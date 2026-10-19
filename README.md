@@ -1,10 +1,16 @@
-# Attack Skills for Agent · 攻击侧 Skills 集（928 个）
+# Attack Skills for Agent · 攻击侧 Skills 集（1000 个）
 
 > 面向渗透测试 Agent 的即插即用 SKILL.md 能力库。每个 skill 是一个标准化 SKILL.md 文件（frontmatter + 方法论 + 命令 + 攻击链），Agent 按需加载。
 >
 > ⚠️ 仅限授权安全测试使用（authorized security testing only）。
 
 
+
+## v1.8 更新(2026-10-19):③ 工具改写流水线 第五批(冲刺) 72 个 —— **1000 指标达成**
+
+- `tool-skills/` 新增 **72 个**(累计 558):OSINT 侦察 21(waymore/favfreak/maryam/datasploit/CrossLinked/SlackPirate/gitGraber...)、DNS/网络枚举 10(aiodnsbrute/dnsprobe/hakrevdns/scannerl...)、中间人 10(PCredz/interactsh/BinProxy/DNSWatch...)、密码字典与破解 11(pydictor/duplicut/cracken/wordlistctl...)、AD 5(PKINITtools/targetedKerberoast/DeathStar...)、C2 4(emp3r0r/koadic/portia...)、AI 渗透 Agent 3(HexStrike-AI/PentestGPT/PentestAgent,补齐 C44 窄类)、钓鱼 3(CredSniper/SocialFish/SimpleEmailSpoofer)
+- **当前合计:1000 个攻击侧 skill(现成 442 + 工具改写 558)—— 1k 目标 100% 达成**
+- 50 个攻击大类全覆盖,License 全部开源可二创(SKILL.md 以 Apache-2.0 二次开源+上游版权头,WPScan 上游 CC BY-NC 除外)
 
 ## v1.7 更新(2026-10-19):③ 工具改写流水线 第四批 180 个
 
