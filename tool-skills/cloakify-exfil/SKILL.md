@@ -1,0 +1,37 @@
+---
+name: cloakify-exfil
+description: 渗透工具 skill:cloakify 的安装、参数速查与攻击场景 playbook。当任务涉及 隐写与隐藏通道 需要调用 cloakify 时使用。
+---
+
+# cloakify
+
+- 攻击大类:C38 隐写与隐藏通道
+- 上游仓库:https://github.com/TryCatchHCF/Cloakify
+- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+
+## 安装
+
+```bash
+git clone https://github.com/TryCatchHCF/Cloakify && cd Cloakify
+```
+
+## 参数速查
+
+| 参数 / 命令 | 说明 |
+| --- | --- |
+| `python cloakify.py secret.txt ciphers/dna` | 把文件编码成 DNA 序列外观 |
+| `decloakify.py out.txt ciphers/dna` | 还原 |
+| `noiseTools/` | 加噪音混淆统计特征 |
+
+## 攻击场景 Playbook
+
+### DLP 规避外传演练
+
+```bash
+python cloakify.py passwd.zip ciphers/ipAddresses > notes.txt
+# notes.txt 外观是一堆 IP 地址,经允许渠道传出后 decloakify 还原
+```
+
+## 注意事项
+
+无加密,仅外观混淆;真敏感数据先加密再 cloakify。
