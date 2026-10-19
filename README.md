@@ -5,6 +5,14 @@
 > ⚠️ 仅限授权安全测试使用（authorized security testing only）。
 
 
+
+## v1.5 更新(2026-10-19):③ 工具改写流水线 第二批 104 个
+
+- `tool-skills/` 新增 **104 个**(累计 157):Web 利用 17(bloodyAD/jwt_tool/ssrfmap/tplmap/commix...)、侦察 26(amass/sublist3r/aquatone/maigret/holehe...)、AD/Kerberos 8、云 6、免杀/反取证/C2/隐写等空类全部补齐
+- **50 个攻击大类首次全部有 skill 覆盖**(C23 LOLBins / C36 隐蔽回连 / C39 影响 / C45 免杀等由本批落地)
+- 当前合计:**599 个攻击侧 skill**(现成 442 + 工具改写 157)
+- 进度:599/1000 = 59.9%,第三批从 P2 池剩余 400+ 候选继续
+
 ## v1.4 更新(2026-10-19):③ 工具改写流水线 第一批 53 个
 
 - 新增 `tool-skills/` 目录:**53 个由开源渗透工具改写的 SKILL.md**(来源:工具注册表 P1/P2 池,人工质量过滤+家族合并)
