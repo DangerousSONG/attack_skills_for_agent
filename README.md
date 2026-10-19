@@ -54,7 +54,7 @@ https://github.com/tmenov/Claude-Red-pentest-set/blob/main/Skills/web/offensive-
 
 如需本地完整 403 个：为本目录添加 Defender 排除项后重新拉取即可。
 
-实际拦截 6 个（Windows Defender 实时查杀，无法落盘）：
+实际拦截 7 个（Windows Defender 实时查杀，无法落盘）：
 
 | 缺失 Skill | 上游文件 |
 | --- | --- |
@@ -65,4 +65,5 @@ https://github.com/tmenov/Claude-Red-pentest-set/blob/main/Skills/web/offensive-
 | hack-skills/unauthorized-access-common-services | https://github.com/yaklang/hack-skills/blob/main/skills/unauthorized-access-common-services/SKILL.md |
 | hack-skills/upload-insecure-files | https://github.com/yaklang/hack-skills/blob/main/skills/upload-insecure-files/SKILL.md |
 
-本地实际落盘 397 个 SKILL.md + README + 索引 CSV + 8 份 LICENSE。
+本地实际落盘 396 个 SKILL.md + README + 索引 CSV + 8 份 LICENSE。
+| Claude-Red-pentest-set/offensive-sqli | https://github.com/tmenov/Claude-Red-pentest-set/blob/main/Skills/web/offensive-sqli/SKILL.md |
