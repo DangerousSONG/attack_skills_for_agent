@@ -6,14 +6,6 @@
 >
 > ⚠️ 仅限授权安全测试使用（authorized security testing only）。
 
-
-
-## v1.8 更新(2026-10-19):③ 工具改写流水线 第五批(冲刺) 72 个 —— **1000 指标达成**
-
-- `tool-skills/` 新增 **72 个**(累计 558):OSINT 侦察 21(waymore/favfreak/maryam/datasploit/CrossLinked/SlackPirate/gitGraber...)、DNS/网络枚举 10(aiodnsbrute/dnsprobe/hakrevdns/scannerl...)、中间人 10(PCredz/interactsh/BinProxy/DNSWatch...)、密码字典与破解 11(pydictor/duplicut/cracken/wordlistctl...)、AD 5(PKINITtools/targetedKerberoast/DeathStar...)、C2 4(emp3r0r/koadic/portia...)、AI 渗透 Agent 3(HexStrike-AI/PentestGPT/PentestAgent,补齐 C44 窄类)、钓鱼 3(CredSniper/SocialFish/SimpleEmailSpoofer)
-- **当前合计:1000 个攻击侧 skill(现成 442 + 工具改写 558)—— 1k 目标 100% 达成**
-- 50 个攻击大类全覆盖,License 全部开源可二创(SKILL.md 以 Apache-2.0 二次开源+上游版权头,WPScan 上游 CC BY-NC 除外)
-
 ## 口径
 
 - 攻击侧 only：已剔除无线/硬件（WiFi/蓝牙/SDR/固件/IoT）、纯防御（检测/狩猎/取证响应/加固合规/ZTNA/PAM/IDS）、纯逆向与恶意软件分析
