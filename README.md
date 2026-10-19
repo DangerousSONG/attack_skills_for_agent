@@ -1,10 +1,16 @@
-# Attack Skills for Agent · 攻击侧 Skills 集（431 个）
+# Attack Skills for Agent · 攻击侧 Skills 集（748 个）
 
 > 面向渗透测试 Agent 的即插即用 SKILL.md 能力库。每个 skill 是一个标准化 SKILL.md 文件（frontmatter + 方法论 + 命令 + 攻击链），Agent 按需加载。
 >
 > ⚠️ 仅限授权安全测试使用（authorized security testing only）。
 
 
+
+## v1.6 更新(2026-10-19):③ 工具改写流水线 第三批 149 个
+
+- `tool-skills/` 新增 **149 个**(累计 306):侦察/资产测绘 30(waybackurls/shuffledns/finalrecon/fierce/zgrab2/zdns...)、Web 利用 19(ghauri/kadimus/lfimap/nosqli/crlfuzz/wcvs/h2csmuggler...)、AD 与横向 18(sccmhunter/donpapi/jackdaw/adpeas/HEKATOMB...)、口令破解 10(crowbar/brutespray/credmaster/bkcrack...)、LDAP 枚举 7、移动端 5、免杀 5、模糊测试 5、密码误用 4、载荷投递 4、身份喷洒 4、Web 扫描 3、服务枚举 3、反取证 3、横向执行 3、隧道 1、CVE 专项 1 等
+- 当前合计:**748 个攻击侧 skill**(现成 442 + 工具改写 306)
+- 进度:748/1000 = 74.8%,第四批从 BlackArch/awesome 系语料补充剩余 ~250 个
 
 ## v1.5 更新(2026-10-19):③ 工具改写流水线 第二批 104 个
 
