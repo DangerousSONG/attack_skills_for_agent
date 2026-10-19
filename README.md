@@ -2,6 +2,7 @@
 
 > 面向渗透测试 Agent 的即插即用 SKILL.md 能力库。每个 skill 是一个标准化 SKILL.md 文件（frontmatter + 方法论 + 命令 + 攻击链），Agent 按需加载。
 >
+> **逐条明细见 [INDEX.md](INDEX.md)**：1000 个 skill 按 50 个攻击大类全量列出。
 >
 > ⚠️ 仅限授权安全测试使用（authorized security testing only）。
 
@@ -12,34 +13,6 @@
 - `tool-skills/` 新增 **72 个**(累计 558):OSINT 侦察 21(waymore/favfreak/maryam/datasploit/CrossLinked/SlackPirate/gitGraber...)、DNS/网络枚举 10(aiodnsbrute/dnsprobe/hakrevdns/scannerl...)、中间人 10(PCredz/interactsh/BinProxy/DNSWatch...)、密码字典与破解 11(pydictor/duplicut/cracken/wordlistctl...)、AD 5(PKINITtools/targetedKerberoast/DeathStar...)、C2 4(emp3r0r/koadic/portia...)、AI 渗透 Agent 3(HexStrike-AI/PentestGPT/PentestAgent,补齐 C44 窄类)、钓鱼 3(CredSniper/SocialFish/SimpleEmailSpoofer)
 - **当前合计:1000 个攻击侧 skill(现成 442 + 工具改写 558)—— 1k 目标 100% 达成**
 - 50 个攻击大类全覆盖,License 全部开源可二创(SKILL.md 以 Apache-2.0 二次开源+上游版权头,WPScan 上游 CC BY-NC 除外)
-
-## v1.7 更新(2026-10-19):③ 工具改写流水线 第四批 180 个
-
-- `tool-skills/` 新增 **180 个**(累计 486):Web 应用攻击 65(bbscan/jaeles/v3n0m/w13scan/sourcemapper/xxexploiter/myjwt...)、网络枚举 14(v3n0m/nray/pbscan/changeme/atscan...)、嗅探与中间人 14(seth/xerosploit/sslstrip/net-creds/snarf...)、密码学与 TLS 11(hash_extender/tlsfuzzer/padre/a2sv...)、Pwn 与利用框架 8(zeratool/angrop/isf/richsploit...)、口令喷射 6(spray365/spraycharles/barq/msmailprobe...)、隧道代理 6(stowaway/mubeng/proxify/torpy...)、横向移动 5(barmie/sjet/sireprat/tomcatWarDeployer...)等
-- 当前合计:**928 个攻击侧 skill**(现成 442 + 工具改写 486)
-- 进度:928/1000 = 92.8%,最后 ~72 个需从 BlackArch 语料+窄类(C44 AI 安全/C48 Web3)定向补充
-
-## v1.6 更新(2026-10-19):③ 工具改写流水线 第三批 149 个
-
-- `tool-skills/` 新增 **149 个**(累计 306):侦察/资产测绘 30(waybackurls/shuffledns/finalrecon/fierce/zgrab2/zdns...)、Web 利用 19(ghauri/kadimus/lfimap/nosqli/crlfuzz/wcvs/h2csmuggler...)、AD 与横向 18(sccmhunter/donpapi/jackdaw/adpeas/HEKATOMB...)、口令破解 10(crowbar/brutespray/credmaster/bkcrack...)、LDAP 枚举 7、移动端 5、免杀 5、模糊测试 5、密码误用 4、载荷投递 4、身份喷洒 4、Web 扫描 3、服务枚举 3、反取证 3、横向执行 3、隧道 1、CVE 专项 1 等
-- 当前合计:**748 个攻击侧 skill**(现成 442 + 工具改写 306)
-- 进度:748/1000 = 74.8%,第四批从 BlackArch/awesome 系语料补充剩余 ~250 个
-
-## v1.5 更新(2026-10-19):③ 工具改写流水线 第二批 104 个
-
-- `tool-skills/` 新增 **104 个**(累计 157):Web 利用 17(bloodyAD/jwt_tool/ssrfmap/tplmap/commix...)、侦察 26(amass/sublist3r/aquatone/maigret/holehe...)、AD/Kerberos 8、云 6、免杀/反取证/C2/隐写等空类全部补齐
-- **50 个攻击大类首次全部有 skill 覆盖**(C23 LOLBins / C36 隐蔽回连 / C39 影响 / C45 免杀等由本批落地)
-- 当前合计:**599 个攻击侧 skill**(现成 442 + 工具改写 157)
-- 进度:599/1000 = 59.9%,第三批从 P2 池剩余 400+ 候选继续
-
-## v1.4 更新(2026-10-19):③ 工具改写流水线 第一批 53 个
-
-- 新增 `tool-skills/` 目录:**53 个由开源渗透工具改写的 SKILL.md**(来源:工具注册表 P1/P2 池,人工质量过滤+家族合并)
-- 分类体系升级为 **50 个攻击大类**(ATT&CK 14 战术为骨架 + 技术细分 + 垂直域),全部 495 个 skill 完成重打标
-- 去重规则:与现有 442 个现成 skill 功能重复者剔除(如 netexec/john/metasploit/hydra/dnscat2 已有覆盖),`impacket × 56` / `Responder × 6` 家族合并为单 skill
-- 权利链条:每个 SKILL.md 以 Apache-2.0 二次开源,头部标注上游仓库与 License,上游版权归原项目所有
-- 覆盖补齐:原 9 个空类目(C13/C14/C20/C23/C28/C29/C33/C38/C45 中除 C23/C36/C45 外)本批全部落地,剩余 3 类在第二批补齐
-- 当前合计:**495 个攻击侧 skill**(现成 442 + 工具改写 53)
 
 ## 口径
 
@@ -128,7 +101,7 @@ Top 12：C09 Web应用漏洞利用 176 · C01 资产测绘与指纹识别 62 · 
 | C21 流量混淆与加密隧道 | 1 | 0 | 1 |
 | **合计** | **442** | **558** | **1000** |
 
-完整逐条明细见飞书多维表格《Skills清单 v1.8》：https://aicarrier.feishu.cn/wiki/SLbTwLg4aijllskSfX1c65yVn7d
+逐条明细（1000 个 · 名称/来源/License/简介/可跳转链接）见 [INDEX.md](INDEX.md)
 
 ## 署名与许可
 
