@@ -20,6 +20,8 @@ def en_keywords(items):
                 c[tok] += 1
     return [wd for wd, _ in c.most_common(4)]
 
+FORCE_PRIMARY = {'java-deserialization-gadget-selector'}  # 实测高价值 skill 强制进 primary
+
 METH_REPO_PRIORITY = [
     'mukul975/Anthropic-Cybersecurity-Skills',
     'yaklang/hack-skills',
@@ -73,6 +75,10 @@ for cat, items in cats.items():
     meth.sort(key=lambda r: METH_REPO_PRIORITY.index(r['来源仓库']) if r['来源仓库'] in METH_REPO_PRIORITY else 99)
     tools.sort(key=lambda r: r['Skill名称'])
     primary = meth[:3] + tools[:2]
+    for must in FORCE_PRIMARY:
+        hit = next((r for r in items if r['Skill名称'] == must), None)
+        if hit and hit not in primary and len(primary) < 6:
+            primary.append(hit)
     total_primary += len(primary)
     en_kw = en_keywords(items)
     w('### {0}（{1} 个 · {2}）\n\n'.format(cat, len(items), tact))
