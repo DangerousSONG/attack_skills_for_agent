@@ -1,6 +1,7 @@
 ---
 name: executing-active-directory-attack-simulation
 description: 'Executes authorized attack simulations against Active Directory environments
+when-to-use: 'Executes authorized attack simulations against Active Directory environments
   to identify misconfigurations, weak credentials, dangerous privilege paths, and
   exploitable trust relationships that could lead to domain compromise. The tester
   uses BloodHound for attack path analysis, Mimikatz for credential extraction, and

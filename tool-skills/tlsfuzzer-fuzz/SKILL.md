@@ -1,6 +1,7 @@
 ---
 name: tlsfuzzer-fuzz
 description: 渗透工具 skill:tlsfuzzer 的安装、参数速查与攻击场景 playbook。当任务涉及 密码学攻击 需要调用 tlsfuzzer 时使用。
+when-to-use: 渗透工具 skill:tlsfuzzer 的安装、参数速查与攻击场景 playbook。当任务涉及 密码学攻击 需要调用 tlsfuzzer 时使用。
 ---
 
 # tlsfuzzer

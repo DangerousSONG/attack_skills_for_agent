@@ -1,6 +1,7 @@
 ---
 name: yakit-native-plugin
 description: 0. 相关路由
+when-to-use: 0. 相关路由
   Yakit 原生插件(yak / mitm 类型)与 cli 参数体系。讲清原生插件与热加载的区别、cli.* 如何变成
   Yakit 执行页的参数表单(String/Int/Bool/Urls/Ports/StringSlice 下拉/File 等 + setRequired/
   setDefault/setVerboseName/setCliGroup), 以及三个优秀案例: yak 原生插件用 cli 收用户输入、

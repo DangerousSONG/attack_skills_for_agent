@@ -1,6 +1,7 @@
 ---
 name: insecure-source-code-management
 description: 0. QUICK START
+when-to-use: 0. QUICK START
   Source control and artifact exposure (.git, .svn, .hg, backups, .env). Use when recon finds VCS paths, 403 on hidden dirs, or backup/config leaks during authorized testing.
 ---
 

@@ -1,6 +1,7 @@
 ---
 name: cicd-supply-chain
 description: Use when attacking or auditing a CI/CD pipeline or software supply chain — pwn requests, poisoned pipeline execution, compromised/mutable-tag actions, dependency confusion, registry worms, runner backdoors, OIDC trust abuse, SLSA/provenance
+when-to-use: Use when attacking or auditing a CI/CD pipeline or software supply chain — pwn requests, poisoned pipeline execution, compromised/mutable-tag actions, dependency confusion, registry worms, runner back
 metadata:
   type: offensive
   phase: weaponize-delivery-exploit

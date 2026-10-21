@@ -1,6 +1,7 @@
 ---
 name: executing-red-team-engagement-planning
 description: Build the foundational red team engagement plan - scope definition, Rules
+when-to-use: Build the foundational red team engagement plan - scope definition, Rules
   of Engagement (restrictions, communication plan, emergency stop procedures, legal authorization),
   MITRE ATT&CK-aligned threat profile selection, and operational timelines - producing an
   engagement brief for stakeholder approval. Use before any offensive testing begins, when

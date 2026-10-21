@@ -1,6 +1,7 @@
 ---
 name: llm-attacks-security
 description: "Guide for LLM security attacks: prompt injection, jailbreaking, data extraction, and where to place resources in README.md."
+when-to-use: "Guide for LLM security attacks: prompt injection, jailbreaking, data extraction, and where to place resources in README.md."
 ---
 
 # LLM Security Attacks

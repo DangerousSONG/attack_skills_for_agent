@@ -1,6 +1,7 @@
 ---
 name: container-k8s-escape
 description: Use when breaking out of a container or escalating inside Kubernetes — runc/BuildKit CVEs, privileged/capability/cgroup misconfig escapes, NVIDIA GPU toolkit escape, K8s RBAC abuse, kubelet RCE, ingress/admission-controller RCE, node-to-cluster pivot
+when-to-use: Use when breaking out of a container or escalating inside Kubernetes — runc/BuildKit CVEs, privileged/capability/cgroup misconfig escapes, NVIDIA GPU toolkit escape, K8s RBAC abuse, kubelet RCE, ingre
 metadata:
   type: offensive
   phase: exploit-install-actions

@@ -1,6 +1,7 @@
 ---
 name: 3proxy-pivot
 description: 渗透工具 skill:3proxy 的安装、参数速查与攻击场景 playbook。当任务涉及 隧道与内网穿透 需要调用 3proxy 时使用。
+when-to-use: 渗透工具 skill:3proxy 的安装、参数速查与攻击场景 playbook。当任务涉及 隧道与内网穿透 需要调用 3proxy 时使用。
 ---
 
 # 3proxy

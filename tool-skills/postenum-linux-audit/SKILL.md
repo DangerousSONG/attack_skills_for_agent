@@ -1,6 +1,7 @@
 ---
 name: postenum-linux-audit
 description: 渗透工具 skill:postenum 的安装、参数速查与攻击场景 playbook。当任务涉及 痕迹清理与反取证 需要调用 postenum 时使用。
+when-to-use: 渗透工具 skill:postenum 的安装、参数速查与攻击场景 playbook。当任务涉及 痕迹清理与反取证 需要调用 postenum 时使用。
 ---
 
 # postenum

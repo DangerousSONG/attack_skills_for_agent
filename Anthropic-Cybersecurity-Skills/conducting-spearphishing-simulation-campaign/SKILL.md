@@ -1,6 +1,7 @@
 ---
 name: conducting-spearphishing-simulation-campaign
 description: Run a targeted spearphishing simulation for initial access by developing OSINT-derived pretexts, building payloads (HTML smuggling, macro docs, ISO/LNK, OneNote, QR codes), standing up look-alike-domain email infrastructure with SPF/DKIM/DMARC via GoPhish, and tracking results. Use in authorized engagements to gain initial access via personalized phishing against specific individuals, distinct from broad campaigns.
+when-to-use: Run a targeted spearphishing simulation for initial access by developing OSINT-derived pretexts, building payloads (HTML smuggling, macro docs, ISO/LNK, OneNote, QR codes), standing up look-alike-doma
 domain: cybersecurity
 subdomain: red-teaming
 tags:

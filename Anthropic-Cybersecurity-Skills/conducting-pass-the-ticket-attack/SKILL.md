@@ -1,6 +1,7 @@
 ---
 name: conducting-pass-the-ticket-attack
 description: Perform Pass-the-Ticket (PtT) lateral movement by extracting Kerberos TGT/TGS tickets from LSASS memory on a compromised host and injecting them into another session to impersonate the ticket owner without knowing their password. Use during authorized post-exploitation to move laterally or escalate access via stolen Kerberos tickets, or to validate detections for Kerberos ticket theft and reuse.
+when-to-use: Perform Pass-the-Ticket (PtT) lateral movement by extracting Kerberos TGT/TGS tickets from LSASS memory on a compromised host and injecting them into another session to impersonate the ticket owner wi
 domain: cybersecurity
 subdomain: red-teaming
 tags:

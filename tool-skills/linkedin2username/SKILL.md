@@ -1,6 +1,7 @@
 ---
 name: linkedin2username
 description: 渗透工具 skill:linkedin2username 的安装、参数速查与攻击场景 playbook。当任务涉及 邮箱与人员OSINT 需要调用 linkedin2username 时使用。
+when-to-use: 渗透工具 skill:linkedin2username 的安装、参数速查与攻击场景 playbook。当任务涉及 邮箱与人员OSINT 需要调用 linkedin2username 时使用。
 ---
 
 # linkedin2username

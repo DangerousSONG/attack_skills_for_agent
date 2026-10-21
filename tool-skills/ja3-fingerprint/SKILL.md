@@ -1,6 +1,7 @@
 ---
 name: ja3-fingerprint
 description: 渗透工具 skill:JA3 的安装、参数速查与攻击场景 playbook。当任务涉及 资产测绘与指纹识别 需要调用 JA3 时使用。
+when-to-use: 渗透工具 skill:JA3 的安装、参数速查与攻击场景 playbook。当任务涉及 资产测绘与指纹识别 需要调用 JA3 时使用。
 ---
 
 # JA3

@@ -1,6 +1,7 @@
 ---
 name: performing-fuzzing-with-aflplusplus
 description: 'Performs coverage-guided fuzzing of compiled binaries with AFL++, instrumenting
+when-to-use: 'Performs coverage-guided fuzzing of compiled binaries with AFL++, instrumenting
   targets via afl-cc/afl-clang-fast, minimizing corpora with afl-cmin and afl-tmin,
   running parallel campaigns with afl-fuzz, and triaging crashes with CASR or GDB
   scripts. Use for binary fuzzing, crash and memory-corruption discovery, coverage-guided

@@ -1,6 +1,7 @@
 ---
 name: asnmap-network-recon
 description: 渗透工具 skill:asnmap 的安装、参数速查与攻击场景 playbook。当任务涉及 网络拓扑测绘 需要调用 asnmap 时使用。
+when-to-use: 渗透工具 skill:asnmap 的安装、参数速查与攻击场景 playbook。当任务涉及 网络拓扑测绘 需要调用 asnmap 时使用。
 ---
 
 # asnmap

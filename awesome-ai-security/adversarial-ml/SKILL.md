@@ -1,6 +1,7 @@
 ---
 name: adversarial-machine-learning
 description: "Guide for adversarial machine learning: adversarial examples, data poisoning, model backdoors, and evasion attacks."
+when-to-use: "Guide for adversarial machine learning: adversarial examples, data poisoning, model backdoors, and evasion attacks."
 ---
 
 # Adversarial Machine Learning

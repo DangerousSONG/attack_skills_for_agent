@@ -1,6 +1,7 @@
 ---
 name: performing-osint-with-spiderfoot
 description: Automate OSINT collection with the SpiderFoot REST API and CLI (sf.py/spiderfoot-cli) across 200+ modules, selecting scan modes (footprint, investigate, passive) and parsing results for domains, IPs, emails, leaked credentials, and DNS records into a target intelligence profile. Use when mapping an organization's attack surface or profiling a target for threat intelligence.
+when-to-use: Automate OSINT collection with the SpiderFoot REST API and CLI (sf.py/spiderfoot-cli) across 200+ modules, selecting scan modes (footprint, investigate, passive) and parsing results for domains, IPs, 
 domain: cybersecurity
 subdomain: threat-intelligence
 tags:

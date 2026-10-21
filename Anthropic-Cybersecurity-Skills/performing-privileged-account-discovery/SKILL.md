@@ -1,6 +1,7 @@
 ---
 name: performing-privileged-account-discovery
 description: Discovers and inventories privileged accounts across enterprise infrastructure,
+when-to-use: Discovers and inventories privileged accounts across enterprise infrastructure,
   including domain admins, local admins, service accounts, database admins, cloud
   IAM roles, and application admin accounts, using automated scanning and risk classification.
   Use when building a privileged account inventory, onboarding accounts to a PAM

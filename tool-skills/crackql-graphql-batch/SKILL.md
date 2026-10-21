@@ -1,6 +1,7 @@
 ---
 name: crackql-graphql-batch
 description: 渗透工具 skill:CrackQL 的安装、参数速查与攻击场景 playbook。当任务涉及 API与GraphQL攻击 需要调用 CrackQL 时使用。
+when-to-use: 渗透工具 skill:CrackQL 的安装、参数速查与攻击场景 playbook。当任务涉及 API与GraphQL攻击 需要调用 CrackQL 时使用。
 ---
 
 # CrackQL

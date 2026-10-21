@@ -1,6 +1,7 @@
 ---
 name: windapsearch-ldap-ad
 description: 渗透工具 skill:windapsearch 的安装、参数速查与攻击场景 playbook。当任务涉及 AD与LDAP枚举 需要调用 windapsearch 时使用。
+when-to-use: 渗透工具 skill:windapsearch 的安装、参数速查与攻击场景 playbook。当任务涉及 AD与LDAP枚举 需要调用 windapsearch 时使用。
 ---
 
 # windapsearch

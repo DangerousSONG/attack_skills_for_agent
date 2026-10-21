@@ -1,6 +1,7 @@
 ---
 name: amber-reflective-packer
 description: 渗透工具 skill:Amber 的安装、参数速查与攻击场景 playbook。当任务涉及 进程注入与内存执行 需要调用 Amber 时使用。
+when-to-use: 渗透工具 skill:Amber 的安装、参数速查与攻击场景 playbook。当任务涉及 进程注入与内存执行 需要调用 Amber 时使用。
 ---
 
 # Amber

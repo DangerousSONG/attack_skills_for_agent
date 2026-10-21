@@ -1,6 +1,7 @@
 ---
 name: bad-pdf-phish
 description: 渗透工具 skill:Bad-Pdf 的安装、参数速查与攻击场景 playbook。当任务涉及 钓鱼与社会工程 需要调用 Bad-Pdf 时使用。
+when-to-use: 渗透工具 skill:Bad-Pdf 的安装、参数速查与攻击场景 playbook。当任务涉及 钓鱼与社会工程 需要调用 Bad-Pdf 时使用。
 ---
 
 # Bad-Pdf

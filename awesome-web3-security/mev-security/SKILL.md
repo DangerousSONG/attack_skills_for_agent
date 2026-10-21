@@ -1,6 +1,7 @@
 ---
 name: mev-security
 description: Guide for MEV concepts, common attacks, mitigations, and how to organize MEV-related resources in README.md.
+when-to-use: Guide for MEV concepts, common attacks, mitigations, and how to organize MEV-related resources in README.md.
 ---
 
 # MEV Security

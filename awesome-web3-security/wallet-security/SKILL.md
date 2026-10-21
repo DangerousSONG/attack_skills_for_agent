@@ -1,6 +1,7 @@
 ---
 name: wallet-security
 description: "Guide for wallet security topics: MPC/TSS, key management, wallet UX security, phishing, and how to categorize related resources in README.md."
+when-to-use: "Guide for wallet security topics: MPC/TSS, key management, wallet UX security, phishing, and how to categorize related resources in README.md."
 ---
 
 # Wallet Security

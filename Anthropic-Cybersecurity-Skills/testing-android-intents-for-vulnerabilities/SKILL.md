@@ -1,6 +1,7 @@
 ---
 name: testing-android-intents-for-vulnerabilities
 description: 'Tests Android inter-process communication (IPC) through intents for
+when-to-use: 'Tests Android inter-process communication (IPC) through intents for
   vulnerabilities including intent injection, unauthorized component access, broadcast
   sniffing, pending intent hijacking, and content provider data leakage. Use when
   assessing Android app attack surface through exported components, testing intent-based

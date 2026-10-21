@@ -1,6 +1,7 @@
 ---
 name: dnsteal-dns-exfil
 description: 渗透工具 skill:dnsteal 的安装、参数速查与攻击场景 playbook。当任务涉及 DNS隧道与利用 需要调用 dnsteal 时使用。
+when-to-use: 渗透工具 skill:dnsteal 的安装、参数速查与攻击场景 playbook。当任务涉及 DNS隧道与利用 需要调用 dnsteal 时使用。
 ---
 
 # dnsteal

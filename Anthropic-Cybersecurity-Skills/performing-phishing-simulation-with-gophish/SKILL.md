@@ -1,6 +1,7 @@
 ---
 name: performing-phishing-simulation-with-gophish
 description: Deploy and run authorized phishing awareness campaigns with GoPhish, covering admin panel setup, SMTP sending profiles, email template and landing page creation, target user groups, and campaign reporting to measure click and credential-submission rates. Use when planning or executing a phishing simulation for employee security-awareness testing or measuring susceptibility to social engineering.
+when-to-use: Deploy and run authorized phishing awareness campaigns with GoPhish, covering admin panel setup, SMTP sending profiles, email template and landing page creation, target user groups, and campaign repor
 domain: cybersecurity
 subdomain: phishing-defense
 tags:

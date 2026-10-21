@@ -1,6 +1,7 @@
 ---
 name: recon-osint
 description: Use when mapping a target's external attack surface or gathering OSINT — subdomain enumeration, attack-surface mapping (httpx/katana/JS secrets), subdomain takeover, multi-cloud/Azure tenant recon, GitHub secret dorking, breach/infostealer credential intel, CVE prioritization (EPSS/KEV)
+when-to-use: Use when mapping a target's external attack surface or gathering OSINT — subdomain enumeration, attack-surface mapping (httpx/katana/JS secrets), subdomain takeover, multi-cloud/Azure tenant recon, Gi
 metadata:
   type: offensive
   phase: reconnaissance

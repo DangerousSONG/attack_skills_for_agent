@@ -1,6 +1,7 @@
 ---
 name: cloud-security
 description: Use when attacking AWS/Azure/GCP cloud — IAM/identity privilege escalation, IMDS/metadata SSRF, Entra device-code & PRT theft, GCP impersonation chains, Kubernetes/container escape, IaC/CI-CD federation abuse
+when-to-use: Use when attacking AWS/Azure/GCP cloud — IAM/identity privilege escalation, IMDS/metadata SSRF, Entra device-code & PRT theft, GCP impersonation chains, Kubernetes/container escape, IaC/CI-CD federati
 metadata:
   type: offensive
   phase: exploitation

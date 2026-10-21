@@ -1,6 +1,7 @@
 ---
 name: wafninja-waf-bypass
 description: 渗透工具 skill:WAFNinja 的安装、参数速查与攻击场景 playbook。当任务涉及 Web利用(WAF绕过) 需要调用 WAFNinja 时使用。
+when-to-use: 渗透工具 skill:WAFNinja 的安装、参数速查与攻击场景 playbook。当任务涉及 Web利用(WAF绕过) 需要调用 WAFNinja 时使用。
 ---
 
 # WAFNinja

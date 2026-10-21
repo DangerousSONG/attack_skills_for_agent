@@ -1,6 +1,7 @@
 ---
 name: cloudlist-multi-cloud
 description: 渗透工具 skill:cloudlist 的安装、参数速查与攻击场景 playbook。当任务涉及 云与容器提权 需要调用 cloudlist 时使用。
+when-to-use: 渗透工具 skill:cloudlist 的安装、参数速查与攻击场景 playbook。当任务涉及 云与容器提权 需要调用 cloudlist 时使用。
 ---
 
 # cloudlist

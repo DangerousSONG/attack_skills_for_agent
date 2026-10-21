@@ -1,6 +1,7 @@
 ---
 name: scope-discipline
 description: Use when about to send a request to, scan, enumerate, exploit, or otherwise interact with any host, IP, URL, or asset — before the first packet reaches a target
+when-to-use: Use when about to send a request to, scan, enumerate, exploit, or otherwise interact with any host, IP, URL, or asset — before the first packet reaches a target
 ---
 
 # Scope Discipline

@@ -1,6 +1,7 @@
 ---
 name: profiling-threat-actor-groups
 description: 'Develops comprehensive threat actor profiles for APT groups, criminal
+when-to-use: 'Develops comprehensive threat actor profiles for APT groups, criminal
   organizations, and hacktivist collectives by aggregating TTP documentation, historical
   campaign data, tooling fingerprints, and attribution indicators from multiple intelligence
   sources. Use when briefing executives on sector-specific threats, updating threat

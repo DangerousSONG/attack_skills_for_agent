@@ -1,6 +1,7 @@
 ---
 name: designing-adversary-engagement-with-mitre-engage
 description: Designing Adversary Engagement with MITRE Engage
+when-to-use: Designing Adversary Engagement with MITRE Engage
   Plan, run, and measure an adversary engagement operation using the MITRE Engage
   framework so that deployed deception is driven by strategy instead of deployed ad hoc.
   Covers the Engage Matrix (Prepare, Expose, Affect, Elicit, Understand), the 10-Step

@@ -1,6 +1,7 @@
 ---
 name: performing-hash-cracking-with-hashcat
 description: Cracks password hashes with Hashcat, covering hash-type identification,
+when-to-use: Cracks password hashes with Hashcat, covering hash-type identification,
   dictionary/brute-force/rule-based attack modes, custom rule creation, GPU benchmarking,
   and password-strength/compliance reporting. Use for authorized penetration testing
   or security audits that need to evaluate password strength or crack captured hashes.

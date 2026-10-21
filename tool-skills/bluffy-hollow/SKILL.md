@@ -1,6 +1,7 @@
 ---
 name: bluffy-hollow
 description: 渗透工具 skill:bluffy 的安装、参数速查与攻击场景 playbook。当任务涉及 恶意软件开发与免杀 需要调用 bluffy 时使用。
+when-to-use: 渗透工具 skill:bluffy 的安装、参数速查与攻击场景 playbook。当任务涉及 恶意软件开发与免杀 需要调用 bluffy 时使用。
 ---
 
 # bluffy

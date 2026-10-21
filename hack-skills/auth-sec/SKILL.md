@@ -1,6 +1,7 @@
 ---
 name: auth-sec
 description: Authentication and Authorization Router
+when-to-use: Authentication and Authorization Router
   Entry P1 category router for authentication and authorization. Use when
   testing login flows, sessions, object authorization, JWT, OAuth, CORS, CSRF,
   and enterprise SSO weaknesses before any deeper auth topic skill.

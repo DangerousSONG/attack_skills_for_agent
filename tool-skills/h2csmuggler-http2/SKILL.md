@@ -1,6 +1,7 @@
 ---
 name: h2csmuggler-http2
 description: 渗透工具 skill:h2csmuggler 的安装、参数速查与攻击场景 playbook。当任务涉及 Web利用(HTTP走私) 需要调用 h2csmuggler 时使用。
+when-to-use: 渗透工具 skill:h2csmuggler 的安装、参数速查与攻击场景 playbook。当任务涉及 Web利用(HTTP走私) 需要调用 h2csmuggler 时使用。
 ---
 
 # h2csmuggler

@@ -1,6 +1,7 @@
 ---
 name: performing-adversary-in-the-middle-phishing-detection
 description: Detect and respond to Adversary-in-the-Middle (AiTM) phishing attacks
+when-to-use: Detect and respond to Adversary-in-the-Middle (AiTM) phishing attacks
   that use reverse proxy kits like EvilProxy, Evilginx, and Tycoon 2FA to bypass MFA
   and steal session tokens, correlating Azure AD/Entra sign-in logs, SIEM alerts,
   and EDR telemetry. Use when investigating suspected MFA-bypass phishing or session

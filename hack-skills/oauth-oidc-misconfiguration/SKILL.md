@@ -1,6 +1,7 @@
 ---
 name: oauth-oidc-misconfiguration
 description: 1. WHEN TO LOAD THIS SKILL
+when-to-use: 1. WHEN TO LOAD THIS SKILL
   OAuth and OIDC misconfiguration testing playbook. Use when reviewing redirect URI handling, state and nonce validation, PKCE, token audience, callback binding, and identity-provider trust flaws.
 ---
 

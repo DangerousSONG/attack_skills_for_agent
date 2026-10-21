@@ -1,6 +1,7 @@
 ---
 name: api-recon-and-docs
 description: 1. PRIMARY GOALS
+when-to-use: 1. PRIMARY GOALS
   API reconnaissance and documentation review playbook. Use when discovering endpoints, schemas, versions, OpenAPI specs, hidden docs, and surface area for API testing.
 ---
 

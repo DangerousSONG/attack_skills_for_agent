@@ -1,6 +1,7 @@
 ---
 name: moonwalk-anti-forensic
 description: 渗透工具 skill:moonwalk 的安装、参数速查与攻击场景 playbook。当任务涉及 反取证与痕迹清理 需要调用 moonwalk 时使用。
+when-to-use: 渗透工具 skill:moonwalk 的安装、参数速查与攻击场景 playbook。当任务涉及 反取证与痕迹清理 需要调用 moonwalk 时使用。
 ---
 
 # moonwalk

@@ -1,6 +1,7 @@
 ---
 name: dependency-confusion
 description: 0. QUICK START
+when-to-use: 0. QUICK START
   Supply-chain testing via package-manager dependency confusion: when internal package names resolve to attacker-controlled public registries, leading to malicious install and script execution. Use for npm/pip/gem/Maven/Composer/Docker manifest review and authorized red-team supply-chain exercises.
 ---
 

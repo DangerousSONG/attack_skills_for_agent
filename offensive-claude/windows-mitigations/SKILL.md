@@ -1,6 +1,7 @@
 ---
 name: windows-mitigations-bypass
 description: Use when bypassing a Windows exploit/platform mitigation — ASLR/DEP/CFG/XFG/CET, ACG/CIG, WDAC/App Control, ASR/AMSI/ETW, PPL/LSA Protection, BYOVD/VBS/HVCI
+when-to-use: Use when bypassing a Windows exploit/platform mitigation — ASLR/DEP/CFG/XFG/CET, ACG/CIG, WDAC/App Control, ASR/AMSI/ETW, PPL/LSA Protection, BYOVD/VBS/HVCI
 metadata:
   type: offensive
   phase: exploitation

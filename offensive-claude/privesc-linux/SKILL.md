@@ -1,6 +1,7 @@
 ---
 name: privesc-linux
 description: Use when escalating privileges on a Linux host — SUID/SGID & GTFOBins, sudo LPE (CVE-2025-32462/32463), capabilities & LD_PRELOAD, kernel LPE (CVE-2024-1086, Dirty Pipe, GameOver(lay)), service misconfig (PwnKit, Looney Tunables), container/namespace escape
+when-to-use: Use when escalating privileges on a Linux host — SUID/SGID & GTFOBins, sudo LPE (CVE-2025-32462/32463), capabilities & LD_PRELOAD, kernel LPE (CVE-2024-1086, Dirty Pipe, GameOver(lay)), service miscon
 metadata:
   type: offensive
   phase: post-exploitation

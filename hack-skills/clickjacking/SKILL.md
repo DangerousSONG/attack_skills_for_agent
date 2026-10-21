@@ -1,6 +1,7 @@
 ---
 name: clickjacking
 description: 1. CORE CONCEPT
+when-to-use: 1. CORE CONCEPT
   Clickjacking playbook. Use when testing whether target pages can be framed, whether X-Frame-Options or CSP frame-ancestors are properly configured, and whether UI redress attacks can trigger sensitive actions.
 ---
 

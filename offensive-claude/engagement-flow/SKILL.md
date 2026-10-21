@@ -1,6 +1,7 @@
 ---
 name: engagement-flow
 description: Use when starting, planning, or running a multi-phase pentest or red-team engagement — to sequence the Cyber Kill Chain phases with quality gates instead of jumping straight to exploitation
+when-to-use: Use when starting, planning, or running a multi-phase pentest or red-team engagement — to sequence the Cyber Kill Chain phases with quality gates instead of jumping straight to exploitation
 ---
 
 # Engagement Flow

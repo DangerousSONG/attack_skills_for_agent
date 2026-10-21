@@ -1,6 +1,7 @@
 ---
 name: solana-security
 description: Guide for Solana/Sealevel security research and where to organize Solana-specific resources in README.md.
+when-to-use: Guide for Solana/Sealevel security research and where to organize Solana-specific resources in README.md.
 ---
 
 # Solana Security (Sealevel)

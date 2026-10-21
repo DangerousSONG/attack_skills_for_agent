@@ -1,6 +1,7 @@
 ---
 name: engagement-memory
 description: Use when recalling prior techniques at recon/weaponize, or recording a confirmed finding at report — cross-engagement pattern memory ranked by impact
+when-to-use: Use when recalling prior techniques at recon/weaponize, or recording a confirmed finding at report — cross-engagement pattern memory ranked by impact
 metadata:
   type: support
   phase: all

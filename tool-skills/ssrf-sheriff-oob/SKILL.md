@@ -1,6 +1,7 @@
 ---
 name: ssrf-sheriff-oob
 description: 渗透工具 skill:SSRF Sheriff 的安装、参数速查与攻击场景 playbook。当任务涉及 Web利用(SSRF) 需要调用 SSRF Sheriff 时使用。
+when-to-use: 渗透工具 skill:SSRF Sheriff 的安装、参数速查与攻击场景 playbook。当任务涉及 Web利用(SSRF) 需要调用 SSRF Sheriff 时使用。
 ---
 
 # SSRF Sheriff

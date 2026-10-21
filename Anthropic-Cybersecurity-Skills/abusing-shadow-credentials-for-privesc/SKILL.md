@@ -1,6 +1,7 @@
 ---
 name: abusing-shadow-credentials-for-privesc
 description: Take over Active Directory accounts by writing attacker-controlled public keys to msDS-KeyCredentialLink (Shadow Credentials) with pyWhisker, Whisker, or Certipy, then authenticate via PKINIT to recover the target's NT hash without a password reset. Use when BloodHound shows GenericWrite/GenericAll/AddKeyCredentialLink over a target, as a stealthier alternative to ForceChangePassword, during authorized red-team engagements.
+when-to-use: Take over Active Directory accounts by writing attacker-controlled public keys to msDS-KeyCredentialLink (Shadow Credentials) with pyWhisker, Whisker, or Certipy, then authenticate via PKINIT to recov
 domain: cybersecurity
 subdomain: red-teaming
 tags:

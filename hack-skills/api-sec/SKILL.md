@@ -1,6 +1,7 @@
 ---
 name: api-sec
 description: API Security Router
+when-to-use: API Security Router
   Entry P1 category router for API security. Use when choosing between API
   recon, authorization, token abuse, and hidden-parameter workflows before any
   deeper API topic skill.

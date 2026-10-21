@@ -1,6 +1,7 @@
 ---
 name: api-auth-and-jwt-abuse
 description: 1. TOKEN TRIAGE
+when-to-use: 1. TOKEN TRIAGE
   API authentication and JWT abuse playbook. Use when testing bearer tokens, API keys, claim trust, header spoofing, rate limits, and API auth boundary weaknesses.
 ---
 

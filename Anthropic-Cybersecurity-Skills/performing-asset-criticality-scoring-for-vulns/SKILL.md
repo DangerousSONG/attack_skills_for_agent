@@ -1,6 +1,7 @@
 ---
 name: performing-asset-criticality-scoring-for-vulns
 description: Build a multi-factor asset criticality scoring model—incorporating data
+when-to-use: Build a multi-factor asset criticality scoring model—incorporating data
   sensitivity, business function dependency, regulatory scope, network exposure, and
   recoverability—to produce a 1-5 criticality tier that weights vulnerability prioritization
   and remediation SLAs. Use when prioritizing vulnerability remediation by business

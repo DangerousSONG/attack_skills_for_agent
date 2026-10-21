@@ -1,6 +1,7 @@
 ---
 name: o365spray-m365
 description: 渗透工具 skill:o365spray 的安装、参数速查与攻击场景 playbook。当任务涉及 暴力破解与口令喷射 需要调用 o365spray 时使用。
+when-to-use: 渗透工具 skill:o365spray 的安装、参数速查与攻击场景 playbook。当任务涉及 暴力破解与口令喷射 需要调用 o365spray 时使用。
 ---
 
 # o365spray

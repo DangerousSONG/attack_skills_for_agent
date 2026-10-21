@@ -1,6 +1,7 @@
 ---
 name: finding-discipline
 description: Use when about to record, claim, rate the severity of, or report any security finding — before marking anything [CONFIRMED] or writing it into the report
+when-to-use: Use when about to record, claim, rate the severity of, or report any security finding — before marking anything [CONFIRMED] or writing it into the report
 ---
 
 # Finding Discipline

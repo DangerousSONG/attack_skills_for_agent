@@ -1,6 +1,7 @@
 ---
 name: sigploit-telecom
 description: 渗透工具 skill:SigPloit 的安装、参数速查与攻击场景 playbook。当任务涉及 边界设备与VPN攻击 需要调用 SigPloit 时使用。
+when-to-use: 渗透工具 skill:SigPloit 的安装、参数速查与攻击场景 playbook。当任务涉及 边界设备与VPN攻击 需要调用 SigPloit 时使用。
 ---
 
 # SigPloit

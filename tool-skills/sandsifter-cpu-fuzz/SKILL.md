@@ -1,6 +1,7 @@
 ---
 name: sandsifter-cpu-fuzz
 description: 渗透工具 skill:sandsifter 的安装、参数速查与攻击场景 playbook。当任务涉及 二进制漏洞利用与Pwn 需要调用 sandsifter 时使用。
+when-to-use: 渗透工具 skill:sandsifter 的安装、参数速查与攻击场景 playbook。当任务涉及 二进制漏洞利用与Pwn 需要调用 sandsifter 时使用。
 ---
 
 # sandsifter

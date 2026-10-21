@@ -1,6 +1,7 @@
 ---
 name: shodanhat-shodan-query
 description: 渗透工具 skill:ShodanHat 的安装、参数速查与攻击场景 playbook。当任务涉及 网络拓扑测绘 需要调用 ShodanHat 时使用。
+when-to-use: 渗透工具 skill:ShodanHat 的安装、参数速查与攻击场景 playbook。当任务涉及 网络拓扑测绘 需要调用 ShodanHat 时使用。
 ---
 
 # ShodanHat

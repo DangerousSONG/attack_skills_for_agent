@@ -1,6 +1,7 @@
 ---
 name: crypto-analysis
 description: Use when assessing cryptography — TLS/PKI auditing, RSA/ECC key attacks, ECDSA nonce lattice recovery, symmetric/AEAD misuse, JWT/JOSE forgery, hash cracking, post-quantum migration review
+when-to-use: Use when assessing cryptography — TLS/PKI auditing, RSA/ECC key attacks, ECDSA nonce lattice recovery, symmetric/AEAD misuse, JWT/JOSE forgery, hash cracking, post-quantum migration review
 metadata:
   type: offensive
   phase: analysis

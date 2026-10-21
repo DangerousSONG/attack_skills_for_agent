@@ -1,6 +1,7 @@
 ---
 name: windows-boundaries
 description: Use when crossing a Windows security boundary or escaping a sandbox — kernel/user crossing (win32k/dxgkrnl UAF CVE-2025-24983), BYOVD kernel R/W, UAC/COM elevation, AppContainer/LPAC & Chromium-Mojo sandbox escape (CVE-2025-2783), PPL bypass, RPC/ALPC & named-pipe impersonation
+when-to-use: Use when crossing a Windows security boundary or escaping a sandbox — kernel/user crossing (win32k/dxgkrnl UAF CVE-2025-24983), BYOVD kernel R/W, UAC/COM elevation, AppContainer/LPAC & Chromium-Mojo s
 metadata:
   type: offensive
   phase: exploitation

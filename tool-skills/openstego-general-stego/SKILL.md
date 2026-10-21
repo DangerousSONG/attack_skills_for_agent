@@ -1,6 +1,7 @@
 ---
 name: openstego-general-stego
 description: 渗透工具 skill:OpenStego 的安装、参数速查与攻击场景 playbook。当任务涉及 隐写与数据提取 需要调用 OpenStego 时使用。
+when-to-use: 渗透工具 skill:OpenStego 的安装、参数速查与攻击场景 playbook。当任务涉及 隐写与数据提取 需要调用 OpenStego 时使用。
 ---
 
 # OpenStego

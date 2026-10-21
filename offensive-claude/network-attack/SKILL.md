@@ -1,6 +1,7 @@
 ---
 name: network-attack
 description: Use when attacking a network or moving laterally — L2/L3 poisoning (LLMNR/mDNS, ARP/DHCP, mitm6), coercion + NTLM relay (CVE-2025-33073), TUN pivoting (Ligolo-ng/Chisel), MitM, network-service RCE (CVE-2024-38077), WPA2/WPA3 wireless
+when-to-use: Use when attacking a network or moving laterally — L2/L3 poisoning (LLMNR/mDNS, ARP/DHCP, mitm6), coercion + NTLM relay (CVE-2025-33073), TUN pivoting (Ligolo-ng/Chisel), MitM, network-service RCE (CV
 metadata:
   type: offensive
   phase: exploitation

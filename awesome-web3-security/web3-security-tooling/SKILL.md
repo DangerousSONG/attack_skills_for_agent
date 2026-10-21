@@ -1,6 +1,7 @@
 ---
 name: web3-security-tooling
 description: Guide for security tooling (analyzers, fuzzers, decompilers, compilers) and consistent placement in README.md.
+when-to-use: Guide for security tooling (analyzers, fuzzers, decompilers, compilers) and consistent placement in README.md.
 ---
 
 # Web3 Security Tooling

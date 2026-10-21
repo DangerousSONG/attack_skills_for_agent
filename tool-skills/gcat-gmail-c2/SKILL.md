@@ -1,6 +1,7 @@
 ---
 name: gcat-gmail-c2
 description: 渗透工具 skill:gcat 的安装、参数速查与攻击场景 playbook。当任务涉及 C2与远控 需要调用 gcat 时使用。
+when-to-use: 渗透工具 skill:gcat 的安装、参数速查与攻击场景 playbook。当任务涉及 C2与远控 需要调用 gcat 时使用。
 ---
 
 # gcat

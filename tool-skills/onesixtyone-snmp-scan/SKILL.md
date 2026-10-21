@@ -1,6 +1,7 @@
 ---
 name: onesixtyone-snmp-scan
 description: 渗透工具 skill:onesixtyone 的安装、参数速查与攻击场景 playbook。当任务涉及 网络服务枚举 需要调用 onesixtyone 时使用。
+when-to-use: 渗透工具 skill:onesixtyone 的安装、参数速查与攻击场景 playbook。当任务涉及 网络服务枚举 需要调用 onesixtyone 时使用。
 ---
 
 # onesixtyone

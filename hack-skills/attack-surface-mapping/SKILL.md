@@ -1,6 +1,7 @@
 ---
 name: attack-surface-mapping
 description: Attack Surface Mapping
+when-to-use: Attack Surface Mapping
   Draw a testable attack surface from one authorized target URL or one
   application. Use when the user says 攻击面, 供给面, 画攻击面, map the surface,
   application recon, find the business host, JS inventory, or when the only

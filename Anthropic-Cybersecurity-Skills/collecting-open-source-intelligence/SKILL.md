@@ -1,6 +1,7 @@
 ---
 name: collecting-open-source-intelligence
 description: 'Collects and synthesizes open-source intelligence (OSINT) about threat
+when-to-use: 'Collects and synthesizes open-source intelligence (OSINT) about threat
   actors, malicious infrastructure, and attack campaigns using publicly available
   data sources, passive reconnaissance tools, and dark web monitoring. Use when investigating
   external threat actor infrastructure, performing pre-engagement reconnaissance for
