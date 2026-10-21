@@ -2,7 +2,7 @@
 
 > 面向渗透测试 Agent 的即插即用 SKILL.md 能力库。每个 skill 是一个标准化 SKILL.md 文件（frontmatter + 方法论 + 命令 + 攻击链），Agent 按需加载。
 >
-> **逐条明细见 [INDEX.md](INDEX.md)**：989 个 skill 按 50 个攻击大类全量列出（注：INDEX.md 将在下次清单重生成时刷新）。
+> **逐条明细见 [INDEX.md](INDEX.md)**：989 个 skill 按 50 个攻击大类全量列出。
 >
 > ⚠️ 仅限授权安全测试使用（authorized security testing only）。
 

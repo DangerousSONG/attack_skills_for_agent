@@ -1,7 +1,6 @@
-# 攻击侧 Skills 完整清单（1000 个 · v1.8）
+# 攻击侧 Skills 完整清单（989 个 · v1.9）
 
-> 现成 442（10 个开源仓库精选）+ 工具改写 558（tool-skills/，Apache-2.0 二次开源+上游版权头）。
-> 按 50 个攻击大类分组；每条含名称、来源、License、简介与可跳转链接。
+> 现成 435（10 个开源仓库精选）+ 工具改写 554（含 2 个原创专项）。按 50 个攻击大类分组。
 
 | 分类 | 数量 |
 | --- | --- |
@@ -11,16 +10,16 @@
 | C44 AI与大模型安全 | 12 |
 | C08 钓鱼与社会工程 | 25 |
 | C18 云与容器提权 | 14 |
-| C35 C2框架与远控 | 22 |
+| C35 C2框架与远控 | 21 |
 | C42 网络扫描与枚举 | 40 |
 | C01 资产测绘与指纹识别 | 62 |
-| C46 二进制漏洞利用与Pwn | 47 |
+| C46 二进制漏洞利用与Pwn | 46 |
 | C10 API与业务逻辑攻击 | 54 |
-| C09 Web应用漏洞利用 | 176 |
+| C09 Web应用漏洞利用 | 171 |
 | C05 外部攻击面与云资产暴露 | 31 |
 | C15 持久化与后门植入 | 13 |
 | C50 红队方法论与自动化 | 38 |
-| C40 嗅探与中间人攻击 | 37 |
+| C40 嗅探与中间人攻击 | 36 |
 | C43 移动端攻击 | 21 |
 | C07 载荷开发与武器化 | 24 |
 | C24 内存转储与LSASS窃取 | 5 |
@@ -32,7 +31,7 @@
 | C19 EDR与AV规避 | 4 |
 | C39 数据破坏与擦除 | 3 |
 | C41 Web漏洞扫描与验证 | 18 |
-| C02 域名与DNS侦察 | 20 |
+| C02 域名与DNS侦察 | 19 |
 | C25 哈希与密码破解 | 33 |
 | C22 进程注入与内存执行 | 19 |
 | C03 邮箱与人员OSINT | 27 |
@@ -41,13 +40,13 @@
 | C11 边界设备与VPN攻击 | 4 |
 | C34 屏幕与输入捕获 | 3 |
 | C21 流量混淆与加密隧道 | 1 |
-| C16 Linux本地提权 | 9 |
+| C16 Linux本地提权 | 8 |
 | C47 逆向工程 | 4 |
 | C32 隧道与内网穿透 | 10 |
 | C37 数据外传 | 2 |
 | C48 区块链与Web3安全 | 5 |
 | C28 暴力破解与口令喷射 | 14 |
-| C29 内网发现与枚举 | 18 |
+| C29 内网发现与枚举 | 17 |
 | C13 远程命令执行与WebShell | 8 |
 | C14 云与容器执行 | 3 |
 | C20 反取证与痕迹清理 | 4 |
@@ -185,14 +184,13 @@
 - [s3scanner-buckets](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/s3scanner-buckets/SKILL.md) · `工具改写(sa7mon/S3Scanner)` · Apache-2.0 (上游 MIT) — [S3Scanner] 从名字候选批量筛可读写 S3 桶;writeable 桶可托管钓鱼页面/注入供应链。
 - [cloudlist-multi-cloud](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/cloudlist-multi-cloud/SKILL.md) · `工具改写(projectdiscovery/cloudlist)` · Apache-2.0 (上游 MIT) — [cloudlist] pd 生态多云枚举;凭据配 ~/.config/cloudlist/provider-config.yaml。
 
-## C35 C2框架与远控（22 个）
+## C35 C2框架与远控（21 个）
 
 - [building-c2-redirector-infrastructure](https://github.com/mukul975/Anthropic-Cybersecurity-Skills/blob/HEAD/skills/building-c2-redirector-infrastructure/SKILL.md) · `mukul975/Anthropic-Cybersecurity-Skills` · Apache-2.0 — Build dumb-pipe and traffic-filtering C2 redirectors with nginx (proxy_pass) and Apache (mod_rewrite), deriving filter rules from…
 - [building-red-team-c2-infrastructure-with-havoc](https://github.com/mukul975/Anthropic-Cybersecurity-Skills/blob/HEAD/skills/building-red-team-c2-infrastructure-with-havoc/SKILL.md) · `mukul975/Anthropic-Cybersecurity-Skills` · Apache-2.0 — Deploy and configure the Havoc C2 framework (teamserver, HTTPS/HTTP/SMB
 - [exploiting-aws-with-pacu](https://github.com/mukul975/Anthropic-Cybersecurity-Skills/blob/HEAD/skills/exploiting-aws-with-pacu/SKILL.md) · `mukul975/Anthropic-Cybersecurity-Skills` · Apache-2.0 — >-
 - [extracting-config-from-agent-tesla-rat](https://github.com/mukul975/Anthropic-Cybersecurity-Skills/blob/HEAD/skills/extracting-config-from-agent-tesla-rat/SKILL.md) · `mukul975/Anthropic-Cybersecurity-Skills` · Apache-2.0 — Extracts embedded configuration from Agent Tesla RAT samples, including
 - [performing-automated-malware-analysis-with-cape](https://github.com/mukul975/Anthropic-Cybersecurity-Skills/blob/HEAD/skills/performing-automated-malware-analysis-with-cape/SKILL.md) · `mukul975/Anthropic-Cybersecurity-Skills` · Apache-2.0 — Deploy and operate the CAPEv2 malware sandbox (a Cuckoo derivative) to run samples in a
-- [performing-open-source-intelligence-gathering](https://github.com/mukul975/Anthropic-Cybersecurity-Skills/blob/HEAD/skills/performing-open-source-intelligence-gathering/SKILL.md) · `mukul975/Anthropic-Cybersecurity-Skills` · Apache-2.0 — Open Source Intelligence (OSINT) gathering is the first active phase
 - [performing-privilege-escalation-assessment](https://github.com/mukul975/Anthropic-Cybersecurity-Skills/blob/HEAD/skills/performing-privilege-escalation-assessment/SKILL.md) · `mukul975/Anthropic-Cybersecurity-Skills` · Apache-2.0 — 'Performs privilege escalation assessments on compromised Linux and Windows
 - [performing-privilege-escalation-on-linux](https://github.com/mukul975/Anthropic-Cybersecurity-Skills/blob/HEAD/skills/performing-privilege-escalation-on-linux/SKILL.md) · `mukul975/Anthropic-Cybersecurity-Skills` · Apache-2.0 — Guides manual enumeration and automated tooling to escalate from a low-privilege
 - [performing-red-team-with-covenant](https://github.com/mukul975/Anthropic-Cybersecurity-Skills/blob/HEAD/skills/performing-red-team-with-covenant/SKILL.md) · `mukul975/Anthropic-Cybersecurity-Skills` · Apache-2.0 — Conducts red team operations using the Covenant C2 framework for authorized
@@ -318,7 +316,7 @@
 - [waymore-archive-urls](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/waymore-archive-urls/SKILL.md) · `工具改写(xnl-h4ck3r/waymore)` · Apache-2.0 (上游 MIT) — [waymore] xnl-h4ck3r 出品,Wayback/Common Crawl/AlienVault 三源 URL 提取,适合大规模资产。
 - [favfreak-favicon-hash](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/favfreak-favicon-hash/SKILL.md) · `工具改写(devanshbatham/FavFreak)` · Apache-2.0 (上游 MIT) — [FavFreak] favicon murmurhash 聚类,快速识别同框架资产(管理后台/同 CMS 站点)。
 
-## C46 二进制漏洞利用与Pwn（47 个）
+## C46 二进制漏洞利用与Pwn（46 个）
 
 - [coercing-authentication-with-coercer-petitpotam](https://github.com/mukul975/Anthropic-Cybersecurity-Skills/blob/HEAD/skills/coercing-authentication-with-coercer-petitpotam/SKILL.md) · `mukul975/Anthropic-Cybersecurity-Skills` · Apache-2.0 — Trigger machine account authentication with PetitPotam (MS-EFSR) and Coercer (MS-RPRN, MS-DFSNM, MS-FSRVP, MS-EVEN) via Coercer's…
 - [conducting-cloud-penetration-testing](https://github.com/mukul975/Anthropic-Cybersecurity-Skills/blob/HEAD/skills/conducting-cloud-penetration-testing/SKILL.md) · `mukul975/Anthropic-Cybersecurity-Skills` · Apache-2.0 — 'This skill outlines methodologies for performing authorized penetration
@@ -333,7 +331,6 @@
 - [offensive-crash-analysis](https://github.com/tmenov/Claude-Red-pentest-set/blob/HEAD/Skills/exploit-dev/offensive-crash-analysis/SKILL.md) · `tmenov/Claude-Red-pentest-set` · MIT — 
 - [offensive-exploit-dev-course](https://github.com/tmenov/Claude-Red-pentest-set/blob/HEAD/Skills/exploit-dev/offensive-exploit-dev-course/SKILL.md) · `tmenov/Claude-Red-pentest-set` · MIT — 
 - [offensive-exploit-development](https://github.com/tmenov/Claude-Red-pentest-set/blob/HEAD/Skills/exploit-dev/offensive-exploit-development/SKILL.md) · `tmenov/Claude-Red-pentest-set` · MIT — 
-- [offensive-mitigations](https://github.com/tmenov/Claude-Red-pentest-set/blob/HEAD/Skills/exploit-dev/offensive-mitigations/SKILL.md) · `tmenov/Claude-Red-pentest-set` · MIT — 
 - [offensive-fuzzing](https://github.com/tmenov/Claude-Red-pentest-set/blob/HEAD/Skills/fuzzing/offensive-fuzzing/SKILL.md) · `tmenov/Claude-Red-pentest-set` · MIT — Practical offensive fuzzing methodology covering target identification, fuzzer selection (AFL++, libFuzzer, Honggfuzz, Boofuzz, s…
 - [offensive-windows-mitigations](https://github.com/tmenov/Claude-Red-pentest-set/blob/HEAD/Skills/infrastructure/offensive-windows-mitigations/SKILL.md) · `tmenov/Claude-Red-pentest-set` · MIT — 
 - [browser-exploitation](https://github.com/hypnguyen1209/offensive-claude/blob/HEAD/skills/browser-exploitation/SKILL.md) · `hypnguyen1209/offensive-claude` · MIT — Use when building a client-side browser exploit — V8/JSC JIT type confusion to renderer R/W, V8 heap-sandbox escape, renderer-to-…
@@ -425,12 +422,11 @@
 - [jwtcat-token-crack](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/jwtcat-token-crack/SKILL.md) · `工具改写(aress31/jwtcat)` · Apache-2.0 (上游 Apache-2.0) — [jwtcat] JWT 密钥字典爆破,命中后用 pyjwt 等伪造 admin token。
 - [myjwt-jwt-audit](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/myjwt-jwt-audit/SKILL.md) · `工具改写(mBouamama/MyJWT)` · Apache-2.0 (上游 MIT) — [MyJWT] JWT 漏洞 Swiss Army: 爆破/篡改/kid/jku/alg confusion。
 
-## C09 Web应用漏洞利用（176 个）
+## C09 Web应用漏洞利用（171 个）
 
 - [bypassing-authentication-with-forced-browsing](https://github.com/mukul975/Anthropic-Cybersecurity-Skills/blob/HEAD/skills/bypassing-authentication-with-forced-browsing/SKILL.md) · `mukul975/Anthropic-Cybersecurity-Skills` · Apache-2.0 — Discovering and accessing unprotected pages, APIs, and administrative
 - [escaping-containers-to-host](https://github.com/mukul975/Anthropic-Cybersecurity-Skills/blob/HEAD/skills/escaping-containers-to-host/SKILL.md) · `mukul975/Anthropic-Cybersecurity-Skills` · Apache-2.0 — >-
 - [exploiting-broken-function-level-authorization](https://github.com/mukul975/Anthropic-Cybersecurity-Skills/blob/HEAD/skills/exploiting-broken-function-level-authorization/SKILL.md) · `mukul975/Anthropic-Cybersecurity-Skills` · Apache-2.0 — >-
-- [exploiting-http-request-smuggling](https://github.com/mukul975/Anthropic-Cybersecurity-Skills/blob/HEAD/skills/exploiting-http-request-smuggling/SKILL.md) · `mukul975/Anthropic-Cybersecurity-Skills` · Apache-2.0 — >-
 - [exploiting-insecure-deserialization](https://github.com/mukul975/Anthropic-Cybersecurity-Skills/blob/HEAD/skills/exploiting-insecure-deserialization/SKILL.md) · `mukul975/Anthropic-Cybersecurity-Skills` · Apache-2.0 — Identifying and exploiting insecure deserialization vulnerabilities in
 - [exploiting-mass-assignment-in-rest-apis](https://github.com/mukul975/Anthropic-Cybersecurity-Skills/blob/HEAD/skills/exploiting-mass-assignment-in-rest-apis/SKILL.md) · `mukul975/Anthropic-Cybersecurity-Skills` · Apache-2.0 — >-
 - [exploiting-prototype-pollution-in-javascript](https://github.com/mukul975/Anthropic-Cybersecurity-Skills/blob/HEAD/skills/exploiting-prototype-pollution-in-javascript/SKILL.md) · `mukul975/Anthropic-Cybersecurity-Skills` · Apache-2.0 — Detects and exploits JavaScript prototype pollution vulnerabilities
@@ -464,7 +460,6 @@
 - [offensive-business-logic](https://github.com/tmenov/Claude-Red-pentest-set/blob/HEAD/Skills/web/offensive-business-logic/SKILL.md) · `tmenov/Claude-Red-pentest-set` · MIT — Business logic vulnerability testing for web/mobile/API engagements. Covers workflow bypass, state machine violations, multi-step…
 - [offensive-deserialization](https://github.com/tmenov/Claude-Red-pentest-set/blob/HEAD/Skills/web/offensive-deserialization/SKILL.md) · `tmenov/Claude-Red-pentest-set` · MIT — Insecure deserialization exploitation across Java, PHP, .NET, Python, Node.js, and Ruby. Covers gadget chain construction with ys…
 - [offensive-file-upload](https://github.com/tmenov/Claude-Red-pentest-set/blob/HEAD/Skills/web/offensive-file-upload/SKILL.md) · `tmenov/Claude-Red-pentest-set` · MIT — 
-- [offensive-open-redirect](https://github.com/tmenov/Claude-Red-pentest-set/blob/HEAD/Skills/web/offensive-open-redirect/SKILL.md) · `tmenov/Claude-Red-pentest-set` · MIT — 
 - [offensive-parameter-pollution](https://github.com/tmenov/Claude-Red-pentest-set/blob/HEAD/Skills/web/offensive-parameter-pollution/SKILL.md) · `tmenov/Claude-Red-pentest-set` · MIT — 
 - [offensive-race-condition](https://github.com/tmenov/Claude-Red-pentest-set/blob/HEAD/Skills/web/offensive-race-condition/SKILL.md) · `tmenov/Claude-Red-pentest-set` · MIT — 
 - [offensive-rce](https://github.com/tmenov/Claude-Red-pentest-set/blob/HEAD/Skills/web/offensive-rce/SKILL.md) · `tmenov/Claude-Red-pentest-set` · MIT — 
@@ -490,7 +485,6 @@
 - [path-traversal-lfi](https://github.com/yaklang/hack-skills/blob/HEAD/./skills/path-traversal-lfi/SKILL.md) · `yaklang/hack-skills` · MIT — LFI-to-RCE 7 paths, PHP wrapper matrix (filter chains/oracle/phar), pearcmd 4 methods, parameter naming dictionary
 - [csrf-cross-site-request-forgery](https://github.com/yaklang/hack-skills/blob/HEAD/./skills/csrf-cross-site-request-forgery/SKILL.md) · `yaklang/hack-skills` · MIT — JSON CSRF 3 techniques, multipart upload CSRF, CSPT2CSRF modern variant
 - [clickjacking](https://github.com/yaklang/hack-skills/blob/HEAD/./skills/clickjacking/SKILL.md) · `yaklang/hack-skills` · MIT — Frame-based attacks, X-Frame-Options/CSP bypass
-- [web-cache-deception](https://github.com/yaklang/hack-skills/blob/HEAD/./skills/web-cache-deception/SKILL.md) · `yaklang/hack-skills` · MIT — Path confusion, cache key manipulation
 - [waf-bypass-techniques](https://github.com/yaklang/hack-skills/blob/HEAD/./skills/waf-bypass-techniques/SKILL.md) · `yaklang/hack-skills` · MIT — Encoding chains, chunked transfer tricks, HTTP smuggling for WAF evasion, vendor-specific bypass matrices (Cloudflare/AWS WAF/Aka…
 - [http-host-header-attacks](https://github.com/yaklang/hack-skills/blob/HEAD/./skills/http-host-header-attacks/SKILL.md) · `yaklang/hack-skills` · MIT — Password reset poisoning, web cache poisoning via Host, routing-based SSRF, absolute-URL override tricks
 - [dns-rebinding-attacks](https://github.com/yaklang/hack-skills/blob/HEAD/./skills/dns-rebinding-attacks/SKILL.md) · `yaklang/hack-skills` · MIT — DNS rebinding for internal network access, TTL manipulation, same-origin policy bypass, browser mitigation evasion
@@ -530,7 +524,6 @@
 - [http2smugl-desync](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/http2smugl-desync/SKILL.md) · `工具改写(neex/http2smugl)` · Apache-2.0 (上游 Unlicense) — [http2smugl] 专攻 HTTP/2 到 HTTP/1.1 转换时的走私面(CL.TE/TE.CL 混淆)。
 - [injectus-crlf-openredirect](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/injectus-crlf-openredirect/SKILL.md) · `工具改写(BountyStrike/Injectus)` · Apache-2.0 (上游 GPL-3.0) — [Injectus] CRLF 注入与开放重定向批量扫描,适合赏金猎人 workflow。
 - [crlfuzz-crlf-injection](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/crlfuzz-crlf-injection/SKILL.md) · `工具改写(dwisiswant0/crlfuzz)` · Apache-2.0 (上游 MIT) — [CRLFuzz] Go 编写,快,对 URL 每个参数注入 CRLF(%0d%0a)并检测响应头回显。
-- [xsspy-xss-scan](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/xsspy-xss-scan/SKILL.md) · `工具改写(faizann24/XssPy)` · Apache-2.0 (上游 MIT) — [XssPy] Python2 时代老工具,胜在简单粗暴整站爬;精细验证建议再上 Dalfox(现有)。
 - [sitadel-web-finger](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/sitadel-web-finger/SKILL.md) · `工具改写(shenril/Sitadel)` · Apache-2.0 (上游 GPL-3.0) — [Sitadel] 模块化架构,指纹/CMS/爆破/攻击四类引擎,适合前期快速摸底。
 - [wcvs-web-cache-vuln](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/wcvs-web-cache-vuln/SKILL.md) · `工具改写(Hackmanit/Web-Cache-Vulnerability-Scanner)` · Apache-2.0 (上游 Apache-2.0) — [Web Cache Vulnerability Scanner (wcvs)] 检测 Web 缓存投毒/欺骗(伪 URL、HTTP 头投毒、Cookie 投毒)。Hackmanit 学术团队出品。
 - [parampampam-param-hunt](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/parampampam-param-hunt/SKILL.md) · `工具改写(Bo0oM/ParamPamPam)` · Apache-2.0 (上游 WTFPL) — [ParamPamPam] 暴力猜解未暴露的 GET/POST 参数,常用于找到 debug=1 之类后门开关。
@@ -558,7 +551,6 @@
 - [vulnx-cms-exploit](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/vulnx-cms-exploit/SKILL.md) · `工具改写(anouarbensaad/vulnx)` · Apache-2.0 (上游 GPL-3.0) — [VulnX] CMS 漏洞扫描+自动利用,内置 20+ 种 CMS 的漏洞 PoC。
 - [w13scan-passive-audit](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/w13scan-passive-audit/SKILL.md) · `工具改写(boy-hack/w13scan)` · Apache-2.0 (上游 GPL-2.0) — [w13scan] 被动式 Web 漏洞扫描器,基于流量分析,适合授权测试中的全站审计。
 - [brutemap-smart-brute](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/brutemap-smart-brute/SKILL.md) · `工具改写(brutemap-dev/brutemap)` · Apache-2.0 (上游 GPL-3.0) — [brutemap] Web 认证爆破,自动识别登录表单与响应差异。
-- [cansina-content-discover](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/cansina-content-discover/SKILL.md) · `工具改写(deibit/cansina)` · Apache-2.0 (上游 GPL-3.0) — [cansina] 目录扫描器,特色是扫描持久化+多扩展名自动组合。
 - [cmsscanner-wp-lib](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/cmsscanner-wp-lib/SKILL.md) · `工具改写(wpscanteam/CMSScanner)` · Apache-2.0 (上游 MIT) — [CMSScanner] WPScan 底层扫描库,提供统一 API 供二次开发自定义 CMS 扫描器。
 - [dawnscanner-ruby-audit](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/dawnscanner-ruby-audit/SKILL.md) · `工具改写(thesp0nge/dawnscanner)` · Apache-2.0 (上游 MIT) — [dawnscanner] Ruby/Rails 静态安全审计,检测已知 CVE 对应的代码模式。
 - [dirble-fast-dir](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/dirble-fast-dir/SKILL.md) · `工具改写(nccgroup/dirble)` · Apache-2.0 (上游 GPL-3.0) — [dirble] NCC 出品的 Rust 目录扫描器,性能优于 dirb 系。
@@ -586,7 +578,6 @@
 - [typo3scan](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/typo3scan/SKILL.md) · `工具改写(whoot/Typo3Scan)` · Apache-2.0 (上游 GPL-2.0) — [Typo3Scan] Typo3 CMS 专项扫描,扩展级漏洞库。
 - [urlextractor-osint](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/urlextractor-osint/SKILL.md) · `工具改写(eschultze/URLextractor)` · Apache-2.0 (上游 MIT) — [URLextractor] 多源 OSINT URL 收集,带技术栈识别。
 - [vbscan-vbulletin](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/vbscan-vbulletin/SKILL.md) · `工具改写(rezasp/vbscan)` · Apache-2.0 (上游 GPL-3.0) — [VBScan] vBulletin 论坛专项扫描器。
-- [wafpass-bypass](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/wafpass-bypass/SKILL.md) · `工具改写(wafpassproject/wafpass)` · Apache-2.0 (上游 MIT) — [WAFPass] WAF 绕过测试工具,多技术混淆组合。
 - [webhandler-shell](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/webhandler-shell/SKILL.md) · `工具改写(lnxg33k/webhandler)` · Apache-2.0 (上游 GPL-3.0) — [webhandler] PHP WebShell 客户端,支持密码认证+交互终端。
 - [whichcdn-detect](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/whichcdn-detect/SKILL.md) · `工具改写(Nitr4x/whichCDN)` · Apache-2.0 (上游 MIT) — [whichCDN] CDN 识别工具,18+ 服务商指纹。
 - [wpbullet-wp-audit](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/wpbullet-wp-audit/SKILL.md) · `工具改写(webarx-security/wpbullet)` · Apache-2.0 (上游 GPL-2.0) — [wpbullet] WebARX 出品的 WP 扫描器,插件漏洞库精。
@@ -603,6 +594,7 @@
 - [v3n0m-sql-xss](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/v3n0m-sql-xss/SKILL.md) · `工具改写(v3n0m-Scanner/V3n0M-Scanner)` · Apache-2.0 (上游 GPL-3.0) — [V3n0M-Scanner] 老牌批量漏洞扫描,支持 6 种漏洞类型。
 - [corstest-cors](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/corstest-cors/SKILL.md) · `工具改写(RUB-NDS/CORStest)` · Apache-2.0 (上游 GPL-2.0) — [CORStest] 学术级 CORS 测试工具,检测 9 种配置错误。
 - [hsecscan-header-audit](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/hsecscan-header-audit/SKILL.md) · `工具改写(riramar/hsecscan)` · Apache-2.0 (上游 GPL-2.0) — [hsecscan] OWASP 安全头项目实现。
+- [java-deserialization-gadget-selector](https://github.com/DangerousSONG/attack_skills_for_agent/tree/main/java-deserialization-gadget-selector) · `工具改写(DangerousSONG/attack_skills_for_agent 原创)` · Apache-2.0 — Java deserialization gadget version decision matrix: read error signals (ClassNotFound/NPE/InvalidClassException/OptionalDataExce…
 
 ## C05 外部攻击面与云资产暴露（31 个）
 
@@ -671,7 +663,6 @@
 - [offensive-initial-access](https://github.com/tmenov/Claude-Red-pentest-set/blob/HEAD/Skills/infrastructure/offensive-initial-access/SKILL.md) · `tmenov/Claude-Red-pentest-set` · MIT — 
 - [offensive-windows-boundaries](https://github.com/tmenov/Claude-Red-pentest-set/blob/HEAD/Skills/infrastructure/offensive-windows-boundaries/SKILL.md) · `tmenov/Claude-Red-pentest-set` · MIT — 
 - [offensive-lateral-movement](https://github.com/tmenov/Claude-Red-pentest-set/blob/HEAD/Skills/post-exploitation/offensive-lateral-movement/SKILL.md) · `tmenov/Claude-Red-pentest-set` · MIT — Comprehensive lateral movement tradecraft for authorized red team engagements covering credential-based movement (pass-the-hash, …
-- [offensive-osint-methodology](https://github.com/tmenov/Claude-Red-pentest-set/blob/HEAD/Skills/recon/offensive-osint-methodology/SKILL.md) · `tmenov/Claude-Red-pentest-set` · MIT — 
 - [offensive-fast-checking](https://github.com/tmenov/Claude-Red-pentest-set/blob/HEAD/Skills/utility/offensive-fast-checking/SKILL.md) · `tmenov/Claude-Red-pentest-set` · MIT — 
 - [offensive-reporting](https://github.com/tmenov/Claude-Red-pentest-set/blob/HEAD/Skills/utility/offensive-reporting/SKILL.md) · `tmenov/Claude-Red-pentest-set` · MIT — Penetration test and red team report writing methodology. Covers executive summary structuring (risk-led narrative for non-techni…
 - [engagement-flow](https://github.com/hypnguyen1209/offensive-claude/blob/HEAD/skills/engagement-flow/SKILL.md) · `hypnguyen1209/offensive-claude` · MIT — Use when starting, planning, or running a multi-phase pentest or red-team engagement — to sequence the Cyber Kill Chain phases wi…
@@ -694,15 +685,15 @@
 - [cloudfail-cloud-origin](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/cloudfail-cloud-origin/SKILL.md) · `工具改写(m0rtem/CloudFail)` · Apache-2.0 (上游 MIT) — [CloudFail] 利用历史 DNS 数据和非 CDN 子域定位 Cloudflare 后的真实源站。
 - [interlace-parallel](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/interlace-parallel/SKILL.md) · `工具改写(codingo/Interlace)` · Apache-2.0 (上游 GPL-3.0) — [Interlace] 渗透命令并行调度器,codingo 出品。
 - [reconnoitre-auto-recon](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/reconnoitre-auto-recon/SKILL.md) · `工具改写(codingo/Reconnoitre)` · Apache-2.0 (上游 GPL-3.0) — [reconnoitre] 内网自动化侦察框架,输出按主机归档。
+- [engagement-discipline](https://github.com/DangerousSONG/attack_skills_for_agent/tree/main/engagement-discipline) · `工具改写(DangerousSONG/attack_skills_for_agent 原创)` · Apache-2.0 — Meta-skill: operational discipline for long-running multi-target engagements — time-boxed assault (90min fallback / 3-fail pivot …
 
-## C40 嗅探与中间人攻击（37 个）
+## C40 嗅探与中间人攻击（36 个）
 
 - [conducting-man-in-the-middle-attack-simulation](https://github.com/mukul975/Anthropic-Cybersecurity-Skills/blob/HEAD/skills/conducting-man-in-the-middle-attack-simulation/SKILL.md) · `mukul975/Anthropic-Cybersecurity-Skills` · Apache-2.0 — 'Simulates man-in-the-middle attacks using Ettercap, mitmproxy, and Bettercap
 - [performing-arp-spoofing-attack-simulation](https://github.com/mukul975/Anthropic-Cybersecurity-Skills/blob/HEAD/skills/performing-arp-spoofing-attack-simulation/SKILL.md) · `mukul975/Anthropic-Cybersecurity-Skills` · Apache-2.0 — 'Simulates ARP spoofing/cache-poisoning attacks in authorized lab or
 - [performing-bandwidth-throttling-attack-simulation](https://github.com/mukul975/Anthropic-Cybersecurity-Skills/blob/HEAD/skills/performing-bandwidth-throttling-attack-simulation/SKILL.md) · `mukul975/Anthropic-Cybersecurity-Skills` · Apache-2.0 — 'Simulate bandwidth throttling and network degradation attacks using tc,
 - [performing-network-packet-capture-analysis](https://github.com/mukul975/Anthropic-Cybersecurity-Skills/blob/HEAD/skills/performing-network-packet-capture-analysis/SKILL.md) · `mukul975/Anthropic-Cybersecurity-Skills` · Apache-2.0 — Perform forensic analysis of network packet captures (PCAP/PCAPNG) using Wireshark, tshark, and tcpdump to reconstruct network co…
 - [performing-network-traffic-analysis-with-zeek](https://github.com/mukul975/Anthropic-Cybersecurity-Skills/blob/HEAD/skills/performing-network-traffic-analysis-with-zeek/SKILL.md) · `mukul975/Anthropic-Cybersecurity-Skills` · Apache-2.0 — Deploy Zeek (formerly Bro) as a passive network security monitor to generate structured logs of protocol metadata (HTTP, DNS, TLS…
-- [offensive-network-attacks](https://github.com/tmenov/Claude-Red-pentest-set/blob/HEAD/Skills/network/offensive-network-attacks/SKILL.md) · `tmenov/Claude-Red-pentest-set` · MIT — Dense description covering ARP spoofing, LLMNR/NBT-NS/mDNS poisoning, DNS poisoning, MITM attacks, VLAN hopping, DHCP attacks, 80…
 - [network-protocol-attacks](https://github.com/yaklang/hack-skills/blob/HEAD/./skills/network-protocol-attacks/SKILL.md) · `yaklang/hack-skills` · MIT — ARP spoofing, DNS poisoning, LLMNR/NBT-NS poisoning, DHCP starvation, IPv6 attacks, protocol-level MitM
 - [mitm-hotpatch](https://github.com/yaklang/yak-skills/blob/HEAD/skills/mitm-hotpatch/SKILL.md) · `yaklang/yak-skills` · MIT — MITM六类Hook：劫持请求/响应、镜像流量、入库、mock——代理侧攻击流量操控
 - [yakit-native-plugin](https://github.com/yaklang/yak-skills/blob/HEAD/skills/yakit-native-plugin/SKILL.md) · `yaklang/yak-skills` · MIT — yak/mitm原生插件：mitm被动扫描、cli参数交互式加载
@@ -904,7 +895,7 @@
 - [cangibrina-admin-finder](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/cangibrina-admin-finder/SKILL.md) · `工具改写(fnk0c/cangibrina)` · Apache-2.0 (上游 GPL-2.0) — [cangibrina] 多引擎后台发现工具。
 - [dirstalk-dir-scan](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/dirstalk-dir-scan/SKILL.md) · `工具改写(stefanoj3/dirstalk)` · Apache-2.0 (上游 MIT) — [dirstalk] Go 目录扫描,支持分布式扫描。
 
-## C02 域名与DNS侦察（20 个）
+## C02 域名与DNS侦察（19 个）
 
 - [performing-dns-enumeration-and-zone-transfer](https://github.com/mukul975/Anthropic-Cybersecurity-Skills/blob/HEAD/skills/performing-dns-enumeration-and-zone-transfer/SKILL.md) · `mukul975/Anthropic-Cybersecurity-Skills` · Apache-2.0 — 'Enumerates DNS records, attempts zone transfers, brute-forces subdomains,
 - [performing-subdomain-enumeration-with-subfinder](https://github.com/mukul975/Anthropic-Cybersecurity-Skills/blob/HEAD/skills/performing-subdomain-enumeration-with-subfinder/SKILL.md) · `mukul975/Anthropic-Cybersecurity-Skills` · Apache-2.0 — Enumerate subdomains of target domains using ProjectDiscovery's Subfinder
@@ -919,7 +910,6 @@
 - [subbrute-dns-spider](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/subbrute-dns-spider/SKILL.md) · `工具改写(TheRook/subbrute)` · Apache-2.0 (上游 GPL-3.0) — [SubBrute] 特色是 resolver 轮换与元查询,绕开部分 DNS 频率限制;配 massdns 更猛。
 - [subjack-takeover](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/subjack-takeover/SKILL.md) · `工具改写(haccer/subjack)` · Apache-2.0 (上游 MIT) — [subjack] Go 编写速度快;接管指纹覆盖 30+ 服务(S3/Heroku/Github/Shopify 等)。
 - [subzy-takeover-check](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/subzy-takeover-check/SKILL.md) · `工具改写(LukaSikic/subzy)` · Apache-2.0 (上游 GPL-2.0) — [Subzy] 并发高指纹全;与 subjack 互补,两个都跑降低漏报。
-- [bluto-dns-recon](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/bluto-dns-recon/SKILL.md) · `工具改写(RandomStorm/Bluto)` · Apache-2.0 (上游 GPL-3.0) — [Bluto] DNS 信息收集+子域爆破+邮箱生成。
 - [ct-exposer-cert-sub](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/ct-exposer-cert-sub/SKILL.md) · `工具改写(chris408/ct-exposer)` · Apache-2.0 (上游 GPL-3.0) — [ct-exposer] 证书透明度子域发现工具。
 - [dnsvalidator-resolvers](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/dnsvalidator-resolvers/SKILL.md) · `工具改写(vortexau/dnsvalidator)` · Apache-2.0 (上游 GPL-3.0) — [dnsvalidator] DNS 解析器清洗工具,amass/shuffledns 前置。
 - [sublert-subdomain-mon](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/sublert-subdomain-mon/SKILL.md) · `工具改写(yassineaboukir/sublert)` · Apache-2.0 (上游 MIT) — [Sublert] 子域添加监控工具,持续跟踪攻击面变化。
@@ -1071,14 +1061,13 @@
 
 - [offensive-data-exfiltration](https://github.com/tmenov/Claude-Red-pentest-set/blob/HEAD/Skills/post-exploitation/offensive-data-exfiltration/SKILL.md) · `tmenov/Claude-Red-pentest-set` · MIT — Dense methodology covering DNS exfiltration (dnscat2, iodine, dns2tcp), HTTPS tunneling (domain fronting, CDN abuse, legitimate s…
 
-## C16 Linux本地提权（9 个）
+## C16 Linux本地提权（8 个）
 
 - [container-k8s-escape](https://github.com/hypnguyen1209/offensive-claude/blob/HEAD/skills/container-k8s-escape/SKILL.md) · `hypnguyen1209/offensive-claude` · MIT — Use when breaking out of a container or escalating inside Kubernetes — runc/BuildKit CVEs, privileged/capability/cgroup misconfig…
 - [linux-privilege-escalation](https://github.com/yaklang/hack-skills/blob/HEAD/./skills/linux-privilege-escalation/SKILL.md) · `yaklang/hack-skills` · MIT — SUID/SGID abuse, kernel exploits, sudo misconfig, cron jobs, Linux Capabilities, writable service files, NFS no_root_squash
 - [sandbox-escape-techniques](https://github.com/yaklang/hack-skills/blob/HEAD/./skills/sandbox-escape-techniques/SKILL.md) · `yaklang/hack-skills` · MIT — Browser sandbox escape, seccomp bypass, IPC abuse, kernel exploitation for sandbox breakout, policy file manipulation
 - [privesc-advisor](https://github.com/0xSteph/pentest-ai-agents/blob/HEAD/agents/privesc-advisor.md) · `0xSteph/pentest-ai-agents` · MIT — Linux and Windows privesc: SUID, tokens, services, kernel exploits, container escape
 - [linenum-privesc-scan](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/linenum-privesc-scan/SKILL.md) · `工具改写(rebootuser/LinEnum)` · Apache-2.0 (上游 MIT) — [LinEnum] 输出按颜色分级(红=高危);现代替代是 linpeas,但 LinEnum 零依赖单文件适合最小化落地。
-- [climber-linux-audit](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/climber-linux-audit/SKILL.md) · `工具改写(raffaele-forte/climber)` · Apache-2.0 (上游 GPL-3.0) — [climber] Linux 提权枚举脚本。
 - [uptux-linux-check](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/uptux-linux-check/SKILL.md) · `工具改写(initstring/uptux)` · Apache-2.0 (上游 MIT) — [uptux] 聚焦 systemd 的 Linux 提权枚举。
 - [suid3num-privesc](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/suid3num-privesc/SKILL.md) · `工具改写(Anon-Exploiter/SUID3NUM)` · Apache-2.0 (上游 MIT) — [suid3num] SUID 二进制自动枚举+利用。
 - [wildpwn-wildcard](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/wildpwn-wildcard/SKILL.md) · `工具改写(localh0t/wildpwn)` · Apache-2.0 (上游 GPL-3.0) — [wildpwn] 通配符注入提权工具。
@@ -1133,7 +1122,7 @@
 - [spraycharles-idp-spray](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/spraycharles-idp-spray/SKILL.md) · `工具改写(Tw1sm/spraycharles)` · Apache-2.0 (上游 BSD-3-Clause) — [spraycharles] Tw1sm 出品,支持 13 种身份平台喷洒。
 - [barq-azure-ad](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/barq-azure-ad/SKILL.md) · `工具改写(Voulnet/barq)` · Apache-2.0 (上游 MIT) — [barq] Azure AD 喷洒工具。
 
-## C29 内网发现与枚举（18 个）
+## C29 内网发现与枚举（17 个）
 
 - [pspy-process-monitor](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/pspy-process-monitor/SKILL.md) · `工具改写(DominicBreuker/pspy)` · Apache-2.0 (上游 GPL-3.0) — [pspy] 64/32 位与静态/动态版本四选;容器/老内核用 pspy32s。
 - [smbmap-share-enum](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/smbmap-share-enum/SKILL.md) · `工具改写(ShawnDEvans/smbmap)` · Apache-2.0 (上游 GPL-3.0) — [smbmap] 比 crackmapexec 共享枚举更细;--download 整个目录树效率高。
@@ -1149,7 +1138,6 @@
 - [ridrelay-rid-cycling](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/ridrelay-rid-cycling/SKILL.md) · `工具改写(skorov/ridrelay)` · Apache-2.0 (上游 GPL-3.0) — [ridrelay] 利用 SMB 空会话做 RID cycling,无凭据枚举域用户(旧 trick 自动化)。
 - [manspider-smb-spider](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/manspider-smb-spider/SKILL.md) · `工具改写(blacklanternsecurity/MANSPIDER)` · Apache-2.0 (上游 AGPL-3.0) — [MANSPIDER] SMB 共享批量爬取+内容匹配,域内凭据发现神器。
 - [sharesniffer-smb](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/sharesniffer-smb/SKILL.md) · `工具改写(shirosaidev/sharesniffer)` · Apache-2.0 (上游 Apache-2.0) — [sharesniffer] SMB 共享发现+访问测试。
-- [smbspider-smb-spider](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/smbspider-smb-spider/SKILL.md) · `工具改写(T-S-A/smbspider)` · Apache-2.0 (上游 GPL-2.0) — [smbspider] SMB 共享文件内容搜索。
 - [smbsr-smb-regret](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/smbsr-smb-regret/SKILL.md) · `工具改写(oldboy21/SMBSR)` · Apache-2.0 (上游 Apache-2.0) — [SMBSR] SMB 内容搜索工具,正则匹配文件名+内容。
 - [smbclient-ng-modern](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/smbclient-ng-modern/SKILL.md) · `工具改写(p0dalirius/smbclient-ng)` · Apache-2.0 (上游 GPL-3.0) — [smbclient-ng] 现代 SMB 客户端,带彩色界面+模块系统。
 - [ad-ldap-enum-ldap](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/ad-ldap-enum-ldap/SKILL.md) · `工具改写(CroweCybersecurity/ad-ldap-enum)` · Apache-2.0 (上游 MIT) — [ad-ldap-enum] CroweCyber 出品,简单直接的 LDAP 枚举。
