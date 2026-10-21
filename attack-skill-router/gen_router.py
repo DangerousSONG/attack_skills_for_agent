@@ -20,7 +20,7 @@ def en_keywords(items):
                 c[tok] += 1
     return [wd for wd, _ in c.most_common(4)]
 
-FORCE_PRIMARY = {'java-deserialization-gadget-selector'}  # 实测高价值 skill 强制进 primary
+FORCE_PRIMARY = {'java-deserialization-gadget-selector', 'engagement-discipline'}  # 实测高价值 skill 强制进 primary
 
 METH_REPO_PRIORITY = [
     'mukul975/Anthropic-Cybersecurity-Skills',

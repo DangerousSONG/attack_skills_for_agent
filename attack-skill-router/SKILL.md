@@ -163,15 +163,15 @@ when-to-use: 任何渗透任务开题时；已加载 skill 不足以解决当前
 - `gcat-gmail-c2` — 改写
 - 更多 8 个: `grep -ril -e persistence -e shell /root/.claude/skills --include=SKILL.md`
 
-### C50 红队方法论与自动化（38 个 · TA0002）
+### C50 红队方法论与自动化（39 个 · TA0002）
 
-- 触发词：红队方法论 / 自动化 ｜ EN: offensive, team, red, engagement
+- 触发词：红队方法论 / 自动化 ｜ EN: offensive, team, engagement, red
 - `conducting-full-scope-red-team-engagement` — Anthropic-Cybersecurity-Skills
 - `designing-adversary-engagement-with-mitre-engage` — Anthropic-Cybersecurity-Skills
 - `emulating-cloud-attacks-with-stratus-red-team` — Anthropic-Cybersecurity-Skills
 - `cloudfail-cloud-origin` — 改写
-- `interlace-parallel` — 改写
-- 更多 33 个: `grep -ril -e offensive -e team /root/.claude/skills --include=SKILL.md`
+- `engagement-discipline` — 改写
+- 更多 34 个: `grep -ril -e offensive -e team /root/.claude/skills --include=SKILL.md`
 
 ### C40 嗅探与中间人攻击（37 个 · TA0009）
 
