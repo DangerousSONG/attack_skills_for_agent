@@ -1,6 +1,6 @@
 ---
 name: implementing-jwt-signing-and-verification
-description: >-
+description: Implementing JWT Signing and Verification
   Implements secure JWT (RFC 7519) signing and verification using HMAC-SHA256,
   RSA-PSS, ES256, and EdDSA, including token expiration, claims validation, and
   defenses against algorithm-confusion, none-algorithm, and key-injection

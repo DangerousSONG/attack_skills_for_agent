@@ -1,6 +1,6 @@
 ---
 name: api-authorization-and-bola
-description: >-
+description: 1. CORE TEST LOOP
   API authorization and BOLA testing playbook. Use when APIs expose object identifiers, nested resources, hidden writable fields, or weak function-level authorization.
 ---
 

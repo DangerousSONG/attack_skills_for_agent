@@ -1,6 +1,6 @@
 ---
 name: performing-ssl-tls-security-assessment
-description: >-
+description: Performing SSL/TLS Security Assessment
   Assess SSL/TLS server configurations using the sslyze Python scanning
   library to evaluate supported protocol versions, cipher suite strength,
   certificate chain validation, HSTS enforcement, OCSP stapling, and known

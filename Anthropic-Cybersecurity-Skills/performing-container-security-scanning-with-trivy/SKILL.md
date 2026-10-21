@@ -1,6 +1,6 @@
 ---
 name: performing-container-security-scanning-with-trivy
-description: >-
+description: Performing Container Security Scanning with Trivy
   Runs Trivy across every target type it supports - container images, filesystems, Git
   repositories, and Kubernetes clusters - for OS and dependency vulnerabilities, IaC
   misconfiguration, exposed secrets, and licences, generating CycloneDX or SPDX SBOMs. Use

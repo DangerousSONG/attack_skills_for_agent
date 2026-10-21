@@ -1,6 +1,7 @@
 ---
 name: conducting-network-penetration-test
 description: 'Conducts comprehensive network penetration tests against authorized
+when-to-use: 'Conducts comprehensive network penetration tests against authorized
   target environments by performing host discovery, port scanning, service enumeration,
   vulnerability identification, and controlled exploitation to assess the security
   posture of network infrastructure. The tester follows PTES methodology from reconnaissance
@@ -143,65 +144,4 @@ Prepare the penetration test report with executive summary, methodology descript
 | **Lateral Movement** | Techniques used to move from one compromised system to another within a network, expanding the scope of access |
 | **Post-Exploitation** | Activities performed after initial compromise including privilege escalation, persistence, credential harvesting, and data access |
 
-## Tools & Systems
-
-- **Nmap**: Network discovery, port scanning, service enumeration, and vulnerability detection via the Nmap Scripting Engine (NSE)
-- **Metasploit Framework**: Exploitation framework providing exploit modules, payloads, encoders, and post-exploitation tools for validated vulnerability exploitation
-- **CrackMapExec**: Swiss-army knife for Windows/Active Directory environments supporting SMB, WinRM, LDAP, and MSSQL enumeration and exploitation
-- **Impacket**: Python library providing low-level programmatic access to network protocols (SMB, MSRPC, Kerberos) used for relay attacks and remote execution
-- **Burp Suite**: Web application proxy used when network services expose HTTP-based management interfaces
-
-## Common Scenarios
-
-### Scenario: Internal Network Penetration Test for a Financial Institution
-
-**Context**: The client is a mid-size bank requiring PCI-DSS compliance. Scope includes the internal corporate network (10.10.0.0/16), excluding payment processing systems in a separate VLAN. Testing window is Monday-Friday 20:00-06:00 to minimize impact on operations.
-
-**Approach**:
-1. Perform ARP-based host discovery on accessible subnets and TCP SYN discovery for hosts with ICMP disabled
-2. Conduct full port scans on all discovered hosts, prioritizing Windows servers and domain controllers
-3. Enumerate SMB shares, SNMP communities, and web management interfaces for quick wins
-4. Identify and exploit an unpatched Apache Tomcat instance with default credentials to gain initial foothold
-5. Escalate privileges via a local Windows kernel vulnerability, then extract cached domain credentials with Mimikatz
-6. Demonstrate lateral movement to the database server containing customer records, proving inadequate network segmentation
-7. Document the complete attack path from initial access to sensitive data, with remediation steps for each vulnerability
-
-**Pitfalls**:
-- Scanning too aggressively during business hours and triggering IDS alerts or service disruptions
-- Failing to verify that all target IPs are actually owned by the client before scanning
-- Not documenting exploitation attempts that failed, missing the opportunity to report on effective controls
-- Forgetting to clean up Meterpreter sessions and uploaded tools after testing
-
-## Output Format
-
-```
-## Finding: Unpatched Apache Tomcat with Default Credentials
-
-**ID**: NET-001
-**Severity**: Critical (CVSS 9.8)
-**Affected Host**: 10.10.5.23 (tomcat-prod.internal.corp)
-**Service**: Apache Tomcat 8.5.31 on port 8080
-**CVE**: CVE-2019-0232
-
-**Description**:
-The Apache Tomcat instance on 10.10.5.23:8080 is running version 8.5.31, which is
-vulnerable to CVE-2019-0232 (remote code execution via CGI Servlet). Additionally,
-the Tomcat Manager interface is accessible with default credentials (tomcat:tomcat),
-allowing deployment of arbitrary WAR files.
-
-**Proof of Concept**:
-1. Accessed http://10.10.5.23:8080/manager/html with credentials tomcat:tomcat
-2. Deployed malicious WAR file containing a reverse shell payload
-3. Obtained command execution as NT AUTHORITY\SYSTEM
-
-**Impact**:
-Full system compromise of the Tomcat server. From this host, the tester
-pivoted to 3 additional systems on the same subnet using harvested credentials,
-ultimately accessing the customer database containing 50,000+ records.
-
-**Remediation**:
-1. Immediately change default Tomcat Manager credentials
-2. Upgrade Apache Tomcat to the latest stable release (currently 10.1.x)
-3. Restrict access to the Tomcat Manager interface to authorized management IPs only
-4. Implement network segmentation between web servers and database tier
-```
+> 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。

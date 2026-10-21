@@ -1,6 +1,6 @@
 ---
 name: csv-formula-injection
-description: >-
+description: 0. QUICK START
   CSV/spreadsheet formula injection (DDE, Excel/LibreOffice, Google Sheets IMPORT*). Use when exports, imports, or user fields feed spreadsheets or reporting tools.
 ---
 

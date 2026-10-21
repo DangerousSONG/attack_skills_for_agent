@@ -1,6 +1,6 @@
 ---
 name: mitm-hotpatch
-description: >-
+description: 0. 相关路由
   Yakit MITM 热加载 (Hot Patch) 专题。当用户需要在 MITM 中间人代理中用代码动态劫持/修改请求与响应、镜像分析流量、入库前打标签染色、或对危险操作做 mock 护栏时使用。覆盖 hijackHTTPRequest / hijackHTTPResponseEx / mirror 系列 / hijackSaveHTTPFlow / mockHTTPRequest 全部 Hook 与 forward/drop 语义。
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: crlf-injection
-description: >-
+description: 0. RELATED ROUTING
   CRLF injection playbook. Use when user input reaches HTTP response headers, Location redirects, Set-Cookie values, or log files where carriage-return/line-feed characters can split or inject content.
 ---
 

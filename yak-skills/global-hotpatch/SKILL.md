@@ -1,6 +1,6 @@
 ---
 name: global-hotpatch
-description: >-
+description: 0. 相关路由
   Yakit 全局热加载 (Global Hot Patch) 专题。当用户需要一处配置、让 MITM 与所有 Web Fuzzer Tab 共享同一套 hook 时使用：全站透明加解密、统一签名/认证注入、动态 challenge 应答、全站染色脱敏、危险操作护栏。全局 hook 先于模块 hook 执行，同时只能启用一个。复用 beforeRequest / afterRequest / hijackHTTPRequest / hijackSaveHTTPFlow / mockHTTPRequest。
 ---
 

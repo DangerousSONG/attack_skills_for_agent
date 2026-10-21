@@ -1,6 +1,7 @@
 ---
 name: performing-web-application-penetration-test
 description: 'Performs systematic security testing of web applications following the
+when-to-use: 'Performs systematic security testing of web applications following the
   OWASP Web Security Testing Guide (WSTG) methodology to identify vulnerabilities
   in authentication, authorization, input validation, session management, and business
   logic. The tester uses Burp Suite as the primary interception proxy alongside manual
@@ -145,64 +146,4 @@ Compile all findings into a structured report:
 - **Nuclei**: Template-based vulnerability scanner with community-maintained templates for known CVEs and misconfigurations
 - **SecLists**: Curated collection of wordlists for fuzzing, credential testing, and payload delivery used throughout web application testing
 
-## Common Scenarios
-
-### Scenario: E-Commerce Application Pre-Launch Security Assessment
-
-**Context**: A retail company is launching a new e-commerce platform built on Node.js with a React frontend and PostgreSQL database. The application handles credit card payments through Stripe integration and stores customer PII. Testing scope includes the staging environment with full API access.
-
-**Approach**:
-1. Map the application through manual browsing and API documentation review, identifying 47 unique endpoints
-2. Test authentication flows including social login (OAuth), standard login, and password reset
-3. Discover IDOR vulnerability in the order retrieval API (`/api/orders/{orderId}`) where any authenticated user can view any order by iterating order IDs
-4. Identify stored XSS in the product review feature that executes when administrators view the admin dashboard
-5. Find SSRF in the product image import function that allows reading AWS EC2 instance metadata
-6. Test payment logic by manipulating price values in the client-side cart before checkout submission
-7. Report all findings with specific Node.js code-level remediation (parameterized queries, input sanitization with DOMPurify, authorization middleware)
-
-**Pitfalls**:
-- Testing only the frontend while ignoring the API layer that lacks independent authorization checks
-- Missing business logic flaws by relying solely on automated scanning without manual testing
-- Not testing the same functionality across different privilege levels to catch authorization issues
-- Overlooking client-side JavaScript for hardcoded API keys, debug endpoints, and internal URLs
-
-## Output Format
-
-```
-## Finding: Insecure Direct Object Reference in Order API
-
-**ID**: WEB-003
-**Severity**: High (CVSS 7.5)
-**Affected URL**: GET /api/v1/orders/{orderId}
-**Parameter**: orderId (path parameter)
-
-**Description**:
-The order retrieval endpoint does not verify that the authenticated user owns
-the requested order. Any authenticated user can access any order's details
-including customer name, shipping address, email, phone number, and order
-items by incrementing the orderId path parameter.
-
-**Reproduction Steps**:
-1. Authenticate as user A (testuser@example.com)
-2. Note user A's order ID: 10451
-3. Send GET /api/v1/orders/10452 with user A's session token
-4. Observe that user B's order details are returned with full PII
-
-**HTTP Request**:
-GET /api/v1/orders/10452 HTTP/1.1
-Host: staging.example.com
-Authorization: Bearer eyJhbGc....[User A's token]
-
-**HTTP Response** (truncated):
-HTTP/1.1 200 OK
-{"orderId":10452,"customerName":"Jane Smith","email":"jane@...","address":"123 Main St"}
-
-**Impact**:
-An attacker can enumerate all customer orders and extract PII (names, emails,
-addresses, phone numbers) for an estimated 25,000 customers.
-
-**Remediation**:
-Add authorization middleware that verifies the authenticated user's ID matches
-the order's userId field before returning order data. Implement UUIDs instead
-of sequential integers for order identifiers to prevent enumeration.
-```
+> 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。

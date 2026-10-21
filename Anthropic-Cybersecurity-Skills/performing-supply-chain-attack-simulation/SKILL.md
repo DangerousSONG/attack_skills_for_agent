@@ -1,6 +1,6 @@
 ---
 name: performing-supply-chain-attack-simulation
-description: >-
+description: Performing Supply Chain Attack Simulation
   Simulates and detects software supply chain attacks: typosquatting
   detection via Levenshtein distance against popular PyPI package names,
   dependency confusion testing against private registries, SHA-256 package

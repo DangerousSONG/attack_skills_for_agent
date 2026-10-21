@@ -1,6 +1,6 @@
 ---
 name: graphql-and-hidden-parameters
-description: >-
+description: 1. GRAPHQL FIRST PASS
   GraphQL and hidden parameter testing playbook. Use when exploring introspection, batching, undocumented fields, hidden parameters, schema abuse, and GraphQL authorization gaps.
 ---
 

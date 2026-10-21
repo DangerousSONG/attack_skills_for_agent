@@ -1,6 +1,6 @@
 ---
 name: webfuzzer-hotpatch
-description: >-
+description: 0. 相关路由
   Yakit Web Fuzzer 热加载 (Hot Patch) 专题。当用户需要在 Web Fuzzer 单 Tab 发包时用代码自动加解密请求/响应、注入签名、智能重试、自定义业务失败判定、用 fuzztag 动态生成 payload、或从响应提取参数做关联测试时使用。覆盖 beforeRequest / afterRequest / retryHandler / customFailureChecker / mirrorHTTPFlow / mockHTTPRequest 与 {{yak(...)}} fuzztag。
 ---
 

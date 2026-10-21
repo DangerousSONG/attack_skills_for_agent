@@ -1,6 +1,6 @@
 ---
 name: injection-checking
-description: >-
+description: Injection Testing Router
   Entry P1 category router for injection testing. Use when routing between XSS,
   SQLi, SSRF, XXE, SSTI, command injection, and NoSQL injection workflows based
   on how attacker-controlled input is consumed.

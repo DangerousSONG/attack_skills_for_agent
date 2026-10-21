@@ -1,0 +1,279 @@
+# performing-network-traffic-analysis-with-zeek — 详细参考（由 SKILL.md 拆分）
+
+# Load standard detection scripts
+@load base/protocols/conn
+@load base/protocols/dns
+@load base/protocols/http
+@load base/protocols/ssl
+@load base/protocols/ssh
+@load base/protocols/smtp
+@load base/protocols/ftp
+
+# Load file analysis
+@load base/files/hash-all-files
+@load base/files/extract-all-files
+
+# Load detection frameworks
+@load base/frameworks/notice
+@load base/frameworks/intel
+@load base/frameworks/files
+@load base/frameworks/software
+
+# Load additional protocol analyzers
+@load policy/protocols/ssl/validate-certs
+@load policy/protocols/ssl/log-hostcerts-only
+@load policy/protocols/ssh/detect-bruteforcing
+@load policy/protocols/dns/detect-external-names
+@load policy/protocols/http/detect-sqli
+
+# Enable JA3 fingerprinting
+@load policy/protocols/ssl/ja3
+
+# Enable JSON output for SIEM ingestion
+@load policy/tuning/json-logs
+
+redef LogAscii::use_json = T;
+
+# Configure file extraction directory
+redef FileExtract::prefix = "/opt/zeek/extracted/";
+
+# Set notice email
+redef Notice::mail_dest = "soc@example.com";
+```
+
+### Step 3: Write Custom Detection Scripts
+
+Create detection scripts for common threats:
+
+**Detect DNS Tunneling** (`/opt/zeek/share/zeek/site/detect-dns-tunnel.zeek`):
+
+```zeek
+@load base/protocols/dns
+
+module DNSTunnel;
+
+export {
+    redef enum Notice::Type += {
+        DNS_Tunnel_Suspected
+    };
+
+    # Threshold for suspicious DNS query length
+    const query_len_threshold = 50 &redef;
+
+    # Track query counts per host per domain
+    global dns_query_counts: table[addr, string] of count &default=0 &create_expire=5min;
+
+    # High query volume threshold
+    const query_volume_threshold = 100 &redef;
+}
+
+event dns_request(c: connection, msg: dns_msg, query: string, qtype: count, qclass: count)
+{
+    if ( |query| > query_len_threshold )
+    {
+        local parts = split_string(query, /\./);
+        if ( |parts| > 3 )
+        {
+            local base_domain = cat(parts[|parts|-2], ".", parts[|parts|-1]);
+            dns_query_counts[c$id$orig_h, base_domain] += 1;
+
+            if ( dns_query_counts[c$id$orig_h, base_domain] > query_volume_threshold )
+            {
+                NOTICE([$note=DNS_Tunnel_Suspected,
+                        $msg=fmt("Possible DNS tunneling: %s queries to %s with long query names",
+                                 c$id$orig_h, base_domain),
+                        $conn=c,
+                        $identifier=cat(c$id$orig_h, base_domain),
+                        $suppress_for=30min]);
+            }
+        }
+    }
+}
+```
+
+**Detect Beaconing Behavior** (`/opt/zeek/share/zeek/site/detect-beaconing.zeek`):
+
+```zeek
+@load base/protocols/conn
+
+module Beaconing;
+
+export {
+    redef enum Notice::Type += {
+        C2_Beacon_Detected
+    };
+
+    # Track connection intervals
+    global conn_intervals: table[addr, addr, port] of vector of time &create_expire=1hr;
+
+    const min_connections = 20 &redef;
+    const jitter_threshold = 0.15 &redef;
+}
+
+event connection_state_remove(c: connection)
+{
+    if ( c$id$resp_p == 80/tcp || c$id$resp_p == 443/tcp )
+    {
+        local key = [c$id$orig_h, c$id$resp_h, c$id$resp_p];
+
+        if ( key !in conn_intervals )
+            conn_intervals[key] = vector();
+
+        conn_intervals[key] += network_time();
+
+        if ( |conn_intervals[key]| >= min_connections )
+        {
+            local intervals: vector of interval = vector();
+            local i = 1;
+            while ( i < |conn_intervals[key]| )
+            {
+                intervals += conn_intervals[key][i] - conn_intervals[key][i-1];
+                i += 1;
+            }
+
+            # Calculate mean and standard deviation
+            local sum_val = 0.0;
+            for ( idx in intervals )
+                sum_val += interval_to_double(intervals[idx]);
+
+            local mean_val = sum_val / |intervals|;
+
+            local variance = 0.0;
+            for ( idx in intervals )
+            {
+                local diff = interval_to_double(intervals[idx]) - mean_val;
+                variance += diff * diff;
+            }
+            variance = variance / |intervals|;
+            local stddev = sqrt(variance);
+
+            if ( mean_val > 0 && (stddev / mean_val) < jitter_threshold )
+            {
+                NOTICE([$note=C2_Beacon_Detected,
+                        $msg=fmt("Possible C2 beaconing: %s -> %s:%s (interval=%.1fs, jitter=%.2f)",
+                                 c$id$orig_h, c$id$resp_h, c$id$resp_p,
+                                 mean_val, stddev/mean_val),
+                        $conn=c,
+                        $identifier=cat(c$id$orig_h, c$id$resp_h),
+                        $suppress_for=1hr]);
+            }
+        }
+    }
+}
+```
+
+### Step 4: Configure Intel Framework
+
+Load threat intelligence feeds into Zeek:
+
+```zeek
+# In local.zeek
+@load frameworks/intel/seen
+@load frameworks/intel/do_notice
+
+redef Intel::read_files += {
+    "/opt/zeek/intel/malicious-ips.intel",
+    "/opt/zeek/intel/malicious-domains.intel",
+    "/opt/zeek/intel/malicious-hashes.intel",
+};
+```
+
+Intel file format (`/opt/zeek/intel/malicious-ips.intel`):
+
+```
+#fields	indicator	indicator_type	meta.source	meta.desc	meta.do_notice
+198.51.100.50	Intel::ADDR	abuse.ch	Known C2 server	T
+203.0.113.100	Intel::ADDR	threatfeed	Ransomware infrastructure	T
+```
+
+### Step 5: Deploy and Operate
+
+```bash
+# Deploy Zeek cluster
+sudo /opt/zeek/bin/zeekctl deploy
+
+# Check cluster status
+sudo /opt/zeek/bin/zeekctl status
+
+# Process offline PCAP
+zeek -r capture.pcap local.zeek
+
+# View logs
+cat /opt/zeek/logs/current/conn.log | zeek-cut id.orig_h id.resp_h id.resp_p proto service duration orig_bytes resp_bytes
+
+# Search for specific connections
+cat /opt/zeek/logs/current/dns.log | zeek-cut query answers | grep -i "suspicious"
+
+# Rotate logs
+sudo /opt/zeek/bin/zeekctl cron
+```
+
+### Step 6: SIEM Integration
+
+**Filebeat configuration for ELK Stack:**
+
+```yaml
+filebeat.inputs:
+  - type: log
+    enabled: true
+    paths:
+      - /opt/zeek/logs/current/*.log
+    json.keys_under_root: true
+    json.add_error_key: true
+    fields:
+      source: zeek
+    fields_under_root: true
+
+output.elasticsearch:
+  hosts: ["https://elasticsearch:9200"]
+  index: "zeek-%{+yyyy.MM.dd}"
+
+setup.template.name: "zeek"
+setup.template.pattern: "zeek-*"
+```
+
+## Analysis Techniques
+
+### Connection Analysis
+
+```bash
+# Find top talkers by bytes
+cat conn.log | zeek-cut id.orig_h orig_bytes | sort -t$'\t' -k2 -rn | head -20
+
+# Find long-duration connections (potential C2)
+cat conn.log | zeek-cut id.orig_h id.resp_h id.resp_p duration | awk '$4 > 3600' | sort -t$'\t' -k4 -rn
+
+# Find connections with unusual ports
+cat conn.log | zeek-cut id.resp_p proto | sort | uniq -c | sort -rn | head -30
+```
+
+### TLS Analysis
+
+```bash
+# Find self-signed certificates
+cat ssl.log | zeek-cut server_name validation_status | grep "self signed"
+
+# Extract JA3 fingerprints for known malware
+cat ssl.log | zeek-cut ja3 server_name | sort | uniq -c | sort -rn
+
+# Find expired certificates
+cat ssl.log | zeek-cut server_name not_valid_after | awk -F'\t' '$2 < systime()'
+```
+
+## Best Practices
+
+- **TAP Over SPAN** - Use network TAPs instead of SPAN ports to avoid packet loss under load
+- **Worker Scaling** - Assign 1 Zeek worker per 1 Gbps of monitored traffic
+- **AF_PACKET Clusters** - Use AF_PACKET with load balancing for multi-core processing
+- **Log Rotation** - Configure automatic log rotation and archival (default: hourly)
+- **Intel Updates** - Automate threat intelligence feed updates at least daily
+- **Packet Loss Monitoring** - Monitor `capture_loss.log` for dropped packets
+- **Custom Scripts** - Develop organization-specific detections based on threat landscape
+
+## References
+
+- [Zeek Documentation](https://docs.zeek.org/en/master/)
+- [Zeek Scripting Reference](https://docs.zeek.org/en/master/script-reference/index.html)
+- [Zeek Intel Framework](https://docs.zeek.org/en/master/frameworks/intel.html)
+- [CISA Zeek Resources](https://www.cisa.gov/resources-tools/services/kismet)
+- [Zeek GitHub Repository](https://github.com/zeek/zeek)
