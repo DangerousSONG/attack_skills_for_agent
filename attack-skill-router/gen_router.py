@@ -20,6 +20,37 @@ def en_keywords(items):
                 c[tok] += 1
     return [wd for wd, _ in c.most_common(4)]
 
+SUBTAG_RULES = [
+    (u'SQL/Nosql 注入', r'sqli|sql-injection|sqlmap|bbqsql|nosql'),
+    (u'XSS', r'xss'),
+    (u'SSRF', r'ssrf'),
+    (u'反序列化', r'deserial|ysoserial|gadget'),
+    (u'文件上传/包含', r'file-upload|upload|lfi|path-traversal|rfi|liffy|lfimap'),
+    (u'模板/命令注入', r'template-injection|ssti|commix|cmd-injection|injectus'),
+    (u'认证与授权(JWT/会话/越权)', r'auth|jwt|session|idor|oauth|forced-browsing|403|bypass'),
+    (u'请求走私/缓存', r'smuggl|cache|desync'),
+    (u'XXE/XML', r'xxe|xml'),
+    (u'CORS/CSRF', r'cors|csrf|xsrf'),
+    (u'开放重定向', r'redirect'),
+    (u'WAF 绕过', r'waf'),
+    (u'CMS 专项(WordPress/Joomla/Drupal等)', r'wordpress|wp-|joomla|drupal|droopescan|typo3|magento|vbulletin|vbscan|joomlavs|juumla|dawnscanner|cmseek|cmsscan|wpscan|wpforce|wpbullet|wpintel|wpprobe'),
+    (u'GraphQL', r'graphql'),
+    (u'扫描/爬虫/综合', r'scan|spider|crawl|audit|recon|fuzz|vuln'),
+]
+SUBTAG_MIN_CAT = 40
+
+def subroute(items):
+    out = []
+    used = set()
+    for tag, pat in SUBTAG_RULES:
+        hits = [r for r in items if re.search(pat, r['Skill名称'], re.I)]
+        hits = [h for h in hits if h['Skill名称'] not in used]
+        if hits:
+            out.append((tag, hits))
+            used.update(h['Skill名称'] for h in hits)
+    rest = [r for r in items if r['Skill名称'] not in used]
+    return out, rest
+
 FORCE_PRIMARY = {'java-deserialization-gadget-selector', 'engagement-discipline'}  # 实测高价值 skill 强制进 primary
 
 METH_REPO_PRIORITY = [
@@ -86,7 +117,16 @@ for cat, items in cats.items():
     for p in primary:
         src = '改写' if p['来源仓库'].startswith('工具改写') else p['来源仓库'].split('/')[1]
         w('- `{0}` — {1}\n'.format(p['Skill名称'], src))
-    if len(items) > len(primary):
+    if len(items) > SUBTAG_MIN_CAT:
+        subs, rest = subroute(items)
+        w('- 二级路由（本类超过 {0} 个，按子标签细分）：\n'.format(SUBTAG_MIN_CAT))
+        for tag, hits in subs:
+            lead = ', '.join('`{0}`'.format(h['Skill名称']) for h in hits[:3])
+            more = ' …' if len(hits) > 3 else ''
+            w('  - {0}（{1} 个）: {2}{3}\n'.format(tag, len(hits), lead, more))
+        if rest:
+            w('  - 其他（{0} 个）: {1}\n'.format(len(rest), ', '.join('`{0}`'.format(r['Skill名称']) for r in rest[:3]) + (' …' if len(rest) > 3 else '')))
+    elif len(items) > len(primary):
         w('- 更多 {0} 个: `grep -ril -e {1} /root/.claude/skills --include=SKILL.md`\n'.format(len(items) - len(primary), ' -e '.join(en_kw[:2])))
     w('\n')
 

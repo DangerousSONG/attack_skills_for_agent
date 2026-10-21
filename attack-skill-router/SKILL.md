@@ -50,7 +50,9 @@ when-to-use: 任何渗透任务开题时；已加载 skill 不足以解决当前
 - `conducting-internal-reconnaissance-with-bloodhound-ce` — Anthropic-Cybersecurity-Skills
 - `aclpwn-acl-abuse` — 改写
 - `activedirectoryenum-ad` — 改写
-- 更多 45 个: `grep -ril -e active -e directory /root/.claude/skills --include=SKILL.md`
+- 二级路由（本类超过 40 个，按子标签细分）：
+  - 扫描/爬虫/综合（5 个）: `conducting-internal-reconnaissance-with-bloodhound-ce`, `performing-active-directory-vulnerability-assessment`, `smart-contract-vulnerabilities` …
+  - 其他（45 个）: `abusing-shadow-credentials-for-privesc`, `attacking-entra-id-with-roadtools`, `conducting-internal-network-penetration-test` …
 
 ### C44 AI与大模型安全（12 个 · TA0001）
 
@@ -82,7 +84,7 @@ when-to-use: 任何渗透任务开题时；已加载 skill 不足以解决当前
 - `microburst-azure` — 改写
 - 更多 9 个: `grep -ril -e performing -e kubernetes /root/.claude/skills --include=SKILL.md`
 
-### C35 C2框架与远控（22 个 · TA0011）
+### C35 C2框架与远控（21 个 · TA0011）
 
 - 触发词：C2框架 / 远控 ｜ EN: performing, infrastructure, building, red
 - `building-c2-redirector-infrastructure` — Anthropic-Cybersecurity-Skills
@@ -90,7 +92,7 @@ when-to-use: 任何渗透任务开题时；已加载 skill 不足以解决当前
 - `exploiting-aws-with-pacu` — Anthropic-Cybersecurity-Skills
 - `adaptix-c2-framework` — 改写
 - `emp3r0r-c2` — 改写
-- 更多 17 个: `grep -ril -e performing -e infrastructure /root/.claude/skills --include=SKILL.md`
+- 更多 16 个: `grep -ril -e performing -e infrastructure /root/.claude/skills --include=SKILL.md`
 
 ### C42 网络扫描与枚举（40 个 · TA0043）
 
@@ -110,9 +112,12 @@ when-to-use: 任何渗透任务开题时；已加载 skill 不足以解决当前
 - `performing-asset-criticality-scoring-for-vulns` — Anthropic-Cybersecurity-Skills
 - `alterx-dsl-subdomains` — 改写
 - `amass-attack-surface` — 改写
-- 更多 57 个: `grep -ril -e recon -e osint /root/.claude/skills --include=SKILL.md`
+- 二级路由（本类超过 40 个，按子标签细分）：
+  - WAF 绕过（1 个）: `wafw00f-waf-detect`
+  - 扫描/爬虫/综合（19 个）: `performing-asset-criticality-scoring-for-vulns`, `performing-timeline-reconstruction-with-plaso`, `recon-for-sec` …
+  - 其他（42 个）: `collecting-open-source-intelligence`, `performing-ai-driven-osint-correlation`, `performing-cloud-asset-inventory-with-cartography` …
 
-### C46 二进制漏洞利用与Pwn（47 个 · TA0002）
+### C46 二进制漏洞利用与Pwn（46 个 · TA0002）
 
 - 触发词：二进制漏洞利用 / Pwn ｜ EN: offensive, exploitation, penetration, ctf
 - `coercing-authentication-with-coercer-petitpotam` — Anthropic-Cybersecurity-Skills
@@ -120,7 +125,10 @@ when-to-use: 任何渗透任务开题时；已加载 skill 不足以解决当前
 - `conducting-network-penetration-test` — Anthropic-Cybersecurity-Skills
 - `angrop-rop-gen` — 改写
 - `armscgen-shellcode` — 改写
-- 更多 42 个: `grep -ril -e offensive -e exploitation /root/.claude/skills --include=SKILL.md`
+- 二级路由（本类超过 40 个，按子标签细分）：
+  - 认证与授权(JWT/会话/越权)（1 个）: `coercing-authentication-with-coercer-petitpotam`
+  - 扫描/爬虫/综合（12 个）: `exploiting-ipv6-vulnerabilities`, `exploiting-smb-vulnerabilities-with-metasploit`, `exploiting-vulnerabilities-with-metasploit-framework` …
+  - 其他（33 个）: `conducting-cloud-penetration-testing`, `conducting-network-penetration-test`, `performing-cloud-penetration-testing-with-pacu` …
 
 ### C10 API与业务逻辑攻击（54 个 · TA0001）
 
@@ -130,9 +138,13 @@ when-to-use: 任何渗透任务开题时；已加载 skill 不足以解决当前
 - `exploiting-idor-vulnerabilities` — Anthropic-Cybersecurity-Skills
 - `astra-api-scan` — 改写
 - `cariddi-crawler-secrets` — 改写
-- 更多 49 个: `grep -ril -e api -e jwt /root/.claude/skills --include=SKILL.md`
+- 二级路由（本类超过 40 个，按子标签细分）：
+  - 认证与授权(JWT/会话/越权)（23 个）: `exploiting-idor-vulnerabilities`, `exploiting-jwt-algorithm-confusion-attack`, `exploiting-oauth-misconfiguration` …
+  - GraphQL（9 个）: `performing-graphql-introspection-attack`, `performing-graphql-security-assessment`, `performing-graphql-depth-limit-attack` …
+  - 扫描/爬虫/综合（12 个）: `exploiting-api-injection-vulnerabilities`, `performing-api-fuzzing-with-restler`, `performing-osint-with-spiderfoot` …
+  - 其他（10 个）: `conducting-api-security-testing`, `performing-api-security-testing-with-postman`, `performing-api-inventory-and-discovery` …
 
-### C09 Web应用漏洞利用（177 个 · TA0001）
+### C09 Web应用漏洞利用（171 个 · TA0001）
 
 - 触发词：Web应用漏洞利用 ｜ EN: offensive, exploiting, injection, performing
 - `bypassing-authentication-with-forced-browsing` — Anthropic-Cybersecurity-Skills
@@ -141,7 +153,22 @@ when-to-use: 任何渗透任务开题时；已加载 skill 不足以解决当前
 - `bbqsql-blind-sqlmap` — 改写
 - `bbscan-batch-scan` — 改写
 - `java-deserialization-gadget-selector` — 改写
-- 更多 171 个: `grep -ril -e offensive -e exploiting /root/.claude/skills --include=SKILL.md`
+- 二级路由（本类超过 40 个，按子标签细分）：
+  - SQL/Nosql 注入（10 个）: `exploiting-nosql-injection-vulnerabilities`, `exploiting-sql-injection-vulnerabilities`, `exploiting-sql-injection-with-sqlmap` …
+  - XSS（8 个）: `testing-for-xss-vulnerabilities`, `offensive-xss`, `xsstrike-xss` …
+  - SSRF（9 个）: `performing-blind-ssrf-exploitation`, `performing-ssrf-vulnerability-exploitation`, `offensive-ssrf` …
+  - 反序列化（4 个）: `exploiting-insecure-deserialization`, `offensive-deserialization`, `deserialization-insecure` …
+  - 文件上传/包含（8 个）: `offensive-file-upload`, `path-traversal-lfi`, `liffy-lfi` …
+  - 模板/命令注入（7 个）: `exploiting-template-injection-vulnerabilities`, `offensive-ssti`, `ssti-server-side-template-injection` …
+  - 认证与授权(JWT/会话/越权)（9 个）: `bypassing-authentication-with-forced-browsing`, `exploiting-broken-function-level-authorization`, `performing-content-security-policy-bypass` …
+  - 请求走私/缓存（8 个）: `performing-web-cache-deception-attack`, `performing-web-cache-poisoning-attack`, `offensive-request-smuggling` …
+  - XXE/XML（6 个）: `testing-for-xml-injection-vulnerabilities`, `testing-for-xxe-injection-vulnerabilities`, `offensive-xxe` …
+  - CORS/CSRF（6 个）: `performing-csrf-attack-simulation`, `csrf-cross-site-request-forgery`, `xsrfprobe-csrf` …
+  - 开放重定向（1 个）: `testing-for-open-redirect-vulnerabilities`
+  - WAF 绕过（1 个）: `identywaf-fingerprint`
+  - CMS 专项(WordPress/Joomla/Drupal等)（13 个）: `plecost-wordpress-finger`, `cmseek-cms-detect`, `cmsscan-multi-cms` …
+  - 扫描/爬虫/综合（24 个）: `exploiting-race-condition-vulnerabilities`, `exploiting-websocket-vulnerabilities`, `exploiting-type-juggling-vulnerabilities` …
+  - 其他（57 个）: `escaping-containers-to-host`, `exploiting-mass-assignment-in-rest-apis`, `exploiting-prototype-pollution-in-javascript` …
 
 ### C05 外部攻击面与云资产暴露（31 个 · TA0043）
 
@@ -163,25 +190,25 @@ when-to-use: 任何渗透任务开题时；已加载 skill 不足以解决当前
 - `gcat-gmail-c2` — 改写
 - 更多 8 个: `grep -ril -e persistence -e shell /root/.claude/skills --include=SKILL.md`
 
-### C50 红队方法论与自动化（39 个 · TA0002）
+### C50 红队方法论与自动化（38 个 · TA0002）
 
-- 触发词：红队方法论 / 自动化 ｜ EN: offensive, team, engagement, red
+- 触发词：红队方法论 / 自动化 ｜ EN: team, offensive, engagement, red
 - `conducting-full-scope-red-team-engagement` — Anthropic-Cybersecurity-Skills
 - `designing-adversary-engagement-with-mitre-engage` — Anthropic-Cybersecurity-Skills
 - `emulating-cloud-attacks-with-stratus-red-team` — Anthropic-Cybersecurity-Skills
 - `cloudfail-cloud-origin` — 改写
 - `engagement-discipline` — 改写
-- 更多 34 个: `grep -ril -e offensive -e team /root/.claude/skills --include=SKILL.md`
+- 更多 33 个: `grep -ril -e team -e offensive /root/.claude/skills --include=SKILL.md`
 
-### C40 嗅探与中间人攻击（37 个 · TA0009）
+### C40 嗅探与中间人攻击（36 个 · TA0009）
 
-- 触发词：嗅探 / 中间人攻击 ｜ EN: mitm, network, performing, simulation
+- 触发词：嗅探 / 中间人攻击 ｜ EN: mitm, performing, network, simulation
 - `conducting-man-in-the-middle-attack-simulation` — Anthropic-Cybersecurity-Skills
 - `performing-arp-spoofing-attack-simulation` — Anthropic-Cybersecurity-Skills
 - `performing-bandwidth-throttling-attack-simulation` — Anthropic-Cybersecurity-Skills
 - `above-protocol-anomaly` — 改写
 - `arpspoof-smikims` — 改写
-- 更多 32 个: `grep -ril -e mitm -e network /root/.claude/skills --include=SKILL.md`
+- 更多 31 个: `grep -ril -e mitm -e performing /root/.claude/skills --include=SKILL.md`
 
 ### C43 移动端攻击（21 个 · TA0001）
 
@@ -287,15 +314,15 @@ when-to-use: 任何渗透任务开题时；已加载 skill 不足以解决当前
 - `cangibrina-admin-finder` — 改写
 - 更多 13 个: `grep -ril -e performing -e scanning /root/.claude/skills --include=SKILL.md`
 
-### C02 域名与DNS侦察（20 个 · TA0043）
+### C02 域名与DNS侦察（19 个 · TA0043）
 
-- 触发词：域名 / DNS侦察 ｜ EN: dns, subdomain, recon, performing
+- 触发词：域名 / DNS侦察 ｜ EN: dns, subdomain, performing, enumeration
 - `performing-dns-enumeration-and-zone-transfer` — Anthropic-Cybersecurity-Skills
 - `performing-subdomain-enumeration-with-subfinder` — Anthropic-Cybersecurity-Skills
 - `cors-cross-origin-misconfiguration` — hack-skills
 - `aiodnsbrute-dns` — 改写
 - `altdns-permutation` — 改写
-- 更多 15 个: `grep -ril -e dns -e subdomain /root/.claude/skills --include=SKILL.md`
+- 更多 14 个: `grep -ril -e dns -e subdomain /root/.claude/skills --include=SKILL.md`
 
 ### C25 哈希与密码破解（33 个 · TA0006）
 
@@ -364,15 +391,15 @@ when-to-use: 任何渗透任务开题时；已加载 skill 不足以解决当前
 - 触发词：流量混淆 / 加密隧道 ｜ EN: offensive, data, exfiltration
 - `offensive-data-exfiltration` — Claude-Red-pentest-set
 
-### C16 Linux本地提权（9 个 · TA0004）
+### C16 Linux本地提权（8 个 · TA0004）
 
-- 触发词：Linux本地提权 ｜ EN: linux, privesc, escape, container
+- 触发词：Linux本地提权 ｜ EN: privesc, escape, linux, container
 - `linux-privilege-escalation` — hack-skills
 - `sandbox-escape-techniques` — hack-skills
 - `privesc-advisor` — pentest-ai-agents
-- `climber-linux-audit` — 改写
 - `linenum-privesc-scan` — 改写
-- 更多 4 个: `grep -ril -e linux -e privesc /root/.claude/skills --include=SKILL.md`
+- `suid3num-privesc` — 改写
+- 更多 3 个: `grep -ril -e privesc -e escape /root/.claude/skills --include=SKILL.md`
 
 ### C47 逆向工程（4 个 · TA0007）
 
@@ -413,12 +440,12 @@ when-to-use: 任何渗透任务开题时；已加载 skill 不足以解决当前
 - `kerbrute-kerberos-enum` — 改写
 - 更多 12 个: `grep -ril -e spray -e brute /root/.claude/skills --include=SKILL.md`
 
-### C29 内网发现与枚举（18 个 · TA0007）
+### C29 内网发现与枚举（17 个 · TA0007）
 
-- 触发词：内网发现 / 枚举 ｜ EN: ldap, smb, enum, windapsearch
+- 触发词：内网发现 / 枚举 ｜ EN: ldap, enum, smb, windapsearch
 - `ad-ldap-enum-ldap` — 改写
 - `adidnsdump-ldap-enum` — 改写
-- 更多 16 个: `grep -ril -e ldap -e smb /root/.claude/skills --include=SKILL.md`
+- 更多 15 个: `grep -ril -e ldap -e enum /root/.claude/skills --include=SKILL.md`
 
 ### C13 远程命令执行与WebShell（8 个 · TA0002）
 
