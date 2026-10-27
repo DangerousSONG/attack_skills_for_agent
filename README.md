@@ -1,45 +1,78 @@
 # Attack Skills for Agent · 攻击侧 Skills 集（996 个 · 1k 达成）
 
-> 面向渗透测试 Agent 的即插即用 SKILL.md 能力库。每个 skill 是一个标准化 SKILL.md 文件（frontmatter + 方法论 + 命令 + 攻击链），Agent 按需加载。
->
-> **逐条明细见 [INDEX.md](INDEX.md)**：996 个 skill 按 50 个攻击大类全量列出。
->
+> 面向渗透测试 Agent 的即插即用 SKILL.md 能力库：每个 skill = frontmatter + 方法论 + 命令速查 + 攻击场景 Playbook，Agent 按需加载、照抄执行。
+> 逐条明细（名称/来源/License/简介/链接）见 [INDEX.md](INDEX.md)。
 > ⚠️ 仅限授权安全测试使用（authorized security testing only）。
 
-## 口径
+## 核心价值
 
-- 攻击侧 only：已剔除无线/硬件（WiFi/蓝牙/SDR/固件/IoT）、纯防御（检测/狩猎/取证响应/加固合规/ZTNA/PAM/IDS）、纯逆向与恶意软件分析
-- 跨仓库按 Skill 名称去重，与 mukul975/Anthropic-Cybersecurity-Skills 内部及其余各源零重名
-- License 全部开源可二创：Apache-2.0 / MIT / CC BY 4.0（CC BY 内容需署名，见下）
-- v1.1 更新：ACS 误伤复议回收 8 个 + 新增 blockint-skills / ctf-skills / awesome-ai-security 三源 20 个（低质量与合规/筛查类目录已剔除）
-- v1.9 口径定稿：blockint 移出；MERGES 20 团裁决（13 并/7 不并）再减 13；新增 gadget 决策表 + 纪律元技能 2 个 → 总量 989（现成 435 + 改写 554），仍满足 1k 指标口径
-- v2.0 工具补齐：补录 nuclei/gobuster/ffuf/hydra/frp/chisel/john 七个主流工具（描述经 Recall 评测迭代，@20 达 100%）→ 总量 996（现成 435 + 改写 561）
-- v2.0 两层部署：996 个 skill 全量注册时每个 step 的 system 区注入约 20K tokens，实验实测 prompt cache 命中率 84.9% → 14.8%，成本放大 3.9 倍 → 改为「3 个注册 + 993 个文件库」两层模型
+- **两层部署，根治 token 爆炸**：996 个 skill 全量注册时每个 step 携带约 20K tokens 索引，实测 prompt cache 命中率 84.9% → 14.8%，成本放大 3.9 倍。改为「3 注册 + 993 文件库」后常驻索引 <2K tokens/step（详见下文部署模型）。
+- **检索质量可量化**：107 条中文渗透任务查询 × 人工金标 slug 的 Recall 评测，当前 **Recall@5 = 84.1% / Recall@20 = 100.0%**，description 历经 3 轮数据驱动迭代（详见下文质量评测）。
+- **口径干净**：攻击侧 only（剔除无线/硬件、纯防御、纯逆向）；跨 10 个源零重名；License 全部可二创（Apache-2.0 / MIT / CC BY 4.0），工具改写类逐条标注上游 License。
+- **56% 自研资产**：561 个工具改写 skill（一个真实工具一个 playbook）+ 路由表 + gadget 决策表，独立知识产权，二创版权最干净。
+
+## 仓库结构
+
+| 目录 | 内容 | 数量 |
+| --- | --- | ---: |
+| `tool-skills/` | 工具改写 skill：一个真实渗透工具（ffuf/mimikatz/nuclei…）一个标准 SKILL.md | 559 |
+| `Anthropic-Cybersecurity-Skills/` | 上游 mukul975/ACS（Apache-2.0）：AD/云/钓鱼/C2/API 方法论 | 188 |
+| `hack-skills/` | 上游 yaklang/hack-skills（MIT）：Web 漏洞专项（SQLi/XSS/SSRF/SSTI…） | 95 |
+| `Claude-Red-pentest-set/` | 上游 tmenov（MIT）：红队全流程（初始访问/横向/免杀） | 59 |
+| `pentest-ai-agents/` | 上游 0xSteph（MIT）：角色型 skill（recon/planner/opsec…） | 38 |
+| `offensive-claude/` | 上游 hypnguyen1209（MIT）：纪律类（scope/engagement/finding） | 29 |
+| `Claude-OSINT/` `ctf-skills/` `awesome-web3-security/` `yak-skills/` `awesome-ai-security/` | 上游 OSINT/CTF/Web3/Yakit/LLM 安全 | 26 |
+| `attack-skill-router/` | 注册层：压缩路由主表（13.3KB）+ MERGES 合并裁决 + 生成脚本 | 1 |
+| `engagement-discipline/` | 注册层：纪律元技能（scope 边界/授权约束） | 1 |
+| `java-deserialization-gadget-selector/` | 注册层：Java 反序列化 gadget 决策表 | 1 |
+| `scripts/` | 治理/部署/评测脚本（见下） | — |
+| `INDEX.md` / `MERGES.md` / `攻击侧Skills清单.csv` | 全量清单 / 合并裁决记录 / 结构化导出 | — |
+
+### scripts/ 速查
+
+| 脚本 | 用途 |
+| --- | --- |
+| `deploy.py` | 两层部署：`--dry-run` 预演、`--clean` 清空重布、路径可用 `--skills-dir`/`--library-dir` 覆盖 |
+| `govern_skills.py` | 质量门禁：frontmatter 校验、断链扫描（含"未随库分发"豁免）、路径存在性检查 |
+| `eval_recall.py` | 检索质量评测：BEFORE=git HEAD / AFTER=工作区，输出 Recall@5/@20 对比 |
+| `gen_router.py` / `regenerate_index.py` / `sync_readme.py` | 路由表生成 / INDEX.md 再生成 / README 数字同步 |
 
 ## 部署（两层模型 · v2.0）
 
-**背景**：v1 把 996 个 skill 全部注册进 agent 的 skills 目录，每个 step 的 system 区都要携带全量 name/description 索引（约 20K tokens）。实测 prompt cache 命中率从 84.9% 跌到 14.8%，token 成本放大 3.9 倍。v2.0 改为两层：
-
 | 层 | 位置 | 内容 | 加载方式 |
 | --- | --- | --- | --- |
-| 注册层（走 Skill 协议） | `/root/.claude/skills/` | 3 个：`attack-skill-router`（路由主表，13KB）、`engagement-discipline`（纪律元技能）、`java-deserialization-gadget-selector`（gadget 决策表） | Agent 原生 skill 索引 |
-| 文件库（走 Read） | `/opt/attack-skill-library/` | 993 个 skill，扁平 `<slug>/SKILL.md`；库根放 `INDEX.md`（全量清单）+ `MERGES.md`（合并裁决） | Agent 按路由表用 Read 按需加载 |
+| 注册层（Skill 协议） | `/root/.claude/skills/` | 3 个：`attack-skill-router`、`engagement-discipline`、`java-deserialization-gadget-selector` | Agent 原生 skill 索引 |
+| 文件库（Read 协议） | `/opt/attack-skill-library/` | 993 个 skill 扁平存放 + `INDEX.md` + `MERGES.md` | 按路由表 Read 按需加载 |
 
-**Agent 入口**：3 个注册 skill 常驻索引（<2K tokens/step）→ 路由表命中场景 → Read 打开 `/opt/attack-skill-library/<slug>/SKILL.md` 获取完整方法论与命令。
-
-**部署命令**：
+**Agent 入口**：3 个注册 skill 常驻索引（<2K tokens/step）→ 路由表命中场景 → Read 打开 `/opt/attack-skill-library/<slug>/SKILL.md`。
 
 ```bash
 python scripts/deploy.py [--dry-run] [--clean] [--skills-dir 注册层目录] [--library-dir 文件库目录]
 ```
 
-- 默认注册层 `/root/.claude/skills/`、文件库 `/opt/attack-skill-library/`，可用环境变量 `SKILL_LIBRARY` 覆盖文件库路径
-- `--dry-run` 只打印不落盘；`--clean` 先清空目标再部署
-- 文件库路径在路由表 / 注册层文本中以 `/opt/attack-skill-library` 为基准，换路径需同步改 `attack-skill-router/SKILL.md`
+- 默认注册层 `/root/.claude/skills/`、文件库 `/opt/attack-skill-library/`（环境变量 `SKILL_LIBRARY` 可覆盖）
+- 换文件库路径需同步改 `attack-skill-router/SKILL.md` 中的基准路径
 
-**质量门禁**：`python scripts/govern_skills.py`（frontmatter 校验、断链扫描含"未随库分发"豁免、路径存在性检查）。
+## 质量评测（Recall）
 
-## 来源分布（现成 435 = 10 个仓库 + 工具改写 561）
+评测回答一个问题：**一条渗透任务描述丢进来，该用的 skill 能不能被检索到前 N 名**。
+
+- 评测集：107 条中文渗透任务查询，每条人工标注金标 slug（如「SQL 注入验证并拖库」→ `exploiting-sql-injection-with-sqlmap` 等 3 个标准答案），50 个攻击大类全覆盖
+- 方法：TF-IDF（词 1-2 gram + 字 3-5 gram）对 `name×3 + description` 排序；Recall@N = 金标至少 1 个进前 N 的查询占比
+- 当前：**Recall@5 84.1% / Recall@20 100.0%**；边界：只测"找不找得到"，不测"用得好不好"
+
+```bash
+python scripts/eval_recall.py   # 约 1-2 分钟，输出 BEFORE(HEAD) vs AFTER(工作区)
+```
+
+## 口径
+
+- 攻击侧 only：剔除无线/硬件（WiFi/蓝牙/SDR/固件/IoT）、纯防御（检测/狩猎/响应/加固/ZTNA/PAM/IDS）、纯逆向与恶意软件分析
+- 跨仓库按 skill 名称去重，与 mukul975/ACS 及其余各源零重名
+- License 全部开源可二创；CC BY 内容需署名（见末节）
+- 工具改写 skill 标注上游仓库与上游 License，二创以 Apache-2.0 发布
+
+## 来源分布（996 = 现成 435 + 工具改写 561）
 
 | 来源 | License | 数量 |
 | --- | --- | ---: |
@@ -53,577 +86,17 @@ python scripts/deploy.py [--dry-run] [--clean] [--skills-dir 注册层目录] [-
 | gmh5225/awesome-web3-security | MIT | 5 |
 | yaklang/yak-skills | MIT | 5 |
 | gmh5225/awesome-ai-security | MIT | 3 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 | 2 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Apache-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-3-Clause(GhostPack)) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-2-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-3-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 AGPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Apache-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 CC BY 4.0(署名)) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-2-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 AGPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-2.0(数据库 GPL;脚本自行检查)) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-2-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 AGPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-3-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Apache-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 LGPL-2.1) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-3-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 LGPL-2.1) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Apache-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 LGPL-2.1) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MPL-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Apache-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT(需Vulners API)) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-2-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 WTFPL) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-3-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 NOASSERTION(需人工)) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 0BSD) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Apache-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 LGPL-2.1) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Apache-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Apache-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-2-Clause(需人工确认)) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 LGPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT(内容库)) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 LGPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 NOASSERTION) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-3-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Apache-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 NOASSERTION) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-3-Clause(GhostPack)) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-3-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-3-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 CC BY 4.0(署名)) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 LGPL-2.1) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 LGPL-2.1) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 LGPL-2.1) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 NOASSERTION(需人工)) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-3-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Apache-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 NOASSERTION(需人工)) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 NOASSERTION(需人工)) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-2-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 AGPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Unlicense) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 NOASSERTION) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 NOASSERTION) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 NOASSERTION(Apache-2.0 为主)) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Apache-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-3-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 NOASSERTION) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Apache-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 AgPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-3-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Unlicense) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Apache-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 WTFPL) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Zlib) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-3-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-3-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Apache-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-4-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-3-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-3-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Apache-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-3-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-2-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 LGPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 AGPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 CC BY-NC 4.0(非商业)) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 LGPL-2.1) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-3-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Apache-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 AGPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Apache-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MPL-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-3-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-3-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-2-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Apache-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-3-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 ISC) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Apache-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Apache-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Apache-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-3-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Apache-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Apache-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-2-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 AGPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 AGPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Unlicense) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-3-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Apache-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Apache-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Apache-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-2-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Apache-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Apache-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 CC0-1.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Apache-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-3-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-3-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 0BSD) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-2-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-3-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-2-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 AGPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-3-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Unlicense) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Apache-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-2-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-2-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Apache-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 AGPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MPL-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Apache-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Apache-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Apache-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Apache-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 BSD-3-Clause) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Apache-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 AGPL-3.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 Apache-2.0) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 MIT) | 1 |
-| 工具改写（本仓库 tool-skills/ + 原创 2） | Apache-2.0 (上游 GPL-2.0) | 1 |
+| 本仓库 tool-skills/ 改写 + 原创（router/discipline/gadget） | Apache-2.0（上游 License 逐条见各 SKILL.md） | 561 |
 | **合计** | | **996** |
-
-注：blockint-skills（11 个区块链情报）已按需求移出；MERGES.md 20 个重叠团已裁决（13 并 / 7 不并），再减 13 个。
 
 ## 攻击大类分布（50 类全覆盖 · ATT&CK 骨架）
 
 Top 12：C09 Web应用漏洞利用 171 · C01 资产测绘与指纹识别 62 · C10 API与业务逻辑攻击 54 · C30 AD域渗透与域控攻击 50 · C46 二进制漏洞利用与Pwn 46 · C42 网络扫描与枚举 40 · C50 红队方法论与自动化 38 · C40 嗅探与中间人攻击 36 · C25 哈希与密码破解 34 · C05 外部攻击面与云资产暴露 31 · C03 邮箱与人员OSINT 27 · C08 钓鱼与社会工程 25。
 
-### 矩阵分布（大类 × 来源，50 类全量）
+<details>
+<summary>矩阵分布（大类 × 来源，50 类全量）</summary>
 
-| 攻击大类 | 现成 Skill | 工具改写 Skill | 合计 |
+| 攻击大类 | 现成 | 改写 | 合计 |
 | --- | ---: | ---: | ---: |
 | C09 Web应用漏洞利用 | 72 | 99 | 171 |
 | C01 资产测绘与指纹识别 | 14 | 48 | 62 |
@@ -639,37 +112,37 @@ Top 12：C09 Web应用漏洞利用 171 · C01 资产测绘与指纹识别 62 · 
 | C08 钓鱼与社会工程 | 15 | 10 | 25 |
 | C07 载荷开发与武器化 | 12 | 12 | 24 |
 | C49 密码学攻击 | 5 | 17 | 22 |
+| C41 Web漏洞扫描与验证 | 7 | 14 | 21 |
 | C35 C2框架与远控 | 13 | 8 | 21 |
 | C43 移动端攻击 | 14 | 7 | 21 |
 | C02 域名与DNS侦察 | 4 | 15 | 19 |
 | C22 进程注入与内存执行 | 18 | 1 | 19 |
-| C41 Web漏洞扫描与验证 | 7 | 14 | 21 |
 | C29 内网发现与枚举 | 0 | 17 | 17 |
 | C12 供应链与CI/CD攻击 | 14 | 2 | 16 |
+| C28 暴力破解与口令喷射 | 0 | 15 | 15 |
 | C18 云与容器提权 | 11 | 3 | 14 |
 | C06 漏洞情报与漏洞库 | 8 | 6 | 14 |
-| C28 暴力破解与口令喷射 | 0 | 15 | 15 |
 | C15 持久化与后门植入 | 9 | 4 | 13 |
 | C31 远程服务横向移动 | 4 | 9 | 13 |
+| C32 隧道与内网穿透 | 2 | 10 | 12 |
 | C44 AI与大模型安全 | 9 | 3 | 12 |
 | C17 Windows本地提权 | 5 | 6 | 11 |
 | C04 网络拓扑与互联网测绘 | 3 | 7 | 10 |
-| C32 隧道与内网穿透 | 2 | 10 | 12 |
 | C45 恶意软件开发与免杀 | 0 | 9 | 9 |
-| C26 Kerberos与票据攻击 | 5 | 3 | 8 |
 | C16 Linux本地提权 | 4 | 4 | 8 |
 | C13 远程命令执行与WebShell | 0 | 8 | 8 |
+| C26 Kerberos与票据攻击 | 5 | 3 | 8 |
 | C24 内存转储与LSASS窃取 | 2 | 3 | 5 |
 | C48 区块链与Web3安全 | 4 | 1 | 5 |
+| C11 边界设备与VPN攻击 | 2 | 2 | 4 |
+| C19 EDR与AV规避 | 4 | 0 | 4 |
+| C20 反取证与痕迹清理 | 0 | 4 | 4 |
 | C27 本地凭证与浏览器窃取 | 4 | 0 | 4 |
 | C33 数据收集与打包暂存 | 1 | 3 | 4 |
-| C19 EDR与AV规避 | 4 | 0 | 4 |
-| C11 边界设备与VPN攻击 | 2 | 2 | 4 |
-| C47 逆向工程 | 1 | 3 | 4 |
-| C20 反取证与痕迹清理 | 0 | 4 | 4 |
 | C38 隐写与隐藏通道 | 0 | 4 | 4 |
-| C39 数据破坏与擦除 | 2 | 1 | 3 |
+| C47 逆向工程 | 1 | 3 | 4 |
 | C34 屏幕与输入捕获 | 1 | 2 | 3 |
+| C39 数据破坏与擦除 | 2 | 1 | 3 |
 | C14 云与容器执行 | 0 | 3 | 3 |
 | C36 隐蔽回连与通信通道 | 0 | 3 | 3 |
 | C37 数据外传 | 1 | 1 | 2 |
@@ -677,10 +150,16 @@ Top 12：C09 Web应用漏洞利用 171 · C01 资产测绘与指纹识别 62 · 
 | C21 流量混淆与加密隧道 | 1 | 0 | 1 |
 | **合计** | **435** | **561** | **996** |
 
-逐条明细（996 个 · 名称/来源/License/简介/可跳转链接）见 [INDEX.md](INDEX.md)
+</details>
+
+## 版本记录
+
+- v1.1：ACS 误伤复议回收 8 个 + 新增 blockint/ctf/awesome-ai-security 三源
+- v1.9：口径定稿（blockint 移出；MERGES 20 团裁决 13 并 7 不并）→ 989
+- v2.0：补 nuclei/gobuster/ffuf/hydra/frp/chisel/john 七工具 → 996；两层部署（router 13.3KB + deploy.py）；description 三轮迭代 + Recall 评测 @20 100%；评测集扩至 107 条（零覆盖大类补齐）@5 84.1% / @20 100%
 
 ## 署名与许可
 
 - 各目录内 LICENSE 文件为对应上游仓库原始许可，二次分发请遵守
 - elementalsouls/Claude-OSINT 的 SKILL.md 内容以 CC BY 4.0 授权，二次使用须署名 **Sachin Sharma / Claude-OSINT** 并链接原仓库
-- 其余仓库均以 Apache-2.0 / MIT 授权，可自由二创
+- 其余上游均以 Apache-2.0 / MIT 授权，可自由二创；本仓库改写内容以 Apache-2.0 发布
