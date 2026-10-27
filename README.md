@@ -13,6 +13,30 @@
 - License 全部开源可二创：Apache-2.0 / MIT / CC BY 4.0（CC BY 内容需署名，见下）
 - v1.1 更新：ACS 误伤复议回收 8 个 + 新增 blockint-skills / ctf-skills / awesome-ai-security 三源 20 个（低质量与合规/筛查类目录已剔除）
 - v1.9 口径定稿：blockint 移出；MERGES 20 团裁决（13 并/7 不并）再减 13；新增 gadget 决策表 + 纪律元技能 2 个 → 总量 989（现成 435 + 改写 554），仍满足 1k 指标口径
+- v2.0 两层部署：990 个 skill 全量注册时每个 step 的 system 区注入约 20K tokens，实验实测 prompt cache 命中率 84.9% → 14.8%，成本放大 3.9 倍 → 改为「3 个注册 + 987 个文件库」两层模型
+
+## 部署（两层模型 · v2.0）
+
+**背景**：v1 把 990 个 skill 全部注册进 agent 的 skills 目录，每个 step 的 system 区都要携带全量 name/description 索引（约 20K tokens）。实测 prompt cache 命中率从 84.9% 跌到 14.8%，token 成本放大 3.9 倍。v2.0 改为两层：
+
+| 层 | 位置 | 内容 | 加载方式 |
+| --- | --- | --- | --- |
+| 注册层（走 Skill 协议） | `/root/.claude/skills/` | 3 个：`attack-skill-router`（路由主表，13KB）、`engagement-discipline`（纪律元技能）、`java-deserialization-gadget-selector`（gadget 决策表） | Agent 原生 skill 索引 |
+| 文件库（走 Read） | `/opt/attack-skill-library/` | 987 个 skill，扁平 `<slug>/SKILL.md`；库根放 `INDEX.md`（全量清单）+ `MERGES.md`（合并裁决） | Agent 按路由表用 Read 按需加载 |
+
+**Agent 入口**：3 个注册 skill 常驻索引（<2K tokens/step）→ 路由表命中场景 → Read 打开 `/opt/attack-skill-library/<slug>/SKILL.md` 获取完整方法论与命令。
+
+**部署命令**：
+
+```bash
+python scripts/deploy.py [--dry-run] [--clean] [--skills-dir 注册层目录] [--library-dir 文件库目录]
+```
+
+- 默认注册层 `/root/.claude/skills/`、文件库 `/opt/attack-skill-library/`，可用环境变量 `SKILL_LIBRARY` 覆盖文件库路径
+- `--dry-run` 只打印不落盘；`--clean` 先清空目标再部署
+- 文件库路径在路由表 / 注册层文本中以 `/opt/attack-skill-library` 为基准，换路径需同步改 `attack-skill-router/SKILL.md`
+
+**质量门禁**：`python scripts/govern_skills.py`（frontmatter 校验、断链扫描含"未随库分发"豁免、路径存在性检查）。
 
 ## 来源分布（现成 435 = 10 个仓库 + 工具改写 554）
 

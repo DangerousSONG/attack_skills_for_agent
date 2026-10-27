@@ -107,8 +107,8 @@ for dp, dirs, files in os.walk(ROOT):
         for pat in REF_PATTERNS:
             for m in pat.finditer(line):
                 ref = m.group(1)
-                if ref.startswith(('http', '//')):
-                    continue
+                if ref.startswith(('http', '//', '/', '{')):
+                    continue  # 绝对部署路径与 {LIB} 模板占位符非仓库相对引用
                 ref = ref.split('#')[0].strip()
                 if not ref:
                     continue
