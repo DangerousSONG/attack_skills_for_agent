@@ -1,7 +1,6 @@
 ---
 name: angrop-rop-gen
-description: 渗透工具 skill:angrop 的安装、参数速查与攻击场景 playbook。当任务涉及 二进制漏洞利用与Pwn 需要调用 angrop 时使用。
-when-to-use: 渗透工具 skill:angrop 的安装、参数速查与攻击场景 playbook。当任务涉及 二进制漏洞利用与Pwn 需要调用 angrop 时使用。
+description: angrop: 自动 ROP 链构造。信号:pwn,二进制利用,ROP 链生成,自动链,内存写。
 ---
 
 # angrop

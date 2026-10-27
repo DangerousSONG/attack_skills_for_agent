@@ -1,6 +1,6 @@
 ---
 name: tunneling-and-pivoting
-description: 0. RELATED ROUTING
+description: "Tunneling and pivoting playbook."
 when-to-use: >-
   Tunneling and pivoting playbook. Use when establishing network tunnels through compromised hosts including SSH tunneling, Chisel, Ligolo-ng, socat, DNS/ICMP/HTTP tunneling, ProxyChains, and multi-layer pivoting strategies.
 ---

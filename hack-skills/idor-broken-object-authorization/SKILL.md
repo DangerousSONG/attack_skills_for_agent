@@ -1,6 +1,6 @@
 ---
 name: idor-broken-object-authorization
-description: 1. IDOR vs BOLA vs BFLA
+description: "IDOR and broken object authorization testing playbook. Use when requests expose object identifiers, tenant boundaries, writable fields, or missing object-level authorization checks."
 when-to-use: >-
   IDOR and broken object authorization testing playbook. Use when requests expose object identifiers, tenant boundaries, writable fields, or missing object-level authorization checks.
 ---

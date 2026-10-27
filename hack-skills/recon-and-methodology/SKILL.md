@@ -1,6 +1,6 @@
 ---
 name: recon-and-methodology
-description: 1. RECON HIERARCHY
+description: "Reconnaissance and methodology playbook. Use when mapping assets, discovering endpoints, fingerprinting technology, and building a structured testing plan for a new target."
 when-to-use: >-
   Reconnaissance and methodology playbook. Use when mapping assets, discovering endpoints, fingerprinting technology, and building a structured testing plan for a new target.
 ---

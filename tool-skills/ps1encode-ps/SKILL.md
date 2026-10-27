@@ -1,7 +1,6 @@
 ---
 name: ps1encode-ps
-description: 渗透工具 skill:ps1encode 的安装、参数速查与攻击场景 playbook。当任务涉及 载荷开发与武器化 需要调用 ps1encode 时使用。
-when-to-use: 渗透工具 skill:ps1encode 的安装、参数速查与攻击场景 playbook。当任务涉及 载荷开发与武器化 需要调用 ps1encode 时使用。
+description: ps1encode: MSF payload PowerShell 化。信号:载荷开发,武器化,VBA 输出。
 ---
 
 # ps1encode

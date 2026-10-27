@@ -1,7 +1,6 @@
 ---
 name: icmpsh-reverse
-description: 渗透工具 skill:icmpsh 的安装、参数速查与攻击场景 playbook。当任务涉及 隐蔽回连与通信通道 需要调用 icmpsh 时使用。
-when-to-use: 渗透工具 skill:icmpsh 的安装、参数速查与攻击场景 playbook。当任务涉及 隐蔽回连与通信通道 需要调用 icmpsh 时使用。
+description: icmpsh: ICMP 隐蔽反弹 shell。信号:隐蔽回连,通信通道,监听端(Python),Windows 目标端,延迟 ms。
 ---
 
 # icmpsh

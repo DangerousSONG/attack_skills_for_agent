@@ -1,6 +1,6 @@
 ---
 name: race-condition
-description: 0. QUICK START — What to Test First
+description: "Race condition and TOCTOU testing for web apps."
 when-to-use: >-
   Race condition and TOCTOU testing for web apps. Use when testing one-time operations, concurrent HTTP abuse, rate-limit bypass, Turbo Intruder gates, HTTP/2 single-packet attacks, and CWE-362-style synchronization gaps.
 ---

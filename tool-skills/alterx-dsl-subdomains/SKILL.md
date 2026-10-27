@@ -1,7 +1,6 @@
 ---
 name: alterx-dsl-subdomains
-description: 渗透工具 skill:alterx 的安装、参数速查与攻击场景 playbook。当任务涉及 资产测绘与指纹识别 需要调用 alterx 时使用。
-when-to-use: 渗透工具 skill:alterx 的安装、参数速查与攻击场景 playbook。当任务涉及 资产测绘与指纹识别 需要调用 alterx 时使用。
+description: alterx: 被动结果驱动的新候选生成。信号:资产测绘,指纹识别,基于已知子域生成候选,直接指定目标。
 ---
 
 # alterx

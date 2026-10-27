@@ -1,7 +1,6 @@
 ---
 name: pwncat-shell-manager
-description: 渗透工具 skill:pwncat 的安装、参数速查与攻击场景 playbook。当任务涉及 远程命令执行与WebShell 需要调用 pwncat 时使用。
-when-to-use: 渗透工具 skill:pwncat 的安装、参数速查与攻击场景 playbook。当任务涉及 远程命令执行与WebShell 需要调用 pwncat 时使用。
+description: pwncat: shell 托管+自动提权。信号:webshell,rce,起监听,文件传输,列可用提权。
 ---
 
 # pwncat

@@ -1,6 +1,6 @@
 ---
 name: file-access-vuln
-description: File Access Router
+description: "This is the routing entry point for filesystem paths, download endpoints, upload pipelines, and file preview handling."
 when-to-use: File Access Router
   Entry P1 category router for file access and upload workflows. Use when
   testing download endpoints, file paths, local file inclusion, upload flows,

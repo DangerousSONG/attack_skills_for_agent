@@ -1,6 +1,6 @@
 ---
 name: hack
-description: HACKING SKILLS / HackSkills
+description: "Entry P0 primary router and operating doctrine for HackSkills."
 when-to-use: >-
   Entry P0 primary router and operating doctrine for HackSkills. Use when the
   task involves web application testing, API security assessment, recon,

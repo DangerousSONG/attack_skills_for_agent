@@ -1,7 +1,6 @@
 ---
 name: pydictor-wordlist
-description: 渗透工具 skill:pydictor 的安装、参数速查与攻击场景 playbook。当任务涉及 哈希与密码破解 需要调用 pydictor 时使用。
-when-to-use: 渗透工具 skill:pydictor 的安装、参数速查与攻击场景 playbook。当任务涉及 哈希与密码破解 需要调用 pydictor 时使用。
+description: pydictor: 全模式密码字典。信号:密码破解,哈希破解,基础字典生成,扩展模式,插件。
 ---
 
 # pydictor

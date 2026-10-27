@@ -1,7 +1,6 @@
 ---
 name: thefatrat-backdoor
-description: 渗透工具 skill:TheFatRat 的安装、参数速查与攻击场景 playbook。当任务涉及 载荷开发与武器化 需要调用 TheFatRat 时使用。
-when-to-use: 渗透工具 skill:TheFatRat 的安装、参数速查与攻击场景 playbook。当任务涉及 载荷开发与武器化 需要调用 TheFatRat 时使用。
+description: TheFatRat: APK 后门打包。信号:载荷开发,武器化,选取编号生成。
 ---
 
 # TheFatRat

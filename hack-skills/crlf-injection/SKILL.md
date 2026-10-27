@@ -1,6 +1,6 @@
 ---
 name: crlf-injection
-description: 0. RELATED ROUTING
+description: "CRLF injection (HTTP response splitting) techniques. Covers header injection, response body injection via double CRLF, XSS escalation, cache poisoning, and encoding bypass."
 when-to-use: 0. RELATED ROUTING
   CRLF injection playbook. Use when user input reaches HTTP response headers, Location redirects, Set-Cookie values, or log files where carriage-return/line-feed characters can split or inject content.
 ---

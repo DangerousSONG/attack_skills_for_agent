@@ -1,7 +1,6 @@
 ---
 name: bbot-automated-recon
-description: 渗透工具 skill:BBOT 的安装、参数速查与攻击场景 playbook。当任务涉及 资产测绘与指纹识别 需要调用 BBOT 时使用。
-when-to-use: 渗透工具 skill:BBOT 的安装、参数速查与攻击场景 playbook。当任务涉及 资产测绘与指纹识别 需要调用 BBOT 时使用。
+description: BBOT: 全域资产测绘一站式、被动前置→主动补漏。信号:资产测绘,指纹识别,子域名枚举 preset,纯被动(不触目标)。
 ---
 
 # BBOT

@@ -1,7 +1,6 @@
 ---
 name: cloakify-exfil
-description: 渗透工具 skill:cloakify 的安装、参数速查与攻击场景 playbook。当任务涉及 隐写与隐藏通道 需要调用 cloakify 时使用。
-when-to-use: 渗透工具 skill:cloakify 的安装、参数速查与攻击场景 playbook。当任务涉及 隐写与隐藏通道 需要调用 cloakify 时使用。
+description: cloakify: DLP 规避外传演练。信号:隐写,steganography,还原,加噪音混淆统计特征。
 ---
 
 # cloakify

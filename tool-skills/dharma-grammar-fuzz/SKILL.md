@@ -1,7 +1,6 @@
 ---
 name: dharma-grammar-fuzz
-description: 渗透工具 skill:dharma 的安装、参数速查与攻击场景 playbook。当任务涉及 模糊测试与漏洞挖掘 需要调用 dharma 时使用。
-when-to-use: 渗透工具 skill:dharma 的安装、参数速查与攻击场景 playbook。当任务涉及 模糊测试与漏洞挖掘 需要调用 dharma 时使用。
+description: dharma: 协议/文件格式 fuzz 样本生成。信号:pwn,二进制利用,按语法生成样本,计数器模式,调试。
 ---
 
 # dharma

@@ -1,7 +1,6 @@
 ---
 name: rusthound-bloodhound
-description: 渗透工具 skill:RustHound 的安装、参数速查与攻击场景 playbook。当任务涉及 AD域渗透与域控攻击 需要调用 RustHound 时使用。
-when-to-use: 渗透工具 skill:RustHound 的安装、参数速查与攻击场景 playbook。当任务涉及 AD域渗透与域控攻击 需要调用 RustHound 时使用。
+description: RustHound: Rust 版 SharpHound。信号:ad攻击,域渗透,域控 IP,Kerberos,打包输出。
 ---
 
 # RustHound

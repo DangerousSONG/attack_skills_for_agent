@@ -1,7 +1,6 @@
 ---
 name: torcrawl-darkweb-crawl
-description: 渗透工具 skill:TorCrawl 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 TorCrawl 时使用。
-when-to-use: 渗透工具 skill:TorCrawl 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 TorCrawl 时使用。
+description: TorCrawl: 暗网站点结构化提取。信号:web漏洞,注入,暗网站点爬取,爬取链接,提取邮箱。
 ---
 
 # TorCrawl

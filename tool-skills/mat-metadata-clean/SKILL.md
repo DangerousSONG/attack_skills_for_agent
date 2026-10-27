@@ -1,7 +1,6 @@
 ---
 name: mat-metadata-clean
-description: 渗透工具 skill:MAT (Metadata Anonymisation Toolkit) 的安装、参数速查与攻击场景 playbook。当任务涉及 反取证与痕迹清理 需要调用 MAT (Metadata Anonymisation Toolkit) 时使用。
-when-to-use: 渗透工具 skill:MAT (Metadata Anonymisation Toolkit) 的安装、参数速查与攻击场景 playbook。当任务涉及 反取证与痕迹清理 需要调用 MAT (Metadata Anonymisation Toolkit) 时使用。
+description: MAT (Metadata Anonymisation Toolkit): 外传文件元数据清洗。信号:痕迹清理,反取证,批量原地清理,列出元数据不清除,验证。
 ---
 
 # MAT (Metadata Anonymisation Toolkit)

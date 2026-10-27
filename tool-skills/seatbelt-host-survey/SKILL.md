@@ -1,7 +1,6 @@
 ---
 name: seatbelt-host-survey
-description: 渗透工具 skill:Seatbelt 的安装、参数速查与攻击场景 playbook。当任务涉及 Windows本地提权 需要调用 Seatbelt 时使用。
-when-to-use: 渗透工具 skill:Seatbelt 的安装、参数速查与攻击场景 playbook。当任务涉及 Windows本地提权 需要调用 Seatbelt 时使用。
+description: Seatbelt: Windows 提权面系统枚举。信号:windows提权,uac绕过,全量主机侦察,按组,系统组。
 ---
 
 # Seatbelt

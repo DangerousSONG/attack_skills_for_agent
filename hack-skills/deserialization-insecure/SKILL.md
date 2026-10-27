@@ -1,6 +1,6 @@
 ---
 name: deserialization-insecure
-description: 0. RELATED ROUTING
+description: "Insecure deserialization playbook."
 when-to-use: >-
   Insecure deserialization playbook. Use when Java, PHP, or Python applications deserialize untrusted data via ObjectInputStream, unserialize, pickle, or similar mechanisms that may lead to RCE, file access, or privilege escalation.
 ---

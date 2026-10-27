@@ -1,6 +1,6 @@
 ---
 name: subdomain-takeover
-description: 0. RELATED ROUTING
+description: "Subdomain takeover detection and exploitation playbook."
 when-to-use: >-
   Subdomain takeover detection and exploitation playbook. Use when targets have
   dangling CNAME/NS/MX records pointing to deprovisioned cloud resources, expired

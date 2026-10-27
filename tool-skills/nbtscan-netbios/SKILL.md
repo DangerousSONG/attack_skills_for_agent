@@ -1,7 +1,6 @@
 ---
 name: nbtscan-netbios
-description: 渗透工具 skill:nbtscan 的安装、参数速查与攻击场景 playbook。当任务涉及 内网发现与枚举 需要调用 nbtscan 时使用。
-when-to-use: 渗透工具 skill:nbtscan 的安装、参数速查与攻击场景 playbook。当任务涉及 内网发现与枚举 需要调用 nbtscan 时使用。
+description: nbtscan: 内网主机名快速普查。信号:内网枚举,网络发现,NetBIOS 名称扫描,使用 137 端口递归,详细。
 ---
 
 # nbtscan

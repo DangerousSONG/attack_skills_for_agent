@@ -1,7 +1,6 @@
 ---
 name: fakedns-dns-redirect
-description: 渗透工具 skill:FakeDns 的安装、参数速查与攻击场景 playbook。当任务涉及 嗅探与中间人攻击 需要调用 FakeDns 时使用。
-when-to-use: 渗透工具 skill:FakeDns 的安装、参数速查与攻击场景 playbook。当任务涉及 嗅探与中间人攻击 需要调用 FakeDns 时使用。
+description: FakeDns: DNS 钓鱼重定向。信号:中间人,mitm,DNS 伪造,重绑定,非权威。
 ---
 
 # FakeDns

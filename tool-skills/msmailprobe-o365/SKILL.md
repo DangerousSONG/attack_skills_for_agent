@@ -1,7 +1,6 @@
 ---
 name: msmailprobe-o365
-description: 渗透工具 skill:msmailprobe 的安装、参数速查与攻击场景 playbook。当任务涉及 暴力破解与口令喷射 需要调用 msmailprobe 时使用。
-when-to-use: 渗透工具 skill:msmailprobe 的安装、参数速查与攻击场景 playbook。当任务涉及 暴力破解与口令喷射 需要调用 msmailprobe 时使用。
+description: msmailprobe: O365 环境侦察+喷洒。信号:暴力破解,口令喷射,用户枚举。
 ---
 
 # msmailprobe

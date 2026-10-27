@@ -1,7 +1,6 @@
 ---
 name: netz-port-diff
-description: 渗透工具 skill:netz 的安装、参数速查与攻击场景 playbook。当任务涉及 网络扫描与枚举 需要调用 netz 时使用。
-when-to-use: 渗透工具 skill:netz 的安装、参数速查与攻击场景 playbook。当任务涉及 网络扫描与枚举 需要调用 netz 时使用。
+description: netz: 网络变化监控。信号:端口扫描,nmap,网段快照,变化检测。
 ---
 
 # netz

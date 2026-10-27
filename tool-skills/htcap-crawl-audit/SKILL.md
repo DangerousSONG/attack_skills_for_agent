@@ -1,7 +1,6 @@
 ---
 name: htcap-crawl-audit
-description: 渗透工具 skill:htcap 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 htcap 时使用。
-when-to-use: 渗透工具 skill:htcap 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 htcap 时使用。
+description: htcap: Ajax 站点全量爬取。信号:web漏洞,注入,爬取+存 SQLite,漏洞评估,爬深。
 ---
 
 # htcap

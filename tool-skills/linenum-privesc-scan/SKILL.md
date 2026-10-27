@@ -1,7 +1,6 @@
 ---
 name: linenum-privesc-scan
-description: 渗透工具 skill:LinEnum 的安装、参数速查与攻击场景 playbook。当任务涉及 Linux本地提权 需要调用 LinEnum 时使用。
-when-to-use: 渗透工具 skill:LinEnum 的安装、参数速查与攻击场景 playbook。当任务涉及 Linux本地提权 需要调用 LinEnum 时使用。
+description: LinEnum: 拿 shell 后系统枚举。信号:linux提权,suid,导出结果,高亮关键字。
 ---
 
 # LinEnum

@@ -1,6 +1,6 @@
 ---
 name: ssti-server-side-template-injection
-description: 0. RELATED ROUTING
+description: "SSTI playbook. Use when template expressions, server-side rendering, preview features, or templating engines may evaluate attacker-controlled content."
 when-to-use: >-
   SSTI playbook. Use when template expressions, server-side rendering, preview features, or templating engines may evaluate attacker-controlled content.
 ---

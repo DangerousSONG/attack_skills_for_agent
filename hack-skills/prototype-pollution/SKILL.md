@@ -1,6 +1,6 @@
 ---
 name: prototype-pollution
-description: 0. QUICK START
+description: "Expert prototype pollution for client and server JS."
 when-to-use: 0. QUICK START
   Prototype pollution testing for JavaScript stacks. Use when user input is
   merged into objects (query parsers, JSON bodies, deep assign), when

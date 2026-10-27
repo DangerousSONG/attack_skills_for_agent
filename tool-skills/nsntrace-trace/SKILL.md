@@ -1,7 +1,6 @@
 ---
 name: nsntrace-trace
-description: 渗透工具 skill:nsntrace 的安装、参数速查与攻击场景 playbook。当任务涉及 网络扫描与枚举 需要调用 nsntrace 时使用。
-when-to-use: 渗透工具 skill:nsntrace 的安装、参数速查与攻击场景 playbook。当任务涉及 网络扫描与枚举 需要调用 nsntrace 时使用。
+description: nsntrace: 进程级流量捕获。信号:端口扫描,nmap,按进程抓包,调试,过滤。
 ---
 
 # nsntrace

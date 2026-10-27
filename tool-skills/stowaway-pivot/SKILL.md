@@ -1,7 +1,6 @@
 ---
 name: stowaway-pivot
-description: 渗透工具 skill:Stowaway 的安装、参数速查与攻击场景 playbook。当任务涉及 隧道与内网穿透 需要调用 Stowaway 时使用。
-when-to-use: 渗透工具 skill:Stowaway 的安装、参数速查与攻击场景 playbook。当任务涉及 隧道与内网穿透 需要调用 Stowaway 时使用。
+description: Stowaway: 多层内网穿透。信号:内网穿透,隧道,agent 监听,admin 连接,密钥。
 ---
 
 # Stowaway

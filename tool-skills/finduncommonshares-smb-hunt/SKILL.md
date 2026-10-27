@@ -1,7 +1,6 @@
 ---
 name: finduncommonshares-smb-hunt
-description: 渗透工具 skill:pyFindUncommonShares 的安装、参数速查与攻击场景 playbook。当任务涉及 AD与LDAP枚举 需要调用 pyFindUncommonShares 时使用。
-when-to-use: 渗透工具 skill:pyFindUncommonShares 的安装、参数速查与攻击场景 playbook。当任务涉及 AD与LDAP枚举 需要调用 pyFindUncommonShares 时使用。
+description: pyFindUncommonShares: 非常规共享找敏感数据。信号:内网枚举,网络发现,全网非常规共享扫描,特定共享名类型,顺带检查当前用户可读。
 ---
 
 # pyFindUncommonShares

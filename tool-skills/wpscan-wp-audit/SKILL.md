@@ -1,7 +1,6 @@
 ---
 name: wpscan-wp-audit
-description: 渗透工具 skill:WPScan 的安装、参数速查与攻击场景 playbook。当任务涉及 Web漏洞扫描与验证 需要调用 WPScan 时使用。
-when-to-use: 渗透工具 skill:WPScan 的安装、参数速查与攻击场景 playbook。当任务涉及 Web漏洞扫描与验证 需要调用 WPScan 时使用。
+description: WPScan: WP 目标深度审计。信号:web扫描,漏洞扫描,基础 WP 扫描,激进插件检测,登录爆破。
 ---
 
 # WPScan

@@ -1,7 +1,6 @@
 ---
 name: modlishka-reverse-proxy-phishing
-description: 渗透工具 skill:Modlishka 的安装、参数速查与攻击场景 playbook。当任务涉及 钓鱼与社会工程 需要调用 Modlishka 时使用。
-when-to-use: 渗透工具 skill:Modlishka 的安装、参数速查与攻击场景 playbook。当任务涉及 钓鱼与社会工程 需要调用 Modlishka 时使用。
+description: Modlishka: 2FA 会话实时钓鱼。信号:钓鱼,社会工程,启动反向代理钓鱼,挂合法域名 TLS 证书,自定义凭证提取正则。
 ---
 
 # Modlishka

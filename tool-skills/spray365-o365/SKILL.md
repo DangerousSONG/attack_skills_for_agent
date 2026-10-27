@@ -1,7 +1,6 @@
 ---
 name: spray365-o365
-description: 渗透工具 skill:Spray365 的安装、参数速查与攻击场景 playbook。当任务涉及 暴力破解与口令喷射 需要调用 Spray365 时使用。
-when-to-use: 渗透工具 skill:Spray365 的安装、参数速查与攻击场景 playbook。当任务涉及 暴力破解与口令喷射 需要调用 Spray365 时使用。
+description: Spray365: O365 智能喷洒。信号:暴力破解,口令喷射,O365 喷洒,自适应。
 ---
 
 # Spray365

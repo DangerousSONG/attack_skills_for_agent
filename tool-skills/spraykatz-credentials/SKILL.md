@@ -1,7 +1,6 @@
 ---
 name: spraykatz-credentials
-description: 渗透工具 skill:spraykatz 的安装、参数速查与攻击场景 playbook。当任务涉及 内存转储与LSASS窃取 需要调用 spraykatz 时使用。
-when-to-use: 渗透工具 skill:spraykatz 的安装、参数速查与攻击场景 playbook。当任务涉及 内存转储与LSASS窃取 需要调用 spraykatz 时使用。
+description: spraykatz: 域内远程 mimikatz。信号:内存转储,lsass,远程凭据收割,wordlist。
 ---
 
 # spraykatz

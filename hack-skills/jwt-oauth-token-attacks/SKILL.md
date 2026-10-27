@@ -1,6 +1,6 @@
 ---
 name: jwt-oauth-token-attacks
-description: 0. RELATED ROUTING
+description: "JWT and OAuth token attack playbook. Use when validating token trust, signing algorithms, key handling, claim abuse, bearer flows, and OAuth account-binding weaknesses."
 when-to-use: >-
   JWT and OAuth token attack playbook. Use when validating token trust, signing algorithms, key handling, claim abuse, bearer flows, and OAuth account-binding weaknesses.
 ---

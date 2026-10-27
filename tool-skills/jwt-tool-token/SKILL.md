@@ -1,7 +1,6 @@
 ---
 name: jwt-tool-token
-description: 渗透工具 skill:jwt_tool 的安装、参数速查与攻击场景 playbook。当任务涉及 API与业务逻辑攻击 需要调用 jwt_tool 时使用。
-when-to-use: 渗透工具 skill:jwt_tool 的安装、参数速查与攻击场景 playbook。当任务涉及 API与业务逻辑攻击 需要调用 jwt_tool 时使用。
+description: jwt_tool: JWT 五连击、jku/x5u 注入拿服务端公钥欺骗。信号:api攻击,接口测试,令牌全面体检,离线破解字典。
 ---
 
 # jwt_tool

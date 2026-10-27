@@ -1,7 +1,6 @@
 ---
 name: a2sv-ssl-vuln
-description: 渗透工具 skill:a2sv 的安装、参数速查与攻击场景 playbook。当任务涉及 密码学攻击 需要调用 a2sv 时使用。
-when-to-use: 渗透工具 skill:a2sv 的安装、参数速查与攻击场景 playbook。当任务涉及 密码学攻击 需要调用 a2sv 时使用。
+description: a2sv: SSL/TLS CVE 检测。信号:密码学攻击,加密破解,SSL 漏洞扫描。
 ---
 
 # a2sv

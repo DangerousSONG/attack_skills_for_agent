@@ -1,6 +1,6 @@
 ---
 name: ntlm-relay-coercion
-description: 0. RELATED ROUTING
+description: "NTLM relay and authentication coercion playbook."
 when-to-use: >-
   NTLM relay and authentication coercion playbook. Use when capturing and relaying NTLM authentication to escalate privileges via SMB, LDAP, HTTP, or MSSQL relay targets, combined with PetitPotam, PrinterBug, and other coercion methods.
 ---

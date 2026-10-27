@@ -1,7 +1,6 @@
 ---
 name: statsprocessor-maskgen
-description: 渗透工具 skill:Statsprocessor 的安装、参数速查与攻击场景 playbook。当任务涉及 口令与哈希破解 需要调用 Statsprocessor 时使用。
-when-to-use: 渗透工具 skill:Statsprocessor 的安装、参数速查与攻击场景 playbook。当任务涉及 口令与哈希破解 需要调用 Statsprocessor 时使用。
+description: Statsprocessor: 基于语料的定向字典生成。信号:密码破解,哈希破解,从字典生成马尔可夫统计,按统计生成候选,长度范围。
 ---
 
 # Statsprocessor

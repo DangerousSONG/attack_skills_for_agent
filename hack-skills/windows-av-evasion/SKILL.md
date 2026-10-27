@@ -1,6 +1,6 @@
 ---
 name: windows-av-evasion
-description: 0. RELATED ROUTING
+description: "AV/EDR evasion playbook for Windows. Use when bypassing AMSI, ETW, .NET assembly detection, shellcode execution, process injection, API hooking, and signature-based detection on Windows endpoints."
 when-to-use: >-
   AV/EDR evasion playbook for Windows. Use when bypassing AMSI, ETW, .NET assembly detection, shellcode execution, process injection, API hooking, and signature-based detection on Windows endpoints.
 ---

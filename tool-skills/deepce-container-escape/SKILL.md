@@ -1,7 +1,6 @@
 ---
 name: deepce-container-escape
-description: 渗透工具 skill:deepce 的安装、参数速查与攻击场景 playbook。当任务涉及 云与容器执行 需要调用 deepce 时使用。
-when-to-use: 渗透工具 skill:deepce 的安装、参数速查与攻击场景 playbook。当任务涉及 云与容器执行 需要调用 deepce 时使用。
+description: deepce: Docker 内枚举+逃逸路径。信号:云命令执行,容器逃逸,容器内全面枚举,自动尝试逃逸,跑所有逃逸检测。
 ---
 
 # deepce

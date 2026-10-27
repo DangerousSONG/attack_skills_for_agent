@@ -1,7 +1,6 @@
 ---
 name: gowitness-screenshot
-description: 渗透工具 skill:gowitness 的安装、参数速查与攻击场景 playbook。当任务涉及 资产测绘与指纹识别 需要调用 gowitness 时使用。
-when-to-use: 渗透工具 skill:gowitness 的安装、参数速查与攻击场景 playbook。当任务涉及 资产测绘与指纹识别 需要调用 gowitness 时使用。
+description: gowitness: 资产可视化核查(先看脸再决定打谁)。信号:资产测绘,指纹识别,单 URL 截图+指纹,批量截图,启动结果浏览服务。
 ---
 
 # gowitness

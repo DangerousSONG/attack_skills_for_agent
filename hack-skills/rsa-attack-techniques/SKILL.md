@@ -1,6 +1,6 @@
 ---
 name: rsa-attack-techniques
-description: 0. RELATED ROUTING
+description: "RSA attack playbook for CTF and real-world cryptanalysis."
 when-to-use: >-
   RSA attack playbook for CTF and real-world cryptanalysis. Use when given
   RSA parameters (n, e, c) and need to recover plaintext by exploiting

@@ -1,7 +1,6 @@
 ---
 name: dislocker-bitlocker
-description: 渗透工具 skill:dislocker 的安装、参数速查与攻击场景 playbook。当任务涉及 口令与哈希破解 需要调用 dislocker 时使用。
-when-to-use: 渗透工具 skill:dislocker 的安装、参数速查与攻击场景 playbook。当任务涉及 口令与哈希破解 需要调用 dislocker 时使用。
+description: dislocker: 离线 BitLocker 解密。信号:密码破解,哈希破解,恢复密码解密卷,用户密码解密,BEK 密钥文件解密。
 ---
 
 # dislocker

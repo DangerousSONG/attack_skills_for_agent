@@ -1,6 +1,6 @@
 ---
 name: dangling-markup-injection
-description: 0. RELATED ROUTING
+description: "Dangling markup injection playbook."
 when-to-use: >-
   Dangling markup injection playbook. Use when HTML injection is possible but
   JavaScript execution is blocked (CSP, sanitizer strips event handlers, WAF

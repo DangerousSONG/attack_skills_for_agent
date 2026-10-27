@@ -1,7 +1,6 @@
 ---
 name: simpleemailspoofer
-description: 渗透工具 skill:SimpleEmailSpoofer 的安装、参数速查与攻击场景 playbook。当任务涉及 钓鱼与社会工程 需要调用 SimpleEmailSpoofer 时使用。
-when-to-use: 渗透工具 skill:SimpleEmailSpoofer 的安装、参数速查与攻击场景 playbook。当任务涉及 钓鱼与社会工程 需要调用 SimpleEmailSpoofer 时使用。
+description: SimpleEmailSpoofer: 钓鱼邮件伪造测试。信号:钓鱼,社会工程,指定 SMTP,HTML 模式。
 ---
 
 # SimpleEmailSpoofer

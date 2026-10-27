@@ -1,7 +1,6 @@
 ---
 name: avet-av-evasion
-description: 渗透工具 skill:AVET 的安装、参数速查与攻击场景 playbook。当任务涉及 免杀与载荷投递 需要调用 AVET 时使用。
-when-to-use: 渗透工具 skill:AVET 的安装、参数速查与攻击场景 playbook。当任务涉及 免杀与载荷投递 需要调用 AVET 时使用。
+description: AVET: 杀软环境载荷投递。信号:恶意软件开发,免杀开发,交互式载荷构建,编码选择,列出编码器。
 ---
 
 # AVET

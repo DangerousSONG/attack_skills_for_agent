@@ -1,7 +1,6 @@
 ---
 name: mitmap-ap-mitm
-description: 渗透工具 skill:mitmAP 的安装、参数速查与攻击场景 playbook。当任务涉及 嗅探与中间人攻击 需要调用 mitmAP 时使用。
-when-to-use: 渗透工具 skill:mitmAP 的安装、参数速查与攻击场景 playbook。当任务涉及 嗅探与中间人攻击 需要调用 mitmAP 时使用。
+description: mitmAP: 恶意热点钓鱼。信号:中间人,mitm,钓鱼热点+中间人,SSLStrip。
 ---
 
 # mitmAP

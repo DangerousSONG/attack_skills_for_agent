@@ -1,7 +1,6 @@
 ---
 name: fuxploider-upload
-description: 渗透工具 skill:Fuxploider 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 Fuxploider 时使用。
-when-to-use: 渗透工具 skill:Fuxploider 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 Fuxploider 时使用。
+description: Fuxploider: 上传功能绕过矩阵。信号:web漏洞,注入,上传漏洞检测,目标脚本语言,扩展名探测。
 ---
 
 # Fuxploider

@@ -1,7 +1,6 @@
 ---
 name: cangibrina-admin-finder
-description: 渗透工具 skill:cangibrina 的安装、参数速查与攻击场景 playbook。当任务涉及 Web漏洞扫描与验证 需要调用 cangibrina 时使用。
-when-to-use: 渗透工具 skill:cangibrina 的安装、参数速查与攻击场景 playbook。当任务涉及 Web漏洞扫描与验证 需要调用 cangibrina 时使用。
+description: cangibrina: 后台地址发现。信号:web扫描,漏洞扫描,后台扫描,字典,线程。
 ---
 
 # cangibrina

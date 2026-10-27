@@ -1,7 +1,6 @@
 ---
 name: sniffjoke-traffic-obf
-description: 渗透工具 skill:sniffjoke 的安装、参数速查与攻击场景 playbook。当任务涉及 嗅探与中间人攻击 需要调用 sniffjoke 时使用。
-when-to-use: 渗透工具 skill:sniffjoke 的安装、参数速查与攻击场景 playbook。当任务涉及 嗅探与中间人攻击 需要调用 sniffjoke 时使用。
+description: sniffjoke: 反嗅探流量混淆。信号:中间人,mitm,透明混淆,调试,静默。
 ---
 
 # sniffjoke

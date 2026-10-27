@@ -1,7 +1,6 @@
 ---
 name: schemathesis-fuzz
-description: 渗透工具 skill:Schemathesis 的安装、参数速查与攻击场景 playbook。当任务涉及 API与业务逻辑攻击 需要调用 Schemathesis 时使用。
-when-to-use: 渗透工具 skill:Schemathesis 的安装、参数速查与攻击场景 playbook。当任务涉及 API与业务逻辑攻击 需要调用 Schemathesis 时使用。
+description: Schemathesis: OpenAPI 规范驱动模糊测试。信号:api攻击,接口测试,属性化模糊测试,只测端点,全检查。
 ---
 
 # Schemathesis

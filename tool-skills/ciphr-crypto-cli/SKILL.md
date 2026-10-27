@@ -1,7 +1,6 @@
 ---
 name: ciphr-crypto-cli
-description: 渗透工具 skill:ciphr 的安装、参数速查与攻击场景 playbook。当任务涉及 密码学攻击 需要调用 ciphr 时使用。
-when-to-use: 渗透工具 skill:ciphr 的安装、参数速查与攻击场景 playbook。当任务涉及 密码学攻击 需要调用 ciphr 时使用。
+description: ciphr: 命令行密码学运算。信号:密码学攻击,加密破解,ciphr --hex`,哈希计算,AES 解密。
 ---
 
 # ciphr

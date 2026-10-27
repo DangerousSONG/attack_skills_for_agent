@@ -1,7 +1,6 @@
 ---
 name: lolbas-living-off-land
-description: 渗透工具 skill:LOLBAS 项目 的安装、参数速查与攻击场景 playbook。当任务涉及 无文件与LOLBins滥用 需要调用 LOLBAS 项目 时使用。
-when-to-use: 渗透工具 skill:LOLBAS 项目 的安装、参数速查与攻击场景 playbook。当任务涉及 无文件与LOLBins滥用 需要调用 LOLBAS 项目 时使用。
+description: LOLBAS 项目: 白名单二进制执行绕过、rundll32 无文件执行。信号:无文件攻击,lolbins,查可下载文件的二进制,查可执行命令的二进制。
 ---
 
 # LOLBAS 项目

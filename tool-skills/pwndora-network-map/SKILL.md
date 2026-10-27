@@ -1,7 +1,6 @@
 ---
 name: pwndora-network-map
-description: 渗透工具 skill:pwndora 的安装、参数速查与攻击场景 playbook。当任务涉及 网络拓扑与互联网测绘 需要调用 pwndora 时使用。
-when-to-use: 渗透工具 skill:pwndora 的安装、参数速查与攻击场景 playbook。当任务涉及 网络拓扑与互联网测绘 需要调用 pwndora 时使用。
+description: pwndora: 企业网段资产图谱。信号:网络拓扑,互联网测绘,大规模网络测绘。
 ---
 
 # pwndora

@@ -1,7 +1,6 @@
 ---
 name: krbrelayx-kerberos-relay
-description: 渗透工具 skill:krbrelayx 的安装、参数速查与攻击场景 playbook。当任务涉及 Kerberos与票据攻击 需要调用 krbrelayx 时使用。
-when-to-use: 渗透工具 skill:krbrelayx 的安装、参数速查与攻击场景 playbook。当任务涉及 Kerberos与票据攻击 需要调用 krbrelayx 时使用。
+description: krbrelayx: Kerberos与票据攻击场景。信号:kerberos,票据攻击,Kerberos 中继,目标 SPN,起恶意 SMB。
 ---
 
 # krbrelayx

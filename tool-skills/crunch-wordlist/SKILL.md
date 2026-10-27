@@ -1,7 +1,6 @@
 ---
 name: crunch-wordlist
-description: 渗透工具 skill:crunch 的安装、参数速查与攻击场景 playbook。当任务涉及 哈希与密码破解 需要调用 crunch 时使用。
-when-to-use: 渗透工具 skill:crunch 的安装、参数速查与攻击场景 playbook。当任务涉及 哈希与密码破解 需要调用 crunch 时使用。
+description: crunch: 掩码定向字典生成。信号:密码破解,哈希破解,按字符集生成,纯数字,掩码模板。
 ---
 
 # crunch

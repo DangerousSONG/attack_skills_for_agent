@@ -1,7 +1,6 @@
 ---
 name: crypthook-encrypted-tunnel
-description: 渗透工具 skill:CryptHook 的安装、参数速查与攻击场景 playbook。当任务涉及 隧道与代理 需要调用 CryptHook 时使用。
-when-to-use: 渗透工具 skill:CryptHook 的安装、参数速查与攻击场景 playbook。当任务涉及 隧道与代理 需要调用 CryptHook 时使用。
+description: CryptHook: 加密隧道转发任意 TCP。信号:内网穿透,隧道,加密监听,加密连接,结合使用。
 ---
 
 # CryptHook

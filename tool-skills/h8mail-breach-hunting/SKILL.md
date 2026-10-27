@@ -1,7 +1,6 @@
 ---
 name: h8mail-breach-hunting
-description: 渗透工具 skill:h8mail 的安装、参数速查与攻击场景 playbook。当任务涉及 邮箱与人员OSINT 需要调用 h8mail 时使用。
-when-to-use: 渗透工具 skill:h8mail 的安装、参数速查与攻击场景 playbook。当任务涉及 邮箱与人员OSINT 需要调用 h8mail 时使用。
+description: h8mail: 凭据泄露面评估、批量员工邮箱撞库前置。信号:邮箱收集,员工信息,JSON 输出。
 ---
 
 # h8mail

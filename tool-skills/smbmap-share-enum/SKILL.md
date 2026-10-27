@@ -1,7 +1,6 @@
 ---
 name: smbmap-share-enum
-description: 渗透工具 skill:smbmap 的安装、参数速查与攻击场景 playbook。当任务涉及 内网发现与枚举 需要调用 smbmap 时使用。
-when-to-use: 渗透工具 skill:smbmap 的安装、参数速查与攻击场景 playbook。当任务涉及 内网发现与枚举 需要调用 smbmap 时使用。
+description: smbmap: 共享盘敏感文件收割、批量可写共享排查。信号:内网枚举,网络发现,匿名/当前会话列共享,指定凭据。
 ---
 
 # smbmap

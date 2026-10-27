@@ -1,7 +1,6 @@
 ---
 name: wfuzz-web-fuzzer
-description: 渗透工具 skill:wfuzz 的安装、参数速查与攻击场景 playbook。当任务涉及 Web漏洞扫描与验证 需要调用 wfuzz 时使用。
-when-to-use: 渗透工具 skill:wfuzz 的安装、参数速查与攻击场景 playbook。当任务涉及 Web漏洞扫描与验证 需要调用 wfuzz 时使用。
+description: wfuzz: 全位置模糊测试。信号:web扫描,漏洞扫描,目录爆破,POST fuzz,Header fuzz。
 ---
 
 # wfuzz

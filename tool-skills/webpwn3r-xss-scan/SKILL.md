@@ -1,7 +1,6 @@
 ---
 name: webpwn3r-xss-scan
-description: 渗透工具 skill:webpwn3r 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 webpwn3r 时使用。
-when-to-use: 渗透工具 skill:webpwn3r 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 webpwn3r 时使用。
+description: webpwn3r: 参数级漏洞扫描。信号:web漏洞,注入,XSS/注入扫描,批量。
 ---
 
 # webpwn3r

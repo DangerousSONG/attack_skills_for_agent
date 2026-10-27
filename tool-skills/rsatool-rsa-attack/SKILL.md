@@ -1,7 +1,6 @@
 ---
 name: rsatool-rsa-attack
-description: 渗透工具 skill:rsatool 的安装、参数速查与攻击场景 playbook。当任务涉及 密码误用与协议分析 需要调用 rsatool 时使用。
-when-to-use: 渗透工具 skill:rsatool 的安装、参数速查与攻击场景 playbook。当任务涉及 密码误用与协议分析 需要调用 rsatool 时使用。
+description: rsatool: RSA 参数泄露私钥重建。信号:密码学攻击,加密破解,从 p,q 重建私钥,从 n,d 重建,输出 PEM。
 ---
 
 # rsatool

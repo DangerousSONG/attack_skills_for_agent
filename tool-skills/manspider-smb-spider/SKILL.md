@@ -1,7 +1,6 @@
 ---
 name: manspider-smb-spider
-description: 渗透工具 skill:MANSPIDER 的安装、参数速查与攻击场景 playbook。当任务涉及 内网发现与枚举 需要调用 MANSPIDER 时使用。
-when-to-use: 渗透工具 skill:MANSPIDER 的安装、参数速查与攻击场景 playbook。当任务涉及 内网发现与枚举 需要调用 MANSPIDER 时使用。
+description: MANSPIDER: 全网 SMB 敏感文件收割。信号:内网枚举,网络发现,secret'`,扩展名。
 ---
 
 # MANSPIDER

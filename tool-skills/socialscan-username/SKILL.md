@@ -1,7 +1,6 @@
 ---
 name: socialscan-username
-description: 渗透工具 skill:socialscan 的安装、参数速查与攻击场景 playbook。当任务涉及 邮箱与人员OSINT 需要调用 socialscan 时使用。
-when-to-use: 渗透工具 skill:socialscan 的安装、参数速查与攻击场景 playbook。当任务涉及 邮箱与人员OSINT 需要调用 socialscan 时使用。
+description: socialscan: 凭据组合前置侦察。信号:邮箱收集,员工信息,邮箱可用性/注册查询,用户名批量,指定平台。
 ---
 
 # socialscan

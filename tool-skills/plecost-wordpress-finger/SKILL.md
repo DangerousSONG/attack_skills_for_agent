@@ -1,7 +1,6 @@
 ---
 name: plecost-wordpress-finger
-description: 渗透工具 skill:Plecost 的安装、参数速查与攻击场景 playbook。当任务涉及 Web利用(CMS漏洞) 需要调用 Plecost 时使用。
-when-to-use: 渗透工具 skill:Plecost 的安装、参数速查与攻击场景 playbook。当任务涉及 Web利用(CMS漏洞) 需要调用 Plecost 时使用。
+description: Plecost: WP 目标漏洞面。信号:web漏洞,注入,插件清单,JSON 输出,并发 10。
 ---
 
 # Plecost

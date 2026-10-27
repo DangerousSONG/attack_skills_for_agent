@@ -1,7 +1,6 @@
 ---
 name: socialfish-phish
-description: 渗透工具 skill:SocialFish 的安装、参数速查与攻击场景 playbook。当任务涉及 钓鱼与社会工程 需要调用 SocialFish 时使用。
-when-to-use: 渗透工具 skill:SocialFish 的安装、参数速查与攻击场景 playbook。当任务涉及 钓鱼与社会工程 需要调用 SocialFish 时使用。
+description: SocialFish: 多平台钓鱼站点。信号:钓鱼,社会工程,钓鱼平台,模板。
 ---
 
 # SocialFish

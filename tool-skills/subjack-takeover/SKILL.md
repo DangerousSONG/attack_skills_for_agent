@@ -1,7 +1,6 @@
 ---
 name: subjack-takeover
-description: 渗透工具 skill:subjack 的安装、参数速查与攻击场景 playbook。当任务涉及 域名与DNS侦察 需要调用 subjack 时使用。
-when-to-use: 渗透工具 skill:subjack 的安装、参数速查与攻击场景 playbook。当任务涉及 域名与DNS侦察 需要调用 subjack 时使用。
+description: subjack: dangling 子域接管批量筛。信号:子域名,域名枚举,批量检测接管,线程,超时。
 ---
 
 # subjack

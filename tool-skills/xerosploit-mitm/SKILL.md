@@ -1,7 +1,6 @@
 ---
 name: xerosploit-mitm
-description: 渗透工具 skill:xerosploit 的安装、参数速查与攻击场景 playbook。当任务涉及 嗅探与中间人攻击 需要调用 xerosploit 时使用。
-when-to-use: 渗透工具 skill:xerosploit 的安装、参数速查与攻击场景 playbook。当任务涉及 嗅探与中间人攻击 需要调用 xerosploit 时使用。
+description: xerosploit: 局域网中间人全家桶。信号:中间人,mitm,交互 MITM 框架,目标发现,中间人模块。
 ---
 
 # xerosploit

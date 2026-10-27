@@ -1,7 +1,6 @@
 ---
 name: m3-gen-msbuild
-description: 渗透工具 skill:MaliciousMacroMSBuild 的安装、参数速查与攻击场景 playbook。当任务涉及 无文件与LOLBins滥用 需要调用 MaliciousMacroMSBuild 时使用。
-when-to-use: 渗透工具 skill:MaliciousMacroMSBuild 的安装、参数速查与攻击场景 playbook。当任务涉及 无文件与LOLBins滥用 需要调用 MaliciousMacroMSBuild 时使用。
+description: MaliciousMacroMSBuild: 宏内嵌 MSBuild 免杀。信号:无文件攻击,lolbins,宏+MSBuild 生成,PS 载荷,混淆。
 ---
 
 # MaliciousMacroMSBuild

@@ -1,7 +1,6 @@
 ---
 name: ridrelay-rid-cycling
-description: 渗透工具 skill:ridrelay 的安装、参数速查与攻击场景 playbook。当任务涉及 AD与LDAP枚举 需要调用 ridrelay 时使用。
-when-to-use: 渗透工具 skill:ridrelay 的安装、参数速查与攻击场景 playbook。当任务涉及 AD与LDAP枚举 需要调用 ridrelay 时使用。
+description: ridrelay: 匿名/空会话用户枚举。信号:内网枚举,网络发现,RID 循环枚举域用户,指定 RID 范围,尝试 SAM 枚举。
 ---
 
 # ridrelay

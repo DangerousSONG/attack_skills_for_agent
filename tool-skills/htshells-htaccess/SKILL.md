@@ -1,7 +1,6 @@
 ---
 name: htshells-htaccess
-description: 渗透工具 skill:htshells 的安装、参数速查与攻击场景 playbook。当任务涉及 远程命令执行与WebShell 需要调用 htshells 时使用。
-when-to-use: 渗透工具 skill:htshells 的安装、参数速查与攻击场景 playbook。当任务涉及 远程命令执行与WebShell 需要调用 htshells 时使用。
+description: htshells: .htaccess webshell。信号:webshell,rce,PHP 执行,CGI 执行。
 ---
 
 # htshells

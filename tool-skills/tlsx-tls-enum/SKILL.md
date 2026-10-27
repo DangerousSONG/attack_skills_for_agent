@@ -1,7 +1,6 @@
 ---
 name: tlsx-tls-enum
-description: 渗透工具 skill:tlsx 的安装、参数速查与攻击场景 playbook。当任务涉及 URL与内容发现 需要调用 tlsx 时使用。
-when-to-use: 渗透工具 skill:tlsx 的安装、参数速查与攻击场景 playbook。当任务涉及 URL与内容发现 需要调用 tlsx 时使用。
+description: tlsx: 证书 SAN 挖子域。信号:数据收集,打包,tlsx -cn -j`,详细枚举,检测 TLS 配置错误。
 ---
 
 # tlsx

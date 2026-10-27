@@ -1,6 +1,6 @@
 ---
 name: xxe-xml-external-entity
-description: 0. RELATED ROUTING
+description: "XXE playbook. Use when XML, SVG, OOXML, SOAP, or parser-driven imports may resolve external entities, files, or internal network resources."
 when-to-use: >-
   XXE playbook. Use when XML, SVG, OOXML, SOAP, or parser-driven imports may resolve external entities, files, or internal network resources.
 ---

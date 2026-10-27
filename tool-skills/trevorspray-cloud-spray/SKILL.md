@@ -1,7 +1,6 @@
 ---
 name: trevorspray-cloud-spray
-description: 渗透工具 skill:TREVORspray 的安装、参数速查与攻击场景 playbook。当任务涉及 口令与哈希破解 需要调用 TREVORspray 时使用。
-when-to-use: 渗透工具 skill:TREVORspray 的安装、参数速查与攻击场景 playbook。当任务涉及 口令与哈希破解 需要调用 TREVORspray 时使用。
+description: TREVORspray: 代理池 O365 喷洒。信号:密码破解,哈希破解,自定义 IdP,SSH 代理池喷洒,线程。
 ---
 
 # TREVORspray

@@ -1,7 +1,6 @@
 ---
 name: s3scanner-buckets
-description: 渗透工具 skill:S3Scanner 的安装、参数速查与攻击场景 playbook。当任务涉及 云与容器提权 需要调用 S3Scanner 时使用。
-when-to-use: 渗透工具 skill:S3Scanner 的安装、参数速查与攻击场景 playbook。当任务涉及 云与容器提权 需要调用 S3Scanner 时使用。
+description: S3Scanner: S3 桶错误配置利用。信号:云提权,iam提权,检测桶配置,批量,列对象。
 ---
 
 # S3Scanner

@@ -1,7 +1,6 @@
 ---
 name: aclpwn-acl-abuse
-description: 渗透工具 skill:aclpwn 的安装、参数速查与攻击场景 playbook。当任务涉及 AD域渗透与域控攻击 需要调用 aclpwn 时使用。
-when-to-use: 渗透工具 skill:aclpwn 的安装、参数速查与攻击场景 playbook。当任务涉及 AD域渗透与域控攻击 需要调用 aclpwn 时使用。
+description: aclpwn: ACL 滥用自动化。信号:ad攻击,域渗透,ACL 提权路径。
 ---
 
 # aclpwn

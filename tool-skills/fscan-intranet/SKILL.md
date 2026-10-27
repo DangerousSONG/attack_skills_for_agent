@@ -1,7 +1,6 @@
 ---
 name: fscan-intranet
-description: 渗透工具 skill:fscan 的安装、参数速查与攻击场景 playbook。当任务涉及 网络扫描与枚举 需要调用 fscan 时使用。
-when-to-use: 渗透工具 skill:fscan 的安装、参数速查与攻击场景 playbook。当任务涉及 网络扫描与枚举 需要调用 fscan 时使用。
+description: fscan: 内网一把梭初扫、单主机深度验证。信号:端口扫描,nmap,指定端口,单模块。
 ---
 
 # fscan

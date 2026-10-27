@@ -1,7 +1,6 @@
 ---
 name: barq-azure-ad
-description: 渗透工具 skill:barq 的安装、参数速查与攻击场景 playbook。当任务涉及 暴力破解与口令喷射 需要调用 barq 时使用。
-when-to-use: 渗透工具 skill:barq 的安装、参数速查与攻击场景 playbook。当任务涉及 暴力破解与口令喷射 需要调用 barq 时使用。
+description: barq: Azure AD 密码喷洒。信号:暴力破解,口令喷射,Azure AD 喷洒,条件访问探测。
 ---
 
 # barq

@@ -1,6 +1,6 @@
 ---
 name: ssrf-server-side-request-forgery
-description: 0. QUICK START
+description: "SSRF playbook. Use when the server fetches URLs, resolves hostnames, imports remote content, or can be driven toward internal networks, cloud metadata, or secondary protocols."
 when-to-use: >-
   SSRF playbook. Use when the server fetches URLs, resolves hostnames, imports remote content, or can be driven toward internal networks, cloud metadata, or secondary protocols.
 ---

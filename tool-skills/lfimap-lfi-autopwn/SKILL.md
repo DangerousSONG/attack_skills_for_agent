@@ -1,7 +1,6 @@
 ---
 name: lfimap-lfi-autopwn
-description: 渗透工具 skill:lfimap 的安装、参数速查与攻击场景 playbook。当任务涉及 Web利用(LFI) 需要调用 lfimap 时使用。
-when-to-use: 渗透工具 skill:lfimap 的安装、参数速查与攻击场景 playbook。当任务涉及 Web利用(LFI) 需要调用 lfimap 时使用。
+description: lfimap: 自动化 LFI 到 shell。信号:web漏洞,注入,LFI 扫描,自动反弹 shell,强制所有参数测试。
 ---
 
 # lfimap

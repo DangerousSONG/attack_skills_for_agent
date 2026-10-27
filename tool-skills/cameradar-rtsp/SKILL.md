@@ -1,7 +1,6 @@
 ---
 name: cameradar-rtsp
-description: 渗透工具 skill:Cameradar 的安装、参数速查与攻击场景 playbook。当任务涉及 边界设备与VPN攻击 需要调用 Cameradar 时使用。
-when-to-use: 渗透工具 skill:Cameradar 的安装、参数速查与攻击场景 playbook。当任务涉及 边界设备与VPN攻击 需要调用 Cameradar 时使用。
+description: Cameradar: 监控摄像头弱口令接管。信号:vpn漏洞,防火墙,扫描 RTSP 端口,指定端口,默认凭据字典。
 ---
 
 # Cameradar

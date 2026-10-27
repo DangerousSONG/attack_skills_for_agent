@@ -1,6 +1,6 @@
 ---
 name: dns-rebinding-attacks
-description: 0. RELATED ROUTING
+description: "DNS rebinding attack playbook."
 when-to-use: >-
   DNS rebinding attack playbook. Use when testing applications that trust DNS resolution for origin checks, interact with internal services from browser context, or when SSRF is not possible server-side but the target has client-side fetch/XHR to attacker-controlled domains.
 ---

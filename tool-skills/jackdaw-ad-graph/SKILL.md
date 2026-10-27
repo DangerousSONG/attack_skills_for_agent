@@ -1,7 +1,6 @@
 ---
 name: jackdaw-ad-graph
-description: 渗透工具 skill:jackdaw 的安装、参数速查与攻击场景 playbook。当任务涉及 AD与横向移动 需要调用 jackdaw 时使用。
-when-to-use: 渗透工具 skill:jackdaw 的安装、参数速查与攻击场景 playbook。当任务涉及 AD与横向移动 需要调用 jackdaw 时使用。
+description: jackdaw: 可视化域渗透路径。信号:ad攻击,域渗透,SMB 会话/共享枚举,启动 Web 界面看图谱,ACL 路径分析。
 ---
 
 # jackdaw

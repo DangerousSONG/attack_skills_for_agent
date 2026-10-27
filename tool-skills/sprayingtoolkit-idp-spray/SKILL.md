@@ -1,7 +1,6 @@
 ---
 name: sprayingtoolkit-idp-spray
-description: 渗透工具 skill:SprayingToolkit 的安装、参数速查与攻击场景 playbook。当任务涉及 云与身份喷洒 需要调用 SprayingToolkit 时使用。
-when-to-use: 渗透工具 skill:SprayingToolkit 的安装、参数速查与攻击场景 playbook。当任务涉及 云与身份喷洒 需要调用 SprayingToolkit 时使用。
+description: SprayingToolkit: 内网 IdP 密码喷洒。信号:暴力破解,口令喷射,O365 喷洒,OWA 喷洒,生成时间窗喷洒计划。
 ---
 
 # SprayingToolkit

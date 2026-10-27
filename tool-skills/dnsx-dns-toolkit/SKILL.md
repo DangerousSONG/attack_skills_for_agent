@@ -1,7 +1,6 @@
 ---
 name: dnsx-dns-toolkit
-description: 渗透工具 skill:dnsx 的安装、参数速查与攻击场景 playbook。当任务涉及 域名与DNS侦察 需要调用 dnsx 时使用。
-when-to-use: 渗透工具 skill:dnsx 的安装、参数速查与攻击场景 playbook。当任务涉及 域名与DNS侦察 需要调用 dnsx 时使用。
+description: dnsx: 子域存活+记录枚举、SPF/DMARC 邮件 spoof 面评估。信号:子域名,域名枚举,批量解析,只显示有响应的,重试次数。
 ---
 
 # dnsx

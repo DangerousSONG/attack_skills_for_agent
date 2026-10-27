@@ -1,7 +1,6 @@
 ---
 name: secretfinder-js-secrets
-description: 渗透工具 skill:SecretFinder 的安装、参数速查与攻击场景 playbook。当任务涉及 API与业务逻辑攻击 需要调用 SecretFinder 时使用。
-when-to-use: 渗透工具 skill:SecretFinder 的安装、参数速查与攻击场景 playbook。当任务涉及 API与业务逻辑攻击 需要调用 SecretFinder 时使用。
+description: SecretFinder: 前端 JS 硬编码密钥收割。信号:api攻击,接口测试,JS 中秘密提取,批量,同时爬站。
 ---
 
 # SecretFinder

@@ -1,7 +1,6 @@
 ---
 name: slackpirate-slack
-description: 渗透工具 skill:SlackPirate 的安装、参数速查与攻击场景 playbook。当任务涉及 邮箱与人员OSINT 需要调用 SlackPirate 时使用。
-when-to-use: 渗透工具 skill:SlackPirate 的安装、参数速查与攻击场景 playbook。当任务涉及 邮箱与人员OSINT 需要调用 SlackPirate 时使用。
+description: SlackPirate: Slack 工作区渗透。信号:邮箱收集,员工信息,Slack 数据收割,Cookie 模式,全导出。
 ---
 
 # SlackPirate

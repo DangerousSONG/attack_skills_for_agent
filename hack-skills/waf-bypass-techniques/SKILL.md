@@ -1,6 +1,6 @@
 ---
 name: waf-bypass-techniques
-description: 0. RELATED ROUTING
+description: "WAF bypass methodology and generic evasion techniques."
 when-to-use: >-
   WAF bypass methodology and generic evasion techniques. Use when a web application
   firewall blocks injection payloads (SQLi, XSS, RCE) and you need to craft

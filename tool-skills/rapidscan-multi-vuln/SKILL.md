@@ -1,7 +1,6 @@
 ---
 name: rapidscan-multi-vuln
-description: 渗透工具 skill:rapidscan 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 rapidscan 时使用。
-when-to-use: 渗透工具 skill:rapidscan 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 rapidscan 时使用。
+description: rapidscan: 多工具结果聚合。信号:web漏洞,注入,一键多工具编排扫描,仅 SSL 模块,排除模块。
 ---
 
 # rapidscan

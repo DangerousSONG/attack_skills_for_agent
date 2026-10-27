@@ -1,7 +1,6 @@
 ---
 name: arjun-param-discovery
-description: 渗透工具 skill:Arjun 的安装、参数速查与攻击场景 playbook。当任务涉及 Web漏洞扫描与验证 需要调用 Arjun 时使用。
-when-to-use: 渗透工具 skill:Arjun 的安装、参数速查与攻击场景 playbook。当任务涉及 Web漏洞扫描与验证 需要调用 Arjun 时使用。
+description: Arjun: 隐藏参数挖掘→扩大攻击面。信号:web扫描,漏洞扫描,HTTP 参数发现,POST 方法,降低速率防 WAF。
 ---
 
 # Arjun

@@ -1,7 +1,6 @@
 ---
 name: rustpad-oracle-gui
-description: 渗透工具 skill:rustpad 的安装、参数速查与攻击场景 playbook。当任务涉及 密码误用与协议分析 需要调用 rustpad 时使用。
-when-to-use: 渗透工具 skill:rustpad 的安装、参数速查与攻击场景 playbook。当任务涉及 密码误用与协议分析 需要调用 rustpad 时使用。
+description: rustpad: 加密参数伪造(水平越权)。信号:密码学攻击,加密破解,解密模式,伪造密文模式,注入点标记。
 ---
 
 # rustpad

@@ -1,7 +1,6 @@
 ---
 name: emp3r0r-c2
-description: 渗透工具 skill:emp3r0r 的安装、参数速查与攻击场景 playbook。当任务涉及 C2框架与远控 需要调用 emp3r0r 时使用。
-when-to-use: 渗透工具 skill:emp3r0r 的安装、参数速查与攻击场景 playbook。当任务涉及 C2框架与远控 需要调用 emp3r0r 时使用。
+description: emp3r0r: Linux 后渗透 C2。信号:c2,命令控制,起服务端,agent 连接,模块。
 ---
 
 # emp3r0r

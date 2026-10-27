@@ -1,7 +1,6 @@
 ---
 name: shad0w-c2-windows
-description: 渗透工具 skill:shad0w 的安装、参数速查与攻击场景 playbook。当任务涉及 C2框架 需要调用 shad0w 时使用。
-when-to-use: 渗透工具 skill:shad0w 的安装、参数速查与攻击场景 playbook。当任务涉及 C2框架 需要调用 shad0w 时使用。
+description: shad0w: Windows 渗透 C2。信号:c2,命令控制,启动服务端,生成 beacon,载荷类型。
 ---
 
 # shad0w

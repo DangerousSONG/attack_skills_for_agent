@@ -1,7 +1,6 @@
 ---
 name: uptux-linux-check
-description: 渗透工具 skill:uptux 的安装、参数速查与攻击场景 playbook。当任务涉及 Linux本地提权 需要调用 uptux 时使用。
-when-to-use: 渗透工具 skill:uptux 的安装、参数速查与攻击场景 playbook。当任务涉及 Linux本地提权 需要调用 uptux 时使用。
+description: uptux: Linux systemd 提权检测。信号:linux提权,suid,Linux 提权检查,全检查,详细。
 ---
 
 # uptux

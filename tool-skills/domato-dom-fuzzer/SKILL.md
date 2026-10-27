@@ -1,7 +1,6 @@
 ---
 name: domato-dom-fuzzer
-description: 渗透工具 skill:Domato 的安装、参数速查与攻击场景 playbook。当任务涉及 模糊测试与漏洞挖掘 需要调用 Domato 时使用。
-when-to-use: 渗透工具 skill:Domato 的安装、参数速查与攻击场景 playbook。当任务涉及 模糊测试与漏洞挖掘 需要调用 Domato 时使用。
+description: Domato: 浏览器/DOM 引擎 fuzz。信号:pwn,二进制利用,自定义语法,喂给目标。
 ---
 
 # Domato

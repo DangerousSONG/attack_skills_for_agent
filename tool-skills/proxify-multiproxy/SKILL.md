@@ -1,7 +1,6 @@
 ---
 name: proxify-multiproxy
-description: 渗透工具 skill:proxify 的安装、参数速查与攻击场景 playbook。当任务涉及 隧道与内网穿透 需要调用 proxify 时使用。
-when-to-use: 渗透工具 skill:proxify 的安装、参数速查与攻击场景 playbook。当任务涉及 隧道与内网穿透 需要调用 proxify 时使用。
+description: proxify: 多协议代理转发。信号:内网穿透,隧道,起多级代理,SOCKS5,流量落盘。
 ---
 
 # proxify

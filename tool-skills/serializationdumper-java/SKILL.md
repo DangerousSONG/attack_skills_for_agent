@@ -1,7 +1,6 @@
 ---
 name: serializationdumper-java
-description: 渗透工具 skill:SerializationDumper 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 SerializationDumper 时使用。
-when-to-use: 渗透工具 skill:SerializationDumper 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 SerializationDumper 时使用。
+description: SerializationDumper: Java 序列化数据分析。信号:web漏洞,注入,从 URL 拉取解析,从文件解析。
 ---
 
 # SerializationDumper

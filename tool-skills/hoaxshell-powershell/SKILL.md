@@ -1,7 +1,6 @@
 ---
 name: hoaxshell-powershell
-description: 渗透工具 skill:hoaxshell 的安装、参数速查与攻击场景 playbook。当任务涉及 载荷开发与武器化 需要调用 hoaxshell 时使用。
-when-to-use: 渗透工具 skill:hoaxshell 的安装、参数速查与攻击场景 playbook。当任务涉及 载荷开发与武器化 需要调用 hoaxshell 时使用。
+description: hoaxshell: PowerShell 会话反弹。信号:载荷开发,武器化,生成 PS 反弹载荷,生成后仅打印,加密传输。
 ---
 
 # hoaxshell

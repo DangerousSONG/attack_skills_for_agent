@@ -1,7 +1,6 @@
 ---
 name: injectus-crlf-openredirect
-description: 渗透工具 skill:Injectus 的安装、参数速查与攻击场景 playbook。当任务涉及 Web利用(CRLF/重定向) 需要调用 Injectus 时使用。
-when-to-use: 渗透工具 skill:Injectus 的安装、参数速查与攻击场景 playbook。当任务涉及 Web利用(CRLF/重定向) 需要调用 Injectus 时使用。
+description: Injectus: 开放重定向+CRLF 组合探测。信号:web漏洞,注入,批量,仅 CRLF,仅开放重定向。
 ---
 
 # Injectus

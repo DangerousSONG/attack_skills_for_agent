@@ -1,7 +1,6 @@
 ---
 name: appmon-ios-android
-description: 渗透工具 skill:appmon 的安装、参数速查与攻击场景 playbook。当任务涉及 移动平台攻击 需要调用 appmon 时使用。
-when-to-use: 渗透工具 skill:appmon 的安装、参数速查与攻击场景 playbook。当任务涉及 移动平台攻击 需要调用 appmon 时使用。
+description: appmon: 移动 App 行为监控。信号:移动端,android攻击,hook 脚本目录,抓包/数据输出,字符串监控。
 ---
 
 # appmon

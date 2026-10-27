@@ -1,7 +1,6 @@
 ---
 name: bridgekeeper-username-mangle
-description: 渗透工具 skill:BridgeKeeper 的安装、参数速查与攻击场景 playbook。当任务涉及 OSINT情报收集 需要调用 BridgeKeeper 时使用。
-when-to-use: 渗透工具 skill:BridgeKeeper 的安装、参数速查与攻击场景 playbook。当任务涉及 OSINT情报收集 需要调用 BridgeKeeper 时使用。
+description: BridgeKeeper: HR 名单变喷洒字典。信号:邮箱收集,员工信息,人名→用户名规则生成,指定格式。
 ---
 
 # BridgeKeeper

@@ -1,7 +1,6 @@
 ---
 name: webacoo-encoded-shell
-description: 渗透工具 skill:WeBaCoo 的安装、参数速查与攻击场景 playbook。当任务涉及 C2与远控 需要调用 WeBaCoo 时使用。
-when-to-use: 渗透工具 skill:WeBaCoo 的安装、参数速查与攻击场景 playbook。当任务涉及 C2与远控 需要调用 WeBaCoo 时使用。
+description: WeBaCoo: HTTP 隐蔽信道远控。信号:持久化,后门,连接 WebShell,交互 shell 模式,下载。
 ---
 
 # WeBaCoo

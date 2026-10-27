@@ -1,7 +1,6 @@
 ---
 name: barmie-rmi-attack
-description: 渗透工具 skill:BaRMIe 的安装、参数速查与攻击场景 playbook。当任务涉及 远程服务横向移动 需要调用 BaRMIe 时使用。
-when-to-use: 渗透工具 skill:BaRMIe 的安装、参数速查与攻击场景 playbook。当任务涉及 远程服务横向移动 需要调用 BaRMIe 时使用。
+description: BaRMIe: Java RMI 攻击。信号:横向移动,psexec,RMI 枚举攻击,攻击模式,字典。
 ---
 
 # BaRMIe

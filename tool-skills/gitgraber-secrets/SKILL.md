@@ -1,7 +1,6 @@
 ---
 name: gitgraber-secrets
-description: 渗透工具 skill:gitGraber 的安装、参数速查与攻击场景 playbook。当任务涉及 外部攻击面与云资产暴露 需要调用 gitGraber 时使用。
-when-to-use: 渗透工具 skill:gitGraber 的安装、参数速查与攻击场景 playbook。当任务涉及 外部攻击面与云资产暴露 需要调用 gitGraber 时使用。
+description: gitGraber: Github 密钥实时监控。信号:攻击面,云资产,Github 实时监控,深度,线程。
 ---
 
 # gitGraber

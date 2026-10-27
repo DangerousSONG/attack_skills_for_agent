@@ -1,7 +1,6 @@
 ---
 name: grammarinator-gen-fuzz
-description: 渗透工具 skill:grammarinator 的安装、参数速查与攻击场景 playbook。当任务涉及 模糊测试与漏洞挖掘 需要调用 grammarinator 时使用。
-when-to-use: 渗透工具 skill:grammarinator 的安装、参数速查与攻击场景 playbook。当任务涉及 模糊测试与漏洞挖掘 需要调用 grammarinator 时使用。
+description: grammarinator: ANTLR 语法驱动 fuzz。信号:pwn,二进制利用,生成测试样本,解析已有样本变异。
 ---
 
 # grammarinator

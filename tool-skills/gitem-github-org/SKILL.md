@@ -1,7 +1,6 @@
 ---
 name: gitem-github-org
-description: 渗透工具 skill:Gitem 的安装、参数速查与攻击场景 playbook。当任务涉及 资产测绘与指纹识别 需要调用 Gitem 时使用。
-when-to-use: 渗透工具 skill:Gitem 的安装、参数速查与攻击场景 playbook。当任务涉及 资产测绘与指纹识别 需要调用 Gitem 时使用。
+description: Gitem: 组织仓库批量克隆审计。信号:资产测绘,指纹识别,拉组织全部 repos,只 metadata。
 ---
 
 # Gitem

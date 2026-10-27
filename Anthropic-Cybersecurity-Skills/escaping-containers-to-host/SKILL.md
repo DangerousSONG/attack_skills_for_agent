@@ -1,6 +1,6 @@
 ---
 name: escaping-containers-to-host
-description: Escaping Containers to Host
+description: "Exploits privileged pods, host mounts, runC CVEs, and exposed Docker sockets to break out of a container and reach the underlying host during an authorized container-security assessment."
 when-to-use: >-
   Exploits privileged pods, host mounts, runC CVEs, and exposed Docker sockets to break out of
   a container and reach the underlying host during an authorized container-security

@@ -1,7 +1,6 @@
 ---
 name: gadgettojscript-deser
-description: 渗透工具 skill:GadgetToJScript 的安装、参数速查与攻击场景 playbook。当任务涉及 载荷开发与武器化 需要调用 GadgetToJScript 时使用。
-when-to-use: 渗透工具 skill:GadgetToJScript 的安装、参数速查与攻击场景 playbook。当任务涉及 载荷开发与武器化 需要调用 GadgetToJScript 时使用。
+description: GadgetToJScript: Office 宏反序列化。信号:载荷开发,武器化,.NET 序列化载荷,VBS 输出,混淆。
 ---
 
 # GadgetToJScript

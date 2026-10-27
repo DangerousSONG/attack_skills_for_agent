@@ -1,7 +1,6 @@
 ---
 name: adpeas-quickwin
-description: 渗透工具 skill:adPEAS 的安装、参数速查与攻击场景 playbook。当任务涉及 AD与横向移动 需要调用 adPEAS 时使用。
-when-to-use: 渗透工具 skill:adPEAS 的安装、参数速查与攻击场景 playbook。当任务涉及 AD与横向移动 需要调用 adPEAS 时使用。
+description: adPEAS: 低权限 AD 快速摸底。信号:ad攻击,域渗透,一键 AD 提权枚举,全模块,输出报告。
 ---
 
 # adPEAS

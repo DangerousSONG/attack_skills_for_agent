@@ -1,7 +1,6 @@
 ---
 name: phpsploit-c2-console
-description: 渗透工具 skill:phpsploit 的安装、参数速查与攻击场景 playbook。当任务涉及 远程命令执行与WebShell 需要调用 phpsploit 时使用。
-when-to-use: 渗透工具 skill:phpsploit 的安装、参数速查与攻击场景 playbook。当任务涉及 远程命令执行与WebShell 需要调用 phpsploit 时使用。
+description: phpsploit: 隐蔽 PHP C2 客户端。信号:webshell,rce,连接 PHP shell,混淆载荷,文件传输。
 ---
 
 # phpsploit

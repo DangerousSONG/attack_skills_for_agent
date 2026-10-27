@@ -1,7 +1,6 @@
 ---
 name: autosploit-metasl
-description: 渗透工具 skill:AutoSploit 的安装、参数速查与攻击场景 playbook。当任务涉及 二进制漏洞利用与Pwn 需要调用 AutoSploit 时使用。
-when-to-use: 渗透工具 skill:AutoSploit 的安装、参数速查与攻击场景 playbook。当任务涉及 二进制漏洞利用与Pwn 需要调用 AutoSploit 时使用。
+description: AutoSploit: 批量 CVE 自动打点(授权靶场)。信号:pwn,二进制利用,本地目标清单,默认端口集。
 ---
 
 # AutoSploit

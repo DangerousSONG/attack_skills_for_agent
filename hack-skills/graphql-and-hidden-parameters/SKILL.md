@@ -1,6 +1,6 @@
 ---
 name: graphql-and-hidden-parameters
-description: 1. GRAPHQL FIRST PASS
+description: "Use this skill when GraphQL exists or when REST documentation suggests optional, deprecated, or undocumented fields."
 when-to-use: 1. GRAPHQL FIRST PASS
   GraphQL and hidden parameter testing playbook. Use when exploring introspection, batching, undocumented fields, hidden parameters, schema abuse, and GraphQL authorization gaps.
 ---

@@ -1,6 +1,6 @@
 ---
 name: sqli-sql-injection
-description: 0. RELATED ROUTING
+description: "SQL injection playbook. Use when input reaches SQL queries, authentication logic, sorting, filtering, reporting, or DB-specific blind and out-of-band execution paths."
 when-to-use: >-
   SQL injection playbook. Use when input reaches SQL queries, authentication logic, sorting, filtering, reporting, or DB-specific blind and out-of-band execution paths.
 ---

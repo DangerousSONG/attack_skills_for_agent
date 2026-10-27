@@ -1,6 +1,6 @@
 ---
 name: active-directory-kerberos-attacks
-description: 0. RELATED ROUTING
+description: "Kerberos attack playbook for Active Directory. Use when targeting AD authentication via AS-REP roasting, Kerberoasting, golden/silver/diamond tickets, delegation abuse, or pass-the-ticket attacks."
 when-to-use: >-
   Kerberos attack playbook for Active Directory. Use when targeting AD authentication via AS-REP roasting, Kerberoasting, golden/silver/diamond tickets, delegation abuse, or pass-the-ticket attacks.
 ---

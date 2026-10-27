@@ -1,7 +1,6 @@
 ---
 name: bbscan-batch-scan
-description: 渗透工具 skill:BBScan 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 BBScan 时使用。
-when-to-use: 渗透工具 skill:BBScan 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 BBScan 时使用。
+description: BBScan: 批量 Web 敏感路径初筛。信号:web漏洞,注入,并发进程,自定义 PoC 脚本,仅收集,不请求 PoC。
 ---
 
 # BBScan

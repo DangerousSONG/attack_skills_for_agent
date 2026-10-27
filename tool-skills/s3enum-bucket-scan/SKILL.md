@@ -1,7 +1,6 @@
 ---
 name: s3enum-bucket-scan
-description: 渗透工具 skill:s3enum 的安装、参数速查与攻击场景 playbook。当任务涉及 云资产发现 需要调用 s3enum 时使用。
-when-to-use: 渗透工具 skill:s3enum 的安装、参数速查与攻击场景 playbook。当任务涉及 云资产发现 需要调用 s3enum 时使用。
+description: s3enum: S3 桶发现(错配公开)。信号:攻击面,云资产,S3 bucket 枚举,常用后缀,并发。
 ---
 
 # s3enum

@@ -1,6 +1,6 @@
 ---
 name: macos-security-bypass
-description: 0. RELATED ROUTING
+description: "macOS security bypass playbook."
 when-to-use: >-
   macOS security bypass playbook. Use when targeting macOS endpoints and need to bypass TCC, Gatekeeper, SIP, sandbox, code signing, or entitlement-based protections during authorized red team or pentest engagements.
 ---

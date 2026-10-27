@@ -1,7 +1,6 @@
 ---
 name: snare-honeypot-clone
-description: 渗透工具 skill:SNARE 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 SNARE 时使用。
-when-to-use: 渗透工具 skill:SNARE 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 SNARE 时使用。
+description: SNARE: 克隆目标站钓鱼。信号:web漏洞,注入,起蜜罐,克隆站点,联动 Tanner 判定。
 ---
 
 # SNARE

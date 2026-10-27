@@ -1,7 +1,6 @@
 ---
 name: dnscan-subdomain-scan
-description: 渗透工具 skill:dnscan 的安装、参数速查与攻击场景 playbook。当任务涉及 域名与DNS侦察 需要调用 dnscan 时使用。
-when-to-use: 渗透工具 skill:dnscan 的安装、参数速查与攻击场景 playbook。当任务涉及 域名与DNS侦察 需要调用 dnscan 时使用。
+description: dnscan: 递归子域爆破。信号:子域名,域名枚举,字典爆破子域,线程,发现子域后递归扫。
 ---
 
 # dnscan

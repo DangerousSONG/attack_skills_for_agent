@@ -1,7 +1,6 @@
 ---
 name: evillimiter-mitm-limit
-description: 渗透工具 skill:evillimiter 的安装、参数速查与攻击场景 playbook。当任务涉及 嗅探与中间人攻击 需要调用 evillimiter 时使用。
-when-to-use: 渗透工具 skill:evillimiter 的安装、参数速查与攻击场景 playbook。当任务涉及 嗅探与中间人攻击 需要调用 evillimiter 时使用。
+description: evillimiter: 内网 ARP 拦截。信号:中间人,mitm,扫描主机,限速目标,断网全部。
 ---
 
 # evillimiter

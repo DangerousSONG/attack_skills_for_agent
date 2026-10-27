@@ -1,7 +1,6 @@
 ---
 name: rustbuster-content-discover
-description: 渗透工具 skill:rustbuster 的安装、参数速查与攻击场景 playbook。当任务涉及 Web漏洞扫描与验证 需要调用 rustbuster 时使用。
-when-to-use: 渗透工具 skill:rustbuster 的安装、参数速查与攻击场景 playbook。当任务涉及 Web漏洞扫描与验证 需要调用 rustbuster 时使用。
+description: rustbuster: 多模式内容发现。信号:web扫描,漏洞扫描,目录爆破,子域爆破,虚拟主机爆破。
 ---
 
 # rustbuster

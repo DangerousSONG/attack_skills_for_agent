@@ -1,7 +1,6 @@
 ---
 name: mongoaudit-mongo-check
-description: 渗透工具 skill:mongoaudit 的安装、参数速查与攻击场景 playbook。当任务涉及 网络扫描与枚举 需要调用 mongoaudit 时使用。
-when-to-use: 渗透工具 skill:mongoaudit 的安装、参数速查与攻击场景 playbook。当任务涉及 网络扫描与枚举 需要调用 mongoaudit 时使用。
+description: mongoaudit: MongoDB 未授权+弱配置。信号:端口扫描,nmap,MongoDB 审计,带认证,JSON 输出。
 ---
 
 # mongoaudit

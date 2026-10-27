@@ -1,7 +1,6 @@
 ---
 name: powershdll-nopowershell
-description: 渗透工具 skill:PowerShdll 的安装、参数速查与攻击场景 playbook。当任务涉及 Windows本地提权 需要调用 PowerShdll 时使用。
-when-to-use: 渗透工具 skill:PowerShdll 的安装、参数速查与攻击场景 playbook。当任务涉及 Windows本地提权 需要调用 PowerShdll 时使用。
+description: PowerShdll: Windows本地提权场景。信号:windows提权,uac绕过,单条命令,注册表模式。
 ---
 
 # PowerShdll

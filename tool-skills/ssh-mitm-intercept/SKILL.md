@@ -1,7 +1,6 @@
 ---
 name: ssh-mitm-intercept
-description: 渗透工具 skill:ssh-mitm 的安装、参数速查与攻击场景 playbook。当任务涉及 嗅探与中间人攻击 需要调用 ssh-mitm 时使用。
-when-to-use: 渗透工具 skill:ssh-mitm 的安装、参数速查与攻击场景 playbook。当任务涉及 嗅探与中间人攻击 需要调用 ssh-mitm 时使用。
+description: ssh-mitm: SSH 会话劫持+凭据截获。信号:中间人,mitm,起 SSH 中间人,监听端口,劫持会话。
 ---
 
 # ssh-mitm

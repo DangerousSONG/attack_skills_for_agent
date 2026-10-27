@@ -1,7 +1,6 @@
 ---
 name: mimipenguin-linux
-description: 渗透工具 skill:mimipenguin 的安装、参数速查与攻击场景 playbook。当任务涉及 内存转储与LSASS窃取 需要调用 mimipenguin 时使用。
-when-to-use: 渗透工具 skill:mimipenguin 的安装、参数速查与攻击场景 playbook。当任务涉及 内存转储与LSASS窃取 需要调用 mimipenguin 时使用。
+description: mimipenguin: Linux 内存明文密码提取。信号:内存转储,lsass,Python 版,详细。
 ---
 
 # mimipenguin

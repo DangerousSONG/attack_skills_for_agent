@@ -1,7 +1,6 @@
 ---
 name: uncover-search-engine
-description: 渗透工具 skill:uncover 的安装、参数速查与攻击场景 playbook。当任务涉及 网络拓扑与互联网测绘 需要调用 uncover 时使用。
-when-to-use: 渗透工具 skill:uncover 的安装、参数速查与攻击场景 playbook。当任务涉及 网络拓扑与互联网测绘 需要调用 uncover 时使用。
+description: uncover: 多引擎资产聚合搜索。信号:网络拓扑,互联网测绘,单查询,批量查询,指定引擎。
 ---
 
 # uncover

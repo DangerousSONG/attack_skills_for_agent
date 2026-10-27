@@ -1,7 +1,6 @@
 ---
 name: webhandler-shell
-description: 渗透工具 skill:webhandler 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 webhandler 时使用。
-when-to-use: 渗透工具 skill:webhandler 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 webhandler 时使用。
+description: webhandler: WebShell 管理。信号:web漏洞,注入,WebShell 客户端,单命令,交互。
 ---
 
 # webhandler

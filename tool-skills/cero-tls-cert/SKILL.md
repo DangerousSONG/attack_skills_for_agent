@@ -1,7 +1,6 @@
 ---
 name: cero-tls-cert
-description: 渗透工具 skill:cero 的安装、参数速查与攻击场景 playbook。当任务涉及 密码学攻击 需要调用 cero 时使用。
-when-to-use: 渗透工具 skill:cero 的安装、参数速查与攻击场景 playbook。当任务涉及 密码学攻击 需要调用 cero 时使用。
+description: cero: 证书批量提取子域。信号:密码学攻击,加密破解,批量 TLS 证书抓取,字段选择。
 ---
 
 # cero

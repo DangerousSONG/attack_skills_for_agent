@@ -1,7 +1,6 @@
 ---
 name: phoneinfoga-osint
-description: 渗透工具 skill:PhoneInfoga 的安装、参数速查与攻击场景 playbook。当任务涉及 邮箱与人员OSINT 需要调用 PhoneInfoga 时使用。
-when-to-use: 渗透工具 skill:PhoneInfoga 的安装、参数速查与攻击场景 playbook。当任务涉及 邮箱与人员OSINT 需要调用 PhoneInfoga 时使用。
+description: PhoneInfoga: 手机号归属/公开足迹。信号:邮箱收集,员工信息,号码 OSINT 扫描,指定扫描器,起 Web UI。
 ---
 
 # PhoneInfoga

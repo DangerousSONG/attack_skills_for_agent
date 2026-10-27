@@ -1,7 +1,6 @@
 ---
 name: sippts-sip-attack
-description: 渗透工具 skill:sippts 的安装、参数速查与攻击场景 playbook。当任务涉及 网络扫描与枚举 需要调用 sippts 时使用。
-when-to-use: 渗透工具 skill:sippts 的安装、参数速查与攻击场景 playbook。当任务涉及 网络扫描与枚举 需要调用 sippts 时使用。
+description: sippts: VoIP 内网攻击。信号:端口扫描,nmap,SIP 扫描,分机枚举,SIP 爆破。
 ---
 
 # sippts

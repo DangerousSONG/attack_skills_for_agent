@@ -1,7 +1,6 @@
 ---
 name: pwndrop-file-drop
-description: 渗透工具 skill:pwndrop 的安装、参数速查与攻击场景 playbook。当任务涉及 载荷与文件投递 需要调用 pwndrop 时使用。
-when-to-use: 渗透工具 skill:pwndrop 的安装、参数速查与攻击场景 playbook。当任务涉及 载荷与文件投递 需要调用 pwndrop 时使用。
+description: pwndrop: 红队载荷托管。信号:载荷开发,武器化,启动投递服务,上传,目标机下载。
 ---
 
 # pwndrop

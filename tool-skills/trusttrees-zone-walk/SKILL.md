@@ -1,7 +1,6 @@
 ---
 name: trusttrees-zone-walk
-description: 渗透工具 skill:TrustTrees 的安装、参数速查与攻击场景 playbook。当任务涉及 AD与横向移动 需要调用 TrustTrees 时使用。
-when-to-use: 渗透工具 skill:TrustTrees 的安装、参数速查与攻击场景 playbook。当任务涉及 AD与横向移动 需要调用 TrustTrees 时使用。
+description: TrustTrees: DNS 委托链漏洞找接管。信号:ad攻击,域渗透,DNS 信任边界可视化,Graphviz 输出,Gandi 集成。
 ---
 
 # TrustTrees

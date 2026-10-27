@@ -1,7 +1,6 @@
 ---
 name: jaeles-vuln-scan
-description: 渗透工具 skill:jaeles 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 jaeles 时使用。
-when-to-use: 渗透工具 skill:jaeles 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 jaeles 时使用。
+description: jaeles: 签名驱动漏洞验证。信号:web漏洞,注入,内置签名扫描,指定签名族,自定义签名。
 ---
 
 # jaeles

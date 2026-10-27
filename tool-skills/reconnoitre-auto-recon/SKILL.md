@@ -1,7 +1,6 @@
 ---
 name: reconnoitre-auto-recon
-description: 渗透工具 skill:reconnoitre 的安装、参数速查与攻击场景 playbook。当任务涉及 红队方法论与自动化 需要调用 reconnoitre 时使用。
-when-to-use: 渗透工具 skill:reconnoitre 的安装、参数速查与攻击场景 playbook。当任务涉及 红队方法论与自动化 需要调用 reconnoitre 时使用。
+description: reconnoitre: 内网自动侦察。信号:红队,方法论,服务枚举,DNS 枚举,全量。
 ---
 
 # reconnoitre

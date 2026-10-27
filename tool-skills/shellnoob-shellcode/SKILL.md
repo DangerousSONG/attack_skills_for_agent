@@ -1,7 +1,6 @@
 ---
 name: shellnoob-shellcode
-description: 渗透工具 skill:shellnoob 的安装、参数速查与攻击场景 playbook。当任务涉及 载荷开发与武器化 需要调用 shellnoob 时使用。
-when-to-use: 渗透工具 skill:shellnoob 的安装、参数速查与攻击场景 playbook。当任务涉及 载荷开发与武器化 需要调用 shellnoob 时使用。
+description: shellnoob: 汇编↔shellcode 快速互转。信号:载荷开发,武器化,反汇编,格式转换,架构。
 ---
 
 # shellnoob

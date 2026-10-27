@@ -1,7 +1,6 @@
 ---
 name: clairvoyance-graphql-schema
-description: 渗透工具 skill:clairvoyance 的安装、参数速查与攻击场景 playbook。当任务涉及 API与业务逻辑攻击 需要调用 clairvoyance 时使用。
-when-to-use: 渗透工具 skill:clairvoyance 的安装、参数速查与攻击场景 playbook。当任务涉及 API与业务逻辑攻击 需要调用 clairvoyance 时使用。
+description: clairvoyance: 关闭内省的 GraphQL 信息收集。信号:api攻击,接口测试,带认证,字典增强。
 ---
 
 # clairvoyance

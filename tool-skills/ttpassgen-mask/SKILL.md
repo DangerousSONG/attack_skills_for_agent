@@ -1,7 +1,6 @@
 ---
 name: ttpassgen-mask
-description: 渗透工具 skill:ttpassgen 的安装、参数速查与攻击场景 playbook。当任务涉及 哈希与密码破解 需要调用 ttpassgen 时使用。
-when-to-use: 渗透工具 skill:ttpassgen 的安装、参数速查与攻击场景 playbook。当任务涉及 哈希与密码破解 需要调用 ttpassgen 时使用。
+description: ttpassgen: 多编码掩码生成。信号:密码破解,哈希破解,统计。
 ---
 
 # ttpassgen

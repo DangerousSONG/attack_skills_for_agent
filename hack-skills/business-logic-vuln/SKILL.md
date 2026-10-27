@@ -1,6 +1,6 @@
 ---
 name: business-logic-vuln
-description: Business Logic Router
+description: "This is the routing entry point for business-logic and state-machine issues."
 when-to-use: Business Logic Router
   Entry P1 category router for business logic testing. Use when workflow abuse,
   race conditions, pricing flaws, or multi-step state attacks matter more than

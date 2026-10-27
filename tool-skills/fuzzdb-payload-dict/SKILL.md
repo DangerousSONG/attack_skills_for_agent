@@ -1,7 +1,6 @@
 ---
 name: fuzzdb-payload-dict
-description: 渗透工具 skill:fuzzdb 的安装、参数速查与攻击场景 playbook。当任务涉及 Web漏洞扫描与验证 需要调用 fuzzdb 时使用。
-when-to-use: 渗透工具 skill:fuzzdb 的安装、参数速查与攻击场景 playbook。当任务涉及 Web漏洞扫描与验证 需要调用 fuzzdb 时使用。
+description: fuzzdb: 手工构造模糊测试。信号:web扫描,漏洞扫描,路径字典,错误指纹正则,弱口令字典。
 ---
 
 # fuzzdb

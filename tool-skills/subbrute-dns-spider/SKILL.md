@@ -1,7 +1,6 @@
 ---
 name: subbrute-dns-spider
-description: 渗透工具 skill:SubBrute 的安装、参数速查与攻击场景 playbook。当任务涉及 域名与DNS侦察 需要调用 SubBrute 时使用。
-when-to-use: 渗透工具 skill:SubBrute 的安装、参数速查与攻击场景 playbook。当任务涉及 域名与DNS侦察 需要调用 SubBrute 时使用。
+description: SubBrute: 免字典元查询枚举。信号:子域名,域名枚举,元查询蜘蛛枚举,小字典快扫,自定义 resolver。
 ---
 
 # SubBrute

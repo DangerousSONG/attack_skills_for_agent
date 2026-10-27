@@ -1,7 +1,6 @@
 ---
 name: preeny-pwn
-description: 渗透工具 skill:preeny 的安装、参数速查与攻击场景 playbook。当任务涉及 二进制漏洞利用与Pwn 需要调用 preeny 时使用。
-when-to-use: 渗透工具 skill:preeny 的安装、参数速查与攻击场景 playbook。当任务涉及 二进制漏洞利用与Pwn 需要调用 preeny 时使用。
+description: preeny: CTF/自动化 pwn 辅助。信号:pwn,二进制利用,去 fork,延时(暴力防提速)。
 ---
 
 # preeny

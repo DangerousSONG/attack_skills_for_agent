@@ -1,7 +1,6 @@
 ---
 name: dnssearch-enum
-description: 渗透工具 skill:dnsSearch 的安装、参数速查与攻击场景 playbook。当任务涉及 资产测绘与指纹识别 需要调用 dnsSearch 时使用。
-when-to-use: 渗透工具 skill:dnsSearch 的安装、参数速查与攻击场景 playbook。当任务涉及 资产测绘与指纹识别 需要调用 dnsSearch 时使用。
+description: dnsSearch: 快速子域爆破轻量件。信号:资产测绘,指纹识别,resolver,线程。
 ---
 
 # dnsSearch

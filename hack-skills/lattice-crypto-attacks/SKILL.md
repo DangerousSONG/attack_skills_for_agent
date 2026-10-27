@@ -1,6 +1,6 @@
 ---
 name: lattice-crypto-attacks
-description: 0. RELATED ROUTING
+description: "Lattice-based cryptanalysis playbook."
 when-to-use: >-
   Lattice-based cryptanalysis playbook. Use when attacking RSA via Coppersmith
   small roots, recovering DSA/ECDSA nonces from bias, solving knapsack

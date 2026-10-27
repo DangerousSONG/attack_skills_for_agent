@@ -1,7 +1,6 @@
 ---
 name: smbclient-ng-modern
-description: 渗透工具 skill:smbclient-ng 的安装、参数速查与攻击场景 playbook。当任务涉及 内网发现与枚举 需要调用 smbclient-ng 时使用。
-when-to-use: 渗透工具 skill:smbclient-ng 的安装、参数速查与攻击场景 playbook。当任务涉及 内网发现与枚举 需要调用 smbclient-ng 时使用。
+description: smbclient-ng: 交互式 SMB 操作。信号:内网枚举,网络发现,现代 SMB 客户端,共享浏览,下载。
 ---
 
 # smbclient-ng

@@ -1,6 +1,6 @@
 ---
 name: saml-sso-assertion-attacks
-description: 1. WHEN TO LOAD THIS SKILL
+description: "Use this skill when the target uses SAML-based SSO and you need to validate assertion trust: signature coverage, audience and recipient checks, ACS handling, XML parsing weaknesses, and IdP/SP confusi"
 when-to-use: 1. WHEN TO LOAD THIS SKILL
   SAML SSO assertion attack playbook. Use when testing signature validation, assertion wrapping, audience restrictions, ACS handling, XML trust boundaries, and enterprise SSO flaws.
 ---

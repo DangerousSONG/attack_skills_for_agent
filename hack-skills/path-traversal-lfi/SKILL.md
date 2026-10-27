@@ -1,6 +1,6 @@
 ---
 name: path-traversal-lfi
-description: 0. RELATED ROUTING
+description: "Path traversal and LFI playbook. Use when file paths, download endpoints, include operations, archive extraction, or wrapper behavior may expose filesystem control."
 when-to-use: >-
   Path traversal and LFI playbook. Use when file paths, download endpoints, include operations, archive extraction, or wrapper behavior may expose filesystem control.
 ---

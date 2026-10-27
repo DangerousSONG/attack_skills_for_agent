@@ -1,7 +1,6 @@
 ---
 name: veil-framework
-description: 渗透工具 skill:Veil 的安装、参数速查与攻击场景 playbook。当任务涉及 恶意软件开发与免杀 需要调用 Veil 时使用。
-when-to-use: 渗透工具 skill:Veil 的安装、参数速查与攻击场景 playbook。当任务涉及 恶意软件开发与免杀 需要调用 Veil 时使用。
+description: Veil: 免杀载荷生成。信号:恶意软件开发,免杀开发,菜单,列 payload,交互选择。
 ---
 
 # Veil

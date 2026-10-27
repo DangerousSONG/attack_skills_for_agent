@@ -1,6 +1,6 @@
 ---
 name: cors-cross-origin-misconfiguration
-description: 1. WHEN TO LOAD THIS SKILL
+description: "CORS misconfiguration testing playbook. Use when analyzing cross-origin trust, credentialed browser reads, origin reflection, preflight policy bugs, and browser-based access to authenticated APIs."
 when-to-use: >-
   CORS misconfiguration testing playbook. Use when analyzing cross-origin trust, credentialed browser reads, origin reflection, preflight policy bugs, and browser-based access to authenticated APIs.
 ---

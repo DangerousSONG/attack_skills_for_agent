@@ -1,7 +1,6 @@
 ---
 name: pythem-network
-description: 渗透工具 skill:PytheM 的安装、参数速查与攻击场景 playbook。当任务涉及 嗅探与中间人攻击 需要调用 PytheM 时使用。
-when-to-use: 渗透工具 skill:PytheM 的安装、参数速查与攻击场景 playbook。当任务涉及 嗅探与中间人攻击 需要调用 PytheM 时使用。
+description: PytheM: 网络渗透一体化。信号:中间人,mitm,网络攻击框架,ARP 欺骗,嗅探。
 ---
 
 # PytheM

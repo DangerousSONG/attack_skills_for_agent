@@ -1,6 +1,6 @@
 ---
 name: email-header-injection
-description: 0. RELATED ROUTING
+description: "Email header injection and spoofing playbook. Use when testing contact forms, email APIs, password reset flows, or any feature that constructs SMTP messages with user-controlled fields."
 when-to-use: >-
   Email header injection and spoofing playbook. Use when testing contact forms, email APIs, password reset flows, or any feature that constructs SMTP messages with user-controlled fields. Covers CRLF injection in headers, SPF/DKIM/DMARC bypass, and phishing amplification.
 ---

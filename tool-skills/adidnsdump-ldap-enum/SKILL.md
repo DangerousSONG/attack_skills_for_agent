@@ -1,7 +1,6 @@
 ---
 name: adidnsdump-ldap-enum
-description: 渗透工具 skill:adidnsdump 的安装、参数速查与攻击场景 playbook。当任务涉及 AD与LDAP枚举 需要调用 adidnsdump 时使用。
-when-to-use: 渗透工具 skill:adidnsdump 的安装、参数速查与攻击场景 playbook。当任务涉及 AD与LDAP枚举 需要调用 adidnsdump 时使用。
+description: adidnsdump: AD DNS 记录收割(发现服务器)。信号:内网枚举,网络发现,只列出区域,解析记录获取 IP,含已删除记录。
 ---
 
 # adidnsdump

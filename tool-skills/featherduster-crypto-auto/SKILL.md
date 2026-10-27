@@ -1,7 +1,6 @@
 ---
 name: featherduster-crypto-auto
-description: 渗透工具 skill:FeatherDuster 的安装、参数速查与攻击场景 playbook。当任务涉及 密码误用与协议分析 需要调用 FeatherDuster 时使用。
-when-to-use: 渗透工具 skill:FeatherDuster 的安装、参数速查与攻击场景 playbook。当任务涉及 密码误用与协议分析 需要调用 FeatherDuster 时使用。
+description: FeatherDuster: CTF/真实场景弱加密破解。信号:密码学攻击,加密破解,自动识别并破解弱加密,进入交互分析,选模块攻击。
 ---
 
 # FeatherDuster

@@ -1,7 +1,6 @@
 ---
 name: doork-dork-scan
-description: 渗透工具 skill:doork 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 doork 时使用。
-when-to-use: 渗透工具 skill:doork 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 doork 时使用。
+description: doork: 目标 dork 自动化。信号:web漏洞,注入,自定义 dork。
 ---
 
 # doork

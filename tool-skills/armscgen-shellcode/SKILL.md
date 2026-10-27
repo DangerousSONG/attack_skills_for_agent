@@ -1,7 +1,6 @@
 ---
 name: armscgen-shellcode
-description: 渗透工具 skill:ARMSCGen 的安装、参数速查与攻击场景 playbook。当任务涉及 二进制漏洞利用与Pwn 需要调用 ARMSCGen 时使用。
-when-to-use: 渗透工具 skill:ARMSCGen 的安装、参数速查与攻击场景 playbook。当任务涉及 二进制漏洞利用与Pwn 需要调用 ARMSCGen 时使用。
+description: ARMSCGen: ARM/嵌入式 shellcode。信号:pwn,二进制利用,反向 shell,列表。
 ---
 
 # ARMSCGen

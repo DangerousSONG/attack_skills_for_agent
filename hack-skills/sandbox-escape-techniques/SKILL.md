@@ -1,6 +1,6 @@
 ---
 name: sandbox-escape-techniques
-description: 0. RELATED ROUTING
+description: "Sandbox escape playbook."
 when-to-use: >-
   Sandbox escape playbook. Use when breaking out of Python sandbox, Lua sandbox, seccomp filter, chroot jail, container/Docker, browser sandbox, or namespace isolation to achieve unrestricted code execution or file access.
 ---

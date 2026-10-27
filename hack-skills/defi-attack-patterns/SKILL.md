@@ -1,6 +1,6 @@
 ---
 name: defi-attack-patterns
-description: 0. RELATED ROUTING
+description: "DeFi attack pattern playbook."
 when-to-use: >-
   DeFi attack pattern playbook. Use when analyzing flash loan attacks, price oracle manipulation, MEV sandwich attacks, governance exploits, bridge vulnerabilities, and token standard edge cases in decentralized finance protocols.
 ---

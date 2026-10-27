@@ -1,7 +1,6 @@
 ---
 name: juumla-joomla-check
-description: 渗透工具 skill:juumla 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 juumla 时使用。
-when-to-use: 渗透工具 skill:juumla 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 juumla 时使用。
+description: juumla: Joomla 快速体检。信号:web漏洞,注入,备份文件探测,组件检测。
 ---
 
 # juumla

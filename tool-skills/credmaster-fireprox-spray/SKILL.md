@@ -1,7 +1,6 @@
 ---
 name: credmaster-fireprox-spray
-description: 渗透工具 skill:CredMaster 的安装、参数速查与攻击场景 playbook。当任务涉及 口令与哈希破解 需要调用 CredMaster 时使用。
-when-to-use: 渗透工具 skill:CredMaster 的安装、参数速查与攻击场景 playbook。当任务涉及 口令与哈希破解 需要调用 CredMaster 时使用。
+description: CredMaster: FireProx 轮换 IP 喷洒。信号:密码破解,哈希破解,OAuth2 喷洒,ADFS 喷洒,OWA 喷洒。
 ---
 
 # CredMaster

@@ -1,6 +1,6 @@
 ---
 name: hash-attack-techniques
-description: 0. RELATED ROUTING
+description: "Hash attack playbook. Use when exploiting length extension, MD5/SHA1 collisions, HMAC timing leaks, birthday attacks, or hash-based proof of work in CTF and authorized testing scenarios."
 when-to-use: >-
   Hash attack playbook. Use when exploiting length extension, MD5/SHA1
   collisions, HMAC timing leaks, birthday attacks, or hash-based proof

@@ -1,7 +1,6 @@
 ---
 name: hakrevdns-reverse
-description: 渗透工具 skill:hakrevdns 的安装、参数速查与攻击场景 playbook。当任务涉及 网络拓扑与互联网测绘 需要调用 hakrevdns 时使用。
-when-to-use: 渗透工具 skill:hakrevdns 的安装、参数速查与攻击场景 playbook。当任务涉及 网络拓扑与互联网测绘 需要调用 hakrevdns 时使用。
+description: hakrevdns: IP 段反查域名。信号:网络拓扑,互联网测绘,字典。
 ---
 
 # hakrevdns

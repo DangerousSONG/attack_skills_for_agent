@@ -1,7 +1,6 @@
 ---
 name: dublin-traceroute-nat
-description: 渗透工具 skill:dublin-traceroute 的安装、参数速查与攻击场景 playbook。当任务涉及 网络扫描与枚举 需要调用 dublin-traceroute 时使用。
-when-to-use: 渗透工具 skill:dublin-traceroute 的安装、参数速查与攻击场景 playbook。当任务涉及 网络扫描与枚举 需要调用 dublin-traceroute 时使用。
+description: dublin-traceroute: NAT 路径测绘。信号:端口扫描,nmap,JSON,可读。
 ---
 
 # dublin-traceroute

@@ -1,7 +1,6 @@
 ---
 name: commix-command-injection
-description: 渗透工具 skill:Commix 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 Commix 时使用。
-when-to-use: 渗透工具 skill:Commix 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 Commix 时使用。
+description: Commix: 命令注入一键 getshell、burp 请求回放利用。信号:web漏洞,注入,自动检测+利用命令注入,POST 数据。
 ---
 
 # Commix

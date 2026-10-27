@@ -1,7 +1,6 @@
 ---
 name: dirble-fast-dir
-description: 渗透工具 skill:dirble 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 dirble 时使用。
-when-to-use: 渗透工具 skill:dirble 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 dirble 时使用。
+description: dirble: 高速目录爆破。信号:web漏洞,注入,目录扫描,字典+线程,递归。
 ---
 
 # dirble

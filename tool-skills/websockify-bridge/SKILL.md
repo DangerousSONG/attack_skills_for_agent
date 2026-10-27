@@ -1,7 +1,6 @@
 ---
 name: websockify-bridge
-description: 渗透工具 skill:websockify 的安装、参数速查与攻击场景 playbook。当任务涉及 隐蔽回连与通信通道 需要调用 websockify 时使用。
-when-to-use: 渗透工具 skill:websockify 的安装、参数速查与攻击场景 playbook。当任务涉及 隐蔽回连与通信通道 需要调用 websockify 时使用。
+description: websockify: WebSocket 隧道封装 C2/远控流量。信号:隐蔽回连,通信通道,强制 SSL,TLS 证书,保活。
 ---
 
 # websockify

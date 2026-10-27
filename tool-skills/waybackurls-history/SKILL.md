@@ -1,7 +1,6 @@
 ---
 name: waybackurls-history
-description: 渗透工具 skill:waybackurls 的安装、参数速查与攻击场景 playbook。当任务涉及 资产测绘与指纹识别 需要调用 waybackurls 时使用。
-when-to-use: 渗透工具 skill:waybackurls 的安装、参数速查与攻击场景 playbook。当任务涉及 资产测绘与指纹识别 需要调用 waybackurls 时使用。
+description: waybackurls: 历史 URL 收割。信号:资产测绘,指纹识别,带时间戳,不含子域,waybackurls`。
 ---
 
 # waybackurls

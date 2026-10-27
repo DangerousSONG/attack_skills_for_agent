@@ -1,6 +1,6 @@
 ---
 name: active-directory-acl-abuse
-description: 0. RELATED ROUTING
+description: "Active Directory ACL abuse playbook."
 when-to-use: >-
   Active Directory ACL abuse playbook. Use when exploiting misconfigured AD permissions including GenericAll, WriteDACL, DCSync rights, shadow credentials, LAPS reading, GPO abuse, and BloodHound-guided attack paths.
 ---

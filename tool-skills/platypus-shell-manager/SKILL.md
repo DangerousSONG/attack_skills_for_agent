@@ -1,7 +1,6 @@
 ---
 name: platypus-shell-manager
-description: 渗透工具 skill:Platypus 的安装、参数速查与攻击场景 playbook。当任务涉及 远程命令执行与WebShell 需要调用 Platypus 时使用。
-when-to-use: 渗透工具 skill:Platypus 的安装、参数速查与攻击场景 playbook。当任务涉及 远程命令执行与WebShell 需要调用 Platypus 时使用。
+description: Platypus: 反弹 shell 集中管控。信号:webshell,rce,起服务(:7331),监听端口,交互。
 ---
 
 # Platypus

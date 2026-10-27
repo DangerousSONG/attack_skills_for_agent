@@ -1,7 +1,6 @@
 ---
 name: sj-swagger-audit
-description: 渗透工具 skill:sj 的安装、参数速查与攻击场景 playbook。当任务涉及 API与GraphQL攻击 需要调用 sj 时使用。
-when-to-use: 渗透工具 skill:sj 的安装、参数速查与攻击场景 playbook。当任务涉及 API与GraphQL攻击 需要调用 sj 时使用。
+description: sj: OpenAPI 规范直连渗透。信号:api攻击,接口测试,自动构造 API 请求,路径爆破,全端点审计。
 ---
 
 # sj

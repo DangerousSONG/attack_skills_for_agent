@@ -1,7 +1,6 @@
 ---
 name: pupy-rat
-description: 渗透工具 skill:Pupy 的安装、参数速查与攻击场景 playbook。当任务涉及 C2框架与远控 需要调用 Pupy 时使用。
-when-to-use: 渗透工具 skill:Pupy 的安装、参数速查与攻击场景 playbook。当任务涉及 C2框架与远控 需要调用 Pupy 时使用。
+description: Pupy: 跨平台远控上线。信号:c2,命令控制,启动控制端,生成客户端,进程迁移。
 ---
 
 # Pupy

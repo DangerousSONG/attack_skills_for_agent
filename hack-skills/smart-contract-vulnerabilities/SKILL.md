@@ -1,6 +1,6 @@
 ---
 name: smart-contract-vulnerabilities
-description: 0. RELATED ROUTING
+description: "Smart contract vulnerability playbook."
 when-to-use: >-
   Smart contract vulnerability playbook. Use when auditing Solidity/EVM contracts for reentrancy, integer overflow, access control, delegatecall, flash loan, signature replay, and MEV-related attack patterns.
 ---

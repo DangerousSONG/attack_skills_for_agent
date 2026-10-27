@@ -1,7 +1,6 @@
 ---
 name: seeker-geo-phish
-description: 渗透工具 skill:seeker 的安装、参数速查与攻击场景 playbook。当任务涉及 钓鱼与社会工程 需要调用 seeker 时使用。
-when-to-use: 渗透工具 skill:seeker 的安装、参数速查与攻击场景 playbook。当任务涉及 钓鱼与社会工程 需要调用 seeker 时使用。
+description: seeker: 精准定位钓鱼。信号:钓鱼,社会工程,手动定制钓鱼页,邻近 WiFi 钓鱼模板。
 ---
 
 # seeker

@@ -1,7 +1,6 @@
 ---
 name: dnsenum-perl-recon
-description: 渗透工具 skill:dnsenum 的安装、参数速查与攻击场景 playbook。当任务涉及 域名与DNS侦察 需要调用 dnsenum 时使用。
-when-to-use: 渗透工具 skill:dnsenum 的安装、参数速查与攻击场景 playbook。当任务涉及 域名与DNS侦察 需要调用 dnsenum 时使用。
+description: dnsenum: DNS 全面枚举。信号:子域名,域名枚举,标准枚举,字典爆破,递归子域。
 ---
 
 # dnsenum

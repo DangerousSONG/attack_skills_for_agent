@@ -1,6 +1,6 @@
 ---
 name: xss-cross-site-scripting
-description: 0. RELATED ROUTING
+description: "XSS playbook. Use when user-controlled content reaches HTML, attributes, JavaScript, DOM sinks, uploads, or multi-context rendering paths."
 when-to-use: >-
   XSS playbook. Use when user-controlled content reaches HTML, attributes, JavaScript, DOM sinks, uploads, or multi-context rendering paths.
 ---

@@ -1,6 +1,6 @@
 ---
 name: symmetric-cipher-attacks
-description: 0. RELATED ROUTING
+description: "Symmetric cipher attack playbook. Use when exploiting block cipher mode weaknesses (CBC padding oracle, ECB cut-and-paste, bit flipping), stream cipher key reuse, or meet-in-the-middle attacks."
 when-to-use: >-
   Symmetric cipher attack playbook. Use when exploiting block cipher mode
   weaknesses (CBC padding oracle, ECB cut-and-paste, bit flipping), stream

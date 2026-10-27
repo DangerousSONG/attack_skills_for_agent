@@ -1,7 +1,6 @@
 ---
 name: corscanner-cors-misconfig
-description: 渗透工具 skill:CORScanner 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 CORScanner 时使用。
-when-to-use: 渗透工具 skill:CORScanner 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 CORScanner 时使用。
+description: CORScanner: CORS 跨域劫持。信号:web漏洞,注入,CORS 配置扫描,批量,线程。
 ---
 
 # CORScanner

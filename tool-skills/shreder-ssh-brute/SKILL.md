@@ -1,7 +1,6 @@
 ---
 name: shreder-ssh-brute
-description: 渗透工具 skill:Shreder 的安装、参数速查与攻击场景 playbook。当任务涉及 哈希与密码破解 需要调用 Shreder 时使用。
-when-to-use: 渗透工具 skill:Shreder 的安装、参数速查与攻击场景 playbook。当任务涉及 哈希与密码破解 需要调用 Shreder 时使用。
+description: Shreder: IoT 默认口令批量。信号:密码破解,哈希破解,线程,协议。
 ---
 
 # Shreder

@@ -1,7 +1,6 @@
 ---
 name: enum4linux-ng
-description: 渗透工具 skill:enum4linux-ng 的安装、参数速查与攻击场景 playbook。当任务涉及 内网发现与枚举 需要调用 enum4linux-ng 时使用。
-when-to-use: 渗透工具 skill:enum4linux-ng 的安装、参数速查与攻击场景 playbook。当任务涉及 内网发现与枚举 需要调用 enum4linux-ng 时使用。
+description: enum4linux-ng: 匿名/凭据双模式域信息收割、工作组环境快速摸底。信号:内网枚举,网络发现,所有模块,带凭据。
 ---
 
 # enum4linux-ng

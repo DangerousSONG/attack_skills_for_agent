@@ -1,7 +1,6 @@
 ---
 name: trevorproxy-spray-pivot
-description: 渗透工具 skill:TREVORproxy 的安装、参数速查与攻击场景 playbook。当任务涉及 隧道与内网穿透 需要调用 TREVORproxy 时使用。
-when-to-use: 渗透工具 skill:TREVORproxy 的安装、参数速查与攻击场景 playbook。当任务涉及 隧道与内网穿透 需要调用 TREVORproxy 时使用。
+description: TREVORproxy: 多源 IP 喷洒。信号:内网穿透,隧道,代理池喷洒,组合,列表。
 ---
 
 # TREVORproxy

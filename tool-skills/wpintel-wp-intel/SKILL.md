@@ -1,7 +1,6 @@
 ---
 name: wpintel-wp-intel
-description: 渗透工具 skill:WPintel 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 WPintel 时使用。
-when-to-use: 渗透工具 skill:WPintel 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 WPintel 时使用。
+description: WPintel: WP 情报快速收集。信号:web漏洞,注入,WP 情报收集,用户枚举,DB 泄露检查。
 ---
 
 # WPintel

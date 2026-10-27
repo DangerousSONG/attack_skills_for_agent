@@ -1,7 +1,6 @@
 ---
 name: saruman-anti-forensic
-description: 渗透工具 skill:saruman 的安装、参数速查与攻击场景 playbook。当任务涉及 反取证与痕迹清理 需要调用 saruman 时使用。
-when-to-use: 渗透工具 skill:saruman 的安装、参数速查与攻击场景 playbook。当任务涉及 反取证与痕迹清理 需要调用 saruman 时使用。
+description: saruman: ELF 内存注入规避磁盘取证。信号:痕迹清理,反取证,附加模式,退出时清理痕迹。
 ---
 
 # saruman

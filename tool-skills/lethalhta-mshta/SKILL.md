@@ -1,7 +1,6 @@
 ---
 name: lethalhta-mshta
-description: 渗透工具 skill:LethalHTA 的安装、参数速查与攻击场景 playbook。当任务涉及 远程服务横向移动 需要调用 LethalHTA 时使用。
-when-to-use: 渗透工具 skill:LethalHTA 的安装、参数速查与攻击场景 playbook。当任务涉及 远程服务横向移动 需要调用 LethalHTA 时使用。
+description: LethalHTA: mshta 白名单执行。信号:横向移动,psexec,直接执行,远程 HTA,参考 README。
 ---
 
 # LethalHTA

@@ -1,7 +1,6 @@
 ---
 name: impacket-protocol-exec
-description: 渗透工具 skill:impacket 协议执行脚本集 的安装、参数速查与攻击场景 playbook。当任务涉及 远程服务横向移动 需要调用 impacket 协议执行脚本集 时使用。
-when-to-use: 渗透工具 skill:impacket 协议执行脚本集 的安装、参数速查与攻击场景 playbook。当任务涉及 远程服务横向移动 需要调用 impacket 协议执行脚本集 时使用。
+description: impacket 协议执行脚本集: PTH 横向拿 shell、NTLM 中继到 ADCS 提权。信号:横向移动,psexec。
 ---
 
 # impacket 协议执行脚本集

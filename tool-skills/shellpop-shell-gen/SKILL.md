@@ -1,7 +1,6 @@
 ---
 name: shellpop-shell-gen
-description: 渗透工具 skill:shellpop 的安装、参数速查与攻击场景 playbook。当任务涉及 远程命令执行与WebShell 需要调用 shellpop 时使用。
-when-to-use: 渗透工具 skill:shellpop 的安装、参数速查与攻击场景 playbook。当任务涉及 远程命令执行与WebShell 需要调用 shellpop 时使用。
+description: shellpop: 受限环境选最优反弹方式。信号:webshell,rce,列全部 payload,生成 PS 反弹,Python 反弹。
 ---
 
 # shellpop

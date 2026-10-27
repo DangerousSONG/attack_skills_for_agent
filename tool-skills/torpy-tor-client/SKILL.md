@@ -1,7 +1,6 @@
 ---
 name: torpy-tor-client
-description: 渗透工具 skill:torpy 的安装、参数速查与攻击场景 playbook。当任务涉及 隧道与内网穿透 需要调用 torpy 时使用。
-when-to-use: 渗透工具 skill:torpy 的安装、参数速查与攻击场景 playbook。当任务涉及 隧道与内网穿透 需要调用 torpy 时使用。
+description: torpy: Tor 网络匿名请求。信号:内网穿透,隧道,Tor 客户端,Tor 内执行,跳数。
 ---
 
 # torpy

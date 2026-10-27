@@ -1,6 +1,6 @@
 ---
 name: windows-privilege-escalation
-description: 0. RELATED ROUTING
+description: "Windows local privilege escalation playbook."
 when-to-use: >-
   Windows local privilege escalation playbook. Use when you have low-privilege shell access on Windows and need to escalate via token abuse, Potato exploits, service misconfigurations, DLL hijacking, UAC bypass, or registry autoruns.
 ---

@@ -1,7 +1,6 @@
 ---
 name: jwtcat-token-crack
-description: 渗透工具 skill:jwtcat 的安装、参数速查与攻击场景 playbook。当任务涉及 API与GraphQL攻击 需要调用 jwtcat 时使用。
-when-to-use: 渗透工具 skill:jwtcat 的安装、参数速查与攻击场景 playbook。当任务涉及 API与GraphQL攻击 需要调用 jwtcat 时使用。
+description: jwtcat: 弱 JWT 密钥接管。信号:api攻击,接口测试,JWT 签名密钥爆破,直接内联 token。
 ---
 
 # jwtcat

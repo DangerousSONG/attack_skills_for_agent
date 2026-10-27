@@ -1,7 +1,6 @@
 ---
 name: trape-osint-track
-description: 渗透工具 skill:trape 的安装、参数速查与攻击场景 playbook。当任务涉及 邮箱与人员OSINT 需要调用 trape 时使用。
-when-to-use: 渗透工具 skill:trape 的安装、参数速查与攻击场景 playbook。当任务涉及 邮箱与人员OSINT 需要调用 trape 时使用。
+description: trape: 目标访问行为追踪。信号:邮箱收集,员工信息,对目标站点做访问者追踪,本地演示模式,自定义注入页面。
 ---
 
 # trape

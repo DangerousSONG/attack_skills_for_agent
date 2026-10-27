@@ -1,7 +1,6 @@
 ---
 name: mylg-network-cli
-description: 渗透工具 skill:mylg 的安装、参数速查与攻击场景 playbook。当任务涉及 网络扫描与枚举 需要调用 mylg 时使用。
-when-to-use: 渗透工具 skill:mylg 的安装、参数速查与攻击场景 playbook。当任务涉及 网络扫描与枚举 需要调用 mylg 时使用。
+description: mylg: 瑞士军刀式网络诊断。信号:端口扫描,nmap,综合网络扫描,路由跟踪,DNS 查询。
 ---
 
 # mylg

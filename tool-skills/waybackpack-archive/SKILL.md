@@ -1,7 +1,6 @@
 ---
 name: waybackpack-archive
-description: 渗透工具 skill:waybackpack 的安装、参数速查与攻击场景 playbook。当任务涉及 资产测绘与指纹识别 需要调用 waybackpack 时使用。
-when-to-use: 渗透工具 skill:waybackpack 的安装、参数速查与攻击场景 playbook。当任务涉及 资产测绘与指纹识别 需要调用 waybackpack 时使用。
+description: waybackpack: 历史快照取证。信号:资产测绘,指纹识别,列归档 URL,只列不下载,从 2015 年。
 ---
 
 # waybackpack

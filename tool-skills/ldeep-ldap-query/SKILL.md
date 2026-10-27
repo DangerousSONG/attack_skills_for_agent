@@ -1,7 +1,6 @@
 ---
 name: ldeep-ldap-query
-description: 渗透工具 skill:ldeep 的安装、参数速查与攻击场景 playbook。当任务涉及 AD与LDAP枚举 需要调用 ldeep 时使用。
-when-to-use: 渗透工具 skill:ldeep 的安装、参数速查与攻击场景 playbook。当任务涉及 AD与LDAP枚举 需要调用 ldeep 时使用。
+description: ldeep: 轻量 LDAP 查询替代 bloodhound。信号:内网枚举,网络发现,列域用户,详细信息,gMSA 账户枚举。
 ---
 
 # ldeep

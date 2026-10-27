@@ -1,7 +1,6 @@
 ---
 name: git-dumper-repo
-description: 渗透工具 skill:git-dumper 的安装、参数速查与攻击场景 playbook。当任务涉及 供应链与CI/CD攻击 需要调用 git-dumper 时使用。
-when-to-use: 渗透工具 skill:git-dumper 的安装、参数速查与攻击场景 playbook。当任务涉及 供应链与CI/CD攻击 需要调用 git-dumper 时使用。
+description: git-dumper: 无目录列表的 .git 还原。信号:供应链,cicd,下载并还原仓库,并发,强扫模式。
 ---
 
 # git-dumper

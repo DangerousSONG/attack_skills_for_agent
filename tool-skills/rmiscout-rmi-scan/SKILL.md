@@ -1,7 +1,6 @@
 ---
 name: rmiscout-rmi-scan
-description: 渗透工具 skill:rmiscout 的安装、参数速查与攻击场景 playbook。当任务涉及 远程服务横向移动 需要调用 rmiscout 时使用。
-when-to-use: 渗透工具 skill:rmiscout 的安装、参数速查与攻击场景 playbook。当任务涉及 远程服务横向移动 需要调用 rmiscout 时使用。
+description: rmiscout: Java RMI 不安全方法。信号:横向移动,psexec,RMI 方法爆破,fuzz。
 ---
 
 # rmiscout

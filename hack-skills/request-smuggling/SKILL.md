@@ -1,6 +1,6 @@
 ---
 name: request-smuggling
-description: 0. RELATED ROUTING
+description: "HTTP request smuggling and desynchronization testing."
 when-to-use: >-
   HTTP request smuggling and desynchronization testing. Use when front proxies,
   CDNs, or load balancers disagree with the origin on message framing

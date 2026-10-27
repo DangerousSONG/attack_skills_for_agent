@@ -1,7 +1,6 @@
 ---
 name: moonwalk-anti-forensic
-description: 渗透工具 skill:moonwalk 的安装、参数速查与攻击场景 playbook。当任务涉及 反取证与痕迹清理 需要调用 moonwalk 时使用。
-when-to-use: 渗透工具 skill:moonwalk 的安装、参数速查与攻击场景 playbook。当任务涉及 反取证与痕迹清理 需要调用 moonwalk 时使用。
+description: moonwalk: Linux 痕迹时间线抹除。信号:痕迹清理,反取证,开始记录时间戳基线,活动期,内存执行模式。
 ---
 
 # moonwalk

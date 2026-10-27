@@ -1,7 +1,6 @@
 ---
 name: pixload-image-payload
-description: 渗透工具 skill:Pixload 的安装、参数速查与攻击场景 playbook。当任务涉及 载荷开发与武器化 需要调用 Pixload 时使用。
-when-to-use: 渗透工具 skill:Pixload 的安装、参数速查与攻击场景 playbook。当任务涉及 载荷开发与武器化 需要调用 Pixload 时使用。
+description: Pixload: 图片上传 XSS/内容检查绕过。信号:载荷开发,武器化,PNG 注入,GIF 注入。
 ---
 
 # Pixload

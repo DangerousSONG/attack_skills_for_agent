@@ -1,6 +1,6 @@
 ---
 name: container-escape-techniques
-description: 0. RELATED ROUTING
+description: "Container escape playbook."
 when-to-use: >-
   Container escape playbook. Use when operating inside a Docker container, LXC, or Kubernetes pod and need to escape to the host via privileged mode, capabilities, Docker socket, cgroup abuse, namespace tricks, or runtime vulnerabilities.
 ---

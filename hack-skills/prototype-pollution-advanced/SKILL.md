@@ -1,6 +1,6 @@
 ---
 name: prototype-pollution-advanced
-description: 0. RELATED ROUTING
+description: "Advanced prototype pollution playbook — server-side RCE, client-side gadgets, filter bypasses, and detection techniques. Companion to ../prototype-pollution/ for basics."
 when-to-use: >-
   Advanced prototype pollution playbook — server-side RCE, client-side gadgets, filter bypasses, and detection techniques. Companion to ../prototype-pollution/ for basics. Use when you've confirmed pollution and need to escalate to code execution or find framework-specific gadgets.
 ---

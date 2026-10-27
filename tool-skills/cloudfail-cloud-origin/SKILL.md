@@ -1,7 +1,6 @@
 ---
 name: cloudfail-cloud-origin
-description: 渗透工具 skill:CloudFail 的安装、参数速查与攻击场景 playbook。当任务涉及 痕迹清理与反取证 需要调用 CloudFail 时使用。
-when-to-use: 渗透工具 skill:CloudFail 的安装、参数速查与攻击场景 playbook。当任务涉及 痕迹清理与反取证 需要调用 CloudFail 时使用。
+description: CloudFail: CDN 后源站 IP 定位。信号:红队,方法论,绕过 CF 找源站 IP,扫描全部子域,Tor 出口防封。
 ---
 
 # CloudFail

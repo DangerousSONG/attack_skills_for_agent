@@ -1,7 +1,6 @@
 ---
 name: simplyemail-email-harvest
-description: 渗透工具 skill:SimplyEmail 的安装、参数速查与攻击场景 playbook。当任务涉及 OSINT情报收集 需要调用 SimplyEmail 时使用。
-when-to-use: 渗透工具 skill:SimplyEmail 的安装、参数速查与攻击场景 playbook。当任务涉及 OSINT情报收集 需要调用 SimplyEmail 时使用。
+description: SimplyEmail: 邮箱地址批量收割。信号:邮箱收集,员工信息,邮箱收集(多源),详细,JSON 输出。
 ---
 
 # SimplyEmail

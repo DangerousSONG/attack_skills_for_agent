@@ -1,6 +1,6 @@
 ---
 name: reverse-shell-techniques
-description: 0. RELATED ROUTING
+description: "Reverse shell techniques playbook."
 when-to-use: >-
   Reverse shell techniques playbook. Use when establishing remote shells including language one-liners, encrypted shells (OpenSSL/socat/ncat), web shells, PTY upgrades, file transfer methods, PowerShell shells, and Windows payload generation.
 ---

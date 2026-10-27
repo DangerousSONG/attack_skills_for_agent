@@ -1,7 +1,6 @@
 ---
 name: parampampam-param-hunt
-description: 渗透工具 skill:ParamPamPam 的安装、参数速查与攻击场景 playbook。当任务涉及 Web利用(参数发现) 需要调用 ParamPamPam 时使用。
-when-to-use: 渗透工具 skill:ParamPamPam 的安装、参数速查与攻击场景 playbook。当任务涉及 Web利用(参数发现) 需要调用 ParamPamPam 时使用。
+description: ParamPamPam: 挖隐藏调试参数。信号:web漏洞,注入,发现隐藏 GET 参数,POST 参数,自定义字典。
 ---
 
 # ParamPamPam

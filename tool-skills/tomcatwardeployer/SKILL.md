@@ -1,7 +1,6 @@
 ---
 name: tomcatwardeployer
-description: 渗透工具 skill:tomcatWarDeployer 的安装、参数速查与攻击场景 playbook。当任务涉及 远程服务横向移动 需要调用 tomcatWarDeployer 时使用。
-when-to-use: 渗透工具 skill:tomcatWarDeployer 的安装、参数速查与攻击场景 playbook。当任务涉及 远程服务横向移动 需要调用 tomcatWarDeployer 时使用。
+description: tomcatWarDeployer: Tomcat 管理后台利用。信号:横向移动,psexec,Tomcat 部署,生成 WAR。
 ---
 
 # tomcatWarDeployer

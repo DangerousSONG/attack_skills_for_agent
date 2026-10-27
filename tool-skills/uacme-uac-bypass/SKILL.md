@@ -1,7 +1,6 @@
 ---
 name: uacme-uac-bypass
-description: 渗透工具 skill:UACME 的安装、参数速查与攻击场景 playbook。当任务涉及 Windows本地提权 需要调用 UACME 时使用。
-when-to-use: 渗透工具 skill:UACME 的安装、参数速查与攻击场景 playbook。当任务涉及 Windows本地提权 需要调用 UACME 时使用。
+description: UACME: 标准用户绕过 UAC 提权。信号:windows提权,uac绕过,带参数的投递执行。
 ---
 
 # UACME

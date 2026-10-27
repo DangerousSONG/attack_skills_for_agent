@@ -1,7 +1,6 @@
 ---
 name: bloodyad-ad-privesc
-description: 渗透工具 skill:bloodyAD 的安装、参数速查与攻击场景 playbook。当任务涉及 AD域渗透与域控攻击 需要调用 bloodyAD 时使用。
-when-to-use: 渗透工具 skill:bloodyAD 的安装、参数速查与攻击场景 playbook。当任务涉及 AD域渗透与域控攻击 需要调用 bloodyAD 时使用。
+description: bloodyAD: ACL 滥用提权链、GenericWrite→影子凭证。信号:ad攻击,域渗透,读 ACL,加委派/写权限。
 ---
 
 # bloodyAD

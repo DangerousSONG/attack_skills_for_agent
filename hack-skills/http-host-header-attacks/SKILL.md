@@ -1,6 +1,6 @@
 ---
 name: http-host-header-attacks
-description: 0. RELATED ROUTING
+description: "HTTP Host header injection and routing abuse playbook."
 when-to-use: >-
   HTTP Host header injection and routing abuse playbook. Use when the application
   trusts the Host header for generating URLs, routing requests, or access control

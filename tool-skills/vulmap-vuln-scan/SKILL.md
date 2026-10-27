@@ -1,7 +1,6 @@
 ---
 name: vulmap-vuln-scan
-description: 渗透工具 skill:Vulmap 的安装、参数速查与攻击场景 playbook。当任务涉及 漏洞情报与漏洞库 需要调用 Vulmap 时使用。
-when-to-use: 渗透工具 skill:Vulmap 的安装、参数速查与攻击场景 playbook。当任务涉及 漏洞情报与漏洞库 需要调用 Vulmap 时使用。
+description: Vulmap: 本地 CVE 一键扫。信号:漏洞情报,cve,本地漏洞扫描,更新漏洞库,指定应用。
 ---
 
 # Vulmap

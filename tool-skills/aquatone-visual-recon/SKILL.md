@@ -1,7 +1,6 @@
 ---
 name: aquatone-visual-recon
-description: 渗透工具 skill:Aquatone 的安装、参数速查与攻击场景 playbook。当任务涉及 资产测绘与指纹识别 需要调用 Aquatone 时使用。
-when-to-use: 渗透工具 skill:Aquatone 的安装、参数速查与攻击场景 playbook。当任务涉及 资产测绘与指纹识别 需要调用 Aquatone 时使用。
+description: Aquatone: 域名飞越式可视化核查。信号:资产测绘,指纹识别,aquatone`,输出目录,扫描超时。
 ---
 
 # Aquatone

@@ -1,7 +1,6 @@
 ---
 name: cr3dov3r-leak-lookup
-description: 渗透工具 skill:Cr3dOv3r 的安装、参数速查与攻击场景 playbook。当任务涉及 邮箱与人员OSINT 需要调用 Cr3dOv3r 时使用。
-when-to-use: 渗透工具 skill:Cr3dOv3r 的安装、参数速查与攻击场景 playbook。当任务涉及 邮箱与人员OSINT 需要调用 Cr3dOv3r 时使用。
+description: Cr3dOv3r: 泄露凭据收集+复用验证。信号:邮箱收集,员工信息,静默,只查明文密码库,不测试凭据复用。
 ---
 
 # Cr3dOv3r

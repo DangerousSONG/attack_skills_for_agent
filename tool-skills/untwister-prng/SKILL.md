@@ -1,7 +1,6 @@
 ---
 name: untwister-prng
-description: 渗透工具 skill:untwister 的安装、参数速查与攻击场景 playbook。当任务涉及 密码学攻击 需要调用 untwister 时使用。
-when-to-use: 渗透工具 skill:untwister 的安装、参数速查与攻击场景 playbook。当任务涉及 密码学攻击 需要调用 untwister 时使用。
+description: untwister: token 种子恢复。信号:密码学攻击,加密破解,PRNG 种子恢复,glibc rand,上限。
 ---
 
 # untwister

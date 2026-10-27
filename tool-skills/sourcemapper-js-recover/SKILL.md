@@ -1,7 +1,6 @@
 ---
 name: sourcemapper-js-recover
-description: 渗透工具 skill:sourcemapper 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 sourcemapper 时使用。
-when-to-use: 渗透工具 skill:sourcemapper 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 sourcemapper 时使用。
+description: sourcemapper: JS 源码还原挖密钥。信号:web漏洞,注入,下载并还原 JS 源码,本地 map 文件。
 ---
 
 # sourcemapper

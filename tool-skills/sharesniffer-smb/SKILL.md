@@ -1,7 +1,6 @@
 ---
 name: sharesniffer-smb
-description: 渗透工具 skill:sharesniffer 的安装、参数速查与攻击场景 playbook。当任务涉及 内网发现与枚举 需要调用 sharesniffer 时使用。
-when-to-use: 渗透工具 skill:sharesniffer 的安装、参数速查与攻击场景 playbook。当任务涉及 内网发现与枚举 需要调用 sharesniffer 时使用。
+description: sharesniffer: 内网共享批量发现。信号:内网枚举,网络发现,SMB 共享嗅探。
 ---
 
 # sharesniffer

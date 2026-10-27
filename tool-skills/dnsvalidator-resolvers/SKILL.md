@@ -1,7 +1,6 @@
 ---
 name: dnsvalidator-resolvers
-description: 渗透工具 skill:dnsvalidator 的安装、参数速查与攻击场景 playbook。当任务涉及 域名与DNS侦察 需要调用 dnsvalidator 时使用。
-when-to-use: 渗透工具 skill:dnsvalidator 的安装、参数速查与攻击场景 playbook。当任务涉及 域名与DNS侦察 需要调用 dnsvalidator 时使用。
+description: dnsvalidator: 构建干净 resolver 池。信号:子域名,域名枚举,验证 DNS 解析器,线程,并发。
 ---
 
 # dnsvalidator

@@ -1,6 +1,6 @@
 ---
 name: business-logic-vulnerabilities
-description: 1. PRICE AND VALUE MANIPULATION
+description: "Business logic vulnerability playbook. Use when reasoning about workflows, race conditions, price manipulation, coupon abuse, state machines, and multi-step authorization gaps."
 when-to-use: >-
   Business logic vulnerability playbook. Use when reasoning about workflows, race conditions, price manipulation, coupon abuse, state machines, and multi-step authorization gaps.
 ---

@@ -1,6 +1,6 @@
 ---
 name: api-recon-and-docs
-description: 1. PRIMARY GOALS
+description: "Use this skill first when the target is a REST, mobile, or GraphQL API and you need to enumerate endpoints, documentation, versions, and hidden surface area before exploitation."
 when-to-use: 1. PRIMARY GOALS
   API reconnaissance and documentation review playbook. Use when discovering endpoints, schemas, versions, OpenAPI specs, hidden docs, and surface area for API testing.
 ---

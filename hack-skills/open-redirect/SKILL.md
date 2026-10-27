@@ -1,6 +1,6 @@
 ---
 name: open-redirect
-description: 1. CORE CONCEPT
+description: "Open redirect playbook. Use when URL parameters, form actions, or JavaScript sinks control navigation targets and may redirect users to attacker-controlled destinations."
 when-to-use: >-
   Open redirect playbook. Use when URL parameters, form actions, or JavaScript sinks control navigation targets and may redirect users to attacker-controlled destinations.
 ---

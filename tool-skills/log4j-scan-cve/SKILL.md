@@ -1,7 +1,6 @@
 ---
 name: log4j-scan-cve
-description: 渗透工具 skill:log4j-scan 的安装、参数速查与攻击场景 playbook。当任务涉及 CVE专项利用 需要调用 log4j-scan 时使用。
-when-to-use: 渗透工具 skill:log4j-scan 的安装、参数速查与攻击场景 playbook。当任务涉及 CVE专项利用 需要调用 log4j-scan 时使用。
+description: log4j-scan: Log4Shell 批量验证。信号:漏洞情报,cve,自建 DNS 接收,超时。
 ---
 
 # log4j-scan

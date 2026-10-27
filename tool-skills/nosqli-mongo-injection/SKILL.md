@@ -1,7 +1,6 @@
 ---
 name: nosqli-mongo-injection
-description: 渗透工具 skill:nosqli 的安装、参数速查与攻击场景 playbook。当任务涉及 Web利用(NoSQL注入) 需要调用 nosqli 时使用。
-when-to-use: 渗透工具 skill:nosqli 的安装、参数速查与攻击场景 playbook。当任务涉及 Web利用(NoSQL注入) 需要调用 nosqli 时使用。
+description: nosqli: 登录接口 NoSQL 绕过。信号:web漏洞,注入,MongoDB 注入扫描,盲注模式,数据提取。
 ---
 
 # nosqli

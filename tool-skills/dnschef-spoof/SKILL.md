@@ -1,7 +1,6 @@
 ---
 name: dnschef-spoof
-description: 渗透工具 skill:DNSChef 的安装、参数速查与攻击场景 playbook。当任务涉及 嗅探与中间人攻击 需要调用 DNSChef 时使用。
-when-to-use: 渗透工具 skill:DNSChef 的安装、参数速查与攻击场景 playbook。当任务涉及 嗅探与中间人攻击 需要调用 DNSChef 时使用。
+description: DNSChef: 定向域名劫持。信号:中间人,mitm,全域名指向攻击机,只伪造指定域,真实解析白名单。
 ---
 
 # DNSChef

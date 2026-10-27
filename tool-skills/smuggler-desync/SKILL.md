@@ -1,7 +1,6 @@
 ---
 name: smuggler-desync
-description: 渗透工具 skill:Smuggler 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 Smuggler 时使用。
-when-to-use: 渗透工具 skill:Smuggler 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 Smuggler 时使用。
+description: Smuggler: 前端/CDN 走私检测。信号:web漏洞,注入,HTTP 请求走私检测,详细,深入模式。
 ---
 
 # Smuggler

@@ -1,7 +1,6 @@
 ---
 name: xsstrike-xss
-description: 渗透工具 skill:XSStrike 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 XSStrike 时使用。
-when-to-use: 渗透工具 skill:XSStrike 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 XSStrike 时使用。
+description: XSStrike: 智能 XSS 打点。信号:web漏洞,注入,自动 XSS 检测,爬站扫,POST。
 ---
 
 # XSStrike

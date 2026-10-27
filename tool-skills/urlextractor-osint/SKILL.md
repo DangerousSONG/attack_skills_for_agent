@@ -1,7 +1,6 @@
 ---
 name: urlextractor-osint
-description: 渗透工具 skill:URLextractor 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 URLextractor 时使用。
-when-to-use: 渗透工具 skill:URLextractor 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 URLextractor 时使用。
+description: URLextractor: 目标 URL 情报聚合。信号:web漏洞,注入,目标 OSINT 提取,包含子域,含端口扫描。
 ---
 
 # URLextractor

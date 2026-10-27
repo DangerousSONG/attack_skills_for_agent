@@ -1,6 +1,6 @@
 ---
 name: cmdi-command-injection
-description: 0. RELATED ROUTING
+description: "Command injection playbook. Use when user input may reach shell commands, process execution, converters, import pipelines, or blind out-of-band command sinks."
 when-to-use: >-
   Command injection playbook. Use when user input may reach shell commands, process execution, converters, import pipelines, or blind out-of-band command sinks.
 ---

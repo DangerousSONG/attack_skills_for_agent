@@ -1,6 +1,6 @@
 ---
 name: windows-lateral-movement
-description: 0. RELATED ROUTING
+description: "Windows lateral movement playbook. Use when pivoting between Windows hosts via PsExec, WMI, WinRM, DCOM, RDP, pass-the-hash, overpass-the-hash, or pass-the-ticket techniques."
 when-to-use: >-
   Windows lateral movement playbook. Use when pivoting between Windows hosts via PsExec, WMI, WinRM, DCOM, RDP, pass-the-hash, overpass-the-hash, or pass-the-ticket techniques.
 ---

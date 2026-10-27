@@ -1,7 +1,6 @@
 ---
 name: crowbar-brute
-description: 渗透工具 skill:Crowbar 的安装、参数速查与攻击场景 playbook。当任务涉及 口令与哈希破解 需要调用 Crowbar 时使用。
-when-to-use: 渗透工具 skill:Crowbar 的安装、参数速查与攻击场景 playbook。当任务涉及 口令与哈希破解 需要调用 Crowbar 时使用。
+description: Crowbar: RDP 口令爆破。信号:密码破解,哈希破解,RDP 爆破,私钥撞库,OpenVPN 爆破。
 ---
 
 # Crowbar

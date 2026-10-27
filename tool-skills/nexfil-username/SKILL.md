@@ -1,7 +1,6 @@
 ---
 name: nexfil-username
-description: 渗透工具 skill:nexfil 的安装、参数速查与攻击场景 playbook。当任务涉及 邮箱与人员OSINT 需要调用 nexfil 时使用。
-when-to-use: 渗透工具 skill:nexfil 的安装、参数速查与攻击场景 playbook。当任务涉及 邮箱与人员OSINT 需要调用 nexfil 时使用。
+description: nexfil: 用户名跨平台追踪。信号:邮箱收集,员工信息,用户名全网存在性,并发。
 ---
 
 # nexfil

@@ -1,7 +1,6 @@
 ---
 name: graphqlmap-graphql
-description: 渗透工具 skill:GraphQLmap 的安装、参数速查与攻击场景 playbook。当任务涉及 API与业务逻辑攻击 需要调用 GraphQLmap 时使用。
-when-to-use: 渗透工具 skill:GraphQLmap 的安装、参数速查与攻击场景 playbook。当任务涉及 API与业务逻辑攻击 需要调用 GraphQLmap 时使用。
+description: GraphQLmap: GraphQL 接口攻击面枚举。信号:api攻击,接口测试,交互模式,NoSQL 注入测试,测试 mutation。
 ---
 
 # GraphQLmap

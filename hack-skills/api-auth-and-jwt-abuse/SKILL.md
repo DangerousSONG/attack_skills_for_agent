@@ -1,6 +1,6 @@
 ---
 name: api-auth-and-jwt-abuse
-description: 1. TOKEN TRIAGE
+description: "Use this skill when APIs rely on JWT, bearer tokens, API keys, or weak request identity signals. Focus on token trust boundaries, claim misuse, header spoofing, and rate-limit bypass."
 when-to-use: 1. TOKEN TRIAGE
   API authentication and JWT abuse playbook. Use when testing bearer tokens, API keys, claim trust, header spoofing, rate limits, and API auth boundary weaknesses.
 ---

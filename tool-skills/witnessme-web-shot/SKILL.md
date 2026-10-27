@@ -1,7 +1,6 @@
 ---
 name: witnessme-web-shot
-description: 渗透工具 skill:WitnessMe 的安装、参数速查与攻击场景 playbook。当任务涉及 截图与取证 需要调用 WitnessMe 时使用。
-when-to-use: 渗透工具 skill:WitnessMe 的安装、参数速查与攻击场景 playbook。当任务涉及 截图与取证 需要调用 WitnessMe 时使用。
+description: WitnessMe: Web 资产整段截图。信号:屏幕捕获,截图,单 URL 截图,批量,起 Web 服务看结果。
 ---
 
 # WitnessMe

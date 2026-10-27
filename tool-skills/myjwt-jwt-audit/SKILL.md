@@ -1,7 +1,6 @@
 ---
 name: myjwt-jwt-audit
-description: 渗透工具 skill:MyJWT 的安装、参数速查与攻击场景 playbook。当任务涉及 API与业务逻辑攻击 需要调用 MyJWT 时使用。
-when-to-use: 渗透工具 skill:MyJWT 的安装、参数速查与攻击场景 playbook。当任务涉及 API与业务逻辑攻击 需要调用 MyJWT 时使用。
+description: MyJWT: JWT 多攻击面测试。信号:api攻击,接口测试,JWT 密钥爆破,KID 注入,JKU 绕过。
 ---
 
 # MyJWT

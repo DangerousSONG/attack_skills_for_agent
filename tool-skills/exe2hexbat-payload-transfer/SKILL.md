@@ -1,7 +1,6 @@
 ---
 name: exe2hexbat-payload-transfer
-description: 渗透工具 skill:exe2hex 的安装、参数速查与攻击场景 playbook。当任务涉及 逆向工程辅助 需要调用 exe2hex 时使用。
-when-to-use: 渗透工具 skill:exe2hex 的安装、参数速查与攻击场景 playbook。当任务涉及 逆向工程辅助 需要调用 exe2hex 时使用。
+description: exe2hex: 无文件落地传二进制。信号:逆向,反汇编,C 代码格式。
 ---
 
 # exe2hex

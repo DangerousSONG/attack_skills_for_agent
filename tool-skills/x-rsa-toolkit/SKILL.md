@@ -1,7 +1,6 @@
 ---
 name: x-rsa-toolkit
-description: 渗透工具 skill:X-RSA 的安装、参数速查与攻击场景 playbook。当任务涉及 密码学攻击 需要调用 X-RSA 时使用。
-when-to-use: 渗透工具 skill:X-RSA 的安装、参数速查与攻击场景 playbook。当任务涉及 密码学攻击 需要调用 X-RSA 时使用。
+description: X-RSA: RSA 弱密钥攻击。信号:密码学攻击,加密破解,RSA 攻击工具,分解模式,私钥恢复。
 ---
 
 # X-RSA

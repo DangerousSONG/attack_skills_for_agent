@@ -1,6 +1,6 @@
 ---
 name: jndi-injection
-description: 0. RELATED ROUTING
+description: "JNDI injection playbook. Use when Java applications perform JNDI lookups with attacker-controlled names, especially via Log4j2, Spring, or any code path reaching InitialContext.lookup()."
 when-to-use: >-
   JNDI injection playbook. Use when Java applications perform JNDI lookups with attacker-controlled names, especially via Log4j2, Spring, or any code path reaching InitialContext.lookup().
 ---

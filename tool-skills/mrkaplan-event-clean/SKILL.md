@@ -1,7 +1,6 @@
 ---
 name: mrkaplan-event-clean
-description: 渗透工具 skill:MrKaplan 的安装、参数速查与攻击场景 playbook。当任务涉及 痕迹清理与反取证 需要调用 MrKaplan 时使用。
-when-to-use: 渗透工具 skill:MrKaplan 的安装、参数速查与攻击场景 playbook。当任务涉及 痕迹清理与反取证 需要调用 MrKaplan 时使用。
+description: MrKaplan: 行动后事件日志定点清理。信号:红队,方法论,擦除模式(留 1102),目标事件/日志配置,运行后自删。
 ---
 
 # MrKaplan

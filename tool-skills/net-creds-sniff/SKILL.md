@@ -1,7 +1,6 @@
 ---
 name: net-creds-sniff
-description: 渗透工具 skill:net-creds 的安装、参数速查与攻击场景 playbook。当任务涉及 嗅探与中间人攻击 需要调用 net-creds 时使用。
-when-to-use: 渗透工具 skill:net-creds 的安装、参数速查与攻击场景 playbook。当任务涉及 嗅探与中间人攻击 需要调用 net-creds 时使用。
+description: net-creds: 内网凭据被动收割。信号:中间人,mitm,被动凭据嗅探,过滤本机,PCAP 分析。
 ---
 
 # net-creds

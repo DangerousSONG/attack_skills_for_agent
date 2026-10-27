@@ -1,7 +1,6 @@
 ---
 name: vcsmap-vcs-hunt
-description: 渗透工具 skill:vcsmap 的安装、参数速查与攻击场景 playbook。当任务涉及 外部攻击面与云资产暴露 需要调用 vcsmap 时使用。
-when-to-use: 渗透工具 skill:vcsmap 的安装、参数速查与攻击场景 playbook。当任务涉及 外部攻击面与云资产暴露 需要调用 vcsmap 时使用。
+description: vcsmap: 代码仓库暴露发现。信号:攻击面,云资产,版本控制仓库发现,平台。
 ---
 
 # vcsmap

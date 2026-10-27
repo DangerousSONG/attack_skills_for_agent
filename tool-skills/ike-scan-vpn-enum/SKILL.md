@@ -1,7 +1,6 @@
 ---
 name: ike-scan-vpn-enum
-description: 渗透工具 skill:ike-scan 的安装、参数速查与攻击场景 playbook。当任务涉及 网络服务枚举 需要调用 ike-scan 时使用。
-when-to-use: 渗透工具 skill:ike-scan 的安装、参数速查与攻击场景 playbook。当任务涉及 网络服务枚举 需要调用 ike-scan 时使用。
+description: ike-scan: VPN 网关探测+PSK 破解。信号:端口扫描,nmap,IKE 服务发现+指纹,多行输出(易读)。
 ---
 
 # ike-scan

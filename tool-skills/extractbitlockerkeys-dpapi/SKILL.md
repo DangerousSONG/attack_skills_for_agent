@@ -1,7 +1,6 @@
 ---
 name: extractbitlockerkeys-dpapi
-description: 渗透工具 skill:extractbitlockerkeys 的安装、参数速查与攻击场景 playbook。当任务涉及 AD与横向移动 需要调用 extractbitlockerkeys 时使用。
-when-to-use: 渗透工具 skill:extractbitlockerkeys 的安装、参数速查与攻击场景 playbook。当任务涉及 AD与横向移动 需要调用 extractbitlockerkeys 时使用。
+description: extractbitlockerkeys: 域内 BitLocker 密钥收割。信号:ad攻击,域渗透,只显示有密钥的主机,CSV 输出。
 ---
 
 # extractbitlockerkeys

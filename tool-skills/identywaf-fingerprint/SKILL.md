@@ -1,7 +1,6 @@
 ---
 name: identywaf-fingerprint
-description: 渗透工具 skill:identYwaf 的安装、参数速查与攻击场景 playbook。当任务涉及 Web利用(WAF绕过) 需要调用 identYwaf 时使用。
-when-to-use: 渗透工具 skill:identYwaf 的安装、参数速查与攻击场景 playbook。当任务涉及 Web利用(WAF绕过) 需要调用 identYwaf 时使用。
+description: identYwaf: 渗透前识别防护。信号:web漏洞,注入,识别 WAF 品牌/型号,从请求文件识别,随机 UA。
 ---
 
 # identYwaf

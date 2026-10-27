@@ -1,7 +1,6 @@
 ---
 name: feroxbuster-content-discovery
-description: 渗透工具 skill:feroxbuster 的安装、参数速查与攻击场景 playbook。当任务涉及 Web漏洞扫描与验证 需要调用 feroxbuster 时使用。
-when-to-use: 渗透工具 skill:feroxbuster 的安装、参数速查与攻击场景 playbook。当任务涉及 Web漏洞扫描与验证 需要调用 feroxbuster 时使用。
+description: feroxbuster: 递归内容发现、API 端点爆破。信号:web扫描,漏洞扫描,单目标扫描,深度递归。
 ---
 
 # feroxbuster

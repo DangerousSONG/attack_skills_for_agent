@@ -1,7 +1,6 @@
 ---
 name: wcvs-web-cache-vuln
-description: 渗透工具 skill:Web Cache Vulnerability Scanner (wcvs) 的安装、参数速查与攻击场景 playbook。当任务涉及 Web利用(缓存投毒) 需要调用 Web Cache Vulnerability Scanner (wcvs) 时使用。
-when-to-use: 渗透工具 skill:Web Cache Vulnerability Scanner (wcvs) 的安装、参数速查与攻击场景 playbook。当任务涉及 Web利用(缓存投毒) 需要调用 Web Cache Vulnerability Scanner (wcvs) 时使用。
+description: Web Cache Vulnerability Scanner (wcvs): 缓存投毒探测。信号:web漏洞,注入,Web 缓存漏洞扫描,包含缓存投毒,自定义字典。
 ---
 
 # Web Cache Vulnerability Scanner (wcvs)

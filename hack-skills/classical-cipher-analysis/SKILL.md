@@ -1,6 +1,6 @@
 ---
 name: classical-cipher-analysis
-description: 0. RELATED ROUTING
+description: "Classical cipher analysis playbook."
 when-to-use: >-
   Classical cipher analysis playbook. Use when encountering substitution
   ciphers, Vigenere, transposition, XOR, or encoded text in CTF challenges

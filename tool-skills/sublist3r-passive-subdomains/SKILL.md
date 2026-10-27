@@ -1,7 +1,6 @@
 ---
 name: sublist3r-passive-subdomains
-description: 渗透工具 skill:Sublist3r 的安装、参数速查与攻击场景 playbook。当任务涉及 资产测绘与指纹识别 需要调用 Sublist3r 时使用。
-when-to-use: 渗透工具 skill:Sublist3r 的安装、参数速查与攻击场景 playbook。当任务涉及 资产测绘与指纹识别 需要调用 Sublist3r 时使用。
+description: Sublist3r: 快速子域清单。信号:资产测绘,指纹识别,经典被动子域枚举,探测存活端口,线程。
 ---
 
 # Sublist3r

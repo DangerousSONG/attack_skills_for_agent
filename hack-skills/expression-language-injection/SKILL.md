@@ -1,6 +1,6 @@
 ---
 name: expression-language-injection
-description: 0. RELATED ROUTING
+description: "Expression Language injection playbook. Use when Java EL, SpEL, OGNL, or MVEL expressions may evaluate attacker-controlled input in Spring, Struts2, Confluence, or similar frameworks."
 when-to-use: >-
   Expression Language injection playbook. Use when Java EL, SpEL, OGNL, or MVEL expressions may evaluate attacker-controlled input in Spring, Struts2, Confluence, or similar frameworks.
 ---

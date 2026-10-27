@@ -1,7 +1,6 @@
 ---
 name: jsonbee-jsonp-harvest
-description: 渗透工具 skill:JSONBee 的安装、参数速查与攻击场景 playbook。当任务涉及 载荷与文件投递 需要调用 JSONBee 时使用。
-when-to-use: 渗透工具 skill:JSONBee 的安装、参数速查与攻击场景 playbook。当任务涉及 载荷与文件投递 需要调用 JSONBee 时使用。
+description: JSONBee: JSONP 回调劫持。信号:载荷开发,武器化,挑可用 JSONP 端点,XSS/数据窃取,预整理端点。
 ---
 
 # JSONBee

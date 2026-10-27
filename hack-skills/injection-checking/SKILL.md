@@ -1,6 +1,6 @@
 ---
 name: injection-checking
-description: Injection Testing Router
+description: "This is the routing entry point when input reaches a dangerous interpreter or execution environment."
 when-to-use: Injection Testing Router
   Entry P1 category router for injection testing. Use when routing between XSS,
   SQLi, SSRF, XXE, SSTI, command injection, and NoSQL injection workflows based

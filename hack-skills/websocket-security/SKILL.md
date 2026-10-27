@@ -1,6 +1,6 @@
 ---
 name: websocket-security
-description: 0. QUICK START
+description: "WebSocket handshake, CSWSH, tooling (wsrepl, ws-harness, Burp), and common flaws. Use when apps use real-time channels, chat, notifications, or WS-backed APIs."
 when-to-use: >-
   WebSocket handshake, CSWSH, tooling (wsrepl, ws-harness, Burp), and common flaws. Use when apps use real-time channels, chat, notifications, or WS-backed APIs.
 ---

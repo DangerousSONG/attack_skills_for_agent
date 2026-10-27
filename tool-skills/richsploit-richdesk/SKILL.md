@@ -1,7 +1,6 @@
 ---
 name: richsploit-richdesk
-description: 渗透工具 skill:Richsploit 的安装、参数速查与攻击场景 playbook。当任务涉及 二进制漏洞利用与Pwn 需要调用 Richsploit 时使用。
-when-to-use: 渗透工具 skill:Richsploit 的安装、参数速查与攻击场景 playbook。当任务涉及 二进制漏洞利用与Pwn 需要调用 Richsploit 时使用。
+description: Richsploit: 富客户端漏洞利用。信号:pwn,二进制利用,列表。
 ---
 
 # Richsploit

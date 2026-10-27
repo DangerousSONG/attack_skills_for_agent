@@ -1,7 +1,6 @@
 ---
 name: pack2-policy-mask
-description: 渗透工具 skill:Pack2 的安装、参数速查与攻击场景 playbook。当任务涉及 口令与哈希破解 需要调用 Pack2 时使用。
-when-to-use: 渗透工具 skill:Pack2 的安装、参数速查与攻击场景 playbook。当任务涉及 口令与哈希破解 需要调用 Pack2 时使用。
+description: Pack2: 按口令策略生成掩码。信号:密码破解,哈希破解,统计字典特征,分析已破哈希。
 ---
 
 # Pack2

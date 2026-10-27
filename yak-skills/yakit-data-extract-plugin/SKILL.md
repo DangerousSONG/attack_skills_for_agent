@@ -1,6 +1,6 @@
 ---
 name: yakit-data-extract-plugin
-description: 0. 相关路由
+description: "本 skill 针对一个具体痛点——“在 History 里堆了一堆某域名的流量，"
 when-to-use: 0. 相关路由
   解决一个高频实战痛点：在 Yakit History 里积累了某站点大量流量后，如何一键按域名捞取所有唯一
   路径、拿到登录 Cookie，并把这些路径沉淀成可复用的 Payload 字典，再带着登录态逐路径发包扫描/Fuzz。

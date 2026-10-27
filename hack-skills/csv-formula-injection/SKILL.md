@@ -1,6 +1,6 @@
 ---
 name: csv-formula-injection
-description: 0. QUICK START
+description: "This skill covers formula/DDE-style injection in CSV and spreadsheet contexts, obfuscation, cloud-sheet primitives, and safe testing methodology."
 when-to-use: 0. QUICK START
   CSV/spreadsheet formula injection (DDE, Excel/LibreOffice, Google Sheets IMPORT*). Use when exports, imports, or user fields feed spreadsheets or reporting tools.
 ---

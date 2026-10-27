@@ -122,3 +122,38 @@ for dp, dirs, files in os.walk(ROOT):
 print('引用断链(未标注):', broken)
 if broken:
     print('提示: 修复方式二选一——补齐文件，或在该文件处以（未随库分发）标注并在文末加参考文档说明块')
+
+# ---------- D. description 质量门禁 ----------
+# 硬失败: 缺失/<20字/垃圾占位/超长(>400); 警告: 100-400字(现成英文长描述待3b批压缩); 提示: 与when-to-use逐字重复
+GARBAGE_DESC = re.compile(r'^(0\.|1\.|RELATED|see |n/a$|none$|-$|>$|>\-$|\|?-?$)', re.I)
+d_short = d_long = d_warn = d_garbage = d_dup = 0
+for dp, dirs, files in os.walk(ROOT):
+    dirs[:] = [d for d in dirs if d not in ('.git',)]
+    if 'SKILL.md' not in files:
+        continue
+    slug = os.path.relpath(dp, ROOT).replace(os.sep, '/')
+    if slug.split('/')[0] in ('attack-skill-router', 'engagement-discipline', 'java-deserialization-gadget-selector', 'scripts'):
+        continue
+    s = io.open(os.path.join(dp, 'SKILL.md'), encoding='utf-8', errors='replace').read()
+    fm = re.search(r'^---\n(.*?)\n---', s, re.S)
+    if not fm:
+        d_short += 1
+        print('  desc缺失:', slug)
+        continue
+    dm = re.search(r'^description:\s*(.+)$', fm.group(1), re.M)
+    wm = re.search(r'^when-to-use:\s*(.+)$', fm.group(1), re.M)
+    d = dm.group(1).strip().strip('"').strip("'") if dm else ''
+    if len(d) < 20:
+        d_short += 1
+        print('  desc过短(<20):', slug, '=>', d[:40])
+    elif GARBAGE_DESC.match(d):
+        d_garbage += 1
+        print('  desc占位垃圾:', slug, '=>', d[:40])
+    elif len(d) > 400:
+        d_long += 1
+        print('  desc超长(>400):', slug, '=>', len(d), '字')
+    elif len(d) > 100:
+        d_warn += 1
+    if wm and wm.group(1).strip().strip('"').strip("'") == d and d:
+        d_dup += 1
+print('desc门禁: 缺失/过短', d_short, '| 占位垃圾', d_garbage, '| 超长>400', d_long, '| 100-400警告', d_warn, '| 与when-to-use重复(仅提示)', d_dup)

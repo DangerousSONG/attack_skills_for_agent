@@ -1,7 +1,6 @@
 ---
 name: tinja-ssti
-description: 渗透工具 skill:TInjA 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 TInjA 时使用。
-when-to-use: 渗透工具 skill:TInjA 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 TInjA 时使用。
+description: TInjA: SSTI 全引擎检测。信号:web漏洞,注入,SSTI 检测,带 Cookie,请求文件。
 ---
 
 # TInjA

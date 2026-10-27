@@ -1,7 +1,6 @@
 ---
 name: kiterunner-api-routes
-description: 渗透工具 skill:kiterunner 的安装、参数速查与攻击场景 playbook。当任务涉及 资产测绘与指纹识别 需要调用 kiterunner 时使用。
-when-to-use: 渗透工具 skill:kiterunner 的安装、参数速查与攻击场景 playbook。当任务涉及 资产测绘与指纹识别 需要调用 kiterunner 时使用。
+description: kiterunner: API 隐藏路由爆破。信号:资产测绘,指纹识别,API 路由扫描,内置字典,最大连接。
 ---
 
 # kiterunner

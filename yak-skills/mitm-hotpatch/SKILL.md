@@ -1,6 +1,6 @@
 ---
 name: mitm-hotpatch
-description: 0. 相关路由
+description: "这是 Yaklang 三层热加载体系中的'模块级 MITM'专题。MITM 热加载允许安全测试人员在不中断代理服务的情况下，用 Yaklang 代码动态接管 HTTP 流量的各个处理阶段。先读本页的 Hook 触发时机表与 forward/drop 语义，再看 `examples/` 下按 Hook 命名的示例，每个示例都可用 `yak <file>` 直接自测。"
 when-to-use: 0. 相关路由
   Yakit MITM 热加载 (Hot Patch) 专题。当用户需要在 MITM 中间人代理中用代码动态劫持/修改请求与响应、镜像分析流量、入库前打标签染色、或对危险操作做 mock 护栏时使用。覆盖 hijackHTTPRequest / hijackHTTPResponseEx / mirror 系列 / hijackSaveHTTPFlow / mockHTTPRequest 全部 Hook 与 forward/drop 语义。
 ---

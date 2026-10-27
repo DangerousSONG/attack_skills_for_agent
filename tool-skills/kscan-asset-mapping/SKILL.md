@@ -1,7 +1,6 @@
 ---
 name: kscan-asset-mapping
-description: 渗透工具 skill:Kscan 的安装、参数速查与攻击场景 playbook。当任务涉及 资产测绘与指纹识别 需要调用 Kscan 时使用。
-when-to-use: 渗透工具 skill:Kscan 的安装、参数速查与攻击场景 playbook。当任务涉及 资产测绘与指纹识别 需要调用 Kscan 时使用。
+description: Kscan: 内网+外网统一测绘。信号:资产测绘,指纹识别,网段存活+指纹,弱口令检测。
 ---
 
 # Kscan

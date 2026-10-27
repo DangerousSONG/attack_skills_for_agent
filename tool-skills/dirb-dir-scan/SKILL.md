@@ -1,7 +1,6 @@
 ---
 name: dirb-dir-scan
-description: 渗透工具 skill:dirb 的安装、参数速查与攻击场景 playbook。当任务涉及 Web漏洞扫描与验证 需要调用 dirb 时使用。
-when-to-use: 渗透工具 skill:dirb 的安装、参数速查与攻击场景 playbook。当任务涉及 Web漏洞扫描与验证 需要调用 dirb 时使用。
+description: dirb: 目录枚举经典款。信号:web扫描,漏洞扫描,标准扫描,大字典,扩展名。
 ---
 
 # dirb

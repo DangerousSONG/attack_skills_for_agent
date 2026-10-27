@@ -1,6 +1,6 @@
 ---
 name: nosql-injection
-description: 1. CORE CONCEPT — OPERATOR INJECTION
+description: "NoSQL injection playbook. Use when MongoDB-style operators, JSON query objects, flexible search filters, or backend query DSLs may allow data or logic abuse."
 when-to-use: >-
   NoSQL injection playbook. Use when MongoDB-style operators, JSON query objects, flexible search filters, or backend query DSLs may allow data or logic abuse.
 ---

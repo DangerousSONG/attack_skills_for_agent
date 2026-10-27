@@ -1,7 +1,6 @@
 ---
 name: dnsprobe-resolve
-description: 渗透工具 skill:dnsprobe 的安装、参数速查与攻击场景 playbook。当任务涉及 域名与DNS侦察 需要调用 dnsprobe 时使用。
-when-to-use: 渗透工具 skill:dnsprobe 的安装、参数速查与攻击场景 playbook。当任务涉及 域名与DNS侦察 需要调用 dnsprobe 时使用。
+description: dnsprobe: 子域批量解析。信号:子域名,域名枚举,dnsprobe`,记录类型。
 ---
 
 # dnsprobe

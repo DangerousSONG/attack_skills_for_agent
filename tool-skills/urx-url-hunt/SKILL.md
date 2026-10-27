@@ -1,7 +1,6 @@
 ---
 name: urx-url-hunt
-description: 渗透工具 skill:urx 的安装、参数速查与攻击场景 playbook。当任务涉及 URL与内容发现 需要调用 urx 时使用。
-when-to-use: 渗透工具 skill:urx 的安装、参数速查与攻击场景 playbook。当任务涉及 URL与内容发现 需要调用 urx 时使用。
+description: urx: 多源 URL 聚合。信号:数据收集,打包,管道过滤,并发。
 ---
 
 # urx

@@ -1,7 +1,6 @@
 ---
 name: villain-c2-shells
-description: 渗透工具 skill:Villain 的安装、参数速查与攻击场景 playbook。当任务涉及 远程命令执行与WebShell 需要调用 Villain 时使用。
-when-to-use: 渗透工具 skill:Villain 的安装、参数速查与攻击场景 playbook。当任务涉及 远程命令执行与WebShell 需要调用 Villain 时使用。
+description: Villain: 多会话 shell 托管。信号:webshell,rce,起主控,级联节点,生成 payload。
 ---
 
 # Villain

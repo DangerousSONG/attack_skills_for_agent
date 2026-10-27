@@ -1,7 +1,6 @@
 ---
 name: suid3num-privesc
-description: 渗透工具 skill:suid3num 的安装、参数速查与攻击场景 playbook。当任务涉及 Linux本地提权 需要调用 suid3num 时使用。
-when-to-use: 渗透工具 skill:suid3num 的安装、参数速查与攻击场景 playbook。当任务涉及 Linux本地提权 需要调用 suid3num 时使用。
+description: suid3num: SUID 提权路径。信号:linux提权,suid,SUID 枚举,exploit,列表。
 ---
 
 # suid3num

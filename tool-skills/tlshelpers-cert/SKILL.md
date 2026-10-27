@@ -1,7 +1,6 @@
 ---
 name: tlshelpers-cert
-description: 渗透工具 skill:tlshelpers 的安装、参数速查与攻击场景 playbook。当任务涉及 密码学攻击 需要调用 tlshelpers 时使用。
-when-to-use: 渗透工具 skill:tlshelpers 的安装、参数速查与攻击场景 playbook。当任务涉及 密码学攻击 需要调用 tlshelpers 时使用。
+description: tlshelpers: TLS 快速检查。信号:密码学攻击,加密破解,证书下载,套件扫描,PCAP 分析。
 ---
 
 # tlshelpers

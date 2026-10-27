@@ -1,7 +1,6 @@
 ---
 name: medusa-bruteforce
-description: 渗透工具 skill:Medusa 的安装、参数速查与攻击场景 playbook。当任务涉及 暴力破解与口令喷射 需要调用 Medusa 时使用。
-when-to-use: 渗透工具 skill:Medusa 的安装、参数速查与攻击场景 playbook。当任务涉及 暴力破解与口令喷射 需要调用 Medusa 时使用。
+description: Medusa: 多服务凭据爆破。信号:暴力破解,口令喷射,SSH 爆破,SMB,HTTP 表单。
 ---
 
 # Medusa

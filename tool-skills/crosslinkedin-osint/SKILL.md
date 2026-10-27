@@ -1,7 +1,6 @@
 ---
 name: crosslinkedin-osint
-description: 渗透工具 skill:CrossLinked 的安装、参数速查与攻击场景 playbook。当任务涉及 邮箱与人员OSINT 需要调用 CrossLinked 时使用。
-when-to-use: 渗透工具 skill:CrossLinked 的安装、参数速查与攻击场景 playbook。当任务涉及 邮箱与人员OSINT 需要调用 CrossLinked 时使用。
+description: CrossLinked: LinkedIn 员工字典。信号:邮箱收集,员工信息,格式。
 ---
 
 # CrossLinked

@@ -1,6 +1,6 @@
 ---
 name: insecure-source-code-management
-description: 0. QUICK START
+description: "This skill covers detection and recovery of exposed version-control metadata, common backup artifacts, and related misconfigurations. Use only in **authorized** assessments."
 when-to-use: 0. QUICK START
   Source control and artifact exposure (.git, .svn, .hg, backups, .env). Use when recon finds VCS paths, 403 on hidden dirs, or backup/config leaks during authorized testing.
 ---

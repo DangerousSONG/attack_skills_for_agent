@@ -1,7 +1,6 @@
 ---
 name: opendoor-scanner
-description: 渗透工具 skill:OpenDoor 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 OpenDoor 时使用。
-when-to-use: 渗透工具 skill:OpenDoor 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 OpenDoor 时使用。
+description: OpenDoor: 目录扫描+多报告。信号:web漏洞,注入,字典,线程,指定路径。
 ---
 
 # OpenDoor

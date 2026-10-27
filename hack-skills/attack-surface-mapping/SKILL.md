@@ -1,6 +1,6 @@
 ---
 name: attack-surface-mapping
-description: Attack Surface Mapping
+description: "Given **one target** and **one application**, draw the surface from what that application already exposes. Then stop. Testing lives in other skills."
 when-to-use: Attack Surface Mapping
   Draw a testable attack surface from one authorized target URL or one
   application. Use when the user says 攻击面, 供给面, 画攻击面, map the surface,

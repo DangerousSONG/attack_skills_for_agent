@@ -1,7 +1,6 @@
 ---
 name: slither-solidity-audit
-description: 渗透工具 skill:Slither 的安装、参数速查与攻击场景 playbook。当任务涉及 区块链与Web3安全 需要调用 Slither 时使用。
-when-to-use: 渗透工具 skill:Slither 的安装、参数速查与攻击场景 playbook。当任务涉及 区块链与Web3安全 需要调用 Slither 时使用。
+description: Slither: 合约重入/权限漏洞审计、代理升级合约完整性检查。信号:区块链,web3,扫当前合约项目,摘要。
 ---
 
 # Slither

@@ -1,7 +1,6 @@
 ---
 name: adaptix-c2-framework
-description: 渗透工具 skill:AdaptixC2 的安装、参数速查与攻击场景 playbook。当任务涉及 C2框架 需要调用 AdaptixC2 时使用。
-when-to-use: 渗透工具 skill:AdaptixC2 的安装、参数速查与攻击场景 playbook。当任务涉及 C2框架 需要调用 AdaptixC2 时使用。
+description: AdaptixC2: 渗透行动 C2 框架。信号:c2,命令控制,启动服务端,生成多平台载荷,横向必备。
 ---
 
 # AdaptixC2

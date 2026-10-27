@@ -1,7 +1,6 @@
 ---
 name: gpowned-gpo-abuse
-description: 渗透工具 skill:gpowned 的安装、参数速查与攻击场景 playbook。当任务涉及 AD与横向移动 需要调用 gpowned 时使用。
-when-to-use: 渗透工具 skill:gpowned 的安装、参数速查与攻击场景 playbook。当任务涉及 AD与横向移动 需要调用 gpowned 时使用。
+description: gpowned: GPO 内下发恶意计划任务。信号:ad攻击,域渗透,认证+GPO 枚举,GPO 命令注入,计划任务方式下发。
 ---
 
 # gpowned

@@ -1,7 +1,6 @@
 ---
 name: w13scan-passive-audit
-description: 渗透工具 skill:w13scan 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 w13scan 时使用。
-when-to-use: 渗透工具 skill:w13scan 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 w13scan 时使用。
+description: w13scan: 被动流量漏洞审计。信号:web漏洞,注入,被动扫描,代理模式抓流量,代理端口。
 ---
 
 # w13scan

@@ -1,7 +1,6 @@
 ---
 name: talon-kerberos-check
-description: 渗透工具 skill:Talon 的安装、参数速查与攻击场景 playbook。当任务涉及 AD域渗透与域控攻击 需要调用 Talon 时使用。
-when-to-use: 渗透工具 skill:Talon 的安装、参数速查与攻击场景 playbook。当任务涉及 AD域渗透与域控攻击 需要调用 Talon 时使用。
+description: Talon: 域账户有效性验证。信号:ad攻击,域渗透,域控。
 ---
 
 # Talon

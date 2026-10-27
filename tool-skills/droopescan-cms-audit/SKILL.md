@@ -1,7 +1,6 @@
 ---
 name: droopescan-cms-audit
-description: 渗透工具 skill:droopescan 的安装、参数速查与攻击场景 playbook。当任务涉及 Web漏洞扫描与验证 需要调用 droopescan 时使用。
-when-to-use: 渗透工具 skill:droopescan 的安装、参数速查与攻击场景 playbook。当任务涉及 Web漏洞扫描与验证 需要调用 droopescan 时使用。
+description: droopescan: CMS 漏洞面审计。信号:web扫描,漏洞扫描,Drupal 扫描,WordPress 扫描,线程。
 ---
 
 # droopescan

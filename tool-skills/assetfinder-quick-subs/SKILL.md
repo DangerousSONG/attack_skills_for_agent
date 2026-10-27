@@ -1,7 +1,6 @@
 ---
 name: assetfinder-quick-subs
-description: 渗透工具 skill:assetfinder 的安装、参数速查与攻击场景 playbook。当任务涉及 资产测绘与指纹识别 需要调用 assetfinder 时使用。
-when-to-use: 渗透工具 skill:assetfinder 的安装、参数速查与攻击场景 playbook。当任务涉及 资产测绘与指纹识别 需要调用 assetfinder 时使用。
+description: assetfinder: 侦察流水线第一棒。信号:资产测绘,指纹识别,只列子域名,子域+关联域名,静默输出便于管道。
 ---
 
 # assetfinder

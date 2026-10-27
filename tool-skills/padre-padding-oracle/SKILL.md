@@ -1,7 +1,6 @@
 ---
 name: padre-padding-oracle
-description: 渗透工具 skill:padre 的安装、参数速查与攻击场景 playbook。当任务涉及 密码误用与协议分析 需要调用 padre 时使用。
-when-to-use: 渗透工具 skill:padre 的安装、参数速查与攻击场景 playbook。当任务涉及 密码误用与协议分析 需要调用 padre 时使用。
+description: padre: CBC 填充预言爆破明文。信号:密码学攻击,加密破解,自定义错误判定,线程,输出明文。
 ---
 
 # padre

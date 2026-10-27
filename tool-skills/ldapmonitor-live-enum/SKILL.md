@@ -1,7 +1,6 @@
 ---
 name: ldapmonitor-live-enum
-description: 渗透工具 skill:ldapmonitor 的安装、参数速查与攻击场景 playbook。当任务涉及 AD与LDAP枚举 需要调用 ldapmonitor 时使用。
-when-to-use: 渗透工具 skill:ldapmonitor 的安装、参数速查与攻击场景 playbook。当任务涉及 AD与LDAP枚举 需要调用 ldapmonitor 时使用。
+description: ldapmonitor: 实时盯 AD 变更(找新特权账号)。信号:内网枚举,网络发现,实时监控 LDAP 变更,过滤条件,显示变更详情。
 ---
 
 # ldapmonitor

@@ -1,7 +1,6 @@
 ---
 name: beef-browser-hook
-description: 渗透工具 skill:BeEF 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 BeEF 时使用。
-when-to-use: 渗透工具 skill:BeEF 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 BeEF 时使用。
+description: BeEF: 浏览器僵尸化。信号:web漏洞,注入,钓鱼弹窗/假登录页,扫描目标内网,确认框驻留。
 ---
 
 # BeEF

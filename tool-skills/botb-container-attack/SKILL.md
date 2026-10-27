@@ -1,7 +1,6 @@
 ---
 name: botb-container-attack
-description: 渗透工具 skill:botb (Break Out The Box) 的安装、参数速查与攻击场景 playbook。当任务涉及 云与容器执行 需要调用 botb (Break Out The Box) 时使用。
-when-to-use: 渗透工具 skill:botb (Break Out The Box) 的安装、参数速查与攻击场景 playbook。当任务涉及 云与容器执行 需要调用 botb (Break Out The Box) 时使用。
+description: botb (Break Out The Box): 容器评估+逃逸一体。信号:云命令执行,容器逃逸,静态容器分析,指定 socket,仅枚举。
 ---
 
 # botb (Break Out The Box)

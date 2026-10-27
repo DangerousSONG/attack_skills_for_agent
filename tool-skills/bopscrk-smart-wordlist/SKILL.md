@@ -1,7 +1,6 @@
 ---
 name: bopscrk-smart-wordlist
-description: 渗透工具 skill:bopscrk 的安装、参数速查与攻击场景 playbook。当任务涉及 哈希与密码破解 需要调用 bopscrk 时使用。
-when-to-use: 渗透工具 skill:bopscrk 的安装、参数速查与攻击场景 playbook。当任务涉及 哈希与密码破解 需要调用 bopscrk 时使用。
+description: bopscrk: 社工字典智能生成。信号:密码破解,哈希破解,交互生成定向字典,关键字+年份。
 ---
 
 # bopscrk

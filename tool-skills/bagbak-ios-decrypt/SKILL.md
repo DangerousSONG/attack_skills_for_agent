@@ -1,7 +1,6 @@
 ---
 name: bagbak-ios-decrypt
-description: 渗透工具 skill:bagbak 的安装、参数速查与攻击场景 playbook。当任务涉及 移动平台攻击 需要调用 bagbak 时使用。
-when-to-use: 渗透工具 skill:bagbak 的安装、参数速查与攻击场景 playbook。当任务涉及 移动平台攻击 需要调用 bagbak 时使用。
+description: bagbak: App Store 应用脱壳提取。信号:移动端,android攻击,导出并解密指定 App,列出设备 App,覆盖已安装包。
 ---
 
 # bagbak

@@ -1,7 +1,6 @@
 ---
 name: scrying-multi-screenshot
-description: 渗透工具 skill:Scrying 的安装、参数速查与攻击场景 playbook。当任务涉及 截图与取证 需要调用 Scrying 时使用。
-when-to-use: 渗透工具 skill:Scrying 的安装、参数速查与攻击场景 playbook。当任务涉及 截图与取证 需要调用 Scrying 时使用。
+description: Scrying: 内网服务批量截图。信号:屏幕捕获,截图,单目标截图,仅 RDP,输出目录。
 ---
 
 # Scrying

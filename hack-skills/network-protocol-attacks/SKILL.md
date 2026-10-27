@@ -1,6 +1,6 @@
 ---
 name: network-protocol-attacks
-description: 0. RELATED ROUTING
+description: "Network protocol attack playbook."
 when-to-use: >-
   Network protocol attack playbook. Use when exploiting layer 2/3 protocols including ARP spoofing, LLMNR/NBT-NS/mDNS poisoning, WPAD abuse, DHCPv6 attacks, VLAN hopping, STP manipulation, DNS spoofing, IPv6 attacks, and IDS/IPS evasion.
 ---

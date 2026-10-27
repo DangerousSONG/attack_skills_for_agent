@@ -1,7 +1,6 @@
 ---
 name: donpapi-dpapi-harvest
-description: 渗透工具 skill:DonPAPI 的安装、参数速查与攻击场景 playbook。当任务涉及 AD与横向移动 需要调用 DonPAPI 时使用。
-when-to-use: 渗透工具 skill:DonPAPI 的安装、参数速查与攻击场景 playbook。当任务涉及 AD与横向移动 需要调用 DonPAPI 时使用。
+description: DonPAPI: 域内 DPAPI 凭据大扫荡。信号:ad攻击,域渗透,单机 triage,连通性测试,输出目录。
 ---
 
 # DonPAPI

@@ -1,7 +1,6 @@
 ---
 name: responder-ntlm-poison
-description: 渗透工具 skill:Responder 的安装、参数速查与攻击场景 playbook。当任务涉及 嗅探与中间人攻击 需要调用 Responder 时使用。
-when-to-use: 渗透工具 skill:Responder 的安装、参数速查与攻击场景 playbook。当任务涉及 嗅探与中间人攻击 需要调用 Responder 时使用。
+description: Responder: 内网哈希收割、签名关闭主机中继。信号:中间人,mitm,强制 WPAD 伪造,分析模式(只观察不投毒)。
 ---
 
 # Responder

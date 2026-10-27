@@ -1,7 +1,6 @@
 ---
 name: cmseek-cms-detect
-description: 渗透工具 skill:CMSeeK 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 CMSeeK 时使用。
-when-to-use: 渗透工具 skill:CMSeeK 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 CMSeeK 时使用。
+description: CMSeeK: CMS 指纹识别+深链检测。信号:web漏洞,注入,CMS 识别+漏洞检测,跟踪重定向,重扫。
 ---
 
 # CMSeeK

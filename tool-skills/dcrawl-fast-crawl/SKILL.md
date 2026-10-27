@@ -1,7 +1,6 @@
 ---
 name: dcrawl-fast-crawl
-description: 渗透工具 skill:dcrawl 的安装、参数速查与攻击场景 playbook。当任务涉及 资产测绘与指纹识别 需要调用 dcrawl 时使用。
-when-to-use: 渗透工具 skill:dcrawl 的安装、参数速查与攻击场景 playbook。当任务涉及 资产测绘与指纹识别 需要调用 dcrawl 时使用。
+description: dcrawl: 批量 URL 轻爬。信号:资产测绘,指纹识别,批量快速爬取,深度。
 ---
 
 # dcrawl

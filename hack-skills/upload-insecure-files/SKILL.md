@@ -1,6 +1,6 @@
 ---
 name: upload-insecure-files
-description: 0. RELATED ROUTING
+description: "Insecure file upload playbook. Use when testing upload validation, storage paths, processing pipelines, preview behavior, overwrite risks, and upload-to-RCE chains."
 when-to-use: >-
   Insecure file upload playbook. Use when testing upload validation, storage paths, processing pipelines, preview behavior, overwrite risks, and upload-to-RCE chains.
 ---

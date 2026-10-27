@@ -1,7 +1,6 @@
 ---
 name: ropeadope-logclean
-description: 渗透工具 skill:ropeadope 的安装、参数速查与攻击场景 playbook。当任务涉及 反取证与痕迹清理 需要调用 ropeadope 时使用。
-when-to-use: 渗透工具 skill:ropeadope 的安装、参数速查与攻击场景 playbook。当任务涉及 反取证与痕迹清理 需要调用 ropeadope 时使用。
+description: ropeadope: Linux 主机日志清理。信号:痕迹清理,反取证,清登录记录,清认证日志。
 ---
 
 # ropeadope

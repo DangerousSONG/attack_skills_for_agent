@@ -1,7 +1,6 @@
 ---
 name: h2t-security-headers
-description: 渗透工具 skill:h2t 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 h2t 时使用。
-when-to-use: 渗透工具 skill:h2t 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 h2t 时使用。
+description: h2t: 安全头配置审计。信号:web漏洞,注入,扫描 HTTP 安全头,检测不安全配置,输出修复建议。
 ---
 
 # h2t

@@ -1,6 +1,6 @@
 ---
 name: linux-security-bypass
-description: 0. RELATED ROUTING
+description: "Linux security mechanism bypass playbook."
 when-to-use: >-
   Linux security mechanism bypass playbook. Use when facing restricted bash/rbash, read-only or noexec filesystems, AppArmor, SELinux, seccomp filters, or audit logging that must be evaded during post-exploitation.
 ---

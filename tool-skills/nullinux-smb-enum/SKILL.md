@@ -1,7 +1,6 @@
 ---
 name: nullinux-smb-enum
-description: 渗透工具 skill:Nullinux 的安装、参数速查与攻击场景 playbook。当任务涉及 资产测绘与指纹识别 需要调用 Nullinux 时使用。
-when-to-use: 渗透工具 skill:Nullinux 的安装、参数速查与攻击场景 playbook。当任务涉及 资产测绘与指纹识别 需要调用 Nullinux 时使用。
+description: Nullinux: Linux 上 SMB 枚举一把梭。信号:资产测绘,指纹识别,SMB/RPC 全枚举,共享枚举,用户枚举。
 ---
 
 # Nullinux

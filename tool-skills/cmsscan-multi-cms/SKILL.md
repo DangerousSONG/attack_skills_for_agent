@@ -1,7 +1,6 @@
 ---
 name: cmsscan-multi-cms
-description: 渗透工具 skill:CMSScan 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 CMSScan 时使用。
-when-to-use: 渗透工具 skill:CMSScan 的安装、参数速查与攻击场景 playbook。当任务涉及 Web应用漏洞利用 需要调用 CMSScan 时使用。
+description: CMSScan: 多 CMS 统一检测。信号:web漏洞,注入,CMS 检测+扫描,指定 CMS,输出报告。
 ---
 
 # CMSScan

@@ -1,7 +1,6 @@
 ---
 name: dvcs-ripper-vcs
-description: 渗透工具 skill:dvcs-ripper 的安装、参数速查与攻击场景 playbook。当任务涉及 供应链与CI/CD攻击 需要调用 dvcs-ripper 时使用。
-when-to-use: 渗透工具 skill:dvcs-ripper 的安装、参数速查与攻击场景 playbook。当任务涉及 供应链与CI/CD攻击 需要调用 dvcs-ripper 时使用。
+description: dvcs-ripper: 泄露的 .git 全量还原。信号:供应链,cicd,SVN,Mercurial,Bazaar。
 ---
 
 # dvcs-ripper

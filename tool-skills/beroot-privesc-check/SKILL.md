@@ -1,7 +1,6 @@
 ---
 name: beroot-privesc-check
-description: 渗透工具 skill:BeRoot 的安装、参数速查与攻击场景 playbook。当任务涉及 Windows本地提权 需要调用 BeRoot 时使用。
-when-to-use: 渗透工具 skill:BeRoot 的安装、参数速查与攻击场景 playbook。当任务涉及 Windows本地提权 需要调用 BeRoot 时使用。
+description: BeRoot: 双平台本地提权体检。信号:windows提权,uac绕过,Linux 提权全检测,指定模块,写可执行漏洞利用建议。
 ---
 
 # BeRoot

@@ -1,7 +1,6 @@
 ---
 name: phishery-basicauth
-description: 渗透工具 skill:phishery 的安装、参数速查与攻击场景 playbook。当任务涉及 钓鱼与社会工程 需要调用 phishery 时使用。
-when-to-use: 渗透工具 skill:phishery 的安装、参数速查与攻击场景 playbook。当任务涉及 钓鱼与社会工程 需要调用 phishery 时使用。
+description: phishery: 文档钓鱼收割域凭据。信号:钓鱼,社会工程,成功状态码伪装。
 ---
 
 # phishery

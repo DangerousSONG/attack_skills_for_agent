@@ -1,7 +1,6 @@
 ---
 name: petools-pe-analysis
-description: 渗透工具 skill:pe-tools 的安装、参数速查与攻击场景 playbook。当任务涉及 逆向工程辅助 需要调用 pe-tools 时使用。
-when-to-use: 渗透工具 skill:pe-tools 的安装、参数速查与攻击场景 playbook。当任务涉及 逆向工程辅助 需要调用 pe-tools 时使用。
+description: pe-tools: PE 文件静态解剖。信号:逆向,反汇编,详细输出,DOS 头解析,提取资源。
 ---
 
 # pe-tools

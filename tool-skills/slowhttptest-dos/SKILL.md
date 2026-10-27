@@ -1,7 +1,6 @@
 ---
 name: slowhttptest-dos
-description: 渗透工具 skill:slowhttptest 的安装、参数速查与攻击场景 playbook。当任务涉及 数据破坏与擦除 需要调用 slowhttptest 时使用。
-when-to-use: 渗透工具 skill:slowhttptest 的安装、参数速查与攻击场景 playbook。当任务涉及 数据破坏与擦除 需要调用 slowhttptest 时使用。
+description: slowhttptest: 慢速 HTTP 压测(授权演练)。信号:数据破坏,擦除,Slowloris 测试,Range 攻击,持续秒数。
 ---
 
 # slowhttptest

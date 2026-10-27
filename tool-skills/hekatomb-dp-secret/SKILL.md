@@ -1,7 +1,6 @@
 ---
 name: hekatomb-dp-secret
-description: 渗透工具 skill:HEKATOMB 的安装、参数速查与攻击场景 playbook。当任务涉及 AD与横向移动 需要调用 HEKATOMB 时使用。
-when-to-use: 渗透工具 skill:HEKATOMB 的安装、参数速查与攻击场景 playbook。当任务涉及 AD与横向移动 需要调用 HEKATOMB 时使用。
+description: HEKATOMB: SCCM DP 机器账户哈希窃取。信号:ad攻击,域渗透,自动找域控,打全部 DP,指定单个 DP。
 ---
 
 # HEKATOMB

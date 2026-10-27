@@ -1,7 +1,6 @@
 ---
 name: spraycharles-idp-spray
-description: 渗透工具 skill:spraycharles 的安装、参数速查与攻击场景 playbook。当任务涉及 暴力破解与口令喷射 需要调用 spraycharles 时使用。
-when-to-use: 渗透工具 skill:spraycharles 的安装、参数速查与攻击场景 playbook。当任务涉及 暴力破解与口令喷射 需要调用 spraycharles 时使用。
+description: spraycharles: 多平台 IdP 喷洒。信号:暴力破解,口令喷射,多 IdP 喷洒,ADFS,Okta。
 ---
 
 # spraycharles

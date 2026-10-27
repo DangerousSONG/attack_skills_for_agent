@@ -1,7 +1,6 @@
 ---
 name: jwt-hack-token
-description: 渗透工具 skill:jwt-hack 的安装、参数速查与攻击场景 playbook。当任务涉及 API与业务逻辑攻击 需要调用 jwt-hack 时使用。
-when-to-use: 渗透工具 skill:jwt-hack 的安装、参数速查与攻击场景 playbook。当任务涉及 API与业务逻辑攻击 需要调用 jwt-hack 时使用。
+description: jwt-hack: 快速令牌拆解与爆破。信号:api攻击,接口测试,解码,爆破密钥。
 ---
 
 # jwt-hack

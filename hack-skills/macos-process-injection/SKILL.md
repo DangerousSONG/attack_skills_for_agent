@@ -1,6 +1,6 @@
 ---
 name: macos-process-injection
-description: 0. RELATED ROUTING
+description: "macOS process injection playbook."
 when-to-use: >-
   macOS process injection playbook. Use when you need to inject code into running or launching macOS processes via dylib hijacking, DYLD environment variables, XPC exploitation, Mach port manipulation, or Electron/Chromium abuse.
 ---

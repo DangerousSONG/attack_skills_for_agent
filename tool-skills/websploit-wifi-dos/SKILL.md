@@ -1,7 +1,6 @@
 ---
 name: websploit-wifi-dos
-description: 渗透工具 skill:websploit 的安装、参数速查与攻击场景 playbook。当任务涉及 二进制漏洞利用与Pwn 需要调用 websploit 时使用。
-when-to-use: 渗透工具 skill:websploit 的安装、参数速查与攻击场景 playbook。当任务涉及 二进制漏洞利用与Pwn 需要调用 websploit 时使用。
+description: websploit: Web 漏洞快速利用。信号:pwn,二进制利用,Web 攻击框架,模块。
 ---
 
 # websploit

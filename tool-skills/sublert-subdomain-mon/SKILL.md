@@ -1,7 +1,6 @@
 ---
 name: sublert-subdomain-mon
-description: 渗透工具 skill:Sublert 的安装、参数速查与攻击场景 playbook。当任务涉及 域名与DNS侦察 需要调用 Sublert 时使用。
-when-to-use: 渗透工具 skill:Sublert 的安装、参数速查与攻击场景 playbook。当任务涉及 域名与DNS侦察 需要调用 Sublert 时使用。
+description: Sublert: 子域变更监控。信号:子域名,域名枚举,子域监控,频率。
 ---
 
 # Sublert

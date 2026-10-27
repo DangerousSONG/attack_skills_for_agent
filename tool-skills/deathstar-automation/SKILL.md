@@ -1,7 +1,6 @@
 ---
 name: deathstar-automation
-description: 渗透工具 skill:DeathStar 的安装、参数速查与攻击场景 playbook。当任务涉及 AD域渗透与域控攻击 需要调用 DeathStar 时使用。
-when-to-use: 渗透工具 skill:DeathStar 的安装、参数速查与攻击场景 playbook。当任务涉及 AD域渗透与域控攻击 需要调用 DeathStar 时使用。
+description: DeathStar: 一键自动化域渗透。信号:ad攻击,域渗透,自动化域管路径,域控。
 ---
 
 # DeathStar

@@ -1,6 +1,6 @@
 ---
 name: mobile-ssl-pinning-bypass
-description: 0. RELATED ROUTING
+description: "Mobile SSL pinning bypass playbook."
 when-to-use: >-
   Mobile SSL pinning bypass playbook. Use when intercepting HTTPS traffic from mobile applications that implement certificate pinning, public key pinning, or SPKI hash pinning on Android and iOS, including React Native, Flutter, and Xamarin frameworks.
 ---

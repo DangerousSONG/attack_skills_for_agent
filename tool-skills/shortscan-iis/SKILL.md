@@ -1,7 +1,6 @@
 ---
 name: shortscan-iis
-description: 渗透工具 skill:shortscan 的安装、参数速查与攻击场景 playbook。当任务涉及 网络扫描与枚举 需要调用 shortscan 时使用。
-when-to-use: 渗透工具 skill:shortscan 的安装、参数速查与攻击场景 playbook。当任务涉及 网络扫描与枚举 需要调用 shortscan 时使用。
+description: shortscan: IIS 短文件名信息泄露。信号:端口扫描,nmap,IIS 短文件名扫描,仅扫描。
 ---
 
 # shortscan

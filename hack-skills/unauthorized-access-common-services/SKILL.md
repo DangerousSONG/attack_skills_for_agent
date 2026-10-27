@@ -1,6 +1,6 @@
 ---
 name: unauthorized-access-common-services
-description: 0. RELATED ROUTING
+description: "Unauthorized access playbook for common exposed services. Use when Redis, Rsync, PHP-FPM, AJP/Ghostcat, Hadoop YARN, H2 Console, or similar management interfaces are exposed without authentication."
 when-to-use: >-
   Unauthorized access playbook for common exposed services. Use when Redis, Rsync, PHP-FPM, AJP/Ghostcat, Hadoop YARN, H2 Console, or similar management interfaces are exposed without authentication.
 ---
