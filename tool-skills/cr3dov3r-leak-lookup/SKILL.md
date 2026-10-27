@@ -1,6 +1,6 @@
 ---
 name: cr3dov3r-leak-lookup
-description: Cr3dOv3r: 泄露凭据收集+复用验证。信号:邮箱收集,员工信息,静默,只查明文密码库,不测试凭据复用。
+description: Cr3dOv3r: 收集泄露口令并验证凭据复用。信号:邮箱收集,员工信息,静默,只查明文密码库,不测试凭据复用。
 ---
 
 # Cr3dOv3r
@@ -26,7 +26,7 @@ git clone https://github.com/D4Vinci/Cr3dOv3r && cd Cr3dOv3r && pip install -r r
 
 ## 攻击场景 Playbook
 
-### 泄露凭据收集+复用验证
+### 收集泄露口令并验证凭据复用
 
 ```bash
 python Cr3dOv3r.py admin@corp.com

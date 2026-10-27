@@ -1,6 +1,6 @@
 ---
 name: h8mail-breach-hunting
-description: h8mail: 凭据泄露面评估、批量员工邮箱撞库前置。信号:邮箱收集,员工信息,JSON 输出。
+description: h8mail: 查邮箱是否在泄露库中出现、批量员工邮箱撞库前置。信号:邮箱收集,员工信息,JSON 输出。
 ---
 
 # h8mail
@@ -28,7 +28,7 @@ pip install h8mail
 
 ## 攻击场景 Playbook
 
-### 凭据泄露面评估
+### 查邮箱是否在泄露库中出现
 
 ```bash
 h8mail -t ceo@corp.com -o out.json

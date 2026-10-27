@@ -1,6 +1,6 @@
 ---
 name: scrying-multi-screenshot
-description: Scrying: 内网服务批量截图。信号:屏幕捕获,截图,单目标截图,仅 RDP,输出目录。
+description: Scrying: 目标屏幕定时截图采集。信号:屏幕捕获,截图,单目标截图,仅 RDP,输出目录。
 ---
 
 # Scrying
@@ -27,7 +27,7 @@ cargo install scrying 或下载 release
 
 ## 攻击场景 Playbook
 
-### 内网服务批量截图
+### 目标屏幕定时截图采集
 
 ```bash
 nmap -p 3389,5900,80,443,8080 --open 10.0.0.0/24 -oX n.xml

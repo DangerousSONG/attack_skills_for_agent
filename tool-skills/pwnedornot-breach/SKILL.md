@@ -1,6 +1,6 @@
 ---
 name: pwnedornot-breach
-description: PwnedOrNot: 邮箱泄露+密码明文。信号:邮箱收集,员工信息,邮箱泄露查询,批量,仅受泄。
+description: PwnedOrNot: 邮箱泄露库查询拿明文口令。信号:邮箱收集,员工信息,邮箱泄露查询,批量,仅受泄。
 ---
 
 # PwnedOrNot
@@ -26,7 +26,7 @@ git clone https://github.com/thewhiteh4t/pwnedOrNot && cd pwnedOrNot
 
 ## 攻击场景 Playbook
 
-### 邮箱泄露+密码明文
+### 邮箱泄露库查询拿明文口令
 
 ```bash
 python3 pwnedornot.py -e ceo@corp.com

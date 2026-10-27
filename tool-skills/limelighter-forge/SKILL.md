@@ -1,6 +1,6 @@
 ---
 name: limelighter-forge
-description: Limelighter: 伪造代码签名。信号:恶意软件开发,免杀开发,伪造签名,延时。
+description: Limelighter: 伪造数字签名过信誉查杀。信号:恶意软件开发,免杀开发,伪造签名,延时。
 ---
 
 # Limelighter
@@ -25,7 +25,7 @@ git clone https://github.com/Tylous/Limelighter && cd Limelighter && go build
 
 ## 攻击场景 Playbook
 
-### 伪造代码签名
+### 伪造数字签名过信誉查杀
 
 ```bash
 ./Limelighter -I malware.exe -O update.exe

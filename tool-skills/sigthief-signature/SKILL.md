@@ -1,6 +1,6 @@
 ---
 name: sigthief-signature
-description: SigThief: 签名窃取绕过 SmartScreen。信号:恶意软件开发,免杀开发,偷合法签名,从已签名文件剥离签名信息,只检查签名。
+description: SigThief: 给木马偷取合法数字签名。信号:恶意软件开发,免杀开发,偷合法签名,从已签名文件剥离签名信息,只检查签名。
 ---
 
 # SigThief
@@ -25,7 +25,7 @@ git clone https://github.com/secretsquirrel/SigThief
 
 ## 攻击场景 Playbook
 
-### 签名窃取绕过 SmartScreen
+### 给木马偷取合法数字签名
 
 ```bash
 python sigthief.py -i C:\Windows\System32\consent.exe -t payload.exe -o signed_payload.exe

