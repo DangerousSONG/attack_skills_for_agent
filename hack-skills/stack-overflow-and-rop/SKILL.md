@@ -18,7 +18,7 @@ when-to-use: >-
 
 ### Advanced Reference
 
-Load [ROP_ADVANCED_TECHNIQUES.md](./ROP_ADVANCED_TECHNIQUES.md) when you need:
+Load ROP_ADVANCED_TECHNIQUES.md when you need:
 - Blind ROP (BROP) methodology against remote services without binary
 - ret2vdso for ASLR bypass on 32-bit systems
 - Partial overwrite techniques for PIE bypass
@@ -141,3 +141,5 @@ Constraints must be satisfied — check register/stack state before using.
 ---
 
 > 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。
+
+> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`ROP_ADVANCED_TECHNIQUES.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。

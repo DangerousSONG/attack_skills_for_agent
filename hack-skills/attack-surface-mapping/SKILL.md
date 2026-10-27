@@ -16,7 +16,7 @@ Given **one target** and **one application**, draw the surface from what that ap
 
 This skill is the fast path. Success is a portrait plus a host/API inventory plus a key table plus response-class labels plus an object graph. A probe count is not success.
 
-Field patterns for where the rest of the surface actually lives: [SURFACE_PATTERNS.md](./SURFACE_PATTERNS.md).
+Field patterns for where the rest of the surface actually lives: SURFACE_PATTERNS.md.
 
 ## When
 
@@ -193,3 +193,5 @@ Then load [hack](../hack/SKILL.md) for effort order and the matching category sk
 - Expanding to a new cluster while this application's live surface is unfinished
 - Calling mapping "done" because the homepage returned 200
 - Minting a new notes tree when the workspace or proxy project already holds the evidence
+
+> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`SURFACE_PATTERNS.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。

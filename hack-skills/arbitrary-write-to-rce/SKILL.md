@@ -15,7 +15,7 @@ when-to-use: >-
 - [format-string-exploitation](../format-string-exploitation/SKILL.md) — obtaining the arbitrary write via %n
 - [stack-overflow-and-rop](../stack-overflow-and-rop/SKILL.md) — stack-based write primitives
 - [binary-protection-bypass](../binary-protection-bypass/SKILL.md) — which targets are available given protection configuration
-- [heap-exploitation IO_FILE_EXPLOITATION.md](../heap-exploitation/IO_FILE_EXPLOITATION.md) — deep _IO_FILE structure exploitation
+- heap-exploitation IO_FILE_EXPLOITATION.md — deep _IO_FILE structure exploitation
 
 ---
 
@@ -108,7 +108,7 @@ write(libc.sym['__malloc_hook'], libc.sym['realloc'] + 2)  # +2, +4, +6 etc. to 
 
 ## 4. _IO_FILE VTABLE
 
-See [IO_FILE_EXPLOITATION.md](../heap-exploitation/IO_FILE_EXPLOITATION.md) for full details.
+See IO_FILE_EXPLOITATION.md for full details.
 
 ### Quick Summary by Version
 
@@ -148,3 +148,5 @@ def mangle(ptr, guard):
     return ((ptr ^ guard) << 0x11 | (ptr ^ guard) >> (64-0x11)) & 0xffffffffffffffff
 
 > 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。
+
+> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`IO_FILE_EXPLOITATION.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。

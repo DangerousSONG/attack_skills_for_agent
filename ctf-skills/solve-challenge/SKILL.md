@@ -37,7 +37,7 @@ bash scripts/install_ctf_tools.sh go
 bash scripts/install_ctf_tools.sh manual
 ```
 
-The full package lists now live in [scripts/install_ctf_tools.sh](../scripts/install_ctf_tools.sh).
+The full package lists now live in scripts/install_ctf_tools.sh.
 
 ### On-demand (during challenges)
 
@@ -62,7 +62,7 @@ export CTF_URL="https://ctf.example.com"
 export CTF_TOKEN="ctfd_..."  # Ask user for this
 ```
 
-Invoke `/ctf-misc` and load its `ctfd-navigation.md` for the full API reference and Python client class.
+Invoke `/ctf-misc` and load its `ctfd-navigation.md`（未随库分发） for the full API reference and Python client class.
 
 #### CTF Platform Interaction via Playwright MCP
 
@@ -134,3 +134,5 @@ Determine the primary category, then invoke the matching skill.
 - netcat with restricted shell or eval -> misc (jail)
 
 > 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。
+
+> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`ctfd-navigation.md`、`install_ctf_tools.sh`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。

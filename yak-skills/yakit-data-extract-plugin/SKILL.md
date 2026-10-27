@@ -17,8 +17,8 @@ when-to-use: 0. 相关路由
 
 ## 0. 相关路由
 
-- 总入口：[yak](../yak/SKILL.md)
-- 数据库 API（KV / Payload / 查询）：[yaklang-database](../yaklang-database/SKILL.md)
+- 总入口：yak
+- 数据库 API（KV / Payload / 查询）：yaklang-database
 - 想在 MITM 阶段直接采集而非事后捞库：[mitm-hotpatch](../mitm-hotpatch/SKILL.md)
 - 训练材料交叉引用：`yaklang-ai-training-materials/library-usage/db/db-practice.yak`
 
@@ -95,4 +95,6 @@ for path in db.YieldPayload(group) {             // 迭代字典逐条扫描
 
 - 直接 `yak your-script.yak`，让 `YAK_MAIN` 自测块用合成数据 + 本地靶站跑通逻辑。
 - 想验证真实 History 捞取，可先用 [mitm-hotpatch](../mitm-hotpatch/SKILL.md) 采集几条流量再跑。
-- 工具链与命令行验证方式见 [yaklang-toolchain](../yaklang-toolchain/SKILL.md)。
+- 工具链与命令行验证方式见 yaklang-toolchain。
+
+> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`SKILL.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。

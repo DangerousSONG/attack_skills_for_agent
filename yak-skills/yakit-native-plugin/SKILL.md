@@ -19,12 +19,12 @@ when-to-use: 0. 相关路由
 
 ## 0. 相关路由
 
-- 总入口: [yak](../yak/SKILL.md)
+- 总入口: yak
 - MITM 全部 hook 与去重语义(热加载视角, 但 hook 契约与原生 mitm 插件一致): [mitm-hotpatch](../mitm-hotpatch/SKILL.md)
-- 右键 codec 插件 + cli 选择提取项: [yakit-rightclick-plugin](../yakit-rightclick-plugin/SKILL.md)
+- 右键 codec 插件 + cli 选择提取项: yakit-rightclick-plugin
 - 历史数据提取/字典/发包: [yakit-data-extract-plugin](../yakit-data-extract-plugin/SKILL.md)
-- 数据库 / Payload 字典 / risk: [yaklang-database](../yaklang-database/SKILL.md)
-- 验证工具链: [yaklang-toolchain](../yaklang-toolchain/SKILL.md)
+- 数据库 / Payload 字典 / risk: yaklang-database
+- 验证工具链: yaklang-toolchain
 
 ## 1. 原生插件 vs 热加载(先分清)
 
@@ -175,7 +175,7 @@ yak skills/yakit-native-plugin/examples/yak-cli-input.yak --target "yaklang.com,
 ```
 
 合格标准: 10 秒内完成、所有 `assert` 通过、`log` 全英文、末尾出现 `... self test passed`。
-mitm 原生插件可进一步用 `yak hotpatch-mitm` 喂真实请求验证(见 [yaklang-toolchain](../yaklang-toolchain/SKILL.md))。
+mitm 原生插件可进一步用 `yak hotpatch-mitm` 喂真实请求验证(见 yaklang-toolchain)。
 
 ## 参考来源
 
@@ -183,3 +183,5 @@ mitm 原生插件可进一步用 `yak hotpatch-mitm` 喂真实请求验证(见 [
 - mitm hook 契约: `yaklang/common/yak/hook_mixed_plugin_caller.go`
 - risk API: `yaklang/common/yak/yaklib/risk.go`(`risk.NewRisk` / `risk.title` / `risk.severity` ...)
 - 训练素材交叉引用: `yaklang-ai-training-materials/library-usage/cli`、`.../risk`
+
+> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`SKILL.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。

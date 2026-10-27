@@ -7,13 +7,13 @@ when-to-use: >-
 
 # SKILL: Server-Side Request Forgery (SSRF) — Expert Attack Playbook
 
-> **AI LOAD INSTRUCTION**: Expert SSRF techniques. Covers URL filter bypass, cloud metadata endpoints, protocol exploitation, blind SSRF detection, and chaining to RCE. Base models know basic 169.254.169.254 — this file covers what they miss. For real-world CVE chains, DNS Rebinding deep dives, K8s SSRF, and SSRF → Redis → RCE full exploitation, load the companion [SCENARIOS.md](./SCENARIOS.md).
+> **AI LOAD INSTRUCTION**: Expert SSRF techniques. Covers URL filter bypass, cloud metadata endpoints, protocol exploitation, blind SSRF detection, and chaining to RCE. Base models know basic 169.254.169.254 — this file covers what they miss. For real-world CVE chains, DNS Rebinding deep dives, K8s SSRF, and SSRF → Redis → RCE full exploitation, load the companion SCENARIOS.md.
 
 ## 0. QUICK START
 
 ### Extended Scenarios
 
-Also load [SCENARIOS.md](./SCENARIOS.md) when you need:
+Also load SCENARIOS.md when you need:
 - WebLogic SSRF (CVE-2014-4210) — `uddiexplorer/SearchPublicRegistries.jsp` + `operator` parameter + `%0D%0A` CRLF to inject Redis commands
 - SSRF → internal Redis → write crontab reverse shell complete payload chain
 - DNS Rebinding deep dive — TTL=0 trick, initial-legit→second-internal resolution, `rbndr.us` service
@@ -24,7 +24,7 @@ Also load [SCENARIOS.md](./SCENARIOS.md) when you need:
 
 ### Advanced Reference
 
-Also load [URL_PARSER_TRICKS.md](./URL_PARSER_TRICKS.md) when you need:
+Also load URL_PARSER_TRICKS.md when you need:
 - URL parser differential table: Python urllib vs requests vs Java URL vs PHP parse_url vs Node url.parse vs Go net/url
 - Full cloud metadata endpoint catalog (AWS IMDSv1/v2, GCP, Azure, DigitalOcean, Alibaba Cloud, Oracle Cloud, Kubernetes, Hetzner, OpenStack)
 - gopher:// payload recipes for Redis, MySQL, SMTP, FastCGI, Memcached (with encoding rules)
@@ -147,3 +147,5 @@ http://169.254.169.254/metadata/identity/oauth2/token?api-version=2021-02-01&res
 ```
 
 > 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。
+
+> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`SCENARIOS.md`、`URL_PARSER_TRICKS.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。

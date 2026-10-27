@@ -51,4 +51,6 @@ typos, look-alikes, an attacker-influenced redirect target).
 | "Removing the guard is faster" | The guard IS the authorization. Removing it = unauthorized attack. |
 
 Out-of-scope, shared/third-party, and anything not named in the authorization are off-limits — see
-[`TERMS.md`](../../TERMS.md). You own every request the toolkit sends.
+`TERMS.md`（未随库分发）. You own every request the toolkit sends.
+
+> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`TERMS.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。

@@ -32,7 +32,7 @@ After confirming this is an injection-class issue, use it to decide whether it i
 - [JNDI Injection](../jndi-injection/SKILL.md)
 - [Expression Language Injection](../expression-language-injection/SKILL.md)
 - [CRLF Injection](../crlf-injection/SKILL.md)
-- [Extra Injection Types (SSI, LDAP, XPath)](./EXTRA_INJECTION_TYPES.md)
+- Extra Injection Types (SSI, LDAP, XPath)
 - [Request Smuggling](../request-smuggling/SKILL.md)
 - [Prototype Pollution](../prototype-pollution/SKILL.md)
 - [Type Juggling](../type-juggling/SKILL.md)
@@ -49,3 +49,5 @@ After confirming this is an injection-class issue, use it to decide whether it i
 ## Related Categories
 
 - [file-access-vuln](../file-access-vuln/SKILL.md)
+
+> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`EXTRA_INJECTION_TYPES.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。

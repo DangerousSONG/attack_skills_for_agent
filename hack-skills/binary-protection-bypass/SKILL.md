@@ -18,7 +18,7 @@ when-to-use: >-
 
 ### Advanced Reference
 
-Load [PROTECTION_BYPASS_MATRIX.md](./PROTECTION_BYPASS_MATRIX.md) for comprehensive protection × bypass × primitive matrix.
+Load PROTECTION_BYPASS_MATRIX.md for comprehensive protection × bypass × primitive matrix.
 
 ---
 
@@ -135,3 +135,5 @@ rop += p64(shellcode_addr)                 # jump to shellcode on now-executable
 | Full RELRO | All GOT entries resolved at load, GOT read-only | Cannot write GOT → target other structures |
 
 > 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。
+
+> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`PROTECTION_BYPASS_MATRIX.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。

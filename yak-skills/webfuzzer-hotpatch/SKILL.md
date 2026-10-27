@@ -11,7 +11,7 @@ when-to-use: 0. 相关路由
 
 ## 0. 相关路由
 
-- 总入口与三层体系：[yak](../yak/SKILL.md)
+- 总入口与三层体系：yak
 - MITM 热加载（代理侧劫持/镜像/入库）：[mitm-hotpatch](../mitm-hotpatch/SKILL.md)
 - 全局热加载（先于模块执行、MITM/Fuzzer 共享）：[global-hotpatch](../global-hotpatch/SKILL.md)
 
@@ -193,3 +193,5 @@ printf 'GET / HTTP/1.1\r\nHost: t.example.com\r\n\r\n' > /tmp/req.txt
 - yak-project-public 282/285 (2022-05) Yakit Web Fuzzer 终极能力强化 热加载 Fuzz
 - yak-project-public 167 (2023-11-17) Web Fuzzer 进阶
 - 引擎实现：`common/yak/script_engine_for_fuzz.go`
+
+> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`SKILL.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。

@@ -16,11 +16,11 @@ Before going deep, consider loading:
 - [tunneling-and-pivoting](../tunneling-and-pivoting/SKILL.md) after establishing MitM position for traffic redirection
 - [ntlm-relay-coercion](../ntlm-relay-coercion/SKILL.md) for relaying captured NTLM hashes from poisoning attacks
 - [unauthorized-access-common-services](../unauthorized-access-common-services/SKILL.md) for exploiting services discovered during network attacks
-- [traffic-analysis-pcap](../traffic-analysis-pcap/SKILL.md) for analyzing captured traffic from MitM
+- traffic-analysis-pcap for analyzing captured traffic from MitM
 
 ### Advanced Reference
 
-Also load [NAME_RESOLUTION_POISONING.md](./NAME_RESOLUTION_POISONING.md) when you need:
+Also load NAME_RESOLUTION_POISONING.md when you need:
 - Detailed Responder/mitm6 configuration and workflows
 - NTLM relay target selection and chaining
 - Credential format analysis and cracking priorities
@@ -147,3 +147,5 @@ ntlmrelayx.py -6 -t ldaps://DC01 -wh fakewpad.domain.com -l loot --delegate-acce
 # 2. Victim DNS queries go to attacker → WPAD redirect
 
 > 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。
+
+> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`NAME_RESOLUTION_POISONING.md`、`SKILL.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。

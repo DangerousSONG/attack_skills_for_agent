@@ -20,12 +20,12 @@ Before going deep, consider loading:
 
 ### Advanced Reference
 
-Also load [SUID_CAPABILITIES_TRICKS.md](./SUID_CAPABILITIES_TRICKS.md) when you need:
+Also load SUID_CAPABILITIES_TRICKS.md when you need:
 - Top 30 SUID binaries with exact exploitation commands (GTFOBins)
 - Capability-specific exploitation for each dangerous cap
 - Custom SUID binary exploitation methodology
 
-Also load [KERNEL_EXPLOITS_CHECKLIST.md](./KERNEL_EXPLOITS_CHECKLIST.md) when you need:
+Also load KERNEL_EXPLOITS_CHECKLIST.md when you need:
 - Kernel version → exploit mapping table (DirtyPipe, DirtyCow, OverlayFS, etc.)
 - Exploit compilation tips and cross-compilation notes
 - Kernel exploit stability assessment
@@ -146,3 +146,5 @@ getcap -r / 2>/dev/null
 # Example: python3 with cap_setuid
 
 > 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。
+
+> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`KERNEL_EXPLOITS_CHECKLIST.md`、`SUID_CAPABILITIES_TRICKS.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。

@@ -20,7 +20,7 @@ Before going deep, consider loading:
 
 ### Advanced Reference
 
-Also load [COERCION_METHODS.md](./COERCION_METHODS.md) when you need:
+Also load COERCION_METHODS.md when you need:
 - Detailed coercion method comparison (PetitPotam, PrinterBug, DFSCoerce, etc.)
 - RPC function-level details and prerequisites
 - Coercer tool usage and discovery
@@ -143,3 +143,5 @@ ntlmrelayx.py -t ldap://DC_IP -smb2support --dump-domain
 ```
 
 > 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。
+
+> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`COERCION_METHODS.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。

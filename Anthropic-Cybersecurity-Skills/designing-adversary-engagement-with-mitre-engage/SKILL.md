@@ -101,7 +101,7 @@ For each technique your target adversary uses, find the Engage Activity that exp
 Pull the authoritative Activity list and IDs from the live matrix; Engage IDs use the prefixes **SGO/EGO** (Goals), **SAP/EAP** (Approaches), and **SAC/EAC** (Activities).
 
 ### 5. Design the engagement environment
-Decide realism and isolation. Choose between standalone, connected, or integrated decoy environments (see D3FEND honeynet types in `references/standards.md`). Populate it with diverse, believable artifacts — Persona Creation, Pocket Litter, Artifact Diversity, Application Diversity — so the environment survives adversary scrutiny.
+Decide realism and isolation. Choose between standalone, connected, or integrated decoy environments (see D3FEND honeynet types in `standards.md`（未随库分发）). Populate it with diverse, believable artifacts — Persona Creation, Pocket Litter, Artifact Diversity, Application Diversity — so the environment survives adversary scrutiny.
 
 ### 6. Define gating criteria and rules of engagement
 Document, before deployment: what the adversary is allowed to reach, the maximum blast radius, the trigger for tear-down or hand-off to IR, evidence preservation steps, and who has authority to escalate. **Affect Activities are limited to the defender's own network** — never act on infrastructure you do not own.
@@ -150,7 +150,7 @@ Score the operation against the Operational Objectives from Step 2. Capture what
 
 ## Output Format
 
-Produce an **Adversary Engagement Operation Plan** using `assets/template.md`, containing:
+Produce an **Adversary Engagement Operation Plan** using `template.md`（未随库分发）, containing:
 
 1. **Strategic context** — where DD&AE fits the cyber strategy; executive sponsor; legal sign-off reference.
 2. **Engagement Goals + Operational Objectives** — each objective falsifiable and time-bound.
@@ -162,3 +162,5 @@ Produce an **Adversary Engagement Operation Plan** using `assets/template.md`, c
 8. **After-action report** — objectives met/missed, intel produced, detections promoted to production, threat-model updates.
 
 Use `scripts/process.py` to validate technique→Activity coverage and generate the operation-plan skeleton from a threat-model input.
+
+> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`standards.md`、`template.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。

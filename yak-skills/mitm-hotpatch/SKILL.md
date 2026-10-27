@@ -11,7 +11,7 @@ when-to-use: 0. 相关路由
 
 ## 0. 相关路由
 
-- 总入口与三层体系：[yak](../yak/SKILL.md)
+- 总入口与三层体系：yak
 - Web Fuzzer 热加载（单 Tab 发包加解密/重试）：[webfuzzer-hotpatch](../webfuzzer-hotpatch/SKILL.md)
 - 全局热加载（先于模块执行的全系统 hook）：[global-hotpatch](../global-hotpatch/SKILL.md)
 
@@ -165,3 +165,5 @@ printf 'POST /api/order/create HTTP/1.1\r\nHost: shop.example.com\r\nContent-Typ
 - yak-project-public 030 (2025-10-24) Yakit 热加载实战技巧
 - yak-project-public 024 (2025-12-05) Mock 重塑无污染客户端测试
 - 引擎实现：`common/yak/hook_mixed_plugin_caller.go`
+
+> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`SKILL.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。

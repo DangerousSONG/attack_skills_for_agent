@@ -19,7 +19,7 @@ Before going deep, consider loading:
 
 ### Advanced Reference
 
-Also load [DOCKER_ESCAPE_CHAINS.md](./DOCKER_ESCAPE_CHAINS.md) when you need:
+Also load DOCKER_ESCAPE_CHAINS.md when you need:
 - Step-by-step escape chains for common misconfigurations
 - Docker-in-Docker escape scenarios
 - Kubernetes-specific escape paths with full command sequences
@@ -148,3 +148,5 @@ ip route               # Can modify routing?
 ```
 
 > 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。
+
+> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`DOCKER_ESCAPE_CHAINS.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。

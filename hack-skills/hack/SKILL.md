@@ -32,12 +32,12 @@ This file is not an exploit cookbook. Weaponized details live in deep topic skil
 
 Load on demand:
 
-- Red-team execution → [RED_TEAM.md](./RED_TEAM.md)
-- Test matrix and effort → [TEST_MATRIX.md](./TEST_MATRIX.md)
-- Blue-team execution → [BLUE_TEAM.md](./BLUE_TEAM.md)
-- Code audit → [CODE_AUDIT.md](./CODE_AUDIT.md)
-- Source leak → [SOURCE_LEAK.md](./SOURCE_LEAK.md)
-- Evidence and report → [EVIDENCE_REPORT.md](./EVIDENCE_REPORT.md)
+- Red-team execution → RED_TEAM.md
+- Test matrix and effort → TEST_MATRIX.md
+- Blue-team execution → BLUE_TEAM.md
+- Code audit → CODE_AUDIT.md
+- Source leak → SOURCE_LEAK.md
+- Evidence and report → EVIDENCE_REPORT.md
 
 ## 0. Task Start Gate
 
@@ -73,14 +73,14 @@ Do not expand onto unauthorized assets.
 
 | User intent | Primary flow | Load |
 |---|---|---|
-| Pentest / red team / foothold / SRC | §§3–5 | [RED_TEAM.md](./RED_TEAM.md), [TEST_MATRIX.md](./TEST_MATRIX.md) |
-| Code audit / whitebox / find sinks | §3 R6 | [CODE_AUDIT.md](./CODE_AUDIT.md) |
-| Source leak / Git leak / secret leak | §3 R5 | [SOURCE_LEAK.md](./SOURCE_LEAK.md), [insecure-source-code-management](../insecure-source-code-management/SKILL.md) |
-| Middleware / gateway / component audit | §3 R7 | [RED_TEAM.md](./RED_TEAM.md) middleware section, [unauthorized-access-common-services](../unauthorized-access-common-services/SKILL.md) |
-| Alert triage / SOC / hunting | Blue quality gate | [BLUE_TEAM.md](./BLUE_TEAM.md) |
-| Detection rules | Blue B6 | [BLUE_TEAM.md](./BLUE_TEAM.md), template in [EVIDENCE_REPORT.md](./EVIDENCE_REPORT.md) |
-| IR / forensics / containment | Blue B7 | [BLUE_TEAM.md](./BLUE_TEAM.md), [memory-forensics-volatility](../memory-forensics-volatility/SKILL.md), [traffic-analysis-pcap](../traffic-analysis-pcap/SKILL.md) |
-| Write the report | §6 | [EVIDENCE_REPORT.md](./EVIDENCE_REPORT.md) |
+| Pentest / red team / foothold / SRC | §§3–5 | RED_TEAM.md, TEST_MATRIX.md |
+| Code audit / whitebox / find sinks | §3 R6 | CODE_AUDIT.md |
+| Source leak / Git leak / secret leak | §3 R5 | SOURCE_LEAK.md, [insecure-source-code-management](../insecure-source-code-management/SKILL.md) |
+| Middleware / gateway / component audit | §3 R7 | RED_TEAM.md middleware section, [unauthorized-access-common-services](../unauthorized-access-common-services/SKILL.md) |
+| Alert triage / SOC / hunting | Blue quality gate | BLUE_TEAM.md |
+| Detection rules | Blue B6 | BLUE_TEAM.md, template in EVIDENCE_REPORT.md |
+| IR / forensics / containment | Blue B7 | BLUE_TEAM.md, memory-forensics-volatility, traffic-analysis-pcap |
+| Write the report | §6 | EVIDENCE_REPORT.md |
 
 When a task crosses red and blue, freeze evidence for the current phase before switching role.
 
@@ -109,7 +109,7 @@ With a URL or an application in hand, map the surface first: [attack-surface-map
 | Repeated param names / WAF-app parse mismatch | HPP | [http-parameter-pollution](../http-parameter-pollution/SKILL.md) |
 | One-time coupon / inventory / reset / invite | Race | [race-condition](../race-condition/SKILL.md) |
 | XML/XSLT templates | XSLT | [xslt-injection](../xslt-injection/SKILL.md) |
-| `.git` / `.svn` / `.env` / backups / public buckets | Source leak | [SOURCE_LEAK.md](./SOURCE_LEAK.md) |
+| `.git` / `.svn` / `.env` / backups / public buckets | Source leak | SOURCE_LEAK.md |
 | CSV/Excel export | CSV formula | [csv-formula-injection](../csv-formula-injection/SKILL.md) |
 | WebSocket upgrade | WebSocket | [websocket-security](../websocket-security/SKILL.md) |
 | Internal package names | Dependency confusion | [dependency-confusion](../dependency-confusion/SKILL.md) |
@@ -123,7 +123,7 @@ Opening one check class does not mean firing only that one shot. Walk the rest o
 
 ### Step 3: Spend effort in this order
 
-Full pass/fail rules: [TEST_MATRIX.md](./TEST_MATRIX.md). Default order:
+Full pass/fail rules: TEST_MATRIX.md. Default order:
 
 1. Unauthenticated access to another user, tenant, or subject
 2. Auth takeover (issue session, reset, rebind, swap ticket) — in-session or password change counts
@@ -140,10 +140,12 @@ Finish the current asset cluster before expanding.
 
 ### R1. Impact, not compliance
 
-Shortest path to influential control first. Each candidate: can the attacker harm a real user or system *now*? The report narrative is the attack chain; CVSS is an appendix. Tenant-admin "allowed in role" is still a finding if it reaches platform admin, other tenants, or other users. Rank findings with the impact ladder in [RED_TEAM.md](./RED_TEAM.md); layer 7 (pure compliance) is appendix-only.
+Shortest path to influential control first. Each candidate: can the attacker harm a real user or system *now*? The report narrative is the attack chain; CVSS is an appendix. Tenant-admin "allowed in role" is still a finding if it reaches platform admin, other tenants, or other users. Rank findings with the impact ladder in RED_TEAM.md; layer 7 (pure compliance) is appendix-only.
 
 ### R5. Source leak: mine the clue to the end
 
-Do not stop at "`.git` exposed" or "repo is public". [SOURCE_LEAK.md](./SOURCE_LEAK.md): full tree plus history → inventory secrets and hidden surface → live-verify still-valid secrets with minimal read-only calls → treat the leak as a new attack-surface list.
+Do not stop at "`.git` exposed" or "repo is public". SOURCE_LEAK.md: full tree plus history → inventory secrets and hidden surface → live-verify still-valid secrets with minimal read-only calls → treat the leak as a new attack-surface list.
 
 > 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。
+
+> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`BLUE_TEAM.md`、`CODE_AUDIT.md`、`EVIDENCE_REPORT.md`、`RED_TEAM.md`、`SKILL.md`、`SOURCE_LEAK.md`、`TEST_MATRIX.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。

@@ -19,7 +19,7 @@ when-to-use: >-
 
 ### Advanced Reference
 
-Also load [BLOCK_CIPHER_ATTACKS.md](./BLOCK_CIPHER_ATTACKS.md) when you need:
+Also load BLOCK_CIPHER_ATTACKS.md when you need:
 - Detailed attack scripts with full Python implementations
 - Step-by-step byte-at-a-time ECB walkthrough
 - PadBuster usage and custom padding oracle scripts
@@ -135,3 +135,5 @@ Modified:  P'_i[j] = D_K(C_i)[j] ⊕ C'_{i-1}[j]
 ```
 
 > 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。
+
+> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`BLOCK_CIPHER_ATTACKS.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。

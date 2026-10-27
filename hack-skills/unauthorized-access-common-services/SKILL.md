@@ -19,7 +19,7 @@ when-to-use: >-
 
 ### Comprehensive Port Reference
 
-Also load [PORT_SERVICE_MATRIX.md](./PORT_SERVICE_MATRIX.md) when you need:
+Also load PORT_SERVICE_MATRIX.md when you need:
 - Full exploitation matrix organized by port number (20+ services)
 - Enumeration, brute force, and post-exploitation per service
 - Quick triage during nmap/masscan output analysis
@@ -145,3 +145,5 @@ rsync -av /tmp/evil_cron TARGET::MODULE/cron.d/backdoor
 ```
 
 > 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。
+
+> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`PORT_SERVICE_MATRIX.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。

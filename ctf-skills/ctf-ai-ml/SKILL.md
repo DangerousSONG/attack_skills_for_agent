@@ -32,9 +32,9 @@ brew install python@3
 
 ## Additional Resources
 
-- [model-attacks.md](model-attacks.md) - Model weight perturbation negation, model inversion via gradient descent, neural network encoder collision, LoRA adapter weight merging, model extraction via query API, membership inference attack
-- [adversarial-ml.md](adversarial-ml.md) - Adversarial example generation (FGSM, PGD, C&W), adversarial patch generation, evasion attacks on ML classifiers, data poisoning, backdoor detection in neural networks
-- [llm-attacks.md](llm-attacks.md) - Prompt injection (direct/indirect), LLM jailbreaking, token smuggling, context window manipulation, tool use exploitation
+- model-attacks.md - Model weight perturbation negation, model inversion via gradient descent, neural network encoder collision, LoRA adapter weight merging, model extraction via query API, membership inference attack
+- adversarial-ml.md - Adversarial example generation (FGSM, PGD, C&W), adversarial patch generation, evasion attacks on ML classifiers, data poisoning, backdoor detection in neural networks
+- llm-attacks.md - Prompt injection (direct/indirect), LLM jailbreaking, token smuggling, context window manipulation, tool use exploitation
 
 ---
 
@@ -116,3 +116,5 @@ print(f'Shape: {img.shape}, Range: [{img.min():.3f}, {img.max():.3f}]')
 
 - **Gradient-based input recovery:** Using model gradients to reconstruct private training data from shared gradients (federated learning attacks). See [model-attacks.md](model-attacks.md#ml-model-inversion-via-gradient-descent-bsidessf-2025).
 - **Activation maximization:** Optimizing input to maximize a specific neuron's activation, revealing what the network has learned.
+
+> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`adversarial-ml.md`、`llm-attacks.md`、`model-attacks.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。

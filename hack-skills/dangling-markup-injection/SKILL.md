@@ -18,7 +18,7 @@ when-to-use: >-
 - [csp-bypass-advanced](../csp-bypass-advanced/SKILL.md) when CSP blocks JS execution — dangling markup bypasses script restrictions
 - [csrf-cross-site-request-forgery](../csrf-cross-site-request-forgery/SKILL.md) when dangling markup steals CSRF tokens for subsequent CSRF attacks
 - [crlf-injection](../crlf-injection/SKILL.md) when CRLF enables HTML injection in HTTP response
-- [web-cache-deception](../web-cache-deception/SKILL.md) when dangling markup + cache poisoning amplifies the attack
+- web-cache-deception when dangling markup + cache poisoning amplifies the attack
 
 ---
 
@@ -146,3 +146,5 @@ Works in older browsers that support the `background` attribute on table element
 **Blocked by**: `img-src` CSP directive
 
 > 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。
+
+> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`SKILL.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。

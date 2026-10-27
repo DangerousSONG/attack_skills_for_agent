@@ -7,19 +7,19 @@ when-to-use: >-
 
 # SKILL: Business Logic Vulnerabilities — Expert Attack Playbook
 
-> **AI LOAD INSTRUCTION**: Business logic flaws are scanner-invisible and high-reward on bug bounty. This skill covers race conditions, price manipulation, workflow bypass, coupon/referral abuse, negative values, and state machine attacks. These require human reasoning, not automation. For specific exploitation techniques (payment precision/overflow, captcha bypass, password reset flaws, user enumeration), load the companion [SCENARIOS.md](./SCENARIOS.md). For the workflow approach itself (modeling → state machine → attack-surface matrix → human judgement) load [METHODOLOGY.md](./METHODOLOGY.md). For the per-module check items load [CHECKLIST.md](./CHECKLIST.md).
+> **AI LOAD INSTRUCTION**: Business logic flaws are scanner-invisible and high-reward on bug bounty. This skill covers race conditions, price manipulation, workflow bypass, coupon/referral abuse, negative values, and state machine attacks. These require human reasoning, not automation. For specific exploitation techniques (payment precision/overflow, captcha bypass, password reset flaws, user enumeration), load the companion SCENARIOS.md. For the workflow approach itself (modeling → state machine → attack-surface matrix → human judgement) load METHODOLOGY.md. For the per-module check items load CHECKLIST.md.
 
 ### Companion files
 
 | File | When to load |
 |---|---|
-| [METHODOLOGY.md](./METHODOLOGY.md) | Need the 5-phase workflow, attack-surface 5×N matrix, human-judgement decision tree |
-| [CHECKLIST.md](./CHECKLIST.md) | Going through a target module-by-module (login / register / payment / IDOR / privacy) and want every line item with why+verify |
-| [SCENARIOS.md](./SCENARIOS.md) | Drilling deeper into payment precision/overflow, captcha bypass, password reset, enumeration, frontend bypass |
+| METHODOLOGY.md | Need the 5-phase workflow, attack-surface 5×N matrix, human-judgement decision tree |
+| CHECKLIST.md | Going through a target module-by-module (login / register / payment / IDOR / privacy) and want every line item with why+verify |
+| SCENARIOS.md | Drilling deeper into payment precision/overflow, captcha bypass, password reset, enumeration, frontend bypass |
 
 ### Extended Scenarios
 
-Also load [SCENARIOS.md](./SCENARIOS.md) when you need:
+Also load SCENARIOS.md when you need:
 - Payment precision & integer overflow attacks — 32-bit overflow to negative, decimal rounding exploitation, negative shipping fees
 - Payment parameter tampering checklist — price, discount, currency, gateway, return_url fields
 - Condition race practical patterns — parallel coupon application, gift card double-spend with Burp group send
@@ -143,3 +143,5 @@ def queueRequests(target, wordlists):
 Result: the per-phone limiter races and many requests slip through, generating multiple distinct verification codes (a real SMS-bombing case). Root cause: counter increment is non-atomic vs. the read.
 
 > 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。
+
+> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`CHECKLIST.md`、`METHODOLOGY.md`、`SCENARIOS.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。

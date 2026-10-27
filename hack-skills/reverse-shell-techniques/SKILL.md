@@ -19,7 +19,7 @@ Before going deep, consider loading:
 
 ### Quick Reference
 
-Also load [SHELL_CHEATSHEET.md](./SHELL_CHEATSHEET.md) when you need:
+Also load SHELL_CHEATSHEET.md when you need:
 - Complete one-liner reverse shells for 20+ languages
 - Copy-paste ready payloads with placeholder substitution
 
@@ -148,3 +148,5 @@ script /dev/null -c bash
 socat file:`tty`,raw,echo=0 tcp-listen:4444
 
 > 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。
+
+> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`SHELL_CHEATSHEET.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。

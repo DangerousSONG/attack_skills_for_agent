@@ -7,7 +7,7 @@ when-to-use: >-
 
 # SKILL: SQL Injection — Expert Attack Playbook
 
-> **AI LOAD INSTRUCTION**: Advanced SQLi techniques. Assumes basic UNION/error/boolean-blind fundamentals known. Focuses on: per-database exploitation, out-of-band exfiltration, second-order injection, parameterized query bypass scenarios, filter evasion, and escalation to OS. For real-world CVE cases, SMB/DNS OOB exfiltration, INSERT/UPDATE injection patterns, and framework-specific exploitation (ThinkPHP, Django GIS), load the companion [SCENARIOS.md](./SCENARIOS.md).
+> **AI LOAD INSTRUCTION**: Advanced SQLi techniques. Assumes basic UNION/error/boolean-blind fundamentals known. Focuses on: per-database exploitation, out-of-band exfiltration, second-order injection, parameterized query bypass scenarios, filter evasion, and escalation to OS. For real-world CVE cases, SMB/DNS OOB exfiltration, INSERT/UPDATE injection patterns, and framework-specific exploitation (ThinkPHP, Django GIS), load the companion SCENARIOS.md.
 
 ## 0. RELATED ROUTING
 
@@ -17,7 +17,7 @@ when-to-use: >-
 
 ### Extended Scenarios
 
-Also load [SCENARIOS.md](./SCENARIOS.md) when you need:
+Also load SCENARIOS.md when you need:
 - SMB out-of-band exfiltration via `LOAD_FILE` + UNC paths (Windows MySQL)
 - KEY injection / URI injection / non-parameter injection points
 - INSERT/DELETE/UPDATE statement injection differences
@@ -27,7 +27,7 @@ Also load [SCENARIOS.md](./SCENARIOS.md) when you need:
 
 ### Advanced Reference
 
-Also load [SQLMAP_ADVANCED.md](./SQLMAP_ADVANCED.md) when you need:
+Also load SQLMAP_ADVANCED.md when you need:
 - SQLMap tamper scripts matrix and WAF bypass tamper chain recipes (space2comment, between, charencode, etc.)
 - `--technique`, `--risk`/`--level` combinations and `--second-url` for second-order injection
 - `--os-shell` / `--os-pwn` OS-level exploitation via SQLMap
@@ -123,3 +123,5 @@ current_user           -- current user
 ---
 
 > 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。
+
+> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`SCENARIOS.md`、`SQLMAP_ADVANCED.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。

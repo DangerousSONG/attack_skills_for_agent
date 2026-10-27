@@ -22,7 +22,7 @@ test-driven development: the proof is the test, and the finding does not exist u
 
 ## The proof bar (per class)
 
-A status code is not impact. See `skills/references/finding-evidence-standards.md`:
+A status code is not impact. See `finding-evidence-standards.md`（未随库分发）:
 SSRF needs the internal response; IDOR needs *another principal's* data; RCE needs command output;
 XSS needs script execution; open redirect needs an external destination.
 
@@ -36,7 +36,7 @@ Before any finding is recorded or reported:
 2. Pass it through the **REQUIRED** `finding-validator` agent (PASS / KILL / DOWNGRADE).
 3. Only a `[CONFIRMED]` survivor goes in the report. Severity must match what was demonstrated (CVSS honest).
 
-See `skills/references/finding-validation-runtime.md` for the 7-question gate.
+See `finding-validation-runtime.md`（未随库分发） for the 7-question gate.
 
 ## Read-first, never name-guess
 
@@ -82,3 +82,5 @@ is about *how well-grounded the claim is*. A High-confidence claim of a Low-impa
 | "The solver timed out, so it's not exploitable" | A tool limit is `feasibility:null` (manual), never `false`. |
 
 A short list of CONFIRMED findings beats a long list of POSSIBLEs. Killing a false positive is success.
+
+> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`finding-evidence-standards.md`、`finding-validation-runtime.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。

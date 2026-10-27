@@ -80,3 +80,45 @@ print('无fm原本列表:', len(no_fm_list))
 for x in no_fm_list[:30]:
     print('  ', x)
 print('瘦身拆分:', slimmed, ' (其中合并进已有reference:', ref_appended, ')')
+
+# ---------- C. 引用完整性检查（断链门禁） ----------
+# 校验 SKILL.md 内引用的相对路径文件是否存在；已标注（未随库分发）的豁免；
+# 常见环境文件（攻击目标/依赖清单，非参考文档）不计断链。
+ENV_FILES = {'robots.txt','flag.txt','requirements.txt','package.json','pyproject.toml',
+             'setup.py','setup.cfg','.env','docker-compose.yml','docker-compose.yaml',
+             'composer.json','go.mod','cargo.toml','gemfile','pom.xml','build.gradle',
+             '.gitignore','readme.md','big.txt','common.txt','rockyou.txt','words.txt'}
+REF_PATTERNS = [
+    re.compile(r'\]\(([^)\s]+\.(?:md|markdown|txt|py|sh|yml|yaml|json|csv))\)'),
+    re.compile(r'`([^`\s]+\.(?:md|markdown|txt))`'),
+    re.compile(r'(?:同目录|参考|详见|见)\s*[「\'"]?([\w\-.一-鿿]+\.md)'),
+]
+ANNOTATED_SPAN = re.compile(r'[^\s（）|，,]+（未随库分发）')
+broken = 0
+for dp, dirs, files in os.walk(ROOT):
+    if 'SKILL.md' not in files:
+        continue
+    p = os.path.join(dp, 'SKILL.md')
+    s = io.open(p, encoding='utf-8', errors='replace').read()
+    body = s.split('> 📎 **参考文档说明**')[0]   # 说明块内是已知清单，豁免
+    for line in body.split('\n'):
+        # 已标注"未随库分发"的提及整段豁免：先抹掉再匹配
+        line = ANNOTATED_SPAN.sub('', line)
+        for pat in REF_PATTERNS:
+            for m in pat.finditer(line):
+                ref = m.group(1)
+                if ref.startswith(('http', '//')):
+                    continue
+                ref = ref.split('#')[0].strip()
+                if not ref:
+                    continue
+                base = os.path.basename(ref).lower()
+                if base in ENV_FILES:
+                    continue
+                if not os.path.exists(os.path.normpath(os.path.join(dp, ref))):
+                    rel = os.path.relpath(p, ROOT)
+                    print('  断链: {0}  ->  {1}'.format(rel, ref))
+                    broken += 1
+print('引用断链(未标注):', broken)
+if broken:
+    print('提示: 修复方式二选一——补齐文件，或在该文件处以（未随库分发）标注并在文末加参考文档说明块')

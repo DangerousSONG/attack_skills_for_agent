@@ -14,7 +14,7 @@ when-to-use: >-
 
 ## 0. RELATED ROUTING
 
-- [web-cache-deception](../web-cache-deception/SKILL.md) when Host injection is combined with cache behavior
+- web-cache-deception when Host injection is combined with cache behavior
 - [ssrf-server-side-request-forgery](../ssrf-server-side-request-forgery/SKILL.md) when Host header routes requests to internal services
 - [open-redirect](../open-redirect/SKILL.md) when Host injection causes redirect to attacker domain
 - [waf-bypass-techniques](../waf-bypass-techniques/SKILL.md) when Host manipulation helps bypass WAF routing
@@ -148,3 +148,5 @@ Hidden:  Host: localhost → server status page
 ---
 
 > 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。
+
+> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`SKILL.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。

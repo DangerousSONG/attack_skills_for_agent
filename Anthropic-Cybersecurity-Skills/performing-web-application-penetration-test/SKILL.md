@@ -140,10 +140,17 @@ Compile all findings into a structured report:
 
 ## Tools & Systems
 
-- **Burp Suite Professional**: Primary web application testing proxy providing interception, scanning, and manual testing tools including Repeater, Intruder, and Sequencer
+- **Burp Suite Professional**: Primary web application testing proxy providing interception, Repeater, Intruder, and Sequencer
 - **ffuf**: Fast web fuzzer for directory/file discovery, parameter fuzzing, and virtual host enumeration
 - **sqlmap**: Automated SQL injection detection and exploitation tool supporting all major database engines and injection techniques
 - **Nuclei**: Template-based vulnerability scanner with community-maintained templates for known CVEs and misconfigurations
 - **SecLists**: Curated collection of wordlists for fuzzing, credential testing, and payload delivery used throughout web application testing
+
+## 实战教训：认证死结与 fresh-install 目标（2026-10 靶场复盘）
+
+1. **环境凭证优先于字典爆破**：登录卡住时，第一反应是在环境里找凭证——同网段其他服务的配置文件、安装脚本、数据库 dump、镜像内的 README/历史层、默认安装向导未完成留下的安装态；字典爆破只在确认环境无凭证后进行，且先算成本（尝试数 × 单次响应时间）。
+2. **fresh-install CMS 先查安装态**：新装未初始化完成的 CMS（Cacti/WordPress/phpMyAdmin 等）优先打 `install.php` / setup wizard（常被允许未认证访问或存在安装态重置管理员的可能），再考虑认证绕过。
+3. **单点攻坚限时**：一个认证/利用点超过 20-30 分钟（约 50 次调用）无进展，必须回退换路或转攻并行的其他 marker；不要因为一个点阻塞整条链（复盘案例：Cacti 认证死结 52 分钟，导致链上 neo4j 等后续目标全部不可达）。
+4. **推理出的假设要跟完**：轨迹中已推理出"密码可能为空/环境藏 CTF 密码"时，先穷尽验证该假设的取证路径，再转向暴力穷举。
 
 > 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。

@@ -11,7 +11,7 @@ when-to-use: 0. 相关路由
 
 ## 0. 相关路由
 
-- 总入口与三层体系：[yak](../yak/SKILL.md)
+- 总入口与三层体系：yak
 - 模块级 MITM 热加载：[mitm-hotpatch](../mitm-hotpatch/SKILL.md)
 - 模块级 Web Fuzzer 热加载：[webfuzzer-hotpatch](../webfuzzer-hotpatch/SKILL.md)
 
@@ -119,3 +119,5 @@ printf 'HTTP/1.1 500 Internal Server Error\r\nContent-Length: 4\r\n\r\nboom' > /
 - yak-project-public 030 (2025-10-24) Yakit 热加载实战技巧
 - yak-project-public 085 (2024-11-27) 全局配置插件环境变量
 - 引擎实现：`common/yakgrpc/grpc_global_hotpatch_test.go`
+
+> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`SKILL.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。

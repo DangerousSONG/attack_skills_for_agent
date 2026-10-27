@@ -17,7 +17,7 @@ when-to-use: >-
 
 ### Advanced Reference
 
-Also load [JAVA_GADGET_CHAINS.md](./JAVA_GADGET_CHAINS.md) when you need:
+Also load JAVA_GADGET_CHAINS.md when you need:
 - Java gadget chain version compatibility matrix (CommonsCollections 1–7, CommonsBeanutils, Spring, JDK-only, Groovy, Hibernate, ROME, C3P0, etc.)
 - SnakeYAML gadget (ScriptEngineManager/URLClassLoader) with exploit JAR structure
 - Hessian/Kryo/Avro/XStream deserialization patterns and traffic fingerprints
@@ -142,3 +142,5 @@ java -cp ysoserial.jar ysoserial.exploit.RMIRegistryExploit TARGET 1099 CommonsC
 ```
 
 > 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。
+
+> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`JAVA_GADGET_CHAINS.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。

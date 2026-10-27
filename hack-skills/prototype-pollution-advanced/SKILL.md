@@ -17,7 +17,7 @@ when-to-use: >-
 
 ### Advanced Reference
 
-Load [KNOWN_GADGETS.md](./KNOWN_GADGETS.md) for the comprehensive gadget table by framework/library with polluted properties, trigger conditions, impact, and affected versions.
+Load KNOWN_GADGETS.md for the comprehensive gadget table by framework/library with polluted properties, trigger conditions, impact, and affected versions.
 
 ---
 
@@ -147,3 +147,5 @@ _.template('hello')();  // sourceURL injected into Function constructor
 | Backbone.js | `_.template` | `sourceURL` | XSS |
 
 > 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。
+
+> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`KNOWN_GADGETS.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。
