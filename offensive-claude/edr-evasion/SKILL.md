@@ -1,6 +1,6 @@
 ---
 name: edr-evasion
-description: Use when bypassing EDR/AV to run a payload — hook unhooking, direct/indirect syscalls, PPID spoofing, process injection, AMSI bypass, ETW patching, memory/sleep encryption, behavioral evasion
+description: "EDR/AV 规避运行载荷:hook unhook、直接/间接系统调用、PPID 欺骗、进程注入、AMSI 绕过、ETW 补丁、内存/睡眠加密、行为规避。信号:edr规避,直接系统调用,unhook。"
 when-to-use: Use when bypassing EDR/AV to run a payload — hook unhooking, direct/indirect syscalls, PPID spoofing, process injection, AMSI bypass, ETW patching, memory/sleep encryption, behavioral evasion
 metadata:
   type: offensive

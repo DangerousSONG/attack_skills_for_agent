@@ -1,6 +1,6 @@
 ---
 name: conducting-phishing-incident-response
-description: Respond to phishing incidents by analyzing reported emails, extracting indicators, sandboxing URLs/attachments, assessing credential compromise, quarantining malicious messages organization-wide, and remediating affected accounts. Use when investigating a reported phishing or credential-phishing email, a suspected spearphishing incident, or when a mailbox-wide purge and account remediation is needed.
+description: "钓鱼事件响应:分析举报邮件、提取 IOC、沙箱跑 URL/附件、评估凭据泄露、全组织隔离清除与账户修复。信号:钓鱼响应,事件响应,ioc,邮件分析,凭据泄露。"
 when-to-use: Respond to phishing incidents by analyzing reported emails, extracting indicators, sandboxing URLs/attachments, assessing credential compromise, quarantining malicious messages organization-wide, and 
 domain: cybersecurity
 subdomain: incident-response

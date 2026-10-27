@@ -1,6 +1,6 @@
 ---
 name: ssrf-server-side-request-forgery
-description: "SSRF playbook. Use when the server fetches URLs, resolves hostnames, imports remote content, or can be driven toward internal networks, cloud metadata, or secondary protocols."
+description: "SSRF:服务器抓取 URL、解析主机名、导入远程内容,可被导向内网/云元数据/二次协议。信号:ssrf,服务端请求伪造,云元数据,内网访问,协议走私。"
 when-to-use: >-
   SSRF playbook. Use when the server fetches URLs, resolves hostnames, imports remote content, or can be driven toward internal networks, cloud metadata, or secondary protocols.
 ---

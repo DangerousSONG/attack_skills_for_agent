@@ -1,6 +1,6 @@
 ---
 name: conducting-domain-persistence-with-dcsync
-description: Perform DCSync attacks by abusing MS-DRSR replication rights (DS-Replication-Get-Changes/-All) to impersonate a Domain Controller and extract KRBTGT, Domain Admin, and service account hashes for Golden Ticket forging, typically with Mimikatz. Use in authorized engagements after finding principals with replication rights, to establish long-term domain persistence, or to validate detections for replication abuse.
+description: "滥用 MS-DRSR 复制权限(DS-Replication-Get-Changes)伪装域控执行 DCSync,导出 KRBTGT/域管/服务账户哈希用于造黄金票据信号:dcsync,域持久化。"
 when-to-use: Perform DCSync attacks by abusing MS-DRSR replication rights (DS-Replication-Get-Changes/-All) to impersonate a Domain Controller and extract KRBTGT, Domain Admin, and service account hashes for Golde
 domain: cybersecurity
 subdomain: red-teaming

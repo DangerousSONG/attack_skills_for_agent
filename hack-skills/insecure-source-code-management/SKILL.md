@@ -1,6 +1,6 @@
 ---
 name: insecure-source-code-management
-description: "This skill covers detection and recovery of exposed version-control metadata, common backup artifacts, and related misconfigurations. Use only in **authorized** assessments."
+description: "暴露的版本控制元数据检测与恢复:.git/.svn 泄露、备份产物与相关配置错误(仅授权测试)。信号:git泄露,svn泄露,源码暴露,备份文件,版本控制。"
 when-to-use: 0. QUICK START
   Source control and artifact exposure (.git, .svn, .hg, backups, .env). Use when recon finds VCS paths, 403 on hidden dirs, or backup/config leaks during authorized testing.
 ---

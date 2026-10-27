@@ -1,6 +1,6 @@
 ---
 name: finding-discipline
-description: Use when about to record, claim, rate the severity of, or report any security finding — before marking anything [CONFIRMED] or writing it into the report
+description: "发现纪律:记录/定级/报告任何安全发现前,先过此 skill 再标 [CONFIRMED]。信号:发现验证,定级纪律,误报控制,报告前置。"
 when-to-use: Use when about to record, claim, rate the severity of, or report any security finding — before marking anything [CONFIRMED] or writing it into the report
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: web3-security-tooling
-description: Guide for security tooling (analyzers, fuzzers, decompilers, compilers) and consistent placement in README.md.
+description: "Web3 安全工具(分析器/fuzzer/反编译器)的资源组织指南。信号:web3工具,合约审计工具,反编译,区块链安全。"
 when-to-use: Guide for security tooling (analyzers, fuzzers, decompilers, compilers) and consistent placement in README.md.
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: jndi-injection
-description: "JNDI injection playbook. Use when Java applications perform JNDI lookups with attacker-controlled names, especially via Log4j2, Spring, or any code path reaching InitialContext.lookup()."
+description: "JNDI 注入:Java 应用以攻击者可控名称做 JNDI 查找,Log4j2、Spring 等到 InitialContext.lookup() 的代码路径。信号:jndi注入,log4j。"
 when-to-use: >-
   JNDI injection playbook. Use when Java applications perform JNDI lookups with attacker-controlled names, especially via Log4j2, Spring, or any code path reaching InitialContext.lookup().
 ---

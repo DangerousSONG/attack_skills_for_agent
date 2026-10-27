@@ -1,6 +1,6 @@
 ---
 name: expression-language-injection
-description: "Expression Language injection playbook. Use when Java EL, SpEL, OGNL, or MVEL expressions may evaluate attacker-controlled input in Spring, Struts2, Confluence, or similar frameworks."
+description: "表达式语言注入:Java EL/SpEL/OGNL/MVEL 在 Spring/Struts2/Confluence 等框架中求值攻击者输入。信号:表达式注入,spel,ognl,el注入。"
 when-to-use: >-
   Expression Language injection playbook. Use when Java EL, SpEL, OGNL, or MVEL expressions may evaluate attacker-controlled input in Spring, Struts2, Confluence, or similar frameworks.
 ---

@@ -1,6 +1,6 @@
 ---
 name: scope-discipline
-description: Use when about to send a request to, scan, enumerate, exploit, or otherwise interact with any host, IP, URL, or asset — before the first packet reaches a target
+description: "范围纪律:对任何主机/IP/URL 发第一个包之前,先过此 skill 确认在授权范围内。信号:范围确认,授权边界,纪律,开工前置。"
 when-to-use: Use when about to send a request to, scan, enumerate, exploit, or otherwise interact with any host, IP, URL, or asset — before the first packet reaches a target
 ---
 

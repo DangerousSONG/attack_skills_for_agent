@@ -1,6 +1,6 @@
 ---
 name: moving-laterally-with-netexec
-description: Use NetExec (nxc) to validate credentials, enumerate SMB shares/users/policy, password-spray safely across lockout thresholds, execute commands, and dump SAM/LSA/NTDS credentials across SMB, WinRM, LDAP, MSSQL, SSH, and other protocol modules. Use during authorized internal penetration tests to find lateral-movement paths after obtaining credentials or hashes, or to conduct controlled password spraying and post-exploitation on in-scope hosts.
+description: "用 NetExec(nxc)验证凭据、枚举 SMB 共享/用户/策略、安全口令喷射、远程执行、跨 SMB/WinRM/LDAP/MSSQL/SSH 模块转储 SAM/信号:netexec,横向移动。"
 when-to-use: Use NetExec (nxc) to validate credentials, enumerate SMB shares/users/policy, password-spray safely across lockout thresholds, execute commands, and dump SAM/LSA/NTDS credentials across SMB, WinRM, LD
 domain: cybersecurity
 subdomain: penetration-testing

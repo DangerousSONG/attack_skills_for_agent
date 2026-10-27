@@ -1,6 +1,6 @@
 ---
 name: coercing-authentication-with-coercer-petitpotam
-description: Trigger machine account authentication with PetitPotam (MS-EFSR) and Coercer (MS-RPRN, MS-DFSNM, MS-FSRVP, MS-EVEN) via Coercer's scan/coerce/fuzz modes, feeding the coerced NTLM auth into a relay against AD CS Web Enrollment (ESC8), LDAP (RBCD), or SMB. Use in authorized engagements to complete a coercion-relay chain against a Domain Controller, or to validate coercion detections and signing/EPA mitigations.
+description: "用 PetitPotam(MS-EFSR)和 Coercer(MS-RPRN/MS-DFSNM 等)触发机器账户强制认证,配合中继打 AD CS Web 注册(E信号:强制认证,coercion。"
 when-to-use: Trigger machine account authentication with PetitPotam (MS-EFSR) and Coercer (MS-RPRN, MS-DFSNM, MS-FSRVP, MS-EVEN) via Coercer's scan/coerce/fuzz modes, feeding the coerced NTLM auth into a relay aga
 domain: cybersecurity
 subdomain: red-teaming

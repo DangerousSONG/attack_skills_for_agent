@@ -1,6 +1,6 @@
 ---
 name: webfuzzer-hotpatch
-description: "这是三层热加载体系中的'模块级 Web Fuzzer'专题。Web Fuzzer 热加载作用于单个 Fuzzer Tab 的发包流程，最典型的用途是'内网加密对抗'（请求加密、响应解密、签名注入）与'自动化决策'（重试、业务失败判定）。先读 Hook 签名与返回值语义，再看 `examples/` 下按 Hook 命名的示例，每个都可 `yak <file>` 自测。处理'前端加密各种 HACK "
+description: "Yakit Web Fuzzer 热加载:单 Tab 发包流程级 hook,典型用于内网加密对抗(请求加密/响应解密/签名注入)与自动化决策(重试/业务失败判信号:yakit,webfuzzer。"
 when-to-use: 0. 相关路由
   Yakit Web Fuzzer 热加载 (Hot Patch) 专题。当用户需要在 Web Fuzzer 单 Tab 发包时用代码自动加解密请求/响应、注入签名、智能重试、自定义业务失败判定、用 fuzztag 动态生成 payload、或从响应提取参数做关联测试时使用。覆盖 beforeRequest / afterRequest / retryHandler / customFailureChecker / mirrorHTTPFlow / mockHTTPRequest 与 {{yak(...)}} fuzztag。
 ---

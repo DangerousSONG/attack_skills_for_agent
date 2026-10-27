@@ -1,6 +1,6 @@
 ---
 name: opsec-discipline
-description: Use when about to take any outward or offensive action (request, payload, persistence, lateral movement, exfil, or feeding captured traffic to the model) — to decide detection footprint, cleanup, and secret redaction first
+description: "OPSEC 纪律:任何对外动作(请求/载荷/持久化/横向/外传)前先定检测足迹、清理与凭据脱敏。信号:opsec,行动纪律,检测足迹,痕迹清理,脱敏。"
 when-to-use: Use when about to take any outward or offensive action (request, payload, persistence, lateral movement, exfil, or feeding captured traffic to the model) — to decide detection footprint, cleanup, and 
 ---
 

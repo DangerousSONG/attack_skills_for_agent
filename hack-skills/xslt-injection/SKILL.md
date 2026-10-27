@@ -1,6 +1,6 @@
 ---
 name: xslt-injection
-description: "XSLT injection testing: processor fingerprinting, XXE and document() SSRF, EXSLT write primitives, PHP/Java/.NET extension RCE surfaces."
+description: "XSLT 注入:处理器指纹、XXE 与 document() SSRF、EXSLT 写原语、PHP/Java/.NET 扩展 RCE 面。信号:xslt注入,xxe,ssrf,exslt,rce。"
 when-to-use: >-
   XSLT injection testing: processor fingerprinting, XXE and document() SSRF, EXSLT write primitives, PHP/Java/.NET extension RCE surfaces. Use when user-controlled XSLT/stylesheet input or transform endpoints are in scope.
 ---

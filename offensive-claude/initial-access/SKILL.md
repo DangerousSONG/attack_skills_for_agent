@@ -1,6 +1,6 @@
 ---
 name: initial-access
-description: Use when gaining initial access to a target — phishing, payload delivery, HTML smuggling, ISO/IMG/MOTW bypass, supply-chain, credential stuffing, exposed-service exploitation
+description: "初始访问:钓鱼、载荷投递、HTML 走私、ISO/IMG/MOTW 绕过、供应链、凭据填充、暴露服务利用。信号:初始访问,钓鱼,html走私,motw,载荷投递,突破口。"
 when-to-use: Use when gaining initial access to a target — phishing, payload delivery, HTML smuggling, ISO/IMG/MOTW bypass, supply-chain, credential stuffing, exposed-service exploitation
 metadata:
   type: offensive

@@ -1,6 +1,6 @@
 ---
 name: api-recon-and-docs
-description: "Use this skill first when the target is a REST, mobile, or GraphQL API and you need to enumerate endpoints, documentation, versions, and hidden surface area before exploitation."
+description: "API 侦察:REST/移动/GraphQL 端点、文档、版本与隐藏面枚举,利用前置。信号:api枚举,端点发现,接口文档,版本探测,隐藏接口。"
 when-to-use: 1. PRIMARY GOALS
   API reconnaissance and documentation review playbook. Use when discovering endpoints, schemas, versions, OpenAPI specs, hidden docs, and surface area for API testing.
 ---

@@ -1,6 +1,6 @@
 ---
 name: privesc-windows
-description: Use when escalating privileges on a Windows host — SeImpersonate Potato chains (GodPotato/PrintNotifyPotato), service & DLL hijacking, UAC bypass (fodhelper/ICMLuaUtil), kernel EoP + BYOVD (CVE-2025-29824), token-rights abuse, LSASS/SAM/DPAPI credential harvesting
+description: "Windows 提权:Potato 链(GodPotato/PrintNotifyPotato)、DLL 劫持、UAC 绕过、凭据收割。信号:windows提权,potato,uac绕过。"
 when-to-use: Use when escalating privileges on a Windows host — SeImpersonate Potato chains (GodPotato/PrintNotifyPotato), service & DLL hijacking, UAC bypass (fodhelper/ICMLuaUtil), kernel EoP + BYOVD (CVE-2025-2
 metadata:
   type: offensive

@@ -1,6 +1,6 @@
 ---
 name: ctf-pwn
-description: Provides binary exploitation techniques for CTF challenges. Use when you already have a vulnerable native target or service and need to turn memory corruption or low-level primitives into code execution or privilege escalation, such as buffer overflows, format strings, heap bugs, ROP, ret2libc, shellcode, kernel exploitation, seccomp bypass, sandbox escape, or Windows/Linux exploit chains. Do not use it when the main blocker is understanding what the binary does; use reverse engineering first. Do not use it for pure web bugs, disk or packet forensics, or standalone crypto/math challenges.
+description: "CTF Pwn:栈溢出/格式化字符串/堆利用/ROP/ret2libc/shellcode/内核提权/seccomp 绕过/沙箱逃逸,把内存破坏原语变成代码执行。信号:ctf,pwn,栈溢出,rop。"
 when-to-use: Provides binary exploitation techniques for CTF challenges. Use when you already have a vulnerable native target or service and need to turn memory corruption or low-level primitives into code executi
 license: MIT
 compatibility: Requires filesystem-based agent (Claude Code or similar) with bash, Python 3, and internet access for tool installation.

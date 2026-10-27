@@ -1,6 +1,6 @@
 ---
 name: engagement-memory
-description: Use when recalling prior techniques at recon/weaponize, or recording a confirmed finding at report — cross-engagement pattern memory ranked by impact
+description: "跨任务记忆:侦察/武器化时召回既有技法,报告时记录已确认发现,按影响排序。信号:记忆,技法库,发现记录,跨任务。"
 when-to-use: Use when recalling prior techniques at recon/weaponize, or recording a confirmed finding at report — cross-engagement pattern memory ranked by impact
 metadata:
   type: support

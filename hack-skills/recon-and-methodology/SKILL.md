@@ -1,6 +1,6 @@
 ---
 name: recon-and-methodology
-description: "Reconnaissance and methodology playbook. Use when mapping assets, discovering endpoints, fingerprinting technology, and building a structured testing plan for a new target."
+description: "侦察方法论:资产测绘、端点发现、技术指纹、结构化测试计划。信号:侦察,资产测绘,端点发现,指纹,测试计划。"
 when-to-use: >-
   Reconnaissance and methodology playbook. Use when mapping assets, discovering endpoints, fingerprinting technology, and building a structured testing plan for a new target.
 ---

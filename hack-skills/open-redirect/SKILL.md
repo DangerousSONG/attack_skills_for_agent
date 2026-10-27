@@ -1,6 +1,6 @@
 ---
 name: open-redirect
-description: "Open redirect playbook. Use when URL parameters, form actions, or JavaScript sinks control navigation targets and may redirect users to attacker-controlled destinations."
+description: "开放重定向:URL 参数、form action、JS sink 控制跳转目标,重定向到攻击者地址。信号:开放重定向,重定向漏洞,url跳转,钓鱼链,跳转劫持。"
 when-to-use: >-
   Open redirect playbook. Use when URL parameters, form actions, or JavaScript sinks control navigation targets and may redirect users to attacker-controlled destinations.
 ---

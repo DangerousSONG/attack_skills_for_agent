@@ -1,6 +1,6 @@
 ---
 name: global-hotpatch
-description: "这是三层热加载体系中的'全局层'。全局热加载是 MITM 与 Web Fuzzer 共享的全系统级 hook，执行顺序为 `全局 HotPatch -> 模块 HotPatch`，同时只能启用 1 个。它最适合做'协议归一化'——一处定义全站加解密/签名/染色，MITM 和所有 Fuzzer Tab 自动生效。先读全局 vs 模块对比，再看 `examples/` 下按 Hook 命名的示例。"
+description: "Yakit 全局热加载:MITM 与 Web Fuzzer 共享的系统级 hook,一处定义全站加解密/签名/染色,协议归一化,同一时刻仅启用 1 个。信号:yakit,热加载,mitm,协议归一化。"
 when-to-use: 0. 相关路由
   Yakit 全局热加载 (Global Hot Patch) 专题。当用户需要一处配置、让 MITM 与所有 Web Fuzzer Tab 共享同一套 hook 时使用：全站透明加解密、统一签名/认证注入、动态 challenge 应答、全站染色脱敏、危险操作护栏。全局 hook 先于模块 hook 执行，同时只能启用一个。复用 beforeRequest / afterRequest / hijackHTTPRequest / hijackSaveHTTPFlow / mockHTTPRequest。
 ---

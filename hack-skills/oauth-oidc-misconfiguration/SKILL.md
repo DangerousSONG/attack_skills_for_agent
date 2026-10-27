@@ -1,6 +1,6 @@
 ---
 name: oauth-oidc-misconfiguration
-description: "Use this skill when the target uses OAuth 2.0 or OpenID Connect and you need a focused misconfiguration checklist: redirect URI validation, state and nonce handling, PKCE enforcement, token audience, "
+description: "OAuth 2.0/OIDC 配置错误清单:redirect URI 校验、state/nonce、PKCE 强制、令牌受众。信号:oauth,oidc,redirect_uri,pkce。"
 when-to-use: 1. WHEN TO LOAD THIS SKILL
   OAuth and OIDC misconfiguration testing playbook. Use when reviewing redirect URI handling, state and nonce validation, PKCE, token audience, callback binding, and identity-provider trust flaws.
 ---

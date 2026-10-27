@@ -84,7 +84,7 @@ def load_skills(from_git=False):
         tmp = os.path.join(ROOT, 'scripts', '_before_tmp')
         if not os.path.exists(tmp):
             os.makedirs(tmp)
-            subprocess.check_call('git archive HEAD tool-skills | tar -x -C scripts/_before_tmp', cwd=ROOT, shell=True,
+            subprocess.check_call('git archive HEAD | tar -x -C scripts/_before_tmp', cwd=ROOT, shell=True,
                                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     for dp, dirs, files in os.walk(ROOT):
         dirs[:] = [d for d in dirs if d not in ('.git', '_before_tmp')]
@@ -95,7 +95,7 @@ def load_skills(from_git=False):
         if parts[0] in REGISTERED or len(parts) < 2 or parts[0] == 'scripts':
             continue
         src = os.path.join(dp, 'SKILL.md')
-        if from_git and parts[0] == 'tool-skills':
+        if from_git:
             src = os.path.join(ROOT, 'scripts', '_before_tmp', slug, 'SKILL.md')
             if not os.path.exists(src):
                 continue

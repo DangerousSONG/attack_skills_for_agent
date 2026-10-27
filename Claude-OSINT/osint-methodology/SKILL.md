@@ -1,6 +1,6 @@
 ---
 name: osint-methodology
-description: "Comprehensive OSINT methodology for external red-team operations and authorized attack-surface assessments. Covers the 6-stage recon pipeline (seed → asset expansion → enrichment → exposure analysis → convergence → operator-armed active validation) with connector-resilience and stage-vs-gating discipline, asset-graph discipline, severity rubric, confidence upgrade workflows, time budgeting, identity-fabric mapping, breach×identity correlation with per-person identity dossiers, detectability tagging, detection-aware probing, WAF/CDN bypass, vulnerability prioritization, phishing infrastructure planning, bug bounty submission, and client deliverable templates. Use when planning or executing reconnaissance against authorized targets, mapping an organization's external attack surface, investigating a person/entity, or producing client deliverables."
+description: "六阶段 OSINT 侦察方法论管线:种子→资产扩展→增强→暴露分析→收敛→有限主动验证,含严重度分级、身份面测绘、时间预算与交付模板。信号:osint方法论,侦察管线,攻击面评估,情报工作流。"
 when-to-use: "Comprehensive OSINT methodology for external red-team operations and authorized attack-surface assessments. Covers the 6-stage recon pipeline (seed → asset expansion → enrichment → exposure analysis 
 version: 2.3
 sources: community, public_research

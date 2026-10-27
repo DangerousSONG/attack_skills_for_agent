@@ -1,6 +1,6 @@
 ---
 name: ai-agent-redteam
-description: Use when red-teaming an agentic AI / LLM application — indirect & zero-click prompt injection, MCP tool poisoning, persistent memory poisoning, excessive-agency tool abuse, multi-turn jailbreaks, PyRIT/Garak/Promptfoo harnesses
+description: "Agentic AI/LLM 应用红队:间接与零点击提示注入、MCP 工具投毒、持久记忆投毒、过度代理工具滥用、多轮越狱,PyRIT/Garak/Promptfoo 信号:agent红队,mcp投毒。"
 when-to-use: Use when red-teaming an agentic AI / LLM application — indirect & zero-click prompt injection, MCP tool poisoning, persistent memory poisoning, excessive-agency tool abuse, multi-turn jailbreaks, PyRI
 metadata:
   type: offensive

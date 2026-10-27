@@ -1,6 +1,6 @@
 ---
 name: unauthorized-access-common-services
-description: "Unauthorized access playbook for common exposed services. Use when Redis, Rsync, PHP-FPM, AJP/Ghostcat, Hadoop YARN, H2 Console, or similar management interfaces are exposed without authentication."
+description: "常见服务未授权访问:Redis/Rsync/PHP-FPM/AJP Ghostcat/Hadoop YARN/H2 Console 等管理面暴露。信号:未授权访问,redis,hadoop,ajp。"
 when-to-use: >-
   Unauthorized access playbook for common exposed services. Use when Redis, Rsync, PHP-FPM, AJP/Ghostcat, Hadoop YARN, H2 Console, or similar management interfaces are exposed without authentication.
 ---

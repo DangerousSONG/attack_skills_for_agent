@@ -1,6 +1,6 @@
 ---
 name: ssti-server-side-template-injection
-description: "SSTI playbook. Use when template expressions, server-side rendering, preview features, or templating engines may evaluate attacker-controlled content."
+description: "SSTI:模板表达式/服务端渲染/预览功能/模板引擎求值攻击者内容。信号:ssti,模板注入,服务端渲染,引擎指纹。"
 when-to-use: >-
   SSTI playbook. Use when template expressions, server-side rendering, preview features, or templating engines may evaluate attacker-controlled content.
 ---

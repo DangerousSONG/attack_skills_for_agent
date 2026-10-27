@@ -1,6 +1,6 @@
 ---
 name: solana-security
-description: Guide for Solana/Sealevel security research and where to organize Solana-specific resources in README.md.
+description: "Solana/Sealevel 安全研究资源组织指南。信号:solana,web3安全,合约审计,区块链安全。"
 when-to-use: Guide for Solana/Sealevel security research and where to organize Solana-specific resources in README.md.
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: windows-lateral-movement
-description: "Windows lateral movement playbook. Use when pivoting between Windows hosts via PsExec, WMI, WinRM, DCOM, RDP, pass-the-hash, overpass-the-hash, or pass-the-ticket techniques."
+description: "Windows 横向移动:PsExec/WMI/WinRM/DCOM/RDP、PtH/Overpass-the-Hash/PtT。信号:横向移动,psexec,wmi,winrm,dcom。"
 when-to-use: >-
   Windows lateral movement playbook. Use when pivoting between Windows hosts via PsExec, WMI, WinRM, DCOM, RDP, pass-the-hash, overpass-the-hash, or pass-the-ticket techniques.
 ---

@@ -1,6 +1,6 @@
 ---
 name: windows-av-evasion
-description: "AV/EDR evasion playbook for Windows. Use when bypassing AMSI, ETW, .NET assembly detection, shellcode execution, process injection, API hooking, and signature-based detection on Windows endpoints."
+description: "Windows AV/EDR 规避:AMSI/ETW/.NET 程序集检测绕过、shellcode 执行、进程注入、API hooking、特征码规避。信号:av规避,edr,amsi绕过,免杀。"
 when-to-use: >-
   AV/EDR evasion playbook for Windows. Use when bypassing AMSI, ETW, .NET assembly detection, shellcode execution, process injection, API hooking, and signature-based detection on Windows endpoints.
 ---

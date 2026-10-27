@@ -1,6 +1,6 @@
 ---
 name: authbypass-authentication-flaws
-description: "Authentication bypass testing playbook. Use when assessing login flows, password reset logic, account recovery, MFA bypass, token predictability, brute-force resistance, and session boundary flaws."
+description: "认证绕过测试:登录流、密码重置、账户恢复、MFA 绕过、令牌可预测性、爆破抗性、会话边界缺陷。信号:认证绕过,mfa绕过,密码重置,会话缺陷,登录绕过。"
 when-to-use: >-
   Authentication bypass testing playbook. Use when assessing login flows, password reset logic, account recovery, MFA bypass, token predictability, brute-force resistance, and session boundary flaws.
 ---

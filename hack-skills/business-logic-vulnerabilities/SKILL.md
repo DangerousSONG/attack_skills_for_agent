@@ -1,6 +1,6 @@
 ---
 name: business-logic-vulnerabilities
-description: "Business logic vulnerability playbook. Use when reasoning about workflows, race conditions, price manipulation, coupon abuse, state machines, and multi-step authorization gaps."
+description: "业务逻辑漏洞 playbook:工作流、竞态、价格操纵、优惠券滥用、状态机、多步授权缺口。信号:业务逻辑,逻辑漏洞,价格操纵,优惠券滥用,状态机。"
 when-to-use: >-
   Business logic vulnerability playbook. Use when reasoning about workflows, race conditions, price manipulation, coupon abuse, state machines, and multi-step authorization gaps.
 ---

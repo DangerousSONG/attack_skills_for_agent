@@ -1,6 +1,6 @@
 ---
 name: jwt-oauth-token-attacks
-description: "JWT and OAuth token attack playbook. Use when validating token trust, signing algorithms, key handling, claim abuse, bearer flows, and OAuth account-binding weaknesses."
+description: "JWT/OAuth 令牌攻击:签名算法、密钥处理、声明滥用、bearer 流、OAuth 账户绑定弱点。信号:jwt,oauth,令牌攻击,签名伪造,声明篡改,账户绑定。"
 when-to-use: >-
   JWT and OAuth token attack playbook. Use when validating token trust, signing algorithms, key handling, claim abuse, bearer flows, and OAuth account-binding weaknesses.
 ---

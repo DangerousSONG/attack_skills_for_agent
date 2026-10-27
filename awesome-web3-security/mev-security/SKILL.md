@@ -1,6 +1,6 @@
 ---
 name: mev-security
-description: Guide for MEV concepts, common attacks, mitigations, and how to organize MEV-related resources in README.md.
+description: "MEV 概念、常见攻击与缓解措施的资源组织指南。信号:mev,抢跑,三明治攻击,以太坊,defi安全。"
 when-to-use: Guide for MEV concepts, common attacks, mitigations, and how to organize MEV-related resources in README.md.
 ---
 

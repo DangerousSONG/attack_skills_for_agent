@@ -1,6 +1,6 @@
 ---
 name: ctf-osint
-description: Provides open source intelligence techniques for CTF challenges. Use when gathering information from public sources, social media, geolocation, DNS records, username enumeration, reverse image search, Google dorking, Wayback Machine, Tor relays, FEC filings, or identifying unknown data like hashes and coordinates.
+description: "CTF OSINT 题技法:社媒地理定位、DNS 记录、用户名枚举、反向搜图、Google dork、Wayback、Tor、哈希与坐标识别。信号:ctf,osint,地理定位,反向搜图,dork。"
 when-to-use: Provides open source intelligence techniques for CTF challenges. Use when gathering information from public sources, social media, geolocation, DNS records, username enumeration, reverse image search,
 license: MIT
 compatibility: Requires filesystem-based agent (Claude Code or similar) with bash, Python 3, and internet access for OSINT lookups.

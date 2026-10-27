@@ -1,6 +1,6 @@
 ---
 name: symmetric-cipher-attacks
-description: "Symmetric cipher attack playbook. Use when exploiting block cipher mode weaknesses (CBC padding oracle, ECB cut-and-paste, bit flipping), stream cipher key reuse, or meet-in-the-middle attacks."
+description: "对称密码攻击:CBC padding oracle、ECB 切块重排、比特翻转、流密钥重用、中间相遇。信号:对称密码,padding oracle,ecb,比特翻转,密钥重用。"
 when-to-use: >-
   Symmetric cipher attack playbook. Use when exploiting block cipher mode
   weaknesses (CBC padding oracle, ECB cut-and-paste, bit flipping), stream

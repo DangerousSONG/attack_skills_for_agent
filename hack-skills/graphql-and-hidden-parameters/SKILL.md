@@ -1,6 +1,6 @@
 ---
 name: graphql-and-hidden-parameters
-description: "Use this skill when GraphQL exists or when REST documentation suggests optional, deprecated, or undocumented fields."
+description: "GraphQL 存在或 REST 文档暗示可选/废弃/未文档化字段时的测试路径。信号:graphql,隐藏参数,废弃字段,模式枚举。"
 when-to-use: 1. GRAPHQL FIRST PASS
   GraphQL and hidden parameter testing playbook. Use when exploring introspection, batching, undocumented fields, hidden parameters, schema abuse, and GraphQL authorization gaps.
 ---

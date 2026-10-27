@@ -1,6 +1,6 @@
 ---
 name: ai-security
-description: Use when attacking an AI/ML system or model — prompt injection & jailbreaks (Crescendo, Skeleton Key, Best-of-N), RAG/vector poisoning, agentic/MCP exploitation (CVE-2025-54136), ML supply-chain RCE (pickle CVE-2025-32434), model extraction / membership inference / adversarial suffixes (GCG)
+description: "AI/ML 系统攻击:Crescendo/Skeleton Key/Best-of-N 越狱、RAG/向量库投毒、Agent/MCP 利用(CVE-2025-54136)、ML信号:ai安全,越狱。"
 when-to-use: Use when attacking an AI/ML system or model — prompt injection & jailbreaks (Crescendo, Skeleton Key, Best-of-N), RAG/vector poisoning, agentic/MCP exploitation (CVE-2025-54136), ML supply-chain RCE (
 metadata:
   type: offensive
