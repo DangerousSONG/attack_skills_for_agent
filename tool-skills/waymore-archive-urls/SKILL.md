@@ -1,6 +1,6 @@
 ---
 name: waymore-archive-urls
-description: waymore: 历史 URL 全量收割。信号:资产测绘,指纹识别,仅 URL,上限。
+description: waymore: 历史 URL 全量收割。信号:资产测绘,子域名,仅 URL,上限。
 ---
 
 # waymore

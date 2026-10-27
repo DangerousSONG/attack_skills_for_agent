@@ -1,6 +1,6 @@
 ---
 name: patator-multi-brute
-description: Patator: HTTP 表单爆破+条件过滤、数据库爆破。信号:暴力破解,口令喷射,SSH,SMB。
+description: Patator: HTTP 登录表单爆破+条件过滤、数据库爆破。信号:暴力破解,口令喷射,SSH,SMB。
 ---
 
 # Patator
@@ -29,7 +29,7 @@ git clone https://github.com/lanjelot/patator && cd patator
 
 ## 攻击场景 Playbook
 
-### HTTP 表单爆破+条件过滤
+### HTTP 登录表单爆破+条件过滤
 
 ```bash
 python patator.py http_fuzz url=https://target/login.php method=POST body='user=FILE0&pass=FILE1' 0=users.txt 1=rockyou.txt -x ignore:fgrep='Invalid' -t 20

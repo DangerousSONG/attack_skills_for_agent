@@ -1,6 +1,6 @@
 ---
 name: shuffledns-brute
-description: shuffledns: 大规模子域爆破。信号:资产测绘,指纹识别,批量,massdns 路径。
+description: shuffledns: 大规模子域爆破。信号:资产测绘,子域名,批量,massdns 路径。
 ---
 
 # shuffledns

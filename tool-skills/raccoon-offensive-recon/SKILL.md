@@ -1,6 +1,6 @@
 ---
 name: raccoon-offensive-recon
-description: Raccoon: 单目标一站式摸底。信号:资产测绘,指纹识别,一站式侦察,输出目录,走 Tor。
+description: Raccoon: 单目标一站式摸底。信号:资产测绘,子域名,一站式侦察,输出目录,走 Tor。
 ---
 
 # Raccoon

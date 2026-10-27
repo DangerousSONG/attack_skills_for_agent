@@ -1,6 +1,6 @@
 ---
 name: cloakify-exfil
-description: cloakify: DLP 规避外传演练。信号:隐写,steganography,还原,加噪音混淆统计特征。
+description: cloakify: 敏感数据外传演练(DLP 规避)。信号:隐写,steganography,还原,加噪音混淆统计特征。
 ---
 
 # cloakify
@@ -25,7 +25,7 @@ git clone https://github.com/TryCatchHCF/Cloakify && cd Cloakify
 
 ## 攻击场景 Playbook
 
-### DLP 规避外传演练
+### 敏感数据外传演练(DLP 规避)
 
 ```bash
 python cloakify.py passwd.zip ciphers/ipAddresses > notes.txt

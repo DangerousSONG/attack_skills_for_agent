@@ -1,6 +1,6 @@
 ---
 name: domained-multi-enum
-description: Domained: 多工具编排子域收集。信号:资产测绘,指纹识别,被动+主动子域,仅爆破,仅主动。
+description: Domained: 多工具编排子域收集。信号:资产测绘,子域名,被动+主动子域,仅爆破,仅主动。
 ---
 
 # Domained

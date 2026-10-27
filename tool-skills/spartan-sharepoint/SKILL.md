@@ -1,6 +1,6 @@
 ---
 name: spartan-sharepoint
-description: Spartan: 资产测绘与指纹识别场景。信号:资产测绘,指纹识别,深度枚举。
+description: Spartan: 资产测绘与指纹识别场景。信号:资产测绘,子域名,深度枚举。
 ---
 
 # Spartan

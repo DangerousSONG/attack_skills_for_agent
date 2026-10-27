@@ -1,6 +1,6 @@
 ---
 name: amass-attack-surface
-description: Amass: 深度攻击面测绘、带 API key 的增强枚举。信号:资产测绘,指纹识别,被动+主动枚举,纯被动。
+description: Amass: 子域名全量枚举与攻击面测绘、带 API key 的增强枚举。信号:资产测绘,子域名,被动+主动枚举,纯被动。
 ---
 
 # Amass
@@ -29,7 +29,7 @@ go install github.com/owasp-amass/amass/v4/...@master 或 snap install amass
 
 ## 攻击场景 Playbook
 
-### 深度攻击面测绘
+### 子域名全量枚举与攻击面测绘
 
 ```bash
 amass enum -d corp.com -active -o subs.txt

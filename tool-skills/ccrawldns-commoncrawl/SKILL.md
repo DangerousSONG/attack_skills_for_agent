@@ -1,6 +1,6 @@
 ---
 name: ccrawldns-commoncrawl
-description: ccrawldns: CommonCrawl 数据源利用。信号:资产测绘,指纹识别。
+description: ccrawldns: CommonCrawl 数据源利用。信号:资产测绘,子域名。
 ---
 
 # ccrawldns

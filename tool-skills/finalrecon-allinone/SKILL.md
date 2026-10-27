@@ -1,6 +1,6 @@
 ---
 name: finalrecon-allinone
-description: FinalRecon: 单目标全量 OSINT 报告。信号:资产测绘,指纹识别,全量侦察,仅 DNS,仅子域。
+description: FinalRecon: 单目标全量 OSINT 报告。信号:资产测绘,子域名,全量侦察,仅 DNS,仅子域。
 ---
 
 # FinalRecon

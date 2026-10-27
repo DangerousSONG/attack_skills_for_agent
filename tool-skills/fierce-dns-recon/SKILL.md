@@ -1,6 +1,6 @@
 ---
 name: fierce-dns-recon
-description: Fierce: 周边网段发现。信号:资产测绘,指纹识别,经典 DNS 侦察,字典,IP 遍历深度。
+description: Fierce: 周边网段发现。信号:资产测绘,子域名,经典 DNS 侦察,字典,IP 遍历深度。
 ---
 
 # Fierce

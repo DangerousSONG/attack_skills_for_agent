@@ -1,6 +1,6 @@
 ---
 name: punter-multi-source
-description: Punter: 多源被动子域聚合。信号:资产测绘,指纹识别,被动子域收集,含主动验证。
+description: Punter: 多源被动子域聚合。信号:资产测绘,子域名,被动子域收集,含主动验证。
 ---
 
 # Punter

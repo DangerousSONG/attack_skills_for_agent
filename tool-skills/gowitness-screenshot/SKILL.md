@@ -1,6 +1,6 @@
 ---
 name: gowitness-screenshot
-description: gowitness: 资产可视化核查(先看脸再决定打谁)。信号:资产测绘,指纹识别,单 URL 截图+指纹,批量截图,启动结果浏览服务。
+description: gowitness: 资产可视化核查(先看脸再决定打谁)。信号:资产测绘,子域名,单 URL 截图+指纹,批量截图,启动结果浏览服务。
 ---
 
 # gowitness

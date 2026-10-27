@@ -1,6 +1,6 @@
 ---
 name: certgraph-ct
-description: CertGraph: CT 日志资产图。信号:资产测绘,指纹识别,证书透明度图遍历,深度,只查 CT log。
+description: CertGraph: CT 日志资产图。信号:资产测绘,子域名,证书透明度图遍历,深度,只查 CT log。
 ---
 
 # CertGraph

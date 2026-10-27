@@ -1,6 +1,6 @@
 ---
 name: mybff-login-brute
-description: myBFF: Web 登录批量撞库。信号:暴力破解,口令喷射,Web 表单喷洒,HTTP Basic,OWA。
+description: myBFF: Web 登录表单批量撞库。信号:暴力破解,口令喷射,Web 表单喷洒,HTTP Basic,OWA。
 ---
 
 # myBFF
@@ -26,7 +26,7 @@ git clone https://github.com/MooseDojo/myBFF && cd myBFF
 
 ## 攻击场景 Playbook
 
-### Web 登录批量撞库
+### Web 登录表单批量撞库
 
 ```bash
 python myBFF.py -u emails.txt -p 'Pass1' -t https://vpn.t.com/login -m form

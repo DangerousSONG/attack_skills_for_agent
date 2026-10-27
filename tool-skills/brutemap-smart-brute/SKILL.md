@@ -1,6 +1,6 @@
 ---
 name: brutemap-smart-brute
-description: brutemap: Web 登录框爆破。信号:web漏洞,注入,登录爆破,自动识别表单,线程。
+description: brutemap: Web 登录表单口令爆破。信号:web漏洞,注入,登录爆破,自动识别表单,线程。
 ---
 
 # brutemap
@@ -25,7 +25,7 @@ git clone https://github.com/brutemap-dev/brutemap && cd brutemap && pip install
 
 ## 攻击场景 Playbook
 
-### Web 登录框爆破
+### Web 登录表单口令爆破
 
 ```bash
 python brutemap.py -u https://t.com/admin/login -U admin.txt -P top100.txt

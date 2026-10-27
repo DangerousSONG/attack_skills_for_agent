@@ -1,6 +1,6 @@
 ---
 name: dnssearch-enum
-description: dnsSearch: 快速子域爆破轻量件。信号:资产测绘,指纹识别,resolver,线程。
+description: dnsSearch: 快速子域爆破轻量件。信号:资产测绘,子域名,resolver,线程。
 ---
 
 # dnsSearch

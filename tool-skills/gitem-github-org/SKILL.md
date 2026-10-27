@@ -1,6 +1,6 @@
 ---
 name: gitem-github-org
-description: Gitem: 组织仓库批量克隆审计。信号:资产测绘,指纹识别,拉组织全部 repos,只 metadata。
+description: Gitem: 组织仓库批量克隆审计。信号:资产测绘,子域名,拉组织全部 repos,只 metadata。
 ---
 
 # Gitem

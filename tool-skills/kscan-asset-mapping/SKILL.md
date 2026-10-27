@@ -1,6 +1,6 @@
 ---
 name: kscan-asset-mapping
-description: Kscan: 内网+外网统一测绘。信号:资产测绘,指纹识别,网段存活+指纹,弱口令检测。
+description: Kscan: 内网+外网统一测绘。信号:资产测绘,子域名,网段存活+指纹,弱口令检测。
 ---
 
 # Kscan

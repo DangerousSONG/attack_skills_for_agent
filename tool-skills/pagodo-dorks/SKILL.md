@@ -1,6 +1,6 @@
 ---
 name: pagodo-dorks
-description: pagodo: GHDB 漏洞指纹 dork 批跑。信号:资产测绘,指纹识别,限速,并发。
+description: pagodo: GHDB 漏洞指纹 dork 批跑。信号:资产测绘,子域名,限速,并发。
 ---
 
 # pagodo

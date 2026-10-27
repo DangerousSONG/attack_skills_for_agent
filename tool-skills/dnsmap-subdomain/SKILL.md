@@ -1,6 +1,6 @@
 ---
 name: dnsmap-subdomain
-description: dnsmap: 快速子域初筛。信号:资产测绘,指纹识别,子域爆破,自定义字典,结果文件。
+description: dnsmap: 快速子域初筛。信号:资产测绘,子域名,子域爆破,自定义字典,结果文件。
 ---
 
 # dnsmap

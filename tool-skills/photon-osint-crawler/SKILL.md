@@ -1,6 +1,6 @@
 ---
 name: photon-osint-crawler
-description: Photon: OSINT 全量抓取。信号:资产测绘,指纹识别,全量爬取,爬深,线程。
+description: Photon: OSINT 全量抓取。信号:资产测绘,子域名,全量爬取,爬深,线程。
 ---
 
 # Photon

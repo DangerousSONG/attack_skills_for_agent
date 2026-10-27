@@ -1,6 +1,6 @@
 ---
 name: wpscan-wp-audit
-description: WPScan: WP 目标深度审计。信号:web扫描,漏洞扫描,基础 WP 扫描,激进插件检测,登录爆破。
+description: WPScan: WordPress 插件漏洞检测。信号:web扫描,漏洞扫描,基础 WP 扫描,激进插件检测,登录爆破。
 ---
 
 # WPScan
@@ -27,7 +27,7 @@ gem install wpscan
 
 ## 攻击场景 Playbook
 
-### WP 目标深度审计
+### WordPress 插件漏洞检测
 
 ```bash
 wpscan --url https://blog.t.com --enumerate vp,vt,u --api-token $WPSCAN_TOKEN

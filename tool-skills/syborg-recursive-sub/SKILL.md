@@ -1,6 +1,6 @@
 ---
 name: syborg-recursive-sub
-description: Syborg: 递归+通配符规避爆破。信号:资产测绘,指纹识别,递归子域枚举,resolver。
+description: Syborg: 递归+通配符规避爆破。信号:资产测绘,子域名,递归子域枚举,resolver。
 ---
 
 # Syborg

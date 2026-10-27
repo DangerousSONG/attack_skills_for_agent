@@ -1,6 +1,6 @@
 ---
 name: gasmask-osint-all
-description: GasMask: 域名/人名/公司多模式 OSINT。信号:资产测绘,指纹识别,全量 OSINT,子域,github。
+description: GasMask: 域名/人名/公司多模式 OSINT。信号:资产测绘,子域名,全量 OSINT,子域,github。
 ---
 
 # GasMask

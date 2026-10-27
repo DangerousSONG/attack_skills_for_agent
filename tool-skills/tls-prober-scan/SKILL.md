@@ -1,6 +1,6 @@
 ---
 name: tls-prober-scan
-description: tls-prober: TLS 栈指纹识别。信号:资产测绘,指纹识别,TLS 实现指纹,CSV 输出。
+description: tls-prober: TLS 栈指纹识别。信号:资产测绘,子域名,TLS 实现指纹,CSV 输出。
 ---
 
 # tls-prober

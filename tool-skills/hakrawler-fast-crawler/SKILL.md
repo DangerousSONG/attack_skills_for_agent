@@ -1,6 +1,6 @@
 ---
 name: hakrawler-fast-crawler
-description: hakrawler: 站点端点快速收割。信号:资产测绘,指纹识别,hakrawler`,爬深 3 层,包含子域。
+description: hakrawler: 站点端点快速收割。信号:资产测绘,子域名,hakrawler`,爬深 3 层,包含子域。
 ---
 
 # hakrawler

@@ -1,6 +1,6 @@
 ---
 name: waybackurls-history
-description: waybackurls: 历史 URL 收割。信号:资产测绘,指纹识别,带时间戳,不含子域,waybackurls`。
+description: waybackurls: 历史 URL 收割。信号:资产测绘,子域名,带时间戳,不含子域,waybackurls`。
 ---
 
 # waybackurls

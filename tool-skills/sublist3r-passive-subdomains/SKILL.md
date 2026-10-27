@@ -1,6 +1,6 @@
 ---
 name: sublist3r-passive-subdomains
-description: Sublist3r: 快速子域清单。信号:资产测绘,指纹识别,经典被动子域枚举,探测存活端口,线程。
+description: Sublist3r: 快速子域清单。信号:资产测绘,子域名,经典被动子域枚举,探测存活端口,线程。
 ---
 
 # Sublist3r

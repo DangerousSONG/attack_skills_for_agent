@@ -1,6 +1,6 @@
 ---
 name: whatweb-fingerprint
-description: WhatWeb: 批量指纹批扫。信号:资产测绘,指纹识别,单目标指纹,侵略等级(1-4),JSON 日志。
+description: WhatWeb: 批量指纹批扫。信号:资产测绘,子域名,单目标指纹,侵略等级(1-4),JSON 日志。
 ---
 
 # WhatWeb

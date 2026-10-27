@@ -1,6 +1,6 @@
 ---
 name: adaptix-c2-framework
-description: AdaptixC2: 渗透行动 C2 框架。信号:c2,命令控制,启动服务端,生成多平台载荷,横向必备。
+description: AdaptixC2: C2 控制框架搭建与会话管理。信号:c2,命令控制,启动服务端,生成多平台载荷,横向必备。
 ---
 
 # AdaptixC2
@@ -26,7 +26,7 @@ git clone https://github.com/Adaptix-Framework/AdaptixC2 && 按 docs 编译 serv
 
 ## 攻击场景 Playbook
 
-### 渗透行动 C2 框架
+### C2 控制框架搭建与会话管理
 
 ```bash
 ./adaptix-server

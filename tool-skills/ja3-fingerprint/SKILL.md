@@ -1,6 +1,6 @@
 ---
 name: ja3-fingerprint
-description: JA3: TLS 指纹威胁识别。信号:资产测绘,指纹识别。
+description: JA3: TLS 指纹威胁识别。信号:资产测绘,子域名。
 ---
 
 # JA3

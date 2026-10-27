@@ -1,6 +1,6 @@
 ---
 name: nullinux-smb-enum
-description: Nullinux: Linux 上 SMB 枚举一把梭。信号:资产测绘,指纹识别,SMB/RPC 全枚举,共享枚举,用户枚举。
+description: Nullinux: Linux 上 SMB 枚举一把梭。信号:资产测绘,子域名,SMB/RPC 全枚举,共享枚举,用户枚举。
 ---
 
 # Nullinux

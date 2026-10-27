@@ -1,6 +1,6 @@
 ---
 name: performing-api-rate-limiting-bypass
-description: "Tests API rate limiting for bypass vulnerabilities using Python (requests/aiohttp) 信号:api攻击,接口测试。"
+description: "Tests API rate limiting for bypass vulnerabilities using Python (requests/aiohttp) 信号:api攻击,限流绕过。"
 when-to-use: 'Tests API rate limiting for bypass vulnerabilities using Python (requests/aiohttp)
   and Burp Suite Turbo Intruder to manipulate headers (e.g. X-Forwarded-For spoofing),
   IPs, HTTP methods, API versions, and encodings, mapping findings to OWASP API4:2023

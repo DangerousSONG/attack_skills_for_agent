@@ -1,6 +1,6 @@
 ---
 name: kiterunner-api-routes
-description: kiterunner: API 隐藏路由爆破。信号:资产测绘,指纹识别,API 路由扫描,内置字典,最大连接。
+description: kiterunner: API 隐藏路由爆破。信号:资产测绘,子域名,API 路由扫描,内置字典,最大连接。
 ---
 
 # kiterunner

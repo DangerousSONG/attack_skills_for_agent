@@ -1,6 +1,6 @@
 ---
 name: alterx-dsl-subdomains
-description: alterx: 被动结果驱动的新候选生成。信号:资产测绘,指纹识别,基于已知子域生成候选,直接指定目标。
+description: alterx: 被动结果驱动的新候选生成。信号:资产测绘,子域名,基于已知子域生成候选,直接指定目标。
 ---
 
 # alterx

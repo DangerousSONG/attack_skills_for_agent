@@ -1,6 +1,6 @@
 ---
 name: subscraper-subdomains
-description: SubScraper: DNS 记录深挖子域。信号:资产测绘,指纹识别,被动+DNS 记录枚举,DNS 记录解析。
+description: SubScraper: DNS 记录深挖子域。信号:资产测绘,子域名,被动+DNS 记录枚举,DNS 记录解析。
 ---
 
 # SubScraper

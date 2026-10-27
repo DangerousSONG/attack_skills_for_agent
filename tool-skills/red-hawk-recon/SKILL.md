@@ -1,6 +1,6 @@
 ---
 name: red-hawk-recon
-description: RED_HAWK: PHP 一体化信息收集。信号:资产测绘,指纹识别,交互输入目标。
+description: RED_HAWK: PHP 一体化信息收集。信号:资产测绘,子域名,交互输入目标。
 ---
 
 # RED_HAWK

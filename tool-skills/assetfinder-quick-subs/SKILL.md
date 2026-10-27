@@ -1,6 +1,6 @@
 ---
 name: assetfinder-quick-subs
-description: assetfinder: 侦察流水线第一棒。信号:资产测绘,指纹识别,只列子域名,子域+关联域名,静默输出便于管道。
+description: assetfinder: 侦察流水线第一棒。信号:资产测绘,子域名,只列子域名,子域+关联域名,静默输出便于管道。
 ---
 
 # assetfinder

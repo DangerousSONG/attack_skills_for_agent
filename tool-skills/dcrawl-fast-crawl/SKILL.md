@@ -1,6 +1,6 @@
 ---
 name: dcrawl-fast-crawl
-description: dcrawl: 批量 URL 轻爬。信号:资产测绘,指纹识别,批量快速爬取,深度。
+description: dcrawl: 批量 URL 轻爬。信号:资产测绘,子域名,批量快速爬取,深度。
 ---
 
 # dcrawl
