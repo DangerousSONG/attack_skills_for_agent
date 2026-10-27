@@ -1,6 +1,6 @@
 ---
 name: executing-phishing-simulation-campaign
-description: 'Executes authorized phishing simulation campaigns to assess an organization''s
+description: "Executes authorized phishing simulation campaigns to assess an organization''s 信号:钓鱼,社会工程,钓鱼邮件。"
 when-to-use: 'Executes authorized phishing simulation campaigns to assess an organization''s
   susceptibility to email-based social engineering attacks. The tester designs realistic
   phishing scenarios, builds credential harvesting infrastructure, sends targeted

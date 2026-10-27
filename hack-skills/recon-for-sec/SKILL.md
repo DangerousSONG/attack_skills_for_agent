@@ -1,6 +1,6 @@
 ---
 name: recon-for-sec
-description: "This is the starting router for new targets and unknown attack surfaces."
+description: "This is the starting router for new targets and unknown attack surfaces 信号:资产测绘,指纹识别,技术栈识别。"
 when-to-use: Recon and Methodology Router
   Entry P1 category router for reconnaissance and methodology. Use when mapping
   scope, drawing an attack surface from one application, discovering assets,

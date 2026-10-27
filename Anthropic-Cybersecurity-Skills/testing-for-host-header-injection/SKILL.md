@@ -1,6 +1,6 @@
 ---
 name: testing-for-host-header-injection
-description: Test web applications for HTTP Host header injection vulnerabilities
+description: "Test web applications for HTTP Host header injection vulnerabilities 信号:进程注入,dll注入,内存执行。"
 when-to-use: Test web applications for HTTP Host header injection vulnerabilities
   to identify password reset poisoning, web cache poisoning, SSRF, and virtual host
   routing manipulation risks.

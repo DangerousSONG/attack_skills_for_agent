@@ -1,6 +1,6 @@
 ---
 name: performing-soap-web-service-security-testing
-description: Performs security testing of SOAP web services by analyzing WSDL definitions
+description: "Performs security testing of SOAP web services by analyzing WSDL definitions 信号:web漏洞,注入,sql注入。"
 when-to-use: Performs security testing of SOAP web services by analyzing WSDL definitions
   and testing for XML injection, XXE, WS-Security bypass, SOAPAction spoofing, and
   XPath injection. Use when assessing a SOAP/WSDL-based API endpoint for XML-related

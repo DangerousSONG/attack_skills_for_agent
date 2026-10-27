@@ -1,6 +1,6 @@
 ---
 name: waf-bypass-techniques
-description: "WAF bypass methodology and generic evasion techniques."
+description: "WAF bypass methodology and generic evasion techniques 信号:web漏洞,注入,sql注入。"
 when-to-use: >-
   WAF bypass methodology and generic evasion techniques. Use when a web application
   firewall blocks injection payloads (SQLi, XSS, RCE) and you need to craft

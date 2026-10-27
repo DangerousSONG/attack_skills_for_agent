@@ -1,6 +1,6 @@
 ---
 name: performing-web-application-penetration-test
-description: 'Performs systematic security testing of web applications following the
+description: "Performs systematic security testing of web applications following the 信号:web漏洞,注入,sql注入。"
 when-to-use: 'Performs systematic security testing of web applications following the
   OWASP Web Security Testing Guide (WSTG) methodology to identify vulnerabilities
   in authentication, authorization, input validation, session management, and business

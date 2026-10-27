@@ -1,6 +1,6 @@
 ---
 name: conducting-mobile-app-penetration-test
-description: 'Conducts penetration testing of iOS and Android mobile applications
+description: "Conducts penetration testing of iOS and Android mobile applications 信号:移动端,android攻击,ios攻击。"
 when-to-use: 'Conducts penetration testing of iOS and Android mobile applications
   following the OWASP Mobile Application Security Testing Guide (MASTG) to identify
   vulnerabilities in data storage, network communication, authentication, cryptography,

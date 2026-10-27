@@ -1,6 +1,6 @@
 ---
 name: csp-bypass-advanced
-description: "Advanced Content Security Policy bypass techniques."
+description: "Advanced Content Security Policy bypass techniques 信号:攻击面,云资产,暴露面。"
 when-to-use: >-
   Advanced Content Security Policy bypass techniques. Use when XSS or data
   exfiltration is blocked by CSP and you need to find policy weaknesses, trusted

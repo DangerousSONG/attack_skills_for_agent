@@ -1,6 +1,6 @@
 ---
 name: testing-for-xml-injection-vulnerabilities
-description: Test web applications for XML injection vulnerabilities including XXE,
+description: "Test web applications for XML injection vulnerabilities including XXE 信号:web漏洞,注入,sql注入。"
 when-to-use: Test web applications for XML injection vulnerabilities including XXE,
   XPath injection, and XML entity attacks to identify data exposure and server-side
   request forgery risks.

@@ -1,6 +1,6 @@
 ---
 name: testing-jwt-token-security
-description: Assessing JSON Web Token implementations for cryptographic weaknesses,
+description: "Assessing JSON Web Token implementations for cryptographic weaknesses 信号:api攻击,接口测试,graphql。"
 when-to-use: Assessing JSON Web Token implementations for cryptographic weaknesses,
   algorithm confusion attacks, and authorization bypass vulnerabilities during security
   engagements.

@@ -1,6 +1,6 @@
 ---
 name: auditing-kubernetes-rbac-privilege-escalation
-description: Auditing Kubernetes RBAC Privilege Escalation
+description: "Auditing Kubernetes RBAC Privilege Escalation 信号:云提权,iam提权,容器提权。"
 when-to-use: >-
   Finds over-permissive RBAC roles and service-account token abuse paths in a Kubernetes
   cluster using kubectl auth can-i, rbac-police, kubectl-who-can, and rakkess, tracing which

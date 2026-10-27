@@ -1,6 +1,6 @@
 ---
 name: testing-prompt-injection-in-rag-pipelines
-description: Probes Retrieval-Augmented Generation pipelines for indirect prompt injection
+description: "Probes Retrieval-Augmented Generation pipelines for indirect prompt injection 信号:供应链,cicd,流水线攻击。"
 when-to-use: Probes Retrieval-Augmented Generation pipelines for indirect prompt injection
   via poisoned retrieved documents and embedding-space manipulation, using NVIDIA garak,
   Promptfoo red-team plugins, and Microsoft PyRIT against vector stores like FAISS,

@@ -1,6 +1,6 @@
 ---
 name: performing-web-cache-poisoning-attack
-description: Exploiting web cache mechanisms to serve malicious content to other users
+description: "Exploiting web cache mechanisms to serve malicious content to other users 信号:web漏洞,注入,sql注入。"
 when-to-use: Exploiting web cache mechanisms to serve malicious content to other users
   by poisoning cached responses through unkeyed headers and parameters during authorized
   security tests.

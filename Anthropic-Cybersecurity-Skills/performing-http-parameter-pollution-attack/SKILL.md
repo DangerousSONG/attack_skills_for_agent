@@ -1,6 +1,6 @@
 ---
 name: performing-http-parameter-pollution-attack
-description: Executes HTTP Parameter Pollution attacks that inject duplicate request
+description: "Executes HTTP Parameter Pollution attacks that inject duplicate request 信号:web漏洞,注入,sql注入。"
 when-to-use: Executes HTTP Parameter Pollution attacks that inject duplicate request
   parameters to bypass input validation, WAF rules, and other security controls when
   front-end and back-end systems parse duplicate parameters differently. Use during

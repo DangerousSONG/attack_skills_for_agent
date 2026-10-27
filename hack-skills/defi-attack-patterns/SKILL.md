@@ -1,6 +1,6 @@
 ---
 name: defi-attack-patterns
-description: "DeFi attack pattern playbook."
+description: "DeFi attack pattern playbook 信号:windows提权,uac绕过,服务提权。"
 when-to-use: >-
   DeFi attack pattern playbook. Use when analyzing flash loan attacks, price oracle manipulation, MEV sandwich attacks, governance exploits, bridge vulnerabilities, and token standard edge cases in decentralized finance protocols.
 ---

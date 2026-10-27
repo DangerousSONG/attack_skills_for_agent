@@ -1,6 +1,6 @@
 ---
 name: performing-arp-spoofing-attack-simulation
-description: 'Simulates ARP spoofing/cache-poisoning attacks in authorized lab or
+description: "Simulates ARP spoofing/cache-poisoning attacks in authorized lab or 信号:中间人,mitm,嗅探。"
 when-to-use: 'Simulates ARP spoofing/cache-poisoning attacks in authorized lab or
   pentest environments using arpspoof, Ettercap, and Scapy to demonstrate man-in-the-middle
   risk and validate Dynamic ARP Inspection, port security, and network monitoring

@@ -1,6 +1,6 @@
 ---
 name: executing-active-directory-attack-simulation
-description: 'Executes authorized attack simulations against Active Directory environments
+description: "Executes authorized attack simulations against Active Directory environments 信号:ad攻击,域渗透,域控。"
 when-to-use: 'Executes authorized attack simulations against Active Directory environments
   to identify misconfigurations, weak credentials, dangerous privilege paths, and
   exploitable trust relationships that could lead to domain compromise. The tester

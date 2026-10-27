@@ -1,6 +1,6 @@
 ---
 name: performing-packet-injection-attack
-description: 'Crafts and injects custom network packets using Scapy, hping3, and Nemesis
+description: "Crafts and injects custom network packets using Scapy, hping3, and Nemesis 信号:进程注入,dll注入,内存执行。"
 when-to-use: 'Crafts and injects custom network packets using Scapy, hping3, and Nemesis
   during authorized security assessments to test firewall rules, IDS detection, protocol
   handling, and network stack resilience against malformed and spoofed traffic.

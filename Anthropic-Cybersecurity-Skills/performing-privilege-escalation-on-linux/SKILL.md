@@ -1,6 +1,6 @@
 ---
 name: performing-privilege-escalation-on-linux
-description: Guides manual enumeration and automated tooling to escalate from a low-privilege
+description: "Guides manual enumeration and automated tooling to escalate from a low-privilege 信号:c2,命令控制,远控。"
 when-to-use: Guides manual enumeration and automated tooling to escalate from a low-privilege
   Linux user to root by exploiting misconfigurations, vulnerable services, kernel exploits,
   and weak permissions, mapped to MITRE ATT&CK. Use during authorized red team engagements

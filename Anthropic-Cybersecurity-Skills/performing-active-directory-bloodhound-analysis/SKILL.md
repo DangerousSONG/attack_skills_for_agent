@@ -1,6 +1,6 @@
 ---
 name: performing-active-directory-bloodhound-analysis
-description: Use BloodHound and SharpHound (or AzureHound) to enumerate Active Directory
+description: "Use BloodHound and SharpHound (or AzureHound) to enumerate Active Directory 信号:ad攻击,域渗透,域控。"
 when-to-use: Use BloodHound and SharpHound (or AzureHound) to enumerate Active Directory
   relationships and graph attack paths from a compromised user to Domain Admin. Use
   when performing AD red-team reconnaissance, mapping privilege-escalation chains

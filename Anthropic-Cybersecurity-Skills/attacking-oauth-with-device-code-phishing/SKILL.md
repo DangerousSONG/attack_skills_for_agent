@@ -1,6 +1,6 @@
 ---
 name: attacking-oauth-with-device-code-phishing
-description: Run OAuth 2.0 device-code and illicit-consent phishing attacks against
+description: "Run OAuth 2.0 device-code and illicit-consent phishing attacks against 信号:钓鱼,社会工程,钓鱼邮件。"
 when-to-use: Run OAuth 2.0 device-code and illicit-consent phishing attacks against
   Microsoft Entra ID, using TokenTactics-style tooling to steal access and refresh
   tokens, bypass MFA, and pivot across Microsoft 365 services. Use for authorized

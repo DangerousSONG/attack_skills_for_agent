@@ -1,6 +1,6 @@
 ---
 name: performing-purple-team-atomic-testing
-description: 'Executes Atomic Red Team tests mapped to MITRE ATT&CK via Invoke-AtomicRedTeam
+description: "Executes Atomic Red Team tests mapped to MITRE ATT&CK via Invoke-AtomicRedTeam 信号:红队,方法论,渗透流程。"
 when-to-use: 'Executes Atomic Red Team tests mapped to MITRE ATT&CK via Invoke-AtomicRedTeam
   PowerShell, generates ATT&CK Navigator coverage heatmaps, correlates results against
   Sigma rules, and runs detection validation loops to measure blue team visibility.

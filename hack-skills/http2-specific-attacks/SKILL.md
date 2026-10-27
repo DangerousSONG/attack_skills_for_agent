@@ -1,6 +1,6 @@
 ---
 name: http2-specific-attacks
-description: "HTTP/2 protocol-specific attack playbook."
+description: "HTTP/2 protocol-specific attack playbook 信号:web漏洞,注入,sql注入。"
 when-to-use: >-
   HTTP/2 protocol-specific attack playbook. Use when the target supports HTTP/2 and you need to exploit binary framing, HPACK compression, h2c upgrade smuggling, pseudo-header injection, stream multiplexing abuse, or H2→H1 downgrade translation flaws.
 ---

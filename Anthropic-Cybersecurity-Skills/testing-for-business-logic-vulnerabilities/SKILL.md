@@ -1,6 +1,6 @@
 ---
 name: testing-for-business-logic-vulnerabilities
-description: Manually identifies flaws in application business logic - price manipulation,
+description: "Manually identifies flaws in application business logic - price manipulation 信号:api攻击,接口测试,graphql。"
 when-to-use: Manually identifies flaws in application business logic - price manipulation,
   multi-step workflow bypass, and privilege escalation - by intercepting and modifying
   requests with Burp Suite, going beyond what automated vulnerability scanners detect.

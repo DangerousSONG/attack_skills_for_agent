@@ -1,6 +1,6 @@
 ---
 name: performing-web-application-firewall-bypass
-description: Bypasses Web Application Firewall protections using encoding tricks,
+description: "Bypasses Web Application Firewall protections using encoding tricks 信号:c2,命令控制,远控。"
 when-to-use: Bypasses Web Application Firewall protections using encoding tricks,
   HTTP method manipulation, parameter pollution, and payload obfuscation to smuggle
   SQL injection, XSS, and other exploit payloads past WAF detection rules. Use when

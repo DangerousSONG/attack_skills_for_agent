@@ -1,6 +1,6 @@
 ---
 name: testing-for-xss-vulnerabilities
-description: Tests web applications for reflected, stored, and DOM-based Cross-Site
+description: "Tests web applications for reflected, stored, and DOM-based Cross-Site 信号:web漏洞,注入,sql注入。"
 when-to-use: Tests web applications for reflected, stored, and DOM-based Cross-Site
   Scripting by injecting JavaScript payloads with Burp Suite (XSS extensions, Active
   Scan++) and browser tools, then bypassing sanitization and CSP to demonstrate session

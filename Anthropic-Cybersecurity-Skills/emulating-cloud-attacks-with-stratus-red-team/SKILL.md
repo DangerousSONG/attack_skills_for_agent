@@ -1,6 +1,6 @@
 ---
 name: emulating-cloud-attacks-with-stratus-red-team
-description: Install and run Stratus Red Team to detonate granular, MITRE ATT&CK-mapped
+description: "Install and run Stratus Red Team to detonate granular, MITRE ATT&CK-mapped 信号:红队,方法论,渗透流程。"
 when-to-use: Install and run Stratus Red Team to detonate granular, MITRE ATT&CK-mapped
   AWS, Azure, GCP, and Kubernetes attack techniques through their warmup-detonate-revert-cleanup
   lifecycle, then verify the telemetry they generate. Use to validate that cloud detections

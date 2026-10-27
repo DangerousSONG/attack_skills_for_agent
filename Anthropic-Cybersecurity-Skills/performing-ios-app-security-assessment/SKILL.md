@@ -1,6 +1,6 @@
 ---
 name: performing-ios-app-security-assessment
-description: 'Performs comprehensive iOS application security assessments using Frida
+description: "Performs comprehensive iOS application security assessments using Frida 信号:移动端,android攻击,ios攻击。"
 when-to-use: 'Performs comprehensive iOS application security assessments using Frida
   for dynamic instrumentation, Objection for runtime exploration, SSL pinning bypass
   for traffic interception, keychain extraction for credential analysis, and IPA static

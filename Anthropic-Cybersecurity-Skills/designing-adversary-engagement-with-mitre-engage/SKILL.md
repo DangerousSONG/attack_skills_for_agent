@@ -1,6 +1,6 @@
 ---
 name: designing-adversary-engagement-with-mitre-engage
-description: Designing Adversary Engagement with MITRE Engage
+description: "Designing Adversary Engagement with MITRE Engage 信号:红队,方法论,渗透流程。"
 when-to-use: Designing Adversary Engagement with MITRE Engage
   Plan, run, and measure an adversary engagement operation using the MITRE Engage
   framework so that deployed deception is driven by strategy instead of deployed ad hoc.

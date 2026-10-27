@@ -1,6 +1,6 @@
 ---
 name: testing-android-intents-for-vulnerabilities
-description: 'Tests Android inter-process communication (IPC) through intents for
+description: "Tests Android inter-process communication (IPC) through intents for 信号:移动端,android攻击,ios攻击。"
 when-to-use: 'Tests Android inter-process communication (IPC) through intents for
   vulnerabilities including intent injection, unauthorized component access, broadcast
   sniffing, pending intent hijacking, and content provider data leakage. Use when

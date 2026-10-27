@@ -1,6 +1,6 @@
 ---
 name: performing-graphql-security-assessment
-description: Assessing GraphQL API endpoints for introspection leaks, injection attacks,
+description: "Assessing GraphQL API endpoints for introspection leaks, injection attacks 信号:api攻击,接口测试,graphql。"
 when-to-use: Assessing GraphQL API endpoints for introspection leaks, injection attacks,
   authorization flaws, and denial-of-service vulnerabilities during authorized security
   tests.

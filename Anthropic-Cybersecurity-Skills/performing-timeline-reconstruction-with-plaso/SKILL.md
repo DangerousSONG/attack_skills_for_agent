@@ -1,6 +1,6 @@
 ---
 name: performing-timeline-reconstruction-with-plaso
-description: Performing Timeline Reconstruction with Plaso
+description: "Performing Timeline Reconstruction with Plaso 信号:资产测绘,指纹识别,技术栈识别。"
 when-to-use: >-
   Builds comprehensive forensic super-timelines using Plaso (log2timeline and
   psort) to correlate events across file system metadata, event logs, browser

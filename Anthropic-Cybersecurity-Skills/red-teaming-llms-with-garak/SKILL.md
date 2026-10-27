@@ -1,6 +1,6 @@
 ---
 name: red-teaming-llms-with-garak
-description: Runs NVIDIA garak probe suites (jailbreak, prompt injection, data
+description: "Runs NVIDIA garak probe suites (jailbreak, prompt injection, data) 信号:进程注入,dll注入,内存执行。"
 when-to-use: Runs NVIDIA garak probe suites (jailbreak, prompt injection, data
   leakage, toxicity, and more) against an LLM endpoint - Hugging Face models, OpenAI-compatible
   APIs, or Bedrock - then interprets the resulting hit-rate report for triage. Use

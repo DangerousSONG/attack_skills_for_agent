@@ -1,6 +1,6 @@
 ---
 name: deserialization-insecure
-description: "Insecure deserialization playbook."
+description: "Insecure deserialization playbook 信号:web漏洞,注入,sql注入。"
 when-to-use: >-
   Insecure deserialization playbook. Use when Java, PHP, or Python applications deserialize untrusted data via ObjectInputStream, unserialize, pickle, or similar mechanisms that may lead to RCE, file access, or privilege escalation.
 ---

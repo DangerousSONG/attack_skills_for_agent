@@ -1,6 +1,6 @@
 ---
 name: implementing-jwt-signing-and-verification
-description: Implementing JWT Signing and Verification
+description: "Implementing JWT Signing and Verification 信号:api攻击,接口测试,graphql。"
 when-to-use: Implementing JWT Signing and Verification
   Implements secure JWT (RFC 7519) signing and verification using HMAC-SHA256,
   RSA-PSS, ES256, and EdDSA, including token expiration, claims validation, and

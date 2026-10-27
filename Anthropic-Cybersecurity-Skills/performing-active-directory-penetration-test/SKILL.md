@@ -1,6 +1,6 @@
 ---
 name: performing-active-directory-penetration-test
-description: Conduct a focused Active Directory penetration test using BloodHound,
+description: "Conduct a focused Active Directory penetration test using BloodHound 信号:ad攻击,域渗透,域控。"
 when-to-use: Conduct a focused Active Directory penetration test using BloodHound,
   Impacket, Certipy, Rubeus, and NetExec to enumerate domain objects, discover attack
   paths, exploit Kerberos weaknesses, escalate privileges via ADCS/DCSync, and demonstrate

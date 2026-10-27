@@ -1,6 +1,6 @@
 ---
 name: performing-kerberoasting-attack
-description: Perform Kerberoasting, a post-exploitation technique that enumerates
+description: "Perform Kerberoasting, a post-exploitation technique that enumerates 信号:kerberos,票据攻击,黄金票据。"
 when-to-use: Perform Kerberoasting, a post-exploitation technique that enumerates
   Active Directory service accounts with Service Principal Names (SPNs), requests
   their Kerberos TGS tickets, and cracks the NTLM-encrypted tickets offline to recover

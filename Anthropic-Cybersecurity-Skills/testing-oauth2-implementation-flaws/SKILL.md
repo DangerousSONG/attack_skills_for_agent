@@ -1,6 +1,6 @@
 ---
 name: testing-oauth2-implementation-flaws
-description: Tests OAuth 2.0 and OpenID Connect implementations for authorization code
+description: "Tests OAuth 2.0 and OpenID Connect implementations for authorization code 信号:api攻击,接口测试,graphql。"
 when-to-use: Tests OAuth 2.0 and OpenID Connect implementations for authorization code
   interception, redirect URI manipulation, CSRF in OAuth flows, token leakage, scope
   escalation, and PKCE bypass, using Burp Suite Professional and the EsPReSSO extension

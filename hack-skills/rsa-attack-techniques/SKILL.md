@@ -1,6 +1,6 @@
 ---
 name: rsa-attack-techniques
-description: "RSA attack playbook for CTF and real-world cryptanalysis."
+description: "RSA attack playbook for CTF and real-world cryptanalysis 信号:密码学攻击,加密破解,弱随机数。"
 when-to-use: >-
   RSA attack playbook for CTF and real-world cryptanalysis. Use when given
   RSA parameters (n, e, c) and need to recover plaintext by exploiting

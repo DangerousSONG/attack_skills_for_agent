@@ -1,6 +1,6 @@
 ---
 name: testing-for-email-header-injection
-description: Tests web application email functionality (contact forms, password reset,
+description: "Tests web application email functionality (contact forms, password reset) 信号:进程注入,dll注入,内存执行。"
 when-to-use: Tests web application email functionality (contact forms, password reset,
   newsletter subscriptions) for CRLF/SMTP header injection using Burp Suite and OWASP ZAP,
   checking whether attackers can inject headers, modify recipients, or abuse forms for

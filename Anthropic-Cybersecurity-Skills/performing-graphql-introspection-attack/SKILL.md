@@ -1,6 +1,6 @@
 ---
 name: performing-graphql-introspection-attack
-description: 'Performs GraphQL introspection attacks that extract the full API schema
+description: "Performs GraphQL introspection attacks that extract the full API schema 信号:api攻击,接口测试,graphql。"
 when-to-use: 'Performs GraphQL introspection attacks that extract the full API schema
   (types, queries, mutations, subscriptions, field definitions), map the attack surface,
   test query depth/complexity limits, and exploit GraphQL-specific weaknesses such

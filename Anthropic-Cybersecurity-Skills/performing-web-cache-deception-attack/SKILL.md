@@ -1,6 +1,6 @@
 ---
 name: performing-web-cache-deception-attack
-description: Executes web cache deception attacks by exploiting path normalization
+description: "Executes web cache deception attacks by exploiting path normalization 信号:web漏洞,注入,sql注入。"
 when-to-use: Executes web cache deception attacks by exploiting path normalization
   discrepancies between CDN/reverse-proxy caching layers (Cloudflare, Akamai, Varnish,
   Nginx) and origin servers to cache and retrieve sensitive authenticated content.

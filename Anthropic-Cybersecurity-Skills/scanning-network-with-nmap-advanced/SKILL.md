@@ -1,6 +1,6 @@
 ---
 name: scanning-network-with-nmap-advanced
-description: 'Performs advanced network recon using Nmap''s Scripting Engine (NSE),
+description: "Performs advanced network recon using Nmap''s Scripting Engine (NSE) 信号:端口扫描,nmap,masscan。"
 when-to-use: 'Performs advanced network recon using Nmap''s Scripting Engine (NSE),
   timing controls, firewall/IDS evasion, and structured output parsing to discover
   hosts, enumerate service versions, detect vulnerabilities, and fingerprint OSes.

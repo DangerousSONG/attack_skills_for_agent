@@ -1,6 +1,6 @@
 ---
 name: linux-privilege-escalation
-description: "Linux privilege escalation playbook."
+description: "Linux privilege escalation playbook 信号:linux提权,suid,sudo滥用。"
 when-to-use: >-
   Linux privilege escalation playbook. Use when you have low-privilege shell access and need to escalate to root via SUID/SGID binaries, capabilities, cron abuse, kernel exploits, misconfigurations, or credential harvesting on Linux systems.
 ---

@@ -1,6 +1,6 @@
 ---
 name: llm-prompt-injection
-description: "LLM prompt injection playbook."
+description: "LLM prompt injection playbook 信号:进程注入,dll注入,内存执行。"
 when-to-use: >-
   LLM prompt injection playbook. Use when testing AI/LLM applications for direct injection, indirect injection via RAG/browsing, tool abuse, data exfiltration, MCP security risks, and defense bypass techniques.
 ---

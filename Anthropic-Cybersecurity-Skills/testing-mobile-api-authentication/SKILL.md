@@ -1,6 +1,6 @@
 ---
 name: testing-mobile-api-authentication
-description: 'Tests authentication and authorization mechanisms in mobile application
+description: "Tests authentication and authorization mechanisms in mobile application 信号:api攻击,接口测试,graphql。"
 when-to-use: 'Tests authentication and authorization mechanisms in mobile application
   APIs to identify broken authentication, insecure token management, session fixation,
   privilege escalation, and IDOR vulnerabilities. Use when performing API security

@@ -1,6 +1,6 @@
 ---
 name: performing-thick-client-application-penetration-test
-description: Conduct a thick client application penetration test to identify insecure
+description: "Conduct a thick client application penetration test to identify insecure 信号:web漏洞,注入,sql注入。"
 when-to-use: Conduct a thick client application penetration test to identify insecure
   local storage, hardcoded credentials, DLL hijacking, memory manipulation, and insecure
   API communication in desktop applications using dnSpy, Procmon, and Burp Suite.

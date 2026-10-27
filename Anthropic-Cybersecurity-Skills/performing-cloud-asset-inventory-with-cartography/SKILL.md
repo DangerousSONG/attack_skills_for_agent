@@ -1,6 +1,6 @@
 ---
 name: performing-cloud-asset-inventory-with-cartography
-description: Run Cartography to sync AWS, GCP, or Azure resources into a Neo4j graph database,
+description: "Run Cartography to sync AWS, GCP, or Azure resources into a Neo4j graph database 信号:资产测绘,指纹识别,技术栈识别。"
 when-to-use: Run Cartography to sync AWS, GCP, or Azure resources into a Neo4j graph database,
   mapping relationships such as IAM permission chains, network paths, and cross-account trust.
   Use when building a cloud asset inventory, querying the graph to identify attack paths, or

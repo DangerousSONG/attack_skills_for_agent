@@ -1,6 +1,6 @@
 ---
 name: conducting-internal-network-penetration-test
-description: Execute an internal network penetration test simulating an insider threat
+description: "Execute an internal network penetration test simulating an insider threat 信号:ad攻击,域渗透,域控。"
 when-to-use: Execute an internal network penetration test simulating an insider threat
   or post-breach attacker to identify lateral movement paths, privilege escalation
   vectors, and sensitive data exposure within the corporate network.

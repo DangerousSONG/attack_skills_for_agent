@@ -1,6 +1,6 @@
 ---
 name: performing-purple-team-exercise
-description: 'Performs purple team exercises by coordinating red team adversary emulation
+description: "Performs purple team exercises by coordinating red team adversary emulation 信号:红队,方法论,渗透流程。"
 when-to-use: 'Performs purple team exercises by coordinating red team adversary emulation
   with blue team detection validation using MITRE ATT&CK-mapped attack scenarios,
   real-time detection testing, and collaborative gap remediation. Use when SOC teams

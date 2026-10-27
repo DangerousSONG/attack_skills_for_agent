@@ -1,6 +1,6 @@
 ---
 name: performing-supply-chain-attack-simulation
-description: Performing Supply Chain Attack Simulation
+description: "Performing Supply Chain Attack Simulation 信号:供应链,cicd,流水线攻击。"
 when-to-use: Performing Supply Chain Attack Simulation
   Simulates and detects software supply chain attacks: typosquatting
   detection via Levenshtein distance against popular PyPI package names,

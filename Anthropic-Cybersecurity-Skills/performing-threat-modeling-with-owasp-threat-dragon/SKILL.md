@@ -1,6 +1,6 @@
 ---
 name: performing-threat-modeling-with-owasp-threat-dragon
-description: Performing Threat Modeling with OWASP Threat Dragon
+description: "Performing Threat Modeling with OWASP Threat Dragon 信号:ai安全,大模型攻击,llm攻击。"
 when-to-use: >-
   Uses OWASP Threat Dragon (web or desktop) to build data flow diagrams,
   identify threats with STRIDE, LINDDUN, CIA, DIE, or PLOT4ai methodologies

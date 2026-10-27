@@ -1,6 +1,6 @@
 ---
 name: api-sec
-description: "This is the routing entry point for API security testing."
+description: "This is the routing entry point for API security testing 信号:api攻击,接口测试,graphql。"
 when-to-use: API Security Router
   Entry P1 category router for API security. Use when choosing between API
   recon, authorization, token abuse, and hidden-parameter workflows before any

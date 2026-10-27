@@ -1,6 +1,6 @@
 ---
 name: performing-subdomain-enumeration-with-subfinder
-description: Enumerate subdomains of target domains using ProjectDiscovery's Subfinder
+description: "Enumerate subdomains of target domains using ProjectDiscovery's Subfinder 信号:子域名,域名枚举,dns枚举。"
 when-to-use: Enumerate subdomains of target domains using ProjectDiscovery's Subfinder
   passive reconnaissance tool to map the attack surface during security assessments.
 domain: cybersecurity

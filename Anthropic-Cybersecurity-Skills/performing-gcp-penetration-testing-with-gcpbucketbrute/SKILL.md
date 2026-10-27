@@ -1,6 +1,6 @@
 ---
 name: performing-gcp-penetration-testing-with-gcpbucketbrute
-description: Performs authorized GCP security testing using GCPBucketBrute to enumerate
+description: "Performs authorized GCP security testing using GCPBucketBrute to enumerate 信号:密码破解,哈希破解,hashcat。"
 when-to-use: Performs authorized GCP security testing using GCPBucketBrute to enumerate
   publicly accessible storage buckets, combined with gcloud CLI IAM enumeration to
   find privilege escalation paths and audit service account permissions. Use when

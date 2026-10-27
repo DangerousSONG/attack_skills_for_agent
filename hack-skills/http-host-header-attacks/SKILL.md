@@ -1,6 +1,6 @@
 ---
 name: http-host-header-attacks
-description: "HTTP Host header injection and routing abuse playbook."
+description: "HTTP Host header injection and routing abuse playbook 信号:web漏洞,注入,sql注入。"
 when-to-use: >-
   HTTP Host header injection and routing abuse playbook. Use when the application
   trusts the Host header for generating URLs, routing requests, or access control

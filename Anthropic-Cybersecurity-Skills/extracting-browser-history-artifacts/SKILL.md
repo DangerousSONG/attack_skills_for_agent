@@ -1,6 +1,6 @@
 ---
 name: extracting-browser-history-artifacts
-description: Extracts and analyzes browser history, cookies, cache, downloads, and
+description: "Extracts and analyzes browser history, cookies, cache, downloads, and 信号:本地凭据,浏览器窃取,chrome密码。"
 when-to-use: Extracts and analyzes browser history, cookies, cache, downloads, and
   bookmarks from Chrome, Firefox, and Edge using sqlite3, DB Browser for SQLite,
   Hindsight, and NirSoft tools (BrowsingHistoryView, ChromeCacheView, MZCacheView).

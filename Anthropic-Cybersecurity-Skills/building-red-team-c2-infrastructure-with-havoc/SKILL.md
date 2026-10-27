@@ -1,6 +1,6 @@
 ---
 name: building-red-team-c2-infrastructure-with-havoc
-description: Deploy and configure the Havoc C2 framework (teamserver, HTTPS/HTTP/SMB
+description: "Deploy and configure the Havoc C2 framework (teamserver, HTTPS/HTTP/SMB) 信号:c2,命令控制,远控。"
 when-to-use: Deploy and configure the Havoc C2 framework (teamserver, HTTPS/HTTP/SMB
   listeners, Nginx redirectors, and Demon agents) with malleable traffic profiles and
   OPSEC-hardened infrastructure for authorized red team operations. Use when standing

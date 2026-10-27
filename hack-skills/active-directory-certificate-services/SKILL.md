@@ -1,6 +1,6 @@
 ---
 name: active-directory-certificate-services
-description: "AD Certificate Services attack playbook."
+description: "AD Certificate Services attack playbook 信号:持久化,后门,权限维持。"
 when-to-use: >-
   AD Certificate Services attack playbook. Use when targeting misconfigured AD CS for privilege escalation via ESC1-ESC13 template abuse, NTLM relay to enrollment, CA officer abuse, and certificate-based persistence.
 ---

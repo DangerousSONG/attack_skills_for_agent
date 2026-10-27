@@ -1,6 +1,6 @@
 ---
 name: subdomain-takeover
-description: "Subdomain takeover detection and exploitation playbook."
+description: "Subdomain takeover detection and exploitation playbook 信号:资产测绘,指纹识别,技术栈识别。"
 when-to-use: >-
   Subdomain takeover detection and exploitation playbook. Use when targets have
   dangling CNAME/NS/MX records pointing to deprovisioned cloud resources, expired

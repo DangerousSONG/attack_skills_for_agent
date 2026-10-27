@@ -1,6 +1,6 @@
 ---
 name: testing-api-for-broken-object-level-authorization
-description: 'Tests REST and GraphQL APIs for Broken Object Level Authorization (BOLA/IDOR,
+description: "Tests REST and GraphQL APIs for Broken Object Level Authorization (BOLA/IDOR) 信号:api攻击,接口测试,graphql。"
 when-to-use: 'Tests REST and GraphQL APIs for Broken Object Level Authorization (BOLA/IDOR,
   OWASP API1:2023) by intercepting API calls, identifying object ID parameters (numeric
   IDs, UUIDs, slugs), and systematically substituting IDs belonging to other users

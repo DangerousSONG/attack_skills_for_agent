@@ -1,6 +1,6 @@
 ---
 name: performing-red-team-phishing-with-gophish
-description: Automates GoPhish phishing simulation campaigns using the Python gophish
+description: "Automates GoPhish phishing simulation campaigns using the Python gophish 信号:钓鱼,社会工程,钓鱼邮件。"
 when-to-use: Automates GoPhish phishing simulation campaigns using the Python gophish
   library, creating email templates with tracking pixels, configuring SMTP sending
   profiles, building target groups from CSV, launching campaigns, and analyzing results

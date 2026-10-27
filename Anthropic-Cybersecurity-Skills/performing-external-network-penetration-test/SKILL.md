@@ -1,6 +1,6 @@
 ---
 name: performing-external-network-penetration-test
-description: Conduct a comprehensive external network penetration test to identify
+description: "Conduct a comprehensive external network penetration test to identify 信号:pwn,二进制利用,栈溢出。"
 when-to-use: Conduct a comprehensive external network penetration test to identify
   vulnerabilities in internet-facing infrastructure using PTES methodology, reconnaissance,
   scanning, exploitation, and reporting.

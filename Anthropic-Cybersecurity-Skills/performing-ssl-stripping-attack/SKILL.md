@@ -1,6 +1,6 @@
 ---
 name: performing-ssl-stripping-attack
-description: Performing SSL Stripping Attack
+description: "Performing SSL Stripping Attack 信号:红队,方法论,渗透流程。"
 when-to-use: >-
   Simulates SSL stripping / HTTPS downgrade attacks using sslstrip, Bettercap,
   and mitmproxy in authorized lab environments to test HSTS enforcement,

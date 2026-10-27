@@ -1,6 +1,6 @@
 ---
 name: performing-aws-account-enumeration-with-scout-suite
-description: Run the agentless, open-source ScoutSuite tool (via pip install and the `scout` CLI)
+description: "Run the agentless, open-source ScoutSuite tool (via pip install and the `scout` CLI) 信号:云提权,iam提权。"
 when-to-use: Run the agentless, open-source ScoutSuite tool (via pip install and the `scout` CLI)
   against an AWS account to enumerate resources across services, identify misconfigurations,
   and generate an interactive HTML security report. Use when assessing an AWS account's overall

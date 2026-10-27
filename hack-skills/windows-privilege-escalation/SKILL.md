@@ -1,6 +1,6 @@
 ---
 name: windows-privilege-escalation
-description: "Windows local privilege escalation playbook."
+description: "Windows local privilege escalation playbook 信号:windows提权,uac绕过,服务提权。"
 when-to-use: >-
   Windows local privilege escalation playbook. Use when you have low-privilege shell access on Windows and need to escalate via token abuse, Potato exploits, service misconfigurations, DLL hijacking, UAC bypass, or registry autoruns.
 ---

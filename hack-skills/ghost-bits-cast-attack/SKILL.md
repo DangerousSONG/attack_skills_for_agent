@@ -1,6 +1,6 @@
 ---
 name: ghost-bits-cast-attack
-description: "Java 'Ghost Bits' / Cast Attack playbook (Black Hat Asia 2026)."
+description: "Java 'Ghost Bits' / Cast Attack playbook (Black Hat Asia 2026) 信号:web漏洞,注入,sql注入。"
 when-to-use: >-
   Java "Ghost Bits" / Cast Attack playbook (Black Hat Asia 2026). Use when
   attacking Java services where 16-bit char is silently narrowed to 8-bit byte

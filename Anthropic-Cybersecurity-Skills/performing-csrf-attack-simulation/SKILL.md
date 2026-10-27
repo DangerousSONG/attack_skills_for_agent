@@ -1,6 +1,6 @@
 ---
 name: performing-csrf-attack-simulation
-description: Testing web applications for Cross-Site Request Forgery vulnerabilities
+description: "Testing web applications for Cross-Site Request Forgery vulnerabilities 信号:web漏洞,注入,sql注入。"
 when-to-use: Testing web applications for Cross-Site Request Forgery vulnerabilities
   by crafting forged requests that exploit authenticated user sessions during authorized
   security assessments.
