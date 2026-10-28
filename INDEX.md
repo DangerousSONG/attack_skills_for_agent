@@ -67,7 +67,7 @@
 
 ## C33 数据收集与打包暂存（4 个）
 
-- [acquiring-disk-image-with-dd-and-dcfldd](https://github.com/mukul975/Anthropic-Cybersecurity-Skills/blob/HEAD/skills/acquiring-disk-image-with-dd-and-dcfldd/SKILL.md) · `mukul975/Anthropic-Cybersecurity-Skills` · Apache-2.0 — 用 dd/dcfldd 在 Linux 取证工作站做逐位磁盘镜像,MD5/SHA 哈希校验保证证据完整。信号:磁盘镜像,取证,dd,dcfldd,证据固定。
+- [acquiring-disk-image-with-dd-and-dcfldd](https://github.com/mukul975/Anthropic-Cybersecurity-Skills/blob/HEAD/skills/acquiring-disk-image-with-dd-and-dcfldd/SKILL.md) · `mukul975/Anthropic-Cybersecurity-Skills` · Apache-2.0 — 对目标磁盘做逐位取证镜像采集固证,MD5/SHA 哈希校验保证证据完整。信号:磁盘镜像,取证镜像采集,dd,dcfldd,证据固定。
 - [paramspider-param-harvest](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/paramspider-param-harvest/SKILL.md) · `工具改写(devanshbatham/ParamSpider)` · Apache-2.0 (上游 MIT) — ParamSpider: 带参 URL 批量收割(喂漏洞扫描器)。信号:数据收集,打包,高爬取深度,排除扩展。
 - [urx-url-hunt](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/urx-url-hunt/SKILL.md) · `工具改写(hahwul/urx)` · Apache-2.0 (上游 MIT) — urx: 多源 URL 聚合。信号:数据收集,打包,管道过滤,并发。
 - [tlsx-tls-enum](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/tlsx-tls-enum/SKILL.md) · `工具改写(projectdiscovery/tlsx)` · Apache-2.0 (上游 MIT) — tlsx: 证书 SAN 挖子域。信号:数据收集,打包,tlsx -cn -j`,详细枚举,检测 TLS 配置错误。
@@ -782,7 +782,7 @@
 - [windows-av-evasion](https://github.com/yaklang/hack-skills/blob/HEAD/./skills/windows-av-evasion/SKILL.md) · `yaklang/hack-skills` · MIT — Windows AV/EDR 规避:AMSI/ETW/.NET 程序集检测绕过、shellcode 执行、进程注入、API hooking、特征码规避。信号:av规避,edr,amsi绕过,免杀。
 - [payload-crafter](https://github.com/0xSteph/pentest-ai-agents/blob/HEAD/agents/payload-crafter.md) · `0xSteph/pentest-ai-agents` · MIT — 载荷制作代理:msfvenom、shellcode、打包编码、反弹 shell、EDR 测试二进制、初始访问产物。信号:载荷,msfvenom,shellcode,免杀载荷,反弹shell。
 - [shellnoob-shellcode](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/shellnoob-shellcode/SKILL.md) · `工具改写(reyammer/shellnoob)` · Apache-2.0 (上游 BSD-2-Clause) — shellnoob: 汇编↔shellcode 快速互转。信号:载荷开发,武器化,反汇编,格式转换,架构。
-- [thefatrat-backdoor](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/thefatrat-backdoor/SKILL.md) · `工具改写(Screetsec/TheFatRat)` · Apache-2.0 (上游 GPL-3.0) — TheFatRat: APK 后门打包。信号:载荷开发,武器化,选取编号生成。
+- [thefatrat-backdoor](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/thefatrat-backdoor/SKILL.md) · `工具改写(Screetsec/TheFatRat)` · Apache-2.0 (上游 GPL-3.0) — TheFatRat: 免杀木马捆绑正常程序(APK/EXE)。信号:载荷开发,武器化,选取编号生成。
 - [hoaxshell-powershell](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/hoaxshell-powershell/SKILL.md) · `工具改写(t3l3machus/hoaxshell)` · Apache-2.0 (上游 BSD-2-Clause) — hoaxshell: PowerShell 会话反弹。信号:载荷开发,武器化,生成 PS 反弹载荷,生成后仅打印,加密传输。
 - [weevely-webshell](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/weevely-webshell/SKILL.md) · `工具改写(epinna/weevely3)` · Apache-2.0 (上游 GPL-3.0) — Weevely: PHP webshell 全功能会话。信号:载荷开发,武器化,连接,执行 PHP,文件传输。
 - [pixload-image-payload](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/pixload-image-payload/SKILL.md) · `工具改写(chinarulezzz/pixload)` · Apache-2.0 (上游 WTFPL) — Pixload: 图片上传 XSS/内容检查绕过。信号:载荷开发,武器化,PNG 注入,GIF 注入。
@@ -897,7 +897,7 @@
 
 - [performing-binary-exploitation-analysis](https://github.com/mukul975/Anthropic-Cybersecurity-Skills/blob/HEAD/skills/performing-binary-exploitation-analysis/SKILL.md) · `mukul975/Anthropic-Cybersecurity-Skills` · Apache-2.0 — Analyze ELF binaries for memory-corruption vulnerabilities and build proof-of-concept 信号:数据破坏,擦除,勒索。
 - [exploit-development](https://github.com/hypnguyen1209/offensive-claude/blob/HEAD/skills/exploit-development/SKILL.md) · `hypnguyen1209/offensive-claude` · MIT — 内存破坏 bug→可用 PoC:栈/ROP、glibc 堆与 FSOP、格式化字符串、浏览器/JIT 混淆与 UAF、Linux/Windows 内核 LPE,对抗信号:exploit开发,rop。
-- [slowhttptest-dos](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/slowhttptest-dos/SKILL.md) · `工具改写(shekyan/slowhttptest)` · Apache-2.0 (上游 Apache-2.0) — slowhttptest: 慢速 HTTP 压测(授权演练)。信号:数据破坏,擦除,Slowloris 测试,Range 攻击,持续秒数。
+- [slowhttptest-dos](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/slowhttptest-dos/SKILL.md) · `工具改写(shekyan/slowhttptest)` · Apache-2.0 (上游 Apache-2.0) — slowhttptest: Web 服务慢速拒绝服务压测。信号:数据破坏,擦除,Slowloris 测试,Range 攻击,持续秒数。
 
 
 ## C41 Web漏洞扫描与验证（21 个）
@@ -996,7 +996,7 @@
 - [ai-security](https://github.com/hypnguyen1209/offensive-claude/blob/HEAD/skills/ai-security/SKILL.md) · `hypnguyen1209/offensive-claude` · MIT — AI/ML 系统攻击:Crescendo/Skeleton Key/Best-of-N 越狱、RAG/向量库投毒、Agent/MCP 利用(CVE-2025-54136)、ML信号:ai安全,越狱。
 - [mobile-pentest](https://github.com/hypnguyen1209/offensive-claude/blob/HEAD/skills/mobile-pentest/SKILL.md) · `hypnguyen1209/offensive-claude` · MIT — Android/iOS 渗透:Frida 17 插桩、SSL pinning 与 root/越狱绕过、Android 14/15 CA 注入、导出组件/内容提供方滥用、de信号:移动渗透,frida。
 - [vulnerability-analysis](https://github.com/hypnguyen1209/offensive-claude/blob/HEAD/skills/vulnerability-analysis/SKILL.md) · `hypnguyen1209/offensive-claude` · MIT — 源码漏洞审计:驱动 CodeQL/Semgrep/Joern 做 source-to-sink 污点分析,覆盖注入/内存安全/反序列化/原型污染/秘密/加密/授权/竞信号:代码审计,codeql。
-- [injection-checking](https://github.com/yaklang/hack-skills/blob/HEAD/./skills/injection-checking/SKILL.md) · `yaklang/hack-skills` · MIT — This is the routing entry point when input reaches a dangerous interpreter or execution environment。
+- [injection-checking](https://github.com/yaklang/hack-skills/blob/HEAD/./skills/injection-checking/SKILL.md) · `yaklang/hack-skills` · MIT — 注入漏洞路由入口:按解释器分流到XSS/SQLi/SSRF/XXE/SSTI/命令注入/NoSQL注入的检测与利用流程。信号:注入,xss,sqli,ssrf,xxe,ssti,命令注入。
 - [expression-language-injection](https://github.com/yaklang/hack-skills/blob/HEAD/./skills/expression-language-injection/SKILL.md) · `yaklang/hack-skills` · MIT — 表达式语言注入:Java EL/SpEL/OGNL/MVEL 在 Spring/Struts2/Confluence 等框架中求值攻击者输入。信号:表达式注入,spel,ognl,el注入。
 - [jndi-injection](https://github.com/yaklang/hack-skills/blob/HEAD/./skills/jndi-injection/SKILL.md) · `yaklang/hack-skills` · MIT — JNDI 注入:Java 应用以攻击者可控名称做 JNDI 查找,Log4j2、Spring 等到 InitialContext.lookup() 的代码路径。信号:jndi注入,log4j。
 - [crlf-injection](https://github.com/yaklang/hack-skills/blob/HEAD/./skills/crlf-injection/SKILL.md) · `yaklang/hack-skills` · MIT — CRLF 注入(HTTP 响应拆分):头部注入、双 CRLF 响应体注入、XSS 升级、缓存投毒、编码绕过。信号:crlf注入,响应拆分,头部注入,缓存投毒,http拆分。
@@ -1013,7 +1013,7 @@
 
 - [profiling-threat-actor-groups](https://github.com/mukul975/Anthropic-Cybersecurity-Skills/blob/HEAD/skills/profiling-threat-actor-groups/SKILL.md) · `mukul975/Anthropic-Cybersecurity-Skills` · Apache-2.0 — Develops comprehensive threat actor profiles for APT groups, criminal 信号:邮箱收集,员工信息,人员情报。
 - [ghunt-google-osint](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/ghunt-google-osint/SKILL.md) · `工具改写(mxrch/GHunt)` · Apache-2.0 (上游 GPL-3.0) — GHunt: 邮箱反查 Google 足迹。信号:邮箱收集,员工信息,GAIA ID 反查,地图评价账号关联。
-- [h8mail-breach-hunting](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/h8mail-breach-hunting/SKILL.md) · `工具改写(khast3x/h8mail)` · Apache-2.0 (上游 BSD-3-Clause) — h8mail: 凭据泄露面评估、批量员工邮箱撞库前置。信号:邮箱收集,员工信息,JSON 输出。
+- [h8mail-breach-hunting](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/h8mail-breach-hunting/SKILL.md) · `工具改写(khast3x/h8mail)` · Apache-2.0 (上游 BSD-3-Clause) — h8mail: 查邮箱是否在泄露库中出现、批量员工邮箱撞库前置。信号:邮箱收集,员工信息,JSON 输出。
 - [snscrape-social](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/snscrape-social/SKILL.md) · `工具改写(JustAnotherArchivist/snscrape)` · Apache-2.0 (上游 GPL-3.0) — snscrape: 目标社交足迹与时间线重建。信号:邮箱收集,员工信息,拉取用户推文,搜索语法,单条推文。
 - [phoneinfoga-osint](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/phoneinfoga-osint/SKILL.md) · `工具改写(sundowndev/PhoneInfoga)` · Apache-2.0 (上游 GPL-3.0) — PhoneInfoga: 手机号归属/公开足迹。信号:邮箱收集,员工信息,号码 OSINT 扫描,指定扫描器,起 Web UI。
 - [trape-osint-track](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/trape-osint-track/SKILL.md) · `工具改写(jofpin/trape)` · Apache-2.0 (上游 MIT) — trape: 目标访问行为追踪。信号:邮箱收集,员工信息,对目标站点做访问者追踪,本地演示模式,自定义注入页面。
@@ -1021,7 +1021,7 @@
 - [holehe-email-check](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/holehe-email-check/SKILL.md) · `工具改写(megadose/holehe)` · Apache-2.0 (上游 GPL-3.0) — holehe: 邮箱注册足迹画像。信号:邮箱收集,员工信息,查邮箱注册站点,只显示已注册,保存 cookies。
 - [maigret-username-osint](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/maigret-username-osint/SKILL.md) · `工具改写(soxoj/maigret)` · Apache-2.0 (上游 MIT) — Maigret: 用户名全网画像、定向核验。信号:邮箱收集,员工信息,6000+ 站点查用户名,全量模式(慢但全)。
 - [socialscan-username](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/socialscan-username/SKILL.md) · `工具改写(iojw/socialscan)` · Apache-2.0 (上游 MPL-2.0) — socialscan: 凭据组合前置侦察。信号:邮箱收集,员工信息,邮箱可用性/注册查询,用户名批量,指定平台。
-- [cr3dov3r-leak-lookup](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/cr3dov3r-leak-lookup/SKILL.md) · `工具改写(D4Vinci/Cr3dOv3r)` · Apache-2.0 (上游 MIT) — Cr3dOv3r: 泄露凭据收集+复用验证。信号:邮箱收集,员工信息,静默,只查明文密码库,不测试凭据复用。
+- [cr3dov3r-leak-lookup](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/cr3dov3r-leak-lookup/SKILL.md) · `工具改写(D4Vinci/Cr3dOv3r)` · Apache-2.0 (上游 MIT) — Cr3dOv3r: 收集泄露口令并验证凭据复用。信号:邮箱收集,员工信息,静默,只查明文密码库,不测试凭据复用。
 - [protosint-email-osint](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/protosint-email-osint/SKILL.md) · `工具改写(pixelbubble/ProtOSINT)` · Apache-2.0 (上游 MIT) — ProtOSINT: 邮箱泄露情报。信号:邮箱收集,员工信息,手机号社工库查询,域名关联邮箱探测。
 - [simplyemail-email-harvest](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/simplyemail-email-harvest/SKILL.md) · `工具改写(killswitch-GUI/SimplyEmail)` · Apache-2.0 (上游 GPL-3.0) — SimplyEmail: 邮箱地址批量收割。信号:邮箱收集,员工信息,邮箱收集(多源),详细,JSON 输出。
 - [bridgekeeper-username-mangle](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/bridgekeeper-username-mangle/SKILL.md) · `工具改写(0xZDH/BridgeKeeper)` · Apache-2.0 (上游 MIT) — BridgeKeeper: HR 名单变喷洒字典。信号:邮箱收集,员工信息,人名→用户名规则生成,指定格式。
@@ -1029,7 +1029,7 @@
 - [machinae-osint](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/machinae-osint/SKILL.md) · `工具改写(HurricaneLabs/machinae)` · Apache-2.0 (上游 MIT) — machinae: 域名/IP/邮箱多源情报。信号:邮箱收集,员工信息,多源 OSINT 查询,指定源,批量。
 - [maryam-osint-framework](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/maryam-osint-framework/SKILL.md) · `工具改写(saeeddhqan/Maryam)` · Apache-2.0 (上游 GPL-3.0) — Maryam: 模块化 OSINT 调查。信号:邮箱收集,员工信息,OSINT 框架 CLI,模块选择,数据源。
 - [datasploit-osint-auto](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/datasploit-osint-auto/SKILL.md) · `工具改写(DataSploit/datasploit)` · Apache-2.0 (上游 GPL-3.0) — datasploit: 一键 OSINT 综合报告。信号:邮箱收集,员工信息,自动化 OSINT 报告,IP 模式,邮箱模式。
-- [pwnedornot-breach](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/pwnedornot-breach/SKILL.md) · `工具改写(thewhiteh4t/pwnedOrNot)` · Apache-2.0 (上游 MIT) — PwnedOrNot: 邮箱泄露+密码明文。信号:邮箱收集,员工信息,邮箱泄露查询,批量,仅受泄。
+- [pwnedornot-breach](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/pwnedornot-breach/SKILL.md) · `工具改写(thewhiteh4t/pwnedOrNot)` · Apache-2.0 (上游 MIT) — PwnedOrNot: 邮箱泄露库查询拿明文口令。信号:邮箱收集,员工信息,邮箱泄露查询,批量,仅受泄。
 - [omnibus-osint](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/omnibus-osint/SKILL.md) · `工具改写(InQuest/Omnibus)` · Apache-2.0 (上游 MIT) — Omnibus: IP/域名快速情报。信号:邮箱收集,员工信息,OSINT CLI,IP 情报,域名情报。
 - [pymeta-metadata](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/pymeta-metadata/SKILL.md) · `工具改写(m8sec/pymeta)` · Apache-2.0 (上游 GPL-3.0) — pymeta: 文档元数据收割。信号:邮箱收集,员工信息,文档元数据提取,类型。
 - [crosslinkedin-osint](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/crosslinkedin-osint/SKILL.md) · `工具改写(m8sec/CrossLinked)` · Apache-2.0 (上游 GPL-3.0) — CrossLinked: LinkedIn 员工字典。信号:邮箱收集,员工信息,格式。
@@ -1091,8 +1091,8 @@
 
 ## C34 屏幕与输入捕获（3 个）
 
-- [offensive-keylogger-arch](https://github.com/tmenov/Claude-Red-pentest-set/blob/HEAD/Skills/infrastructure/offensive-keylogger-arch/SKILL.md) · `tmenov/Claude-Red-pentest-set` · MIT — 键盘记录器架构设计:内核钩子(WH_KEYBOARD_LL/SetWindowsHookEx)、ETW 输入捕获、用户态vs内核态、隐蔽技术与数据外传。信号:键盘记录,keylogger,钩子。
-- [scrying-multi-screenshot](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/scrying-multi-screenshot/SKILL.md) · `工具改写(nccgroup/scrying)` · Apache-2.0 (上游 GPL-3.0) — Scrying: 内网服务批量截图。信号:屏幕捕获,截图,单目标截图,仅 RDP,输出目录。
+- [offensive-keylogger-arch](https://github.com/tmenov/Claude-Red-pentest-set/blob/HEAD/Skills/infrastructure/offensive-keylogger-arch/SKILL.md) · `tmenov/Claude-Red-pentest-set` · MIT — 键盘记录器:内核钩子(WH_KEYBOARD_LL/SetWindowsHookEx)、ETW 输入捕获、用户态vs内核态、隐蔽技术与数据外传。信号:键盘记录,记录键盘输入,keylogger。
+- [scrying-multi-screenshot](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/scrying-multi-screenshot/SKILL.md) · `工具改写(nccgroup/scrying)` · Apache-2.0 (上游 GPL-3.0) — Scrying: 目标屏幕定时截图采集。信号:屏幕捕获,截图,单目标截图,仅 RDP,输出目录。
 - [witnessme-web-shot](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/witnessme-web-shot/SKILL.md) · `工具改写(byt3bl33d3r/WitnessMe)` · Apache-2.0 (上游 GPL-3.0) — WitnessMe: Web 资产整段截图。信号:屏幕捕获,截图,单 URL 截图,批量,起 Web 服务看结果。
 
 
@@ -1229,7 +1229,7 @@
 
 ## C23 无文件与LOLBins滥用（2 个）
 
-- [lolbas-living-off-land](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/lolbas-living-off-land/SKILL.md) · `工具改写(LOLBAS-Project/LOLBAS)` · Apache-2.0 (上游 MIT(内容库)) — LOLBAS 项目: 白名单二进制执行绕过、rundll32 无文件执行。信号:无文件攻击,lolbins,查可下载文件的二进制,查可执行命令的二进制。
+- [lolbas-living-off-land](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/lolbas-living-off-land/SKILL.md) · `工具改写(LOLBAS-Project/LOLBAS)` · Apache-2.0 (上游 MIT(内容库)) — LOLBAS 项目: 系统自带工具下载并执行 payload、rundll32 无文件执行。信号:无文件攻击,lolbins,查可下载文件的二进制,查可执行命令的二进制,查可导出凭据的。
 - [m3-gen-msbuild](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/m3-gen-msbuild/SKILL.md) · `工具改写(infosecn1nja/MaliciousMacroMSBuild)` · Apache-2.0 (上游 GPL-2.0) — MaliciousMacroMSBuild: 宏内嵌 MSBuild 免杀。信号:无文件攻击,lolbins,宏+MSBuild 生成,PS 载荷,混淆。
 
 
@@ -1243,11 +1243,11 @@
 ## C45 恶意软件开发与免杀（9 个）
 
 - [veil-framework](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/veil-framework/SKILL.md) · `工具改写(Veil-Framework/Veil)` · Apache-2.0 (上游 GPL-3.0) — Veil: 免杀载荷生成。信号:恶意软件开发,免杀开发,菜单,列 payload,交互选择。
-- [sigthief-signature](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/sigthief-signature/SKILL.md) · `工具改写(secretsquirrel/SigThief)` · Apache-2.0 (上游 BSD-3-Clause) — SigThief: 签名窃取绕过 SmartScreen。信号:恶意软件开发,免杀开发,偷合法签名,从已签名文件剥离签名信息,只检查签名。
+- [sigthief-signature](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/sigthief-signature/SKILL.md) · `工具改写(secretsquirrel/SigThief)` · Apache-2.0 (上游 BSD-3-Clause) — SigThief: 给木马偷取合法数字签名。信号:恶意软件开发,免杀开发,偷合法签名,从已签名文件剥离签名信息,只检查签名。
 - [avet-av-evasion](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/avet-av-evasion/SKILL.md) · `工具改写(govolution/avet)` · Apache-2.0 (上游 GPL-3.0) — AVET: 杀软环境载荷投递。信号:恶意软件开发,免杀开发,交互式载荷构建,编码选择,列出编码器。
 - [darkarmour-obfuscate](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/darkarmour-obfuscate/SKILL.md) · `工具改写(bats3c/darkarmour)` · Apache-2.0 (上游 MIT) — darkarmour: EDR 环境载荷投递。信号:恶意软件开发,免杀开发,AES 加密,进程注入,间接 syscall。
 - [evilclippy-macro-hide](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/evilclippy-macro-hide/SKILL.md) · `工具改写(outflanknl/EvilClippy)` · Apache-2.0 (上游 GPL-3.0) — EvilClippy: 宏文档免杀。信号:恶意软件开发,免杀开发,GUI 混淆,移除宏 VBA 项目,URL 注入宏。
 - [dkmc-macro-gen](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/dkmc-macro-gen/SKILL.md) · `工具改写(Mr-Un1k0d3r/DKMC)` · Apache-2.0 (上游 GPL-3.0) — DKMC: 钓鱼文档批量生成。信号:恶意软件开发,免杀开发,生成宏投递,起 HTTP 服务投递。
 - [demiguise-hta-crypt](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/demiguise-hta-crypt/SKILL.md) · `工具改写(nccgroup/demiguise)` · Apache-2.0 (上游 AGPL-3.0) — demiguise: HTA 钓鱼载荷。信号:恶意软件开发,免杀开发,生成加密 HTA,RC4 密钥。
 - [bluffy-hollow](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/bluffy-hollow/SKILL.md) · `工具改写(ad-995/bluffy)` · Apache-2.0 (上游 MIT) — bluffy: shellcode 免杀。信号:恶意软件开发,免杀开发,shellcode 混淆,AES 加密,直接 syscall。
-- [limelighter-forge](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/limelighter-forge/SKILL.md) · `工具改写(Tylous/Limelighter)` · Apache-2.0 (上游 MIT) — Limelighter: 伪造代码签名。信号:恶意软件开发,免杀开发,伪造签名,延时。
+- [limelighter-forge](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/limelighter-forge/SKILL.md) · `工具改写(Tylous/Limelighter)` · Apache-2.0 (上游 MIT) — Limelighter: 伪造数字签名过信誉查杀。信号:恶意软件开发,免杀开发,伪造签名,延时。

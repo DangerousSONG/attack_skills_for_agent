@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""两层部署脚本：注册层(3 skill) + 文件库(~987 skill 扁平化)
+"""两层部署脚本：注册层(3 skill) + 文件库(993 skill 扁平化)
 
 用法:
   python scripts/deploy.py                 # 实际部署(默认 /root/.claude/skills + /opt/attack-skill-library)

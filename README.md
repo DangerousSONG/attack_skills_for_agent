@@ -22,7 +22,7 @@
 | `pentest-ai-agents/` | 上游 0xSteph（MIT）：角色型 skill（recon/planner/opsec…） | 38 |
 | `offensive-claude/` | 上游 hypnguyen1209（MIT）：纪律类（scope/engagement/finding） | 29 |
 | `Claude-OSINT/` `ctf-skills/` `awesome-web3-security/` `yak-skills/` `awesome-ai-security/` | 上游 OSINT/CTF/Web3/Yakit/LLM 安全 | 26 |
-| `attack-skill-router/` | 注册层：压缩路由主表（13.3KB）+ MERGES 合并裁决 + 生成脚本 | 1 |
+| `attack-skill-router/` | 注册层：压缩路由主表（15KB）+ reference.md 展开层 + MERGES 合并裁决 + 生成脚本 | 1 |
 | `engagement-discipline/` | 注册层：纪律元技能（scope 边界/授权约束） | 1 |
 | `java-deserialization-gadget-selector/` | 注册层：Java 反序列化 gadget 决策表 | 1 |
 | `scripts/` | 治理/部署/评测脚本（见下） | — |
@@ -35,7 +35,7 @@
 | `deploy.py` | 两层部署：`--dry-run` 预演、`--clean` 清空重布、路径可用 `--skills-dir`/`--library-dir` 覆盖 |
 | `govern_skills.py` | 质量门禁：frontmatter 校验、断链扫描（含"未随库分发"豁免）、路径存在性检查 |
 | `eval_recall.py` | 检索质量评测：BEFORE=git HEAD / AFTER=工作区，输出 Recall@5/@20 对比 |
-| `gen_router.py` / `regenerate_index.py` / `sync_readme.py` | 路由表生成 / INDEX.md 再生成 / README 数字同步 |
+| `attack-skill-router/gen_router.py` / `regenerate_index.py` / `export_csv.py` | 路由表两层生成（主表+reference）/ INDEX.md 再生成 / CSV 清单导出；`sync_readme.py` 已失效留档勿跑 |
 
 ## 部署（两层模型 · v2.0）
 
@@ -156,7 +156,8 @@ Top 12：C09 Web应用漏洞利用 171 · C01 资产测绘与指纹识别 62 · 
 
 - v1.1：ACS 误伤复议回收 8 个 + 新增 blockint/ctf/awesome-ai-security 三源
 - v1.9：口径定稿（blockint 移出；MERGES 20 团裁决 13 并 7 不并）→ 989
-- v2.0：补 nuclei/gobuster/ffuf/hydra/frp/chisel/john 七工具 → 996；两层部署（router 13.3KB + deploy.py）；description 三轮迭代 + Recall 评测 @20 100%；评测集扩至 107 条（零覆盖大类补齐）@5 84.1% / @20 100%
+- v2.0：补 nuclei/gobuster/ffuf/hydra/frp/chisel/john 七工具 → 996；两层部署（router 15KB 主表 + reference 展开层 + deploy.py）；description 三轮迭代 + Recall 评测 @20 100%；评测集扩至 107 条（零覆盖大类补齐）@5 84.1% / @20 100%
+- v2.1：治理修复 —— 路由表数据源由外部旧 CSV 改为「INDEX.md + 仓库直扫」重生成（7 新工具全收录、数字口径 996 全同步）；CSV 清单重导出（599 → 996）；4 处 frontmatter name 与目录名对齐；死金标清理；gen_router 修复多强制项互相挤占 bug
 
 ## 署名与许可
 

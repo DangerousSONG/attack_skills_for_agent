@@ -58,7 +58,7 @@ QUERIES = [
     ("搭建钓鱼演练平台批量发钓鱼邮件", ["performing-phishing-simulation-with-gophish", "performing-red-team-phishing-with-gophish"]),
     ("反向代理钓鱼页面实时接管会话", ["modlishka-reverse-proxy-phishing"]),
     ("子域名全量枚举", ["performing-subdomain-enumeration-with-subfinder", "amass-attack-surface", "sublist3r-passive-subdomains", "findomain-fast-enum", "shuffledns-brute"]),
-    ("邮箱和员工OSINT情报收集", ["osint-collector", "gmask-osint-all", "gasmask-osint-all"]),
+    ("邮箱和员工OSINT情报收集", ["osint-collector", "gasmask-osint-all"]),
     ("DNS记录收割与区域枚举", ["fierce-dns-recon", "dnsmap-subdomain", "adidnsdump-ldap-enum", "zdns-lookup"]),
     ("外部攻击面测绘与资产梳理", ["amass-attack-surface", "gowitness-screenshot"]),
     ("根据CVE编号查找可用EXP", ["rext-exploit-db", "offensive-vuln-classes"]),

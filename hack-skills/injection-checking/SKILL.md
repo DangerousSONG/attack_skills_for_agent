@@ -1,6 +1,6 @@
 ---
 name: injection-checking
-description: "This is the routing entry point when input reaches a dangerous interpreter or execution environment。"
+description: "注入漏洞路由入口:按解释器分流到XSS/SQLi/SSRF/XXE/SSTI/命令注入/NoSQL注入的检测与利用流程。信号:注入,xss,sqli,ssrf,xxe,ssti,命令注入。"
 when-to-use: Injection Testing Router
   Entry P1 category router for injection testing. Use when routing between XSS,
   SQLi, SSRF, XXE, SSTI, command injection, and NoSQL injection workflows based
