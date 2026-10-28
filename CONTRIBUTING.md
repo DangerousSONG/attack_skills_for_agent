@@ -45,5 +45,6 @@ python scripts/deploy.py             # 注册层(3个) → /root/.claude/skills/
 ## 五、红线
 
 1. **MERGES.md 是人工裁决产物**（20 团，13 并 7 不并），任何脚本不得覆盖；gen_router.py 已移除 MERGES 生成逻辑
-2. 推送前跑 `git status`，不得带入 `scripts/_*` 临时文件（.gitignore 已屏蔽）
-3. 口径数字（996 = 现成 435 + 改写 561）分散在 README / INDEX / 路由表 / deploy.py，改动总量后必须全文同步
+2. **评测 harness（`scripts/eval_recall.py` + 107 条人工金标）是质量门禁，不得删除、绕过或静默替换**（2026-10-28 曾被当作"失效脚本"误删，已从 git 历史恢复）；任何检索/路由方案的替换或升级，必须先用它跑出 BEFORE/AFTER 对比证明不回退，新方案文档承诺的召回率指标（如 Recall@20 ≥95%）一律以它验收
+3. 推送前跑 `git status`，不得带入 `scripts/_*` 临时文件（.gitignore 已屏蔽）
+4. 口径数字（996 = 现成 435 + 改写 561）分散在 README / INDEX / 路由表 / deploy.py，改动总量后必须全文同步
