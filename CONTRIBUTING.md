@@ -23,7 +23,6 @@ python scripts/export_csv.py           # 3. 攻击侧Skills清单.csv 重导出
 
 - 只改了某条 description → 只需第 1 步（刷新 INDEX 里的简介）
 - 新增/删除/改大类 → 三步全跑
-- **不要跑 `scripts/sync_readme.py`**：v1.9→v2.0 一次性补丁，已失效，会全部 no-op
 
 ## 三、质量验证（提交前必须全过）
 
