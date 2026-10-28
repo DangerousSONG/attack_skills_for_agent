@@ -1,7 +1,7 @@
 # Attack Skills for Agent · 攻击侧 Skills 集（996 个 · 1k 达成）
 
 > 面向渗透测试 Agent 的即插即用 SKILL.md 能力库：每个 skill = frontmatter + 方法论 + 命令速查 + 攻击场景 Playbook，Agent 按需加载、照抄执行。
-> 逐条明细（名称/来源/License/简介/链接）见 [INDEX.md](INDEX.md)。
+> 逐条明细（名称/来源/License/简介/链接）见 [INDEX.md](INDEX.md)。维护流程（新增/修改 skill 的三步级联 + 门禁）见 [CONTRIBUTING](CONTRIBUTING.md)。
 > ⚠️ 仅限授权安全测试使用（authorized security testing only）。
 
 ## 核心价值
