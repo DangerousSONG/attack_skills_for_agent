@@ -2,6 +2,9 @@
 scripts/_*.txt
 scripts/_before_tmp/
 scripts/_retrieval_index.pkl
+scripts/_exp_cache.json
+scripts/_vec_index.npz
+scripts/_exp_scores.json
 
 # Python
 __pycache__/
