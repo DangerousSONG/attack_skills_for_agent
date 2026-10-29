@@ -28,12 +28,24 @@ def load_queries():
     return mod['QUERIES']
 
 
-def load_query_sims(n_queries, slugs):
-    """批量查询嵌入缓存(scripts/_coarse_cache/*.queries.npy, 与 QUERIES 同序) -> S[查询, skill]"""
+def load_query_sims(queries, slugs):
+    """批量查询嵌入(缓存 scripts/_coarse_cache/*.queries.npy, 与 QUERIES 同序) -> S[查询, skill]
+    缓存缺失时自动批量嵌入全部查询(约 1 分钟)并落盘, 保证克隆后开箱可跑"""
     key = R.COARSE_MODEL.replace('/', '_')
-    fp = os.path.join(os.path.dirname(os.path.abspath(__file__)), '_coarse_cache', key + '.queries.npy')
-    Q = np.load(fp).astype(np.float32)[:n_queries]
-    X = np.load(os.path.join(os.path.dirname(os.path.abspath(__file__)), '_coarse_cache', key + '.npy')).astype(np.float32)
+    cache_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '_coarse_cache')
+    fp = os.path.join(cache_dir, key + '.queries.npy')
+    if os.path.exists(fp):
+        Q = np.load(fp).astype(np.float32)
+    else:
+        print('查询嵌入缓存缺失, 批量嵌入 {0} 条查询(约 1 分钟, 之后走缓存)...'.format(len(queries)), flush=True)
+        from fastembed import TextEmbedding
+        emb = TextEmbedding(R.COARSE_MODEL)
+        prefix = R.Q_PREFIX.get(R.COARSE_MODEL, '')
+        Q = np.array(list(emb.embed([prefix + q for q, _ in queries])), dtype=np.float32)
+        os.makedirs(cache_dir, exist_ok=True)
+        np.save(fp, Q)
+    Q = Q[:len(queries)]
+    X = np.load(os.path.join(cache_dir, key + '.npy')).astype(np.float32)
     assert X.shape[0] == len(slugs)
     Qn = Q / np.linalg.norm(Q, axis=1, keepdims=True)
     Xn = X / np.linalg.norm(X, axis=1, keepdims=True)
@@ -104,8 +116,9 @@ def main():
         idx = pickle.load(f)
     slugs = idx['slugs']
     docs = load_corpus()
-    queries = load_queries()[a.start:a.end]
-    sims = load_query_sims(len(load_queries()), slugs)[a.start:a.end]
+    all_queries = load_queries()
+    queries = all_queries[a.start:a.end]
+    sims = load_query_sims(all_queries, slugs)[a.start:a.end]
     print('评测 {0} 条查询 / {1} skills / tau={2}'.format(len(queries), len(slugs), a.tau), flush=True)
     for cfg in a.configs.split(','):
         run_config(cfg.strip(), queries, sims, docs, slugs, idx, a.tau)

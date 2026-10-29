@@ -10,4 +10,3 @@ scripts/_exp_scores.json
 __pycache__/
 *.pyc
 scripts/_coarse_cache/
-scripts/_embed_seed.py
