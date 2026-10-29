@@ -14,8 +14,8 @@ when-to-use: 任何渗透任务开题时；已加载 skill 不足以解决当前
 
 ## 使用流程（必须按序）
 
-1. **调工具**：`python /opt/attack-skill-library/_router/skill_route.py "<当前任务描述>" --docs`（--docs 附 skill 描述，直接够做决策；L3 重排版加 `--rerank llm`，需网关 key）；
-2. **看结果选用**：JSON 里 `skills` 是推荐 slug 列表；`abstain=true` 表示工具弃权（无高置信候选），不要强行加载，凭自身能力做或换更具体的关键词重试；
+1. **调工具**：`python /opt/attack-skill-library/_router/skill_route.py "<当前任务描述>" --docs`（`--docs` 附 skill 描述直接够做决策；L3 重排二选一：`--rerank llm` 走网关 key 千问打分，或 `--rerank local` 本地 bge-reranker 离线重排首次自动下载 0.57GB；万级扩容时加 `--coarse` 先过 embedding 粗筛再进 L2）；
+2. **看结果选用**：JSON 里 `skills` 是推荐 slug 列表；`source` 显示命中层（l1=字典精确命中，l0c=粗筛后剩余数）；`abstain=true` 表示工具弃权（无高置信候选），不要强行加载，凭自身能力做或换更具体的关键词重试；
 3. **定向加载**：用 Skill 工具加载选定 slug（同主题只装一个，规则见下）；库路径 `/opt/attack-skill-library/<slug>/SKILL.md`；
 4. **不够再扩**：重跑工具换措辞，或按下方「路由表」定位大类后用 `grep -ril <关键词> /opt/attack-skill-library` 定向补；
 5. **报告**：最终报告末尾列出实际加载的 slug（与评测工作流一致）。

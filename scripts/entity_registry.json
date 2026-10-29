@@ -1,9 +1,10 @@
 {
- "version": "v0",
- "generated_from": "skill corpus internal mining (eval isolated)",
+ "version": "v1",
+ "generated_from": "skill corpus internal mining + curated hall-of-fame (eval isolated)",
  "counts": {
   "cve": 36,
   "tool_alias": 22,
+  "curated": 43,
   "categories": 47
  },
  "entities": [
@@ -481,14 +482,15 @@
    "type": "tool",
    "value": "hydra-service-brute",
    "aliases": [
+    "hydra",
     "thc-hydra"
    ],
    "skills": [
     "hydra-service-brute"
    ],
    "cat": "C28",
-   "provenance": "frontmatter+上游仓库",
-   "confidence": 0.9
+   "provenance": "frontmatter+上游仓库+curated",
+   "confidence": 1.0
   },
   {
    "type": "tool",
@@ -637,14 +639,15 @@
    "type": "tool",
    "value": "weevely-webshell",
    "aliases": [
+    "weevely",
     "weevely3"
    ],
    "skills": [
     "weevely-webshell"
    ],
    "cat": "C07",
-   "provenance": "frontmatter+上游仓库",
-   "confidence": 0.9
+   "provenance": "frontmatter+上游仓库+curated",
+   "confidence": 1.0
   },
   {
    "type": "tool",
@@ -658,6 +661,548 @@
    "cat": "C38",
    "provenance": "frontmatter+上游仓库",
    "confidence": 0.9
+  },
+  {
+   "type": "tool",
+   "value": "exploiting-sql-injection-with-sqlmap",
+   "aliases": [
+    "sqlmap"
+   ],
+   "skills": [
+    "exploiting-sql-injection-with-sqlmap"
+   ],
+   "cat": "",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "scanning-network-with-nmap-advanced",
+   "aliases": [
+    "nmap"
+   ],
+   "skills": [
+    "scanning-network-with-nmap-advanced"
+   ],
+   "cat": "",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "masscan-internet",
+   "aliases": [
+    "masscan"
+   ],
+   "skills": [
+    "masscan-internet"
+   ],
+   "cat": "C42",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "mimikatz-credentials",
+   "aliases": [
+    "mimikatz"
+   ],
+   "skills": [
+    "mimikatz-credentials"
+   ],
+   "cat": "C24",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "exploiting-active-directory-with-bloodhound",
+   "aliases": [
+    "bloodhound"
+   ],
+   "skills": [
+    "exploiting-active-directory-with-bloodhound"
+   ],
+   "cat": "",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "moving-laterally-with-netexec",
+   "aliases": [
+    "netexec"
+   ],
+   "skills": [
+    "moving-laterally-with-netexec"
+   ],
+   "cat": "",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "crackmapexec-smb",
+   "aliases": [
+    "cme",
+    "crackmapexec"
+   ],
+   "skills": [
+    "crackmapexec-smb"
+   ],
+   "cat": "C30",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "impacket-protocol-exec",
+   "aliases": [
+    "impacket",
+    "psexec",
+    "smbexec",
+    "wmiexec"
+   ],
+   "skills": [
+    "impacket-protocol-exec"
+   ],
+   "cat": "C31",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "responder-ntlm-poison",
+   "aliases": [
+    "responder"
+   ],
+   "skills": [
+    "responder-ntlm-poison"
+   ],
+   "cat": "C40",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "kerbrute-kerberos-enum",
+   "aliases": [
+    "kerbrute"
+   ],
+   "skills": [
+    "kerbrute-kerberos-enum"
+   ],
+   "cat": "C28",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "performing-hash-cracking-with-hashcat",
+   "aliases": [
+    "hashcat"
+   ],
+   "skills": [
+    "performing-hash-cracking-with-hashcat"
+   ],
+   "cat": "",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "john-hash-crack",
+   "aliases": [
+    "john the ripper",
+    "johntheripper"
+   ],
+   "skills": [
+    "john-hash-crack"
+   ],
+   "cat": "C25",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "intercepting-mobile-traffic-with-burpsuite",
+   "aliases": [
+    "burp",
+    "burp suite",
+    "burpsuite"
+   ],
+   "skills": [
+    "intercepting-mobile-traffic-with-burpsuite"
+   ],
+   "cat": "",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "exploiting-vulnerabilities-with-metasploit-framework",
+   "aliases": [
+    "metasploit",
+    "msfconsole",
+    "msfvenom"
+   ],
+   "skills": [
+    "exploiting-vulnerabilities-with-metasploit-framework"
+   ],
+   "cat": "",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "performing-web-application-scanning-with-nikto",
+   "aliases": [
+    "nikto"
+   ],
+   "skills": [
+    "performing-web-application-scanning-with-nikto"
+   ],
+   "cat": "",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "gobuster-dir-dns",
+   "aliases": [
+    "gobuster"
+   ],
+   "skills": [
+    "gobuster-dir-dns"
+   ],
+   "cat": "C41",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "ffuf-web-fuzz",
+   "aliases": [
+    "ffuf"
+   ],
+   "skills": [
+    "ffuf-web-fuzz"
+   ],
+   "cat": "C41",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "feroxbuster-content-discovery",
+   "aliases": [
+    "feroxbuster"
+   ],
+   "skills": [
+    "feroxbuster-content-discovery"
+   ],
+   "cat": "C41",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "nuclei-template-scan",
+   "aliases": [
+    "nuclei"
+   ],
+   "skills": [
+    "nuclei-template-scan"
+   ],
+   "cat": "C41",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "chisel-tunnel",
+   "aliases": [
+    "chisel"
+   ],
+   "skills": [
+    "chisel-tunnel"
+   ],
+   "cat": "C32",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "frp-tunnel",
+   "aliases": [
+    "frp"
+   ],
+   "skills": [
+    "frp-tunnel"
+   ],
+   "cat": "C32",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "rubeus-kerberos",
+   "aliases": [
+    "rubeus"
+   ],
+   "skills": [
+    "rubeus-kerberos"
+   ],
+   "cat": "C26",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "wpscan-wp-audit",
+   "aliases": [
+    "wpscan"
+   ],
+   "skills": [
+    "wpscan-wp-audit"
+   ],
+   "cat": "C41",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "fscan-intranet",
+   "aliases": [
+    "fscan"
+   ],
+   "skills": [
+    "fscan-intranet"
+   ],
+   "cat": "C42",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "naabu-portscan",
+   "aliases": [
+    "naabu"
+   ],
+   "skills": [
+    "naabu-portscan"
+   ],
+   "cat": "C42",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "rustscan-speed",
+   "aliases": [
+    "rustscan"
+   ],
+   "skills": [
+    "rustscan-speed"
+   ],
+   "cat": "C42",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "exploiting-adcs-with-certipy",
+   "aliases": [
+    "certipy"
+   ],
+   "skills": [
+    "exploiting-adcs-with-certipy"
+   ],
+   "cat": "",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "performing-phishing-simulation-with-gophish",
+   "aliases": [
+    "gophish"
+   ],
+   "skills": [
+    "performing-phishing-simulation-with-gophish"
+   ],
+   "cat": "",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "operating-sliver-c2",
+   "aliases": [
+    "sliver"
+   ],
+   "skills": [
+    "operating-sliver-c2"
+   ],
+   "cat": "",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "operating-havoc-c2",
+   "aliases": [
+    "havoc"
+   ],
+   "skills": [
+    "operating-havoc-c2"
+   ],
+   "cat": "",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "enum4linux-ng",
+   "aliases": [
+    "enum4linux"
+   ],
+   "skills": [
+    "enum4linux-ng"
+   ],
+   "cat": "C29",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "dirsearch-dir-bruteforce",
+   "aliases": [
+    "dirsearch"
+   ],
+   "skills": [
+    "dirsearch-dir-bruteforce"
+   ],
+   "cat": "C41",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "performing-subdomain-enumeration-with-subfinder",
+   "aliases": [
+    "subfinder"
+   ],
+   "skills": [
+    "performing-subdomain-enumeration-with-subfinder"
+   ],
+   "cat": "",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "amass-attack-surface",
+   "aliases": [
+    "amass"
+   ],
+   "skills": [
+    "amass-attack-surface"
+   ],
+   "cat": "C01",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "xsstrike-xss",
+   "aliases": [
+    "xsstrike"
+   ],
+   "skills": [
+    "xsstrike-xss"
+   ],
+   "cat": "C09",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "commix-command-injection",
+   "aliases": [
+    "commix"
+   ],
+   "skills": [
+    "commix-command-injection"
+   ],
+   "cat": "C09",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "ldeep-ldap-query",
+   "aliases": [
+    "ldeep"
+   ],
+   "skills": [
+    "ldeep-ldap-query"
+   ],
+   "cat": "C29",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "windapsearch-ldap-ad",
+   "aliases": [
+    "windapsearch"
+   ],
+   "skills": [
+    "windapsearch-ldap-ad"
+   ],
+   "cat": "C29",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "adpeas-quickwin",
+   "aliases": [
+    "adpeas"
+   ],
+   "skills": [
+    "adpeas-quickwin"
+   ],
+   "cat": "C30",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "bloodyad-ad-privesc",
+   "aliases": [
+    "bloodyad"
+   ],
+   "skills": [
+    "bloodyad-ad-privesc"
+   ],
+   "cat": "C30",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "cewl-wordlist",
+   "aliases": [
+    "cewl"
+   ],
+   "skills": [
+    "cewl-wordlist"
+   ],
+   "cat": "C25",
+   "provenance": "curated:manual",
+   "confidence": 1.0
   }
  ],
  "category_routes": {

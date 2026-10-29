@@ -19,6 +19,54 @@ OUT = os.path.join(ROOT, 'scripts', 'entity_registry.json')
 REGISTERED = {'attack-skill-router', 'engagement-discipline', 'java-deserialization-gadget-selector'}
 CVE_RE = re.compile(r'CVE-\d{4}-\d{4,7}', re.I)
 
+# ---- 名人堂高频工具别名(人工策展, 与挖掘结果合并; 重新生成不丢失) ----
+# (slug, [别名...]): 别名为小写子串匹配, 不做短词(防误命中)
+CURATED_TOOLS = [
+    ('exploiting-sql-injection-with-sqlmap', ['sqlmap']),
+    ('scanning-network-with-nmap-advanced', ['nmap']),
+    ('masscan-internet', ['masscan']),
+    ('mimikatz-credentials', ['mimikatz']),
+    ('exploiting-active-directory-with-bloodhound', ['bloodhound']),
+    ('moving-laterally-with-netexec', ['netexec']),
+    ('crackmapexec-smb', ['crackmapexec', 'cme']),
+    ('impacket-protocol-exec', ['impacket', 'wmiexec', 'psexec', 'smbexec']),
+    ('responder-ntlm-poison', ['responder']),
+    ('kerbrute-kerberos-enum', ['kerbrute']),
+    ('performing-hash-cracking-with-hashcat', ['hashcat']),
+    ('john-hash-crack', ['john the ripper', 'johntheripper']),
+    ('hydra-service-brute', ['hydra']),
+    ('intercepting-mobile-traffic-with-burpsuite', ['burpsuite', 'burp suite', 'burp']),
+    ('exploiting-vulnerabilities-with-metasploit-framework', ['metasploit', 'msfconsole', 'msfvenom']),
+    ('performing-web-application-scanning-with-nikto', ['nikto']),
+    ('gobuster-dir-dns', ['gobuster']),
+    ('ffuf-web-fuzz', ['ffuf']),
+    ('feroxbuster-content-discovery', ['feroxbuster']),
+    ('nuclei-template-scan', ['nuclei']),
+    ('chisel-tunnel', ['chisel']),
+    ('frp-tunnel', ['frp']),
+    ('rubeus-kerberos', ['rubeus']),
+    ('weevely-webshell', ['weevely']),
+    ('wpscan-wp-audit', ['wpscan']),
+    ('fscan-intranet', ['fscan']),
+    ('naabu-portscan', ['naabu']),
+    ('rustscan-speed', ['rustscan']),
+    ('exploiting-adcs-with-certipy', ['certipy']),
+    ('performing-phishing-simulation-with-gophish', ['gophish']),
+    ('operating-sliver-c2', ['sliver']),
+    ('operating-havoc-c2', ['havoc']),
+    ('enum4linux-ng', ['enum4linux']),
+    ('dirsearch-dir-bruteforce', ['dirsearch']),
+    ('performing-subdomain-enumeration-with-subfinder', ['subfinder']),
+    ('amass-attack-surface', ['amass']),
+    ('xsstrike-xss', ['xsstrike']),
+    ('commix-command-injection', ['commix']),
+    ('ldeep-ldap-query', ['ldeep']),
+    ('windapsearch-ldap-ad', ['windapsearch']),
+    ('adpeas-quickwin', ['adpeas']),
+    ('bloodyad-ad-privesc', ['bloodyad']),
+    ('cewl-wordlist', ['cewl']),
+]
+
 
 def load_skills():
     docs = {}
@@ -88,20 +136,39 @@ def main():
                              'provenance': 'frontmatter+上游仓库', 'confidence': 0.9})
             n_tool += 1
 
+    # ---- 名人堂策展别名: 合并进已有 tool 实体(同 slug)或新建, slug 不在语料则跳过 ----
+    n_curated = 0
+    by_slug = {e['value']: e for e in entities if e['type'] == 'tool'}
+    for slug, aliases in CURATED_TOOLS:
+        if slug not in docs:
+            print('  [跳过] 策展 slug 不在语料:', slug)
+            continue
+        if slug in by_slug:
+            merged = sorted(set(by_slug[slug]['aliases']) | set(aliases))
+            by_slug[slug]['aliases'] = merged
+            by_slug[slug]['provenance'] += '+curated'
+            by_slug[slug]['confidence'] = 1.0
+        else:
+            entities.append({'type': 'tool', 'value': slug, 'aliases': sorted(aliases),
+                             'skills': [slug], 'cat': docs[slug]['cat'],
+                             'provenance': 'curated:manual', 'confidence': 1.0})
+            by_slug[slug] = entities[-1]
+        n_curated += 1
+
     # ---- category 路由表: Cxx -> 全部 slug(元数据路由用, 不进查询匹配) ----
     cats = collections.defaultdict(list)
     for slug, d in docs.items():
         if d['cat']:
             cats[d['cat']].append(slug)
 
-    out = {'version': 'v0', 'generated_from': 'skill corpus internal mining (eval isolated)',
-           'counts': {'cve': len(cve_map), 'tool_alias': n_tool, 'categories': len(cats)},
+    out = {'version': 'v1', 'generated_from': 'skill corpus internal mining + curated hall-of-fame (eval isolated)',
+           'counts': {'cve': len(cve_map), 'tool_alias': n_tool, 'curated': n_curated, 'categories': len(cats)},
            'entities': entities,
            'category_routes': {k: sorted(v) for k, v in sorted(cats.items())}}
     io.open(OUT, 'w', encoding='utf-8', newline='\n').write(
         json.dumps(out, ensure_ascii=False, indent=1))
-    print('实体总数 {0}: CVE {1} / 工具别名 {2} / 大类 {3}'.format(
-        len(entities), len(cve_map), n_tool, len(cats)))
+    print('实体总数 {0}: CVE {1} / 工具别名 {2} / 策展 {3} / 大类 {4}'.format(
+        len(entities), len(cve_map), n_tool, n_curated, len(cats)))
     print('多 skill 共享的 CVE(高价值路由):')
     for cve in sorted(cve_map):
         if len(cve_map[cve]) > 1:
