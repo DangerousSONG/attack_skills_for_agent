@@ -31,7 +31,8 @@ def load_corpus():
             continue
         slug = os.path.relpath(dp, ROOT).replace(os.sep, '/').split('/')[-1]
         parts = os.path.relpath(dp, ROOT).replace(os.sep, '/').split('/')
-        if parts[0] in REGISTERED or len(parts) < 2 or parts[0] == 'scripts':
+        # 兼容两种布局: 仓库(组目录/slug) 与 部署态库根(扁平 slug); 排除注册层/工具目录
+        if parts[0] in REGISTERED or parts[0] in ('scripts', '_router') or '.git' in parts:
             continue
         s = io.open(os.path.join(dp, 'SKILL.md'), encoding='utf-8', errors='replace').read()
         fm = re.search(r'^---\n(.*?)\n---', s, re.S)
