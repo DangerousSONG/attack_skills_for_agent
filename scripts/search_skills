@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+# search_skills — Agent(Claude Code 等)调用入口。
+#
+# 存在理由: search_skills.py 需要装了 torch/sentence_transformers 的解释器, 而 Agent 的 Bash
+# 默认 PATH 上通常只有系统 python3(缺依赖); 且 Agent 的 cwd 是目标项目、不是本库。
+# 本包装脚本负责自定位仓库根 + 解析可用解释器 + 预检模型与索引, 参数原样透传给 .py。
+#
+# 用法(任意 cwd 均可, 参数与 search_skills.py 完全一致):
+#   /path/to/attack_skills_for_agent/scripts/search_skills "一句话任务描述" --top-k 5
+#   echo "一句话任务描述" | /path/to/.../scripts/search_skills - --format text
+#   /path/to/.../scripts/search_skills --print-python   # 内部用: 只打印解析到的解释器路径
+#
+# 环境变量:
+#   SKILL_PYTHON  指定解释器, 优先级最高(跳过 .python-path 与探测)
+#   SKILL_QUIET   置 1 时不输出预检提示(stderr 只剩 .py 自身的诊断)
+#
+# 退出码: 0=正常 / 2=参数或索引错误(透传 .py) / 3=环境未就绪(缺解释器或模型权重)
+set -euo pipefail
+
+SELF="$(readlink -f "${BASH_SOURCE[0]}")"
+ROOT="$(cd "$(dirname "$SELF")/.." && pwd)"
+PY_FILE="$ROOT/scripts/search_skills.py"
+
+note() { [ "${SKILL_QUIET:-0}" = 1 ] || printf '[search_skills] %s\n' "$*" >&2; }
+die()  { printf '[search_skills] 环境未就绪: %s\n' "$*" >&2; exit 3; }
+
+[ -f "$PY_FILE" ] || die "找不到 $PY_FILE (仓库不完整?)"
+
+# ---- 解释器解析: SKILL_PYTHON > .python-path(由 install_skill.sh 校验后写入) > 已知 venv > python3
+# 用 find_spec 而非 import 校验依赖: 只查能否定位模块、不执行它, 约 30ms; import torch 要 2s+。
+WHY=""
+PROBE='import importlib.util as u,sys
+miss=[m for m in ("torch","sentence_transformers","sklearn","scipy") if u.find_spec(m) is None]
+sys.exit(("缺依赖: "+",".join(miss)) if miss else 0)'
+has_deps() {  # $1=解释器; 缺失原因写全局 WHY
+  if WHY="$("$1" -c "$PROBE" 2>&1)"; then return 0; fi
+  case "$WHY" in *缺依赖*) WHY="${WHY##*$'\n'}" ;; *) WHY="无法运行: $WHY" ;; esac
+  return 1
+}
+resolve_python() {
+  local c
+  if [ -n "${SKILL_PYTHON:-}" ]; then
+    [ -x "${SKILL_PYTHON}" ] || die "SKILL_PYTHON=$SKILL_PYTHON 不可执行"
+    if ! has_deps "${SKILL_PYTHON}"; then die "SKILL_PYTHON=$SKILL_PYTHON $WHY"; fi
+    printf '%s' "$SKILL_PYTHON"; return
+  fi
+  if [ -f "$ROOT/.python-path" ]; then
+    c="$(head -n1 "$ROOT/.python-path")"
+    if [ -n "$c" ] && [ -x "$c" ] && has_deps "$c"; then printf '%s' "$c"; return; fi
+    note ".python-path 记录的解释器不可用($c: ${WHY:-不存在}), 回落探测"
+  fi
+  for c in "$ROOT/../PentestAgent/venv/bin/python" \
+           "$HOME/safe-range/PentestAgent/venv/bin/python" \
+           python3 python; do
+    case "$c" in */*) [ -x "$c" ] || continue ;; *) command -v "$c" >/dev/null 2>&1 || continue ;; esac
+    if has_deps "$c"; then printf '%s' "$c"; return; fi
+  done
+  die "找不到带 torch/sentence_transformers/sklearn/scipy 的 python (最后试的 $c: $WHY)
+  → 修法一: export SKILL_PYTHON=<venv>/bin/python
+  → 修法二: bash $ROOT/scripts/install_skill.sh   (自动探测并写入 .python-path)"
+}
+PY="$(resolve_python)"
+
+# ---- 内部出口: 把解析结果吐给 scripts/router_server.sh 复用, 免得两边各写一份解释器探测逻辑
+if [ "${1:-}" = "--print-python" ]; then printf '%s\n' "$PY"; exit 0; fi
+
+# ---- 预检: 权重缺失直接给出修复命令, 避免 .py 抛栈或联网卡住
+if [ ! -d "$ROOT/demo/models/BAAI/bge-m3" ]; then
+  die "缺 L1 模型权重 demo/models/BAAI/bge-m3 → 先跑: bash $ROOT/demo/fetch_models.sh"
+fi
+if compgen -G "$ROOT/_index/l1_embs_*.npz" >/dev/null; then
+  note "索引已就绪, 解释器 $PY"
+else
+  note "首次运行: 需编码全库 994 条(CPU 约 2 分钟), 之后命中 _index/ 缓存"
+fi
+
+exec "$PY" "$PY_FILE" "$@"

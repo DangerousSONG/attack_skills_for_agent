@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 从 ModelScope 拉取 demo 所需两个模型到 demo/models/（huggingface.co 直连不通时的替代渠道）
+# 从 ModelScope 拉取 demo/CLI 所需模型到 demo/models/（huggingface.co 直连不通时的替代渠道）
 set -e
 cd "$(dirname "$0")"
 BASE=https://modelscope.cn/models
@@ -22,6 +22,13 @@ done
 R=BAAI/bge-reranker-v2-m3
 for f in config.json sentencepiece.bpe.model special_tokens_map.json tokenizer.json \
          tokenizer_config.json model.safetensors; do
+  get "$R" "$f"
+done
+# bge-m3: 多语言 1024 维, 语料中英混排时的 L1 默认模型; 权重只有 pytorch_model.bin(2.2GB), 无 safetensors
+R=BAAI/bge-m3
+for f in config.json modules.json sentence_bert_config.json config_sentence_transformers.json \
+         special_tokens_map.json tokenizer.json tokenizer_config.json sentencepiece.bpe.model \
+         1_Pooling/config.json pytorch_model.bin; do
   get "$R" "$f"
 done
 echo DONE

@@ -9,4 +9,14 @@ __pycache__/
 # demo 产物(模型权重/缓存/报告/日志)
 demo/cache/
 demo/models/
+demo/report/
 demo/logs/
+
+# 路由 CLI 索引产物(embedding 缓存)
+_index/
+
+# 本机解释器路径(scripts/install_skill.sh 写入, 因机器而异)
+.python-path
+
+# HTTP 路由服务运行期产物(pidfile / 日志, 因机器而异)
+.run/
