@@ -1,6 +1,7 @@
 ---
 name: dns-rebinding-attacks
-description: "DNS rebinding attack playbook 信号:web漏洞,注入,sql注入。"
+description: "DNS rebinding attack playbook. Signals: web vulnerabilities, injection, SQL injection."
+zh-signals: "DNS rebinding attack playbook 信号:web漏洞,注入,sql注入。"
 when-to-use: >-
   DNS rebinding attack playbook. Use when testing applications that trust DNS resolution for origin checks, interact with internal services from browser context, or when SSRF is not possible server-side but the target has client-side fetch/XHR to attacker-controlled domains.
 ---

@@ -1,6 +1,7 @@
 ---
 name: hekatomb-dp-secret
-description: HEKATOMB: SCCM DP 机器账户哈希窃取。信号:ad攻击,域渗透,自动找域控,打全部 DP,指定单个 DP。
+description: "HEKATOMB steals SCCM DP machine account hashes. Signals: AD attack, domain pentest, auto find domain controller, attack all DPs, specify single DP."
+zh-signals: "HEKATOMB: SCCM DP 机器账户哈希窃取。信号:ad攻击,域渗透,自动找域控,打全部 DP,指定单个 DP。"
 ---
 
 # HEKATOMB

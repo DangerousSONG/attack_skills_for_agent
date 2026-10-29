@@ -1,6 +1,7 @@
 ---
 name: mitmap-ap-mitm
-description: mitmAP: 恶意热点钓鱼。信号:中间人,mitm,钓鱼热点+中间人,SSLStrip。
+description: "mitmAP: Malicious hotspot phishing. Signals: man-in-the-middle, MITM, phishing hotspot+MITM, SSLStrip."
+zh-signals: "mitmAP: 恶意热点钓鱼。信号:中间人,mitm,钓鱼热点+中间人,SSLStrip。"
 ---
 
 # mitmAP

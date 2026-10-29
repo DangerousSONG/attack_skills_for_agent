@@ -1,6 +1,7 @@
 ---
 name: http2smugl-desync
-description: http2smugl: HTTP/2 走私检测。信号:web漏洞,注入,第二种混淆模式,注入走私前缀,只报可利用目标。
+description: "http2smugl detects HTTP/2 request smuggling. Signals: web vulnerability, injection, second obfuscation mode, inject smuggling prefix, report only exploitable targets."
+zh-signals: "http2smugl: HTTP/2 走私检测。信号:web漏洞,注入,第二种混淆模式,注入走私前缀,只报可利用目标。"
 ---
 
 # http2smugl

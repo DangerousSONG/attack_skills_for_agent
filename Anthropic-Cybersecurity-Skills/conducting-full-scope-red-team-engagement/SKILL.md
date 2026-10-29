@@ -1,6 +1,7 @@
 ---
 name: conducting-full-scope-red-team-engagement
-description: "按 MITRE ATT&CK 规划并执行全周期红队演练:威胁建模、侦察、初始访问、后渗透全链路,检验检测/防护/响应能力。信号:红队演练,全周期,apt模拟,紫队,威胁建模。"
+description: "Plan and execute full-cycle red team engagements using MITRE ATT&CK, from threat modeling through post-exploitation, to test detection, protection, and response. Signals: red team exercise, full-cycle, APT simulation, purple team, threat modeling."
+zh-signals: "按 MITRE ATT&CK 规划并执行全周期红队演练:威胁建模、侦察、初始访问、后渗透全链路,检验检测/防护/响应能力。信号:红队演练,全周期,apt模拟,紫队,威胁建模。"
 when-to-use: Plan and execute a comprehensive, MITRE ATT&CK-aligned red team engagement spanning threat modeling, reconnaissance, initial access, and post-exploitation to evaluate an organization's detection, prev
 domain: cybersecurity
 subdomain: red-teaming

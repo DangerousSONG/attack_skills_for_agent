@@ -1,6 +1,7 @@
 ---
 name: lfisuite-lfi
-description: LFISuite: 全自动 LFI 打点。信号:web漏洞,注入,交互菜单,目标 URL。
+description: "LFISuite automates LFI exploitation. Signals: web vulnerability, injection, interactive menu, target URL."
+zh-signals: "LFISuite: 全自动 LFI 打点。信号:web漏洞,注入,交互菜单,目标 URL。"
 ---
 
 # LFISuite

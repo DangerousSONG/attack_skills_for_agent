@@ -1,6 +1,7 @@
 ---
 name: webanalyze-tech-fingerprint
-description: webanalyze: 技术栈指纹识别(挑 CVE 用)。信号:资产测绘,子域名,批量技术栈识别,单目标,爬取页数。
+description: "webanalyze: Technology stack fingerprinting for CVE selection. Signals: asset mapping, subdomains, batch technology stack identification, single target, crawl page count."
+zh-signals: "webanalyze: 技术栈指纹识别(挑 CVE 用)。信号:资产测绘,子域名,批量技术栈识别,单目标,爬取页数。"
 ---
 
 # webanalyze

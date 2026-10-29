@@ -1,6 +1,7 @@
 ---
 name: wpscan-wp-audit
-description: WPScan: WordPress 插件漏洞检测。信号:web扫描,漏洞扫描,基础 WP 扫描,激进插件检测,登录爆破。
+description: "WPScan: WordPress plugin vulnerability detection. Signals: web scanning, vulnerability scanning, basic WP scan, aggressive plugin detection, login brute force."
+zh-signals: "WPScan: WordPress 插件漏洞检测。信号:web扫描,漏洞扫描,基础 WP 扫描,激进插件检测,登录爆破。"
 ---
 
 # WPScan

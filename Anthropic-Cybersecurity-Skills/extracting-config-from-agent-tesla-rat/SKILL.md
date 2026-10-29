@@ -1,6 +1,7 @@
 ---
 name: extracting-config-from-agent-tesla-rat
-description: "Extracts embedded configuration from Agent Tesla RAT samples, including 信号:c2,命令控制,远控。"
+description: "Extract embedded configuration from Agent Tesla RAT samples, including C2 infrastructure. Signals: C2, command and control, remote access."
+zh-signals: "Extracts embedded configuration from Agent Tesla RAT samples, including 信号:c2,命令控制,远控。"
 when-to-use: Extracts embedded configuration from Agent Tesla RAT samples, including
   SMTP/FTP/Telegram exfiltration credentials, keylogger settings, and C2 endpoints,
   via .NET decompilation and memory analysis. Use when analyzing a suspected or

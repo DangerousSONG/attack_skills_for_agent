@@ -1,6 +1,7 @@
 ---
 name: manspider-smb-spider
-description: MANSPIDER: 全网 SMB 敏感文件收割。信号:内网枚举,网络发现,secret'`,扩展名。
+description: "MANSPIDER: Internet-wide SMB sensitive file harvesting. Signals: internal network enumeration, network discovery, secret files, extensions."
+zh-signals: "MANSPIDER: 全网 SMB 敏感文件收割。信号:内网枚举,网络发现,secret'`,扩展名。"
 ---
 
 # MANSPIDER

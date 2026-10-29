@@ -1,6 +1,7 @@
 ---
 name: csrf-cross-site-request-forgery
-description: "CSRF 测试:状态变更流程、反 CSRF 防御、SameSite 行为、JSON CSRF、登录 CSRF、OAuth state 处理。信号:csrf,跨站请求伪造,samesite。"
+description: "CSRF testing: state-changing flows, anti-CSRF defenses, SameSite behavior, JSON CSRF, login CSRF, OAuth state handling. Signals: CSRF, cross-site request forgery, SameSite."
+zh-signals: "CSRF 测试:状态变更流程、反 CSRF 防御、SameSite 行为、JSON CSRF、登录 CSRF、OAuth state 处理。信号:csrf,跨站请求伪造,samesite。"
 when-to-use: >-
   CSRF testing playbook. Use when reviewing state-changing web flows, anti-CSRF defenses, SameSite behavior, JSON CSRF, login CSRF, and OAuth state handling.
 ---

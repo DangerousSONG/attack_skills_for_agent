@@ -85,7 +85,8 @@ def load_skills():
         nm = re.search(r'^name:\s*(.+)$', fm.group(1), re.M)
         if not dm:
             continue
-        docs[parts[-1]] = (nm.group(1).strip() if nm else parts[-1], dm.group(1).strip())
+        zm = re.search(r'^zh-signals:\s*(.+)$', fm.group(1), re.M)
+        docs[parts[-1]] = (nm.group(1).strip() if nm else parts[-1], dm.group(1).strip(), zm.group(1).strip().strip(chr(34)).strip(chr(39)) if zm else '')
     return docs
 
 
@@ -93,7 +94,7 @@ def tfidf_top(docs, queries, topn=20):
     from sklearn.feature_extraction.text import TfidfVectorizer
     from scipy.sparse import hstack
     slugs = sorted(docs)
-    corpus = ['{0} {0} {0} {1}'.format(docs[s][0], docs[s][1]) for s in slugs]
+    corpus = ['{0} {0} {0} {1} {2}'.format(docs[s][0], docs[s][1], docs[s][2]) for s in slugs]
     vw = TfidfVectorizer(ngram_range=(1, 2), min_df=1)
     vc = TfidfVectorizer(analyzer='char_wb', ngram_range=(3, 5), min_df=1)
     X = hstack([vw.fit_transform(corpus), vc.fit_transform(corpus)])
@@ -122,7 +123,7 @@ def llm_scores(model, query, cands, docs, cache):
         return cache[ck], 0.0, None
     items = []
     for i, c in enumerate(cands):
-        name, desc = docs[c]
+        name, desc = docs[c][0], docs[c][1]
         desc = desc if len(desc) <= 300 else desc[:300]
         items.append('[{0}] {1} — {2}: {3}'.format(i + 1, c, name, desc))
     sys_prompt = ('你是渗透测试技能路由专家。给定用户任务和候选技能列表,为每个候选打相关性分数:'
@@ -270,7 +271,7 @@ def main():
         print('加载 {0} ...'.format(vec_model))
         emb = TextEmbedding(vec_model)
         slugs = sorted(docs)
-        texts = ['{0}: {1}'.format(docs[s][0], docs[s][1]) for s in slugs]
+        texts = ['{0}: {1}'.format(docs[s][0], docs[s][1]) for s in slugs]  # 向量组仅英文描述, 与C0口径一致
         t0 = time.time()
         D = np.array(list(emb.embed(texts)), dtype=np.float32)
         Q = np.array(list(emb.embed(qs)), dtype=np.float32)

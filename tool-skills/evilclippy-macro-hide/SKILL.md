@@ -1,6 +1,7 @@
 ---
 name: evilclippy-macro-hide
-description: EvilClippy: 宏文档免杀。信号:恶意软件开发,免杀开发,GUI 混淆,移除宏 VBA 项目,URL 注入宏。
+description: "EvilClippy: macro document evasion. Signals: malware development, evasion development, GUI obfuscation, remove macro VBA project, inject URL into macro."
+zh-signals: "EvilClippy: 宏文档免杀。信号:恶意软件开发,免杀开发,GUI 混淆,移除宏 VBA 项目,URL 注入宏。"
 ---
 
 # EvilClippy

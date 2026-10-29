@@ -1,6 +1,7 @@
 ---
 name: testing-api-authentication-weaknesses
-description: "Tests API authentication mechanisms for weaknesses including broken 信号:api攻击,接口测试,graphql。"
+description: "Tests API authentication mechanisms for weaknesses. Signals: API attacks, interface testing, GraphQL."
+zh-signals: "Tests API authentication mechanisms for weaknesses including broken 信号:api攻击,接口测试,graphql。"
 when-to-use: 'Tests API authentication mechanisms for weaknesses including broken
   token validation, missing authentication on endpoints, weak password policies, credential
   stuffing susceptibility, token leakage in URLs or logs, and session management flaws.

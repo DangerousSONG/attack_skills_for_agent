@@ -1,6 +1,7 @@
 ---
 name: scanqli-sqli-check
-description: ScanQLi: SQLi 快速验证。信号:web漏洞,注入,SQLi 扫描,库枚举,线程。
+description: "ScanQLi: Quickly validates SQL injection. Signals: web vulnerabilities, injection, SQLi scanning, database enumeration, threads."
+zh-signals: "ScanQLi: SQLi 快速验证。信号:web漏洞,注入,SQLi 扫描,库枚举,线程。"
 ---
 
 # ScanQLi

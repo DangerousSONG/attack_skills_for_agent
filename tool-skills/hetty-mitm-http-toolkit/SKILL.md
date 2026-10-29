@@ -1,6 +1,7 @@
 ---
 name: hetty-mitm-http-toolkit
-description: hetty: HTTPS 流量拦截改包测试。信号:中间人,mitm,链上游代理,限定拦截域名避免噪音。
+description: "hetty intercepts and modifies HTTPS traffic for testing. Signals: MITM, mitm, upstream proxy chaining, domain filtering, noise reduction."
+zh-signals: "hetty: HTTPS 流量拦截改包测试。信号:中间人,mitm,链上游代理,限定拦截域名避免噪音。"
 ---
 
 # hetty

@@ -1,6 +1,7 @@
 ---
 name: smuggler-desync
-description: Smuggler: 前端/CDN 走私检测。信号:web漏洞,注入,HTTP 请求走私检测,详细,深入模式。
+description: "Smuggler: frontend and CDN smuggling detection. Signals: web vulnerability, injection, HTTP request smuggling detection, detailed, deep mode."
+zh-signals: "Smuggler: 前端/CDN 走私检测。信号:web漏洞,注入,HTTP 请求走私检测,详细,深入模式。"
 ---
 
 # Smuggler

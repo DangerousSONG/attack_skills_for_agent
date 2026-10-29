@@ -1,6 +1,7 @@
 ---
 name: performing-api-fuzzing-with-restler
-description: "Uses Microsoft RESTler to perform stateful REST API fuzzing: compiles 信号:api攻击,接口测试,graphql。"
+description: "Use Microsoft RESTler to perform stateful REST API fuzzing by compiling API definitions. Signals: api attack, interface testing, graphql."
+zh-signals: "Uses Microsoft RESTler to perform stateful REST API fuzzing: compiles 信号:api攻击,接口测试,graphql。"
 when-to-use: 'Uses Microsoft RESTler to perform stateful REST API fuzzing: compiles
   an OpenAPI/Swagger spec into a RESTler grammar, configures authentication, and runs
   test/fuzz-lean/fuzz modes that generate request sequences exercising producer-consumer

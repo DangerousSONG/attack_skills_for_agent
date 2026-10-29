@@ -1,6 +1,7 @@
 ---
 name: moving-laterally-with-netexec
-description: "用 NetExec(nxc)验证凭据、枚举 SMB 共享/用户/策略、安全口令喷射、远程执行、跨 SMB/WinRM/LDAP/MSSQL/SSH 模块转储 SAM/信号:netexec,横向移动。"
+description: "Use NetExec (nxc) to validate credentials, enumerate SMB shares, users, and policies, perform safe password spraying, execute remotely, and dump SAM across SMB, WinRM, LDAP, MSSQL, and SSH modules. Signals: NetExec, lateral movement."
+zh-signals: "用 NetExec(nxc)验证凭据、枚举 SMB 共享/用户/策略、安全口令喷射、远程执行、跨 SMB/WinRM/LDAP/MSSQL/SSH 模块转储 SAM/信号:netexec,横向移动。"
 when-to-use: Use NetExec (nxc) to validate credentials, enumerate SMB shares/users/policy, password-spray safely across lockout thresholds, execute commands, and dump SAM/LSA/NTDS credentials across SMB, WinRM, LD
 domain: cybersecurity
 subdomain: penetration-testing

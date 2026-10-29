@@ -1,6 +1,7 @@
 ---
 name: simpleemailspoofer
-description: SimpleEmailSpoofer: 钓鱼邮件伪造测试。信号:钓鱼,社会工程,指定 SMTP,HTML 模式。
+description: "SimpleEmailSpoofer: phishing email spoofing test. Signals: phishing, social engineering, specified SMTP, HTML mode."
+zh-signals: "SimpleEmailSpoofer: 钓鱼邮件伪造测试。信号:钓鱼,社会工程,指定 SMTP,HTML 模式。"
 ---
 
 # SimpleEmailSpoofer

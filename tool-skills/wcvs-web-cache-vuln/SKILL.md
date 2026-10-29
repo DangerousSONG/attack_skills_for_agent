@@ -1,6 +1,7 @@
 ---
 name: wcvs-web-cache-vuln
-description: Web Cache Vulnerability Scanner (wcvs): 缓存投毒探测。信号:web漏洞,注入,Web 缓存漏洞扫描,包含缓存投毒,自定义字典。
+description: "Web Cache Vulnerability Scanner (wcvs): Cache poisoning probing. Signals: web vulnerabilities, injection, web cache vulnerability scan, include cache poisoning, custom dictionary."
+zh-signals: "Web Cache Vulnerability Scanner (wcvs): 缓存投毒探测。信号:web漏洞,注入,Web 缓存漏洞扫描,包含缓存投毒,自定义字典。"
 ---
 
 # Web Cache Vulnerability Scanner (wcvs)

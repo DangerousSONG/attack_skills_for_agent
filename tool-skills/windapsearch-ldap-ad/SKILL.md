@@ -1,6 +1,7 @@
 ---
 name: windapsearch-ldap-ad
-description: windapsearch: 自定义 LDAP 查询。信号:内网枚举,网络发现,枚举用户,仅域管,计算机。
+description: "windapsearch: Custom LDAP queries. Signals: internal network enumeration, network discovery, enumerate users, domain admins only, computers."
+zh-signals: "windapsearch: 自定义 LDAP 查询。信号:内网枚举,网络发现,枚举用户,仅域管,计算机。"
 ---
 
 # windapsearch

@@ -1,6 +1,7 @@
 ---
 name: interactsh-oob
-description: interactsh: OOB 漏洞验证。信号:隐蔽回连,通信通道,OOB 接收,JSON 模式。
+description: "interactsh verifies vulnerabilities out-of-band. Signals: covert callback, communication channel, OOB receipt, JSON mode."
+zh-signals: "interactsh: OOB 漏洞验证。信号:隐蔽回连,通信通道,OOB 接收,JSON 模式。"
 ---
 
 # interactsh

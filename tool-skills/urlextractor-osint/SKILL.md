@@ -1,6 +1,7 @@
 ---
 name: urlextractor-osint
-description: URLextractor: 目标 URL 情报聚合。信号:web漏洞,注入,目标 OSINT 提取,包含子域,含端口扫描。
+description: "URLextractor: Target URL intelligence aggregation. Signals: web vulnerabilities, injection, target OSINT extraction, include subdomains, with port scan."
+zh-signals: "URLextractor: 目标 URL 情报聚合。信号:web漏洞,注入,目标 OSINT 提取,包含子域,含端口扫描。"
 ---
 
 # URLextractor

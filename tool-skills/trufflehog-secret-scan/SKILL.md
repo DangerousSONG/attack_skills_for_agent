@@ -1,6 +1,7 @@
 ---
 name: trufflehog-secret-scan
-description: trufflehog: Github 密钥泄露收割、员工 fork 仓库找内部凭证。信号:攻击面,云资产,扫单个仓库,扫整个 org。
+description: "trufflehog harvests GitHub key leaks and internal credentials from employee forks. Signals: attack surface, cloud assets, scan single repository, scan whole org"
+zh-signals: "trufflehog: Github 密钥泄露收割、员工 fork 仓库找内部凭证。信号:攻击面,云资产,扫单个仓库,扫整个 org。"
 ---
 
 # trufflehog

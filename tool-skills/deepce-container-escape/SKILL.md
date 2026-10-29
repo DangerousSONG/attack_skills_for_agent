@@ -1,6 +1,7 @@
 ---
 name: deepce-container-escape
-description: deepce: Docker 内枚举+逃逸路径。信号:云命令执行,容器逃逸,容器内全面枚举,自动尝试逃逸,跑所有逃逸检测。
+description: "deepce: Docker enumeration and escape paths. Signals: cloud command execution, container escape, full container enumeration, automatic escape attempts, run all escape checks."
+zh-signals: "deepce: Docker 内枚举+逃逸路径。信号:云命令执行,容器逃逸,容器内全面枚举,自动尝试逃逸,跑所有逃逸检测。"
 ---
 
 # deepce

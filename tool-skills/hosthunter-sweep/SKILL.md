@@ -1,6 +1,7 @@
 ---
 name: hosthunter-sweep
-description: HostHunter: IP→主机名 OSINT。信号:网络拓扑,互联网测绘,OSINT 主机名发现,批量。
+description: "HostHunter maps IPs to hostnames via OSINT. Signals: network topology, internet mapping, OSINT hostname discovery, batch."
+zh-signals: "HostHunter: IP→主机名 OSINT。信号:网络拓扑,互联网测绘,OSINT 主机名发现,批量。"
 ---
 
 # HostHunter

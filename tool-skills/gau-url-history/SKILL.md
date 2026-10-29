@@ -1,6 +1,7 @@
 ---
 name: gau-url-history
-description: gau (Get All URLs): 历史端点收集→喂给漏洞扫描、JS 文件敏感信息挖掘。信号:资产测绘,子域名,包含子域名,并发数。
+description: "gau collects historical endpoints for vulnerability scanning and JS secret mining. Signals: asset mapping, subdomains, include subdomains, concurrency."
+zh-signals: "gau (Get All URLs): 历史端点收集→喂给漏洞扫描、JS 文件敏感信息挖掘。信号:资产测绘,子域名,包含子域名,并发数。"
 ---
 
 # gau (Get All URLs)

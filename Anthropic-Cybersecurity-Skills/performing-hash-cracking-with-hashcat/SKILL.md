@@ -1,6 +1,7 @@
 ---
 name: performing-hash-cracking-with-hashcat
-description: "Cracks password hashes with Hashcat, covering hash-type identification 信号:密码破解,哈希破解,ntlm,hashcat。"
+description: "Crack password hashes with Hashcat, covering hash-type identification and rule-based attacks. Signals: password cracking, hash cracking, ntlm, hashcat."
+zh-signals: "Cracks password hashes with Hashcat, covering hash-type identification 信号:密码破解,哈希破解,ntlm,hashcat。"
 when-to-use: Cracks password hashes with Hashcat, covering hash-type identification,
   dictionary/brute-force/rule-based attack modes, custom rule creation, GPU benchmarking,
   and password-strength/compliance reporting. Use for authorized penetration testing

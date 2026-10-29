@@ -1,6 +1,7 @@
 ---
 name: xsrfprobe-csrf
-description: XSRFProbe: CSRF 全站审计。信号:web漏洞,注入,全站 CSRF 检测,爬取全站表单,爬深。
+description: "XSRFProbe: Site-wide CSRF audit. Signals: web vulnerability, injection, site-wide CSRF detection, crawl site forms, crawl depth."
+zh-signals: "XSRFProbe: CSRF 全站审计。信号:web漏洞,注入,全站 CSRF 检测,爬取全站表单,爬深。"
 ---
 
 # XSRFProbe

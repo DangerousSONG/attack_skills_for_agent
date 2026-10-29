@@ -1,6 +1,7 @@
 ---
 name: shellme-webshell
-description: shellme: 多语言 WebShell 生成。信号:webshell,rce,JSP,编码。
+description: "shellme: multilingual WebShell generation. Signals: webshell, rce, JSP, encoding."
+zh-signals: "shellme: 多语言 WebShell 生成。信号:webshell,rce,JSP,编码。"
 ---
 
 # shellme

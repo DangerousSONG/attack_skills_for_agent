@@ -1,6 +1,7 @@
 ---
 name: macchanger-spoof
-description: macchanger: MAC 地址伪装。信号:中间人,mitm,随机 MAC,指定 MAC,查看。
+description: "macchanger: Spoof MAC addresses. Signals: man-in-the-middle, MITM, random MAC, specified MAC, view."
+zh-signals: "macchanger: MAC 地址伪装。信号:中间人,mitm,随机 MAC,指定 MAC,查看。"
 ---
 
 # macchanger

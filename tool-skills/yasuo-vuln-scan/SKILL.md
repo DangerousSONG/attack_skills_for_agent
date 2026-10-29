@@ -1,6 +1,7 @@
 ---
 name: yasuo-vuln-scan
-description: yasuo: 后台+漏洞双探测。信号:web漏洞,注入,Web 应用漏洞扫描,全端口,爆破后台。
+description: "yasuo: Admin panel and vulnerability dual detection. Signals: web vulnerability, injection, web app vulnerability scan, all ports, brute-force admin panel."
+zh-signals: "yasuo: 后台+漏洞双探测。信号:web漏洞,注入,Web 应用漏洞扫描,全端口,爆破后台。"
 ---
 
 # yasuo

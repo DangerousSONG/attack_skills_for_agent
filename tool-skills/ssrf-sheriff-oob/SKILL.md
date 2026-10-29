@@ -1,6 +1,7 @@
 ---
 name: ssrf-sheriff-oob
-description: SSRF Sheriff: 云元数据 SSRF 外带。信号:web漏洞,注入,对外发起请求并记录,云元数据外带,取回触发的 URL 记录。
+description: "SSRF Sheriff exfiltrates cloud metadata via SSRF. Signals: web vulnerability, injection, outbound request logging, cloud metadata exfiltration, retrieved triggered URL records"
+zh-signals: "SSRF Sheriff: 云元数据 SSRF 外带。信号:web漏洞,注入,对外发起请求并记录,云元数据外带,取回触发的 URL 记录。"
 ---
 
 # SSRF Sheriff

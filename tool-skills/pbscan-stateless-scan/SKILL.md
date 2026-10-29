@@ -1,6 +1,7 @@
 ---
 name: pbscan-stateless-scan
-description: pbscan: 全网段秒级扫描。信号:端口扫描,nmap,无状态端口扫描,速率,banner 抓取。
+description: "Second-level full-subnet scanning. Signals: port scanning, nmap, stateless port scanning, rate, banner capture."
+zh-signals: "pbscan: 全网段秒级扫描。信号:端口扫描,nmap,无状态端口扫描,速率,banner 抓取。"
 ---
 
 # pbscan

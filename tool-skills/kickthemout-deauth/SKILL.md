@@ -1,6 +1,7 @@
 ---
 name: kickthemout-deauth
-description: kickthemout: 内网设备 ARP 踢下线。信号:中间人,mitm,局域网设备踢下线,kick 全部。
+description: "kickthemout kicks LAN devices offline with ARP. Signals: MITM, mitm, LAN device disconnection, kick all."
+zh-signals: "kickthemout: 内网设备 ARP 踢下线。信号:中间人,mitm,局域网设备踢下线,kick 全部。"
 ---
 
 # kickthemout

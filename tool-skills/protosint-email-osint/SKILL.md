@@ -1,6 +1,7 @@
 ---
 name: protosint-email-osint
-description: ProtOSINT: 邮箱泄露情报。信号:邮箱收集,员工信息,手机号社工库查询,域名关联邮箱探测。
+description: "Email leak intelligence. Signals: email collection, employee info, phone number social database query, domain-associated email detection."
+zh-signals: "ProtOSINT: 邮箱泄露情报。信号:邮箱收集,员工信息,手机号社工库查询,域名关联邮箱探测。"
 ---
 
 # ProtOSINT

@@ -1,6 +1,7 @@
 ---
 name: botb-container-attack
-description: botb (Break Out The Box): 容器评估+逃逸一体。信号:云命令执行,容器逃逸,静态容器分析,指定 socket,仅枚举。
+description: "botb (Break Out The Box): assesses and escapes containers. Signals: cloud command execution, container escape, static container analysis, specify socket, enumeration only"
+zh-signals: "botb (Break Out The Box): 容器评估+逃逸一体。信号:云命令执行,容器逃逸,静态容器分析,指定 socket,仅枚举。"
 ---
 
 # botb (Break Out The Box)

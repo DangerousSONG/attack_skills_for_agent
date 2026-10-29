@@ -1,6 +1,7 @@
 ---
 name: performing-aws-privilege-escalation-assessment
-description: "Performing authorized privilege escalation assessments in AWS environments 信号:云提权,iam提权,容器提权。"
+description: "Perform authorized privilege escalation assessments in AWS environments. Signals: cloud privilege escalation, iam privilege escalation, container privilege escalation."
+zh-signals: "Performing authorized privilege escalation assessments in AWS environments 信号:云提权,iam提权,容器提权。"
 when-to-use: 'Performing authorized privilege escalation assessments in AWS environments
   to identify IAM misconfigurations that allow users or roles to elevate their permissions
   using Pacu, CloudFox, Principal Mapper, and manual IAM policy analysis techniques.

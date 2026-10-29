@@ -1,6 +1,7 @@
 ---
 name: ffuf-web-fuzz
-description: ffuf: 目录与参数点 fuzz、多位置同时 fuzz(用户+ID)。信号:web扫描,漏洞扫描,字典文件,多字典多占位符。
+description: "ffuf fuzzes directories and parameters, including simultaneous multi-location payloads. Signals: web scanning, vulnerability scanning, wordlists, multiple wordlists, placeholders."
+zh-signals: "ffuf: 目录与参数点 fuzz、多位置同时 fuzz(用户+ID)。信号:web扫描,漏洞扫描,字典文件,多字典多占位符。"
 ---
 
 # ffuf

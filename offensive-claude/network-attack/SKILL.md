@@ -1,6 +1,7 @@
 ---
 name: network-attack
-description: "网络攻击与横向:L2/L3 投毒(LLMNR/mDNS、ARP/DHCP、mitm6)、强制认证+NTLM 中继(CVE-2025-33073)、TUN 隧道(Ligo信号:网络攻击,llmnr投毒。"
+description: "Covers network attacks and lateral movement via L2/L3 poisoning (LLMNR/mDNS, ARP/DHCP, mitm6), forced authentication and NTLM relay (CVE-2025-33073), and TUN tunneling (Ligolo-ng). Signals: network attack, llmnr poisoning."
+zh-signals: "网络攻击与横向:L2/L3 投毒(LLMNR/mDNS、ARP/DHCP、mitm6)、强制认证+NTLM 中继(CVE-2025-33073)、TUN 隧道(Ligo信号:网络攻击,llmnr投毒。"
 when-to-use: Use when attacking a network or moving laterally — L2/L3 poisoning (LLMNR/mDNS, ARP/DHCP, mitm6), coercion + NTLM relay (CVE-2025-33073), TUN pivoting (Ligolo-ng/Chisel), MitM, network-service RCE (CV
 metadata:
   type: offensive

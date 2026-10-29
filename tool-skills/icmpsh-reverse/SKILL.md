@@ -1,6 +1,7 @@
 ---
 name: icmpsh-reverse
-description: icmpsh: ICMP 隐蔽反弹 shell。信号:隐蔽回连,通信通道,监听端(Python),Windows 目标端,延迟 ms。
+description: "icmpsh provides an ICMP covert reverse shell. Signals: covert callback, communication channel, Python listener, Windows target, latency ms."
+zh-signals: "icmpsh: ICMP 隐蔽反弹 shell。信号:隐蔽回连,通信通道,监听端(Python),Windows 目标端,延迟 ms。"
 ---
 
 # icmpsh

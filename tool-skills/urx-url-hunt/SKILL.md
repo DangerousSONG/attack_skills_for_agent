@@ -1,6 +1,7 @@
 ---
 name: urx-url-hunt
-description: urx: 多源 URL 聚合。信号:数据收集,打包,管道过滤,并发。
+description: "urx: Multi-source URL aggregation. Signals: data collection, packing, pipeline filtering, concurrency."
+zh-signals: "urx: 多源 URL 聚合。信号:数据收集,打包,管道过滤,并发。"
 ---
 
 # urx

@@ -1,6 +1,7 @@
 ---
 name: pwnedornot-breach
-description: PwnedOrNot: 邮箱泄露库查询拿明文口令。信号:邮箱收集,员工信息,邮箱泄露查询,批量,仅受泄。
+description: "PwnedOrNot: Queries breach databases for email passwords. Signals: email collection, employee information, email breach query, batch, breached only."
+zh-signals: "PwnedOrNot: 邮箱泄露库查询拿明文口令。信号:邮箱收集,员工信息,邮箱泄露查询,批量,仅受泄。"
 ---
 
 # PwnedOrNot

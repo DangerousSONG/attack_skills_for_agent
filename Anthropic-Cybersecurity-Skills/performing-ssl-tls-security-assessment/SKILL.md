@@ -1,6 +1,7 @@
 ---
 name: performing-ssl-tls-security-assessment
-description: "Performing SSL/TLS Security Assessment 信号:web扫描,漏洞扫描,burp。"
+description: "Performs SSL/TLS security assessments. Signals: web scanning, vulnerability scanning, Burp."
+zh-signals: "Performing SSL/TLS Security Assessment 信号:web扫描,漏洞扫描,burp。"
 when-to-use: Performing SSL/TLS Security Assessment
   Assess SSL/TLS server configurations using the sslyze Python scanning
   library to evaluate supported protocol versions, cipher suite strength,

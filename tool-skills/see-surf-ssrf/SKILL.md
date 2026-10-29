@@ -1,6 +1,7 @@
 ---
 name: see-surf-ssrf
-description: See-SURF: 爬取+SSRF 双探测。信号:web漏洞,注入,SSRF 爬取式检测,OOB 回调,并发。
+description: "See-SURF: crawling plus SSRF dual probing. Signals: web vulnerability, injection, crawl-based SSRF detection, OOB callback, concurrency."
+zh-signals: "See-SURF: 爬取+SSRF 双探测。信号:web漏洞,注入,SSRF 爬取式检测,OOB 回调,并发。"
 ---
 
 # See-SURF

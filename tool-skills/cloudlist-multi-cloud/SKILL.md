@@ -1,6 +1,7 @@
 ---
 name: cloudlist-multi-cloud
-description: cloudlist: 多云攻击面枚举。信号:云提权,iam提权,枚举 AWS 资产,JSON。
+description: "cloudlist: Enumerates attack surfaces across multiple clouds. Signals: cloud privilege escalation, IAM privilege escalation, AWS asset enumeration, JSON."
+zh-signals: "cloudlist: 多云攻击面枚举。信号:云提权,iam提权,枚举 AWS 资产,JSON。"
 ---
 
 # cloudlist

@@ -1,6 +1,7 @@
 ---
 name: jwtcat-token-crack
-description: jwtcat: 弱 JWT 密钥接管。信号:api攻击,接口测试,JWT 签名密钥爆破,直接内联 token。
+description: "jwtcat takes over weak JWT signing keys. Signals: API attack, interface testing, JWT signing key brute force, inline token."
+zh-signals: "jwtcat: 弱 JWT 密钥接管。信号:api攻击,接口测试,JWT 签名密钥爆破,直接内联 token。"
 ---
 
 # jwtcat

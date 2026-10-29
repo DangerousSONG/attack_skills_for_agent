@@ -1,6 +1,7 @@
 ---
 name: rdpassspray-rdp-spray
-description: RDPassSpray: 域内 RDP 口令喷洒。信号:暴力破解,口令喷射,RDP 喷洒,密码字典,指定域。
+description: "RDPassSpray: Sprays passwords over domain RDP. Signals: brute force, password spraying, RDP spraying, password dictionary, specified domain."
+zh-signals: "RDPassSpray: 域内 RDP 口令喷洒。信号:暴力破解,口令喷射,RDP 喷洒,密码字典,指定域。"
 ---
 
 # RDPassSpray

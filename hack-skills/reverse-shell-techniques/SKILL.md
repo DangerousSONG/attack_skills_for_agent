@@ -1,6 +1,7 @@
 ---
 name: reverse-shell-techniques
-description: "Reverse shell techniques playbook 信号:载荷开发,武器化,payload生成。"
+description: "Reverse shell techniques playbook. Signals: payload development, weaponization, payload generation."
+zh-signals: "Reverse shell techniques playbook 信号:载荷开发,武器化,payload生成。"
 when-to-use: >-
   Reverse shell techniques playbook. Use when establishing remote shells including language one-liners, encrypted shells (OpenSSL/socat/ncat), web shells, PTY upgrades, file transfer methods, PowerShell shells, and Windows payload generation.
 ---

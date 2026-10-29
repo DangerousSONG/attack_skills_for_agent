@@ -1,6 +1,7 @@
 ---
 name: holehe-email-check
-description: holehe: 邮箱注册足迹画像。信号:邮箱收集,员工信息,查邮箱注册站点,只显示已注册,保存 cookies。
+description: "holehe profiles email registration footprints. Signals: email collection, employee info, check registered sites, show only registered, save cookies."
+zh-signals: "holehe: 邮箱注册足迹画像。信号:邮箱收集,员工信息,查邮箱注册站点,只显示已注册,保存 cookies。"
 ---
 
 # holehe

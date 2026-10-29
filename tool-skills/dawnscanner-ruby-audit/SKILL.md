@@ -1,6 +1,7 @@
 ---
 name: dawnscanner-ruby-audit
-description: dawnscanner: Rails 应用代码审计。信号:web漏洞,注入,Rails 应用静态审计,Ruby 版本漏洞,仅知识库模式。
+description: "dawnscanner: Audits Rails application code. Signals: web vulnerability, injection, Rails application static audit, Ruby version vulnerabilities, knowledge-base-only mode."
+zh-signals: "dawnscanner: Rails 应用代码审计。信号:web漏洞,注入,Rails 应用静态审计,Ruby 版本漏洞,仅知识库模式。"
 ---
 
 # dawnscanner

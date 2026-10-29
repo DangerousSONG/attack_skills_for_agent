@@ -1,6 +1,7 @@
 ---
 name: striker-recon
-description: Striker: 目标快速画像。信号:web漏洞,注入,信息收集+漏洞初判,详细。
+description: "Striker rapidly profiles targets. Signals: web vulnerability, injection, reconnaissance and initial vulnerability triage, verbose"
+zh-signals: "Striker: 目标快速画像。信号:web漏洞,注入,信息收集+漏洞初判,详细。"
 ---
 
 # Striker

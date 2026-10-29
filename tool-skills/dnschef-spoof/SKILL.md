@@ -1,6 +1,7 @@
 ---
 name: dnschef-spoof
-description: DNSChef: 定向域名劫持。信号:中间人,mitm,全域名指向攻击机,只伪造指定域,真实解析白名单。
+description: "DNSChef: targeted DNS hijacking. Signals: man-in-the-middle, MITM, redirect all domains to attacker, spoof only specified domains, real resolution whitelist."
+zh-signals: "DNSChef: 定向域名劫持。信号:中间人,mitm,全域名指向攻击机,只伪造指定域,真实解析白名单。"
 ---
 
 # DNSChef

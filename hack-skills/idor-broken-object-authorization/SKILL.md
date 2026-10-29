@@ -1,6 +1,7 @@
 ---
 name: idor-broken-object-authorization
-description: "IDOR/BOLA 测试:请求暴露对象标识、租户边界、可写字段或缺少对象级授权检查。信号:idor,bola,越权,对象引用,租户隔离。"
+description: "IDOR/BOLA testing: requests exposing object identifiers, tenant boundaries, writable fields, or missing object-level authorization checks. Signals: IDOR, BOLA, unauthorized access, object references, tenant isolation."
+zh-signals: "IDOR/BOLA 测试:请求暴露对象标识、租户边界、可写字段或缺少对象级授权检查。信号:idor,bola,越权,对象引用,租户隔离。"
 when-to-use: >-
   IDOR and broken object authorization testing playbook. Use when requests expose object identifiers, tenant boundaries, writable fields, or missing object-level authorization checks.
 ---

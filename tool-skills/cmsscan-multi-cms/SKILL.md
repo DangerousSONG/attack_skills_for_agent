@@ -1,6 +1,7 @@
 ---
 name: cmsscan-multi-cms
-description: CMSScan: 多 CMS 统一检测。信号:web漏洞,注入,CMS 检测+扫描,指定 CMS,输出报告。
+description: "CMSScan: Performs unified detection across multiple CMSs. Signals: web vulnerability, injection, CMS detection plus scanning, specified CMS, report output."
+zh-signals: "CMSScan: 多 CMS 统一检测。信号:web漏洞,注入,CMS 检测+扫描,指定 CMS,输出报告。"
 ---
 
 # CMSScan

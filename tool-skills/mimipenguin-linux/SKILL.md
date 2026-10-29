@@ -1,6 +1,7 @@
 ---
 name: mimipenguin-linux
-description: mimipenguin: Linux 内存明文密码提取。信号:内存转储,lsass,Python 版,详细。
+description: "mimipenguin: Linux memory plaintext password extraction. Signals: memory dump, lsass, Python version, detailed."
+zh-signals: "mimipenguin: Linux 内存明文密码提取。信号:内存转储,lsass,Python 版,详细。"
 ---
 
 # mimipenguin

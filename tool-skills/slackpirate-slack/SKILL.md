@@ -1,6 +1,7 @@
 ---
 name: slackpirate-slack
-description: SlackPirate: Slack 工作区渗透。信号:邮箱收集,员工信息,Slack 数据收割,Cookie 模式,全导出。
+description: "SlackPirate: Slack workspace pentesting. Signals: email collection, employee info, Slack data harvesting, cookie mode, full export."
+zh-signals: "SlackPirate: Slack 工作区渗透。信号:邮箱收集,员工信息,Slack 数据收割,Cookie 模式,全导出。"
 ---
 
 # SlackPirate

@@ -1,6 +1,7 @@
 ---
 name: droopescan-cms-audit
-description: droopescan: CMS 漏洞面审计。信号:web扫描,漏洞扫描,Drupal 扫描,WordPress 扫描,线程。
+description: "droopescan: CMS vulnerability surface audit. Signals: web scanning, vulnerability scanning, Drupal scanning, WordPress scanning, threads."
+zh-signals: "droopescan: CMS 漏洞面审计。信号:web扫描,漏洞扫描,Drupal 扫描,WordPress 扫描,线程。"
 ---
 
 # droopescan

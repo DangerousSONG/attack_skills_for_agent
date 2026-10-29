@@ -1,6 +1,7 @@
 ---
 name: performing-cloud-penetration-testing-with-pacu
-description: "Run authorized AWS penetration tests with Pacu, the open-source AWS exploitation 信号:pwn,二进制利用,栈溢出。"
+description: "Run authorized AWS penetration tests with Pacu, the open-source AWS exploitation framework. Signals: pwn, binary exploitation, stack overflow."
+zh-signals: "Run authorized AWS penetration tests with Pacu, the open-source AWS exploitation 信号:pwn,二进制利用,栈溢出。"
 when-to-use: 'Run authorized AWS penetration tests with Pacu, the open-source AWS exploitation
   framework, to enumerate IAM configuration, scan for privilege escalation paths, and
   test data access and lateral movement using compromised credentials. Use when conducting

@@ -1,6 +1,7 @@
 ---
 name: metafinder-docs
-description: MetaFinder: 文档元数据+泄露文件收集。信号:资产测绘,子域名,搜目标文档,文件类型,输出目录。
+description: "MetaFinder: Document metadata and leaked file collection. Signals: asset mapping, subdomains, search target documents, file types, output directory."
+zh-signals: "MetaFinder: 文档元数据+泄露文件收集。信号:资产测绘,子域名,搜目标文档,文件类型,输出目录。"
 ---
 
 # MetaFinder

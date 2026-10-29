@@ -1,6 +1,7 @@
 ---
 name: gitrecon-github-osint
-description: GitRecon: GitHub 组织信息收集。信号:资产测绘,子域名,token。
+description: "GitRecon collects GitHub organization information. Signals: asset mapping, subdomains, token."
+zh-signals: "GitRecon: GitHub 组织信息收集。信号:资产测绘,子域名,token。"
 ---
 
 # GitRecon

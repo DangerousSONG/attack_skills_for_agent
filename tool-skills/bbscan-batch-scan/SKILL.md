@@ -1,6 +1,7 @@
 ---
 name: bbscan-batch-scan
-description: BBScan: 批量 Web 敏感路径初筛。信号:web漏洞,注入,并发进程,自定义 PoC 脚本,仅收集,不请求 PoC。
+description: "BBScan: batch screens web sensitive paths. Signals: web vulnerability, injection, concurrent processes, custom PoC scripts, collect only, no PoC request"
+zh-signals: "BBScan: 批量 Web 敏感路径初筛。信号:web漏洞,注入,并发进程,自定义 PoC 脚本,仅收集,不请求 PoC。"
 ---
 
 # BBScan

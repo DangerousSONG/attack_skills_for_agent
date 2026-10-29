@@ -1,6 +1,7 @@
 ---
 name: sublert-subdomain-mon
-description: Sublert: 子域变更监控。信号:子域名,域名枚举,子域监控,频率。
+description: "Sublert monitors subdomain changes. Signals: subdomain, domain enumeration, subdomain monitoring, frequency"
+zh-signals: "Sublert: 子域变更监控。信号:子域名,域名枚举,子域监控,频率。"
 ---
 
 # Sublert

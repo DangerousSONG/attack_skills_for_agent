@@ -1,6 +1,7 @@
 ---
 name: bloodyad-ad-privesc
-description: bloodyAD: ACL 滥用提权链、GenericWrite→影子凭证。信号:ad攻击,域渗透,读 ACL,加委派/写权限。
+description: "bloodyAD: abuses ACLs for escalation chains, GenericWrite to shadow credentials. Signals: ad attack, domain pentest, read ACL, add delegation/write permissions"
+zh-signals: "bloodyAD: ACL 滥用提权链、GenericWrite→影子凭证。信号:ad攻击,域渗透,读 ACL,加委派/写权限。"
 ---
 
 # bloodyAD

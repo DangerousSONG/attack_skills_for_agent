@@ -1,6 +1,7 @@
 ---
 name: modlishka-reverse-proxy-phishing
-description: Modlishka: 2FA 会话实时钓鱼。信号:钓鱼,社会工程,启动反向代理钓鱼,挂合法域名 TLS 证书,自定义凭证提取正则。
+description: "Modlishka: Real-time 2FA session phishing. Signals: phishing, social engineering, launch reverse proxy phishing, attach legitimate domain TLS certificate, custom credential extraction regex."
+zh-signals: "Modlishka: 2FA 会话实时钓鱼。信号:钓鱼,社会工程,启动反向代理钓鱼,挂合法域名 TLS 证书,自定义凭证提取正则。"
 ---
 
 # Modlishka

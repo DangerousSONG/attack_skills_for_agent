@@ -1,6 +1,7 @@
 ---
 name: crlfuzz-crlf-injection
-description: CRLFuzz: 响应拆分测试。信号:web漏洞,注入,单目标 CRLF 注入,批量。
+description: "CRLFuzz: Tests response splitting via CRLF injection. Signals: web vulnerability, injection, single-target CRLF injection, batch."
+zh-signals: "CRLFuzz: 响应拆分测试。信号:web漏洞,注入,单目标 CRLF 注入,批量。"
 ---
 
 # CRLFuzz

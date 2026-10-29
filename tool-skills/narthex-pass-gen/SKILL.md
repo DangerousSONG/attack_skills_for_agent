@@ -1,6 +1,7 @@
 ---
 name: narthex-pass-gen
-description: narthex: 字典增强流水线。信号:密码破解,哈希破解,组合,插入,leet 变换。
+description: "narthex: Dictionary enhancement pipeline. Signals: password cracking, hash cracking, combination, insertion, leet transformation."
+zh-signals: "narthex: 字典增强流水线。信号:密码破解,哈希破解,组合,插入,leet 变换。"
 ---
 
 # narthex

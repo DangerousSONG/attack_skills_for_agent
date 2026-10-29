@@ -1,6 +1,7 @@
 ---
 name: chankro-php-binary
-description: Chankro: PHP 环境投递 ELF/EXE。信号:载荷开发,武器化,生成二进制投递 PHP,Windows 载荷,指定 PHP 解释器路径。
+description: "Chankro: Delivers ELF/EXE payloads through PHP environments. Signals: payload development, weaponization, binary delivery via PHP, Windows payloads, specified PHP interpreter path."
+zh-signals: "Chankro: PHP 环境投递 ELF/EXE。信号:载荷开发,武器化,生成二进制投递 PHP,Windows 载荷,指定 PHP 解释器路径。"
 ---
 
 # Chankro

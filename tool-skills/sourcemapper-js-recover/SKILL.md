@@ -1,6 +1,7 @@
 ---
 name: sourcemapper-js-recover
-description: sourcemapper: JS 源码还原挖密钥。信号:web漏洞,注入,下载并还原 JS 源码,本地 map 文件。
+description: "sourcemapper: restores JS source to mine secrets. Signals: web vulnerability, injection, download and restore JS source, local map file."
+zh-signals: "sourcemapper: JS 源码还原挖密钥。信号:web漏洞,注入,下载并还原 JS 源码,本地 map 文件。"
 ---
 
 # sourcemapper

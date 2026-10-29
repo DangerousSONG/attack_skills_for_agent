@@ -1,6 +1,7 @@
 ---
 name: vulmap-vuln-scan
-description: Vulmap: 本地 CVE 一键扫。信号:漏洞情报,cve,本地漏洞扫描,更新漏洞库,指定应用。
+description: "Vulmap: Local CVE one-click scan. Signals: vulnerability intelligence, CVE, local vulnerability scan, update vulnerability database, specified application."
+zh-signals: "Vulmap: 本地 CVE 一键扫。信号:漏洞情报,cve,本地漏洞扫描,更新漏洞库,指定应用。"
 ---
 
 # Vulmap

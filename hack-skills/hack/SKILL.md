@@ -1,6 +1,7 @@
 ---
 name: hack
-description: "Entry P0 primary router and operating doctrine for HackSkills 信号:资产测绘,指纹识别,技术栈识别。"
+description: "Entry P0 primary router and operating doctrine for HackSkills. Signals: asset mapping, fingerprinting, tech stack identification."
+zh-signals: "Entry P0 primary router and operating doctrine for HackSkills 信号:资产测绘,指纹识别,技术栈识别。"
 when-to-use: >-
   Entry P0 primary router and operating doctrine for HackSkills. Use when the
   task involves web application testing, API security assessment, recon,

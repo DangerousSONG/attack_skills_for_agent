@@ -1,6 +1,7 @@
 ---
 name: api-authorization-and-bola
-description: "API 授权测试路径:BOLA/IDOR、BFLA、方法滥用、隐藏字段控制。信号:bola,idor,越权,水平越权,api授权,对象级授权。"
+description: "API authorization testing paths: BOLA/IDOR, BFLA, method abuse, hidden field controls. Signals: bola, idor, broken access control, horizontal privilege escalation, api authorization, object-level authorization."
+zh-signals: "API 授权测试路径:BOLA/IDOR、BFLA、方法滥用、隐藏字段控制。信号:bola,idor,越权,水平越权,api授权,对象级授权。"
 when-to-use: 1. CORE TEST LOOP
   API authorization and BOLA testing playbook. Use when APIs expose object identifiers, nested resources, hidden writable fields, or weak function-level authorization.
 ---

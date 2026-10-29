@@ -1,6 +1,7 @@
 ---
 name: filebuster-dav-buster
-description: filebuster: WebDAV/虚拟主机 fuzz。信号:web漏洞,注入,HTTP fuzz,扩展,自定义头。
+description: "filebuster fuzzes WebDAV and virtual hosts. Signals: web vulnerabilities, injection, HTTP fuzzing, extensions, custom headers."
+zh-signals: "filebuster: WebDAV/虚拟主机 fuzz。信号:web漏洞,注入,HTTP fuzz,扩展,自定义头。"
 ---
 
 # filebuster

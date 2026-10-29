@@ -1,6 +1,7 @@
 ---
 name: building-c2-redirector-infrastructure
-description: "用 nginx(proxy_pass)和 Apache(mod_rewrite)搭建 C2 重定向器(哑管道/流量过滤),从 Malleable C2 配置信号:c2重定向器,redirector。"
+description: "Build C2 redirectors with nginx proxy_pass and Apache mod_rewrite for dumb pipes/traffic filtering from Malleable C2 configs. Signals: C2 redirector, redirector."
+zh-signals: "用 nginx(proxy_pass)和 Apache(mod_rewrite)搭建 C2 重定向器(哑管道/流量过滤),从 Malleable C2 配置信号:c2重定向器,redirector。"
 when-to-use: Build dumb-pipe and traffic-filtering C2 redirectors with nginx (proxy_pass) and Apache (mod_rewrite), deriving filter rules from a Malleable C2 profile, layering Let's Encrypt TLS, and applying OPSEC
 domain: cybersecurity
 subdomain: red-teaming

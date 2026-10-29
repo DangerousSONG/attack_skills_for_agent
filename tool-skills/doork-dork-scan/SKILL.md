@@ -1,6 +1,7 @@
 ---
 name: doork-dork-scan
-description: doork: 目标 dork 自动化。信号:web漏洞,注入,自定义 dork。
+description: "doork: automated target dorking. Signals: web vulnerability, injection, custom dork."
+zh-signals: "doork: 目标 dork 自动化。信号:web漏洞,注入,自定义 dork。"
 ---
 
 # doork

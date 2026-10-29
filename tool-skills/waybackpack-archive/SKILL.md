@@ -1,6 +1,7 @@
 ---
 name: waybackpack-archive
-description: waybackpack: 历史快照取证。信号:资产测绘,子域名,列归档 URL,只列不下载,从 2015 年。
+description: "waybackpack: Historical snapshot forensics. Signals: asset mapping, subdomains, list archived URLs, list only no download, from 2015."
+zh-signals: "waybackpack: 历史快照取证。信号:资产测绘,子域名,列归档 URL,只列不下载,从 2015 年。"
 ---
 
 # waybackpack

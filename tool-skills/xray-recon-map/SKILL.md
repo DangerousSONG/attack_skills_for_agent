@@ -1,6 +1,7 @@
 ---
 name: xray-recon-map
-description: XRay: Shodan 数据驱动的资产图谱。信号:资产测绘,子域名,Shodan 驱动测绘,字典模式。
+description: "XRay: Shodan data-driven asset graph. Signals: asset mapping, subdomains, Shodan-driven mapping, dictionary mode."
+zh-signals: "XRay: Shodan 数据驱动的资产图谱。信号:资产测绘,子域名,Shodan 驱动测绘,字典模式。"
 ---
 
 # XRay

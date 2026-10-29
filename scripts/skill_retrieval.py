@@ -23,7 +23,8 @@ REGISTERED = {'attack-skill-router', 'engagement-discipline', 'java-deserializat
 
 
 def load_corpus():
-    """{slug: (name, description)}，与 eval_recall.load_skills 同口径(排除注册层与 scripts)"""
+    """{slug: (name, description, zh_signals)}，与 eval_recall.load_skills 同口径(排除注册层与 scripts)
+    第三元素为中文检索信号词(zh-signals 字段, 与英文 description 分离存储, 仅检索用不进展示)"""
     docs = {}
     for dp, dirs, files in os.walk(ROOT):
         dirs[:] = [d for d in dirs if d not in ('.git', '_before_tmp')]
@@ -40,10 +41,17 @@ def load_corpus():
             continue
         dm = re.search(r'^description:\s*(.+)$', fm.group(1), re.M)
         nm = re.search(r'^name:\s*(.+)$', fm.group(1), re.M)
+        zm = re.search(r'^zh-signals:\s*(.+)$', fm.group(1), re.M)
         if not dm:
             continue
-        docs[slug] = (nm.group(1).strip() if nm else slug, dm.group(1).strip())
+        docs[slug] = (nm.group(1).strip() if nm else slug, dm.group(1).strip(),
+                      zm.group(1).strip().strip('"').strip("'") if zm else '')
     return docs
+
+
+def corpus_text(t):
+    """检索语料 = name×3 + 英文 description + 中文信号词(词面召回的中英桥接)"""
+    return '{0} {0} {0} {1} {2}'.format(t[0], t[1], t[2])
 
 
 def build():
@@ -54,7 +62,7 @@ def build():
 
     docs = load_corpus()
     slugs = sorted(docs)
-    corpus = ['{0} {0} {0} {1}'.format(docs[s][0], docs[s][1]) for s in slugs]
+    corpus = [corpus_text(docs[s]) for s in slugs]
     vec_w = TfidfVectorizer(ngram_range=(1, 2), min_df=1)
     vec_c = TfidfVectorizer(analyzer='char_wb', ngram_range=(3, 5), min_df=1)
     X = hstack([vec_w.fit_transform(corpus), vec_c.fit_transform(corpus)]).tocsr()

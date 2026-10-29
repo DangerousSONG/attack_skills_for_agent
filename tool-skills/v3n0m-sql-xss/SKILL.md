@@ -1,6 +1,7 @@
 ---
 name: v3n0m-sql-xss
-description: V3n0M-Scanner: 多漏洞批量扫描。信号:web漏洞,注入,dork 扫描,SSRF 模式,XSS 模式。
+description: "V3n0M-Scanner: Multi-vulnerability batch scanning. Signals: web vulnerabilities, injection, dork scan, SSRF patterns, XSS patterns."
+zh-signals: "V3n0M-Scanner: 多漏洞批量扫描。信号:web漏洞,注入,dork 扫描,SSRF 模式,XSS 模式。"
 ---
 
 # V3n0M-Scanner

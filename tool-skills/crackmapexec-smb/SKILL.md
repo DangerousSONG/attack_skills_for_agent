@@ -1,6 +1,7 @@
 ---
 name: crackmapexec-smb
-description: CrackMapExec / CME: CIDR 级域内信息速览。信号:ad攻击,域渗透,SMB 协议枚举存活,列 SMB 共享,远程抓取哈希。
+description: "CrackMapExec / CME: Provides fast domain information over CIDR ranges. Signals: AD attack, domain penetration, SMB protocol alive enumeration, list SMB shares, remote hash extraction."
+zh-signals: "CrackMapExec / CME: CIDR 级域内信息速览。信号:ad攻击,域渗透,SMB 协议枚举存活,列 SMB 共享,远程抓取哈希。"
 ---
 
 # CrackMapExec / CME

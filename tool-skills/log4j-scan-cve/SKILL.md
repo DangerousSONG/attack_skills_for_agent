@@ -1,6 +1,7 @@
 ---
 name: log4j-scan-cve
-description: log4j-scan: Log4Shell 批量验证。信号:漏洞情报,cve,自建 DNS 接收,超时。
+description: "log4j-scan: Batch validate Log4Shell. Signals: vulnerability intelligence, CVE, self-hosted DNS receiver, timeout."
+zh-signals: "log4j-scan: Log4Shell 批量验证。信号:漏洞情报,cve,自建 DNS 接收,超时。"
 ---
 
 # log4j-scan

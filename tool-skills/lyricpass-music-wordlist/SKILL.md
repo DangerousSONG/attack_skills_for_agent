@@ -1,6 +1,7 @@
 ---
 name: lyricpass-music-wordlist
-description: lyricpass: 歌词社工字典。信号:密码破解,哈希破解,歌词转密码字典,单曲。
+description: "lyricpass: Lyric-based social engineering dictionary. Signals: password cracking, hash cracking, lyrics to password dictionary, single track."
+zh-signals: "lyricpass: 歌词社工字典。信号:密码破解,哈希破解,歌词转密码字典,单曲。"
 ---
 
 # lyricpass

@@ -1,6 +1,7 @@
 ---
 name: astra-api-scan
-description: Astra: REST API 漏洞批扫。信号:api攻击,接口测试,REST API 扫描,JSON 报告,仅 API 模式。
+description: "Astra: batch scans REST API vulnerabilities. Signals: api attack, interface testing, REST API scan, JSON report, API-only mode"
+zh-signals: "Astra: REST API 漏洞批扫。信号:api攻击,接口测试,REST API 扫描,JSON 报告,仅 API 模式。"
 ---
 
 # Astra

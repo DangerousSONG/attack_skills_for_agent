@@ -1,6 +1,7 @@
 ---
 name: engagement-discipline
-description: 长时渗透任务的通用作战纪律。当任务为多点/多阶段（靶场、内网渗透、多节点评测）且预计运行超过 1 小时时，先加载本 skill：时间盒攻坚、失败换路、并行推进、定期固化进度、收尾前全面核验。防止在单点上耗尽预算。
+description: "General operational discipline for long penetration tests: use time-boxed attempts, switch paths on failure, parallelize work, regularly checkpoint progress, and fully verify before closing to avoid exhausting budget on one point. Signals: long pentest, operational discipline, time box, progress checkpoint, verification."
+zh-signals: "长时渗透任务的通用作战纪律。当任务为多点/多阶段（靶场、内网渗透、多节点评测）且预计运行超过 1 小时时，先加载本 skill：时间盒攻坚、失败换路、并行推进、定期固化进度、收尾前全面核验。防止在单点上耗尽预算。"
 when-to-use: 任何多节点/多阶段渗透任务开题时；任何单点攻坚超过 60 分钟时；准备写最终报告前的收尾阶段。
 ---
 

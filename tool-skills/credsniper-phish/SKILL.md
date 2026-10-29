@@ -1,6 +1,7 @@
 ---
 name: credsniper-phish
-description: CredSniper: OAuth/2FA 钓鱼。信号:钓鱼,社会工程,SSL。
+description: "CredSniper: Phishes OAuth and 2FA credentials. Signals: phishing, social engineering, SSL."
+zh-signals: "CredSniper: OAuth/2FA 钓鱼。信号:钓鱼,社会工程,SSL。"
 ---
 
 # CredSniper

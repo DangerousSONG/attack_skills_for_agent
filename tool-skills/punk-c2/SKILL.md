@@ -1,6 +1,7 @@
 ---
 name: punk-c2
-description: punk.py: 轻量 C2。信号:c2,命令控制,起 C2,执行,自毁。
+description: "punk.py: Lightweight C2. Signals: C2, command and control, start C2, execution, self-destruct."
+zh-signals: "punk.py: 轻量 C2。信号:c2,命令控制,起 C2,执行,自毁。"
 ---
 
 # punk.py

@@ -1,6 +1,7 @@
 ---
 name: wpprobe-wp-version
-description: wpprobe: WP 组件批量探测。信号:web漏洞,注入,WP 版本+插件探测,插件文件。
+description: "wpprobe: WP component batch probing. Signals: web vulnerabilities, injection, WP version plus plugin probe, plugin file."
+zh-signals: "wpprobe: WP 组件批量探测。信号:web漏洞,注入,WP 版本+插件探测,插件文件。"
 ---
 
 # wpprobe

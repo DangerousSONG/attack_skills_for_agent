@@ -1,6 +1,7 @@
 ---
 name: ja3-fingerprint
-description: JA3: TLS 指纹威胁识别。信号:资产测绘,子域名。
+description: "JA3 identifies threats using TLS fingerprints. Signals: asset mapping, subdomain."
+zh-signals: "JA3: TLS 指纹威胁识别。信号:资产测绘,子域名。"
 ---
 
 # JA3

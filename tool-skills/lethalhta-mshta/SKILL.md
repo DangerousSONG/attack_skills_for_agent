@@ -1,6 +1,7 @@
 ---
 name: lethalhta-mshta
-description: LethalHTA: mshta 白名单执行。信号:横向移动,psexec,直接执行,远程 HTA,参考 README。
+description: "LethalHTA abuses mshta for allowlisted execution. Signals: lateral movement, psexec, direct execution, remote HTA, README reference."
+zh-signals: "LethalHTA: mshta 白名单执行。信号:横向移动,psexec,直接执行,远程 HTA,参考 README。"
 ---
 
 # LethalHTA

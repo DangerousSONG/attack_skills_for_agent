@@ -1,6 +1,7 @@
 ---
 name: bypassing-authentication-with-forced-browsing
-description: "Discovering and accessing unprotected pages, APIs, and administrative 信号:web漏洞,注入,sql注入。"
+description: "Discover and access unprotected pages, APIs, and administrative interfaces. Signals: web vulnerabilities, injection, SQL injection."
+zh-signals: "Discovering and accessing unprotected pages, APIs, and administrative 信号:web漏洞,注入,sql注入。"
 when-to-use: Discovering and accessing unprotected pages, APIs, and administrative
   interfaces by enumerating URLs and bypassing authentication controls during authorized
   security assessments.

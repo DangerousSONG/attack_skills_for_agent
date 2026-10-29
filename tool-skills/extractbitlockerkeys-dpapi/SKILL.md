@@ -1,6 +1,7 @@
 ---
 name: extractbitlockerkeys-dpapi
-description: extractbitlockerkeys: 域内 BitLocker 密钥收割。信号:ad攻击,域渗透,只显示有密钥的主机,CSV 输出。
+description: "extractbitlockerkeys: domain BitLocker key harvesting. Signals: AD attack, domain penetration, show hosts with keys only, CSV output."
+zh-signals: "extractbitlockerkeys: 域内 BitLocker 密钥收割。信号:ad攻击,域渗透,只显示有密钥的主机,CSV 输出。"
 ---
 
 # extractbitlockerkeys

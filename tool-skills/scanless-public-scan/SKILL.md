@@ -1,6 +1,7 @@
 ---
 name: scanless-public-scan
-description: scanless: 匿名端口扫描。信号:端口扫描,nmap,公共扫描服务代扫,指定引擎。
+description: "scanless: Performs anonymous port scanning. Signals: port scanning, nmap, public scan service proxy, specified engine."
+zh-signals: "scanless: 匿名端口扫描。信号:端口扫描,nmap,公共扫描服务代扫,指定引擎。"
 ---
 
 # scanless

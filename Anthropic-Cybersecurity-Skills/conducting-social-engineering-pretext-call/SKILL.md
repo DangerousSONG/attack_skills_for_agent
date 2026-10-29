@@ -1,6 +1,7 @@
 ---
 name: conducting-social-engineering-pretext-call
-description: "Plan and execute authorized vishing (voice phishing) pretext calls to 信号:钓鱼,社会工程,钓鱼邮件。"
+description: "Plan and execute authorized vishing pretext calls. Signals: phishing, social engineering, phishing emails."
+zh-signals: "Plan and execute authorized vishing (voice phishing) pretext calls to 信号:钓鱼,社会工程,钓鱼邮件。"
 when-to-use: Plan and execute authorized vishing (voice phishing) pretext calls to
   assess employee susceptibility to social engineering and evaluate security awareness
   controls.

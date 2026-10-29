@@ -1,6 +1,7 @@
 ---
 name: crackql-graphql-batch
-description: CrackQL: GraphQL 批量注入/爆破。信号:api攻击,接口测试,详细。
+description: "CrackQL: Performs batch GraphQL injection and brute-force attacks. Signals: API attack, interface testing, verbose."
+zh-signals: "CrackQL: GraphQL 批量注入/爆破。信号:api攻击,接口测试,详细。"
 ---
 
 # CrackQL

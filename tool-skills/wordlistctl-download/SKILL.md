@@ -1,6 +1,7 @@
 ---
 name: wordlistctl-download
-description: wordlistctl: BlackArch 字典仓库。信号:密码破解,哈希破解,字典下载,列表,搜索。
+description: "wordlistctl: BlackArch wordlist repository. Signals: password cracking, hash cracking, wordlist download, list, search."
+zh-signals: "wordlistctl: BlackArch 字典仓库。信号:密码破解,哈希破解,字典下载,列表,搜索。"
 ---
 
 # wordlistctl

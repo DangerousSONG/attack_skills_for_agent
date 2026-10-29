@@ -1,6 +1,7 @@
 ---
 name: netz-port-diff
-description: netz: 网络变化监控。信号:端口扫描,nmap,网段快照,变化检测。
+description: "netz: Network change monitoring. Signals: port scanning, nmap, subnet snapshot, change detection."
+zh-signals: "netz: 网络变化监控。信号:端口扫描,nmap,网段快照,变化检测。"
 ---
 
 # netz

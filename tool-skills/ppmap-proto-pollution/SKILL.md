@@ -1,6 +1,7 @@
 ---
 name: ppmap-proto-pollution
-description: ppmap: 原型链污染验证。信号:web漏洞,注入,原型链污染检测,带 OOB 回调。
+description: "Prototype pollution verification. Signals: web vulnerability, injection, prototype pollution detection, OOB callback."
+zh-signals: "ppmap: 原型链污染验证。信号:web漏洞,注入,原型链污染检测,带 OOB 回调。"
 ---
 
 # ppmap

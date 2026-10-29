@@ -1,6 +1,7 @@
 ---
 name: ssh-mitm-intercept
-description: ssh-mitm: SSH 会话劫持+凭据截获。信号:中间人,mitm,起 SSH 中间人,监听端口,劫持会话。
+description: "ssh-mitm hijacks SSH sessions and captures credentials. Signals: MITM, mitm, start SSH MITM, listen port, session hijack"
+zh-signals: "ssh-mitm: SSH 会话劫持+凭据截获。信号:中间人,mitm,起 SSH 中间人,监听端口,劫持会话。"
 ---
 
 # ssh-mitm

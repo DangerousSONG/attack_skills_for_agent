@@ -1,6 +1,7 @@
 ---
 name: tinja-ssti
-description: TInjA: SSTI 全引擎检测。信号:web漏洞,注入,SSTI 检测,带 Cookie,请求文件。
+description: "TInjA detects SSTI across engines. Signals: web vulnerability, injection, SSTI detection, with Cookie, request file"
+zh-signals: "TInjA: SSTI 全引擎检测。信号:web漏洞,注入,SSTI 检测,带 Cookie,请求文件。"
 ---
 
 # TInjA

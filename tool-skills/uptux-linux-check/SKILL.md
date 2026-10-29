@@ -1,6 +1,7 @@
 ---
 name: uptux-linux-check
-description: uptux: Linux systemd 提权检测。信号:linux提权,suid,Linux 提权检查,全检查,详细。
+description: "uptux: Linux systemd privilege escalation detection. Signals: linux privilege escalation, SUID, Linux privilege escalation check, full check, verbose."
+zh-signals: "uptux: Linux systemd 提权检测。信号:linux提权,suid,Linux 提权检查,全检查,详细。"
 ---
 
 # uptux

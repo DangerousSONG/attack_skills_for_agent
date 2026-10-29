@@ -1,6 +1,7 @@
 ---
 name: uncover-search-engine
-description: uncover: 多引擎资产聚合搜索。信号:网络拓扑,互联网测绘,单查询,批量查询,指定引擎。
+description: "uncover: Multi-engine asset aggregation search. Signals: network topology, internet mapping, single query, batch query, specified engines."
+zh-signals: "uncover: 多引擎资产聚合搜索。信号:网络拓扑,互联网测绘,单查询,批量查询,指定引擎。"
 ---
 
 # uncover

@@ -1,6 +1,7 @@
 ---
 name: snallygaster-secret-scan
-description: snallygaster: Web 服务器敏感文件普查。信号:web漏洞,注入,秘密文件扫描,调试,禁 HTTP。
+description: "snallygaster: web server sensitive file survey. Signals: web vulnerability, injection, secret file scan, debug, disable HTTP."
+zh-signals: "snallygaster: Web 服务器敏感文件普查。信号:web漏洞,注入,秘密文件扫描,调试,禁 HTTP。"
 ---
 
 # snallygaster

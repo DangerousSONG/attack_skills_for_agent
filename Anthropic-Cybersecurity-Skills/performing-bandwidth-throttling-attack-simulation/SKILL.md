@@ -1,6 +1,7 @@
 ---
 name: performing-bandwidth-throttling-attack-simulation
-description: "Simulate bandwidth throttling and network degradation attacks using tc 信号:中间人,mitm,嗅探。"
+description: "Simulate bandwidth throttling and network degradation attacks using tc. Signals: man-in-the-middle, mitm, sniffing."
+zh-signals: "Simulate bandwidth throttling and network degradation attacks using tc 信号:中间人,mitm,嗅探。"
 when-to-use: 'Simulate bandwidth throttling and network degradation attacks using tc,
   iperf3, and Scapy in authorized lab environments to test QoS controls, application
   resilience, and monitoring detection of traffic manipulation. Use when validating

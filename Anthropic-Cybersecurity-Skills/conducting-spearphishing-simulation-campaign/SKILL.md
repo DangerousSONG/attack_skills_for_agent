@@ -1,6 +1,7 @@
 ---
 name: conducting-spearphishing-simulation-campaign
-description: "定向鱼叉钓鱼模拟:OSINT 定制借口、HTML 走私/macro/ISO/LNK/OneNote/二维码载荷、仿冒域名+SPF/DKIM/DMARC 基础设施,GoPhi信号:鱼叉钓鱼,初始访问。"
+description: "Run targeted spear-phishing simulations with OSINT pretexts, HTML smuggling/macro/ISO/LNK/OneNote/QR payloads, and lookalike domains with SPF/DKIM/DMARC infrastructure. Signals: spear phishing, initial access."
+zh-signals: "定向鱼叉钓鱼模拟:OSINT 定制借口、HTML 走私/macro/ISO/LNK/OneNote/二维码载荷、仿冒域名+SPF/DKIM/DMARC 基础设施,GoPhi信号:鱼叉钓鱼,初始访问。"
 when-to-use: Run a targeted spearphishing simulation for initial access by developing OSINT-derived pretexts, building payloads (HTML smuggling, macro docs, ISO/LNK, OneNote, QR codes), standing up look-alike-doma
 domain: cybersecurity
 subdomain: red-teaming

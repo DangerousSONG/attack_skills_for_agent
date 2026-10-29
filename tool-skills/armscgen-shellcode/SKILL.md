@@ -1,6 +1,7 @@
 ---
 name: armscgen-shellcode
-description: ARMSCGen: ARM/嵌入式 shellcode。信号:pwn,二进制利用,反向 shell,列表。
+description: "ARMSCGen: generates ARM/embedded shellcode. Signals: pwn, binary exploitation, reverse shell, list"
+zh-signals: "ARMSCGen: ARM/嵌入式 shellcode。信号:pwn,二进制利用,反向 shell,列表。"
 ---
 
 # ARMSCGen

@@ -1,6 +1,7 @@
 ---
 name: ciphr-crypto-cli
-description: ciphr: 命令行密码学运算。信号:密码学攻击,加密破解,ciphr --hex`,哈希计算,AES 解密。
+description: "ciphr: Performs cryptographic operations from the command line. Signals: cryptographic attack, encryption cracking, ciphr --hex, hash calculation, AES decryption."
+zh-signals: "ciphr: 命令行密码学运算。信号:密码学攻击,加密破解,ciphr --hex`,哈希计算,AES 解密。"
 ---
 
 # ciphr

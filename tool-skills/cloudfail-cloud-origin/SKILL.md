@@ -1,6 +1,7 @@
 ---
 name: cloudfail-cloud-origin
-description: CloudFail: CDN 后源站 IP 定位。信号:红队,方法论,绕过 CF 找源站 IP,扫描全部子域,Tor 出口防封。
+description: "CloudFail: Locates origin IPs behind CDNs. Signals: red team, methodology, bypassing Cloudflare to find origin IP, scanning all subdomains, Tor exit nodes to avoid blocking."
+zh-signals: "CloudFail: CDN 后源站 IP 定位。信号:红队,方法论,绕过 CF 找源站 IP,扫描全部子域,Tor 出口防封。"
 ---
 
 # CloudFail

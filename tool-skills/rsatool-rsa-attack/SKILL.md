@@ -1,6 +1,7 @@
 ---
 name: rsatool-rsa-attack
-description: rsatool: RSA 参数泄露私钥重建。信号:密码学攻击,加密破解,从 p,q 重建私钥,从 n,d 重建,输出 PEM。
+description: "rsatool: Reconstructs RSA private keys from leaked parameters. Signals: cryptographic attack, encryption cracking, rebuild private key from p and q, rebuild from n and d, output PEM."
+zh-signals: "rsatool: RSA 参数泄露私钥重建。信号:密码学攻击,加密破解,从 p,q 重建私钥,从 n,d 重建,输出 PEM。"
 ---
 
 # rsatool

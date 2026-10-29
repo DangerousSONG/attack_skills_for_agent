@@ -1,6 +1,7 @@
 ---
 name: whoxyrm-reverse-whois
-description: WhoxyRM: WHOIS 反查关联资产。信号:资产测绘,子域名,反查注册组织名下域名,按邮箱反查。
+description: "WhoxyRM: WHOIS reverse lookup associated assets. Signals: asset mapping, subdomains, reverse lookup domains by registration organization, reverse lookup by email."
+zh-signals: "WhoxyRM: WHOIS 反查关联资产。信号:资产测绘,子域名,反查注册组织名下域名,按邮箱反查。"
 ---
 
 # WhoxyRM

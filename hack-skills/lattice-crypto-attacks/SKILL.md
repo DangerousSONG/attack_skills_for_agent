@@ -1,6 +1,7 @@
 ---
 name: lattice-crypto-attacks
-description: "Lattice-based cryptanalysis playbook 信号:密码学攻击,加密破解,弱随机数。"
+description: "Lattice-based cryptanalysis playbook. Signals: cryptanalysis, encryption cracking, weak randomness."
+zh-signals: "Lattice-based cryptanalysis playbook 信号:密码学攻击,加密破解,弱随机数。"
 when-to-use: >-
   Lattice-based cryptanalysis playbook. Use when attacking RSA via Coppersmith
   small roots, recovering DSA/ECDSA nonces from bias, solving knapsack

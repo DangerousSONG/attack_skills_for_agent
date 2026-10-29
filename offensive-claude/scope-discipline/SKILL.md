@@ -1,6 +1,7 @@
 ---
 name: scope-discipline
-description: "范围纪律:对任何主机/IP/URL 发第一个包之前,先过此 skill 确认在授权范围内。信号:范围确认,授权边界,纪律,开工前置。"
+description: "Covers scope discipline: before sending the first packet to any host/IP/URL, confirm authorization scope via this skill. Signals: scope confirmation, authorization boundary, discipline, pre-work gate."
+zh-signals: "范围纪律:对任何主机/IP/URL 发第一个包之前,先过此 skill 确认在授权范围内。信号:范围确认,授权边界,纪律,开工前置。"
 when-to-use: Use when about to send a request to, scan, enumerate, exploit, or otherwise interact with any host, IP, URL, or asset — before the first packet reaches a target
 ---
 

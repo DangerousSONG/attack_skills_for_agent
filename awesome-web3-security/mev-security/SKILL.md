@@ -1,6 +1,7 @@
 ---
 name: mev-security
-description: "MEV 概念、常见攻击与缓解措施的资源组织指南。信号:mev,抢跑,三明治攻击,以太坊,defi安全。"
+description: "Resource guide for MEV concepts, common attacks, mitigations. Signals: MEV, front-running, sandwich attacks, Ethereum, DeFi security."
+zh-signals: "MEV 概念、常见攻击与缓解措施的资源组织指南。信号:mev,抢跑,三明治攻击,以太坊,defi安全。"
 when-to-use: Guide for MEV concepts, common attacks, mitigations, and how to organize MEV-related resources in README.md.
 ---
 

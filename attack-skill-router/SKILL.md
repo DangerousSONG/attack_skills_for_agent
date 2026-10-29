@@ -1,6 +1,7 @@
 ---
 name: attack-skill-router
-description: 攻击侧 Skill 库的路由层。当任务涉及渗透测试任一环节（侦察/利用/提权/横向/持久化等）时，先加载本 skill 并调用 skill_route 工具（L1 字典 + L2 混合召回 + L3 可选重排）拿到 3-5 个推荐 skill 再定向加载；工具不可用时按「服务/技术/CVE → 推荐 skill」路由表人工选用；不要在 1000 个 SKILL.md 里盲目 grep 全读。
+description: "Attack-side skill library routing layer using skill_route for pentest tasks. Signals: skill routing, penetration testing, CVE, reconnaissance, exploitation, privilege escalation, lateral movement, persistence."
+zh-signals: "攻击侧 Skill 库的路由层。当任务涉及渗透测试任一环节（侦察/利用/提权/横向/持久化等）时，先加载本 skill 并调用 skill_route 工具（L1 字典 + L2 混合召回 + L3 可选重排）拿到 3-5 个推荐 skill 再定向加载；工具不可用时按「服务/技术/CVE → 推荐 skill」路由表人工选用；不要在 1000 个 SKILL.md 里盲目 grep 全读。"
 when-to-use: 任何渗透任务开题时；已加载 skill 不足以解决当前障碍时回来换路由。
 ---
 

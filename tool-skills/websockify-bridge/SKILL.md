@@ -1,6 +1,7 @@
 ---
 name: websockify-bridge
-description: websockify: WebSocket 隧道封装 C2/远控流量。信号:隐蔽回连,通信通道,强制 SSL,TLS 证书,保活。
+description: "websockify: WebSocket tunnel encapsulation for C2/remote control traffic. Signals: covert callback, communication channel, force SSL, TLS certificate, keepalive."
+zh-signals: "websockify: WebSocket 隧道封装 C2/远控流量。信号:隐蔽回连,通信通道,强制 SSL,TLS 证书,保活。"
 ---
 
 # websockify

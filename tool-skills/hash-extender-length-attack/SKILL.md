@@ -1,6 +1,7 @@
 ---
 name: hash-extender-length-attack
-description: hash_extender: 哈希长度扩展伪造。信号:密码学攻击,加密破解,长度扩展攻击,算法选择。
+description: "Hash length-extension forgery. Signals: cryptographic attack, encryption cracking, length extension attack, algorithm selection."
+zh-signals: "hash_extender: 哈希长度扩展伪造。信号:密码学攻击,加密破解,长度扩展攻击,算法选择。"
 ---
 
 # hash_extender

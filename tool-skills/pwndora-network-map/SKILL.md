@@ -1,6 +1,7 @@
 ---
 name: pwndora-network-map
-description: pwndora: 企业网段资产图谱。信号:网络拓扑,互联网测绘,大规模网络测绘。
+description: "pwndora: Maps enterprise network asset graph. Signals: network topology, internet mapping, large-scale network mapping."
+zh-signals: "pwndora: 企业网段资产图谱。信号:网络拓扑,互联网测绘,大规模网络测绘。"
 ---
 
 # pwndora

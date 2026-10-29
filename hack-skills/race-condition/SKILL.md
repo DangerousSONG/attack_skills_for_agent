@@ -1,6 +1,7 @@
 ---
 name: race-condition
-description: "Race condition and TOCTOU testing for web apps 信号:漏洞情报,cve,cnvd。"
+description: "Race condition and TOCTOU testing for web apps. Signals: vulnerability intelligence, CVE, CNVD."
+zh-signals: "Race condition and TOCTOU testing for web apps 信号:漏洞情报,cve,cnvd。"
 when-to-use: >-
   Race condition and TOCTOU testing for web apps. Use when testing one-time operations, concurrent HTTP abuse, rate-limit bypass, Turbo Intruder gates, HTTP/2 single-packet attacks, and CWE-362-style synchronization gaps.
 ---

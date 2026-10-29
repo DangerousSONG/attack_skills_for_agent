@@ -1,6 +1,7 @@
 ---
 name: dbd-dns-tunnel-shell
-description: dbd: TCP 被封改 DNS 隧道反弹。信号:持久化,后门,监听反弹(TCP),DNS 模式连出,AES 加密信道。
+description: "dbd: Uses DNS tunnels for reverse shells when TCP is blocked. Signals: persistence, backdoor, TCP reverse shell listener, DNS outbound mode, AES encrypted channel."
+zh-signals: "dbd: TCP 被封改 DNS 隧道反弹。信号:持久化,后门,监听反弹(TCP),DNS 模式连出,AES 加密信道。"
 ---
 
 # dbd

@@ -38,7 +38,8 @@ def load_data():
         nm = re.search(r'^name:\s*(.+)$', fm.group(1), re.M)
         if not dm:
             continue
-        docs[parts[-1]] = (nm.group(1).strip() if nm else parts[-1], dm.group(1).strip())
+        zm = re.search(r'^zh-signals:\s*(.+)$', fm.group(1), re.M)
+        docs[parts[-1]] = (nm.group(1).strip() if nm else parts[-1], dm.group(1).strip(), zm.group(1).strip().strip(chr(34)).strip(chr(39)) if zm else '')
     return queries, docs
 
 
@@ -59,7 +60,7 @@ def embed(model_name, texts, cache_key):
 def main():
     queries, docs = load_data()
     slugs = sorted(docs)
-    corpus = ['{0} {0} {0} {1}'.format(docs[s][0], docs[s][1]) for s in slugs]
+    corpus = ['{0} {0} {0} {1} {2}'.format(docs[s][0], docs[s][1], docs[s][2]) for s in slugs]
     qtexts = [q for q, _ in queries]
     golds = [[g for g in gold if g in docs] for _, gold in queries]
     n = len(slugs)

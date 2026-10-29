@@ -1,6 +1,7 @@
 ---
 name: openstego-general-stego
-description: OpenStego: 通用文件隐写。信号:隐写,steganography,嵌入数据,提取数据,数字水印。
+description: "General file steganography. Signals: steganography, embed data, extract data, digital watermark."
+zh-signals: "OpenStego: 通用文件隐写。信号:隐写,steganography,嵌入数据,提取数据,数字水印。"
 ---
 
 # OpenStego

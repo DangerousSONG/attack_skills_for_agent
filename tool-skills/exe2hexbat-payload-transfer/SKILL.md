@@ -1,6 +1,7 @@
 ---
 name: exe2hexbat-payload-transfer
-description: exe2hex: 无文件落地传二进制。信号:逆向,反汇编,C 代码格式。
+description: "exe2hex: transfer binaries without file landing. Signals: reverse engineering, disassembly, C code format."
+zh-signals: "exe2hex: 无文件落地传二进制。信号:逆向,反汇编,C 代码格式。"
 ---
 
 # exe2hex

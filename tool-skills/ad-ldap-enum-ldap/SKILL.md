@@ -1,6 +1,7 @@
 ---
 name: ad-ldap-enum-ldap
-description: ad-ldap-enum: Crowe 出品 LDAP 枚举。信号:内网枚举,网络发现,LDAP 全枚举。
+description: "ad-ldap-enum: Crowe LDAP enumeration tool. Signals: internal network enumeration, network discovery, LDAP full enumeration"
+zh-signals: "ad-ldap-enum: Crowe 出品 LDAP 枚举。信号:内网枚举,网络发现,LDAP 全枚举。"
 ---
 
 # ad-ldap-enum

@@ -1,6 +1,7 @@
 ---
 name: gpowned-gpo-abuse
-description: gpowned: GPO 内下发恶意计划任务。信号:ad攻击,域渗透,认证+GPO 枚举,GPO 命令注入,计划任务方式下发。
+description: "gpowned deploys malicious scheduled tasks through GPOs. Signals: AD attack, domain penetration, authentication and GPO enumeration, GPO command injection, scheduled-task delivery."
+zh-signals: "gpowned: GPO 内下发恶意计划任务。信号:ad攻击,域渗透,认证+GPO 枚举,GPO 命令注入,计划任务方式下发。"
 ---
 
 # gpowned

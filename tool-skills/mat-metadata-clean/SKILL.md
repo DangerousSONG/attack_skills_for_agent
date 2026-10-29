@@ -1,6 +1,7 @@
 ---
 name: mat-metadata-clean
-description: MAT (Metadata Anonymisation Toolkit): 外传文件元数据清洗。信号:痕迹清理,反取证,批量原地清理,列出元数据不清除,验证。
+description: "MAT: Clean metadata from exfiltrated files. Signals: trace cleanup, anti-forensics, batch in-place cleanup, list metadata without clearing, verify."
+zh-signals: "MAT (Metadata Anonymisation Toolkit): 外传文件元数据清洗。信号:痕迹清理,反取证,批量原地清理,列出元数据不清除,验证。"
 ---
 
 # MAT (Metadata Anonymisation Toolkit)

@@ -1,6 +1,7 @@
 ---
 name: altdns-permutation
-description: altdns: 已知子域变形爆破。信号:子域名,域名枚举,置换生成候选子域,生成后解析,线程。
+description: "altdns: mutates known subdomains for brute forcing. Signals: subdomain, domain enumeration, permutation candidate generation, resolve after generation, threads"
+zh-signals: "altdns: 已知子域变形爆破。信号:子域名,域名枚举,置换生成候选子域,生成后解析,线程。"
 ---
 
 # altdns

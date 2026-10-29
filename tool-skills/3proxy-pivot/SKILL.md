@@ -1,6 +1,7 @@
 ---
 name: 3proxy-pivot
-description: 3proxy: 已控主机上起二级代理供全组使用。信号:内网穿透,隧道,SOCKS5,仅按 IP 白名单放行。
+description: "3proxy: starts a secondary proxy on a compromised host for team use. Signals: network tunneling, tunnel, SOCKS5, IP whitelist only"
+zh-signals: "3proxy: 已控主机上起二级代理供全组使用。信号:内网穿透,隧道,SOCKS5,仅按 IP 白名单放行。"
 ---
 
 # 3proxy

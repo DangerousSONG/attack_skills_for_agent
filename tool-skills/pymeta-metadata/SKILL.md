@@ -1,6 +1,7 @@
 ---
 name: pymeta-metadata
-description: pymeta: 文档元数据收割。信号:邮箱收集,员工信息,文档元数据提取,类型。
+description: "pymeta: Harvests document metadata. Signals: email collection, employee information, document metadata extraction, file type."
+zh-signals: "pymeta: 文档元数据收割。信号:邮箱收集,员工信息,文档元数据提取,类型。"
 ---
 
 # pymeta

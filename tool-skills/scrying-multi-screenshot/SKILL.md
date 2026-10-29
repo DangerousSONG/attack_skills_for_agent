@@ -1,6 +1,7 @@
 ---
 name: scrying-multi-screenshot
-description: Scrying: 目标屏幕定时截图采集。信号:屏幕捕获,截图,单目标截图,仅 RDP,输出目录。
+description: "Scrying: Periodically captures target screenshots. Signals: screen capture, screenshots, single-target screenshot, RDP only, output directory."
+zh-signals: "Scrying: 目标屏幕定时截图采集。信号:屏幕捕获,截图,单目标截图,仅 RDP,输出目录。"
 ---
 
 # Scrying

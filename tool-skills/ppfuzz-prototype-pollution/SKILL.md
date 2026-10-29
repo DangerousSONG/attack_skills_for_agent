@@ -1,6 +1,7 @@
 ---
 name: ppfuzz-prototype-pollution
-description: ppfuzz: JS 站原型链污染探测。信号:web漏洞,注入,批量,并发 30,JSON 输出。
+description: "Prototype pollution detection for JavaScript sites. Signals: web vulnerability, injection, batch, concurrency 30, JSON output."
+zh-signals: "ppfuzz: JS 站原型链污染探测。信号:web漏洞,注入,批量,并发 30,JSON 输出。"
 ---
 
 # ppfuzz

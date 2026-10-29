@@ -1,6 +1,7 @@
 ---
 name: httprobe-alive
-description: httprobe: 子域→存活站点过滤。信号:端口扫描,nmap,httprobe`,并发,超时 ms。
+description: "httprobe filters subdomains to live sites. Signals: port scan, nmap, httprobe, concurrency, timeout ms."
+zh-signals: "httprobe: 子域→存活站点过滤。信号:端口扫描,nmap,httprobe`,并发,超时 ms。"
 ---
 
 # httprobe

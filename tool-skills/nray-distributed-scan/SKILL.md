@@ -1,6 +1,7 @@
 ---
 name: nray-distributed-scan
-description: nray: 超大规模端口扫描。信号:端口扫描,nmap,分布式端口扫描,速率,JSON 输出。
+description: "Massive-scale port scanning. Signals: port scanning, nmap, distributed port scanning, rate, JSON output."
+zh-signals: "nray: 超大规模端口扫描。信号:端口扫描,nmap,分布式端口扫描,速率,JSON 输出。"
 ---
 
 # nray

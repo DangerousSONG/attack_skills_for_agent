@@ -1,6 +1,7 @@
 ---
 name: cameradar-rtsp
-description: Cameradar: 监控摄像头弱口令接管。信号:vpn漏洞,防火墙,扫描 RTSP 端口,指定端口,默认凭据字典。
+description: "Cameradar: Takes over surveillance cameras via weak passwords. Signals: VPN vulnerability, firewall, RTSP port scanning, specified ports, default credential dictionary."
+zh-signals: "Cameradar: 监控摄像头弱口令接管。信号:vpn漏洞,防火墙,扫描 RTSP 端口,指定端口,默认凭据字典。"
 ---
 
 # Cameradar

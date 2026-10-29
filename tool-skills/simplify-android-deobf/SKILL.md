@@ -1,6 +1,7 @@
 ---
 name: simplify-android-deobf
-description: simplify: Android 恶意/加固样本反混淆。信号:移动端,android攻击,Android 反混淆,仅处理指定类,单方法超时。
+description: "simplify: Android malicious and hardened sample deobfuscation. Signals: mobile, Android attack, Android deobfuscation, specified classes only, single-method timeout."
+zh-signals: "simplify: Android 恶意/加固样本反混淆。信号:移动端,android攻击,Android 反混淆,仅处理指定类,单方法超时。"
 ---
 
 # simplify

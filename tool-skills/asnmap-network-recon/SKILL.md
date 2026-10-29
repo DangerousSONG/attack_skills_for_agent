@@ -1,6 +1,7 @@
 ---
 name: asnmap-network-recon
-description: asnmap: 目标企业网段全量测绘。信号:网络拓扑,互联网测绘,asnmap`。
+description: "asnmap: maps all enterprise network ranges for a target ASN. Signals: network topology, internet mapping, asnmap"
+zh-signals: "asnmap: 目标企业网段全量测绘。信号:网络拓扑,互联网测绘,asnmap`。"
 ---
 
 # asnmap

@@ -1,6 +1,7 @@
 ---
 name: omnihash-hash-id
-description: omnihash: 未知哈希类型识别。信号:密码破解,哈希破解,文件哈希,算法全枚举。
+description: "Identify unknown hash types. Signals: password cracking, hash cracking, file hashes, algorithm enumeration."
+zh-signals: "omnihash: 未知哈希类型识别。信号:密码破解,哈希破解,文件哈希,算法全枚举。"
 ---
 
 # omnihash

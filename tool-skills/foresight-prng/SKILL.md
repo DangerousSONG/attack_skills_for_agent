@@ -1,6 +1,7 @@
 ---
 name: foresight-prng
-description: foresight: 弱 PRNG 预测。信号:密码学攻击,加密破解,LCG 参数恢复。
+description: "foresight predicts weak PRNG output. Signals: cryptographic attack, encryption cracking, LCG parameter recovery."
+zh-signals: "foresight: 弱 PRNG 预测。信号:密码学攻击,加密破解,LCG 参数恢复。"
 ---
 
 # foresight

@@ -1,6 +1,7 @@
 ---
 name: whatportis-service
-description: whatportis: 非标准端口识别。信号:端口扫描,nmap,端口服务查询,服务反查,模糊。
+description: "whatportis: Non-standard port identification. Signals: port scan, nmap, port service query, service reverse lookup, fuzzy."
+zh-signals: "whatportis: 非标准端口识别。信号:端口扫描,nmap,端口服务查询,服务反查,模糊。"
 ---
 
 # whatportis

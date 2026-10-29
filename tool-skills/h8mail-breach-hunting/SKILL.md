@@ -1,6 +1,7 @@
 ---
 name: h8mail-breach-hunting
-description: h8mail: 查邮箱是否在泄露库中出现、批量员工邮箱撞库前置。信号:邮箱收集,员工信息,JSON 输出。
+description: "h8mail checks emails in breach databases and prepares bulk employee credential stuffing. Signals: email collection, employee information, JSON output."
+zh-signals: "h8mail: 查邮箱是否在泄露库中出现、批量员工邮箱撞库前置。信号:邮箱收集,员工信息,JSON 输出。"
 ---
 
 # h8mail

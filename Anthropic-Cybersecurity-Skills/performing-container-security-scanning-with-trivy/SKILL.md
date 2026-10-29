@@ -1,6 +1,7 @@
 ---
 name: performing-container-security-scanning-with-trivy
-description: "Performing Container Security Scanning with Trivy 信号:web扫描,漏洞扫描,burp。"
+description: "Perform container security scanning with Trivy. Signals: web scanning, vulnerability scanning, burp."
+zh-signals: "Performing Container Security Scanning with Trivy 信号:web扫描,漏洞扫描,burp。"
 when-to-use: Performing Container Security Scanning with Trivy
   Runs Trivy across every target type it supports - container images, filesystems, Git
   repositories, and Kubernetes clusters - for OS and dependency vulnerabilities, IaC

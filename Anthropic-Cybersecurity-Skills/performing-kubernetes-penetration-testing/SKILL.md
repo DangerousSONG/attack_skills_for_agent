@@ -1,6 +1,7 @@
 ---
 name: performing-kubernetes-penetration-testing
-description: "Performing Kubernetes Penetration Testing 信号:云提权,iam提权,容器提权。"
+description: "Perform Kubernetes penetration testing. Signals: cloud privilege escalation, iam privilege escalation, container privilege escalation."
+zh-signals: "Performing Kubernetes Penetration Testing 信号:云提权,iam提权,容器提权。"
 when-to-use: >-
   Evaluates Kubernetes cluster security by actively simulating attacker techniques against the
   API server, kubelet, etcd, pods, RBAC, network policy, and secrets, using kube-hunter,

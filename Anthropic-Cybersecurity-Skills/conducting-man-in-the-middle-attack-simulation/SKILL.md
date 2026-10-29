@@ -1,6 +1,7 @@
 ---
 name: conducting-man-in-the-middle-attack-simulation
-description: "Simulates man-in-the-middle attacks using Ettercap, mitmproxy, and Bettercap 信号:中间人,mitm,嗅探。"
+description: "Simulate man-in-the-middle attacks using Ettercap, mitmproxy, and Bettercap. Signals: MITM, mitm, sniffing."
+zh-signals: "Simulates man-in-the-middle attacks using Ettercap, mitmproxy, and Bettercap 信号:中间人,mitm,嗅探。"
 when-to-use: 'Simulates man-in-the-middle attacks using Ettercap, mitmproxy, and Bettercap
   in authorized environments to intercept, analyze, and modify network traffic for
   testing encryption enforcement, certificate validation, and detection capabilities.

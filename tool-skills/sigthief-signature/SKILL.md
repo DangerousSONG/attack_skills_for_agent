@@ -1,6 +1,7 @@
 ---
 name: sigthief-signature
-description: SigThief: 给木马偷取合法数字签名。信号:恶意软件开发,免杀开发,偷合法签名,从已签名文件剥离签名信息,只检查签名。
+description: "SigThief: steals legitimate digital signatures for trojans. Signals: malware development, evasion, steal valid signature, strip signature from signed file, check signature only."
+zh-signals: "SigThief: 给木马偷取合法数字签名。信号:恶意软件开发,免杀开发,偷合法签名,从已签名文件剥离签名信息,只检查签名。"
 ---
 
 # SigThief

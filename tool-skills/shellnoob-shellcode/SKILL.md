@@ -1,6 +1,7 @@
 ---
 name: shellnoob-shellcode
-description: shellnoob: 汇编↔shellcode 快速互转。信号:载荷开发,武器化,反汇编,格式转换,架构。
+description: "shellnoob: fast assembly and shellcode conversion. Signals: payload development, weaponization, disassembly, format conversion, architecture."
+zh-signals: "shellnoob: 汇编↔shellcode 快速互转。信号:载荷开发,武器化,反汇编,格式转换,架构。"
 ---
 
 # shellnoob

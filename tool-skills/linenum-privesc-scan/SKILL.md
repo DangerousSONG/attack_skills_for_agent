@@ -1,6 +1,7 @@
 ---
 name: linenum-privesc-scan
-description: LinEnum: 拿 shell 后系统枚举。信号:linux提权,suid,导出结果,高亮关键字。
+description: "LinEnum: Post-shell system enumeration. Signals: Linux privilege escalation, SUID, export results, highlighted keywords."
+zh-signals: "LinEnum: 拿 shell 后系统枚举。信号:linux提权,suid,导出结果,高亮关键字。"
 ---
 
 # LinEnum

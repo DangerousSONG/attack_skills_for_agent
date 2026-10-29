@@ -1,6 +1,7 @@
 ---
 name: maskprocessor-mask-gen
-description: maskprocessor: 定向掩码生成。信号:密码破解,哈希破解,范围。
+description: "maskprocessor: Targeted mask generation. Signals: password cracking, hash cracking, range."
+zh-signals: "maskprocessor: 定向掩码生成。信号:密码破解,哈希破解,范围。"
 ---
 
 # maskprocessor

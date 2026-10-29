@@ -1,6 +1,7 @@
 ---
 name: coding-mastery
-description: "安全工具开发:Python/C/Go/Rust/ASM 编写 exploit、扫描器、C2,系统与网络编程、自动化、密码学实现。信号:安全开发,exploit编码,扫描器开发,c2开发,编程。"
+description: "Security tool development: exploit, scanner, C2 in Python/C/Go/Rust/ASM; system/network programming, automation, cryptographic implementation. Signals: security development, exploit coding, scanner development, C2 development, programming."
+zh-signals: "安全工具开发:Python/C/Go/Rust/ASM 编写 exploit、扫描器、C2,系统与网络编程、自动化、密码学实现。信号:安全开发,exploit编码,扫描器开发,c2开发,编程。"
 when-to-use: Use when writing security tooling, exploits, scanners, or C2 in Python/C/Go/Rust/ASM — systems & network programming, automation, cryptography implementation
 metadata:
   type: utility

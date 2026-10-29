@@ -1,6 +1,7 @@
 ---
 name: csv-formula-injection
-description: "CSV/电子表格公式(DDE)注入:混淆、云表格原语与安全测试方法。信号:csv注入,公式注入,dde,电子表格攻击,数据注入。"
+description: "CSV/spreadsheet formula (DDE) injection: obfuscation, cloud spreadsheet primitives, and security testing methods. Signals: CSV injection, formula injection, DDE, spreadsheet attacks, data injection."
+zh-signals: "CSV/电子表格公式(DDE)注入:混淆、云表格原语与安全测试方法。信号:csv注入,公式注入,dde,电子表格攻击,数据注入。"
 when-to-use: 0. QUICK START
   CSV/spreadsheet formula injection (DDE, Excel/LibreOffice, Google Sheets IMPORT*). Use when exports, imports, or user fields feed spreadsheets or reporting tools.
 ---

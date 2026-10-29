@@ -1,6 +1,7 @@
 ---
 name: performing-initial-access-with-evilginx3
-description: "Perform authorized initial access using EvilGinx3 adversary-in-the-middle 信号:钓鱼,社会工程,钓鱼邮件。"
+description: "Perform authorized initial access using EvilGinx3 adversary-in-the-middle phishing. Signals: phishing, social engineering, phishing email."
+zh-signals: "Perform authorized initial access using EvilGinx3 adversary-in-the-middle 信号:钓鱼,社会工程,钓鱼邮件。"
 when-to-use: Perform authorized initial access using EvilGinx3 adversary-in-the-middle
   phishing framework to capture session tokens and bypass multi-factor authentication
   during red team engagements.

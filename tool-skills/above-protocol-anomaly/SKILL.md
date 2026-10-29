@@ -1,6 +1,7 @@
 ---
 name: above-protocol-anomaly
-description: Above: 内网协议层攻击检测。信号:中间人,mitm,协议异常检测,ARP 欺骗,PCAP 分析。
+description: "Above: detects internal protocol-layer attacks. Signals: man-in-the-middle, mitm, protocol anomaly detection, ARP spoofing, PCAP analysis"
+zh-signals: "Above: 内网协议层攻击检测。信号:中间人,mitm,协议异常检测,ARP 欺骗,PCAP 分析。"
 ---
 
 # Above

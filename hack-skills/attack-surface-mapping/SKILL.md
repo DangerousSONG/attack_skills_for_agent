@@ -1,6 +1,7 @@
 ---
 name: attack-surface-mapping
-description: "给定单一目标应用,从它已暴露的面绘制攻击面,然后停手——测试在其他 skill。信号:攻击面,资产梳理,单目标,暴露面分析。"
+description: "Given a single target application, map its attack surface from exposed interfaces, then stop; testing belongs in other skills. Signals: attack surface, asset mapping, single target, exposed surface analysis."
+zh-signals: "给定单一目标应用,从它已暴露的面绘制攻击面,然后停手——测试在其他 skill。信号:攻击面,资产梳理,单目标,暴露面分析。"
 when-to-use: Attack Surface Mapping
   Draw a testable attack surface from one authorized target URL or one
   application. Use when the user says 攻击面, 供给面, 画攻击面, map the surface,

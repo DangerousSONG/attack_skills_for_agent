@@ -1,6 +1,7 @@
 ---
 name: performing-threat-emulation-with-atomic-red-team
-description: "Executes Atomic Red Team tests for MITRE ATT&CK technique validation 信号:红队,方法论,渗透流程。"
+description: "Executes Atomic Red Team tests for MITRE ATT&CK technique validation. Signals: red team, methodology, penetration testing workflow."
+zh-signals: "Executes Atomic Red Team tests for MITRE ATT&CK technique validation 信号:红队,方法论,渗透流程。"
 when-to-use: 'Executes Atomic Red Team tests for MITRE ATT&CK technique validation
   using the atomic-operator Python framework. Loads test definitions from YAML atomics,
   runs attack simulations, and validates detection coverage. Use when testing SIEM

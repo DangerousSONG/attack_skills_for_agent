@@ -1,6 +1,7 @@
 ---
 name: untwister-prng
-description: untwister: token 种子恢复。信号:密码学攻击,加密破解,PRNG 种子恢复,glibc rand,上限。
+description: "untwister: Token seed recovery. Signals: cryptographic attack, encryption cracking, PRNG seed recovery, glibc rand, upper limit."
+zh-signals: "untwister: token 种子恢复。信号:密码学攻击,加密破解,PRNG 种子恢复,glibc rand,上限。"
 ---
 
 # untwister

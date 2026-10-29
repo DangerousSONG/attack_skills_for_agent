@@ -1,6 +1,7 @@
 ---
 name: linkedin2username
-description: linkedin2username: LinkedIn 员工用户名。信号:邮箱收集,员工信息,员工用户名生成,深挖。
+description: "linkedin2username: Generate LinkedIn employee usernames. Signals: email collection, employee information, username generation, deep dive."
+zh-signals: "linkedin2username: LinkedIn 员工用户名。信号:邮箱收集,员工信息,员工用户名生成,深挖。"
 ---
 
 # linkedin2username

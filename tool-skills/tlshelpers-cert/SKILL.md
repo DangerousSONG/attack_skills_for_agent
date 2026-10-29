@@ -1,6 +1,7 @@
 ---
 name: tlshelpers-cert
-description: tlshelpers: TLS 快速检查。信号:密码学攻击,加密破解,证书下载,套件扫描,PCAP 分析。
+description: "tlshelpers performs quick TLS checks. Signals: cryptographic attack, cryptographic cracking, certificate download, cipher scan, PCAP analysis"
+zh-signals: "tlshelpers: TLS 快速检查。信号:密码学攻击,加密破解,证书下载,套件扫描,PCAP 分析。"
 ---
 
 # tlshelpers

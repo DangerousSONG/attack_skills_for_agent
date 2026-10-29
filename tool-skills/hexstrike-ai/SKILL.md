@@ -1,6 +1,7 @@
 ---
 name: hexstrike-ai
-description: HexStrike-AI: LLM 辅助渗透测试。信号:ai安全,大模型攻击,AI 辅助渗透,模块,AI 分析。
+description: "HexStrike-AI uses LLMs to assist penetration testing. Signals: AI security, LLM attack, AI-assisted pentest, modules, AI analysis."
+zh-signals: "HexStrike-AI: LLM 辅助渗透测试。信号:ai安全,大模型攻击,AI 辅助渗透,模块,AI 分析。"
 ---
 
 # HexStrike-AI

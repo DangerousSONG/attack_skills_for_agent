@@ -1,6 +1,7 @@
 ---
 name: phpsploit-c2-console
-description: phpsploit: 隐蔽 PHP C2 客户端。信号:webshell,rce,连接 PHP shell,混淆载荷,文件传输。
+description: "Stealthy PHP C2 client. Signals: webshell, rce, connect PHP shell, obfuscated payload, file transfer."
+zh-signals: "phpsploit: 隐蔽 PHP C2 客户端。信号:webshell,rce,连接 PHP shell,混淆载荷,文件传输。"
 ---
 
 # phpsploit

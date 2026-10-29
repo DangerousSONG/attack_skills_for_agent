@@ -1,6 +1,7 @@
 ---
 name: performing-web-application-scanning-with-nikto
-description: "Runs Nikto, an open-source web server and web application scanner 信号:web扫描,漏洞扫描,burp。"
+description: "Runs Nikto web server and application scanner. Signals: web scanning, vulnerability scanning, Burp."
+zh-signals: "Runs Nikto, an open-source web server and web application scanner 信号:web扫描,漏洞扫描,burp。"
 when-to-use: Runs Nikto, an open-source web server and web application scanner,
   to test over 7,000 potentially dangerous files/programs, check for outdated versions
   across 1,250+ servers, and identify XSS, SQL injection, misconfigurations, default

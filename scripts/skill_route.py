@@ -91,7 +91,7 @@ def l3_llm_rerank(text, cands, docs, model):
     base = os.environ.get('TENSORIS_BASE', 'https://api.tensoris.ai/v1')
     items = []
     for i, c in enumerate(cands):
-        name, desc = docs[c]
+        name, desc = docs[c][0], docs[c][1]
         desc = desc if len(desc) <= 300 else desc[:300]
         items.append('[{0}] {1} — {2}: {3}'.format(i + 1, c, name, desc))
     sys_prompt = ('你是渗透测试技能路由专家。给定用户任务和候选技能列表,为每个候选打相关性分数:'

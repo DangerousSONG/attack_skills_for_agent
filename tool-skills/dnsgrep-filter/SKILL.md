@@ -1,6 +1,7 @@
 ---
 name: dnsgrep-filter
-description: dnsgrep: 海量 DNS 数据筛目标。信号:子域名,域名枚举,正则。
+description: "dnsgrep: filter targets from massive DNS data. Signals: subdomain, domain enumeration, regex."
+zh-signals: "dnsgrep: 海量 DNS 数据筛目标。信号:子域名,域名枚举,正则。"
 ---
 
 # dnsgrep

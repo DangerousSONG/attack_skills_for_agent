@@ -1,6 +1,7 @@
 ---
 name: svn-extractor-dump
-description: svn-extractor: .svn 泄露源码恢复。信号:攻击面,云资产,SVN 泄露导出,过滤。
+description: "svn-extractor recovers source from leaked .svn directories. Signals: attack surface, cloud assets, SVN leak export, filtering"
+zh-signals: "svn-extractor: .svn 泄露源码恢复。信号:攻击面,云资产,SVN 泄露导出,过滤。"
 ---
 
 # svn-extractor

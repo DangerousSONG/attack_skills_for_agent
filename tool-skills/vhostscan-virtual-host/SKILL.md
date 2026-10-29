@@ -1,6 +1,7 @@
 ---
 name: vhostscan-virtual-host
-description: VHostScan: 共享 IP 虚拟主机发现。信号:端口扫描,nmap,虚拟主机枚举,SSL。
+description: "VHostScan: Shared IP virtual host discovery. Signals: port scan, nmap, virtual host enumeration, SSL."
+zh-signals: "VHostScan: 共享 IP 虚拟主机发现。信号:端口扫描,nmap,虚拟主机枚举,SSL。"
 ---
 
 # VHostScan
