@@ -1,6 +1,7 @@
 ---
 name: hsecscan-header-audit
-description: hsecscan: OWASP 安全头审计。信号:web漏洞,注入,安全头扫描,详细,被动模式。
+description: "hsecscan audits OWASP security headers. Signals: web vulnerability, injection, security header scan, verbose, passive mode."
+zh-signals: "hsecscan: OWASP 安全头审计。信号:web漏洞,注入,安全头扫描,详细,被动模式。"
 ---
 
 # hsecscan

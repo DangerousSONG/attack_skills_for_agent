@@ -1,6 +1,7 @@
 ---
 name: wfuzz-web-fuzzer
-description: wfuzz: 全位置模糊测试。信号:web扫描,漏洞扫描,目录爆破,POST fuzz,Header fuzz。
+description: "wfuzz: Full-position fuzzing. Signals: web scanning, vulnerability scanning, directory brute force, POST fuzz, header fuzz."
+zh-signals: "wfuzz: 全位置模糊测试。信号:web扫描,漏洞扫描,目录爆破,POST fuzz,Header fuzz。"
 ---
 
 # wfuzz

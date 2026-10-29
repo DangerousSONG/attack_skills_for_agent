@@ -1,6 +1,7 @@
 ---
 name: classical-cipher-analysis
-description: "Classical cipher analysis playbook 信号:密码学攻击,加密破解,弱随机数。"
+description: "Classical cipher analysis playbook. Signals: cryptanalysis, encryption cracking, weak randomness."
+zh-signals: "Classical cipher analysis playbook 信号:密码学攻击,加密破解,弱随机数。"
 when-to-use: >-
   Classical cipher analysis playbook. Use when encountering substitution
   ciphers, Vigenere, transposition, XOR, or encoded text in CTF challenges

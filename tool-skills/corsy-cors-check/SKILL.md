@@ -1,6 +1,7 @@
 ---
 name: corsy-cors-check
-description: Corsy: CORS 配置快速体检。信号:web漏洞,注入,CORS 扫描,批量,延迟。
+description: "Corsy: Quickly checks CORS configurations. Signals: web vulnerability, injection, CORS scanning, batch, delay."
+zh-signals: "Corsy: CORS 配置快速体检。信号:web漏洞,注入,CORS 扫描,批量,延迟。"
 ---
 
 # Corsy

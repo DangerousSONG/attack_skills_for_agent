@@ -1,6 +1,7 @@
 ---
 name: dirble-fast-dir
-description: dirble: 高速目录爆破。信号:web漏洞,注入,目录扫描,字典+线程,递归。
+description: "dirble: fast directory brute-forcing. Signals: web vulnerability, injection, directory scanning, dictionary plus threads, recursion."
+zh-signals: "dirble: 高速目录爆破。信号:web漏洞,注入,目录扫描,字典+线程,递归。"
 ---
 
 # dirble

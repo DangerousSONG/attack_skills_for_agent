@@ -1,6 +1,7 @@
 ---
 name: cent-poc-engine
-description: cent: nuclei 模板一键扩容。信号:web漏洞,注入,按关键字筛选模板,指定输出目录,排除模板。
+description: "cent: Expands nuclei templates in one click. Signals: web vulnerability, injection, keyword template filtering, specified output directory, template exclusion."
+zh-signals: "cent: nuclei 模板一键扩容。信号:web漏洞,注入,按关键字筛选模板,指定输出目录,排除模板。"
 ---
 
 # cent

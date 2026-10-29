@@ -1,6 +1,7 @@
 ---
 name: microburst-azure
-description: MicroBurst: Azure 凭据收割+权限提升。信号:云提权,iam提权,凭据收集,VM 上执行命令,租户信息枚举。
+description: "MicroBurst: Azure credential harvesting and privilege escalation. Signals: cloud privilege escalation, IAM privilege escalation, credential collection, execute commands on VM, tenant information enumeration."
+zh-signals: "MicroBurst: Azure 凭据收割+权限提升。信号:云提权,iam提权,凭据收集,VM 上执行命令,租户信息枚举。"
 ---
 
 # MicroBurst

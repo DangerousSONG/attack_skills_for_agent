@@ -1,6 +1,7 @@
 ---
 name: performing-mobile-app-certificate-pinning-bypass
-description: "Bypasses SSL/TLS certificate pinning implementations in Android and 信号:移动端,android攻击,ios攻击。"
+description: "Bypasses SSL/TLS certificate pinning in Android. Signals: mobile, Android attacks, iOS attacks."
+zh-signals: "Bypasses SSL/TLS certificate pinning implementations in Android and 信号:移动端,android攻击,ios攻击。"
 when-to-use: 'Bypasses SSL/TLS certificate pinning implementations in Android and
   iOS applications to enable traffic interception during authorized security assessments.
   Covers OkHttp, TrustManager, NSURLSession, and third-party pinning library bypass

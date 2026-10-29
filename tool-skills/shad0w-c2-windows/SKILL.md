@@ -1,6 +1,7 @@
 ---
 name: shad0w-c2-windows
-description: shad0w: Windows 渗透 C2。信号:c2,命令控制,启动服务端,生成 beacon,载荷类型。
+description: "shad0w: Windows pentest C2. Signals: c2, command-and-control, start server, generate beacon, payload type."
+zh-signals: "shad0w: Windows 渗透 C2。信号:c2,命令控制,启动服务端,生成 beacon,载荷类型。"
 ---
 
 # shad0w

@@ -1,6 +1,7 @@
 ---
 name: testing-for-xxe-injection-vulnerabilities
-description: "Discovering and exploiting XML External Entity injection vulnerabilities 信号:web漏洞,注入,sql注入。"
+description: "Tests XXE injection vulnerabilities. Signals: web vulnerability, injection, SQL injection."
+zh-signals: "Discovering and exploiting XML External Entity injection vulnerabilities 信号:web漏洞,注入,sql注入。"
 when-to-use: Discovering and exploiting XML External Entity injection vulnerabilities
   to read server files, perform SSRF, and exfiltrate data during authorized penetration
   tests.

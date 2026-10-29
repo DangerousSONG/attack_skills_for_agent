@@ -1,6 +1,7 @@
 ---
 name: injectus-crlf-openredirect
-description: Injectus: 开放重定向+CRLF 组合探测。信号:web漏洞,注入,批量,仅 CRLF,仅开放重定向。
+description: "Injectus probes combined open redirect and CRLF issues. Signals: web vulnerability, injection, batch, CRLF only, open redirect only."
+zh-signals: "Injectus: 开放重定向+CRLF 组合探测。信号:web漏洞,注入,批量,仅 CRLF,仅开放重定向。"
 ---
 
 # Injectus

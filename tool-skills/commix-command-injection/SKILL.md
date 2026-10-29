@@ -1,6 +1,7 @@
 ---
 name: commix-command-injection
-description: Commix: 命令注入一键 getshell、burp 请求回放利用。信号:web漏洞,注入,自动检测+利用命令注入,POST 数据。
+description: "Commix: Automates command injection exploitation and Burp request replay. Signals: web vulnerability, injection, automatic command injection detection and exploitation, POST data."
+zh-signals: "Commix: 命令注入一键 getshell、burp 请求回放利用。信号:web漏洞,注入,自动检测+利用命令注入,POST 数据。"
 ---
 
 # Commix

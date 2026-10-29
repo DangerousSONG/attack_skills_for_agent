@@ -1,6 +1,7 @@
 ---
 name: binary-protection-bypass
-description: "二进制保护绕过:ASLR/PIE/NX/Canary/RELRO/FORTIFY/CET/MTE 的识别与绕过以支撑利用。信号:aslr绕过,canary,nx,relro,保护绕过,pwn。"
+description: "Binary protection bypass: identify and bypass ASLR/PIE/NX/Canary/RELRO/FORTIFY/CET/MTE to support exploitation. Signals: ASLR bypass, canary, NX, RELRO, protection bypass, pwn."
+zh-signals: "二进制保护绕过:ASLR/PIE/NX/Canary/RELRO/FORTIFY/CET/MTE 的识别与绕过以支撑利用。信号:aslr绕过,canary,nx,relro,保护绕过,pwn。"
 when-to-use: >-
   Binary protection bypass playbook. Use when identifying and bypassing ASLR, PIE, NX/DEP, stack canary, RELRO, FORTIFY_SOURCE, CET, and MTE protections in ELF binaries to enable exploitation.
 ---

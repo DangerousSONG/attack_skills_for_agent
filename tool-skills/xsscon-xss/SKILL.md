@@ -1,6 +1,7 @@
 ---
 name: xsscon-xss
-description: XSSCon: 反射/存储 XSS 探测。信号:web漏洞,注入,XSS 扫描,带 Cookie,线程。
+description: "XSSCon: Reflected/stored XSS probing. Signals: web vulnerability, injection, XSS scan, with cookie, threads."
+zh-signals: "XSSCon: 反射/存储 XSS 探测。信号:web漏洞,注入,XSS 扫描,带 Cookie,线程。"
 ---
 
 # XSSCon

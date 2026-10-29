@@ -1,6 +1,7 @@
 ---
 name: trape-osint-track
-description: trape: 目标访问行为追踪。信号:邮箱收集,员工信息,对目标站点做访问者追踪,本地演示模式,自定义注入页面。
+description: "trape tracks target visit behavior. Signals: email collection, employee information, visitor tracking for target sites, local demo mode, custom injected page"
+zh-signals: "trape: 目标访问行为追踪。信号:邮箱收集,员工信息,对目标站点做访问者追踪,本地演示模式,自定义注入页面。"
 ---
 
 # trape

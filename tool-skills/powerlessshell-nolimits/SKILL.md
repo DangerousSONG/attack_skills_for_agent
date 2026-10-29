@@ -1,6 +1,7 @@
 ---
 name: powerlessshell-nolimits
-description: PowerLessShell: 无 powershell.exe 执行。信号:横向移动,psexec,shellcode 模式。
+description: "Execute without powershell.exe. Signals: lateral movement, psexec, shellcode mode."
+zh-signals: "PowerLessShell: 无 powershell.exe 执行。信号:横向移动,psexec,shellcode 模式。"
 ---
 
 # PowerLessShell

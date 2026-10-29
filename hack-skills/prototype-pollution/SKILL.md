@@ -1,6 +1,7 @@
 ---
 name: prototype-pollution
-description: "Expert prototype pollution for client and server JS 信号:漏洞情报,cve,cnvd。"
+description: "Expert prototype pollution for client and server JS. Signals: vulnerability intelligence, CVE, CNVD."
+zh-signals: "Expert prototype pollution for client and server JS 信号:漏洞情报,cve,cnvd。"
 when-to-use: 0. QUICK START
   Prototype pollution testing for JavaScript stacks. Use when user input is
   merged into objects (query parsers, JSON bodies, deep assign), when

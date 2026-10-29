@@ -1,6 +1,7 @@
 ---
 name: mubeng-proxy-rotate
-description: mubeng: 代理池轮换负载均衡。信号:内网穿透,隧道,代理轮换,轮换间隔,检测代理。
+description: "mubeng: Proxy pool rotation and load balancing. Signals: internal network penetration, tunnel, proxy rotation, rotation interval, detect proxies."
+zh-signals: "mubeng: 代理池轮换负载均衡。信号:内网穿透,隧道,代理轮换,轮换间隔,检测代理。"
 ---
 
 # mubeng

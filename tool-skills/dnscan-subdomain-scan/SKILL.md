@@ -1,6 +1,7 @@
 ---
 name: dnscan-subdomain-scan
-description: dnscan: 递归子域爆破。信号:子域名,域名枚举,字典爆破子域,线程,发现子域后递归扫。
+description: "dnscan: recursive subdomain brute-forcing. Signals: subdomain, domain enumeration, dictionary subdomain brute force, threads, recursive scan after discovered subdomains."
+zh-signals: "dnscan: 递归子域爆破。信号:子域名,域名枚举,字典爆破子域,线程,发现子域后递归扫。"
 ---
 
 # dnscan

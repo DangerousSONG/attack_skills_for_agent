@@ -1,6 +1,7 @@
 ---
 name: gitmails-osint
-description: gitmails: 开发者邮箱收割。信号:攻击面,云资产,仓库提交者邮箱提取,深度。
+description: "gitmails harvests developer emails. Signals: attack surface, cloud assets, repository committer email extraction, depth."
+zh-signals: "gitmails: 开发者邮箱收割。信号:攻击面,云资产,仓库提交者邮箱提取,深度。"
 ---
 
 # gitmails

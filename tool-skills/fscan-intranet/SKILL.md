@@ -1,6 +1,7 @@
 ---
 name: fscan-intranet
-description: fscan: 内网一把梭初扫、单主机深度验证。信号:端口扫描,nmap,指定端口,单模块。
+description: "fscan performs one-shot internal initial scans and deep single-host validation. Signals: port scanning, nmap, specified ports, single module."
+zh-signals: "fscan: 内网一把梭初扫、单主机深度验证。信号:端口扫描,nmap,指定端口,单模块。"
 ---
 
 # fscan

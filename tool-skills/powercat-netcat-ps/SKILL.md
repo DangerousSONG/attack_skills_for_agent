@@ -1,6 +1,7 @@
 ---
 name: powercat-netcat-ps
-description: powercat: Windows 原生 netcat。信号:横向移动,psexec,监听,反弹。
+description: "Windows-native netcat. Signals: lateral movement, psexec, listening, reverse."
+zh-signals: "powercat: Windows 原生 netcat。信号:横向移动,psexec,监听,反弹。"
 ---
 
 # powercat

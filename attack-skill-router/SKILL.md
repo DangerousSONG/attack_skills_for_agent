@@ -1,22 +1,26 @@
 ---
 name: attack-skill-router
-description: 攻击侧 Skill 库的路由层。当任务涉及渗透测试任一环节（侦察/利用/提权/横向/持久化等）时，先加载本 skill 按「服务/技术/CVE → 推荐 skill」表选用 3-5 个 primary skill，再定向加载；不要在 1000 个 SKILL.md 里盲目 grep 全读。
+description: "Attack-side skill library routing layer using skill_route for pentest tasks. Signals: skill routing, penetration testing, CVE, reconnaissance, exploitation, privilege escalation, lateral movement, persistence."
+zh-signals: "攻击侧 Skill 库的路由层。当任务涉及渗透测试任一环节（侦察/利用/提权/横向/持久化等）时，先加载本 skill 并调用 skill_route 工具（L1 字典 + L2 混合召回 + L3 可选重排）拿到 3-5 个推荐 skill 再定向加载；工具不可用时按「服务/技术/CVE → 推荐 skill」路由表人工选用；不要在 1000 个 SKILL.md 里盲目 grep 全读。"
 when-to-use: 任何渗透任务开题时；已加载 skill 不足以解决当前障碍时回来换路由。
 ---
 
-# Attack Skill Router · 攻击 Skill 路由层（v2.0）
+# Attack Skill Router · 攻击 Skill 路由层（v3.0）
 
 ## 用途
 
 本库共 996 个 skill（50 个攻击大类）。直接全库搜索会让 Agent 面对过量同质选项（实测：反序列化主题曾一次装入 3 个重叠 skill）。
-**本路由层把「996 选 N」压缩为「50 类选 1 类 → 每类 3-5 个 primary 选 1-3 个」**。
+**v3.0 起路由由 `skill_route` 工具完成**：L1 字典实体匹配（CVE/工具别名，命中即 100% 精度）→ L2 TF-IDF∪BM25 混合召回（并集候选 R@20=100%，107 查询实测）→ L3 可选重排；工具把「996 选 N」压缩为一次命令调用，Agent 不再人肉读索引。
 
 ## 使用流程（必须按序）
 
-1. **定位大类**：用下方「路由表」按 服务类型 / 漏洞类别 / 技术关键词 / CVE 命中一行；
-2. **选 primary**：在该行的 3-5 个 slug 中，按 when-to-use 选 1-3 个最贴切的，用 Skill 工具加载；
-3. **不够再扩**：大类标了〔二级子类→ref〕的（本类 skill 多），展开同目录 `reference.md` 按子标签细选；其余用 `grep -ril <关键词> /opt/attack-skill-library` 定向补；
-4. **报告**：最终报告末尾列出实际加载的 slug（与评测工作流一致）。
+1. **调工具**：`python /opt/attack-skill-library/_router/skill_route.py "<当前任务描述>" --docs`（--docs 附 skill 描述，直接够做决策；L3 重排版加 `--rerank llm`，需网关 key）；
+2. **看结果选用**：JSON 里 `skills` 是推荐 slug 列表；`abstain=true` 表示工具弃权（无高置信候选），不要强行加载，凭自身能力做或换更具体的关键词重试；
+3. **定向加载**：用 Skill 工具加载选定 slug（同主题只装一个，规则见下）；库路径 `/opt/attack-skill-library/<slug>/SKILL.md`；
+4. **不够再扩**：重跑工具换措辞，或按下方「路由表」定位大类后用 `grep -ril <关键词> /opt/attack-skill-library` 定向补；
+5. **报告**：最终报告末尾列出实际加载的 slug（与评测工作流一致）。
+
+**工具不可用时的降级路径**（镜像未装 _router 或索引缺失）：按下方「路由表」按 服务类型 / 漏洞类别 / 技术关键词 / CVE 命中一行 → 在该行 3-5 个 slug 中选 1-3 个加载 → 〔二级子类→ref〕的类展开 `reference.md` 细选。
 
 ## 选用规则
 

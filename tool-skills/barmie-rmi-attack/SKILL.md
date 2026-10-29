@@ -1,6 +1,7 @@
 ---
 name: barmie-rmi-attack
-description: BaRMIe: Java RMI 攻击。信号:横向移动,psexec,RMI 枚举攻击,攻击模式,字典。
+description: "BaRMIe: attacks Java RMI. Signals: lateral movement, psexec, RMI enumeration attack, attack modes, dictionary"
+zh-signals: "BaRMIe: Java RMI 攻击。信号:横向移动,psexec,RMI 枚举攻击,攻击模式,字典。"
 ---
 
 # BaRMIe

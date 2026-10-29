@@ -1,6 +1,7 @@
 ---
 name: apkleaks-endpoint-scan
-description: APKLeaks: 移动应用 API 面暴露检查。信号:攻击面,云资产,扫 APK 端点/密钥,自定义规则,JSON 输出。
+description: "APKLeaks: checks mobile app API surface exposure. Signals: attack surface, cloud assets, scan APK endpoints/keys, custom rules, JSON output"
+zh-signals: "APKLeaks: 移动应用 API 面暴露检查。信号:攻击面,云资产,扫 APK 端点/密钥,自定义规则,JSON 输出。"
 ---
 
 # APKLeaks

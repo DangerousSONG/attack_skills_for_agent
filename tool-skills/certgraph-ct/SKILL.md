@@ -1,6 +1,7 @@
 ---
 name: certgraph-ct
-description: CertGraph: CT 日志资产图。信号:资产测绘,子域名,证书透明度图遍历,深度,只查 CT log。
+description: "CertGraph: Builds asset graphs from Certificate Transparency logs. Signals: asset mapping, subdomains, CT log graph traversal, depth, CT logs only."
+zh-signals: "CertGraph: CT 日志资产图。信号:资产测绘,子域名,证书透明度图遍历,深度,只查 CT log。"
 ---
 
 # CertGraph

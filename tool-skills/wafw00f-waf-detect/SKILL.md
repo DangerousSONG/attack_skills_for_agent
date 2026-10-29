@@ -1,6 +1,7 @@
 ---
 name: wafw00f-waf-detect
-description: WAFW00F: 打前先探 WAF。信号:资产测绘,子域名,识别 WAF,列出可识别产品,全量检测模式。
+description: "WAFW00F: Probe WAF before attacking. Signals: asset mapping, subdomains, identify WAF, list identifiable products, full detection mode."
+zh-signals: "WAFW00F: 打前先探 WAF。信号:资产测绘,子域名,识别 WAF,列出可识别产品,全量检测模式。"
 ---
 
 # WAFW00F

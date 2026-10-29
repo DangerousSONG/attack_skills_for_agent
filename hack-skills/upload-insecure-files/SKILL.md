@@ -1,6 +1,7 @@
 ---
 name: upload-insecure-files
-description: "不安全文件上传:校验/存储路径/处理管道/预览行为/覆盖风险,上传到 RCE 利用链。信号:文件上传,上传rce,存储路径,预览漏洞,覆盖上传。"
+description: "Unsafe file upload: validation, storage path, processing pipeline, preview behavior, overwrite risk; upload-to-RCE chains. Signals: file upload, upload RCE, storage path, preview vulnerability, overwrite upload."
+zh-signals: "不安全文件上传:校验/存储路径/处理管道/预览行为/覆盖风险,上传到 RCE 利用链。信号:文件上传,上传rce,存储路径,预览漏洞,覆盖上传。"
 when-to-use: >-
   Insecure file upload playbook. Use when testing upload validation, storage paths, processing pipelines, preview behavior, overwrite risks, and upload-to-RCE chains.
 ---

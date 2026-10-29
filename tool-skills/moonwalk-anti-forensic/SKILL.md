@@ -1,6 +1,7 @@
 ---
 name: moonwalk-anti-forensic
-description: moonwalk: Linux 痕迹时间线抹除。信号:痕迹清理,反取证,开始记录时间戳基线,活动期,内存执行模式。
+description: "moonwalk: Linux trace timeline erasure. Signals: trace cleanup, anti-forensics, start timestamp baseline recording, active period, in-memory execution mode."
+zh-signals: "moonwalk: Linux 痕迹时间线抹除。信号:痕迹清理,反取证,开始记录时间戳基线,活动期,内存执行模式。"
 ---
 
 # moonwalk

@@ -1,6 +1,7 @@
 ---
 name: rsactftool
-description: RsaCtfTool: CTF/弱 RSA 私钥恢复、已知密文解密。信号:密码学攻击,加密破解,已知 n/e/密文解密,指定攻击。
+description: "RsaCtfTool: Recovers weak RSA private keys and decrypts known ciphertexts. Signals: cryptographic attack, encryption cracking, known n/e/ciphertext decryption, specified attack."
+zh-signals: "RsaCtfTool: CTF/弱 RSA 私钥恢复、已知密文解密。信号:密码学攻击,加密破解,已知 n/e/密文解密,指定攻击。"
 ---
 
 # RsaCtfTool

@@ -1,6 +1,7 @@
 ---
 name: arjun-param-discovery
-description: Arjun: 隐藏参数挖掘→扩大攻击面。信号:web扫描,漏洞扫描,HTTP 参数发现,POST 方法,降低速率防 WAF。
+description: "Arjun: mines hidden parameters to expand attack surface. Signals: web scan, vulnerability scan, HTTP parameter discovery, POST methods, rate limiting to avoid WAF"
+zh-signals: "Arjun: 隐藏参数挖掘→扩大攻击面。信号:web扫描,漏洞扫描,HTTP 参数发现,POST 方法,降低速率防 WAF。"
 ---
 
 # Arjun

@@ -1,6 +1,7 @@
 ---
 name: braa-snmp-mass
-description: braa: SNMP 团体串批量撞库。信号:端口扫描,nmap,超时/重试,进程表。
+description: "braa: batch brute-forces SNMP community strings. Signals: port scan, nmap, timeout/retries, process table"
+zh-signals: "braa: SNMP 团体串批量撞库。信号:端口扫描,nmap,超时/重试,进程表。"
 ---
 
 # braa

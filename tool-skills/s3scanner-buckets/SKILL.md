@@ -1,6 +1,7 @@
 ---
 name: s3scanner-buckets
-description: S3Scanner: S3 桶错误配置利用。信号:云提权,iam提权,检测桶配置,批量,列对象。
+description: "S3Scanner: Exploits misconfigured S3 buckets. Signals: cloud privilege escalation, IAM privilege escalation, detect bucket configuration, batch, list objects."
+zh-signals: "S3Scanner: S3 桶错误配置利用。信号:云提权,iam提权,检测桶配置,批量,列对象。"
 ---
 
 # S3Scanner

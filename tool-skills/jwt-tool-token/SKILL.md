@@ -1,6 +1,7 @@
 ---
 name: jwt-tool-token
-description: jwt_tool: JWT 五连击、jku/x5u 注入拿服务端公钥欺骗。信号:api攻击,接口测试,令牌全面体检,离线破解字典。
+description: "jwt_tool performs JWT attacks including jku/x5u injection to spoof server keys. Signals: API attack, interface testing, comprehensive token audit, offline dictionary cracking."
+zh-signals: "jwt_tool: JWT 五连击、jku/x5u 注入拿服务端公钥欺骗。信号:api攻击,接口测试,令牌全面体检,离线破解字典。"
 ---
 
 # jwt_tool

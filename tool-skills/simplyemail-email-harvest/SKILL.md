@@ -1,6 +1,7 @@
 ---
 name: simplyemail-email-harvest
-description: SimplyEmail: 邮箱地址批量收割。信号:邮箱收集,员工信息,邮箱收集(多源),详细,JSON 输出。
+description: "SimplyEmail: bulk email address harvesting. Signals: email collection, employee info, multi-source email collection, detailed, JSON output."
+zh-signals: "SimplyEmail: 邮箱地址批量收割。信号:邮箱收集,员工信息,邮箱收集(多源),详细,JSON 输出。"
 ---
 
 # SimplyEmail

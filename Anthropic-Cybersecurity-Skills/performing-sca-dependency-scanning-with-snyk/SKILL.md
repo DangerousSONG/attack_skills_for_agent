@@ -1,6 +1,7 @@
 ---
 name: performing-sca-dependency-scanning-with-snyk
-description: "This skill covers implementing Software Composition Analysis (SCA) using 信号:供应链,cicd,流水线攻击。"
+description: "Implements Software Composition Analysis (SCA). Signals: supply chain, CI/CD, pipeline attacks."
+zh-signals: "This skill covers implementing Software Composition Analysis (SCA) using 信号:供应链,cicd,流水线攻击。"
 when-to-use: 'This skill covers implementing Software Composition Analysis (SCA) using
   Snyk to detect vulnerable open-source dependencies in CI/CD pipelines. It addresses
   scanning package manifests and lockfiles, automated fix pull request generation,

@@ -1,6 +1,7 @@
 ---
 name: logmepwn-log4j-mass
-description: LogMePwn: Log4Shell 全网批扫。信号:漏洞情报,cve,Log4Shell 批量,全 payload,线程。
+description: "LogMePwn: Internet-wide batch Log4Shell scanning. Signals: vulnerability intelligence, CVE, Log4Shell batch, all payloads, threads."
+zh-signals: "LogMePwn: Log4Shell 全网批扫。信号:漏洞情报,cve,Log4Shell 批量,全 payload,线程。"
 ---
 
 # LogMePwn

@@ -1,6 +1,7 @@
 ---
 name: goofuzz-google-dork
-description: GooFuzz: 免 API key 的 Google dork。信号:web漏洞,注入,/backup'`,文件类型。
+description: "GooFuzz performs Google dorking without an API key. Signals: web vulnerabilities, injection, /backup, file types."
+zh-signals: "GooFuzz: 免 API key 的 Google dork。信号:web漏洞,注入,/backup'`,文件类型。"
 ---
 
 # GooFuzz

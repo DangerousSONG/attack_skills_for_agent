@@ -1,6 +1,7 @@
 ---
 name: dislocker-bitlocker
-description: dislocker: 离线 BitLocker 解密。信号:密码破解,哈希破解,恢复密码解密卷,用户密码解密,BEK 密钥文件解密。
+description: "dislocker: offline BitLocker decryption. Signals: password cracking, hash cracking, recovery password volume decryption, user password decryption, BEK key file decryption."
+zh-signals: "dislocker: 离线 BitLocker 解密。信号:密码破解,哈希破解,恢复密码解密卷,用户密码解密,BEK 密钥文件解密。"
 ---
 
 # dislocker

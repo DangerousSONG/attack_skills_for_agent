@@ -1,6 +1,7 @@
 ---
 name: ridrelay-rid-cycling
-description: ridrelay: 匿名/空会话用户枚举。信号:内网枚举,网络发现,RID 循环枚举域用户,指定 RID 范围,尝试 SAM 枚举。
+description: "ridrelay: Enumerates users via anonymous/empty sessions. Signals: internal enumeration, network discovery, RID cycling for domain users, specified RID range, attempt SAM enumeration."
+zh-signals: "ridrelay: 匿名/空会话用户枚举。信号:内网枚举,网络发现,RID 循环枚举域用户,指定 RID 范围,尝试 SAM 枚举。"
 ---
 
 # ridrelay

@@ -1,6 +1,7 @@
 ---
 name: nsntrace-trace
-description: nsntrace: 进程级流量捕获。信号:端口扫描,nmap,按进程抓包,调试,过滤。
+description: "Process-level traffic capture. Signals: port scanning, nmap, per-process packet capture, debugging, filtering."
+zh-signals: "nsntrace: 进程级流量捕获。信号:端口扫描,nmap,按进程抓包,调试,过滤。"
 ---
 
 # nsntrace

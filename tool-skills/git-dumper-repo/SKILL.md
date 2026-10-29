@@ -1,6 +1,7 @@
 ---
 name: git-dumper-repo
-description: git-dumper: 无目录列表的 .git 还原。信号:供应链,cicd,下载并还原仓库,并发,强扫模式。
+description: "git-dumper recovers exposed .git repositories without directory listing. Signals: supply chain, CI/CD, download and restore repository, concurrency, aggressive scan mode."
+zh-signals: "git-dumper: 无目录列表的 .git 还原。信号:供应链,cicd,下载并还原仓库,并发,强扫模式。"
 ---
 
 # git-dumper

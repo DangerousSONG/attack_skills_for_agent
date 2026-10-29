@@ -1,6 +1,7 @@
 ---
 name: trusttrees-zone-walk
-description: TrustTrees: DNS 委托链漏洞找接管。信号:ad攻击,域渗透,DNS 信任边界可视化,Graphviz 输出,Gandi 集成。
+description: "TrustTrees finds DNS delegation-chain takeover vulnerabilities. Signals: AD attack, domain penetration, DNS trust-boundary visualization, Graphviz output, Gandi integration"
+zh-signals: "TrustTrees: DNS 委托链漏洞找接管。信号:ad攻击,域渗透,DNS 信任边界可视化,Graphviz 输出,Gandi 集成。"
 ---
 
 # TrustTrees

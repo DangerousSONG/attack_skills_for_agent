@@ -1,6 +1,7 @@
 ---
 name: donpapi-dpapi-harvest
-description: DonPAPI: 域内 DPAPI 凭据大扫荡。信号:ad攻击,域渗透,单机 triage,连通性测试,输出目录。
+description: "DonPAPI: domain-wide DPAPI credential sweep. Signals: AD attack, domain penetration, single-host triage, connectivity test, output directory."
+zh-signals: "DonPAPI: 域内 DPAPI 凭据大扫荡。信号:ad攻击,域渗透,单机 triage,连通性测试,输出目录。"
 ---
 
 # DonPAPI

@@ -1,6 +1,7 @@
 ---
 name: performing-web-cache-poisoning-attack
-description: "Exploiting web cache mechanisms to serve malicious content to other users 信号:web漏洞,注入,sql注入。"
+description: "Exploits web cache mechanisms to serve malicious content. Signals: web vulnerabilities, injection, SQL injection."
+zh-signals: "Exploiting web cache mechanisms to serve malicious content to other users 信号:web漏洞,注入,sql注入。"
 when-to-use: Exploiting web cache mechanisms to serve malicious content to other users
   by poisoning cached responses through unkeyed headers and parameters during authorized
   security tests.

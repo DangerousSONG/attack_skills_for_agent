@@ -1,6 +1,7 @@
 ---
 name: fierce-dns-recon
-description: Fierce: 周边网段发现。信号:资产测绘,子域名,经典 DNS 侦察,字典,IP 遍历深度。
+description: "Fierce discovers adjacent network segments. Signals: asset mapping, subdomains, classic DNS reconnaissance, wordlists, IP sweep depth."
+zh-signals: "Fierce: 周边网段发现。信号:资产测绘,子域名,经典 DNS 侦察,字典,IP 遍历深度。"
 ---
 
 # Fierce

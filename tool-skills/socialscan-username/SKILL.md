@@ -1,6 +1,7 @@
 ---
 name: socialscan-username
-description: socialscan: 凭据组合前置侦察。信号:邮箱收集,员工信息,邮箱可用性/注册查询,用户名批量,指定平台。
+description: "socialscan: credential combination pre-reconnaissance. Signals: email collection, employee info, email availability or registration lookup, username bulk, specified platform."
+zh-signals: "socialscan: 凭据组合前置侦察。信号:邮箱收集,员工信息,邮箱可用性/注册查询,用户名批量,指定平台。"
 ---
 
 # socialscan

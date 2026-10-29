@@ -1,6 +1,7 @@
 ---
 name: operating-sliver-c2
-description: "搭建 Sliver C2(mTLS 监听),生成跨平台 implant/beacon,经 Armory 跑 BOF/.NET 工具做对抗模拟全生命周期。信号:sliver,c2,mtls。"
+description: "Set up Sliver C2 with mTLS listeners, generate cross-platform implants/beacons, and run BOF/.NET tools via Armory for full adversary simulation lifecycle. Signals: sliver, c2, mtls."
+zh-signals: "搭建 Sliver C2(mTLS 监听),生成跨平台 implant/beacon,经 Armory 跑 BOF/.NET 工具做对抗模拟全生命周期。信号:sliver,c2,mtls。"
 when-to-use: Stand up a Sliver C2 server and mTLS listeners, generate cross-platform implants and beacons, and run post-exploitation, pivoting, and BOF/.NET tooling via the Armory for adversary emulation. Use duri
 domain: cybersecurity
 subdomain: red-teaming

@@ -1,6 +1,7 @@
 ---
 name: ropeadope-logclean
-description: ropeadope: Linux 主机日志清理。信号:痕迹清理,反取证,清登录记录,清认证日志。
+description: "ropeadope: Cleans Linux host logs. Signals: trace cleanup, anti-forensics, clear login records, clear authentication logs."
+zh-signals: "ropeadope: Linux 主机日志清理。信号:痕迹清理,反取证,清登录记录,清认证日志。"
 ---
 
 # ropeadope

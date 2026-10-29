@@ -1,6 +1,7 @@
 ---
 name: witnessme-web-shot
-description: WitnessMe: Web 资产整段截图。信号:屏幕捕获,截图,单 URL 截图,批量,起 Web 服务看结果。
+description: "WitnessMe: Web asset full-page screenshots. Signals: screen capture, screenshot, single URL screenshot, batch, start web service to view results."
+zh-signals: "WitnessMe: Web 资产整段截图。信号:屏幕捕获,截图,单 URL 截图,批量,起 Web 服务看结果。"
 ---
 
 # WitnessMe

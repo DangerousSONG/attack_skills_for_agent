@@ -1,6 +1,7 @@
 ---
 name: hyperfox-mitm
-description: Hyperfox: HTTP 流量中间人分析。信号:中间人,mitm,透明代理,流量落盘。
+description: "Hyperfox performs MITM analysis of HTTP traffic. Signals: MITM, mitm, transparent proxy, traffic capture to disk."
+zh-signals: "Hyperfox: HTTP 流量中间人分析。信号:中间人,mitm,透明代理,流量落盘。"
 ---
 
 # Hyperfox

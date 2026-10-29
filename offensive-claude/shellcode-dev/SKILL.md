@@ -1,6 +1,7 @@
 ---
 name: shellcode-dev
-description: "位置无关 shellcode 与 loader:PEB 遍历、API 哈希、空字节规避、编码器、loader、PE→shellcode、跨平台。信号:shellcode,pic,peb遍历。"
+description: "Covers position-independent shellcode and loaders: PEB traversal, API hashing, null-byte avoidance, encoders, loaders, PE-to-shellcode, and cross-platform support. Signals: shellcode, pic, peb traversal."
+zh-signals: "位置无关 shellcode 与 loader:PEB 遍历、API 哈希、空字节规避、编码器、loader、PE→shellcode、跨平台。信号:shellcode,pic,peb遍历。"
 when-to-use: Use when writing position-independent shellcode or a loader — PEB walking, API hashing, null-byte avoidance, encoders, loaders, PE-to-shellcode conversion, cross-platform shellcode
 metadata:
   type: offensive

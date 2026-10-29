@@ -1,6 +1,7 @@
 ---
 name: frp-tunnel
-description: frp: 客户端起 SOCKS5 打穿整个内网段。信号:内网穿透,隧道,启动服务端(攻击机),启动客户端(已控内网机),开启 TLS,防流量明文。
+description: "frp tunnels client SOCKS5 traffic across internal segments. Signals: internal tunneling, tunnel, start server on attacker, start client on compromised host, enable TLS, prevent plaintext traffic."
+zh-signals: "frp: 客户端起 SOCKS5 打穿整个内网段。信号:内网穿透,隧道,启动服务端(攻击机),启动客户端(已控内网机),开启 TLS,防流量明文。"
 ---
 
 # frp

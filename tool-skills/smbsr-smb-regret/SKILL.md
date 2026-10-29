@@ -1,6 +1,7 @@
 ---
 name: smbsr-smb-regret
-description: SMBSR: 内网密码文件全网搜。信号:内网枚举,网络发现,SMB 内容搜索,token'`。
+description: "SMBSR: internal network password file search. Signals: internal enumeration, network discovery, SMB content search, token."
+zh-signals: "SMBSR: 内网密码文件全网搜。信号:内网枚举,网络发现,SMB 内容搜索,token'`。"
 ---
 
 # SMBSR

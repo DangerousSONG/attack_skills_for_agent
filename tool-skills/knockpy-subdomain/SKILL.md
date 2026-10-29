@@ -1,6 +1,7 @@
 ---
 name: knockpy-subdomain
-description: Knock: 子域枚举+接管检测。信号:子域名,域名枚举,被动+字典枚举,自定义字典,纯爆破模式。
+description: "Knock enumerates subdomains and detects takeovers. Signals: subdomain, domain enumeration, passive and dictionary enumeration, custom dictionary, brute-only mode."
+zh-signals: "Knock: 子域枚举+接管检测。信号:子域名,域名枚举,被动+字典枚举,自定义字典,纯爆破模式。"
 ---
 
 # Knock

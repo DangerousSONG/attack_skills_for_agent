@@ -1,6 +1,7 @@
 ---
 name: gopherus-ssrf
-description: Gopherus: SSRF 打内网 MySQL/Redis。信号:web漏洞,注入,Redis 载荷,SSH 载荷,SMTP 发信。
+description: "Gopherus uses SSRF to attack internal MySQL and Redis. Signals: web vulnerabilities, injection, Redis payloads, SSH payloads, SMTP sending."
+zh-signals: "Gopherus: SSRF 打内网 MySQL/Redis。信号:web漏洞,注入,Redis 载荷,SSH 载荷,SMTP 发信。"
 ---
 
 # Gopherus

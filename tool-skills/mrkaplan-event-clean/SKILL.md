@@ -1,6 +1,7 @@
 ---
 name: mrkaplan-event-clean
-description: MrKaplan: 行动后事件日志定点清理。信号:红队,方法论,擦除模式(留 1102),目标事件/日志配置,运行后自删。
+description: "MrKaplan: Post-action targeted event log cleanup. Signals: red team, methodology, erase mode keep 1102, target event/log configuration, self-delete after run."
+zh-signals: "MrKaplan: 行动后事件日志定点清理。信号:红队,方法论,擦除模式(留 1102),目标事件/日志配置,运行后自删。"
 ---
 
 # MrKaplan

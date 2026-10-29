@@ -1,6 +1,7 @@
 ---
 name: second-order-subdomain-takeover
-description: second-order: 子域接管批量扫描。信号:web漏洞,注入,子域接管检测,指定云服务。
+description: "Second-order: batch subdomain takeover scanning. Signals: web vulnerability, injection, subdomain takeover detection, specified cloud service."
+zh-signals: "second-order: 子域接管批量扫描。信号:web漏洞,注入,子域接管检测,指定云服务。"
 ---
 
 # second-order

@@ -1,6 +1,7 @@
 ---
 name: performing-lateral-movement-detection
-description: "Detects lateral movement techniques including Pass-the-Hash, PsExec 信号:横向移动,psexec,wmiexec。"
+description: "Detect lateral movement techniques including Pass-the-Hash, PsExec, and WMIExec. Signals: lateral movement, psexec, wmiexec."
+zh-signals: "Detects lateral movement techniques including Pass-the-Hash, PsExec 信号:横向移动,psexec,wmiexec。"
 when-to-use: 'Detects lateral movement techniques including Pass-the-Hash, PsExec,
   WMI execution, RDP pivoting, and SMB-based spreading by correlating Windows Security/Sysmon
   event logs, network flow data (NetFlow/Zeek), and endpoint telemetry in a SIEM,

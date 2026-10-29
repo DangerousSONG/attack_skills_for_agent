@@ -1,6 +1,7 @@
 ---
 name: ad-miner-graph
-description: AD Miner: BH 数据可视化风险评级。信号:ad攻击,域渗透,生成控制路径图,控制路径层数,直接连域控采集。
+description: "AD Miner: visualizes BloodHound data and rates risk. Signals: ad attack, domain pentest, control path graph generation, control path depth, direct DC collection"
+zh-signals: "AD Miner: BH 数据可视化风险评级。信号:ad攻击,域渗透,生成控制路径图,控制路径层数,直接连域控采集。"
 ---
 
 # AD Miner

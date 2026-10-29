@@ -1,6 +1,7 @@
 ---
 name: bkcrack-zip-plaintext
-description: bkcrack: ZIP 已知明文攻击。信号:密码破解,哈希破解,查看 ZIP 加密信息,用密钥直接解密,解密出新 ZIP。
+description: "bkcrack: performs ZIP known-plaintext attacks. Signals: password cracking, hash cracking, view ZIP encryption info, decrypt directly with key, decrypt to new ZIP"
+zh-signals: "bkcrack: ZIP 已知明文攻击。信号:密码破解,哈希破解,查看 ZIP 加密信息,用密钥直接解密,解密出新 ZIP。"
 ---
 
 # bkcrack

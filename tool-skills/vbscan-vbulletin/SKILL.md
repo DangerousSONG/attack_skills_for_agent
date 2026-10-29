@@ -1,6 +1,7 @@
 ---
 name: vbscan-vbulletin
-description: VBScan: vBulletin 漏洞扫描。信号:web漏洞,注入,vBulletin 扫描,带 Cookie,输出报告。
+description: "VBScan: vBulletin vulnerability scanning. Signals: web vulnerabilities, injection, vBulletin scan, with cookie, report output."
+zh-signals: "VBScan: vBulletin 漏洞扫描。信号:web漏洞,注入,vBulletin 扫描,带 Cookie,输出报告。"
 ---
 
 # VBScan

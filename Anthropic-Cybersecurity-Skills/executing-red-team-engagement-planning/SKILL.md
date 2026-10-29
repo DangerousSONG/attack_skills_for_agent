@@ -1,6 +1,7 @@
 ---
 name: executing-red-team-engagement-planning
-description: "Build the foundational red team engagement plan - scope definition, Rules 信号:红队,方法论,渗透流程。"
+description: "Build the foundational red team engagement plan, including scope definition and rules. Signals: red team, methodology, penetration testing process."
+zh-signals: "Build the foundational red team engagement plan - scope definition, Rules 信号:红队,方法论,渗透流程。"
 when-to-use: Build the foundational red team engagement plan - scope definition, Rules
   of Engagement (restrictions, communication plan, emergency stop procedures, legal authorization),
   MITRE ATT&CK-aligned threat profile selection, and operational timelines - producing an

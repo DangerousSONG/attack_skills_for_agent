@@ -1,6 +1,7 @@
 ---
 name: sqlivulscan-google-sql
-description: sqlivulscan: dork 批量找注入点。信号:web漏洞,注入,单目标,引擎选择。
+description: "sqlivulscan uses dorks to batch find injection points. Signals: web vulnerability, injection, single target, engine selection"
+zh-signals: "sqlivulscan: dork 批量找注入点。信号:web漏洞,注入,单目标,引擎选择。"
 ---
 
 # sqlivulscan

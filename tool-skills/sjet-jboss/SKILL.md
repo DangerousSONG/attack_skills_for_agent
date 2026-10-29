@@ -1,6 +1,7 @@
 ---
 name: sjet-jboss
-description: sjet: JBoss/JMXConsole 利用。信号:横向移动,psexec,JBoss 部署,卸载,列表。
+description: "sjet: JBoss and JMXConsole exploitation. Signals: lateral movement, psexec, JBoss deployment, undeploy, list."
+zh-signals: "sjet: JBoss/JMXConsole 利用。信号:横向移动,psexec,JBoss 部署,卸载,列表。"
 ---
 
 # sjet

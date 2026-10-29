@@ -1,6 +1,7 @@
 ---
 name: testing-for-open-redirect-vulnerabilities
-description: "Identifies and exploits open redirect vulnerabilities by analyzing URL 信号:web漏洞,注入,sql注入。"
+description: "Identifies and exploits open redirect vulnerabilities. Signals: web vulnerabilities, injection, SQL injection."
+zh-signals: "Identifies and exploits open redirect vulnerabilities by analyzing URL 信号:web漏洞,注入,sql注入。"
 when-to-use: Identifies and exploits open redirect vulnerabilities by analyzing URL
   redirection parameters (next, url, redirect, return, goto), applying bypass techniques,
   and chaining findings into phishing or token-theft exploits, using Burp Suite/OWASP ZAP

@@ -1,6 +1,7 @@
 ---
 name: punter-multi-source
-description: Punter: 多源被动子域聚合。信号:资产测绘,子域名,被动子域收集,含主动验证。
+description: "Punter: Aggregates passive subdomains from multiple sources. Signals: asset mapping, subdomains, passive subdomain collection, includes active validation."
+zh-signals: "Punter: 多源被动子域聚合。信号:资产测绘,子域名,被动子域收集,含主动验证。"
 ---
 
 # Punter

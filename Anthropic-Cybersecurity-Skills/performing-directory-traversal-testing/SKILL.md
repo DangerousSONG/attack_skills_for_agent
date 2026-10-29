@@ -1,6 +1,7 @@
 ---
 name: performing-directory-traversal-testing
-description: "Test web applications for path traversal and Local/Remote File Inclusion 信号:web漏洞,注入,sql注入。"
+description: "Test web applications for path traversal and local/remote file inclusion. Signals: web vulnerability, injection, sql injection."
+zh-signals: "Test web applications for path traversal and Local/Remote File Inclusion 信号:web漏洞,注入,sql注入。"
 when-to-use: Test web applications for path traversal and Local/Remote File Inclusion
   vulnerabilities by manipulating file path parameters, applying encoding and filter-bypass
   techniques, automating discovery with ffuf and dotdotpwn, and reading high-value files

@@ -1,6 +1,7 @@
 ---
 name: wildpwn-wildcard
-description: wildpwn: tar/chmod 通配符提权。信号:linux提权,suid,通配符注入。
+description: "wildpwn: tar/chmod wildcard privilege escalation. Signals: linux privilege escalation, SUID, wildcard injection."
+zh-signals: "wildpwn: tar/chmod 通配符提权。信号:linux提权,suid,通配符注入。"
 ---
 
 # wildpwn

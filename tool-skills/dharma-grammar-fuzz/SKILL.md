@@ -1,6 +1,7 @@
 ---
 name: dharma-grammar-fuzz
-description: dharma: 协议/文件格式 fuzz 样本生成。信号:pwn,二进制利用,按语法生成样本,计数器模式,调试。
+description: "dharma: protocol/file format fuzz sample generation. Signals: pwn, binary exploitation, syntax-based sample generation, counter mode, debugging."
+zh-signals: "dharma: 协议/文件格式 fuzz 样本生成。信号:pwn,二进制利用,按语法生成样本,计数器模式,调试。"
 ---
 
 # dharma

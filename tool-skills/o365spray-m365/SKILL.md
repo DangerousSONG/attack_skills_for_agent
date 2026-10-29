@@ -1,6 +1,7 @@
 ---
 name: o365spray-m365
-description: o365spray: M365 租户口令喷洒(授权)。信号:暴力破解,口令喷射,M365 用户名枚举,防锁定节奏控制。
+description: "Authorized M365 tenant password spraying. Signals: brute force, password spraying, M365 username enumeration, lockout rate control."
+zh-signals: "o365spray: M365 租户口令喷洒(授权)。信号:暴力破解,口令喷射,M365 用户名枚举,防锁定节奏控制。"
 ---
 
 # o365spray

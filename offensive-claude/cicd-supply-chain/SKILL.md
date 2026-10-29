@@ -1,6 +1,7 @@
 ---
 name: cicd-supply-chain
-description: "CI/CD 与供应链攻击:pwn request、投毒管道执行、可篡改 tag action、依赖混淆、注册表蠕虫、runner 后门、OIDC 信任滥用、SLSA  pr信号:cicd攻击,供应链。"
+description: "CI/CD and supply-chain attacks: pwn request, poisoned pipeline execution, tamperable tag actions, dependency confusion, registry worms, runner backdoors, OIDC trust abuse, SLSA PR. Signals: CI/CD attack, supply chain."
+zh-signals: "CI/CD 与供应链攻击:pwn request、投毒管道执行、可篡改 tag action、依赖混淆、注册表蠕虫、runner 后门、OIDC 信任滥用、SLSA  pr信号:cicd攻击,供应链。"
 when-to-use: Use when attacking or auditing a CI/CD pipeline or software supply chain — pwn requests, poisoned pipeline execution, compromised/mutable-tag actions, dependency confusion, registry worms, runner back
 metadata:
   type: offensive

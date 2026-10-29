@@ -1,6 +1,7 @@
 ---
 name: escaping-containers-to-host
-description: "利用特权 Pod、宿主机挂载、runC CVE 和暴露的 Docker socket 从容器逃逸到宿主机。信号:容器逃逸,docker逃逸,特权容器,runC,宿主机。"
+description: "Escape from container to host using privileged Pods, host mounts, runC CVEs, and exposed Docker sockets. Signals: container escape, docker escape, privileged container, runC, host."
+zh-signals: "利用特权 Pod、宿主机挂载、runC CVE 和暴露的 Docker socket 从容器逃逸到宿主机。信号:容器逃逸,docker逃逸,特权容器,runC,宿主机。"
 when-to-use: >-
   Exploits privileged pods, host mounts, runC CVEs, and exposed Docker sockets to break out of
   a container and reach the underlying host during an authorized container-security

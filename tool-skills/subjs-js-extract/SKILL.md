@@ -1,6 +1,7 @@
 ---
 name: subjs-js-extract
-description: subjs: JS 文件批量提取。信号:web漏洞,注入,subjs`,并发。
+description: "subjs batch-extracts JavaScript files. Signals: web vulnerability, injection, subjs, concurrency"
+zh-signals: "subjs: JS 文件批量提取。信号:web漏洞,注入,subjs`,并发。"
 ---
 
 # subjs

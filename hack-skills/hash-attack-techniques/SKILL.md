@@ -1,6 +1,7 @@
 ---
 name: hash-attack-techniques
-description: "哈希攻击:长度扩展、MD5/SHA1 碰撞、HMAC 时序泄露、生日攻击、哈希工作量证明(CTF/授权测试)。信号:哈希攻击,长度扩展,哈希碰撞,hmac时序,md5碰撞。"
+description: "Hash attacks: length extension, MD5/SHA1 collisions, HMAC timing leaks, birthday attacks, hash proof-of-work for CTF/auth testing. Signals: hash attack, length extension, hash collision, HMAC timing, MD5 collision."
+zh-signals: "哈希攻击:长度扩展、MD5/SHA1 碰撞、HMAC 时序泄露、生日攻击、哈希工作量证明(CTF/授权测试)。信号:哈希攻击,长度扩展,哈希碰撞,hmac时序,md5碰撞。"
 when-to-use: >-
   Hash attack playbook. Use when exploiting length extension, MD5/SHA1
   collisions, HMAC timing leaks, birthday attacks, or hash-based proof

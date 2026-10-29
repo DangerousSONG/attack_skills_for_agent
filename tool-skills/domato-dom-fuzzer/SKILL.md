@@ -1,6 +1,7 @@
 ---
 name: domato-dom-fuzzer
-description: Domato: 浏览器/DOM 引擎 fuzz。信号:pwn,二进制利用,自定义语法,喂给目标。
+description: "Domato: browser/DOM engine fuzzing. Signals: pwn, binary exploitation, custom grammar, feed to target."
+zh-signals: "Domato: 浏览器/DOM 引擎 fuzz。信号:pwn,二进制利用,自定义语法,喂给目标。"
 ---
 
 # Domato

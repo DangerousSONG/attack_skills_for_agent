@@ -1,6 +1,7 @@
 ---
 name: findomain-fast-enum
-description: Findomain: 批量域名资产收集。信号:资产测绘,子域名,单目标枚举,截图,端口扫描联动。
+description: "Findomain collects domain assets in bulk. Signals: asset mapping, subdomains, single-target enumeration, screenshots, port-scanning integration."
+zh-signals: "Findomain: 批量域名资产收集。信号:资产测绘,子域名,单目标枚举,截图,端口扫描联动。"
 ---
 
 # Findomain

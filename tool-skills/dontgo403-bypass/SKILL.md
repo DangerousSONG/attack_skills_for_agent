@@ -1,6 +1,7 @@
 ---
 name: dontgo403-bypass
-description: dontgo403: 403 端点绕过。信号:web漏洞,注入,403 绕过测试,批量路径,请求方式轮换。
+description: "dontgo403: 403 endpoint bypass. Signals: web vulnerability, injection, 403 bypass testing, batch paths, request method rotation."
+zh-signals: "dontgo403: 403 端点绕过。信号:web漏洞,注入,403 绕过测试,批量路径,请求方式轮换。"
 ---
 
 # dontgo403

@@ -1,6 +1,7 @@
 ---
 name: performing-lateral-movement-with-wmiexec
-description: "Perform lateral movement across Windows networks using WMI-based remote 信号:横向移动,psexec,wmiexec。"
+description: "Perform lateral movement across Windows networks using WMI-based remote execution. Signals: lateral movement, psexec, wmiexec."
+zh-signals: "Perform lateral movement across Windows networks using WMI-based remote 信号:横向移动,psexec,wmiexec。"
 when-to-use: Perform lateral movement across Windows networks using WMI-based remote
   execution techniques including Impacket wmiexec.py, CrackMapExec, and native WMI
   commands for stealthy post-exploitation during red team engagements.

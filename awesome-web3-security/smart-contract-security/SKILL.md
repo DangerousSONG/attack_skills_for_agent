@@ -1,6 +1,7 @@
 ---
 name: smart-contract-security
-description: "EVM/Solidity 智能合约安全:漏洞分类体系与审计工作流。信号:智能合约,solidity,合约审计,重入,漏洞分类,web3安全。"
+description: "EVM/Solidity smart contract security: vulnerability taxonomy and audit workflow. Signals: smart contracts, Solidity, contract audit, reentrancy, vulnerability taxonomy, Web3 security."
+zh-signals: "EVM/Solidity 智能合约安全:漏洞分类体系与审计工作流。信号:智能合约,solidity,合约审计,重入,漏洞分类,web3安全。"
 when-to-use: "Guide for EVM/solidity smart contract security work: vulnerability taxonomy, review workflow, and where to place resources in README.md."
 ---
 

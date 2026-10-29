@@ -1,6 +1,7 @@
 ---
 name: ntlmrecon-web-ntlm
-description: ntlmrecon: NTLM 认证端点全网发现。信号:ad攻击,域渗透,NTLM 端点枚举,网段。
+description: "Discover NTLM authentication endpoints network-wide. Signals: AD attack, domain penetration, NTLM endpoint enumeration, subnet."
+zh-signals: "ntlmrecon: NTLM 认证端点全网发现。信号:ad攻击,域渗透,NTLM 端点枚举,网段。"
 ---
 
 # ntlmrecon

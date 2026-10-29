@@ -1,6 +1,7 @@
 ---
 name: shuffledns-brute
-description: shuffledns: 大规模子域爆破。信号:资产测绘,子域名,批量,massdns 路径。
+description: "shuffledns: large-scale subdomain brute force. Signals: asset mapping, subdomain, bulk, massdns path."
+zh-signals: "shuffledns: 大规模子域爆破。信号:资产测绘,子域名,批量,massdns 路径。"
 ---
 
 # shuffledns

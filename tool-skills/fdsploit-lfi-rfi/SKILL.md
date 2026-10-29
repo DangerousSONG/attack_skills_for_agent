@@ -1,6 +1,7 @@
 ---
 name: fdsploit-lfi-rfi
-description: FDsploit: LFI 到 shell 自动化。信号:web漏洞,注入,LFI/RFI 检测利用,编码模式,反弹参数。
+description: "FDsploit: automated LFI to shell. Signals: web vulnerability, injection, LFI/RFI detection and exploitation, encoding mode, reverse parameters."
+zh-signals: "FDsploit: LFI 到 shell 自动化。信号:web漏洞,注入,LFI/RFI 检测利用,编码模式,反弹参数。"
 ---
 
 # FDsploit

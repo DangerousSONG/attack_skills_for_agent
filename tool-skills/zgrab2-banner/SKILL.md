@@ -1,6 +1,7 @@
 ---
 name: zgrab2-banner
-description: zgrab2: 全网资产应用层指纹。信号:资产测绘,子域名,TLS 证书/指纹,SSH banner,JSON 输出。
+description: "zgrab2: Internet-wide asset application-layer fingerprinting. Signals: asset mapping, subdomain, TLS certificate/fingerprint, SSH banner, JSON output."
+zh-signals: "zgrab2: 全网资产应用层指纹。信号:资产测绘,子域名,TLS 证书/指纹,SSH banner,JSON 输出。"
 ---
 
 # zgrab2

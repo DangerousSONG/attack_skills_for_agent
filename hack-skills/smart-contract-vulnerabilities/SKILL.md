@@ -1,6 +1,7 @@
 ---
 name: smart-contract-vulnerabilities
-description: "Smart contract vulnerability playbook 信号:ad攻击,域渗透,域控。"
+description: "Smart contract vulnerability playbook. Signals: AD attack, domain penetration, domain controller."
+zh-signals: "Smart contract vulnerability playbook 信号:ad攻击,域渗透,域控。"
 when-to-use: >-
   Smart contract vulnerability playbook. Use when auditing Solidity/EVM contracts for reentrancy, integer overflow, access control, delegatecall, flash loan, signature replay, and MEV-related attack patterns.
 ---

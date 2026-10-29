@@ -1,6 +1,7 @@
 ---
 name: injection-checking
-description: "注入漏洞路由入口:按解释器分流到XSS/SQLi/SSRF/XXE/SSTI/命令注入/NoSQL注入的检测与利用流程。信号:注入,xss,sqli,ssrf,xxe,ssti,命令注入。"
+description: "Injection vulnerability routing entry: dispatch by interpreter to XSS/SQLi/SSRF/XXE/SSTI/command injection/NoSQL injection detection and exploitation flows. Signals: injection, XSS, SQLi, SSRF, XXE, SSTI, command injection."
+zh-signals: "注入漏洞路由入口:按解释器分流到XSS/SQLi/SSRF/XXE/SSTI/命令注入/NoSQL注入的检测与利用流程。信号:注入,xss,sqli,ssrf,xxe,ssti,命令注入。"
 when-to-use: Injection Testing Router
   Entry P1 category router for injection testing. Use when routing between XSS,
   SQLi, SSRF, XXE, SSTI, command injection, and NoSQL injection workflows based

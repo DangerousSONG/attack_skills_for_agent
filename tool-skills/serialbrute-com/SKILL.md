@@ -1,6 +1,7 @@
 ---
 name: serialbrute-com
-description: SerialBrute: 硬件串口密码爆破。信号:端口扫描,nmap,串口暴力破解,字典,tty。
+description: "SerialBrute: hardware serial password brute force. Signals: port scan, nmap, serial brute force, dictionary, tty."
+zh-signals: "SerialBrute: 硬件串口密码爆破。信号:端口扫描,nmap,串口暴力破解,字典,tty。"
 ---
 
 # SerialBrute

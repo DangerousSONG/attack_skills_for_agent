@@ -1,6 +1,7 @@
 ---
 name: net-creds-sniff
-description: net-creds: 内网凭据被动收割。信号:中间人,mitm,被动凭据嗅探,过滤本机,PCAP 分析。
+description: "net-creds: Passive internal network credential harvesting. Signals: man-in-the-middle, MITM, passive credential sniffing, filter local host, PCAP analysis."
+zh-signals: "net-creds: 内网凭据被动收割。信号:中间人,mitm,被动凭据嗅探,过滤本机,PCAP 分析。"
 ---
 
 # net-creds

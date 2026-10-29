@@ -1,6 +1,7 @@
 ---
 name: scannerl-dist-scan
-description: scannerl: Erlang 分布式全网扫描。信号:端口扫描,nmap,分布式指纹扫描,批处理。
+description: "scannerl: Distributed whole-network scanning in Erlang. Signals: port scanning, nmap, distributed fingerprint scanning, batch processing."
+zh-signals: "scannerl: Erlang 分布式全网扫描。信号:端口扫描,nmap,分布式指纹扫描,批处理。"
 ---
 
 # scannerl

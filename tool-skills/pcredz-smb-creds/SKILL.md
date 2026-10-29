@@ -1,6 +1,7 @@
 ---
 name: pcredz-smb-creds
-description: PCredz: SMB/HTTP 凭据嗅探。信号:中间人,mitm,流量凭据提取,PCAP 分析,详细。
+description: "SMB/HTTP credential sniffing. Signals: MITM, mitm, traffic credential extraction, PCAP analysis, detailed."
+zh-signals: "PCredz: SMB/HTTP 凭据嗅探。信号:中间人,mitm,流量凭据提取,PCAP 分析,详细。"
 ---
 
 # PCredz

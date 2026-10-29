@@ -1,6 +1,7 @@
 ---
 name: davtest-webdav
-description: davtest: WebDAV 可写验证。信号:web漏洞,注入,WebDAV 上传测试,认证,上传目录。
+description: "davtest: Tests WebDAV writability. Signals: web vulnerability, injection, WebDAV upload test, authentication, upload directory."
+zh-signals: "davtest: WebDAV 可写验证。信号:web漏洞,注入,WebDAV 上传测试,认证,上传目录。"
 ---
 
 # davtest

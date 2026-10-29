@@ -1,6 +1,7 @@
 ---
 name: platypus-shell-manager
-description: Platypus: 反弹 shell 集中管控。信号:webshell,rce,起服务(:7331),监听端口,交互。
+description: "Centralized reverse shell management. Signals: webshell, rce, start service :7331, listening port, interaction."
+zh-signals: "Platypus: 反弹 shell 集中管控。信号:webshell,rce,起服务(:7331),监听端口,交互。"
 ---
 
 # Platypus

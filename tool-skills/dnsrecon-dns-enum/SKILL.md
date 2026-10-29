@@ -1,6 +1,7 @@
 ---
 name: dnsrecon-dns-enum
-description: dnsrecon: SRV 记录挖内部服务、Zone Transfer 尝试。信号:子域名,域名枚举,标准枚举,字典爆破。
+description: "dnsrecon: SRV record internal service discovery and zone transfer attempts. Signals: subdomain, domain enumeration, standard enumeration, dictionary brute force."
+zh-signals: "dnsrecon: SRV 记录挖内部服务、Zone Transfer 尝试。信号:子域名,域名枚举,标准枚举,字典爆破。"
 ---
 
 # dnsrecon

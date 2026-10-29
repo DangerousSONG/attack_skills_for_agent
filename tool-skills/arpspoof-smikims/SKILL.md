@@ -1,6 +1,7 @@
 ---
 name: arpspoof-smikims
-description: arpspoof: 局域网 ARP 毒化。信号:中间人,mitm,双向 ARP 欺骗,目标+网关。
+description: "arpspoof: poisons ARP on the LAN. Signals: man-in-the-middle, mitm, bidirectional ARP spoofing, target+gateway"
+zh-signals: "arpspoof: 局域网 ARP 毒化。信号:中间人,mitm,双向 ARP 欺骗,目标+网关。"
 ---
 
 # arpspoof

@@ -1,6 +1,7 @@
 ---
 name: tlsx-tls-enum
-description: tlsx: 证书 SAN 挖子域。信号:数据收集,打包,tlsx -cn -j`,详细枚举,检测 TLS 配置错误。
+description: "tlsx mines subdomains from certificate SANs. Signals: data collection, packaging, tlsx -cn -j, detailed enumeration, detect TLS misconfiguration"
+zh-signals: "tlsx: 证书 SAN 挖子域。信号:数据收集,打包,tlsx -cn -j`,详细枚举,检测 TLS 配置错误。"
 ---
 
 # tlsx

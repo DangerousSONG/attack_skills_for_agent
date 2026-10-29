@@ -1,6 +1,7 @@
 ---
 name: corscanner-cors-misconfig
-description: CORScanner: CORS 跨域劫持。信号:web漏洞,注入,CORS 配置扫描,批量,线程。
+description: "CORScanner: Scans for CORS cross-origin hijacking. Signals: web vulnerability, injection, CORS configuration scanning, batch, threads."
+zh-signals: "CORScanner: CORS 跨域劫持。信号:web漏洞,注入,CORS 配置扫描,批量,线程。"
 ---
 
 # CORScanner

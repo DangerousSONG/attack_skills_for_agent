@@ -1,6 +1,7 @@
 ---
 name: recollapse-mutation
-description: recollapse: 403 绕过参数变异。信号:web漏洞,注入,参数变异生成,值变异,参数名变异。
+description: "recollapse: Generates 403-bypass parameter mutations. Signals: web vulnerabilities, injection, parameter mutation generation, value mutation, parameter name mutation."
+zh-signals: "recollapse: 403 绕过参数变异。信号:web漏洞,注入,参数变异生成,值变异,参数名变异。"
 ---
 
 # recollapse

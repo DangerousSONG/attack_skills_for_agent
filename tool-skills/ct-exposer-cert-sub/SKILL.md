@@ -1,6 +1,7 @@
 ---
 name: ct-exposer-cert-sub
-description: ct-exposer: CT 日志子域提取。信号:子域名,域名枚举,CT 日志子域发现。
+description: "ct-exposer: Extracts subdomains from Certificate Transparency logs. Signals: subdomains, domain enumeration, CT log subdomain discovery."
+zh-signals: "ct-exposer: CT 日志子域提取。信号:子域名,域名枚举,CT 日志子域发现。"
 ---
 
 # ct-exposer

@@ -1,6 +1,7 @@
 ---
 name: ccrawldns-commoncrawl
-description: ccrawldns: CommonCrawl 数据源利用。信号:资产测绘,子域名。
+description: "ccrawldns: Leverages CommonCrawl data sources. Signals: asset mapping, subdomains."
+zh-signals: "ccrawldns: CommonCrawl 数据源利用。信号:资产测绘,子域名。"
 ---
 
 # ccrawldns

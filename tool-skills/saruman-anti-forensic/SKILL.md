@@ -1,6 +1,7 @@
 ---
 name: saruman-anti-forensic
-description: saruman: ELF 内存注入规避磁盘取证。信号:痕迹清理,反取证,附加模式,退出时清理痕迹。
+description: "saruman: Injects ELF into memory to evade disk forensics. Signals: trace cleanup, anti-forensics, attach mode, cleanup traces on exit."
+zh-signals: "saruman: ELF 内存注入规避磁盘取证。信号:痕迹清理,反取证,附加模式,退出时清理痕迹。"
 ---
 
 # saruman

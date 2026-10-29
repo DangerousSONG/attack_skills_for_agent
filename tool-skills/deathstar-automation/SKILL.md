@@ -1,6 +1,7 @@
 ---
 name: deathstar-automation
-description: DeathStar: 一键自动化域渗透。信号:ad攻击,域渗透,自动化域管路径,域控。
+description: "DeathStar: one-click automated Active Directory domain penetration. Signals: AD attack, domain penetration, automated domain admin path, domain controller."
+zh-signals: "DeathStar: 一键自动化域渗透。信号:ad攻击,域渗透,自动化域管路径,域控。"
 ---
 
 # DeathStar

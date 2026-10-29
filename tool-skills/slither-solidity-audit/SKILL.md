@@ -1,6 +1,7 @@
 ---
 name: slither-solidity-audit
-description: Slither: 合约重入/权限漏洞审计、代理升级合约完整性检查。信号:区块链,web3,扫当前合约项目,摘要。
+description: "Slither: audits contract reentrancy and permission flaws, plus proxy upgrade integrity. Signals: blockchain, web3, scan current contract project, summary."
+zh-signals: "Slither: 合约重入/权限漏洞审计、代理升级合约完整性检查。信号:区块链,web3,扫当前合约项目,摘要。"
 ---
 
 # Slither

@@ -1,6 +1,7 @@
 ---
 name: graphinder-js-endpoints
-description: Graphinder: 隐藏 GraphQL 端点发现。信号:攻击面,云资产,子域联动。
+description: "Graphinder discovers hidden GraphQL endpoints. Signals: attack surface, cloud assets, subdomain correlation."
+zh-signals: "Graphinder: 隐藏 GraphQL 端点发现。信号:攻击面,云资产,子域联动。"
 ---
 
 # Graphinder

@@ -1,6 +1,7 @@
 ---
 name: john-hash-crack
-description: John the Ripper: 破解 Windows NTLM 哈希、破解 Linux 系统口令。信号:密码破解,哈希破解,字典破解,显示已破解结果。
+description: "John the Ripper cracks Windows NTLM hashes and Linux passwords. Signals: password cracking, hash cracking, dictionary cracking, show cracked results."
+zh-signals: "John the Ripper: 破解 Windows NTLM 哈希、破解 Linux 系统口令。信号:密码破解,哈希破解,字典破解,显示已破解结果。"
 ---
 
 # John the Ripper

@@ -1,6 +1,7 @@
 ---
 name: aquatone-visual-recon
-description: Aquatone: 域名飞越式可视化核查。信号:资产测绘,子域名,aquatone`,输出目录,扫描超时。
+description: "Aquatone: performs domain flyover visual verification. Signals: asset mapping, subdomain, aquatone, output directory, scan timeout"
+zh-signals: "Aquatone: 域名飞越式可视化核查。信号:资产测绘,子域名,aquatone`,输出目录,扫描超时。"
 ---
 
 # Aquatone

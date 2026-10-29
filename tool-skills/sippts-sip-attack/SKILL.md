@@ -1,6 +1,7 @@
 ---
 name: sippts-sip-attack
-description: sippts: VoIP 内网攻击。信号:端口扫描,nmap,SIP 扫描,分机枚举,SIP 爆破。
+description: "sippts: internal VoIP attack. Signals: port scan, nmap, SIP scan, extension enumeration, SIP brute force."
+zh-signals: "sippts: VoIP 内网攻击。信号:端口扫描,nmap,SIP 扫描,分机枚举,SIP 爆破。"
 ---
 
 # sippts

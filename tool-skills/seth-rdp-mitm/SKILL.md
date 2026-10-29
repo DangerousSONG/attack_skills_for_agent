@@ -1,6 +1,7 @@
 ---
 name: seth-rdp-mitm
-description: Seth: RDP 明文凭据截获。信号:中间人,mitm,RDP 中间人,仅降级攻击,哈希收割。
+description: "Seth: intercepts RDP plaintext credentials. Signals: MITM, mitm, RDP MITM, downgrade-only attack, hash harvesting."
+zh-signals: "Seth: RDP 明文凭据截获。信号:中间人,mitm,RDP 中间人,仅降级攻击,哈希收割。"
 ---
 
 # Seth

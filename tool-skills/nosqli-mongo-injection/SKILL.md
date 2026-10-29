@@ -1,6 +1,7 @@
 ---
 name: nosqli-mongo-injection
-description: nosqli: 登录接口 NoSQL 绕过。信号:web漏洞,注入,MongoDB 注入扫描,盲注模式,数据提取。
+description: "NoSQL login bypass. Signals: web vulnerability, injection, MongoDB injection scan, blind injection, data extraction."
+zh-signals: "nosqli: 登录接口 NoSQL 绕过。信号:web漏洞,注入,MongoDB 注入扫描,盲注模式,数据提取。"
 ---
 
 # nosqli

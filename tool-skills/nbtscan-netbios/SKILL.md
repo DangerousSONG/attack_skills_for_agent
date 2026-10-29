@@ -1,6 +1,7 @@
 ---
 name: nbtscan-netbios
-description: nbtscan: 内网主机名快速普查。信号:内网枚举,网络发现,NetBIOS 名称扫描,使用 137 端口递归,详细。
+description: "nbtscan: Quick internal network hostname census. Signals: internal network enumeration, network discovery, NetBIOS name scanning, use port 137 recursively, detailed."
+zh-signals: "nbtscan: 内网主机名快速普查。信号:内网枚举,网络发现,NetBIOS 名称扫描,使用 137 端口递归,详细。"
 ---
 
 # nbtscan

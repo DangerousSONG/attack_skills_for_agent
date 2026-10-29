@@ -1,6 +1,7 @@
 ---
 name: meg-path-check
-description: meg: 全路径批量请求。信号:web漏洞,注入,多 host×多路径请求,POST 模式,只存 200 响应。
+description: "meg: Batch requests across full paths. Signals: web vulnerability, injection, multi-host multi-path requests, POST mode, store only 200 responses."
+zh-signals: "meg: 全路径批量请求。信号:web漏洞,注入,多 host×多路径请求,POST 模式,只存 200 响应。"
 ---
 
 # meg

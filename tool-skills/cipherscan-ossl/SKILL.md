@@ -1,6 +1,7 @@
 ---
 name: cipherscan-ossl
-description: cipherscan: TLS 套件合规检查。信号:密码学攻击,加密破解,密码套件扫描,JSON,详细。
+description: "cipherscan: Checks TLS cipher suite compliance. Signals: cryptographic attack, encryption cracking, cipher suite scanning, JSON, verbose."
+zh-signals: "cipherscan: TLS 套件合规检查。信号:密码学攻击,加密破解,密码套件扫描,JSON,详细。"
 ---
 
 # cipherscan

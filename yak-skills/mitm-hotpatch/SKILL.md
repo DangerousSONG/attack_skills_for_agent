@@ -1,6 +1,7 @@
 ---
 name: mitm-hotpatch
-description: "Yakit MITM 模块级热加载:不中断代理用 Yaklang 动态接管 HTTP 流量各处理阶段,先看 Hook 时机表与 forward/drop 语义。信号:yakit,mitm,热加载。"
+description: "Yakit MITM module-level hot reload: Uses Yaklang to dynamically take over HTTP traffic stages without interrupting proxy; review hook timing table and forward/drop semantics. Signals: yakit, mitm, hot reload."
+zh-signals: "Yakit MITM 模块级热加载:不中断代理用 Yaklang 动态接管 HTTP 流量各处理阶段,先看 Hook 时机表与 forward/drop 语义。信号:yakit,mitm,热加载。"
 when-to-use: 0. 相关路由
   Yakit MITM 热加载 (Hot Patch) 专题。当用户需要在 MITM 中间人代理中用代码动态劫持/修改请求与响应、镜像分析流量、入库前打标签染色、或对危险操作做 mock 护栏时使用。覆盖 hijackHTTPRequest / hijackHTTPResponseEx / mirror 系列 / hijackSaveHTTPFlow / mockHTTPRequest 全部 Hook 与 forward/drop 语义。
 ---

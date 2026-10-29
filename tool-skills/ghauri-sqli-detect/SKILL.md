@@ -1,6 +1,7 @@
 ---
 name: ghauri-sqli-detect
-description: Ghauri: 常规参数注入拖库。信号:web漏洞,注入,注入检测+类型识别,枚举数据库名,枚举表。
+description: "Ghauri performs standard parameter injection and database extraction. Signals: web vulnerabilities, injection, injection detection and type identification, database name enumeration, table enumeration."
+zh-signals: "Ghauri: 常规参数注入拖库。信号:web漏洞,注入,注入检测+类型识别,枚举数据库名,枚举表。"
 ---
 
 # Ghauri

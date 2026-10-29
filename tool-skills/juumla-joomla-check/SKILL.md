@@ -1,6 +1,7 @@
 ---
 name: juumla-joomla-check
-description: juumla: Joomla 快速体检。信号:web漏洞,注入,备份文件探测,组件检测。
+description: "juumla performs quick Joomla checks. Signals: web vulnerability, injection, backup file detection, component detection."
+zh-signals: "juumla: Joomla 快速体检。信号:web漏洞,注入,备份文件探测,组件检测。"
 ---
 
 # juumla

@@ -1,6 +1,7 @@
 ---
 name: sireprat-windows-iot
-description: SirepRAT: Windows IoT 设备 RCE。信号:横向移动,psexec,上传。
+description: "SirepRAT: Windows IoT device RCE. Signals: lateral movement, psexec, upload."
+zh-signals: "SirepRAT: Windows IoT 设备 RCE。信号:横向移动,psexec,上传。"
 ---
 
 # SirepRAT

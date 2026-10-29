@@ -1,6 +1,7 @@
 ---
 name: syborg-recursive-sub
-description: Syborg: 递归+通配符规避爆破。信号:资产测绘,子域名,递归子域枚举,resolver。
+description: "Syborg brute-forces recursively while avoiding wildcards. Signals: asset mapping, subdomain, recursive subdomain enumeration, resolver"
+zh-signals: "Syborg: 递归+通配符规避爆破。信号:资产测绘,子域名,递归子域枚举,resolver。"
 ---
 
 # Syborg

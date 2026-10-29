@@ -1,6 +1,7 @@
 ---
 name: cracken-fast-crack
-description: cracken: 亿级字典掩码过滤。信号:密码破解,哈希破解,掩码高速过滤,范围。
+description: "cracken: Filters billion-scale dictionaries using masks. Signals: password cracking, hash cracking, high-speed mask filtering, range."
+zh-signals: "cracken: 亿级字典掩码过滤。信号:密码破解,哈希破解,掩码高速过滤,范围。"
 ---
 
 # cracken

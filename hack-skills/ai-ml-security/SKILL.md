@@ -1,6 +1,7 @@
 ---
 name: ai-ml-security
-description: "AI/ML security playbook 信号:ai安全,大模型攻击,llm攻击。"
+description: "AI/ML security playbook. Signals: ai security, large model attacks, llm attacks."
+zh-signals: "AI/ML security playbook 信号:ai安全,大模型攻击,llm攻击。"
 when-to-use: >-
   AI/ML security playbook. Use when assessing model supply chain attacks (pickle RCE, poisoned weights), adversarial examples, model poisoning, model stealing, data privacy attacks (membership inference, model inversion), and autonomous agent security risks.
 ---

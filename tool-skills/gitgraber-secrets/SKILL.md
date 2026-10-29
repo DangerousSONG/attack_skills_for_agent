@@ -1,6 +1,7 @@
 ---
 name: gitgraber-secrets
-description: gitGraber: Github 密钥实时监控。信号:攻击面,云资产,Github 实时监控,深度,线程。
+description: "gitGraber monitors GitHub for secrets in real time. Signals: attack surface, cloud assets, GitHub real-time monitoring, depth, threads."
+zh-signals: "gitGraber: Github 密钥实时监控。信号:攻击面,云资产,Github 实时监控,深度,线程。"
 ---
 
 # gitGraber

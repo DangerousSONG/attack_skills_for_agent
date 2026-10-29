@@ -1,6 +1,7 @@
 ---
 name: aiodnsbrute-dns
-description: aiodnsbrute: 百万级子域爆破。信号:子域名,域名枚举,异步 DNS 爆破,并发。
+description: "aiodnsbrute: brute-forces subdomains at million scale. Signals: subdomain, domain enumeration, async DNS brute force, concurrency"
+zh-signals: "aiodnsbrute: 百万级子域爆破。信号:子域名,域名枚举,异步 DNS 爆破,并发。"
 ---
 
 # aiodnsbrute

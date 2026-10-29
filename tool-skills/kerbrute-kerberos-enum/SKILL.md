@@ -1,6 +1,7 @@
 ---
 name: kerbrute-kerberos-enum
-description: kerbrute: 预认证枚举+口令喷洒、从 breach 密码定向爆破。信号:暴力破解,口令喷射,从密码字典爆破,线程数。
+description: "kerbrute performs pre-auth enumeration, password spraying, and targeted breach-password brute force. Signals: brute force, password spraying, dictionary cracking, thread count."
+zh-signals: "kerbrute: 预认证枚举+口令喷洒、从 breach 密码定向爆破。信号:暴力破解,口令喷射,从密码字典爆破,线程数。"
 ---
 
 # kerbrute

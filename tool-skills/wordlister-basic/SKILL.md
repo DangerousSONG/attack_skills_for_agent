@@ -1,6 +1,7 @@
 ---
 name: wordlister-basic
-description: Wordlister: 关键词组合字典。信号:密码破解,哈希破解,模式。
+description: "Wordlister: Keyword combination wordlist. Signals: password cracking, hash cracking, patterns."
+zh-signals: "Wordlister: 关键词组合字典。信号:密码破解,哈希破解,模式。"
 ---
 
 # Wordlister

@@ -1,6 +1,7 @@
 ---
 name: threat-model-discipline
-description: "威胁建模纪律:开工/利用前/攻击面变化时构建并校验威胁模型,发现漂移(新增未审查面)再推进。信号:威胁建模,攻击面漂移,建模纪律。"
+description: "Covers threat modeling discipline: build and validate threat models before work, exploitation, or attack-surface changes, and detect drift before proceeding. Signals: threat modeling, attack surface drift, modeling discipline."
+zh-signals: "威胁建模纪律:开工/利用前/攻击面变化时构建并校验威胁模型,发现漂移(新增未审查面)再推进。信号:威胁建模,攻击面漂移,建模纪律。"
 when-to-use: Use when starting an engagement, before exploitation, or whenever the attack surface changes — build/validate the threat model and detect drift (new unreviewed surface) before advancing
 scripts:
   - scripts/threatmodel_lint.py

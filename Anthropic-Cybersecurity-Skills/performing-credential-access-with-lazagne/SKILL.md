@@ -1,6 +1,7 @@
 ---
 name: performing-credential-access-with-lazagne
-description: "Extract stored credentials from compromised endpoints using the LaZagne 信号:本地凭据,浏览器窃取,chrome密码。"
+description: "Extract stored credentials from compromised endpoints using LaZagne. Signals: local credentials, browser stealing, chrome passwords."
+zh-signals: "Extract stored credentials from compromised endpoints using the LaZagne 信号:本地凭据,浏览器窃取,chrome密码。"
 when-to-use: Extract stored credentials from compromised endpoints using the LaZagne
   post-exploitation tool to recover passwords from browsers, databases, system vaults,
   and applications during authorized red team operations.

@@ -1,6 +1,7 @@
 ---
 name: proxify-multiproxy
-description: proxify: 多协议代理转发。信号:内网穿透,隧道,起多级代理,SOCKS5,流量落盘。
+description: "Multi-protocol proxy forwarding. Signals: intranet tunneling, tunnel, multi-level proxy, SOCKS5, traffic capture to disk."
+zh-signals: "proxify: 多协议代理转发。信号:内网穿透,隧道,起多级代理,SOCKS5,流量落盘。"
 ---
 
 # proxify

@@ -1,6 +1,7 @@
 ---
 name: shreder-ssh-brute
-description: Shreder: IoT 默认口令批量。信号:密码破解,哈希破解,线程,协议。
+description: "Shreder: IoT default password batch testing. Signals: password cracking, hash cracking, threads, protocol."
+zh-signals: "Shreder: IoT 默认口令批量。信号:密码破解,哈希破解,线程,协议。"
 ---
 
 # Shreder

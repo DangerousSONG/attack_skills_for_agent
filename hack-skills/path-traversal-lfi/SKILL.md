@@ -1,6 +1,7 @@
 ---
 name: path-traversal-lfi
-description: "路径遍历与 LFI:文件路径、下载端点、包含操作、压缩解压、wrapper 行为暴露文件系统控制。信号:路径遍历,lfi,目录穿越,文件包含,任意文件读取。"
+description: "Path traversal and LFI: file paths, download endpoints, inclusion operations, archive extraction, wrapper behavior expose filesystem control. Signals: path traversal, LFI, directory traversal, file inclusion, arbitrary file read."
+zh-signals: "路径遍历与 LFI:文件路径、下载端点、包含操作、压缩解压、wrapper 行为暴露文件系统控制。信号:路径遍历,lfi,目录穿越,文件包含,任意文件读取。"
 when-to-use: >-
   Path traversal and LFI playbook. Use when file paths, download endpoints, include operations, archive extraction, or wrapper behavior may expose filesystem control.
 ---

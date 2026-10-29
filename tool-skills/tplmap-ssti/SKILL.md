@@ -1,6 +1,7 @@
 ---
 name: tplmap-ssti
-description: tplmap: SSTI 直取系统命令、沙盒逃逸探测。信号:web漏洞,注入,SSTI 检测+利用,POST。
+description: "tplmap gets system commands via SSTI and probes sandbox escapes. Signals: web vulnerability, injection, SSTI detection+exploitation, POST"
+zh-signals: "tplmap: SSTI 直取系统命令、沙盒逃逸探测。信号:web漏洞,注入,SSTI 检测+利用,POST。"
 ---
 
 # tplmap

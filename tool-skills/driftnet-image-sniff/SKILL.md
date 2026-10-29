@@ -1,6 +1,7 @@
 ---
 name: driftnet-image-sniff
-description: driftnet: 局域网图片嗅探。信号:中间人,mitm,图片流量嗅探,音频,落盘。
+description: "driftnet: LAN image sniffing. Signals: man-in-the-middle, MITM, image traffic sniffing, audio, save to disk."
+zh-signals: "driftnet: 局域网图片嗅探。信号:中间人,mitm,图片流量嗅探,音频,落盘。"
 ---
 
 # driftnet

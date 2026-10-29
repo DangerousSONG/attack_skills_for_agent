@@ -1,6 +1,7 @@
 ---
 name: lfimap-lfi-autopwn
-description: lfimap: 自动化 LFI 到 shell。信号:web漏洞,注入,LFI 扫描,自动反弹 shell,强制所有参数测试。
+description: "lfimap automates LFI discovery to shell. Signals: web vulnerability, injection, LFI scanning, automatic reverse shell, test all parameters."
+zh-signals: "lfimap: 自动化 LFI 到 shell。信号:web漏洞,注入,LFI 扫描,自动反弹 shell,强制所有参数测试。"
 ---
 
 # lfimap

@@ -1,6 +1,7 @@
 ---
 name: operating-havoc-c2
-description: "部署 Havoc C2 teamserver(Yaotl 配置),生成间接系统调用+睡眠混淆的 Demon 代理,执行后渗透与横向。信号:havoc,c2,demon代理,间接系统调用,后渗透。"
+description: "Deploy Havoc C2 teamserver with Yaotl config, generate Demon agents using indirect syscalls and sleep obfuscation for post-exploitation and lateral movement. Signals: havoc, c2, demon agent, indirect syscalls, post-exploitation."
+zh-signals: "部署 Havoc C2 teamserver(Yaotl 配置),生成间接系统调用+睡眠混淆的 Demon 代理,执行后渗透与横向。信号:havoc,c2,demon代理,间接系统调用,后渗透。"
 when-to-use: Deploy a Havoc C2 team server with Yaotl malleable profiles, generate evasive Demon agents using indirect syscalls and sleep obfuscation, and run post-exploitation and pivoting operations. Use during 
 domain: cybersecurity
 subdomain: red-teaming

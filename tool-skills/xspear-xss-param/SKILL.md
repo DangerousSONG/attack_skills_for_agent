@@ -1,6 +1,7 @@
 ---
 name: xspear-xss-param
-description: XSpear: 参数级 XSS 验证。信号:web漏洞,注入,XSS 扫描,POST 数据,头注入。
+description: "XSpear: Parameter-level XSS validation. Signals: web vulnerability, injection, XSS scan, POST data, header injection."
+zh-signals: "XSpear: 参数级 XSS 验证。信号:web漏洞,注入,XSS 扫描,POST 数据,头注入。"
 ---
 
 # XSpear

@@ -1,6 +1,7 @@
 ---
 name: featherduster-crypto-auto
-description: FeatherDuster: CTF/真实场景弱加密破解。信号:密码学攻击,加密破解,自动识别并破解弱加密,进入交互分析,选模块攻击。
+description: "FeatherDuster cracks weak cryptography in CTF and real-world scenarios. Signals: cryptographic attack, encryption cracking, automatic weak-crypto identification, interactive analysis, module attack."
+zh-signals: "FeatherDuster: CTF/真实场景弱加密破解。信号:密码学攻击,加密破解,自动识别并破解弱加密,进入交互分析,选模块攻击。"
 ---
 
 # FeatherDuster

@@ -1,6 +1,7 @@
 ---
 name: striptls-downgrade
-description: striptls: STARTTLS 降级攻击。信号:中间人,mitm,IMAP 降级,透明模式。
+description: "striptls performs STARTTLS downgrade attacks. Signals: MITM, mitm, IMAP downgrade, transparent mode"
+zh-signals: "striptls: STARTTLS 降级攻击。信号:中间人,mitm,IMAP 降级,透明模式。"
 ---
 
 # striptls

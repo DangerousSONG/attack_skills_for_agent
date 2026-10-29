@@ -1,6 +1,7 @@
 ---
 name: business-logic-vuln
-description: "This is the routing entry point for business-logic and state-machine issues 信号:api攻击,接口测试,graphql。"
+description: "Routing entry point for business-logic and state-machine issues. Signals: API attacks, interface testing, GraphQL."
+zh-signals: "This is the routing entry point for business-logic and state-machine issues 信号:api攻击,接口测试,graphql。"
 when-to-use: Business Logic Router
   Entry P1 category router for business logic testing. Use when workflow abuse,
   race conditions, pricing flaws, or multi-step state attacks matter more than

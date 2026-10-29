@@ -1,6 +1,7 @@
 ---
 name: pygpoabuse-gpo-privesc
-description: pyGPOAbuse: 可写 GPO 提权到域管。信号:ad攻击,域渗透,列出 GPO 详情,把用户加进组,滥用可写 GPO 提权。
+description: "pyGPOAbuse: Escalates writable GPOs to Domain Admin. Signals: AD attack, domain penetration, list GPO details, add user to group, abuse writable GPO for privilege escalation."
+zh-signals: "pyGPOAbuse: 可写 GPO 提权到域管。信号:ad攻击,域渗透,列出 GPO 详情,把用户加进组,滥用可写 GPO 提权。"
 ---
 
 # pyGPOAbuse

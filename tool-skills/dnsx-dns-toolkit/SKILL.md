@@ -1,6 +1,7 @@
 ---
 name: dnsx-dns-toolkit
-description: dnsx: 子域存活+记录枚举、SPF/DMARC 邮件 spoof 面评估。信号:子域名,域名枚举,批量解析,只显示有响应的,重试次数。
+description: "dnsx: subdomain liveness, record enumeration, and SPF/DMARC email spoof surface assessment. Signals: subdomain, domain enumeration, bulk resolution, show responsive only, retry count."
+zh-signals: "dnsx: 子域存活+记录枚举、SPF/DMARC 邮件 spoof 面评估。信号:子域名,域名枚举,批量解析,只显示有响应的,重试次数。"
 ---
 
 # dnsx

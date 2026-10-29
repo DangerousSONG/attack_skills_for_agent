@@ -1,6 +1,7 @@
 ---
 name: gcat-gmail-c2
-description: gcat: Gmail 信道隐蔽 C2。信号:持久化,后门,交互式控制,指令集,切换 Gmail 附件。
+description: "gcat provides Gmail-channel covert C2. Signals: persistence, backdoor, interactive control, command set, Gmail attachment switching."
+zh-signals: "gcat: Gmail 信道隐蔽 C2。信号:持久化,后门,交互式控制,指令集,切换 Gmail 附件。"
 ---
 
 # gcat

@@ -1,6 +1,7 @@
 ---
 name: limelighter-forge
-description: Limelighter: 伪造数字签名过信誉查杀。信号:恶意软件开发,免杀开发,伪造签名,延时。
+description: "Limelighter: Forge digital signatures to evade reputation scanning. Signals: malware development, evasion development, forged signatures, delay."
+zh-signals: "Limelighter: 伪造数字签名过信誉查杀。信号:恶意软件开发,免杀开发,伪造签名,延时。"
 ---
 
 # Limelighter

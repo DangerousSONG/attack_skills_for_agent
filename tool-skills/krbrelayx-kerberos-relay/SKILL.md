@@ -1,6 +1,7 @@
 ---
 name: krbrelayx-kerberos-relay
-description: krbrelayx: Kerberos与票据攻击场景。信号:kerberos,票据攻击,Kerberos 中继,目标 SPN,起恶意 SMB。
+description: "krbrelayx executes Kerberos relay and ticket attack scenarios. Signals: Kerberos, ticket attack, Kerberos relay, target SPN, malicious SMB."
+zh-signals: "krbrelayx: Kerberos与票据攻击场景。信号:kerberos,票据攻击,Kerberos 中继,目标 SPN,起恶意 SMB。"
 ---
 
 # krbrelayx

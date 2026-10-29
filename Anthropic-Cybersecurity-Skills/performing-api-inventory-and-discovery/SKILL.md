@@ -1,6 +1,7 @@
 ---
 name: performing-api-inventory-and-discovery
-description: "Performs API inventory and discovery to identify all API endpoints in 信号:api攻击,接口测试,graphql。"
+description: "Perform API inventory and discovery to identify all API endpoints. Signals: api attack, interface testing, graphql."
+zh-signals: "Performs API inventory and discovery to identify all API endpoints in 信号:api攻击,接口测试,graphql。"
 when-to-use: 'Performs API inventory and discovery to identify all API endpoints in
   an organization''s environment including documented, undocumented, shadow, zombie,
   and deprecated APIs. The tester uses passive traffic analysis, active scanning,

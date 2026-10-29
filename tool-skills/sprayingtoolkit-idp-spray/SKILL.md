@@ -1,6 +1,7 @@
 ---
 name: sprayingtoolkit-idp-spray
-description: SprayingToolkit: 内网 IdP 密码喷洒。信号:暴力破解,口令喷射,O365 喷洒,OWA 喷洒,生成时间窗喷洒计划。
+description: "SprayingToolkit performs internal IdP password spraying. Signals: brute force, password spraying, O365 spraying, OWA spraying, time-window spray plan generation"
+zh-signals: "SprayingToolkit: 内网 IdP 密码喷洒。信号:暴力破解,口令喷射,O365 喷洒,OWA 喷洒,生成时间窗喷洒计划。"
 ---
 
 # SprayingToolkit

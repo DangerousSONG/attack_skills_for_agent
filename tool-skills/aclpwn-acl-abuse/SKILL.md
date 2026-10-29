@@ -1,6 +1,7 @@
 ---
 name: aclpwn-acl-abuse
-description: aclpwn: ACL 滥用自动化。信号:ad攻击,域渗透,ACL 提权路径。
+description: "aclpwn: automates ACL abuse. Signals: ad attack, domain pentest, ACL privilege escalation path"
+zh-signals: "aclpwn: ACL 滥用自动化。信号:ad攻击,域渗透,ACL 提权路径。"
 ---
 
 # aclpwn

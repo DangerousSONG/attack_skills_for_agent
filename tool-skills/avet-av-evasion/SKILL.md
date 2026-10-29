@@ -1,6 +1,7 @@
 ---
 name: avet-av-evasion
-description: AVET: 杀软环境载荷投递。信号:恶意软件开发,免杀开发,交互式载荷构建,编码选择,列出编码器。
+description: "AVET: delivers payloads in antivirus environments. Signals: malware development, evasion development, interactive payload building, encoding selection, list encoders"
+zh-signals: "AVET: 杀软环境载荷投递。信号:恶意软件开发,免杀开发,交互式载荷构建,编码选择,列出编码器。"
 ---
 
 # AVET

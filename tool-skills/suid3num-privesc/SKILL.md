@@ -1,6 +1,7 @@
 ---
 name: suid3num-privesc
-description: suid3num: SUID 提权路径。信号:linux提权,suid,SUID 枚举,exploit,列表。
+description: "suid3num finds SUID privilege escalation paths. Signals: Linux privilege escalation, suid, SUID enumeration, exploit, list"
+zh-signals: "suid3num: SUID 提权路径。信号:linux提权,suid,SUID 枚举,exploit,列表。"
 ---
 
 # suid3num

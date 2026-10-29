@@ -1,6 +1,7 @@
 ---
 name: novahot-web-shell
-description: novahot: 获 WebShell 后统一操作。信号:webshell,rce,上传 WebShell,下载文件,执行命令。
+description: "Unified post-WebShell operations. Signals: webshell, rce, upload WebShell, download files, execute commands."
+zh-signals: "novahot: 获 WebShell 后统一操作。信号:webshell,rce,上传 WebShell,下载文件,执行命令。"
 ---
 
 # novahot

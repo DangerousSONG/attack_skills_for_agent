@@ -1,6 +1,7 @@
 ---
 name: jira-scan-cve
-description: jira_scan: Jira 漏洞批量核查。信号:web漏洞,注入,检测匿名访问,静默。
+description: "jira_scan batch-checks Jira vulnerabilities. Signals: web vulnerability, injection, detect anonymous access, silent mode."
+zh-signals: "jira_scan: Jira 漏洞批量核查。信号:web漏洞,注入,检测匿名访问,静默。"
 ---
 
 # jira_scan

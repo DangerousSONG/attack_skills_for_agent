@@ -1,6 +1,7 @@
 ---
 name: crosslinkedin-osint
-description: CrossLinked: LinkedIn 员工字典。信号:邮箱收集,员工信息,格式。
+description: "CrossLinked: Builds employee dictionaries from LinkedIn. Signals: email harvesting, employee information, format."
+zh-signals: "CrossLinked: LinkedIn 员工字典。信号:邮箱收集,员工信息,格式。"
 ---
 
 # CrossLinked

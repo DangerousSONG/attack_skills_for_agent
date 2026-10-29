@@ -1,6 +1,7 @@
 ---
 name: email2phonenumber
-description: email2phonenumber: 邮箱反查手机号。信号:邮箱收集,员工信息,邮箱→手机号,深度模式。
+description: "email2phonenumber: reverse lookup phone number from email. Signals: email collection, employee information, email to phone number, deep mode."
+zh-signals: "email2phonenumber: 邮箱反查手机号。信号:邮箱收集,员工信息,邮箱→手机号,深度模式。"
 ---
 
 # email2phonenumber

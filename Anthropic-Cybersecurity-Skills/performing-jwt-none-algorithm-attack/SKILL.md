@@ -1,6 +1,7 @@
 ---
 name: performing-jwt-none-algorithm-attack
-description: "Execute and test the JWT none algorithm attack, crafting tokens with 信号:api攻击,接口测试,graphql。"
+description: "Execute and test the JWT none algorithm attack by crafting tokens. Signals: api attack, interface testing, graphql."
+zh-signals: "Execute and test the JWT none algorithm attack, crafting tokens with 信号:api攻击,接口测试,graphql。"
 when-to-use: Execute and test the JWT none algorithm attack, crafting tokens with
   the alg header set to none using PyJWT and an intercepting proxy (Burp Suite/mitmproxy)
   to bypass signature verification and forge arbitrary claims. Use during authorized

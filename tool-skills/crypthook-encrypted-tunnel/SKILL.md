@@ -1,6 +1,7 @@
 ---
 name: crypthook-encrypted-tunnel
-description: CryptHook: 加密隧道转发任意 TCP。信号:内网穿透,隧道,加密监听,加密连接,结合使用。
+description: "CryptHook: Forwards arbitrary TCP traffic through encrypted tunnels. Signals: internal network tunneling, tunnel, encrypted listening, encrypted connection, combined use."
+zh-signals: "CryptHook: 加密隧道转发任意 TCP。信号:内网穿透,隧道,加密监听,加密连接,结合使用。"
 ---
 
 # CryptHook

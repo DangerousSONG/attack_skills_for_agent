@@ -1,6 +1,7 @@
 ---
 name: ghunt-google-osint
-description: GHunt: 邮箱反查 Google 足迹。信号:邮箱收集,员工信息,GAIA ID 反查,地图评价账号关联。
+description: "GHunt reverse-searches Google footprints from email. Signals: email collection, employee information, GAIA ID lookup, map review account correlation."
+zh-signals: "GHunt: 邮箱反查 Google 足迹。信号:邮箱收集,员工信息,GAIA ID 反查,地图评价账号关联。"
 ---
 
 # GHunt

@@ -1,6 +1,7 @@
 ---
 name: xerosploit-mitm
-description: xerosploit: 局域网中间人全家桶。信号:中间人,mitm,交互 MITM 框架,目标发现,中间人模块。
+description: "xerosploit: LAN man-in-the-middle toolkit. Signals: man-in-the-middle, MITM, interactive MITM framework, target discovery, MITM modules."
+zh-signals: "xerosploit: 局域网中间人全家桶。信号:中间人,mitm,交互 MITM 框架,目标发现,中间人模块。"
 ---
 
 # xerosploit

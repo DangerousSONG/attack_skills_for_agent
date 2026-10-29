@@ -1,6 +1,7 @@
 ---
 name: s3enum-bucket-scan
-description: s3enum: S3 桶发现(错配公开)。信号:攻击面,云资产,S3 bucket 枚举,常用后缀,并发。
+description: "s3enum: Discovers misconfigured public S3 buckets. Signals: attack surface, cloud assets, S3 bucket enumeration, common suffixes, concurrency."
+zh-signals: "s3enum: S3 桶发现(错配公开)。信号:攻击面,云资产,S3 bucket 枚举,常用后缀,并发。"
 ---
 
 # s3enum

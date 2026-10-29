@@ -1,6 +1,7 @@
 ---
 name: testing-websocket-api-security
-description: "Tests WebSocket API implementations for missing upgrade-handshake authentication 信号:web漏洞,注入,sql注入。"
+description: "Tests WebSocket APIs for missing upgrade-handshake authentication. Signals: web vulnerability, injection, SQL injection."
+zh-signals: "Tests WebSocket API implementations for missing upgrade-handshake authentication 信号:web漏洞,注入,sql注入。"
 when-to-use: Tests WebSocket API implementations for missing upgrade-handshake authentication,
   Cross-Site WebSocket Hijacking (CSWSH), message injection, insufficient input validation,
   message-flooding DoS, and information leakage, using Burp Suite's WebSocket interception

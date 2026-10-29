@@ -1,6 +1,7 @@
 ---
 name: adversarial-ml
-description: "对抗机器学习指南:对抗样本、数据投毒、模型后门、规避攻击的资源组织。信号:对抗样本,模型后门,数据投毒,规避攻击,ai安全。"
+description: "Organizes adversarial machine learning resources: adversarial examples, data poisoning, model backdoors, evasion. Signals: adversarial examples, model backdoors, data poisoning, evasion, AI security."
+zh-signals: "对抗机器学习指南:对抗样本、数据投毒、模型后门、规避攻击的资源组织。信号:对抗样本,模型后门,数据投毒,规避攻击,ai安全。"
 when-to-use: "Guide for adversarial machine learning: adversarial examples, data poisoning, model backdoors, and evasion attacks."
 ---
 

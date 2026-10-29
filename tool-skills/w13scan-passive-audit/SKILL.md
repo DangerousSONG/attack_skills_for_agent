@@ -1,6 +1,7 @@
 ---
 name: w13scan-passive-audit
-description: w13scan: 被动流量漏洞审计。信号:web漏洞,注入,被动扫描,代理模式抓流量,代理端口。
+description: "w13scan: Passive traffic vulnerability auditing. Signals: web vulnerabilities, injection, passive scan, proxy mode traffic capture, proxy port."
+zh-signals: "w13scan: 被动流量漏洞审计。信号:web漏洞,注入,被动扫描,代理模式抓流量,代理端口。"
 ---
 
 # w13scan

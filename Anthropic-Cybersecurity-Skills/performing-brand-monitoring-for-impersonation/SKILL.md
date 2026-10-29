@@ -1,6 +1,7 @@
 ---
 name: performing-brand-monitoring-for-impersonation
-description: "Monitor for brand impersonation attacks across domains, social media 信号:ad攻击,域渗透,域控。"
+description: "Monitor for brand impersonation attacks across domains and social media. Signals: ad attack, domain penetration, domain controller."
+zh-signals: "Monitor for brand impersonation attacks across domains, social media 信号:ad攻击,域渗透,域控。"
 when-to-use: Monitor for brand impersonation attacks across domains, social media,
   mobile apps, and dark web channels to detect phishing campaigns, fake sites, and
   unauthorized brand usage targeting your organization.

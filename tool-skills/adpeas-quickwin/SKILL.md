@@ -1,6 +1,7 @@
 ---
 name: adpeas-quickwin
-description: adPEAS: 低权限 AD 快速摸底。信号:ad攻击,域渗透,一键 AD 提权枚举,全模块,输出报告。
+description: "adPEAS: performs quick low-privilege AD assessment. Signals: ad attack, domain pentest, one-click AD privilege escalation enumeration, all modules, report output"
+zh-signals: "adPEAS: 低权限 AD 快速摸底。信号:ad攻击,域渗透,一键 AD 提权枚举,全模块,输出报告。"
 ---
 
 # adPEAS

@@ -1,6 +1,7 @@
 ---
 name: dnsenum-perl-recon
-description: dnsenum: DNS 全面枚举。信号:子域名,域名枚举,标准枚举,字典爆破,递归子域。
+description: "dnsenum: comprehensive DNS enumeration. Signals: subdomain, domain enumeration, standard enumeration, dictionary brute force, recursive subdomains."
+zh-signals: "dnsenum: DNS 全面枚举。信号:子域名,域名枚举,标准枚举,字典爆破,递归子域。"
 ---
 
 # dnsenum

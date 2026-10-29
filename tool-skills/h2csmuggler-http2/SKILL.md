@@ -1,6 +1,7 @@
 ---
 name: h2csmuggler-http2
-description: h2csmuggler: h2c 走私绕过前端 ACL。信号:web漏洞,注入,并发扫描多 URL。
+description: "h2csmuggler uses h2c request smuggling to bypass frontend ACLs. Signals: web vulnerabilities, injection, concurrent multi-URL scanning."
+zh-signals: "h2csmuggler: h2c 走私绕过前端 ACL。信号:web漏洞,注入,并发扫描多 URL。"
 ---
 
 # h2csmuggler

@@ -1,6 +1,7 @@
 ---
 name: barq-azure-ad
-description: barq: Azure AD 密码喷洒。信号:暴力破解,口令喷射,Azure AD 喷洒,条件访问探测。
+description: "barq: sprays Azure AD passwords. Signals: brute force, password spraying, Azure AD spraying, conditional access probing"
+zh-signals: "barq: Azure AD 密码喷洒。信号:暴力破解,口令喷射,Azure AD 喷洒,条件访问探测。"
 ---
 
 # barq

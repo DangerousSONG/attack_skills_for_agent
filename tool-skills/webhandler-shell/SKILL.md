@@ -1,6 +1,7 @@
 ---
 name: webhandler-shell
-description: webhandler: WebShell 管理。信号:web漏洞,注入,WebShell 客户端,单命令,交互。
+description: "webhandler: WebShell management. Signals: web vulnerabilities, injection, WebShell client, single command, interactive."
+zh-signals: "webhandler: WebShell 管理。信号:web漏洞,注入,WebShell 客户端,单命令,交互。"
 ---
 
 # webhandler

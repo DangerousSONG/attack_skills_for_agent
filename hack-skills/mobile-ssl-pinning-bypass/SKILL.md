@@ -1,6 +1,7 @@
 ---
 name: mobile-ssl-pinning-bypass
-description: "Mobile SSL pinning bypass playbook 信号:移动端,android攻击,ios攻击。"
+description: "Mobile SSL pinning bypass playbook. Signals: mobile, Android attacks, iOS attacks."
+zh-signals: "Mobile SSL pinning bypass playbook 信号:移动端,android攻击,ios攻击。"
 when-to-use: >-
   Mobile SSL pinning bypass playbook. Use when intercepting HTTPS traffic from mobile applications that implement certificate pinning, public key pinning, or SPKI hash pinning on Android and iOS, including React Native, Flutter, and Xamarin frameworks.
 ---

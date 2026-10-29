@@ -1,6 +1,7 @@
 ---
 name: recon-osint
-description: "外部攻击面与 OSINT:子域枚举、攻击面测绘(httpx/katana/JS 秘密)、子域接管、多云/Azure 租户侦察、GitHub 秘密 dork、泄露与窃密凭据信号:osint,子域枚举。"
+description: "Covers external attack surface and OSINT: subdomain enumeration, attack surface mapping (httpx/katana/JS secrets), subdomain takeover, multi-cloud/Azure tenant recon, GitHub secret dorks, and leaked/infostealer credentials. Signals: osint, subdomain enumeration."
+zh-signals: "外部攻击面与 OSINT:子域枚举、攻击面测绘(httpx/katana/JS 秘密)、子域接管、多云/Azure 租户侦察、GitHub 秘密 dork、泄露与窃密凭据信号:osint,子域枚举。"
 when-to-use: Use when mapping a target's external attack surface or gathering OSINT — subdomain enumeration, attack-surface mapping (httpx/katana/JS secrets), subdomain takeover, multi-cloud/Azure tenant recon, Gi
 metadata:
   type: offensive

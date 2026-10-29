@@ -1,6 +1,7 @@
 ---
 name: beroot-privesc-check
-description: BeRoot: 双平台本地提权体检。信号:windows提权,uac绕过,Linux 提权全检测,指定模块,写可执行漏洞利用建议。
+description: "BeRoot: checks local privilege escalation on Windows and Linux. Signals: windows privilege escalation, UAC bypass, Linux privilege escalation full checks, specify modules, actionable exploitation advice"
+zh-signals: "BeRoot: 双平台本地提权体检。信号:windows提权,uac绕过,Linux 提权全检测,指定模块,写可执行漏洞利用建议。"
 ---
 
 # BeRoot

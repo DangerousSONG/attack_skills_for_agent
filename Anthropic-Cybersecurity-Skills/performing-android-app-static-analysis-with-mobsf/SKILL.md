@@ -1,6 +1,7 @@
 ---
 name: performing-android-app-static-analysis-with-mobsf
-description: "Performs automated static analysis of Android applications using Mobile 信号:移动端,android攻击,ios攻击。"
+description: "Perform automated static analysis of Android applications using mobile security tooling. Signals: mobile, android attack, ios attack."
+zh-signals: "Performs automated static analysis of Android applications using Mobile 信号:移动端,android攻击,ios攻击。"
 when-to-use: 'Performs automated static analysis of Android applications using Mobile
   Security Framework (MobSF) to identify hardcoded secrets, insecure permissions,
   vulnerable components, weak cryptography, and code-level security flaws without

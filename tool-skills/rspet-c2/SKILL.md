@@ -1,6 +1,7 @@
 ---
 name: rspet-c2
-description: RSPET: Python 远控。信号:c2,命令控制,服务端,客户端,加密。
+description: "RSPET: Python-based remote control. Signals: C2, command and control, server, client, encryption."
+zh-signals: "RSPET: Python 远控。信号:c2,命令控制,服务端,客户端,加密。"
 ---
 
 # RSPET

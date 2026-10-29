@@ -1,6 +1,7 @@
 ---
 name: bbot-automated-recon
-description: BBOT: 全域资产测绘一站式、被动前置→主动补漏。信号:资产测绘,子域名,子域名枚举 preset,纯被动(不触目标)。
+description: "BBOT: performs one-stop full asset mapping, passive first then active gap filling. Signals: asset mapping, subdomain, subdomain enumeration preset, passive-only no target contact"
+zh-signals: "BBOT: 全域资产测绘一站式、被动前置→主动补漏。信号:资产测绘,子域名,子域名枚举 preset,纯被动(不触目标)。"
 ---
 
 # BBOT

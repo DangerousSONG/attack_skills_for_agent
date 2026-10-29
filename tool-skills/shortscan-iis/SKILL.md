@@ -1,6 +1,7 @@
 ---
 name: shortscan-iis
-description: shortscan: IIS 短文件名信息泄露。信号:端口扫描,nmap,IIS 短文件名扫描,仅扫描。
+description: "shortscan: IIS short filename disclosure. Signals: port scan, nmap, IIS short filename scan, scan only."
+zh-signals: "shortscan: IIS 短文件名信息泄露。信号:端口扫描,nmap,IIS 短文件名扫描,仅扫描。"
 ---
 
 # shortscan

@@ -1,6 +1,7 @@
 ---
 name: shocker-docker-escape
-description: shocker: Docker 守护进程滥用。信号:云命令执行,容器逃逸。
+description: "shocker: Docker daemon abuse. Signals: cloud command execution, container escape."
+zh-signals: "shocker: Docker 守护进程滥用。信号:云命令执行,容器逃逸。"
 ---
 
 # shocker
