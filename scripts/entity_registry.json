@@ -1,0 +1,1318 @@
+{
+ "version": "v0",
+ "generated_from": "skill corpus internal mining (eval isolated)",
+ "counts": {
+  "cve": 36,
+  "tool_alias": 22,
+  "categories": 47
+ },
+ "entities": [
+  {
+   "type": "cve",
+   "value": "CVE-2014-4210",
+   "aliases": [],
+   "skills": [
+    "ssrf-server-side-request-forgery"
+   ],
+   "provenance": "regex:SKILL.md",
+   "confidence": 1.0
+  },
+  {
+   "type": "cve",
+   "value": "CVE-2014-6271",
+   "aliases": [],
+   "skills": [
+    "sipshock-sip-shock"
+   ],
+   "provenance": "regex:SKILL.md",
+   "confidence": 1.0
+  },
+  {
+   "type": "cve",
+   "value": "CVE-2016-0792",
+   "aliases": [],
+   "skills": [
+    "getsploit-exploit-search"
+   ],
+   "provenance": "regex:SKILL.md",
+   "confidence": 1.0
+  },
+  {
+   "type": "cve",
+   "value": "CVE-2017-12615",
+   "aliases": [],
+   "skills": [
+    "upload-insecure-files"
+   ],
+   "provenance": "regex:SKILL.md",
+   "confidence": 1.0
+  },
+  {
+   "type": "cve",
+   "value": "CVE-2017-12629",
+   "aliases": [],
+   "skills": [
+    "xxe-xml-external-entity"
+   ],
+   "provenance": "regex:SKILL.md",
+   "confidence": 1.0
+  },
+  {
+   "type": "cve",
+   "value": "CVE-2017-12794",
+   "aliases": [],
+   "skills": [
+    "xss-cross-site-scripting"
+   ],
+   "provenance": "regex:SKILL.md",
+   "confidence": 1.0
+  },
+  {
+   "type": "cve",
+   "value": "CVE-2017-15715",
+   "aliases": [],
+   "skills": [
+    "upload-insecure-files"
+   ],
+   "provenance": "regex:SKILL.md",
+   "confidence": 1.0
+  },
+  {
+   "type": "cve",
+   "value": "CVE-2017-5638",
+   "aliases": [],
+   "skills": [
+    "ssti-server-side-template-injection"
+   ],
+   "provenance": "regex:SKILL.md",
+   "confidence": 1.0
+  },
+  {
+   "type": "cve",
+   "value": "CVE-2018-2894",
+   "aliases": [],
+   "skills": [
+    "upload-insecure-files"
+   ],
+   "provenance": "regex:SKILL.md",
+   "confidence": 1.0
+  },
+  {
+   "type": "cve",
+   "value": "CVE-2018-7600",
+   "aliases": [],
+   "skills": [
+    "drupwn-drupal-exploit"
+   ],
+   "provenance": "regex:SKILL.md",
+   "confidence": 1.0
+  },
+  {
+   "type": "cve",
+   "value": "CVE-2019-11581",
+   "aliases": [],
+   "skills": [
+    "jira-scan-cve",
+    "ssti-server-side-template-injection"
+   ],
+   "provenance": "regex:SKILL.md",
+   "confidence": 1.0
+  },
+  {
+   "type": "cve",
+   "value": "CVE-2019-5736",
+   "aliases": [],
+   "skills": [
+    "escaping-containers-to-host"
+   ],
+   "provenance": "regex:SKILL.md",
+   "confidence": 1.0
+  },
+  {
+   "type": "cve",
+   "value": "CVE-2020-0932",
+   "aliases": [],
+   "skills": [
+    "richsploit-richdesk"
+   ],
+   "provenance": "regex:SKILL.md",
+   "confidence": 1.0
+  },
+  {
+   "type": "cve",
+   "value": "CVE-2020-1472",
+   "aliases": [],
+   "skills": [
+    "exploiting-zerologon-vulnerability-cve-2020-1472",
+    "scansploit-exploit-scan"
+   ],
+   "provenance": "regex:SKILL.md",
+   "confidence": 1.0
+  },
+  {
+   "type": "cve",
+   "value": "CVE-2020-17518",
+   "aliases": [],
+   "skills": [
+    "upload-insecure-files"
+   ],
+   "provenance": "regex:SKILL.md",
+   "confidence": 1.0
+  },
+  {
+   "type": "cve",
+   "value": "CVE-2020-8555",
+   "aliases": [],
+   "skills": [
+    "ssrf-server-side-request-forgery"
+   ],
+   "provenance": "regex:SKILL.md",
+   "confidence": 1.0
+  },
+  {
+   "type": "cve",
+   "value": "CVE-2020-8562",
+   "aliases": [],
+   "skills": [
+    "ssrf-server-side-request-forgery"
+   ],
+   "provenance": "regex:SKILL.md",
+   "confidence": 1.0
+  },
+  {
+   "type": "cve",
+   "value": "CVE-2021-26084",
+   "aliases": [],
+   "skills": [
+    "ssti-server-side-template-injection"
+   ],
+   "provenance": "regex:SKILL.md",
+   "confidence": 1.0
+  },
+  {
+   "type": "cve",
+   "value": "CVE-2021-3156",
+   "aliases": [],
+   "skills": [
+    "offensive-linux-privesc"
+   ],
+   "provenance": "regex:SKILL.md",
+   "confidence": 1.0
+  },
+  {
+   "type": "cve",
+   "value": "CVE-2021-41773",
+   "aliases": [],
+   "skills": [
+    "exploitdb-search"
+   ],
+   "provenance": "regex:SKILL.md",
+   "confidence": 1.0
+  },
+  {
+   "type": "cve",
+   "value": "CVE-2021-42278",
+   "aliases": [],
+   "skills": [
+    "exploiting-nopac-cve-2021-42278-42287"
+   ],
+   "provenance": "regex:SKILL.md",
+   "confidence": 1.0
+  },
+  {
+   "type": "cve",
+   "value": "CVE-2021-42287",
+   "aliases": [],
+   "skills": [
+    "exploiting-nopac-cve-2021-42278-42287"
+   ],
+   "provenance": "regex:SKILL.md",
+   "confidence": 1.0
+  },
+  {
+   "type": "cve",
+   "value": "CVE-2021-44228",
+   "aliases": [],
+   "skills": [
+    "jndi-injection",
+    "log4j-scan-cve",
+    "logmepwn-log4j-mass",
+    "rext-exploit-db"
+   ],
+   "provenance": "regex:SKILL.md",
+   "confidence": 1.0
+  },
+  {
+   "type": "cve",
+   "value": "CVE-2022-22947",
+   "aliases": [],
+   "skills": [
+    "ssti-server-side-template-injection"
+   ],
+   "provenance": "regex:SKILL.md",
+   "confidence": 1.0
+  },
+  {
+   "type": "cve",
+   "value": "CVE-2023-22515",
+   "aliases": [],
+   "skills": [
+    "pompem-exploit-finder"
+   ],
+   "provenance": "regex:SKILL.md",
+   "confidence": 1.0
+  },
+  {
+   "type": "cve",
+   "value": "CVE-2023-27350",
+   "aliases": [],
+   "skills": [
+    "exploitdb-search"
+   ],
+   "provenance": "regex:SKILL.md",
+   "confidence": 1.0
+  },
+  {
+   "type": "cve",
+   "value": "CVE-2024-1086",
+   "aliases": [],
+   "skills": [
+    "privesc-linux"
+   ],
+   "provenance": "regex:SKILL.md",
+   "confidence": 1.0
+  },
+  {
+   "type": "cve",
+   "value": "CVE-2024-21626",
+   "aliases": [],
+   "skills": [
+    "escaping-containers-to-host"
+   ],
+   "provenance": "regex:SKILL.md",
+   "confidence": 1.0
+  },
+  {
+   "type": "cve",
+   "value": "CVE-2024-21762",
+   "aliases": [],
+   "skills": [
+    "getsploit-exploit-search"
+   ],
+   "provenance": "regex:SKILL.md",
+   "confidence": 1.0
+  },
+  {
+   "type": "cve",
+   "value": "CVE-2025-24983",
+   "aliases": [],
+   "skills": [
+    "windows-boundaries"
+   ],
+   "provenance": "regex:SKILL.md",
+   "confidence": 1.0
+  },
+  {
+   "type": "cve",
+   "value": "CVE-2025-32462",
+   "aliases": [],
+   "skills": [
+    "privesc-linux"
+   ],
+   "provenance": "regex:SKILL.md",
+   "confidence": 1.0
+  },
+  {
+   "type": "cve",
+   "value": "CVE-2025-33073",
+   "aliases": [],
+   "skills": [
+    "active-directory-attack",
+    "network-attack"
+   ],
+   "provenance": "regex:SKILL.md",
+   "confidence": 1.0
+  },
+  {
+   "type": "cve",
+   "value": "CVE-2025-41242",
+   "aliases": [],
+   "skills": [
+    "path-traversal-lfi"
+   ],
+   "provenance": "regex:SKILL.md",
+   "confidence": 1.0
+  },
+  {
+   "type": "cve",
+   "value": "CVE-2025-54136",
+   "aliases": [],
+   "skills": [
+    "ai-security"
+   ],
+   "provenance": "regex:SKILL.md",
+   "confidence": 1.0
+  },
+  {
+   "type": "cve",
+   "value": "CVE-2025-57733",
+   "aliases": [],
+   "skills": [
+    "crlf-injection"
+   ],
+   "provenance": "regex:SKILL.md",
+   "confidence": 1.0
+  },
+  {
+   "type": "cve",
+   "value": "CVE-2026-21933",
+   "aliases": [],
+   "skills": [
+    "crlf-injection"
+   ],
+   "provenance": "regex:SKILL.md",
+   "confidence": 1.0
+  },
+  {
+   "type": "tool",
+   "value": "aclpwn-acl-abuse",
+   "aliases": [
+    "aclpwn.py"
+   ],
+   "skills": [
+    "aclpwn-acl-abuse"
+   ],
+   "cat": "C30",
+   "provenance": "frontmatter+上游仓库",
+   "confidence": 0.9
+  },
+  {
+   "type": "tool",
+   "value": "ad-miner-graph",
+   "aliases": [
+    "AD_Miner"
+   ],
+   "skills": [
+    "ad-miner-graph"
+   ],
+   "cat": "C30",
+   "provenance": "frontmatter+上游仓库",
+   "confidence": 0.9
+  },
+  {
+   "type": "tool",
+   "value": "adaptix-c2-framework",
+   "aliases": [
+    "AdaptixC2"
+   ],
+   "skills": [
+    "adaptix-c2-framework"
+   ],
+   "cat": "C35",
+   "provenance": "frontmatter+上游仓库",
+   "confidence": 0.9
+  },
+  {
+   "type": "tool",
+   "value": "angry-ip-scan",
+   "aliases": [
+    "ipscan"
+   ],
+   "skills": [
+    "angry-ip-scan"
+   ],
+   "cat": "C42",
+   "provenance": "frontmatter+上游仓库",
+   "confidence": 0.9
+  },
+  {
+   "type": "tool",
+   "value": "atscan-web-scan",
+   "aliases": [
+    "ATSCAN-V3.1"
+   ],
+   "skills": [
+    "atscan-web-scan"
+   ],
+   "cat": "C42",
+   "provenance": "frontmatter+上游仓库",
+   "confidence": 0.9
+  },
+  {
+   "type": "tool",
+   "value": "finduncommonshares-smb-hunt",
+   "aliases": [
+    "pyFindUncommonShares"
+   ],
+   "skills": [
+    "finduncommonshares-smb-hunt"
+   ],
+   "cat": "C29",
+   "provenance": "frontmatter+上游仓库",
+   "confidence": 0.9
+  },
+  {
+   "type": "tool",
+   "value": "getsploit-exploit-search",
+   "aliases": [
+    "vulners-getsploit"
+   ],
+   "skills": [
+    "getsploit-exploit-search"
+   ],
+   "cat": "C06",
+   "provenance": "frontmatter+上游仓库",
+   "confidence": 0.9
+  },
+  {
+   "type": "tool",
+   "value": "hash-extender-length-attack",
+   "aliases": [
+    "hash_extender"
+   ],
+   "skills": [
+    "hash-extender-length-attack"
+   ],
+   "cat": "C49",
+   "provenance": "frontmatter+上游仓库",
+   "confidence": 0.9
+  },
+  {
+   "type": "tool",
+   "value": "hydra-service-brute",
+   "aliases": [
+    "thc-hydra"
+   ],
+   "skills": [
+    "hydra-service-brute"
+   ],
+   "cat": "C28",
+   "provenance": "frontmatter+上游仓库",
+   "confidence": 0.9
+  },
+  {
+   "type": "tool",
+   "value": "jira-scan-cve",
+   "aliases": [
+    "jira_scan"
+   ],
+   "skills": [
+    "jira-scan-cve"
+   ],
+   "cat": "C09",
+   "provenance": "frontmatter+上游仓库",
+   "confidence": 0.9
+  },
+  {
+   "type": "tool",
+   "value": "jwt-cracker-c",
+   "aliases": [
+    "c-jwt-cracker"
+   ],
+   "skills": [
+    "jwt-cracker-c"
+   ],
+   "cat": "C10",
+   "provenance": "frontmatter+上游仓库",
+   "confidence": 0.9
+  },
+  {
+   "type": "tool",
+   "value": "jwt-tool-token",
+   "aliases": [
+    "jwt_tool"
+   ],
+   "skills": [
+    "jwt-tool-token"
+   ],
+   "cat": "C10",
+   "provenance": "frontmatter+上游仓库",
+   "confidence": 0.9
+  },
+  {
+   "type": "tool",
+   "value": "m3-gen-msbuild",
+   "aliases": [
+    "MaliciousMacroMSBuild"
+   ],
+   "skills": [
+    "m3-gen-msbuild"
+   ],
+   "cat": "C23",
+   "provenance": "frontmatter+上游仓库",
+   "confidence": 0.9
+  },
+  {
+   "type": "tool",
+   "value": "ntlm-challenger-check",
+   "aliases": [
+    "ntlm_challenger"
+   ],
+   "skills": [
+    "ntlm-challenger-check"
+   ],
+   "cat": "C30",
+   "provenance": "frontmatter+上游仓库",
+   "confidence": 0.9
+  },
+  {
+   "type": "tool",
+   "value": "punk-c2",
+   "aliases": [
+    "punk.py"
+   ],
+   "skills": [
+    "punk-c2"
+   ],
+   "cat": "C35",
+   "provenance": "frontmatter+上游仓库",
+   "confidence": 0.9
+  },
+  {
+   "type": "tool",
+   "value": "red-hawk-recon",
+   "aliases": [
+    "RED_HAWK"
+   ],
+   "skills": [
+    "red-hawk-recon"
+   ],
+   "cat": "C01",
+   "provenance": "frontmatter+上游仓库",
+   "confidence": 0.9
+  },
+  {
+   "type": "tool",
+   "value": "secretfinder-js-secrets",
+   "aliases": [
+    "secrets-patterns-db"
+   ],
+   "skills": [
+    "secretfinder-js-secrets"
+   ],
+   "cat": "C10",
+   "provenance": "frontmatter+上游仓库",
+   "confidence": 0.9
+  },
+  {
+   "type": "tool",
+   "value": "torcrawl-darkweb-crawl",
+   "aliases": [
+    "TorCrawl.py"
+   ],
+   "skills": [
+    "torcrawl-darkweb-crawl"
+   ],
+   "cat": "C09",
+   "provenance": "frontmatter+上游仓库",
+   "confidence": 0.9
+  },
+  {
+   "type": "tool",
+   "value": "v3n0m-sql-xss",
+   "aliases": [
+    "V3n0M-Scanner"
+   ],
+   "skills": [
+    "v3n0m-sql-xss"
+   ],
+   "cat": "C09",
+   "provenance": "frontmatter+上游仓库",
+   "confidence": 0.9
+  },
+  {
+   "type": "tool",
+   "value": "wcvs-web-cache-vuln",
+   "aliases": [
+    "Web-Cache-Vulnerability-Scanner"
+   ],
+   "skills": [
+    "wcvs-web-cache-vuln"
+   ],
+   "cat": "C09",
+   "provenance": "frontmatter+上游仓库",
+   "confidence": 0.9
+  },
+  {
+   "type": "tool",
+   "value": "weevely-webshell",
+   "aliases": [
+    "weevely3"
+   ],
+   "skills": [
+    "weevely-webshell"
+   ],
+   "cat": "C07",
+   "provenance": "frontmatter+上游仓库",
+   "confidence": 0.9
+  },
+  {
+   "type": "tool",
+   "value": "zsteg-png-stego",
+   "aliases": [
+    "zstest"
+   ],
+   "skills": [
+    "zsteg-png-stego"
+   ],
+   "cat": "C38",
+   "provenance": "frontmatter+上游仓库",
+   "confidence": 0.9
+  }
+ ],
+ "category_routes": {
+  "C01": [
+   "alterx-dsl-subdomains",
+   "amass-attack-surface",
+   "aquatone-visual-recon",
+   "assetfinder-quick-subs",
+   "bbot-automated-recon",
+   "ccrawldns-commoncrawl",
+   "certgraph-ct",
+   "dcrawl-fast-crawl",
+   "dnsmap-subdomain",
+   "dnssearch-enum",
+   "domained-multi-enum",
+   "favfreak-favicon-hash",
+   "fierce-dns-recon",
+   "finalrecon-allinone",
+   "findomain-fast-enum",
+   "gasmask-osint-all",
+   "gau-url-history",
+   "gitem-github-org",
+   "gitrecon-github-osint",
+   "goohak-dorks",
+   "gowitness-screenshot",
+   "hakrawler-fast-crawler",
+   "ja3-fingerprint",
+   "kiterunner-api-routes",
+   "kscan-asset-mapping",
+   "metafinder-docs",
+   "nullinux-smb-enum",
+   "pagodo-dorks",
+   "photon-osint-crawler",
+   "punter-multi-source",
+   "raccoon-offensive-recon",
+   "red-hawk-recon",
+   "shuffledns-brute",
+   "spartan-sharepoint",
+   "sublist3r-passive-subdomains",
+   "subscraper-subdomains",
+   "syborg-recursive-sub",
+   "tls-prober-scan",
+   "wafw00f-waf-detect",
+   "waybackpack-archive",
+   "waybackurls-history",
+   "waymore-archive-urls",
+   "webanalyze-tech-fingerprint",
+   "whatweb-fingerprint",
+   "whoxyrm-reverse-whois",
+   "xray-recon-map",
+   "zdns-lookup",
+   "zgrab2-banner"
+  ],
+  "C02": [
+   "aiodnsbrute-dns",
+   "altdns-permutation",
+   "ct-exposer-cert-sub",
+   "dnscan-subdomain-scan",
+   "dnsenum-perl-recon",
+   "dnsgrep-filter",
+   "dnsprobe-resolve",
+   "dnsrecon-dns-enum",
+   "dnsvalidator-resolvers",
+   "dnsx-dns-toolkit",
+   "knockpy-subdomain",
+   "subbrute-dns-spider",
+   "subjack-takeover",
+   "sublert-subdomain-mon",
+   "subzy-takeover-check"
+  ],
+  "C03": [
+   "bridgekeeper-username-mangle",
+   "cr3dov3r-leak-lookup",
+   "crosslinkedin-osint",
+   "datasploit-osint-auto",
+   "email2phonenumber",
+   "ghunt-google-osint",
+   "h8mail-breach-hunting",
+   "holehe-email-check",
+   "linkedin2username",
+   "machinae-osint",
+   "maigret-username-osint",
+   "maryam-osint-framework",
+   "metabigor-company-osint",
+   "nexfil-username",
+   "omnibus-osint",
+   "phoneinfoga-osint",
+   "protosint-email-osint",
+   "pwnedornot-breach",
+   "pymeta-metadata",
+   "simplyemail-email-harvest",
+   "slackpirate-slack",
+   "snscrape-social",
+   "socialscan-username",
+   "teamsuserenum-teams",
+   "trape-osint-track",
+   "twint-twitter"
+  ],
+  "C04": [
+   "asnmap-network-recon",
+   "fav-up-favicon-lookup",
+   "hakrevdns-reverse",
+   "hosthunter-sweep",
+   "pwndora-network-map",
+   "shodanhat-shodan-query",
+   "uncover-search-engine"
+  ],
+  "C05": [
+   "apkleaks-endpoint-scan",
+   "gh-dork-github",
+   "git-wild-hunt-secrets",
+   "gitgraber-secrets",
+   "gitmails-osint",
+   "graphinder-js-endpoints",
+   "s3enum-bucket-scan",
+   "sandcastle-s3",
+   "shhgit-secret-monitor",
+   "stardox-github",
+   "subover-takeover",
+   "svn-extractor-dump",
+   "trufflehog-secret-scan",
+   "vcsmap-vcs-hunt"
+  ],
+  "C06": [
+   "exploitdb-search",
+   "getsploit-exploit-search",
+   "log4j-scan-cve",
+   "logmepwn-log4j-mass",
+   "pompem-exploit-finder",
+   "vulmap-vuln-scan"
+  ],
+  "C07": [
+   "chankro-php-binary",
+   "gadgettojscript-deser",
+   "hoaxshell-powershell",
+   "imagejs-polyglot",
+   "jsonbee-jsonp-harvest",
+   "pixload-image-payload",
+   "ps1encode-ps",
+   "pwndrop-file-drop",
+   "shellnoob-shellcode",
+   "thefatrat-backdoor",
+   "weevely-webshell",
+   "zipexec-macros"
+  ],
+  "C08": [
+   "bad-pdf-phish",
+   "credsniper-phish",
+   "domainhunter-expired",
+   "ducktoolkit-usb",
+   "modlishka-reverse-proxy-phishing",
+   "phishery-basicauth",
+   "seeker-geo-phish",
+   "simpleemailspoofer",
+   "smtptester-spoof",
+   "socialfish-phish"
+  ],
+  "C09": [
+   "bbqsql-blind-sqlmap",
+   "bbscan-batch-scan",
+   "beef-browser-hook",
+   "brutemap-smart-brute",
+   "cent-poc-engine",
+   "cmseek-cms-detect",
+   "cmsscan-multi-cms",
+   "cmsscanner-wp-lib",
+   "commix-command-injection",
+   "corscanner-cors-misconfig",
+   "corstest-cors",
+   "corsy-cors-check",
+   "crlfuzz-crlf-injection",
+   "darkdump-darkweb",
+   "davtest-webdav",
+   "dawnscanner-ruby-audit",
+   "dirble-fast-dir",
+   "dontgo403-bypass",
+   "doork-dork-scan",
+   "dorknet-selenium",
+   "drupwn-drupal-exploit",
+   "fdsploit-lfi-rfi",
+   "filebuster-dav-buster",
+   "fuxploider-upload",
+   "ghauri-sqli-detect",
+   "golismero-scan-manage",
+   "goofuzz-google-dork",
+   "gopherus-ssrf",
+   "gospider-js-crawl",
+   "h2csmuggler-http2",
+   "h2t-security-headers",
+   "hsecscan-header-audit",
+   "htcap-crawl-audit",
+   "http2smugl-desync",
+   "identywaf-fingerprint",
+   "injectus-crlf-openredirect",
+   "jaeles-vuln-scan",
+   "jexboss-jboss-exploit",
+   "jira-scan-cve",
+   "joomlavs-joomla-scan",
+   "juumla-joomla-check",
+   "kadimus-lfi-rce",
+   "lfimap-lfi-autopwn",
+   "lfisuite-lfi",
+   "liffy-lfi",
+   "lorsrf-ssrf-hunt",
+   "meg-path-check",
+   "nosqli-mongo-injection",
+   "onionsearch-darkweb",
+   "opendoor-scanner",
+   "padbuster-padding-oracle",
+   "parampampam-param-hunt",
+   "pinkerton-js-secret",
+   "plecost-wordpress-finger",
+   "ppfuzz-prototype-pollution",
+   "ppmap-proto-pollution",
+   "rapidscan-multi-vuln",
+   "recollapse-mutation",
+   "scanqli-sqli-check",
+   "second-order-subdomain-takeover",
+   "see-surf-ssrf",
+   "serializationdumper-java",
+   "sitadel-web-finger",
+   "smuggler-desync",
+   "snallygaster-secret-scan",
+   "snare-honeypot-clone",
+   "sourcemapper-js-recover",
+   "sqlivulscan-google-sql",
+   "ssrf-sheriff-oob",
+   "ssrfmap-exploit",
+   "stews-websocket-scan",
+   "striker-recon",
+   "subjs-js-extract",
+   "tinja-ssti",
+   "torcrawl-darkweb-crawl",
+   "tplmap-ssti",
+   "traxss-xss",
+   "typo3scan",
+   "urlextractor-osint",
+   "v3n0m-sql-xss",
+   "vbscan-vbulletin",
+   "vulnx-cms-exploit",
+   "w13scan-passive-audit",
+   "wafninja-waf-bypass",
+   "wcvs-web-cache-vuln",
+   "webhandler-shell",
+   "webpwn3r-xss-scan",
+   "whichcdn-detect",
+   "wpbullet-wp-audit",
+   "wpintel-wp-intel",
+   "wpprobe-wp-version",
+   "xcat-xml-exploit",
+   "xspear-xss-param",
+   "xsrfprobe-csrf",
+   "xsscon-xss",
+   "xsstrike-xss",
+   "xxexploiter-xxe",
+   "yasuo-vuln-scan"
+  ],
+  "C10": [
+   "astra-api-scan",
+   "cariddi-crawler-secrets",
+   "clairvoyance-graphql-schema",
+   "crackql-graphql-batch",
+   "graphqlmap-graphql",
+   "graphw00f-graphql-finger",
+   "jwt-cracker-c",
+   "jwt-hack-token",
+   "jwt-tool-token",
+   "jwtcat-token-crack",
+   "myjwt-jwt-audit",
+   "schemathesis-fuzz",
+   "secretfinder-js-secrets",
+   "sj-swagger-audit"
+  ],
+  "C11": [
+   "cameradar-rtsp",
+   "sigploit-telecom"
+  ],
+  "C12": [
+   "dvcs-ripper-vcs",
+   "git-dumper-repo"
+  ],
+  "C13": [
+   "htshells-htaccess",
+   "novahot-web-shell",
+   "phpsploit-c2-console",
+   "platypus-shell-manager",
+   "pwncat-shell-manager",
+   "shellme-webshell",
+   "shellpop-shell-gen",
+   "villain-c2-shells"
+  ],
+  "C14": [
+   "botb-container-attack",
+   "deepce-container-escape",
+   "shocker-docker-escape"
+  ],
+  "C15": [
+   "dbd-dns-tunnel-shell",
+   "gcat-gmail-c2",
+   "portia-post-exploit",
+   "webacoo-encoded-shell"
+  ],
+  "C16": [
+   "linenum-privesc-scan",
+   "suid3num-privesc",
+   "uptux-linux-check",
+   "wildpwn-wildcard"
+  ],
+  "C17": [
+   "beroot-privesc-check",
+   "powershdll-nopowershell",
+   "seatbelt-host-survey",
+   "uacme-uac-bypass",
+   "wesng-windows-exploit",
+   "winpwn-windows-auto"
+  ],
+  "C18": [
+   "cloudlist-multi-cloud",
+   "microburst-azure",
+   "s3scanner-buckets"
+  ],
+  "C20": [
+   "mat-metadata-clean",
+   "moonwalk-anti-forensic",
+   "ropeadope-logclean",
+   "saruman-anti-forensic"
+  ],
+  "C22": [
+   "amber-reflective-packer"
+  ],
+  "C23": [
+   "lolbas-living-off-land",
+   "m3-gen-msbuild"
+  ],
+  "C24": [
+   "mimikatz-credentials",
+   "mimipenguin-linux",
+   "spraykatz-credentials"
+  ],
+  "C25": [
+   "bkcrack-zip-plaintext",
+   "bopscrk-smart-wordlist",
+   "brutespray-service-brute",
+   "cewl-wordlist",
+   "cracken-fast-crack",
+   "crackpkcs12-pfx",
+   "creddump-sam-extract",
+   "credmaster-fireprox-spray",
+   "crowbar-brute",
+   "crunch-wordlist",
+   "dislocker-bitlocker",
+   "duplicut-dedup",
+   "john-hash-crack",
+   "lyricpass-music-wordlist",
+   "maskprocessor-mask-gen",
+   "mentalist-wordlist",
+   "name-that-hash",
+   "narthex-pass-gen",
+   "omnihash-hash-id",
+   "pack2-policy-mask",
+   "pwcrack-framework",
+   "pybozocrack-md5-lookup",
+   "pydictor-wordlist",
+   "shreder-ssh-brute",
+   "statsprocessor-maskgen",
+   "trevorspray-cloud-spray",
+   "ttpassgen-mask",
+   "wordlistctl-download",
+   "wordlister-basic"
+  ],
+  "C26": [
+   "kekeo-kerberos",
+   "krbrelayx-kerberos-relay",
+   "rubeus-kerberos"
+  ],
+  "C28": [
+   "barq-azure-ad",
+   "hydra-service-brute",
+   "kerbrute-kerberos-enum",
+   "medusa-bruteforce",
+   "msmailprobe-o365",
+   "mybff-login-brute",
+   "o365spray-m365",
+   "patator-multi-brute",
+   "pemcrack-pem-key",
+   "rdpassspray-rdp-spray",
+   "spray365-o365",
+   "spraycharles-idp-spray",
+   "sprayhound-ad-spray",
+   "sprayingtoolkit-idp-spray",
+   "wpforce-login"
+  ],
+  "C29": [
+   "ad-ldap-enum-ldap",
+   "adidnsdump-ldap-enum",
+   "enum4linux-ng",
+   "finduncommonshares-smb-hunt",
+   "go-windapsearch-fast",
+   "ldapmonitor-live-enum",
+   "ldeep-ldap-query",
+   "manspider-smb-spider",
+   "nbtscan-netbios",
+   "netdiscover-arp",
+   "pspy-process-monitor",
+   "ridrelay-rid-cycling",
+   "sharesniffer-smb",
+   "smbclient-ng-modern",
+   "smbmap-share-enum",
+   "smbsr-smb-regret",
+   "windapsearch-ldap-ad"
+  ],
+  "C30": [
+   "aclpwn-acl-abuse",
+   "activedirectoryenum-ad",
+   "ad-miner-graph",
+   "adpeas-quickwin",
+   "bloodyad-ad-privesc",
+   "conpass-ad-mon",
+   "crackmapexec-smb",
+   "deathstar-automation",
+   "donpapi-dpapi-harvest",
+   "extractbitlockerkeys-dpapi",
+   "goddi-ad-export",
+   "gomapenum-ad-enum",
+   "gpowned-gpo-abuse",
+   "hekatomb-dp-secret",
+   "jackdaw-ad-graph",
+   "ntlm-challenger-check",
+   "ntlmrecon-web-ntlm",
+   "pkinittools-adcs",
+   "pygpoabuse-gpo-privesc",
+   "rusthound-bloodhound",
+   "sccmhunter-sccm-attack",
+   "talon-kerberos-check",
+   "targetedkerberoast-ad",
+   "trusttrees-zone-walk"
+  ],
+  "C31": [
+   "barmie-rmi-attack",
+   "impacket-protocol-exec",
+   "lethalhta-mshta",
+   "powercat-netcat-ps",
+   "powerlessshell-nolimits",
+   "rmiscout-rmi-scan",
+   "sireprat-windows-iot",
+   "sjet-jboss",
+   "tomcatwardeployer"
+  ],
+  "C32": [
+   "3proxy-pivot",
+   "chisel-tunnel",
+   "crypthook-encrypted-tunnel",
+   "frp-tunnel",
+   "mubeng-proxy-rotate",
+   "proxify-multiproxy",
+   "proxybroker2-proxies",
+   "stowaway-pivot",
+   "torpy-tor-client",
+   "trevorproxy-spray-pivot"
+  ],
+  "C33": [
+   "paramspider-param-harvest",
+   "tlsx-tls-enum",
+   "urx-url-hunt"
+  ],
+  "C34": [
+   "scrying-multi-screenshot",
+   "witnessme-web-shot"
+  ],
+  "C35": [
+   "adaptix-c2-framework",
+   "emp3r0r-c2",
+   "koadic-c2",
+   "punk-c2",
+   "pupy-rat",
+   "rspet-c2",
+   "shad0w-c2-windows",
+   "volana-c2"
+  ],
+  "C36": [
+   "icmpsh-reverse",
+   "interactsh-oob",
+   "websockify-bridge"
+  ],
+  "C37": [
+   "dnsteal-dns-exfil"
+  ],
+  "C38": [
+   "cloakify-exfil",
+   "openstego-general-stego",
+   "outguess-jpeg-stego",
+   "zsteg-png-stego"
+  ],
+  "C39": [
+   "slowhttptest-dos"
+  ],
+  "C40": [
+   "above-protocol-anomaly",
+   "arpspoof-smikims",
+   "binproxy-tcp-intercept",
+   "datajackproxy-modbus",
+   "dnschef-spoof",
+   "dnswatch-dns-mon",
+   "driftnet-image-sniff",
+   "evillimiter-mitm-limit",
+   "fakedns-dns-redirect",
+   "hetty-mitm-http-toolkit",
+   "hyperfox-mitm",
+   "kickthemout-deauth",
+   "macchanger-spoof",
+   "mitmap-ap-mitm",
+   "mitmf-mitm",
+   "net-creds-sniff",
+   "pcredz-smb-creds",
+   "pythem-network",
+   "rbndr-dns-rebinding",
+   "responder-ntlm-poison",
+   "seth-rdp-mitm",
+   "snarf-mitm-smb",
+   "sniffjoke-traffic-obf",
+   "ssh-mitm-intercept",
+   "sslsniff-cert-mitm",
+   "sslstrip-downgrade",
+   "striptls-downgrade",
+   "xerosploit-mitm"
+  ],
+  "C41": [
+   "arjun-param-discovery",
+   "cangibrina-admin-finder",
+   "dirb-dir-scan",
+   "dirsearch-dir-bruteforce",
+   "dirstalk-dir-scan",
+   "droopescan-cms-audit",
+   "feroxbuster-content-discovery",
+   "ffuf-web-fuzz",
+   "fuzzdb-payload-dict",
+   "gobuster-dir-dns",
+   "nuclei-template-scan",
+   "rustbuster-content-discover",
+   "wfuzz-web-fuzzer",
+   "wpscan-wp-audit"
+  ],
+  "C42": [
+   "angry-ip-scan",
+   "apachetomcatscanner-tomcat",
+   "atscan-web-scan",
+   "autorecon-auto",
+   "braa-snmp-mass",
+   "changeme-default-creds",
+   "dublin-traceroute-nat",
+   "fscan-intranet",
+   "habu-network-kit",
+   "httprobe-alive",
+   "ike-scan-vpn-enum",
+   "masscan-internet",
+   "mongoaudit-mongo-check",
+   "mylg-network-cli",
+   "naabu-portscan",
+   "netz-port-diff",
+   "nextnet-as400",
+   "nili-network",
+   "nray-distributed-scan",
+   "nsntrace-trace",
+   "onesixtyone-snmp-scan",
+   "pbscan-stateless-scan",
+   "rustscan-speed",
+   "scanless-public-scan",
+   "scannerl-dist-scan",
+   "serialbrute-com",
+   "shortscan-iis",
+   "sippts-sip-attack",
+   "sipshock-sip-shock",
+   "sipvicious-sip",
+   "vhostscan-virtual-host",
+   "whatportis-service",
+   "zmap-internet"
+  ],
+  "C43": [
+   "appmon-ios-android",
+   "bagbak-ios-decrypt",
+   "drozer-android",
+   "dwarf-android-hook",
+   "needle-ios-pentest",
+   "qark-android",
+   "simplify-android-deobf"
+  ],
+  "C44": [
+   "hexstrike-ai",
+   "pentestagent-crewai",
+   "pentestgpt-agent"
+  ],
+  "C45": [
+   "avet-av-evasion",
+   "bluffy-hollow",
+   "darkarmour-obfuscate",
+   "demiguise-hta-crypt",
+   "dkmc-macro-gen",
+   "evilclippy-macro-hide",
+   "limelighter-forge",
+   "sigthief-signature",
+   "veil-framework"
+  ],
+  "C46": [
+   "angrop-rop-gen",
+   "armscgen-shellcode",
+   "autosploit-metasl",
+   "dharma-grammar-fuzz",
+   "domato-dom-fuzzer",
+   "fuzzowski-network-fuzz",
+   "gittools-git-exploit",
+   "grammarinator-gen-fuzz",
+   "isf-ics-exploit",
+   "marshalsec-deser",
+   "preeny-pwn",
+   "rext-exploit-db",
+   "richsploit-richdesk",
+   "sandsifter-cpu-fuzz",
+   "scansploit-exploit-scan",
+   "websploit-wifi-dos",
+   "zeratool-auto-pwn"
+  ],
+  "C47": [
+   "exe2hexbat-payload-transfer",
+   "petools-pe-analysis",
+   "sickle-shellcode"
+  ],
+  "C48": [
+   "slither-solidity-audit"
+  ],
+  "C49": [
+   "a2sv-ssl-vuln",
+   "cero-tls-cert",
+   "cipherscan-ossl",
+   "ciphr-crypto-cli",
+   "featherduster-crypto-auto",
+   "foresight-prng",
+   "hash-extender-length-attack",
+   "padre-padding-oracle",
+   "rsactftool",
+   "rsatool-rsa-attack",
+   "rustpad-oracle-gui",
+   "sslscan-tls-check",
+   "sslyze-deep-tls",
+   "tlsfuzzer-fuzz",
+   "tlshelpers-cert",
+   "untwister-prng",
+   "x-rsa-toolkit"
+  ],
+  "C50": [
+   "cloudfail-cloud-origin",
+   "interlace-parallel",
+   "mrkaplan-event-clean",
+   "nishang-powershell",
+   "postenum-linux-audit",
+   "reconnoitre-auto-recon"
+  ]
+ }
+}
