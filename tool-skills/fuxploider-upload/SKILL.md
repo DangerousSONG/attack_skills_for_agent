@@ -1,6 +1,7 @@
 ---
 name: fuxploider-upload
-description: Fuxploider: 上传功能绕过矩阵。信号:web漏洞,注入,上传漏洞检测,目标脚本语言,扩展名探测。
+description: "Fuxploider tests upload functionality bypass matrices. Signals: web vulnerabilities, injection, upload vulnerability detection, target scripting language, extension probing."
+zh-signals: "Fuxploider: 上传功能绕过矩阵。信号:web漏洞,注入,上传漏洞检测,目标脚本语言,扩展名探测。"
 ---
 
 # Fuxploider

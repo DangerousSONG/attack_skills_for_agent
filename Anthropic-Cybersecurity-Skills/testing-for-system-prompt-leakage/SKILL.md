@@ -1,6 +1,7 @@
 ---
 name: testing-for-system-prompt-leakage
-description: "Extracts LLM system prompts using direct requests, jailbreak/instruction-override 信号:ai安全,大模型攻击。"
+description: "Extracts LLM system prompts via direct requests and jailbreaks. Signals: AI security, large model attacks."
+zh-signals: "Extracts LLM system prompts using direct requests, jailbreak/instruction-override 信号:ai安全,大模型攻击。"
 when-to-use: Extracts LLM system prompts using direct requests, jailbreak/instruction-override
   framing, translation/encoding tricks, and few-shot replay, combining manual payloads with
   automated garak and Promptfoo scanners to surface embedded secrets, routing logic, and

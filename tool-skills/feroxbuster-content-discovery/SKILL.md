@@ -1,6 +1,7 @@
 ---
 name: feroxbuster-content-discovery
-description: feroxbuster: 递归内容发现、API 端点爆破。信号:web扫描,漏洞扫描,单目标扫描,深度递归。
+description: "feroxbuster performs recursive content discovery and API endpoint brute-forcing. Signals: web scanning, vulnerability scanning, single-target scan, deep recursion."
+zh-signals: "feroxbuster: 递归内容发现、API 端点爆破。信号:web扫描,漏洞扫描,单目标扫描,深度递归。"
 ---
 
 # feroxbuster

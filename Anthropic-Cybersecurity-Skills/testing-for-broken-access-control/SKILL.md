@@ -1,6 +1,7 @@
 ---
 name: testing-for-broken-access-control
-description: "Systematically tests web applications and APIs for broken access control 信号:web漏洞,注入,sql注入。"
+description: "Tests web applications and APIs for broken access control. Signals: web vulnerabilities, injection, SQL injection."
+zh-signals: "Systematically tests web applications and APIs for broken access control 信号:web漏洞,注入,sql注入。"
 when-to-use: Systematically tests web applications and APIs for broken access control
   (OWASP A01:2021), including privilege escalation, missing function-level checks, insecure
   direct object references, and multi-tenant data leakage, using Burp Suite with the

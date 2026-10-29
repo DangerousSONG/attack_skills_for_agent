@@ -1,6 +1,7 @@
 ---
 name: rustpad-oracle-gui
-description: rustpad: 加密参数伪造(水平越权)。信号:密码学攻击,加密破解,解密模式,伪造密文模式,注入点标记。
+description: "rustpad: Forges encrypted parameters for horizontal privilege escalation. Signals: cryptographic attack, encryption cracking, decryption mode, forged ciphertext mode, injection point marking."
+zh-signals: "rustpad: 加密参数伪造(水平越权)。信号:密码学攻击,加密破解,解密模式,伪造密文模式,注入点标记。"
 ---
 
 # rustpad

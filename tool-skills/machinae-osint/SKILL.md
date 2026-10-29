@@ -1,6 +1,7 @@
 ---
 name: machinae-osint
-description: machinae: 域名/IP/邮箱多源情报。信号:邮箱收集,员工信息,多源 OSINT 查询,指定源,批量。
+description: "machinae: Multi-source intelligence for domains/IPs/emails. Signals: email collection, employee information, multi-source OSINT queries, specified sources, batch."
+zh-signals: "machinae: 域名/IP/邮箱多源情报。信号:邮箱收集,员工信息,多源 OSINT 查询,指定源,批量。"
 ---
 
 # machinae

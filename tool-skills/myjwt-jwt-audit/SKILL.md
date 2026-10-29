@@ -1,6 +1,7 @@
 ---
 name: myjwt-jwt-audit
-description: MyJWT: JWT 多攻击面测试。信号:api攻击,接口测试,JWT 密钥爆破,KID 注入,JKU 绕过。
+description: "MyJWT: JWT multi-attack-surface testing. Signals: API attack, interface testing, JWT key brute force, KID injection, JKU bypass."
+zh-signals: "MyJWT: JWT 多攻击面测试。信号:api攻击,接口测试,JWT 密钥爆破,KID 注入,JKU 绕过。"
 ---
 
 # MyJWT

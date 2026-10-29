@@ -1,6 +1,7 @@
 ---
 name: talon-kerberos-check
-description: Talon: 域账户有效性验证。信号:ad攻击,域渗透,域控。
+description: "Talon validates domain account existence. Signals: AD attack, domain penetration, domain controller"
+zh-signals: "Talon: 域账户有效性验证。信号:ad攻击,域渗透,域控。"
 ---
 
 # Talon

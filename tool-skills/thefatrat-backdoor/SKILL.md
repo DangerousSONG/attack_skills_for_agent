@@ -1,6 +1,7 @@
 ---
 name: thefatrat-backdoor
-description: TheFatRat: 免杀木马捆绑正常程序(APK/EXE)。信号:载荷开发,武器化,选取编号生成。
+description: "TheFatRat bundles evasion trojans into normal APK/EXE programs. Signals: payload development, weaponization, select number to generate"
+zh-signals: "TheFatRat: 免杀木马捆绑正常程序(APK/EXE)。信号:载荷开发,武器化,选取编号生成。"
 ---
 
 # TheFatRat

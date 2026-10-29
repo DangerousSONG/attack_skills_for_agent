@@ -1,6 +1,7 @@
 ---
 name: htcap-crawl-audit
-description: htcap: Ajax 站点全量爬取。信号:web漏洞,注入,爬取+存 SQLite,漏洞评估,爬深。
+description: "htcap fully crawls Ajax sites. Signals: web vulnerability, injection, crawl and store SQLite, vulnerability assessment, crawl depth."
+zh-signals: "htcap: Ajax 站点全量爬取。信号:web漏洞,注入,爬取+存 SQLite,漏洞评估,爬深。"
 ---
 
 # htcap

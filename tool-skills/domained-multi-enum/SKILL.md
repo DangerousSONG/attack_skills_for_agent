@@ -1,6 +1,7 @@
 ---
 name: domained-multi-enum
-description: Domained: 多工具编排子域收集。信号:资产测绘,子域名,被动+主动子域,仅爆破,仅主动。
+description: "Domained: multi-tool orchestrated subdomain collection. Signals: asset mapping, subdomain, passive plus active subdomains, brute force only, active only."
+zh-signals: "Domained: 多工具编排子域收集。信号:资产测绘,子域名,被动+主动子域,仅爆破,仅主动。"
 ---
 
 # Domained

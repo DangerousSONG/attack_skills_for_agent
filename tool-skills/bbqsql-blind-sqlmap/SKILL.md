@@ -1,6 +1,7 @@
 ---
 name: bbqsql-blind-sqlmap
-description: BBQSQL: 半盲注手工配置。信号:web漏洞,注入,配置完成后执行盲注,导出结果。
+description: "BBQSQL: manually configures semi-blind injection. Signals: web vulnerability, injection, run blind injection after configuration, export results"
+zh-signals: "BBQSQL: 半盲注手工配置。信号:web漏洞,注入,配置完成后执行盲注,导出结果。"
 ---
 
 # BBQSQL

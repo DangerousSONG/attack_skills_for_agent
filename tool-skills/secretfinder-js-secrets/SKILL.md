@@ -1,6 +1,7 @@
 ---
 name: secretfinder-js-secrets
-description: SecretFinder: 前端 JS 硬编码密钥收割。信号:api攻击,接口测试,JS 中秘密提取,批量,同时爬站。
+description: "SecretFinder: harvests hardcoded secrets from frontend JS. Signals: API attack, interface testing, JS secret extraction, bulk, simultaneous crawling."
+zh-signals: "SecretFinder: 前端 JS 硬编码密钥收割。信号:api攻击,接口测试,JS 中秘密提取,批量,同时爬站。"
 ---
 
 # SecretFinder

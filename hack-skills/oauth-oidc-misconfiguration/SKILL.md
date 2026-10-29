@@ -1,6 +1,7 @@
 ---
 name: oauth-oidc-misconfiguration
-description: "OAuth 2.0/OIDC 配置错误清单:redirect URI 校验、state/nonce、PKCE 强制、令牌受众。信号:oauth,oidc,redirect_uri,pkce。"
+description: "OAuth 2.0/OIDC misconfiguration checklist: redirect URI validation, state/nonce, PKCE enforcement, token audience. Signals: OAuth, OIDC, redirect_uri, PKCE."
+zh-signals: "OAuth 2.0/OIDC 配置错误清单:redirect URI 校验、state/nonce、PKCE 强制、令牌受众。信号:oauth,oidc,redirect_uri,pkce。"
 when-to-use: 1. WHEN TO LOAD THIS SKILL
   OAuth and OIDC misconfiguration testing playbook. Use when reviewing redirect URI handling, state and nonce validation, PKCE, token audience, callback binding, and identity-provider trust flaws.
 ---

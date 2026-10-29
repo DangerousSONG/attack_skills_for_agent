@@ -1,6 +1,7 @@
 ---
 name: performing-ip-reputation-analysis-with-shodan
-description: "Analyze IP address reputation using the Shodan API to identify open ports 信号:网络拓扑,互联网测绘,空间测绘。"
+description: "Analyze IP address reputation using the Shodan API to identify open ports and services. Signals: network topology, internet mapping, spatial mapping."
+zh-signals: "Analyze IP address reputation using the Shodan API to identify open ports 信号:网络拓扑,互联网测绘,空间测绘。"
 when-to-use: Analyze IP address reputation using the Shodan API to identify open ports,
   running services, known vulnerabilities, and hosting context for threat intelligence
   enrichment and incident triage.

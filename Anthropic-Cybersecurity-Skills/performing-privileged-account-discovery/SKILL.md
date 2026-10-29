@@ -1,6 +1,7 @@
 ---
 name: performing-privileged-account-discovery
-description: "Discovers and inventories privileged accounts across enterprise infrastructure 信号:云提权,iam提权,容器提权。"
+description: "Discovers and inventories privileged accounts across enterprise infrastructure. Signals: cloud privilege escalation, IAM privilege escalation, container privilege escalation."
+zh-signals: "Discovers and inventories privileged accounts across enterprise infrastructure 信号:云提权,iam提权,容器提权。"
 when-to-use: Discovers and inventories privileged accounts across enterprise infrastructure,
   including domain admins, local admins, service accounts, database admins, cloud
   IAM roles, and application admin accounts, using automated scanning and risk classification.

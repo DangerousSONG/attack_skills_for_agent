@@ -1,6 +1,7 @@
 ---
 name: enumerating-cloud-with-cloudfox
-description: "Run CloudFox's read-only Describe/List/Get enumeration (all-checks) 信号:攻击面,云资产,暴露面。"
+description: "Run CloudFox read-only Describe, List, and Get enumeration with all checks. Signals: attack surface, cloud assets, exposure."
+zh-signals: "Run CloudFox's read-only Describe/List/Get enumeration (all-checks) 信号:攻击面,云资产,暴露面。"
 when-to-use: Run CloudFox's read-only Describe/List/Get enumeration (all-checks,
   role-trusts, secrets, endpoints, and permissions commands) to map AWS and Azure attack
   paths and surface exploitable misconfigurations. Use immediately after obtaining a cloud

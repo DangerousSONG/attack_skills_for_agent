@@ -1,6 +1,7 @@
 ---
 name: rapidscan-multi-vuln
-description: rapidscan: 多工具结果聚合。信号:web漏洞,注入,一键多工具编排扫描,仅 SSL 模块,排除模块。
+description: "rapidscan: Aggregates results from multiple tools. Signals: web vulnerabilities, injection, one-click multi-tool orchestrated scan, SSL-only modules, exclude modules."
+zh-signals: "rapidscan: 多工具结果聚合。信号:web漏洞,注入,一键多工具编排扫描,仅 SSL 模块,排除模块。"
 ---
 
 # rapidscan

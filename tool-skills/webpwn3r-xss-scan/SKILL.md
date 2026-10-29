@@ -1,6 +1,7 @@
 ---
 name: webpwn3r-xss-scan
-description: webpwn3r: 参数级漏洞扫描。信号:web漏洞,注入,XSS/注入扫描,批量。
+description: "webpwn3r: Parameter-level vulnerability scanning. Signals: web vulnerabilities, injection, XSS/injection scan, batch."
+zh-signals: "webpwn3r: 参数级漏洞扫描。信号:web漏洞,注入,XSS/注入扫描,批量。"
 ---
 
 # webpwn3r

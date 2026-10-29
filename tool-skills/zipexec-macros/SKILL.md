@@ -1,6 +1,7 @@
 ---
 name: zipexec-macros
-description: ZipExec: 载荷免杀投递。信号:载荷开发,武器化,EXE 藏 JS,附加选项。
+description: "ZipExec: AV-evasion payload delivery. Signals: payload development, weaponization, EXE hides JS, additional options."
+zh-signals: "ZipExec: 载荷免杀投递。信号:载荷开发,武器化,EXE 藏 JS,附加选项。"
 ---
 
 # ZipExec

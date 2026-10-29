@@ -1,6 +1,7 @@
 ---
 name: koadic-c2
-description: Koadic: JScript/VBScript C2。信号:c2,命令控制,C2 控制台,载荷选择,监听。
+description: "Koadic provides a JScript/VBScript C2 framework. Signals: C2, command and control, C2 console, payload selection, listener."
+zh-signals: "Koadic: JScript/VBScript C2。信号:c2,命令控制,C2 控制台,载荷选择,监听。"
 ---
 
 # Koadic

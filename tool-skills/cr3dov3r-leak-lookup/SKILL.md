@@ -1,6 +1,7 @@
 ---
 name: cr3dov3r-leak-lookup
-description: Cr3dOv3r: 收集泄露口令并验证凭据复用。信号:邮箱收集,员工信息,静默,只查明文密码库,不测试凭据复用。
+description: "Cr3dOv3r: Collects leaked passwords and verifies credential reuse. Signals: email harvesting, employee information, silent mode, plaintext password databases only, no credential reuse testing."
+zh-signals: "Cr3dOv3r: 收集泄露口令并验证凭据复用。信号:邮箱收集,员工信息,静默,只查明文密码库,不测试凭据复用。"
 ---
 
 # Cr3dOv3r

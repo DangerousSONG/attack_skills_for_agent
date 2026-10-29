@@ -1,6 +1,7 @@
 ---
 name: dangling-markup-injection
-description: "Dangling markup injection playbook 信号:进程注入,dll注入,内存执行。"
+description: "Dangling markup injection playbook. Signals: process injection, DLL injection, memory execution."
+zh-signals: "Dangling markup injection playbook 信号:进程注入,dll注入,内存执行。"
 when-to-use: >-
   Dangling markup injection playbook. Use when HTML injection is possible but
   JavaScript execution is blocked (CSP, sanitizer strips event handlers, WAF

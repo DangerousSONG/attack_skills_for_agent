@@ -1,6 +1,7 @@
 ---
 name: wpintel-wp-intel
-description: WPintel: WP 情报快速收集。信号:web漏洞,注入,WP 情报收集,用户枚举,DB 泄露检查。
+description: "WPintel: WP intelligence rapid collection. Signals: web vulnerabilities, injection, WP intelligence collection, user enumeration, DB leak check."
+zh-signals: "WPintel: WP 情报快速收集。信号:web漏洞,注入,WP 情报收集,用户枚举,DB 泄露检查。"
 ---
 
 # WPintel

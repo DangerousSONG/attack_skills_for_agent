@@ -1,6 +1,7 @@
 ---
 name: dorknet-selenium
-description: DorkNet: 反爬场景 dork。信号:web漏洞,注入,详细,仅输出 URL。
+description: "DorkNet: dorking for anti-scraping scenarios. Signals: web vulnerability, injection, detailed, output URLs only."
+zh-signals: "DorkNet: 反爬场景 dork。信号:web漏洞,注入,详细,仅输出 URL。"
 ---
 
 # DorkNet

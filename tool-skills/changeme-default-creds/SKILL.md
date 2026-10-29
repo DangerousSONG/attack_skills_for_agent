@@ -1,6 +1,7 @@
 ---
 name: changeme-default-creds
-description: changeme: 默认口令全网扫描。信号:端口扫描,nmap,默认凭据扫描,指定应用。
+description: "changeme: Scans the internet for default credentials. Signals: port scanning, nmap, default credential scanning, specified application."
+zh-signals: "changeme: 默认口令全网扫描。信号:端口扫描,nmap,默认凭据扫描,指定应用。"
 ---
 
 # changeme

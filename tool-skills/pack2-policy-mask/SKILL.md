@@ -1,6 +1,7 @@
 ---
 name: pack2-policy-mask
-description: Pack2: 按口令策略生成掩码。信号:密码破解,哈希破解,统计字典特征,分析已破哈希。
+description: "Generate password masks from policy. Signals: password cracking, hash cracking, statistical dictionary features, analyze cracked hashes."
+zh-signals: "Pack2: 按口令策略生成掩码。信号:密码破解,哈希破解,统计字典特征,分析已破哈希。"
 ---
 
 # Pack2

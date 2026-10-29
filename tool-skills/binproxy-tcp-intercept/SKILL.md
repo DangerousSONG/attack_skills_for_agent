@@ -1,6 +1,7 @@
 ---
 name: binproxy-tcp-intercept
-description: BinProxy: 私有协议中间人。信号:中间人,mitm,二进制协议中间人,SSL,调试。
+description: "BinProxy: intercepts binary protocols. Signals: man-in-the-middle, mitm, binary protocol MITM, SSL, debugging"
+zh-signals: "BinProxy: 私有协议中间人。信号:中间人,mitm,二进制协议中间人,SSL,调试。"
 ---
 
 # BinProxy

@@ -1,6 +1,7 @@
 ---
 name: conducting-social-engineering-penetration-test
-description: "OSINT 画像驱动的社会工程渗透测试:钓鱼/语音钓鱼/短信钓鱼/物理伪装,用 GoPhish、SET、Evilginx 度量人员安全韧性。信号:社会工程,钓鱼测试,vishing,smishing。"
+description: "Conduct OSINT-profile-driven social engineering tests with phishing, vishing, smishing, and pretexting using GoPhish, SET, and Evilginx. Signals: social engineering, phishing test, vishing, smishing."
+zh-signals: "OSINT 画像驱动的社会工程渗透测试:钓鱼/语音钓鱼/短信钓鱼/物理伪装,用 GoPhish、SET、Evilginx 度量人员安全韧性。信号:社会工程,钓鱼测试,vishing,smishing。"
 when-to-use: Design and execute a social engineering penetration test combining OSINT-driven target profiling with phishing, vishing, smishing, and physical pretexting campaigns using tools like GoPhish, the Socia
 domain: cybersecurity
 subdomain: penetration-testing

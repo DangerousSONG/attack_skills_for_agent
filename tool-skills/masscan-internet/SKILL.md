@@ -1,6 +1,7 @@
 ---
 name: masscan-internet
-description: masscan: 网段级快速测绘、Banner 级服务识别。信号:端口扫描,nmap,全网段全端口高速扫,带 banner 抓指纹。
+description: "masscan: Network-wide fast mapping and banner-level service identification. Signals: port scanning, nmap, full subnet full port high-speed scan, banner fingerprinting."
+zh-signals: "masscan: 网段级快速测绘、Banner 级服务识别。信号:端口扫描,nmap,全网段全端口高速扫,带 banner 抓指纹。"
 ---
 
 # masscan

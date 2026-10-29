@@ -1,6 +1,7 @@
 ---
 name: lorsrf-ssrf-hunt
-description: lorsrf: SSRF 批量探测。信号:web漏洞,注入,SSRF 参数测试,OOB 接收,批量 URL。
+description: "lorsrf: Batch SSRF probing. Signals: web vulnerability, injection, SSRF parameter testing, OOB receiver, batch URLs."
+zh-signals: "lorsrf: SSRF 批量探测。信号:web漏洞,注入,SSRF 参数测试,OOB 接收,批量 URL。"
 ---
 
 # lorsrf

@@ -1,6 +1,7 @@
 ---
 name: ducktoolkit-usb
-description: DuckToolkit: USB Rubber Ducky 载荷。信号:钓鱼,社会工程,解码,键盘布局。
+description: "DuckToolkit: USB Rubber Ducky payloads. Signals: phishing, social engineering, decode, keyboard layout."
+zh-signals: "DuckToolkit: USB Rubber Ducky 载荷。信号:钓鱼,社会工程,解码,键盘布局。"
 ---
 
 # DuckToolkit

@@ -1,6 +1,7 @@
 ---
 name: powershdll-nopowershell
-description: PowerShdll: Windows本地提权场景。信号:windows提权,uac绕过,单条命令,注册表模式。
+description: "Windows local privilege escalation scenario. Signals: Windows privilege escalation, UAC bypass, single command, registry mode."
+zh-signals: "PowerShdll: Windows本地提权场景。信号:windows提权,uac绕过,单条命令,注册表模式。"
 ---
 
 # PowerShdll

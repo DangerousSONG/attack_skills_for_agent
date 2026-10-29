@@ -1,6 +1,7 @@
 ---
 name: gomapenum-ad-enum
-description: GoMapEnum: AD 全协议枚举。信号:ad攻击,域渗透,LDAP 枚举,票据攻击,O365 枚举。
+description: "GoMapEnum enumerates Active Directory across all protocols. Signals: AD attack, domain penetration, LDAP enumeration, ticket attacks, O365 enumeration."
+zh-signals: "GoMapEnum: AD 全协议枚举。信号:ad攻击,域渗透,LDAP 枚举,票据攻击,O365 枚举。"
 ---
 
 # GoMapEnum

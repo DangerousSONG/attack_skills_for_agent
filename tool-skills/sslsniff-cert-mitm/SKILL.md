@@ -1,6 +1,7 @@
 ---
 name: sslsniff-cert-mitm
-description: sslsniff: SSL 中间人。信号:中间人,mitm,SSL MITM,指定证书。
+description: "sslsniff performs SSL MITM. Signals: MITM, mitm, SSL MITM, specify certificate"
+zh-signals: "sslsniff: SSL 中间人。信号:中间人,mitm,SSL MITM,指定证书。"
 ---
 
 # sslsniff

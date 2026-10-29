@@ -1,6 +1,7 @@
 ---
 name: rmiscout-rmi-scan
-description: rmiscout: Java RMI 不安全方法。信号:横向移动,psexec,RMI 方法爆破,fuzz。
+description: "rmiscout: Finds unsafe Java RMI methods. Signals: lateral movement, psexec, RMI method brute forcing, fuzzing."
+zh-signals: "rmiscout: Java RMI 不安全方法。信号:横向移动,psexec,RMI 方法爆破,fuzz。"
 ---
 
 # rmiscout

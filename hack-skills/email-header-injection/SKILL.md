@@ -1,6 +1,7 @@
 ---
 name: email-header-injection
-description: "邮件头注入与伪造:测试联系表单、邮件 API、密码重置流程等用用户可控字段构造 SMTP 消息的场景。信号:邮件头注入,邮件伪造,smtp注入,重置流程。"
+description: "Email header injection and spoofing: test contact forms, email APIs, password reset flows using user-controlled fields to construct SMTP messages. Signals: email header injection, email spoofing, SMTP injection, reset flow."
+zh-signals: "邮件头注入与伪造:测试联系表单、邮件 API、密码重置流程等用用户可控字段构造 SMTP 消息的场景。信号:邮件头注入,邮件伪造,smtp注入,重置流程。"
 when-to-use: >-
   Email header injection and spoofing playbook. Use when testing contact forms, email APIs, password reset flows, or any feature that constructs SMTP messages with user-controlled fields. Covers CRLF injection in headers, SPF/DKIM/DMARC bypass, and phishing amplification.
 ---

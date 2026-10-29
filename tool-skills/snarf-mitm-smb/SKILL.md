@@ -1,6 +1,7 @@
 ---
 name: snarf-mitm-smb
-description: snarf: SMB 认证中继。信号:中间人,mitm,SMB 中间人,网关,监听。
+description: "snarf: SMB authentication relay. Signals: MITM, mitm, SMB MITM, gateway, listen."
+zh-signals: "snarf: SMB 认证中继。信号:中间人,mitm,SMB 中间人,网关,监听。"
 ---
 
 # snarf

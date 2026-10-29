@@ -1,6 +1,7 @@
 ---
 name: ntlm-challenger-check
-description: ntlm-challenger: NTLM 信息泄露提取。信号:ad攻击,域渗透,解析 NTLM 认证头。
+description: "Extract NTLM information leakage. Signals: AD attack, domain penetration, parse NTLM authentication headers."
+zh-signals: "ntlm-challenger: NTLM 信息泄露提取。信号:ad攻击,域渗透,解析 NTLM 认证头。"
 ---
 
 # ntlm-challenger

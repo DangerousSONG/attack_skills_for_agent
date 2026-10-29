@@ -1,6 +1,7 @@
 ---
 name: sslscan-tls-check
-description: sslscan: TLS 弱配置审计。信号:密码学攻击,加密破解,TLS 配置审计,证书详情,跳过套件枚举。
+description: "sslscan audits weak TLS configurations. Signals: cryptographic attack, cryptographic cracking, TLS configuration audit, certificate details, skip cipher enumeration"
+zh-signals: "sslscan: TLS 弱配置审计。信号:密码学攻击,加密破解,TLS 配置审计,证书详情,跳过套件枚举。"
 ---
 
 # sslscan

@@ -1,6 +1,7 @@
 ---
 name: schemathesis-fuzz
-description: Schemathesis: OpenAPI 规范驱动模糊测试。信号:api攻击,接口测试,属性化模糊测试,只测端点,全检查。
+description: "Schemathesis: OpenAPI specification-driven fuzzing. Signals: API attack, interface testing, property-based fuzzing, test endpoints only, full checks."
+zh-signals: "Schemathesis: OpenAPI 规范驱动模糊测试。信号:api攻击,接口测试,属性化模糊测试,只测端点,全检查。"
 ---
 
 # Schemathesis

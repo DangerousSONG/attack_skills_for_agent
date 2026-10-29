@@ -1,6 +1,7 @@
 ---
 name: sslyze-deep-tls
-description: sslyze: 合规级 TLS 评估。信号:密码学攻击,加密破解,TLS 深度扫描,合规检查,证书链详情。
+description: "sslyze performs compliance-grade TLS assessment. Signals: cryptographic attack, cryptographic cracking, TLS deep scan, compliance check, certificate chain details"
+zh-signals: "sslyze: 合规级 TLS 评估。信号:密码学攻击,加密破解,TLS 深度扫描,合规检查,证书链详情。"
 ---
 
 # sslyze

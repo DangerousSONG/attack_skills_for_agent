@@ -1,6 +1,7 @@
 ---
 name: vcsmap-vcs-hunt
-description: vcsmap: 代码仓库暴露发现。信号:攻击面,云资产,版本控制仓库发现,平台。
+description: "vcsmap: Code repository exposure discovery. Signals: attack surface, cloud assets, version control repository discovery, platform."
+zh-signals: "vcsmap: 代码仓库暴露发现。信号:攻击面,云资产,版本控制仓库发现,平台。"
 ---
 
 # vcsmap

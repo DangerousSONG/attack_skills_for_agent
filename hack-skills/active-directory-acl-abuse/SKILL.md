@@ -1,6 +1,7 @@
 ---
 name: active-directory-acl-abuse
-description: "Active Directory ACL abuse playbook 信号:内存转储,lsass,mimikatz。"
+description: "Active Directory ACL abuse playbook. Signals: memory dump, lsass, mimikatz."
+zh-signals: "Active Directory ACL abuse playbook 信号:内存转储,lsass,mimikatz。"
 when-to-use: >-
   Active Directory ACL abuse playbook. Use when exploiting misconfigured AD permissions including GenericAll, WriteDACL, DCSync rights, shadow credentials, LAPS reading, GPO abuse, and BloodHound-guided attack paths.
 ---

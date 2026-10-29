@@ -1,6 +1,7 @@
 ---
 name: adaptix-c2-framework
-description: AdaptixC2: C2 控制框架搭建与会话管理。信号:c2,命令控制,启动服务端,生成多平台载荷,横向必备。
+description: "AdaptixC2: builds a C2 framework and manages sessions. Signals: c2, command and control, start server, generate multi-platform payloads, lateral movement essential"
+zh-signals: "AdaptixC2: C2 控制框架搭建与会话管理。信号:c2,命令控制,启动服务端,生成多平台载荷,横向必备。"
 ---
 
 # AdaptixC2

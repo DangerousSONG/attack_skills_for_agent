@@ -1,6 +1,7 @@
 ---
 name: pspy-process-monitor
-description: pspy: 定时任务提权线索捕捉。信号:内网枚举,网络发现,只监控进程 fork,打印间隔,高亮新进程。
+description: "pspy: Captures scheduled-task privilege escalation clues. Signals: internal enumeration, network discovery, monitor process forks only, print interval, highlight new processes."
+zh-signals: "pspy: 定时任务提权线索捕捉。信号:内网枚举,网络发现,只监控进程 fork,打印间隔,高亮新进程。"
 ---
 
 # pspy

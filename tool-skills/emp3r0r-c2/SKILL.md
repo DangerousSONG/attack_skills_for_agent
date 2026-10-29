@@ -1,6 +1,7 @@
 ---
 name: emp3r0r-c2
-description: emp3r0r: Linux 后渗透 C2。信号:c2,命令控制,起服务端,agent 连接,模块。
+description: "emp3r0r: Linux post-exploitation C2. Signals: C2, command and control, start server, agent connection, modules."
+zh-signals: "emp3r0r: Linux 后渗透 C2。信号:c2,命令控制,起服务端,agent 连接,模块。"
 ---
 
 # emp3r0r

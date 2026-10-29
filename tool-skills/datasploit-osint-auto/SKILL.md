@@ -1,6 +1,7 @@
 ---
 name: datasploit-osint-auto
-description: datasploit: 一键 OSINT 综合报告。信号:邮箱收集,员工信息,自动化 OSINT 报告,IP 模式,邮箱模式。
+description: "datasploit: Generates one-click OSINT reports. Signals: email harvesting, employee information, automated OSINT reporting, IP mode, email mode."
+zh-signals: "datasploit: 一键 OSINT 综合报告。信号:邮箱收集,员工信息,自动化 OSINT 报告,IP 模式,邮箱模式。"
 ---
 
 # datasploit

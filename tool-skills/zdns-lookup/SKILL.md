@@ -1,6 +1,7 @@
 ---
 name: zdns-lookup
-description: ZDNS: 百万级 DNS 查询。信号:资产测绘,子域名,zdns A`,MX 记录,NS 记录。
+description: "ZDNS: Million-scale DNS queries. Signals: asset mapping, subdomain, zdns A records, MX records, NS records."
+zh-signals: "ZDNS: 百万级 DNS 查询。信号:资产测绘,子域名,zdns A`,MX 记录,NS 记录。"
 ---
 
 # ZDNS

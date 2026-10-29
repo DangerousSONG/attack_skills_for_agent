@@ -1,6 +1,7 @@
 ---
 name: dnswatch-dns-mon
-description: DNSWatch: DNS 请求监控+劫持。信号:中间人,mitm,DNS 监控+伪造,伪造模式,定向。
+description: "DNSWatch: DNS request monitoring and hijacking. Signals: man-in-the-middle, MITM, DNS monitoring plus spoofing, spoofing modes, targeted."
+zh-signals: "DNSWatch: DNS 请求监控+劫持。信号:中间人,mitm,DNS 监控+伪造,伪造模式,定向。"
 ---
 
 # DNSWatch

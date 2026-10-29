@@ -1,6 +1,7 @@
 ---
 name: performing-fuzzing-with-aflplusplus
-description: "Performs coverage-guided fuzzing of compiled binaries with AFL++, instrumenting 信号:pwn,二进制利用,栈溢出。"
+description: "Perform coverage-guided fuzzing of compiled binaries with AFL++ by instrumenting targets. Signals: pwn, binary exploitation, stack overflow."
+zh-signals: "Performs coverage-guided fuzzing of compiled binaries with AFL++, instrumenting 信号:pwn,二进制利用,栈溢出。"
 when-to-use: 'Performs coverage-guided fuzzing of compiled binaries with AFL++, instrumenting
   targets via afl-cc/afl-clang-fast, minimizing corpora with afl-cmin and afl-tmin,
   running parallel campaigns with afl-fuzz, and triaging crashes with CASR or GDB

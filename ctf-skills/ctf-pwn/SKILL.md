@@ -1,6 +1,7 @@
 ---
 name: ctf-pwn
-description: "CTF Pwn:栈溢出/格式化字符串/堆利用/ROP/ret2libc/shellcode/内核提权/seccomp 绕过/沙箱逃逸,把内存破坏原语变成代码执行。信号:ctf,pwn,栈溢出,rop。"
+description: "CTF pwn: stack overflow, format string, heap exploitation, ROP, ret2libc, shellcode, kernel privilege escalation, seccomp bypass, sandbox escape, turning memory corruption into code execution. Signals: ctf, pwn, stack overflow, rop."
+zh-signals: "CTF Pwn:栈溢出/格式化字符串/堆利用/ROP/ret2libc/shellcode/内核提权/seccomp 绕过/沙箱逃逸,把内存破坏原语变成代码执行。信号:ctf,pwn,栈溢出,rop。"
 when-to-use: Provides binary exploitation techniques for CTF challenges. Use when you already have a vulnerable native target or service and need to turn memory corruption or low-level primitives into code executi
 license: MIT
 compatibility: Requires filesystem-based agent (Claude Code or similar) with bash, Python 3, and internet access for tool installation.

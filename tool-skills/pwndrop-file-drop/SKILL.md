@@ -1,6 +1,7 @@
 ---
 name: pwndrop-file-drop
-description: pwndrop: 红队载荷托管。信号:载荷开发,武器化,启动投递服务,上传,目标机下载。
+description: "pwndrop: Hosts red-team payloads. Signals: payload development, weaponization, start delivery service, upload, target download."
+zh-signals: "pwndrop: 红队载荷托管。信号:载荷开发,武器化,启动投递服务,上传,目标机下载。"
 ---
 
 # pwndrop

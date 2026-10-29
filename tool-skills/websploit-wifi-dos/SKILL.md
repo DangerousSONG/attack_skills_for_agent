@@ -1,6 +1,7 @@
 ---
 name: websploit-wifi-dos
-description: websploit: Web 漏洞快速利用。信号:pwn,二进制利用,Web 攻击框架,模块。
+description: "websploit: Web vulnerability rapid exploitation. Signals: pwn, binary exploitation, web attack framework, modules."
+zh-signals: "websploit: Web 漏洞快速利用。信号:pwn,二进制利用,Web 攻击框架,模块。"
 ---
 
 # websploit

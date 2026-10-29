@@ -1,6 +1,7 @@
 ---
 name: auth-sec
-description: "Authentication and Authorization Router 信号:红队,方法论,渗透流程。"
+description: "Authentication and Authorization Router. Signals: red team, methodology, penetration testing workflow."
+zh-signals: "Authentication and Authorization Router 信号:红队,方法论,渗透流程。"
 when-to-use: Authentication and Authorization Router
   Entry P1 category router for authentication and authorization. Use when
   testing login flows, sessions, object authorization, JWT, OAuth, CORS, CSRF,

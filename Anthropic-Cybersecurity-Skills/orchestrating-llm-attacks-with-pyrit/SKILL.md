@@ -1,6 +1,7 @@
 ---
 name: orchestrating-llm-attacks-with-pyrit
-description: "用微软 PyRIT 编排多轮 LLM 攻击:Crescendo 渐进升级、攻击树剪枝、scorer 反馈循环与会话记忆,打聊天机器人/Agent。信号:pyrit,llm攻击,多轮红队。"
+description: "Orchestrate multi-turn LLM attacks with Microsoft PyRIT, including Crescendo escalation, attack-tree pruning, scorer feedback loops, and session memory against chatbots/agents. Signals: pyrit, llm attack, multi-turn red team."
+zh-signals: "用微软 PyRIT 编排多轮 LLM 攻击:Crescendo 渐进升级、攻击树剪枝、scorer 反馈循环与会话记忆,打聊天机器人/Agent。信号:pyrit,llm攻击,多轮红队。"
 when-to-use: Build automated multi-turn adversarial attacks against conversational LLM targets using Microsoft PyRIT's RedTeamingOrchestrator, CrescendoOrchestrator (gradual escalation), and TreeOfAttacksWithPruni
 domain: cybersecurity
 subdomain: ai-security

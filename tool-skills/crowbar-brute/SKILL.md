@@ -1,6 +1,7 @@
 ---
 name: crowbar-brute
-description: Crowbar: RDP 口令爆破。信号:密码破解,哈希破解,RDP 爆破,私钥撞库,OpenVPN 爆破。
+description: "Crowbar: Brute-forces RDP passwords. Signals: password cracking, hash cracking, RDP brute force, private key brute force, OpenVPN brute force."
+zh-signals: "Crowbar: RDP 口令爆破。信号:密码破解,哈希破解,RDP 爆破,私钥撞库,OpenVPN 爆破。"
 ---
 
 # Crowbar

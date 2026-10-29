@@ -1,6 +1,7 @@
 ---
 name: evillimiter-mitm-limit
-description: evillimiter: 内网 ARP 拦截。信号:中间人,mitm,扫描主机,限速目标,断网全部。
+description: "evillimiter: internal ARP interception. Signals: man-in-the-middle, MITM, scan hosts, throttle targets, disconnect all."
+zh-signals: "evillimiter: 内网 ARP 拦截。信号:中间人,mitm,扫描主机,限速目标,断网全部。"
 ---
 
 # evillimiter

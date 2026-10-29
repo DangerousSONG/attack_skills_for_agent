@@ -1,6 +1,7 @@
 ---
 name: container-escape-techniques
-description: "Container escape playbook 信号:云提权,iam提权,容器提权。"
+description: "Container escape playbook. Signals: cloud privilege escalation, IAM privilege escalation, container privilege escalation."
+zh-signals: "Container escape playbook 信号:云提权,iam提权,容器提权。"
 when-to-use: >-
   Container escape playbook. Use when operating inside a Docker container, LXC, or Kubernetes pod and need to escape to the host via privileged mode, capabilities, Docker socket, cgroup abuse, namespace tricks, or runtime vulnerabilities.
 ---

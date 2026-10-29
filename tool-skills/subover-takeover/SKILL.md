@@ -1,6 +1,7 @@
 ---
 name: subover-takeover
-description: SubOver: 子域接管批扫。信号:攻击面,云资产,子域接管检测,线程。
+description: "SubOver batch-scans subdomain takeovers. Signals: attack surface, cloud assets, subdomain takeover detection, threads"
+zh-signals: "SubOver: 子域接管批扫。信号:攻击面,云资产,子域接管检测,线程。"
 ---
 
 # SubOver

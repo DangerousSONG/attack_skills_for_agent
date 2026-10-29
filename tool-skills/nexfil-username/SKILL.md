@@ -1,6 +1,7 @@
 ---
 name: nexfil-username
-description: nexfil: 用户名跨平台追踪。信号:邮箱收集,员工信息,用户名全网存在性,并发。
+description: "nexfil: Cross-platform username tracking. Signals: email collection, employee information, username internet-wide existence, concurrency."
+zh-signals: "nexfil: 用户名跨平台追踪。信号:邮箱收集,员工信息,用户名全网存在性,并发。"
 ---
 
 # nexfil

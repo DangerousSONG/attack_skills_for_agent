@@ -1,6 +1,7 @@
 ---
 name: tlsfuzzer-fuzz
-description: tlsfuzzer: TLS 实现 fuzz。信号:密码学攻击,加密破解,协议 fuzz,迭代。
+description: "tlsfuzzer fuzzes TLS implementations. Signals: cryptographic attack, cryptographic cracking, protocol fuzzing, iteration"
+zh-signals: "tlsfuzzer: TLS 实现 fuzz。信号:密码学攻击,加密破解,协议 fuzz,迭代。"
 ---
 
 # tlsfuzzer

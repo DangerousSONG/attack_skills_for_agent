@@ -1,6 +1,7 @@
 ---
 name: smbclient-ng-modern
-description: smbclient-ng: 交互式 SMB 操作。信号:内网枚举,网络发现,现代 SMB 客户端,共享浏览,下载。
+description: "smbclient-ng: interactive SMB operations. Signals: internal enumeration, network discovery, modern SMB client, share browsing, download."
+zh-signals: "smbclient-ng: 交互式 SMB 操作。信号:内网枚举,网络发现,现代 SMB 客户端,共享浏览,下载。"
 ---
 
 # smbclient-ng

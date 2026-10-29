@@ -1,6 +1,7 @@
 ---
 name: plecost-wordpress-finger
-description: Plecost: WP 目标漏洞面。信号:web漏洞,注入,插件清单,JSON 输出,并发 10。
+description: "WordPress target vulnerability surface. Signals: web vulnerability, injection, plugin inventory, JSON output, concurrency 10."
+zh-signals: "Plecost: WP 目标漏洞面。信号:web漏洞,注入,插件清单,JSON 输出,并发 10。"
 ---
 
 # Plecost

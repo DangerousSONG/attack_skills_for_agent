@@ -1,6 +1,7 @@
 ---
 name: xss-cross-site-scripting
-description: "XSS:用户可控内容到达 HTML/属性/JS/DOM sink/上传/多上下文渲染路径。信号:xss,跨站脚本,dom sink,上下文逃逸,脚本注入。"
+description: "XSS: user-controlled content reaches HTML, attribute, JS, DOM sinks, upload, multi-context rendering paths. Signals: XSS, cross-site scripting, DOM sink, context escaping, script injection."
+zh-signals: "XSS:用户可控内容到达 HTML/属性/JS/DOM sink/上传/多上下文渲染路径。信号:xss,跨站脚本,dom sink,上下文逃逸,脚本注入。"
 when-to-use: >-
   XSS playbook. Use when user-controlled content reaches HTML, attributes, JavaScript, DOM sinks, uploads, or multi-context rendering paths.
 ---

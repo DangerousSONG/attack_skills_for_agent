@@ -1,6 +1,7 @@
 ---
 name: rustbuster-content-discover
-description: rustbuster: 多模式内容发现。信号:web扫描,漏洞扫描,目录爆破,子域爆破,虚拟主机爆破。
+description: "rustbuster: Multi-mode content discovery. Signals: web scanning, vulnerability scanning, directory brute forcing, subdomain brute forcing, virtual host brute forcing."
+zh-signals: "rustbuster: 多模式内容发现。信号:web扫描,漏洞扫描,目录爆破,子域爆破,虚拟主机爆破。"
 ---
 
 # rustbuster

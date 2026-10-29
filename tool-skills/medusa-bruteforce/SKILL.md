@@ -1,6 +1,7 @@
 ---
 name: medusa-bruteforce
-description: Medusa: 多服务凭据爆破。信号:暴力破解,口令喷射,SSH 爆破,SMB,HTTP 表单。
+description: "Medusa: Multi-service credential brute forcing. Signals: brute force, password spraying, SSH brute force, SMB, HTTP forms."
+zh-signals: "Medusa: 多服务凭据爆破。信号:暴力破解,口令喷射,SSH 爆破,SMB,HTTP 表单。"
 ---
 
 # Medusa

@@ -1,6 +1,7 @@
 ---
 name: m3-gen-msbuild
-description: MaliciousMacroMSBuild: 宏内嵌 MSBuild 免杀。信号:无文件攻击,lolbins,宏+MSBuild 生成,PS 载荷,混淆。
+description: "MaliciousMacroMSBuild: Fileless evasion via macros embedding MSBuild. Signals: fileless attack, lolbins, macro+MSBuild generation, PS payload, obfuscation."
+zh-signals: "MaliciousMacroMSBuild: 宏内嵌 MSBuild 免杀。信号:无文件攻击,lolbins,宏+MSBuild 生成,PS 载荷,混淆。"
 ---
 
 # MaliciousMacroMSBuild

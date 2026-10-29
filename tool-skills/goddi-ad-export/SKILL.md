@@ -1,6 +1,7 @@
 ---
 name: goddi-ad-export
-description: goddi: AD 结构全量导出(离线分析)。信号:ad攻击,域渗透,json`。
+description: "goddi exports full Active Directory structure for offline analysis. Signals: AD attack, domain penetration, JSON."
+zh-signals: "goddi: AD 结构全量导出(离线分析)。信号:ad攻击,域渗透,json`。"
 ---
 
 # goddi

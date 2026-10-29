@@ -1,6 +1,7 @@
 ---
 name: sccmhunter-sccm-attack
-description: SCCMHunter: SCCM 站点资产测绘。信号:ad攻击,域渗透,查看站点详情,票据复用模式,调试输出。
+description: "SCCMHunter: Maps SCCM site assets. Signals: AD attack, domain penetration, view site details, ticket reuse mode, debug output."
+zh-signals: "SCCMHunter: SCCM 站点资产测绘。信号:ad攻击,域渗透,查看站点详情,票据复用模式,调试输出。"
 ---
 
 # SCCMHunter

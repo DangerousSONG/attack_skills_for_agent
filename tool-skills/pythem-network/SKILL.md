@@ -1,6 +1,7 @@
 ---
 name: pythem-network
-description: PytheM: 网络渗透一体化。信号:中间人,mitm,网络攻击框架,ARP 欺骗,嗅探。
+description: "PytheM: Integrated network penetration framework. Signals: man-in-the-middle, MITM, network attack framework, ARP spoofing, sniffing."
+zh-signals: "PytheM: 网络渗透一体化。信号:中间人,mitm,网络攻击框架,ARP 欺骗,嗅探。"
 ---
 
 # PytheM

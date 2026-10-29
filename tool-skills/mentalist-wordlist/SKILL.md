@@ -1,6 +1,7 @@
 ---
 name: mentalist-wordlist
-description: Mentalist: GUI 字典工厂。信号:密码破解,哈希破解,可视化字典生成,变异。
+description: "Mentalist: GUI dictionary factory. Signals: password cracking, hash cracking, visual dictionary generation, mutation."
+zh-signals: "Mentalist: GUI 字典工厂。信号:密码破解,哈希破解,可视化字典生成,变异。"
 ---
 
 # Mentalist

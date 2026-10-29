@@ -1,6 +1,7 @@
 ---
 name: postenum-linux-audit
-description: postenum: Linux 立足点快速摸底。信号:红队,方法论,基础系统信息,容器/虚拟化检测,网络信息。
+description: "Quick Linux foothold assessment. Signals: red team, methodology, basic system info, container/virtualization detection, network info."
+zh-signals: "postenum: Linux 立足点快速摸底。信号:红队,方法论,基础系统信息,容器/虚拟化检测,网络信息。"
 ---
 
 # postenum

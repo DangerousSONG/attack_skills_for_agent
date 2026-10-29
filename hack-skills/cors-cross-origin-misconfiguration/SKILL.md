@@ -1,6 +1,7 @@
 ---
 name: cors-cross-origin-misconfiguration
-description: "CORS 配置错误测试:跨源信任、带凭据读取、origin 反射、preflight 策略缺陷、浏览器侧认证 API 访问。信号:cors,跨域,origin反射,预检,跨站读取。"
+description: "CORS misconfiguration testing: cross-origin trust, credentialed reads, origin reflection, preflight policy flaws, browser-side auth API access. Signals: CORS, cross-origin, origin reflection, preflight, cross-site read."
+zh-signals: "CORS 配置错误测试:跨源信任、带凭据读取、origin 反射、preflight 策略缺陷、浏览器侧认证 API 访问。信号:cors,跨域,origin反射,预检,跨站读取。"
 when-to-use: >-
   CORS misconfiguration testing playbook. Use when analyzing cross-origin trust, credentialed browser reads, origin reflection, preflight policy bugs, and browser-based access to authenticated APIs.
 ---

@@ -1,6 +1,7 @@
 ---
 name: parampampam-param-hunt
-description: ParamPamPam: 挖隐藏调试参数。信号:web漏洞,注入,发现隐藏 GET 参数,POST 参数,自定义字典。
+description: "Find hidden debug parameters. Signals: web vulnerability, injection, hidden GET parameters, POST parameters, custom wordlist."
+zh-signals: "ParamPamPam: 挖隐藏调试参数。信号:web漏洞,注入,发现隐藏 GET 参数,POST 参数,自定义字典。"
 ---
 
 # ParamPamPam

@@ -1,6 +1,7 @@
 ---
 name: sipshock-sip-shock
-description: sipshock: SIP 设备 Shellshock。信号:端口扫描,nmap,Range。
+description: "sipshock: SIP device Shellshock testing. Signals: port scan, nmap, Range."
+zh-signals: "sipshock: SIP 设备 Shellshock。信号:端口扫描,nmap,Range。"
 ---
 
 # sipshock

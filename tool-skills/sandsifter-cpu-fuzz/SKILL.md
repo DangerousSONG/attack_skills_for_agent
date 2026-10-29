@@ -1,6 +1,7 @@
 ---
 name: sandsifter-cpu-fuzz
-description: sandsifter: CPU 指令集差异侧信道/漏洞挖掘。信号:pwn,二进制利用,扫描未文档指令,反汇编差异,模式扫描。
+description: "sandsifter: Discovers CPU instruction side channels and vulnerabilities. Signals: pwn, binary exploitation, scan undocumented instructions, disassembly differences, pattern scanning."
+zh-signals: "sandsifter: CPU 指令集差异侧信道/漏洞挖掘。信号:pwn,二进制利用,扫描未文档指令,反汇编差异,模式扫描。"
 ---
 
 # sandsifter

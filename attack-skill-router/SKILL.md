@@ -1,7 +1,8 @@
 ---
 name: attack-skill-router
-description: 攻击侧 Skill 库（996 个渗透测试 skill）的路由层。提供 search_skills 语义检索 HTTP API（curl 调用宿主常驻服务，约 0.1s 返回 top-k 候选与可直接 Read 的绝对路径，容器内无需挂载 venv/模型权重）、同名本地 CLI 兜底，以及 50 类静态路由表（前两者都不可用时兜底）。任务涉及侦察、漏洞利用、提权、横向移动、持久化、免杀、C2 等任一渗透环节时先加载本 skill，用它定位该读的 1-3 个 SKILL.md；不要在近千个 SKILL.md 里盲目 grep 全读。
-when_to_use: 渗透任务开题时；已加载的 skill 解决不了当前障碍、需要换路由时；用户提到具体服务/工具/技术/CVE 编号（如 Redis 未授权、sqlmap、Java 反序列化、域渗透、UAC 绕过、CVE-xxxx-xxxx）时。
+description: "Attack-side skill library routing layer (996 pentest skills) exposing a search_skills semantic-retrieval HTTP API served by a resident host process, a same-named local CLI fallback, and a 50-category static routing table as last resort. Signals: skill routing, semantic skill search, penetration testing, CVE, reconnaissance, exploitation, privilege escalation, lateral movement, persistence, evasion, C2."
+zh-signals: "攻击侧 Skill 库（996 个渗透测试 skill）的路由层。提供 search_skills 语义检索 HTTP API（curl 调用宿主常驻服务，约 0.1s 返回 top-k 候选与可直接 Read 的绝对路径，容器内无需挂载 venv/模型权重）、同名本地 CLI 兜底，以及 50 类静态路由表（前两者都不可用时兜底）。任务涉及侦察、漏洞利用、提权、横向移动、持久化、免杀、C2 等任一渗透环节时先加载本 skill，用它定位该读的 1-3 个 SKILL.md；不要在近千个 SKILL.md 里盲目 grep 全读。"
+when-to-use: 渗透任务开题时；已加载的 skill 解决不了当前障碍、需要换路由时；用户提到具体服务/工具/技术/CVE 编号（如 Redis 未授权、sqlmap、Java 反序列化、域渗透、UAC 绕过、CVE-xxxx-xxxx）时。
 argument-hint: 一句话任务描述，例如 Redis 未授权访问想拿 shell
 allowed-tools: Bash(curl:*), Bash(bash /home/panjiahao/safe-range/attack_skills_for_agent/scripts/router_server.sh:*), Bash(/home/panjiahao/safe-range/attack_skills_for_agent/scripts/search_skills:*)
 ---

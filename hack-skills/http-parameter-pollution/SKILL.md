@@ -1,6 +1,7 @@
 ---
 name: http-parameter-pollution
-description: "HTTP 参数污染(HPP):重复 query/body 键被服务器、代理、WAF、框架差异解析。信号:hpp,参数污染,重复参数,解析差异,waf绕过。"
+description: "HTTP parameter pollution (HPP): duplicate query/body keys parsed differently by servers, proxies, WAFs, frameworks. Signals: HPP, parameter pollution, duplicate parameters, parser differences, WAF bypass."
+zh-signals: "HTTP 参数污染(HPP):重复 query/body 键被服务器、代理、WAF、框架差异解析。信号:hpp,参数污染,重复参数,解析差异,waf绕过。"
 when-to-use: >-
   HTTP Parameter Pollution (HPP): duplicate query/body keys parsed differently by servers, proxies, WAFs, and app frameworks. Use when filters and application layers disagree on which value wins, enabling bypass, SSRF second URL, logic abuse, or CSRF token confusion.
 ---

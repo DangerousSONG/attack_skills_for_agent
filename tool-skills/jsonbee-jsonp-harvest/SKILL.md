@@ -1,6 +1,7 @@
 ---
 name: jsonbee-jsonp-harvest
-description: JSONBee: JSONP 回调劫持。信号:载荷开发,武器化,挑可用 JSONP 端点,XSS/数据窃取,预整理端点。
+description: "JSONBee hijacks JSONP callbacks. Signals: payload development, weaponization, usable JSONP endpoints, XSS or data theft, curated endpoints."
+zh-signals: "JSONBee: JSONP 回调劫持。信号:载荷开发,武器化,挑可用 JSONP 端点,XSS/数据窃取,预整理端点。"
 ---
 
 # JSONBee

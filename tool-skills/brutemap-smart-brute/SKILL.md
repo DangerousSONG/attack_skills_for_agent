@@ -1,6 +1,7 @@
 ---
 name: brutemap-smart-brute
-description: brutemap: Web 登录表单口令爆破。信号:web漏洞,注入,登录爆破,自动识别表单,线程。
+description: "brutemap: Brute-forces web login forms. Signals: web vulnerability, injection, login brute force, automatic form recognition, threads."
+zh-signals: "brutemap: Web 登录表单口令爆破。信号:web漏洞,注入,登录爆破,自动识别表单,线程。"
 ---
 
 # brutemap

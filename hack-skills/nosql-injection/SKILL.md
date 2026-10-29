@@ -1,6 +1,7 @@
 ---
 name: nosql-injection
-description: "NoSQL 注入:MongoDB 操作符、JSON 查询对象、灵活搜索过滤器、后端查询 DSL 的数据或逻辑滥用。信号:nosql注入,mongodb注入,操作符注入,json查询。"
+description: "NoSQL injection: MongoDB operators, JSON query objects, flexible search filters, backend query DSL data/logic abuse. Signals: NoSQL injection, MongoDB injection, operator injection, JSON query."
+zh-signals: "NoSQL 注入:MongoDB 操作符、JSON 查询对象、灵活搜索过滤器、后端查询 DSL 的数据或逻辑滥用。信号:nosql注入,mongodb注入,操作符注入,json查询。"
 when-to-use: >-
   NoSQL injection playbook. Use when MongoDB-style operators, JSON query objects, flexible search filters, or backend query DSLs may allow data or logic abuse.
 ---

@@ -1,6 +1,7 @@
 ---
 name: duplicut-dedup
-description: duplicut: 50GB 字典秒级去重。信号:密码破解,哈希破解,大字典去重,长度过滤,内存限制。
+description: "duplicut: second-level deduplication of 50GB dictionaries. Signals: password cracking, hash cracking, large dictionary deduplication, length filtering, memory limit."
+zh-signals: "duplicut: 50GB 字典秒级去重。信号:密码破解,哈希破解,大字典去重,长度过滤,内存限制。"
 ---
 
 # duplicut

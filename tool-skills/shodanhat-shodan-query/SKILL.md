@@ -1,6 +1,7 @@
 ---
 name: shodanhat-shodan-query
-description: ShodanHat: Shodan 批量资产收割。信号:网络拓扑,互联网测绘,证书匹配,组合过滤。
+description: "ShodanHat: batch Shodan asset harvesting. Signals: network topology, internet mapping, certificate matching, combined filters."
+zh-signals: "ShodanHat: Shodan 批量资产收割。信号:网络拓扑,互联网测绘,证书匹配,组合过滤。"
 ---
 
 # ShodanHat

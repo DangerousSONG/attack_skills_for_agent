@@ -1,6 +1,7 @@
 ---
 name: seatbelt-host-survey
-description: Seatbelt: Windows 提权面系统枚举。信号:windows提权,uac绕过,全量主机侦察,按组,系统组。
+description: "Seatbelt: Enumerates Windows privilege escalation surface. Signals: Windows privilege escalation, UAC bypass, full host reconnaissance, by group, system groups."
+zh-signals: "Seatbelt: Windows 提权面系统枚举。信号:windows提权,uac绕过,全量主机侦察,按组,系统组。"
 ---
 
 # Seatbelt

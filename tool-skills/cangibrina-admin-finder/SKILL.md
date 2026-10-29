@@ -1,6 +1,7 @@
 ---
 name: cangibrina-admin-finder
-description: cangibrina: 后台地址发现。信号:web扫描,漏洞扫描,后台扫描,字典,线程。
+description: "cangibrina: Discovers administrative panel URLs. Signals: web scanning, vulnerability scanning, admin panel scanning, dictionary, threads."
+zh-signals: "cangibrina: 后台地址发现。信号:web扫描,漏洞扫描,后台扫描,字典,线程。"
 ---
 
 # cangibrina

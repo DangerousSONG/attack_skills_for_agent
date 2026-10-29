@@ -1,6 +1,7 @@
 ---
 name: goohak-dorks
-description: GooHak: Google Hacking 自动化。信号:资产测绘,子域名,多个浏览器标签打开结果。
+description: "GooHak automates Google hacking. Signals: asset mapping, subdomains, open results in multiple browser tabs."
+zh-signals: "GooHak: Google Hacking 自动化。信号:资产测绘,子域名,多个浏览器标签打开结果。"
 ---
 
 # GooHak

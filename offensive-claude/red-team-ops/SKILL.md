@@ -1,6 +1,7 @@
 ---
 name: red-team-ops
-description: "红队端到端作战:初始访问、持久化、提权、防御规避、C2 基础设施、EDR 绕过、LOLBins 落地。信号:红队,端到端,防御规避,c2,落地利用。"
+description: "Covers red team end-to-end operations: initial access, persistence, privilege escalation, defense evasion, C2 infrastructure, EDR bypass, and LOLBins landing. Signals: red team, end-to-end, defense evasion, c2, landing exploitation."
+zh-signals: "红队端到端作战:初始访问、持久化、提权、防御规避、C2 基础设施、EDR 绕过、LOLBins 落地。信号:红队,端到端,防御规避,c2,落地利用。"
 when-to-use: Use when running a full red-team engagement end-to-end — initial access, persistence, privilege escalation, defense evasion, C2 infrastructure, EDR bypass, living-off-the-land
 metadata:
   type: offensive

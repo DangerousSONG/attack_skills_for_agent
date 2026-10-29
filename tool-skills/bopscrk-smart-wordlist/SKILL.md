@@ -1,6 +1,7 @@
 ---
 name: bopscrk-smart-wordlist
-description: bopscrk: 社工字典智能生成。信号:密码破解,哈希破解,交互生成定向字典,关键字+年份。
+description: "bopscrk: intelligently generates social engineering wordlists. Signals: password cracking, hash cracking, interactive targeted dictionary generation, keywords+years"
+zh-signals: "bopscrk: 社工字典智能生成。信号:密码破解,哈希破解,交互生成定向字典,关键字+年份。"
 ---
 
 # bopscrk

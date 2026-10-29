@@ -1,6 +1,7 @@
 ---
 name: a2sv-ssl-vuln
-description: a2sv: SSL/TLS CVE 检测。信号:密码学攻击,加密破解,SSL 漏洞扫描。
+description: "a2sv: detects SSL/TLS CVEs. Signals: cryptographic attack, encryption cracking, SSL vulnerability scan"
+zh-signals: "a2sv: SSL/TLS CVE 检测。信号:密码学攻击,加密破解,SSL 漏洞扫描。"
 ---
 
 # a2sv

@@ -1,6 +1,7 @@
 ---
 name: metabigor-company-osint
-description: metabigor: 公司名/域名全网资产。信号:邮箱收集,员工信息,证书透明度查关联域名,IP 信息聚合。
+description: "metabigor: Company/domain internet-wide assets. Signals: email collection, employee information, certificate transparency related domains, IP information aggregation."
+zh-signals: "metabigor: 公司名/域名全网资产。信号:邮箱收集,员工信息,证书透明度查关联域名,IP 信息聚合。"
 ---
 
 # metabigor

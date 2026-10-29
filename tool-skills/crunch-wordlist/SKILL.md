@@ -1,6 +1,7 @@
 ---
 name: crunch-wordlist
-description: crunch: 掩码定向字典生成。信号:密码破解,哈希破解,按字符集生成,纯数字,掩码模板。
+description: "crunch: Generates targeted mask-based dictionaries. Signals: password cracking, hash cracking, charset generation, numeric only, mask template."
+zh-signals: "crunch: 掩码定向字典生成。信号:密码破解,哈希破解,按字符集生成,纯数字,掩码模板。"
 ---
 
 # crunch

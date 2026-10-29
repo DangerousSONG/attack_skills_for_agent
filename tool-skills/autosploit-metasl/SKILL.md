@@ -1,6 +1,7 @@
 ---
 name: autosploit-metasl
-description: AutoSploit: 批量 CVE 自动打点(授权靶场)。信号:pwn,二进制利用,本地目标清单,默认端口集。
+description: "AutoSploit: batch auto-exploits CVEs in authorized labs. Signals: pwn, binary exploitation, local target list, default port set"
+zh-signals: "AutoSploit: 批量 CVE 自动打点(授权靶场)。信号:pwn,二进制利用,本地目标清单,默认端口集。"
 ---
 
 # AutoSploit

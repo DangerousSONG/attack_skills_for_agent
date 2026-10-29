@@ -1,6 +1,7 @@
 ---
 name: mylg-network-cli
-description: mylg: 瑞士军刀式网络诊断。信号:端口扫描,nmap,综合网络扫描,路由跟踪,DNS 查询。
+description: "mylg: Swiss-army-knife network diagnostics. Signals: port scanning, nmap, comprehensive network scan, traceroute, DNS query."
+zh-signals: "mylg: 瑞士军刀式网络诊断。信号:端口扫描,nmap,综合网络扫描,路由跟踪,DNS 查询。"
 ---
 
 # mylg

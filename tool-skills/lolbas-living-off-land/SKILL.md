@@ -1,6 +1,7 @@
 ---
 name: lolbas-living-off-land
-description: LOLBAS 项目: 系统自带工具下载并执行 payload、rundll32 无文件执行。信号:无文件攻击,lolbins,查可下载文件的二进制,查可执行命令的二进制,查可导出凭据的。
+description: "LOLBAS project: Use built-in tools to download/execute payloads and fileless rundll32 execution. Signals: fileless attack, lolbins, find binaries that download files, find binaries that execute commands, find binaries that export credentials."
+zh-signals: "LOLBAS 项目: 系统自带工具下载并执行 payload、rundll32 无文件执行。信号:无文件攻击,lolbins,查可下载文件的二进制,查可执行命令的二进制,查可导出凭据的。"
 ---
 
 # LOLBAS 项目

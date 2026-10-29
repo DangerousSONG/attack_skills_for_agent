@@ -1,6 +1,7 @@
 ---
 name: dnsteal-dns-exfil
-description: dnsteal: 纯 DNS 出网环境偷文件。信号:数据外传,数据泄露,DNS 文件窃取服务端,自定义分块长度,发送端。
+description: "dnsteal: exfiltrate files over DNS-only outbound. Signals: data exfiltration, data leakage, DNS file theft server, custom chunk length, sender."
+zh-signals: "dnsteal: 纯 DNS 出网环境偷文件。信号:数据外传,数据泄露,DNS 文件窃取服务端,自定义分块长度,发送端。"
 ---
 
 # dnsteal

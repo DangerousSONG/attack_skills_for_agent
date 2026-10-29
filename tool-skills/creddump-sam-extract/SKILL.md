@@ -1,6 +1,7 @@
 ---
 name: creddump-sam-extract
-description: creddump: 离线 SAM 哈希提取。信号:密码破解,哈希破解,提取 LSA 密钥。
+description: "creddump: Extracts SAM hashes offline. Signals: password cracking, hash cracking, LSA key extraction."
+zh-signals: "creddump: 离线 SAM 哈希提取。信号:密码破解,哈希破解,提取 LSA 密钥。"
 ---
 
 # creddump

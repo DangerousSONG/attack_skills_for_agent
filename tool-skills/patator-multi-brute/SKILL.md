@@ -1,6 +1,7 @@
 ---
 name: patator-multi-brute
-description: Patator: HTTP 登录表单爆破+条件过滤、数据库爆破。信号:暴力破解,口令喷射,SSH,SMB。
+description: "HTTP login form brute forcing with filters and database brute forcing. Signals: brute force, password spraying, SSH, SMB."
+zh-signals: "Patator: HTTP 登录表单爆破+条件过滤、数据库爆破。信号:暴力破解,口令喷射,SSH,SMB。"
 ---
 
 # Patator

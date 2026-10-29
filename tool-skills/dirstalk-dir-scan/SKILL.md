@@ -1,6 +1,7 @@
 ---
 name: dirstalk-dir-scan
-description: dirstalk: 分布式目录扫描。信号:web扫描,漏洞扫描,线程,状态过滤。
+description: "dirstalk: distributed directory scanning. Signals: web scanning, vulnerability scanning, threads, status filtering."
+zh-signals: "dirstalk: 分布式目录扫描。信号:web扫描,漏洞扫描,线程,状态过滤。"
 ---
 
 # dirstalk

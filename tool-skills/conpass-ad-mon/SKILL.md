@@ -1,6 +1,7 @@
 ---
 name: conpass-ad-mon
-description: conpass: AD 密码策略审计。信号:ad攻击,域渗透,密码策略+强度审计,弱口令检测。
+description: "conpass: Audits Active Directory password policies. Signals: AD attack, domain penetration, password policy and strength audit, weak password detection."
+zh-signals: "conpass: AD 密码策略审计。信号:ad攻击,域渗透,密码策略+强度审计,弱口令检测。"
 ---
 
 # conpass

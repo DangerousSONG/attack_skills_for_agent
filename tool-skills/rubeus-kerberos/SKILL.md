@@ -1,6 +1,7 @@
 ---
 name: rubeus-kerberos
-description: Rubeus: 普通用户伪造域管票据(S4U2Self)、黄金票据恢复域管。信号:kerberos,票据攻击,请求 TGT,S4U 委派,票据续期。
+description: "Rubeus: Forges Domain Admin tickets via S4U2Self and golden tickets. Signals: Kerberos, ticket attack, request TGT, S4U delegation, ticket renewal."
+zh-signals: "Rubeus: 普通用户伪造域管票据(S4U2Self)、黄金票据恢复域管。信号:kerberos,票据攻击,请求 TGT,S4U 委派,票据续期。"
 ---
 
 # Rubeus

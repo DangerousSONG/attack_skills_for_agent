@@ -1,6 +1,7 @@
 ---
 name: hakrevdns-reverse
-description: hakrevdns: IP 段反查域名。信号:网络拓扑,互联网测绘,字典。
+description: "hakrevdns reverse-resolves IP ranges to domains. Signals: network topology, internet mapping, dictionaries."
+zh-signals: "hakrevdns: IP 段反查域名。信号:网络拓扑,互联网测绘,字典。"
 ---
 
 # hakrevdns

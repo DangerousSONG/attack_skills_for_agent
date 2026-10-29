@@ -1,6 +1,7 @@
 ---
 name: tomcatwardeployer
-description: tomcatWarDeployer: Tomcat 管理后台利用。信号:横向移动,psexec,Tomcat 部署,生成 WAR。
+description: "tomcatWarDeployer exploits Tomcat admin consoles. Signals: lateral movement, psexec, Tomcat deployment, WAR generation"
+zh-signals: "tomcatWarDeployer: Tomcat 管理后台利用。信号:横向移动,psexec,Tomcat 部署,生成 WAR。"
 ---
 
 # tomcatWarDeployer

@@ -1,6 +1,7 @@
 ---
 name: bagbak-ios-decrypt
-description: bagbak: App Store 应用脱壳提取。信号:移动端,android攻击,导出并解密指定 App,列出设备 App,覆盖已安装包。
+description: "bagbak: extracts and unpacks App Store apps. Signals: mobile, android attack, export and decrypt specified app, list device apps, overwrite installed packages"
+zh-signals: "bagbak: App Store 应用脱壳提取。信号:移动端,android攻击,导出并解密指定 App,列出设备 App,覆盖已安装包。"
 ---
 
 # bagbak

@@ -1,6 +1,7 @@
 ---
 name: fuzzdb-payload-dict
-description: fuzzdb: 手工构造模糊测试。信号:web扫描,漏洞扫描,路径字典,错误指纹正则,弱口令字典。
+description: "fuzzdb supports manual fuzzing payload construction. Signals: web scanning, vulnerability scanning, path dictionaries, error fingerprint regex, weak password dictionaries."
+zh-signals: "fuzzdb: 手工构造模糊测试。信号:web扫描,漏洞扫描,路径字典,错误指纹正则,弱口令字典。"
 ---
 
 # fuzzdb

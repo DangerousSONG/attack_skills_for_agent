@@ -1,6 +1,7 @@
 ---
 name: impacket-protocol-exec
-description: impacket 协议执行脚本集: PTH 横向拿 shell、NTLM 中继到 ADCS 提权。信号:横向移动,psexec。
+description: "impacket scripts perform PTH lateral shells and NTLM relay to ADCS privilege escalation. Signals: lateral movement, psexec."
+zh-signals: "impacket 协议执行脚本集: PTH 横向拿 shell、NTLM 中继到 ADCS 提权。信号:横向移动,psexec。"
 ---
 
 # impacket 协议执行脚本集

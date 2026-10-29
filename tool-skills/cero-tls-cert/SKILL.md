@@ -1,6 +1,7 @@
 ---
 name: cero-tls-cert
-description: cero: 证书批量提取子域。信号:密码学攻击,加密破解,批量 TLS 证书抓取,字段选择。
+description: "cero: Extracts subdomains from certificates in bulk. Signals: cryptographic attack, encryption cracking, bulk TLS certificate fetching, field selection."
+zh-signals: "cero: 证书批量提取子域。信号:密码学攻击,加密破解,批量 TLS 证书抓取,字段选择。"
 ---
 
 # cero

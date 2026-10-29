@@ -1,6 +1,7 @@
 ---
 name: subjack-takeover
-description: subjack: dangling 子域接管批量筛。信号:子域名,域名枚举,批量检测接管,线程,超时。
+description: "subjack batch-filters dangling subdomain takeovers. Signals: subdomain, domain enumeration, batch takeover detection, threads, timeout"
+zh-signals: "subjack: dangling 子域接管批量筛。信号:子域名,域名枚举,批量检测接管,线程,超时。"
 ---
 
 # subjack

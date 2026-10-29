@@ -1,6 +1,7 @@
 ---
 name: seeker-geo-phish
-description: seeker: 精准定位钓鱼。信号:钓鱼,社会工程,手动定制钓鱼页,邻近 WiFi 钓鱼模板。
+description: "seeker: precise phishing targeting. Signals: phishing, social engineering, custom phishing page, nearby WiFi phishing template."
+zh-signals: "seeker: 精准定位钓鱼。信号:钓鱼,社会工程,手动定制钓鱼页,邻近 WiFi 钓鱼模板。"
 ---
 
 # seeker

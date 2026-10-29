@@ -1,6 +1,7 @@
 ---
 name: habu-network-kit
-description: habu: 网络层 Swiss Army。信号:端口扫描,nmap,IP 信息,ARP 扫描,TCP 标志探测。
+description: "habu is a network-layer Swiss Army toolkit. Signals: port scanning, nmap, IP information, ARP scanning, TCP flag probing."
+zh-signals: "habu: 网络层 Swiss Army。信号:端口扫描,nmap,IP 信息,ARP 扫描,TCP 标志探测。"
 ---
 
 # habu

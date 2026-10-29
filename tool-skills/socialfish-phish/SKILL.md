@@ -1,6 +1,7 @@
 ---
 name: socialfish-phish
-description: SocialFish: 多平台钓鱼站点。信号:钓鱼,社会工程,钓鱼平台,模板。
+description: "SocialFish: multi-platform phishing sites. Signals: phishing, social engineering, phishing platform, template."
+zh-signals: "SocialFish: 多平台钓鱼站点。信号:钓鱼,社会工程,钓鱼平台,模板。"
 ---
 
 # SocialFish

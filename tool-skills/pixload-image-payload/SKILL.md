@@ -1,6 +1,7 @@
 ---
 name: pixload-image-payload
-description: Pixload: 图片上传 XSS/内容检查绕过。信号:载荷开发,武器化,PNG 注入,GIF 注入。
+description: "Image upload XSS and content-check bypass. Signals: payload development, weaponization, PNG injection, GIF injection."
+zh-signals: "Pixload: 图片上传 XSS/内容检查绕过。信号:载荷开发,武器化,PNG 注入,GIF 注入。"
 ---
 
 # Pixload

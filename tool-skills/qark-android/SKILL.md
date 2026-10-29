@@ -1,6 +1,7 @@
 ---
 name: qark-android
-description: QARK: APK 静态漏洞扫描。信号:移动端,android攻击,APK 静态扫描,JSON 报告,生成可执行 PoC。
+description: "QARK: Static APK vulnerability scanner. Signals: mobile, Android attack, APK static scanning, JSON report, generate executable PoC."
+zh-signals: "QARK: APK 静态漏洞扫描。信号:移动端,android攻击,APK 静态扫描,JSON 报告,生成可执行 PoC。"
 ---
 
 # QARK

@@ -1,6 +1,7 @@
 ---
 name: conducting-api-security-testing
-description: "Conducts security testing of REST, GraphQL, and gRPC APIs to identify 信号:api攻击,接口测试,graphql。"
+description: "Conduct security testing of REST, GraphQL, and gRPC APIs. Signals: API attacks, interface testing, GraphQL."
+zh-signals: "Conducts security testing of REST, GraphQL, and gRPC APIs to identify 信号:api攻击,接口测试,graphql。"
 when-to-use: 'Conducts security testing of REST, GraphQL, and gRPC APIs to identify
   vulnerabilities in authentication, authorization, rate limiting, input validation,
   and business logic. The tester uses the OWASP API Security Top 10 as the testing

@@ -1,6 +1,7 @@
 ---
 name: ttpassgen-mask
-description: ttpassgen: 多编码掩码生成。信号:密码破解,哈希破解,统计。
+description: "ttpassgen generates multi-encoding masks. Signals: password cracking, hash cracking, statistics"
+zh-signals: "ttpassgen: 多编码掩码生成。信号:密码破解,哈希破解,统计。"
 ---
 
 # ttpassgen

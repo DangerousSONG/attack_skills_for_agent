@@ -1,6 +1,7 @@
 ---
 name: linux-lateral-movement
-description: "Linux lateral movement playbook 信号:持久化,后门,权限维持。"
+description: "Linux lateral movement playbook. Signals: persistence, backdoors, privilege maintenance."
+zh-signals: "Linux lateral movement playbook 信号:持久化,后门,权限维持。"
 when-to-use: >-
   Linux lateral movement playbook. Use after gaining initial access to pivot across Linux hosts via SSH hijacking, credential harvesting, internal pivoting, D-Bus exploitation, sudo token reuse, and shared filesystem abuse.
 ---

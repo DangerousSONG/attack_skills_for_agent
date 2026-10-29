@@ -1,6 +1,7 @@
 ---
 name: joomlavs-joomla-scan
-description: joomlavs: Joomla 组件漏洞扫描。信号:web漏洞,注入,Joomla 扫描,组件枚举,全组件。
+description: "joomlavs scans Joomla component vulnerabilities. Signals: web vulnerability, injection, Joomla scan, component enumeration, all components."
+zh-signals: "joomlavs: Joomla 组件漏洞扫描。信号:web漏洞,注入,Joomla 扫描,组件枚举,全组件。"
 ---
 
 # joomlavs

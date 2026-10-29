@@ -1,6 +1,7 @@
 ---
 name: teamsuserenum-teams
-description: TeamsUserEnum: Teams 用户有效性枚举。信号:邮箱收集,员工信息,Teams 用户枚举,线程。
+description: "TeamsUserEnum enumerates valid Teams users. Signals: email collection, employee information, Teams user enumeration, threads"
+zh-signals: "TeamsUserEnum: Teams 用户有效性枚举。信号:邮箱收集,员工信息,Teams 用户枚举,线程。"
 ---
 
 # TeamsUserEnum

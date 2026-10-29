@@ -1,6 +1,7 @@
 ---
 name: chisel-tunnel
-description: chisel: 反向 SOCKS5 打穿内网(最常用)、跳板到内网第二台机器。信号:内网穿透,隧道,服务端加认证。
+description: "chisel: Pivots into internal networks with reverse SOCKS5. Signals: internal network tunneling, tunnel, server-side authentication."
+zh-signals: "chisel: 反向 SOCKS5 打穿内网(最常用)、跳板到内网第二台机器。信号:内网穿透,隧道,服务端加认证。"
 ---
 
 # chisel

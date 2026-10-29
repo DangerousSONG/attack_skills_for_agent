@@ -1,6 +1,7 @@
 ---
 name: imagejs-polyglot
-description: imagejs: 绕过图片上传白名单。信号:载荷开发,武器化,PHP 藏进 GIF,列出支持格式。
+description: "imagejs bypasses image upload whitelists. Signals: payload development, weaponization, PHP hidden in GIF, list supported formats."
+zh-signals: "imagejs: 绕过图片上传白名单。信号:载荷开发,武器化,PHP 藏进 GIF,列出支持格式。"
 ---
 
 # imagejs

@@ -1,6 +1,7 @@
 ---
 name: stews-websocket-scan
-description: STEWS: WebSocket 端点发现。信号:web漏洞,注入,漏洞检测。
+description: "STEWS discovers WebSocket endpoints. Signals: web vulnerability, injection, vulnerability detection"
+zh-signals: "STEWS: WebSocket 端点发现。信号:web漏洞,注入,漏洞检测。"
 ---
 
 # STEWS

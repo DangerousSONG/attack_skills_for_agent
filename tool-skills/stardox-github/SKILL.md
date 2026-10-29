@@ -1,6 +1,7 @@
 ---
 name: stardox-github
-description: Stardox: 仓库 star 用户分析。信号:攻击面,云资产,stargazer 分析。
+description: "Stardox analyzes repository stargazers. Signals: attack surface, cloud assets, stargazer analysis"
+zh-signals: "Stardox: 仓库 star 用户分析。信号:攻击面,云资产,stargazer 分析。"
 ---
 
 # Stardox

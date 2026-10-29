@@ -1,6 +1,7 @@
 ---
 name: performing-clickjacking-attack-test
-description: "Testing web applications for clickjacking vulnerabilities by assessing 信号:web漏洞,注入,sql注入。"
+description: "Test web applications for clickjacking vulnerabilities by assessing frame embedding controls. Signals: web vulnerability, injection, sql injection."
+zh-signals: "Testing web applications for clickjacking vulnerabilities by assessing 信号:web漏洞,注入,sql注入。"
 when-to-use: Testing web applications for clickjacking vulnerabilities by assessing
   frame embedding controls and crafting proof-of-concept overlay attacks during authorized
   security assessments.

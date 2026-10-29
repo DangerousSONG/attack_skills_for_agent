@@ -1,6 +1,7 @@
 ---
 name: jwt-cracker-c
-description: jwt-cracker: HS256 密钥高速爆破。信号:api攻击,接口测试,字符集爆破,最大长度。
+description: "jwt-cracker brute-forces HS256 keys quickly. Signals: API attack, interface testing, charset brute force, maximum length."
+zh-signals: "jwt-cracker: HS256 密钥高速爆破。信号:api攻击,接口测试,字符集爆破,最大长度。"
 ---
 
 # jwt-cracker

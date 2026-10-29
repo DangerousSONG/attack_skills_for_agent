@@ -1,6 +1,7 @@
 ---
 name: typo3scan
-description: Typo3Scan: Typo3 漏洞扫描。信号:web漏洞,注入,SSL,批量。
+description: "Typo3Scan scans TYPO3 vulnerabilities. Signals: web vulnerability, injection, SSL, batch"
+zh-signals: "Typo3Scan: Typo3 漏洞扫描。信号:web漏洞,注入,SSL,批量。"
 ---
 
 # Typo3Scan

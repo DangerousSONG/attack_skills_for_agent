@@ -1,6 +1,7 @@
 ---
 name: veil-framework
-description: Veil: 免杀载荷生成。信号:恶意软件开发,免杀开发,菜单,列 payload,交互选择。
+description: "Veil: Evasion payload generation. Signals: malware development, evasion development, menu, list payloads, interactive selection."
+zh-signals: "Veil: 免杀载荷生成。信号:恶意软件开发,免杀开发,菜单,列 payload,交互选择。"
 ---
 
 # Veil

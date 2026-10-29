@@ -1,6 +1,7 @@
 ---
 name: cmdi-command-injection
-description: "命令注入 playbook:用户输入到达 shell/进程/转换器/导入管道,含盲打与带外命令 sink。信号:命令注入,cmdi,盲注,带外命令,os注入。"
+description: "Command injection playbook: user input reaches shell/process/converter/import pipelines, including blind and out-of-band command sinks. Signals: command injection, cmdi, blind injection, out-of-band commands, OS injection."
+zh-signals: "命令注入 playbook:用户输入到达 shell/进程/转换器/导入管道,含盲打与带外命令 sink。信号:命令注入,cmdi,盲注,带外命令,os注入。"
 when-to-use: >-
   Command injection playbook. Use when user input may reach shell commands, process execution, converters, import pipelines, or blind out-of-band command sinks.
 ---

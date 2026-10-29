@@ -1,6 +1,7 @@
 ---
 name: assetfinder-quick-subs
-description: assetfinder: 侦察流水线第一棒。信号:资产测绘,子域名,只列子域名,子域+关联域名,静默输出便于管道。
+description: "assetfinder: acts as the first stage in a recon pipeline. Signals: asset mapping, subdomain, list subdomains only, subdomains+related domains, quiet output for pipelines"
+zh-signals: "assetfinder: 侦察流水线第一棒。信号:资产测绘,子域名,只列子域名,子域+关联域名,静默输出便于管道。"
 ---
 
 # assetfinder

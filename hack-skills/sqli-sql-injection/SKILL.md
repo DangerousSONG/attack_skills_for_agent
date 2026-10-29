@@ -1,6 +1,7 @@
 ---
 name: sqli-sql-injection
-description: "SQL 注入 playbook:输入到达 SQL 查询/认证/排序/过滤,DB 特性盲注与带外执行路径。信号:sql注入,注入,盲注,带外注入,数据库利用。"
+description: "SQL injection playbook: input reaches SQL queries, authentication, sorting, filtering; DB-specific blind and out-of-band execution paths. Signals: SQL injection, injection, blind injection, out-of-band injection, database exploitation."
+zh-signals: "SQL 注入 playbook:输入到达 SQL 查询/认证/排序/过滤,DB 特性盲注与带外执行路径。信号:sql注入,注入,盲注,带外注入,数据库利用。"
 when-to-use: >-
   SQL injection playbook. Use when input reaches SQL queries, authentication logic, sorting, filtering, reporting, or DB-specific blind and out-of-band execution paths.
 ---

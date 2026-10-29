@@ -1,6 +1,7 @@
 ---
 name: shellpop-shell-gen
-description: shellpop: 受限环境选最优反弹方式。信号:webshell,rce,列全部 payload,生成 PS 反弹,Python 反弹。
+description: "shellpop: selects optimal reverse shells for restricted environments. Signals: webshell, rce, list all payloads, generate PS reverse, Python reverse."
+zh-signals: "shellpop: 受限环境选最优反弹方式。信号:webshell,rce,列全部 payload,生成 PS 反弹,Python 反弹。"
 ---
 
 # shellpop

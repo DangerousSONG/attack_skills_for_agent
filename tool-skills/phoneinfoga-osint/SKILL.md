@@ -1,6 +1,7 @@
 ---
 name: phoneinfoga-osint
-description: PhoneInfoga: 手机号归属/公开足迹。信号:邮箱收集,员工信息,号码 OSINT 扫描,指定扫描器,起 Web UI。
+description: "Phone number attribution and public footprint. Signals: email collection, employee info, phone OSINT scan, specified scanners, launch Web UI."
+zh-signals: "PhoneInfoga: 手机号归属/公开足迹。信号:邮箱收集,员工信息,号码 OSINT 扫描,指定扫描器,起 Web UI。"
 ---
 
 # PhoneInfoga

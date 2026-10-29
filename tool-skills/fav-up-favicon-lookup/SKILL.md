@@ -1,6 +1,7 @@
 ---
 name: fav-up-favicon-lookup
-description: Fav-up: 真实 IP 反查(favicon 哈希)。信号:网络拓扑,互联网测绘,批量 favicon。
+description: "Fav-up: real IP reverse lookup using favicon hashes. Signals: network topology, internet mapping, batch favicon."
+zh-signals: "Fav-up: 真实 IP 反查(favicon 哈希)。信号:网络拓扑,互联网测绘,批量 favicon。"
 ---
 
 # Fav-up

@@ -1,6 +1,7 @@
 ---
 name: domainhunter-expired
-description: DomainHunter: 挑钓鱼域名(高信誉过期域名)。信号:钓鱼,社会工程,搜过期可注册域名,查分类信誉,过滤成人类。
+description: "DomainHunter: select phishing domains from high-reputation expired domains. Signals: phishing, social engineering, search expired registrable domains, check category reputation, filter adult."
+zh-signals: "DomainHunter: 挑钓鱼域名(高信誉过期域名)。信号:钓鱼,社会工程,搜过期可注册域名,查分类信誉,过滤成人类。"
 ---
 
 # DomainHunter

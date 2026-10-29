@@ -1,6 +1,7 @@
 ---
 name: x-rsa-toolkit
-description: X-RSA: RSA 弱密钥攻击。信号:密码学攻击,加密破解,RSA 攻击工具,分解模式,私钥恢复。
+description: "X-RSA: RSA weak key attack. Signals: cryptographic attack, encryption cracking, RSA attack tool, factorization mode, private key recovery."
+zh-signals: "X-RSA: RSA 弱密钥攻击。信号:密码学攻击,加密破解,RSA 攻击工具,分解模式,私钥恢复。"
 ---
 
 # X-RSA

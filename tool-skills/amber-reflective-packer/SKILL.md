@@ -1,6 +1,7 @@
 ---
 name: amber-reflective-packer
-description: Amber: 反射加载规避磁盘扫描。信号:进程注入,dll注入,保留 PE 头,静态编译。
+description: "Amber: uses reflective loading to evade disk scanning. Signals: process injection, dll injection, preserve PE header, static compilation"
+zh-signals: "Amber: 反射加载规避磁盘扫描。信号:进程注入,dll注入,保留 PE 头,静态编译。"
 ---
 
 # Amber

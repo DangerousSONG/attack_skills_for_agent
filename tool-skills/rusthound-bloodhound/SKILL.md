@@ -1,6 +1,7 @@
 ---
 name: rusthound-bloodhound
-description: RustHound: Rust 版 SharpHound。信号:ad攻击,域渗透,域控 IP,Kerberos,打包输出。
+description: "RustHound: Rust implementation of SharpHound. Signals: AD attack, domain penetration, domain controller IP, Kerberos, packaged output."
+zh-signals: "RustHound: Rust 版 SharpHound。信号:ad攻击,域渗透,域控 IP,Kerberos,打包输出。"
 ---
 
 # RustHound

@@ -1,6 +1,7 @@
 ---
 name: api-auth-and-jwt-abuse
-description: "API 认证与令牌滥用:JWT/bearer/API key 信任边界、声明误用、头部欺骗、限流绕过。信号:jwt,api认证,令牌滥用,bearer,声明伪造,限流绕过。"
+description: "API authentication and token abuse: JWT/bearer/API key trust boundaries, claim misuse, header spoofing, rate-limit bypass. Signals: jwt, api authentication, token abuse, bearer, claim forgery, rate-limit bypass."
+zh-signals: "API 认证与令牌滥用:JWT/bearer/API key 信任边界、声明误用、头部欺骗、限流绕过。信号:jwt,api认证,令牌滥用,bearer,声明伪造,限流绕过。"
 when-to-use: 1. TOKEN TRIAGE
   API authentication and JWT abuse playbook. Use when testing bearer tokens, API keys, claim trust, header spoofing, rate limits, and API auth boundary weaknesses.
 ---

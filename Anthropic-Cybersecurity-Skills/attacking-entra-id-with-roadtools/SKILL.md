@@ -1,6 +1,7 @@
 ---
 name: attacking-entra-id-with-roadtools
-description: "Enumerate Microsoft Entra ID (Azure AD) tenants with ROADrecon and 信号:ad攻击,域渗透,域控。"
+description: "Enumerate Microsoft Entra ID (Azure AD) tenants with ROADrecon. Signals: AD attacks, domain penetration, domain controller."
+zh-signals: "Enumerate Microsoft Entra ID (Azure AD) tenants with ROADrecon and 信号:ad攻击,域渗透,域控。"
 when-to-use: Enumerate Microsoft Entra ID (Azure AD) tenants with ROADrecon and
   acquire, exchange, and abuse tokens (including primary refresh tokens) with roadtx.
   Use for authorized red-team enumeration of a tenant's directory objects or for

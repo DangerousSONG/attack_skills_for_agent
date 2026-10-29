@@ -1,6 +1,7 @@
 ---
 name: marshalsec-deser
-description: marshalsec: JNDI 注入利用基础设施。信号:pwn,二进制利用,恶意 LDAP,RMI 服务,codebase URL。
+description: "marshalsec: JNDI injection exploitation infrastructure. Signals: pwn, binary exploitation, malicious LDAP, RMI service, codebase URL."
+zh-signals: "marshalsec: JNDI 注入利用基础设施。信号:pwn,二进制利用,恶意 LDAP,RMI 服务,codebase URL。"
 ---
 
 # marshalsec

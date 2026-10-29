@@ -1,6 +1,7 @@
 ---
 name: dwarf-android-hook
-description: Dwarf: Android 运行时分析。信号:移动端,android攻击,启动 GUI/CLI,附加进程,Java 方法 hook。
+description: "Dwarf: Android runtime analysis. Signals: mobile, Android attack, launch GUI/CLI, attach process, Java method hooking."
+zh-signals: "Dwarf: Android 运行时分析。信号:移动端,android攻击,启动 GUI/CLI,附加进程,Java 方法 hook。"
 ---
 
 # Dwarf

@@ -1,6 +1,7 @@
 ---
 name: solve-challenge
-description: "CTF 解题调度器:首轮分诊识别题型,路由到对应 ctf-* 专项 skill;题型已明时不走此 skill。信号:ctf,解题,调度,题型分诊,比赛。"
+description: "CTF solver scheduler: first-pass triage to identify challenge type and route to specialized ctf-* skills; skip when type is already clear. Signals: ctf, solve, routing, challenge triage, competition."
+zh-signals: "CTF 解题调度器:首轮分诊识别题型,路由到对应 ctf-* 专项 skill;题型已明时不走此 skill。信号:ctf,解题,调度,题型分诊,比赛。"
 when-to-use: Solves CTF challenges by performing first-pass triage, identifying the dominant category, and routing execution to the right specialized ctf-* skill. Use when the user gives you a challenge bundle, a 
 license: MIT
 compatibility: Requires filesystem-based agent (Claude Code or similar) with bash, Python 3, and internet access. Orchestrates other ctf-* skills.

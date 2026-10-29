@@ -1,6 +1,7 @@
 ---
 name: traxss-xss
-description: traxss: 带认证 XSS 扫描。信号:web漏洞,注入,带 Header,DOM 模式。
+description: "traxss scans XSS with authentication. Signals: web vulnerability, injection, with Header, DOM mode"
+zh-signals: "traxss: 带认证 XSS 扫描。信号:web漏洞,注入,带 Header,DOM 模式。"
 ---
 
 # traxss

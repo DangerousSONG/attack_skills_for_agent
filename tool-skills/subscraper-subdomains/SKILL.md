@@ -1,6 +1,7 @@
 ---
 name: subscraper-subdomains
-description: SubScraper: DNS 记录深挖子域。信号:资产测绘,子域名,被动+DNS 记录枚举,DNS 记录解析。
+description: "SubScraper mines subdomains from DNS records. Signals: asset mapping, subdomain, passive+DNS record enumeration, DNS record parsing"
+zh-signals: "SubScraper: DNS 记录深挖子域。信号:资产测绘,子域名,被动+DNS 记录枚举,DNS 记录解析。"
 ---
 
 # SubScraper

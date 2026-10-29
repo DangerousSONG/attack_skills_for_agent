@@ -1,6 +1,7 @@
 ---
 name: wafninja-waf-bypass
-description: WAFNinja: WAF 指纹+绕过重试。信号:web漏洞,注入,SQLi payload,识别 WAF 厂商,自定义 payload。
+description: "WAFNinja: WAF fingerprinting plus bypass retries. Signals: web vulnerabilities, injection, SQLi payload, identify WAF vendor, custom payload."
+zh-signals: "WAFNinja: WAF 指纹+绕过重试。信号:web漏洞,注入,SQLi payload,识别 WAF 厂商,自定义 payload。"
 ---
 
 # WAFNinja

@@ -1,6 +1,7 @@
 ---
 name: xsstrike-xss
-description: XSStrike: 智能 XSS 打点。信号:web漏洞,注入,自动 XSS 检测,爬站扫,POST。
+description: "XSStrike: Intelligent XSS detection. Signals: web vulnerability, injection, automatic XSS detection, site crawl scan, POST."
+zh-signals: "XSStrike: 智能 XSS 打点。信号:web漏洞,注入,自动 XSS 检测,爬站扫,POST。"
 ---
 
 # XSStrike

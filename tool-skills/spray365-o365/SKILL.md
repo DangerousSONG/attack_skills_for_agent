@@ -1,6 +1,7 @@
 ---
 name: spray365-o365
-description: Spray365: O365 智能喷洒。信号:暴力破解,口令喷射,O365 喷洒,自适应。
+description: "Spray365: smart O365 password spraying. Signals: brute force, password spraying, O365 spray, adaptive."
+zh-signals: "Spray365: O365 智能喷洒。信号:暴力破解,口令喷射,O365 喷洒,自适应。"
 ---
 
 # Spray365

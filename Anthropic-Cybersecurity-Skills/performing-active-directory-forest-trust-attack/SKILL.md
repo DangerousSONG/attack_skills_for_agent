@@ -1,6 +1,7 @@
 ---
 name: performing-active-directory-forest-trust-attack
-description: "Enumerate and audit Active Directory forest trust relationships using 信号:ad攻击,域渗透,域控。"
+description: "Enumerate and audit Active Directory forest trust relationships. Signals: ad attack, domain penetration, domain controller."
+zh-signals: "Enumerate and audit Active Directory forest trust relationships using 信号:ad攻击,域渗透,域控。"
 when-to-use: Enumerate and audit Active Directory forest trust relationships using
   Impacket for SID filtering analysis, trust key extraction, cross-forest SID history
   abuse detection, and inter-realm Kerberos ticket assessment. Use when red-teaming

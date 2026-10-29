@@ -1,6 +1,7 @@
 ---
 name: git-wild-hunt-secrets
-description: git-wild-hunt: 公开仓库密钥泄露挖掘。信号:攻击面,云资产,批量,自定义规则。
+description: "git-wild-hunt mines leaked secrets in public repositories. Signals: attack surface, cloud assets, bulk scanning, custom rules."
+zh-signals: "git-wild-hunt: 公开仓库密钥泄露挖掘。信号:攻击面,云资产,批量,自定义规则。"
 ---
 
 # git-wild-hunt

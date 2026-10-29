@@ -1,6 +1,7 @@
 ---
 name: mybff-login-brute
-description: myBFF: Web 登录表单批量撞库。信号:暴力破解,口令喷射,Web 表单喷洒,HTTP Basic,OWA。
+description: "myBFF: Batch web login form credential stuffing. Signals: brute force, password spraying, web form spraying, HTTP Basic, OWA."
+zh-signals: "myBFF: Web 登录表单批量撞库。信号:暴力破解,口令喷射,Web 表单喷洒,HTTP Basic,OWA。"
 ---
 
 # myBFF

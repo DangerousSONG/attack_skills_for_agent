@@ -1,6 +1,7 @@
 ---
 name: rustscan-speed
-description: RustScan: 单机全端口秒扫。信号:端口扫描,nmap,批量文件,透传参数给 nmap,batch 速率。
+description: "RustScan: Fast full-port scanning on a single host. Signals: port scanning, nmap, batch file, pass parameters to nmap, batch rate."
+zh-signals: "RustScan: 单机全端口秒扫。信号:端口扫描,nmap,批量文件,透传参数给 nmap,batch 速率。"
 ---
 
 # RustScan

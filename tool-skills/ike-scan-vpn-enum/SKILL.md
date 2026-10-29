@@ -1,6 +1,7 @@
 ---
 name: ike-scan-vpn-enum
-description: ike-scan: VPN 网关探测+PSK 破解。信号:端口扫描,nmap,IKE 服务发现+指纹,多行输出(易读)。
+description: "ike-scan probes VPN gateways and cracks PSKs. Signals: port scan, nmap, IKE service discovery and fingerprinting, readable multiline output."
+zh-signals: "ike-scan: VPN 网关探测+PSK 破解。信号:端口扫描,nmap,IKE 服务发现+指纹,多行输出(易读)。"
 ---
 
 # ike-scan

@@ -1,6 +1,7 @@
 ---
 name: sandcastle-s3
-description: sandcastle: S3 桶名爆破。信号:攻击面,云资产,S3 bucket 发现,字典。
+description: "sandcastle: Brute-forces S3 bucket names. Signals: attack surface, cloud assets, S3 bucket discovery, dictionary."
+zh-signals: "sandcastle: S3 桶名爆破。信号:攻击面,云资产,S3 bucket 发现,字典。"
 ---
 
 # sandcastle

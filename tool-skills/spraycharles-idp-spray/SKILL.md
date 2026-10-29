@@ -1,6 +1,7 @@
 ---
 name: spraycharles-idp-spray
-description: spraycharles: 多平台 IdP 喷洒。信号:暴力破解,口令喷射,多 IdP 喷洒,ADFS,Okta。
+description: "spraycharles: multi-platform IdP spraying. Signals: brute force, password spraying, multi-IdP spray, ADFS, Okta."
+zh-signals: "spraycharles: 多平台 IdP 喷洒。信号:暴力破解,口令喷射,多 IdP 喷洒,ADFS,Okta。"
 ---
 
 # spraycharles

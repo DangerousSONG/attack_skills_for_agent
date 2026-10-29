@@ -1,6 +1,7 @@
 ---
 name: adidnsdump-ldap-enum
-description: adidnsdump: AD DNS 记录收割(发现服务器)。信号:内网枚举,网络发现,只列出区域,解析记录获取 IP,含已删除记录。
+description: "adidnsdump: harvests AD DNS records to discover servers. Signals: internal network enumeration, network discovery, list zones only, resolve records to IPs, include deleted records"
+zh-signals: "adidnsdump: AD DNS 记录收割(发现服务器)。信号:内网枚举,网络发现,只列出区域,解析记录获取 IP,含已删除记录。"
 ---
 
 # adidnsdump

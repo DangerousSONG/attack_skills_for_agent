@@ -1,6 +1,7 @@
 ---
 name: hoaxshell-powershell
-description: hoaxshell: PowerShell 会话反弹。信号:载荷开发,武器化,生成 PS 反弹载荷,生成后仅打印,加密传输。
+description: "hoaxshell creates PowerShell reverse sessions. Signals: payload development, weaponization, generate PS reverse payload, print-only generation, encrypted transport."
+zh-signals: "hoaxshell: PowerShell 会话反弹。信号:载荷开发,武器化,生成 PS 反弹载荷,生成后仅打印,加密传输。"
 ---
 
 # hoaxshell

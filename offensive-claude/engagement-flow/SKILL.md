@@ -1,6 +1,7 @@
 ---
 name: engagement-flow
-description: "多阶段渗透/红队流程编排:按 Cyber Kill Chain 阶段推进并设质量门,不直接跳到利用。信号:渗透流程,杀伤链,阶段推进,质量门,方法论。"
+description: "Multi-stage penetration/red-team orchestration: advance by Cyber Kill Chain phases with quality gates, avoid jumping straight to exploitation. Signals: penetration workflow, kill chain, phase progression, quality gate, methodology."
+zh-signals: "多阶段渗透/红队流程编排:按 Cyber Kill Chain 阶段推进并设质量门,不直接跳到利用。信号:渗透流程,杀伤链,阶段推进,质量门,方法论。"
 when-to-use: Use when starting, planning, or running a multi-phase pentest or red-team engagement — to sequence the Cyber Kill Chain phases with quality gates instead of jumping straight to exploitation
 ---
 

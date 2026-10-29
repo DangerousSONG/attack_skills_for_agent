@@ -1,6 +1,7 @@
 ---
 name: mongoaudit-mongo-check
-description: mongoaudit: MongoDB 未授权+弱配置。信号:端口扫描,nmap,MongoDB 审计,带认证,JSON 输出。
+description: "mongoaudit: MongoDB unauthorized and weak configuration checks. Signals: port scanning, nmap, MongoDB audit, with authentication, JSON output."
+zh-signals: "mongoaudit: MongoDB 未授权+弱配置。信号:端口扫描,nmap,MongoDB 审计,带认证,JSON 输出。"
 ---
 
 # mongoaudit

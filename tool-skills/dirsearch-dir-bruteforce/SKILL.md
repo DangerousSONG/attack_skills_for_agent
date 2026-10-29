@@ -1,6 +1,7 @@
 ---
 name: dirsearch-dir-bruteforce
-description: dirsearch: 后台与备份文件发现。信号:web扫描,漏洞扫描,扩展名枚举目录,自定义字典,递归扫描 3 层。
+description: "dirsearch: backend and backup file discovery. Signals: web scanning, vulnerability scanning, extension-based directory enumeration, custom dictionary, recursive scan 3 levels."
+zh-signals: "dirsearch: 后台与备份文件发现。信号:web扫描,漏洞扫描,扩展名枚举目录,自定义字典,递归扫描 3 层。"
 ---
 
 # dirsearch

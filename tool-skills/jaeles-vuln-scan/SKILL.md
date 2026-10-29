@@ -1,6 +1,7 @@
 ---
 name: jaeles-vuln-scan
-description: jaeles: 签名驱动漏洞验证。信号:web漏洞,注入,内置签名扫描,指定签名族,自定义签名。
+description: "jaeles verifies vulnerabilities with signatures. Signals: web vulnerability, injection, built-in signature scan, signature family selection, custom signatures."
+zh-signals: "jaeles: 签名驱动漏洞验证。信号:web漏洞,注入,内置签名扫描,指定签名族,自定义签名。"
 ---
 
 # jaeles

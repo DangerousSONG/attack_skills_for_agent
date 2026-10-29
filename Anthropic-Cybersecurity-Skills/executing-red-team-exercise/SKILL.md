@@ -1,6 +1,7 @@
 ---
 name: executing-red-team-exercise
-description: "Run a stealthy, MITRE ATT&CK-mapped adversary emulation against an organization''s 信号:红队,方法论,渗透流程。"
+description: "Run a stealthy MITRE ATT&CK-mapped adversary emulation against an organization. Signals: red team, methodology, penetration testing process."
+zh-signals: "Run a stealthy, MITRE ATT&CK-mapped adversary emulation against an organization''s 信号:红队,方法论,渗透流程。"
 when-to-use: 'Run a stealthy, MITRE ATT&CK-mapped adversary emulation against an organization''s
   people, processes, and technology, using C2 infrastructure (Cobalt Strike, Sliver, Brute
   Ratel, Mythic) through the full attack lifecycle to test SOC detection and response rather
