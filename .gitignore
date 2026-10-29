@@ -5,3 +5,8 @@ scripts/_before_tmp/
 # Python
 __pycache__/
 *.pyc
+
+# demo 产物(模型权重/缓存/报告/日志)
+demo/cache/
+demo/models/
+demo/logs/
