@@ -1,6 +1,7 @@
 # 取证/评测临时产物
 scripts/_*.txt
 scripts/_before_tmp/
+scripts/_retrieval_index.pkl
 
 # Python
 __pycache__/
