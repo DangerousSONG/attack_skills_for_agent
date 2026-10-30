@@ -10,13 +10,18 @@
 #   bash scripts/router_server.sh logs 100       # 看最近 N 行日志(默认 50)
 #   bash scripts/router_server.sh stop           # SIGTERM, 10s 不退再 SIGKILL
 #   bash scripts/router_server.sh restart
-#   bash scripts/router_server.sh curl "Redis 未授权访问想拿 shell" [top_k=5] [rerank=1] ...
+#   bash scripts/router_server.sh curl "Redis 未授权访问想拿 shell" [top_k=5] [rerank=0] ...
+#                (L3 精排默认开: 约 1.4s/查询但头部排序明显更准; 追加 rerank=0 退回 L1+L2 约 0.09s)
 #
 # 环境变量:
 #   ROUTER_PORT  监听端口(默认 8787)
 #   ROUTER_HOST  监听地址(默认 0.0.0.0 = 所有网卡)。服务**无鉴权**, 绑 0.0.0.0 就意味着同网段
-#                任何人都能无凭据查询到全库 skill 名称/描述与宿主绝对路径; 要收窄暴露面就设
+#                任何人都能无凭据查询到全库 skill 名称/描述; 要收窄暴露面就设
 #                127.0.0.1(仅本机, 容器需 --network host)或 docker 网桥地址(仅容器, LAN 连不上)
+#   ROUTER_LIB_PREFIX
+#                返回体里 candidates[].path 的前缀(默认 /opt/attack-skill-library, 即 deploy.py
+#                部署到容器里的扁平文件库)。服务在宿主跑而 Agent 在容器里, 返回宿主真实路径
+#                容器 Read 不到。设成空串(ROUTER_LIB_PREFIX= 而非 unset)则不改写
 #   SKILL_PYTHON 指定解释器(透传给 scripts/search_skills --print-python)
 #
 # 退出码: 0=成功 / 2=用法错误 / 3=环境未就绪(缺解释器或模型权重) / 4=启动失败 / 5=停止失败
@@ -31,6 +36,8 @@ PIDFILE="$RUN_DIR/router.pid"
 LOGFILE="$RUN_DIR/router.log"
 PORT="${ROUTER_PORT:-8787}"
 HOST="${ROUTER_HOST:-0.0.0.0}"
+# 用 ${VAR-default} 而非 ${VAR:-default}: 显式设成空串是"关闭改写"的有效取值, 不能被当成未设
+LIB_PREFIX="${ROUTER_LIB_PREFIX-/opt/attack-skill-library}"
 HEALTH="http://127.0.0.1:$PORT/health"
 
 die()  { printf '[router_server] %s\n' "$*" >&2; exit "${2:-2}"; }
@@ -73,16 +80,17 @@ cmd_start() {
 
   local py; py="$(resolve_py)"
   mkdir -p "$RUN_DIR"
-  info "启动中: $py $SERVER --host $HOST --port $PORT"
+  info "启动中: $py $SERVER --host $HOST --port $PORT --lib-prefix '$LIB_PREFIX'"
   case "$HOST" in
     0.0.0.0|::|"")
-      info "警告: 绑所有网卡且服务无鉴权 —— 同网段任何人都能无凭据查到全库 skill 清单与宿主路径。"
+      info "警告: 绑所有网卡且服务无鉴权 —— 同网段任何人都能无凭据查到全库 skill 清单。"
       info "      要收窄: ROUTER_HOST=127.0.0.1(仅本机) 或 ROUTER_HOST=<docker 网桥地址>(仅容器)"
       ;;
   esac
+  [ -n "$LIB_PREFIX" ] || info "注意: ROUTER_LIB_PREFIX 为空 → 不改写 path, 返回宿主机真实路径"
   info "日志: $LOGFILE"
   # nohup + 重定向: 脱离当前终端; 日志追加而非覆盖, 便于回看上一次崩溃原因
-  nohup "$py" "$SERVER" --host "$HOST" --port "$PORT" >>"$LOGFILE" 2>&1 &
+  nohup "$py" "$SERVER" --host "$HOST" --port "$PORT" --lib-prefix "$LIB_PREFIX" >>"$LOGFILE" 2>&1 &
   local pid=$!
   printf '%s\n' "$pid" > "$PIDFILE"
 
@@ -151,7 +159,7 @@ cmd_logs() { tail -n "${1:-50}" "$LOGFILE" 2>/dev/null || die "还没有日志: 
 # curl "<query>" [k=v ...] —— 人工/脚本调用的便捷入口; Agent 侧 SKILL.md 用的是裸 curl
 cmd_curl() {
   need_curl
-  local q="${1:-}"; [ -n "$q" ] || die '用法: router_server.sh curl "一句话任务描述" [top_k=5] [rerank=1]' 2
+  local q="${1:-}"; [ -n "$q" ] || die '用法: router_server.sh curl "一句话任务描述" [top_k=5] [rerank=0]' 2
   shift || true
   local args=(-sS -G "http://127.0.0.1:$PORT/search" --data-urlencode "query=$q")
   local kv
@@ -161,7 +169,7 @@ cmd_curl() {
   curl "${args[@]}"
 }
 
-usage() { sed -n '2,22p' "$SELF"; }
+usage() { sed -n '2,27p' "$SELF"; }
 
 case "${1:-}" in
   start)   cmd_start ;;

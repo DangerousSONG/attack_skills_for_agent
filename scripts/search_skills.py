@@ -2,12 +2,12 @@
 # -*- coding: utf-8 -*-
 """search_skills — 攻击 skill 库三层漏斗路由 CLI（供 Claude Code 等 Agent 通过 Bash 调用）。
 
-流水线: L1 embedding top-k 粗筛 -> L2 RRF(余弦名次 + TF-IDF 名次)融合排序 -> L3 cross-encoder 精排(--rerank 时启用)。
+流水线: L1 embedding top-k 粗筛 -> L2 RRF(余弦名次 + TF-IDF 名次)融合排序 -> L3 cross-encoder 精排(默认启用, --no-rerank 关)。
 设计与评测数据见仓库根目录 DESIGN.md; 离线评测与选点标定用 demo/router_demo.py。
 
 用法:
     python scripts/search_skills.py "一句话任务描述" --top-k 5
-    python scripts/search_skills.py "一句话任务描述" --rerank --top-k 5
+    python scripts/search_skills.py "一句话任务描述" --no-rerank --top-k 5   # 退回 L1+L2, 省约 1.4s
     echo "一句话任务描述" | python scripts/search_skills.py - --format text
 
 约定:
@@ -36,6 +36,13 @@ RERANK_MODEL = 'BAAI/bge-reranker-v2-m3'
 # 选点标定结果(见 demo/logs 与 DESIGN.md §2.2): top-k 是与语料规模解耦的成本预算, k=50 时本语料金标零丢失
 L1_TOPK = 50
 RRF_K0 = 60  # reciprocal rank fusion 平滑常数, 与 demo/router_demo.py 保持一致
+# L3 精排默认开启: 只靠 L1+L2 的 RRF 融合分排头部, 会把"语义相关但不对症"的 skill 顶到 top1
+# (实测 query "Redis 未授权访问想拿 shell" 关 L3 时 top1=gopherus-ssrf, 开 L3 才修正成
+# unauthorized-access-common-services)。代价是延迟约 0.09s → 热态约 1.4s(本机 CPU 无 GPU),
+# 所以 L2_TOPN 从 20 收到 10, 把 L3 成本砍半。两条调用路径(CLI 与 router_server)都引用这两个
+# 常量, 而不是各写各的字面量 —— 否则改了这里仍会被调用方的旧默认值覆盖掉。
+RERANK_DEFAULT = True
+L2_TOPN = 10
 
 
 def err(msg):
@@ -122,7 +129,7 @@ class Router(object):
     为什么要这个类: 原来每次查询都要重做三件昂贵的事 —— 走全库读 994 个 SKILL.md、构造
     SentenceTransformer(约 5.7s)、对全库语料 fit 两个 TfidfVectorizer(约 0.28s)。CLI 是一次性
     进程, 这三笔每次都付(所以单次调用约 6s); HTTP 服务(scripts/router_server.py)只在启动时付
-    一次, 单次查询降到约 0.1s。
+    一次, L1+L2 的单次查询降到约 0.09s(默认还叠加 L3 精排, 那部分另需约 1.4s)。
 
     两条路径共用这一份实现, 排序逻辑不分叉: 数值与重构前逐位一致(TF-IDF 只是把 fit 从每查询
     提前到构造期, 同语料同参数, 结果不变)。
@@ -165,8 +172,15 @@ class Router(object):
         Q = hstack([self.vec_w.transform([query]), self.vec_c.transform([query])])
         return (Q @ self.X.T).toarray()[0]
 
-    def search(self, query, top_k=20, l1_topk=L1_TOPK, rerank=False, l2_topn=20, desc_chars=200):
-        """单查询三层漏斗。latency_ms 只计流水线, 不含一次性加载(那部分见 meta.ready_ms)。"""
+    def search(self, query, top_k=20, l1_topk=L1_TOPK, rerank=RERANK_DEFAULT, l2_topn=L2_TOPN,
+               desc_chars=200):
+        """单查询三层漏斗。
+
+        latency_ms 计的是流水线本身: L1/L2 的一次性加载在构造期就付掉了(见 meta.ready_ms),
+        但 L3 的 cross-encoder 是**懒加载**的 —— 下面 t0 的设置早于 self.reranker 的取值, 所以
+        首次精排那笔加载(本机约 1.4s)会被算进 latency_ms.l3。常驻服务靠启动预热避开它,
+        CLI 一次性进程避不开(每次调用都是首次)。
+        """
         t_start = time.time()
         slugs, docs = self.slugs, self.docs
 
@@ -229,8 +243,8 @@ class Router(object):
                                         'total': round(1000 * (time.time() - t_start), 1)}}}
 
 
-def search(query, top_k=20, emb_model=EMB_MODEL, l1_topk=L1_TOPK, rerank=False,
-           l2_topn=20, desc_chars=200, rebuild_index=False):
+def search(query, top_k=20, emb_model=EMB_MODEL, l1_topk=L1_TOPK, rerank=RERANK_DEFAULT,
+           l2_topn=L2_TOPN, desc_chars=200, rebuild_index=False):
     """一次性进程语义(CLI 用): 新建 Router 查一次即退出。常驻服务请直接复用 Router 实例。"""
     return Router(emb_model=emb_model, rebuild_index=rebuild_index).search(
         query, top_k=top_k, l1_topk=l1_topk, rerank=rerank, l2_topn=l2_topn, desc_chars=desc_chars)
@@ -251,12 +265,16 @@ def main():
     ap = argparse.ArgumentParser(
         description='三层漏斗 skill 路由: 输入一句话任务描述, 输出最匹配的 skill 候选。')
     ap.add_argument('query', help='自然语言任务描述; 传 "-" 从 stdin 读取')
-    ap.add_argument('--top-k', type=int, default=20, help='返回候选数 (默认 20; --rerank 时建议 5)')
+    ap.add_argument('--top-k', type=int, default=20,
+                    help='返回候选数 (默认 20; 精排只重排头部 --l2-topn 条, 其余仍按 L2 名次跟在后面)')
     ap.add_argument('--emb-model', default=EMB_MODEL, help='L1 embedding 模型 (hub id 或本地目录名)')
     ap.add_argument('--l1-topk', type=int, default=L1_TOPK,
                     help='L1 保留的候选条数; 与语料规模解耦的成本预算 (默认 50, 本语料金标零丢失)')
-    ap.add_argument('--rerank', action='store_true', help='启用 L3 cross-encoder 精排 (CPU 上约 +5s)')
-    ap.add_argument('--l2-topn', type=int, default=20, help='--rerank 时送进 L3 的条数')
+    ap.add_argument('--no-rerank', action='store_false', dest='rerank',
+                    help='关掉默认的 L3 cross-encoder 精排, 退回 L1+L2 的 RRF 排序 '
+                         '(一次性进程能省约 2.7s: 权重加载 + 推理; 但头部排序会明显变差)')
+    ap.add_argument('--l2-topn', type=int, default=L2_TOPN,
+                    help='精排时送进 L3 的条数 (默认 %d; L3 耗时与之成正比, 20 条约 3.0s)' % L2_TOPN)
     ap.add_argument('--desc-chars', type=int, default=200, help='返回体中 description 截断长度')
     ap.add_argument('--format', choices=('json', 'text'), default='json')
     ap.add_argument('--rebuild-index', action='store_true', help='强制重新编码全库 embedding')

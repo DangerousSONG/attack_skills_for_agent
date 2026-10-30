@@ -4,10 +4,23 @@
 
 为什么要有它: CLI(scripts/search_skills)是一次性进程, 每次调用都要重付三笔冷启动成本 ——
 走全库读 994 个 SKILL.md、构造 SentenceTransformer(约 5.3s)、fit 两个 TfidfVectorizer。
-常驻服务把这三笔提到启动期付一次, 单次查询从约 6000ms 降到约 80ms。
+常驻服务把这三笔提到启动期付一次, L1+L2 的单次查询从约 6000ms 降到约 85ms。
 附带好处: 容器里的 Agent 不必再挂载 5.6G 的 venv, 只要能发 HTTP 就能用
 (走 docker 网桥网关; 该地址因机器而异, 本机是 172.16.0.1 而非 docker 默认的 172.17.0.1,
  容器内可从 /proc/net/route 里 Destination=00000000 那行的 Gateway 取)。
+
+返回体里的 candidates[].path 会被改写成**容器内文件库**的路径(--lib-prefix, 默认
+/opt/attack-skill-library/<slug>/SKILL.md), 容器里 Read 这个路径就能直接读到原文。
+之所以按 slug 重组而不是简单换前缀: 服务跑在宿主, 语料根是本仓库, 布局是
+<category>/<slug>/SKILL.md; 消费方是 scripts/deploy.py 部署的**扁平**库(<slug>/SKILL.md),
+两边前缀不同、层级也少一层。传 --lib-prefix '' 可关闭改写, 拿回宿主机真实路径。
+
+L3 精排**默认开启**(不带 rerank 参数就是开, 而不是要显式 rerank=1 才开): 只靠 L1+L2 的 RRF
+融合分排头部, 会把"语义相关但不对症"的 skill 顶到 top1 —— 实测 query
+"Redis 未授权访问想拿 shell" 关 L3 时 top1 是 gopherus-ssrf, 开 L3 才修正成
+unauthorized-access-common-services。代价是延迟: 约 0.09s(L1+L2) → 热态约 1.4s
+(l2_topn=10, 本机 CPU 无 GPU)。为不让第一个查询额外付约 1.4s 的模型加载, 启动期就预热
+2.2G 的 cross-encoder(--lazy-reranker 可关)。要退回"快而糙"的排序, 单次请求带 rerank=0。
 
 排序实现与 CLI 共用 search_skills.Router, 不分叉(重构后已验证逐位一致)。
 只用标准库 http.server: venv 里没有 fastapi/flask, 单端点 + CPU 密集场景 async 也无收益,
@@ -20,7 +33,8 @@
     GET  /                  返回用法说明
 
 **无鉴权, 这是刻意的取舍**: 默认绑 0.0.0.0, 所以同网段任何人都能无凭据查询本服务,
-拿到 994 个 skill 的名称/描述与宿主机绝对路径(等于对外公示本机目录结构与攻击工具清单)。
+拿到 994 个 skill 的名称/描述(等于对外公示本机的攻击工具清单)。
+返回的 path 已被改写成固定前缀的库内路径, 不泄露宿主真实目录结构。
 只在可信隔离网段里这么用。要收窄暴露面就换绑定地址, 而不是加回 token:
     --host 127.0.0.1     只有本机可达(容器需 --network host)
     --host 172.16.0.1    只有 docker 默认网桥可达, LAN 上连不上(地址按本机实际网桥改)
@@ -49,6 +63,12 @@ import search_skills as ss  # noqa: E402  (复用 Router / format_text / 常量,
 
 DEFAULT_HOST = '0.0.0.0'
 DEFAULT_PORT = 8787
+# 容器内文件库前缀(scripts/deploy.py --library-dir 的默认值)。服务在宿主跑, 消费方在容器里,
+# 返回宿主真实路径容器 Read 不到, 故统一改写成这个前缀下的路径。
+DEFAULT_LIB_PREFIX = '/opt/attack-skill-library'
+# L3 精排的缺省行为。这里只做转发, 不另立一份字面量: 取舍依据与实测数字见 ss.RERANK_DEFAULT
+# 的定义处; 两处各写各的, 就可能出现"改了签名却仍被调用方旧默认值覆盖"的情况。
+DEFAULT_RERANK = ss.RERANK_DEFAULT
 MAX_BODY = 64 * 1024        # query 是一句话, 64KB 已远超合理上限, 防内存打爆
 MAX_QUERY_LEN = 2000
 
@@ -57,7 +77,7 @@ LIMITS = {
     'top_k': (1, 50, 5),
     'desc_chars': (0, 2000, 200),
     'l1_topk': (1, 5000, ss.L1_TOPK),
-    'l2_topn': (1, 100, 20),
+    'l2_topn': (1, 100, ss.L2_TOPN),
 }
 
 
@@ -130,9 +150,9 @@ def _int(name, raw):
     return v
 
 
-def _bool(name, raw):
+def _bool(name, raw, default=False):
     if raw is None or raw == '' or raw == []:
-        return False
+        return default
     if isinstance(raw, bool):
         return raw
     s = str(raw).strip().lower()
@@ -167,12 +187,32 @@ def parse_params(raw):
     if fmt not in ('json', 'text'):
         raise BadRequest('format 只支持 json|text, 收到 %r' % fmt)
 
+    # rerank 缺省走 DEFAULT_RERANK(True), 不能用 _bool 的 False 兜底 —— 那会把 Router.search
+    # 的默认值也一并覆盖掉, 变成"改签名却仍然不精排"。
     return {'query': query, 'format': fmt,
             'top_k': _int('top_k', one('top_k')),
             'desc_chars': _int('desc_chars', one('desc_chars')),
             'l1_topk': _int('l1_topk', one('l1_topk')),
             'l2_topn': _int('l2_topn', one('l2_topn')),
-            'rerank': _bool('rerank', one('rerank'))}
+            'rerank': _bool('rerank', one('rerank'), DEFAULT_RERANK)}
+
+
+# ---------------------------------------------------------------- 路径改写
+def rewrite_paths(result, lib_prefix):
+    """把 candidates[].path 改写成容器内文件库路径, 就地改并返回同一个 dict。
+
+    不能只做前缀替换: 宿主语料根下是 <category>/<slug>/SKILL.md(deploy.py 的 find_skills
+    递归收集, 层级还不止两种), 而它部署出来的库是扁平的 <slug>/SKILL.md。少的那层
+    category 只能丢掉, 所以按 slug 重组 —— slug 本来就在候选里, 且 deploy.py 保证
+    库目录名 == slug(重名会拒绝部署)。
+    lib_prefix 为空串则原样保留宿主真实路径(服务与消费方都在宿主时用)。
+    """
+    if not lib_prefix:
+        return result
+    prefix = lib_prefix.rstrip('/')
+    for c in result.get('candidates', []):
+        c['path'] = '%s/%s/SKILL.md' % (prefix, c['slug'])
+    return result
 
 
 # ---------------------------------------------------------------- handler
@@ -182,6 +222,7 @@ class Handler(BaseHTTPRequestHandler):
     server_version = 'skill-router'
     sys_version = ''            # 不暴露 Python 版本
     router = None               # 由 main() 注入(类属性, 全进程共享一个 Router)
+    lib_prefix = DEFAULT_LIB_PREFIX   # 同上, 由 main() 按 --lib-prefix 注入
     t_boot = 0.0
 
     # ---- 基础设施
@@ -266,11 +307,15 @@ class Handler(BaseHTTPRequestHandler):
         body = {'status': 'ok', 'n_skills': len(r.slugs), 'emb_model': r.emb_model,
                 'ready_ms': r.ready_ms, 'uptime_s': round(time.time() - self.t_boot, 1),
                 'reranker_loaded': r._reranker is not None,
+                'rerank_default': DEFAULT_RERANK,
+                'lib_prefix': self.lib_prefix or '(宿主真实路径)',
                 'pid': os.getpid()}
         if usage:
             body['usage'] = {
                 'GET /search': 'query(必填) top_k desc_chars l1_topk l2_topn rerank format',
                 'POST /search': '同上, 走 JSON 体',
+                'rerank': '默认 %s(L3 精排, 更准但 CPU 上约 1.4s); 传 rerank=0 退回 L1+L2 约 0.09s'
+                          % DEFAULT_RERANK,
                 'auth': '无 —— 能连到这个端口就能查询; 要收窄暴露面用 --host 指定绑定地址',
                 'example': 'curl -s -G --data-urlencode "query=Redis 未授权访问想拿 shell" '
                            '--data-urlencode top_k=5 http://127.0.0.1:%d/search'
@@ -291,6 +336,8 @@ class Handler(BaseHTTPRequestHandler):
         except Exception as e:
             # Router 内部异常(模型/索引损坏等)不该把连接直接掐断, 回 500 + 类型名便于定位
             return self._err(500, '检索失败: %s: %s' % (type(e).__name__, e), t0)
+        # 改写要在分流之前: format=text 的输出里也带 path(format_text 会打印它)
+        rewrite_paths(result, self.lib_prefix)
         if fmt == 'text':
             self._send(200, ss.format_text(result) + '\n', 'text/plain; charset=utf-8')
         else:
@@ -313,10 +360,15 @@ def main():
                     help='监听地址(默认 %s = 所有网卡, 容器可经 docker 网桥网关访问)。'
                          '本服务无鉴权, 要收窄暴露面就填 127.0.0.1 或网桥地址' % DEFAULT_HOST)
     ap.add_argument('--port', type=int, default=DEFAULT_PORT, help='监听端口(默认 %d)' % DEFAULT_PORT)
+    ap.add_argument('--lib-prefix', default=DEFAULT_LIB_PREFIX,
+                    help='返回体里 candidates[].path 的前缀(默认 %s, 即 scripts/deploy.py '
+                         '部署到容器里的扁平文件库)。传空串则返回宿主机真实路径'
+                         % DEFAULT_LIB_PREFIX)
     ap.add_argument('--emb-model', default=ss.EMB_MODEL, help='L1 embedding 模型')
     ap.add_argument('--rebuild-index', action='store_true', help='强制重新编码全库 embedding')
-    ap.add_argument('--prewarm-reranker', action='store_true',
-                    help='启动时就加载 L3 cross-encoder(否则首个 rerank 请求要多等约 2s)')
+    ap.add_argument('--lazy-reranker', action='store_true',
+                    help='不在启动期加载 L3 cross-encoder(默认会加载)。省约 1.4s 启动时间与 '
+                         '常驻内存, 代价是第一个 rerank 请求要多等约 1.4s')
     args = ap.parse_args()
 
     # 先绑端口再加载模型: 端口被占是常见错误, 不值得先等 5s 冷启动才发现
@@ -333,10 +385,17 @@ def main():
         log('Router 初始化失败: %s: %s' % (type(e).__name__, e))
         httpd.server_close()
         return 2
-    if args.prewarm_reranker:
-        router.reranker   # 触发懒加载
+    if DEFAULT_RERANK and not args.lazy_reranker:
+        # 既然 L3 默认开, 这 2.2G 权重的加载就得提到启动期付: search_skills 里 t0 的设置早于
+        # self.reranker 的懒加载, 不预热的话第一个查询的 latency_ms.l3 会含约 1.4s 加载时间,
+        # 看起来像"L3 比平时慢一倍", 实际只是冷启动被算进了流水线。
+        log('预热 L3 cross-encoder(%s) ...' % ss.RERANK_MODEL)
+        t_pw = time.time()
+        router.reranker
+        log('预热完成, 耗时 %dms' % round((time.time() - t_pw) * 1000))
 
     Handler.router = router
+    Handler.lib_prefix = args.lib_prefix
     Handler.t_boot = time.time()
 
     addrs = listen_addresses(args.host, args.port)
@@ -347,11 +406,14 @@ def main():
         log('监听 %s ... (共 %d 个 IPv4 地址)' % (' '.join(addrs[:4]), len(addrs)))
     if args.host in ('0.0.0.0', '::', ''):
         log('警告: 已绑定所有网卡且无鉴权 —— 上面任一地址可达者都能无凭据查询本服务,')
-        log('      拿到 %d 个 skill 的名称/描述与宿主机绝对路径(等于公示本机目录结构与工具清单)。'
+        log('      拿到 %d 个 skill 的名称与描述(等于公示本机的攻击工具清单)。'
             % len(router.slugs))
         log('      只在可信隔离网段这么用。收窄暴露面: --host 127.0.0.1(仅本机, 容器需 --network host),')
         log('      或 --host <docker 网桥地址>(仅容器可达, LAN 上连不上)。')
     log('语料 %d 条, 冷启动 %sms' % (len(router.slugs), router.ready_ms))
+    log('返回体 path 前缀: %s' % (args.lib_prefix or '(不改写, 宿主真实路径)'))
+    log('L3 精排: 默认%s(单次查询带 rerank=0 可退回 L1+L2, 约 0.09s), 启动预热=%s'
+        % ('开' if DEFAULT_RERANK else '关', '否' if args.lazy_reranker else '是'))
     log('健康检查: curl -s http://127.0.0.1:%d/health' % args.port)
 
     stop = threading.Event()

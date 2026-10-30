@@ -195,150 +195,152 @@ out = io.open(os.path.join(ROUTER_DIR, 'SKILL.md'), 'w', encoding='utf-8', newli
 w = out.write
 w('''---
 name: attack-skill-router
-description: 攻击侧 Skill 库（{0} 个渗透测试 skill）的路由层。提供 search_skills 语义检索 HTTP API（curl 调用宿主常驻服务，约 0.1s 返回 top-k 候选与可直接 Read 的绝对路径，容器内无需挂载 venv/模型权重）、同名本地 CLI 兜底，以及 {1} 类静态路由表（前两者都不可用时兜底）。任务涉及侦察、漏洞利用、提权、横向移动、持久化、免杀、C2 等任一渗透环节时先加载本 skill，用它定位该读的 1-3 个 SKILL.md；不要在近千个 SKILL.md 里盲目 grep 全读。
-when_to_use: 渗透任务开题时；已加载的 skill 解决不了当前障碍、需要换路由时；用户提到具体服务/工具/技术/CVE 编号（如 Redis 未授权、sqlmap、Java 反序列化、域渗透、UAC 绕过、CVE-xxxx-xxxx）时。
-argument-hint: 一句话任务描述，例如 Redis 未授权访问想拿 shell
+description: "Attack-side skill library routing layer ({0} pentest skills) exposing a search_skills semantic-retrieval HTTP API served by a resident host process, a same-named local CLI fallback, and a {1}-category static routing table as last resort. Signals: skill routing, semantic skill search, penetration testing, CVE, reconnaissance, exploitation, privilege escalation, lateral movement, persistence, evasion, C2."
+zh-signals: "攻击侧 Skill 库（{0} 个渗透测试 skill）的路由层。提供 search_skills 语义检索 HTTP API（curl 调用宿主常驻服务，默认带 L3 cross-encoder 精排，约 1.4s 返回 top-k 候选与可直接 Read 的绝对路径，容器内无需挂载 venv/模型权重）、同名本地 CLI 兜底，以及 {1} 类静态路由表（前两者都不可用时兜底）。任务涉及侦察、漏洞利用、提权、横向移动、持久化、免杀、C2 等任一渗透环节时先加载本 skill，用它定位该读的 1-3 个 SKILL.md；不要在近千个 SKILL.md 里盲目 grep 全读。"
+when-to-use: "At the start of a pentest engagement; when an already-loaded skill no longer resolves the current obstacle and you need to re-route; whenever the user names a concrete service / tool / technique / CVE id (e.g. unauthenticated Redis, sqlmap, Java deserialization, domain lateral movement, UAC bypass, CVE-xxxx-xxxx)."
+argument-hint: "One-sentence task description, e.g. 'unauthenticated Redis, want a shell'"
 allowed-tools: Bash(curl:*), Bash(bash {2}/scripts/router_server.sh:*), Bash({2}/scripts/search_skills:*)
 ---
 
-# Attack Skill Router · 攻击 Skill 路由层（v2.2）
+# Attack Skill Router (v2.2)
 
-## 用途
+## Purpose
 
-本库共 {0} 个 skill（{1} 个攻击大类）。直接全库搜索会让 Agent 面对过量同质选项（实测：反序列化主题曾一次装入 3 个重叠 skill）。
-**本路由层把「{0} 选 N」压缩为「50 类选 1 类 → 每类 3-5 个 primary 选 1-3 个」**，并提供语义路由 API 直接输出 top-k 候选（curl 一次约 0.1s）。
+This library holds {0} skills across {1} attack categories. Searching the whole library directly confronts the Agent with too many homogeneous options (measured: one deserialization query pulled in 3 overlapping skills at once).
+**This routing layer compresses "pick N out of {0}" into "pick 1 of {1} categories → pick 1-3 of that category's 3-5 primaries"**, and also exposes a semantic routing API that returns top-k candidates directly (about 1.4s per curl, since L3 reranking is on by default).
 
-## 直接调用（`/attack-skill-router`）
+## Direct invocation (`/attack-skill-router`)
 
-用户可用 `/attack-skill-router <一句话任务描述>` 显式触发本 skill。本次调用传入的参数为：
+The user can trigger this skill explicitly with `/attack-skill-router <one-sentence task description>`. The arguments passed to this invocation are:
 
 > $ARGUMENTS
 
-- **参数非空** → 直接把它当作 query，执行下方「路由方式 A · 标准调用」；
-- **参数为空**（或本 skill 是被自动加载的）→ 先从当前对话上下文里自己提炼一句「任务 + 信号词」的 query（写法见 A 节表格），再执行同样步骤。不要在没跑过路由检索的情况下直接凭印象挑 skill。
+- **Arguments non-empty** → use them as-is as the query and run "Routing path A - standard call" below;
+- **Arguments empty** (or this skill was auto-loaded) → first distill a "task + signal words" query yourself from the current conversation context (see the table in section A), then run the same steps. Never pick a skill from memory without having run a routing query first.
 
-## 路由方式 A：search_skills HTTP API（推荐，先试这个）
+## Routing path A: search_skills HTTP API (recommended - try this first)
 
-三层漏斗语义路由（L1 embedding top-k 粗筛 → L2 RRF 融合排序〔余弦名次 + TF-IDF 名次〕→ L3 cross-encoder 精排），覆盖全库，不受下方静态表 {1} 类粒度限制。
+Three-stage funnel semantic routing (L1 embedding top-k coarse filter → L2 RRF fused ranking [cosine rank + TF-IDF rank] → L3 cross-encoder rerank). L3 runs **by default** - you get the reranked ordering without asking for it. It covers the whole library and is not limited by the {1}-category granularity of the static table below.
 
-检索逻辑跑在**宿主常驻服务**（`{2}/scripts/router_server.py`）里：bge-m3、全库 994 条向量、TF-IDF 向量器都只在启动时加载一次，所以**单次查询约 0.1s**（本地 CLI 每次进程冷启动要重付约 5.3s 建模，故约 6s）。容器里的 Agent 只要能发 HTTP 就能用，**不必挂载 5.6G 的 venv 或 4.5G 的模型权重**。设计与评测数据见 `{2}/DESIGN.md`。
+The retrieval logic runs in a **resident host service** (`{2}/scripts/router_server.py`): bge-m3, all 994 library vectors, the TF-IDF vectorizer and the L3 cross-encoder are loaded once at startup, so **a single query takes about 1.4s** (~0.09s for L1+L2 plus ~1.3s for L3 on CPU; the local CLI re-pays ~5.3s of model construction on every cold process start, hence ~6s). An Agent inside a container only needs to be able to send HTTP - **it does not have to mount the 5.6G venv or the 4.5G model weights**. See `{2}/DESIGN.md` for the design and evaluation data.
 
-### 第 0 步：确认服务活着（每次任务开头跑一次即可，不是每次查询都跑）
+### Step 0: confirm the service is alive (run once at the start of a task, not before every query)
 
 ```bash
 curl -sf --max-time 2 "${{ROUTER_API:-http://127.0.0.1:8787}}/health" >/dev/null || bash {2}/scripts/router_server.sh start
 ```
 
-- 通了 → 静默返回，直接进标准调用；
-- 不通 → 后半句拉起服务（阻塞到就绪；索引已缓存时约 5-10s，`_index/` 缺失需现场编码全库则约 2 分钟）。**只试这一次**：退出码非 0（3=环境未就绪 / 4=启动失败）就走下面的「降级链」，不要反复重试；
-- `/health` 只报语料条数 / 存活时长 / 是否已加载 L3，不泄露库内容。
+- Reachable → returns silently; go straight to the standard call;
+- Not reachable → the second half brings the service up (blocks until ready; ~5-10s when the index is cached, ~2 minutes when `_index/` is missing and the whole library must be encoded on the spot). **Try this only once**: on a non-zero exit code (3 = environment not ready / 4 = startup failed) go to the "degradation chain" below - do not keep retrying;
+- `/health` only reports corpus size / uptime / whether L3 is loaded. It does not leak library contents.
 
-### 标准调用（照抄这一条，不要改写）
+### Standard call (copy this verbatim, do not rewrite it)
 
 ```bash
 curl -sS --max-time 30 -G "${{ROUTER_API:-http://127.0.0.1:8787}}/search" \\
-  --data-urlencode 'query=<一句话任务描述>' \\
+  --data-urlencode 'query=<one-sentence task description>' \\
   --data-urlencode top_k=5 --data-urlencode desc_chars=120
 ```
 
-- **命令必须以 `curl` 开头**（`allowed-tools` 的预批准按前缀匹配；前面加环境变量赋值会让它失效）；
-- `query` 用 `--data-urlencode` 传，中英文、空格、引号都不用你自己转义；
-- `top_k=5 desc_chars=120` 是为控上下文 token 定的标准配置，返回体约 800 token；
-- 结果 JSON 走 stdout，可直接解析；**`candidates[].path` 是绝对路径**，用 Read 打开即可，不需要再拼仓库根；
-- **服务无鉴权**：能连到 `${{ROUTER_API}}` 就能查，不需要任何凭据。不要去找 token 文件，也不要自己加 `-H "Authorization: ..."`（旧文档里可能有，已废弃）。
+- **The command must start with `curl`** (`allowed-tools` pre-approval matches by prefix; prefixing an environment-variable assignment breaks it);
+- Pass `query` via `--data-urlencode` - Chinese, English, spaces and quotes all need no escaping on your side;
+- `top_k=5 desc_chars=120` is the standard configuration chosen to control context tokens; the response body is about 800 tokens;
+- The result JSON goes to stdout and can be parsed directly; **`candidates[].path` is an absolute path** - just open it with Read, no need to prepend the repo root;
+- **The service has no authentication**: if you can reach `${{ROUTER_API}}` you can query it, no credentials needed. Do not go hunting for a token file, and do not add `-H "Authorization: ..."` yourself (older docs may show it; it is deprecated).
 
-### Agent 执行序列
+### Agent execution sequence
 
-1. 跑第 0 步确认服务；
-2. 把当前障碍写成一句「任务 + 信号词」的 query（写法见下表），跑标准调用；
-3. 读 JSON，从 `candidates` 里挑 **1-3 个** `slug`。判断依据是 `description` 与当前 服务/版本/技术栈 是否对得上，**不是 `score` 的绝对值**；
-4. 用 Read 打开对应 `path`，按该 skill 的步骤执行。**不要全读 5 个，不要再 grep 全库**；
-5. top-5 全不相关时，按此顺序升级，每步只试一次：
-   - ① 重写 query，补上服务名 / 版本号 / 报错关键词 / 已有权限状态 → 重跑标准调用；
-   - ② 加 `--data-urlencode rerank=1`（L3 cross-encoder 精排，已预热约 +2.6s，首次调用还要多约 2s 加载）；
-   - ③ 转路由方式 B（静态表）；
-6. 最终报告末尾列出实际加载的 slug。
+1. Run step 0 to confirm the service;
+2. Write the current obstacle as a one-sentence "task + signal words" query (see the table below) and run the standard call;
+3. Read the JSON and pick **1-3** `slug`s out of `candidates`. Judge by whether the `description` matches the current service / version / tech stack, **not by the absolute value of `score`**;
+4. Open the corresponding `path` with Read and follow that skill's steps. **Do not read all 5, and do not grep the whole library again**;
+5. If none of the top-5 is relevant, escalate in this order, trying each step only once:
+   - (1) Rewrite the query, adding the service name / version number / error keywords / current privilege state → re-run the standard call;
+   - (2) Fall back to routing path B (static table);
+6. List the slugs actually loaded at the end of the final report.
 
-**约 0.1s 一次，但一次任务通常仍只需 1-2 次查询**：多查不会更准，只会把同质候选反复装进上下文。
+**~1.4s per query, but a task usually still needs only 1-2 queries**: querying more does not make the answer more accurate, it just keeps loading homogeneous candidates into the context.
 
-### query 写法
+### How to write the query
 
-| 好（任务 + 信号词） | 差 |
+| Good (task + signal words) | Bad |
 |---|---|
 | `Unauthenticated Redis instance exposed on the network, gain code execution via the database` | `redis` |
 | `目标域控已拿到域用户凭据，想做横向移动到内网其他主机` | `横向` |
 | `Java 应用反序列化漏洞，WebLogic 10.3.6，需要构造 gadget 链` | `deserialization` |
-| `SQL injection in the login form, verify with an automated tool and dump the DB` | `exploiting-sql-injection-with-sqlmap`（slug 不是 query）|
+| `SQL injection in the login form, verify with an automated tool and dump the DB` | `exploiting-sql-injection-with-sqlmap` (a slug is not a query) |
 
-中英文均可（默认模型 `BAAI/bge-m3` 为多语言）。**关键是把可检索的信号词写全**：服务名 + 版本、漏洞类型、当前已有的权限/凭据状态、想达成的动作。
+Both Chinese and English work (the default model `BAAI/bge-m3` is multilingual), which is why two of the good examples above are deliberately Chinese. **The key is to write out every retrievable signal word**: service name + version, vulnerability type, the privileges/credentials you already hold, and the action you want to achieve.
 
-### 返回体
+### Response body
 
 ```json
 {{"query": "...",
  "candidates": [{{"slug": "database-attacker", "name": "...",
-                 "description": "...", "path": "{2}/Anthropic-Cybersecurity-Skills/.../SKILL.md",
-                 "score": 0.0328, "l1_sim": 0.575, "rerank_score": 0.63}}],
+                 "description": "...", "path": "{2}/database-attacker/SKILL.md",
+                 "score": 0.5484, "l1_sim": 0.575, "rerank_score": 0.5484}}],
  "meta": {{"l1_kept": 50, "n_skills": 994, "l1_topk": 50, "rrf_k0": 60,
-          "emb_model": "BAAI/bge-m3", "rerank": false, "degraded": false,
-          "ready_ms": 5149, "latency_ms": {{"l1": 80, "l2": 4, "l3": 0, "total": 85}}}}}}
+          "emb_model": "BAAI/bge-m3", "rerank": true, "degraded": false,
+          "ready_ms": 5206, "latency_ms": {{"l1": 72, "l2": 8, "l3": 1347, "total": 1427}}}}}}
 ```
 
-`score` 是当层排序依据：未开 `rerank` 时为 RRF 融合分（量级约 0.03，**只用来看相对次序，绝对值无意义，不要当相似度阈值**）；开了则为 cross-encoder 分。`l1_sim` 始终是余弦相似度。`ready_ms` 是服务启动时的一次性加载耗时（不计入本次查询），`latency_ms.total` 才是本次查询耗时（含并发排队）。`n_skills=994` 是检索语料口径（磁盘 {0} 减去本路由层等注册 skill），与评测 harness 一致。
+`score` is the ranking criterion of the current stage. With the default `rerank: true` it equals `rerank_score`, the cross-encoder score in 0-1 - and it **does** discriminate: measured top1 0.5484 vs top2 0.0165 for an unauthenticated-Redis query, so a large gap between #1 and #2 is a real signal that #1 is the right skill. With `rerank=0` it is instead the RRF fused score (magnitude ~0.03, and the top candidates come out nearly tied - **use it only for relative ordering; the absolute value is meaningless, do not treat it as a similarity threshold**). `l1_sim` is always the cosine similarity. `ready_ms` is the one-off loading time at service startup (not counted in this query); `latency_ms.total` is this query's own latency (including concurrent queueing), ~1.4s of which is L3 on CPU. `n_skills=994` is the retrieval-corpus figure ({0} on disk minus the registered skills such as this routing layer), consistent with the evaluation harness.
 
-出错时返回 `{{"error": {{"code": 4xx/5xx, "message": "...", "hint": "..."}}}}`，按 message 改参数即可，不必猜。
+On error the response is `{{"error": {{"code": 4xx/5xx, "message": "...", "hint": "..."}}}}` - fix the parameters according to `message`, no guessing needed.
 
-### 降级链（严格按序，每级只试一次）
+### Degradation chain (strictly in order, try each level only once)
 
 ```
-① HTTP API（约 0.1s）→ ② 本地 CLI {2}/scripts/search_skills（约 6s）→ ③ 静态路由表 B
+(1) HTTP API (~1.4s) → (2) local CLI {2}/scripts/search_skills (~8s) → (3) static routing table B
 ```
 
-② 的调用方式：`{2}/scripts/search_skills "<query>" --top-k 5 --desc-chars 120`（无扩展名 bash 包装脚本，自定位仓库根、自动解析带 torch 的解释器、预检模型与索引；不需要 cd、不需要自己找 python）。**②③ 的返回体与 query 写法与 ① 完全一致**，换级不用改判断逻辑。
+How to call (2): `{2}/scripts/search_skills "<query>" --top-k 5 --desc-chars 120` (an extension-less bash wrapper that self-locates the repo root, resolves an interpreter that has torch, and pre-checks the model and index; no `cd` needed and no need to find python yourself). **The response body and query style of (2) and (3) are identical to (1)**, so moving between levels requires no change in your decision logic.
 
-| 现象 | 含义 | 该怎么办 |
+| Symptom | Meaning | What to do |
 |---|---|---|
-| `curl: (7) Failed to connect` | 服务没起 | 跑一次第 0 步（内含 `router_server.sh start`）；仍不通 → 降级 ② |
-| HTTP **422** + `error.message` | 参数名写错或超范围 | 按 message 改。合法参数：`query` `top_k`(1-50) `desc_chars`(0-2000) `l1_topk` `l2_topn` `rerank` `format`(json 或 text) |
-| HTTP **500** | 服务端检索异常（索引/权重损坏） | `bash {2}/scripts/router_server.sh logs 50` 看原因；必要时 `stop` 后手动带 `--rebuild-index` 重启。期间降级 ② |
-| ② 退出码 **3** + `环境未就绪` | 缺可用解释器，或缺 `demo/models/BAAI/bge-m3` 权重 | **别重试**。stderr 已给出确切修复命令；无人值守时直接转 ③，并在报告里注明 A 不可用 |
-| ② 退出码 **2** / 首次约 **2 分钟** | 参数或索引错误 / 正在编码全库 994 条写入 `_index/` | 2 → 加 `--rebuild-index` 重跑一次；首次编码属正常，**不是卡死**，别中断 |
-| `degraded: true` | `l1_topk` ≥ 语料规模，粗筛没剔除任何候选 | 结果仍可用，只是没享受漏斗加速。默认 50 时不会出现，出现说明有人手工放宽了 k |
-| 候选全是 `offensive-*` / `auth-sec` 这类泛化兜底 slug | query 信号词不足 | 按升级步骤 ① 重写 query |
+| `curl: (7) Failed to connect` | Service not started | Run step 0 once (it contains `router_server.sh start`); still unreachable → degrade to (2) |
+| HTTP **422** + `error.message` | Wrong parameter name or value out of range | Fix per `message`. Valid parameters: `query` `top_k`(1-50) `desc_chars`(0-2000) `l1_topk` `l2_topn` `rerank` `format`(json or text) |
+| HTTP **500** | Server-side retrieval error (corrupt index/weights) | `bash {2}/scripts/router_server.sh logs 50` to see why; if needed `stop` then restart manually with `--rebuild-index`. Degrade to (2) in the meantime |
+| (2) exit code **3** + `环境未就绪` (literal stderr prefix, "environment not ready") | No usable interpreter, or the `demo/models/BAAI/bge-m3` weights are missing | **Do not retry.** stderr already gives the exact fix command; when unattended go straight to (3) and note in the report that A was unavailable |
+| (2) exit code **2** / ~**2 minutes** on first run | Parameter or index error / it is encoding all 994 entries into `_index/` | On 2 → re-run once with `--rebuild-index`; first-time encoding is normal, **it is not a hang**, do not interrupt it |
+| `degraded: true` | `l1_topk` ≥ corpus size, so the coarse filter eliminated nothing | Results are still usable, you just got no funnel speedup. This never happens at the default 50; if it does, someone manually widened k |
+| Candidates are all generic fallback slugs such as `offensive-*` / `auth-sec` | The query lacks signal words | Rewrite the query per escalation step (1) |
 
-### 容器内调用（本方案的主要收益之一）
+### Calling from inside a container (one of the main payoffs of this design)
 
-容器里**不需要** python 依赖、不需要 venv、不需要模型权重，只要能发 HTTP：
+Inside a container you need **no** python dependencies, no venv and no model weights - only the ability to send HTTP:
 
-- `ROUTER_API` 指向宿主的 docker 网桥网关。**本机实测是 `172.16.0.1`，不是 docker 默认的 `172.17.0.1`** —— 别硬编码，容器内这样取：读 `/proc/net/route` 里 `Destination` 为 `00000000` 那行的 `Gateway`（十六进制小端），或起容器时加 `--add-host=host.docker.internal:host-gateway` 后用 `http://host.docker.internal:8787`；
-- 服务无鉴权，容器里**不用传任何凭据**，`ROUTER_API` 一个环境变量就够；
-- **`candidates[].path` 是宿主绝对路径**，容器里直接 Read 会失败。要能读原文就得把库挂进容器且**挂在同一路径**：`-v {2}:{2}:ro`（去掉 `demo/models`、`.git`、`_index` 后仅约 17M）。不想挂就只用 `slug` + `description` 判断，再让宿主侧 Agent 去 Read。
+- `ROUTER_API` points at the host's docker bridge gateway. **Measured on this machine it is `172.16.0.1`, not docker's default `172.17.0.1`** - do not hardcode it. Inside the container derive it by reading the `Gateway` (hex, little-endian) of the row whose `Destination` is `00000000` in `/proc/net/route`, or start the container with `--add-host=host.docker.internal:host-gateway` and use `http://host.docker.internal:8787`;
+- The service has no authentication, so **no credentials are needed** in the container - the single `ROUTER_API` environment variable is enough;
+- **`candidates[].path` already points inside the container**: the service rewrites it to `{2}/<slug>/SKILL.md` before responding, so Read works as-is once the library is mounted there. It is rebuilt from `slug` rather than prefix-substituted because the two layouts differ by a level - the server runs on the host where the corpus is `<category>/<slug>/SKILL.md`, while `scripts/deploy.py` deploys a **flat** library. Pass `--lib-prefix ''` (or `ROUTER_LIB_PREFIX=`) to get host-real paths instead.
 
-### 服务托管
+### Service supervision
 
-`bash {2}/scripts/router_server.sh` 不带参数即打印用法（start / stop / restart / status / logs / curl）。端口与监听地址用 `ROUTER_PORT`（默认 8787）、`ROUTER_HOST`（默认 `0.0.0.0`）覆盖。**服务无鉴权**，默认绑 `0.0.0.0` 是为了让容器能连，代价是**同网段任何人都能无凭据查到全库 skill 清单与宿主机绝对路径**；要收窄暴露面就设 `ROUTER_HOST=127.0.0.1`（仅本机，容器需 `--network host`）或 docker 网桥地址（仅容器可达，LAN 连不上）。
+`bash {2}/scripts/router_server.sh` with no arguments prints the usage (start / stop / restart / status / logs / curl). Override the port and listen address with `ROUTER_PORT` (default 8787) and `ROUTER_HOST` (default `0.0.0.0`). **The service has no authentication**; it binds `0.0.0.0` by default precisely so containers can reach it, at the cost that **anyone on the same subnet can query the full skill list and the host absolute paths without credentials**. To narrow the exposure set `ROUTER_HOST=127.0.0.1` (host only; containers then need `--network host`) or the docker bridge address (reachable from containers only, not from the LAN).
 
-### 其他参数（日常不用，列出备查）
+### Other parameters (not needed day to day, listed for reference)
 
-`rerank=1`（追加 L3 cross-encoder，精度最高）、`format=text`（人读格式，`text/plain`）、`l1_topk`（L1 候选预算，默认 50，本语料金标零丢失）、`l2_topn`（送 L3 的条数，默认 20）、`desc_chars`（description 截断长度，API 默认 200、标准调用传 120）。CLI 侧另有 `-`（从 stdin 读 query）、`--emb-model`（默认 `BAAI/bge-m3`，1024 维多语言；语料 description 100% 中英混排，**勿换纯英文模型**）、`--rebuild-index`（skill 增删改后必须）。API 与 CLI 同名参数语义一致，只是 API 用下划线（`top_k`）、CLI 用连字符（`--top-k`）。
+`rerank=0` (turns the default L3 cross-encoder **off**, back to L1+L2 - ~0.1s instead of ~1.4s, but the head of the list gets visibly worse), `format=text` (human-readable, `text/plain`), `l1_topk` (L1 candidate budget, default 50, zero gold-standard loss on this corpus), `l2_topn` (how many entries go to L3, default 10 - L3 cost scales with it), `desc_chars` (description truncation length; API default 200, the standard call passes 120). The CLI additionally has `-` (read the query from stdin), `--no-rerank` (same as `rerank=0`), `--emb-model` (default `BAAI/bge-m3`, 1024-dim multilingual; the corpus descriptions are 100% mixed Chinese-English, **do not switch to an English-only model**) and `--rebuild-index` (mandatory after skills are added/removed/changed). Same-named parameters carry identical semantics in the API and the CLI; the API uses underscores (`top_k`) and the CLI hyphens (`--top-k`).
 
-选点标定与 recall 回归属于**维护动作，Agent 日常不用跑**：`demo/router_demo.py`（107 条金标，报告落 `demo/report/report_<ts>.json`；`--grid` 跑 l1-topk × l2-topn 网格搜索，结果表自动写入 DESIGN.md §2.3）。当前 bge-m3 实测：L1 存活集召回 100%、L2 @5 94.4%、**L3 @5 95.3% / @20 100%**（纯 TF-IDF baseline @5 仅 84.1%）。
+Threshold calibration and recall regression are **maintenance actions, not something the Agent runs day to day**: `demo/router_demo.py` (107 gold entries; reports land in `demo/report/report_<ts>.json`; `--grid` runs an l1-topk × l2-topn grid search and writes the result table into DESIGN.md section 2.3). Current measured numbers for bge-m3: L1 survival-set recall 100%, L2 @5 94.4%, **L3 @5 95.3% / @20 100%** (a pure TF-IDF baseline reaches only 84.1% @5).
 
-## 路由方式 B：静态路由表（CLI 不可用时，按序执行）
+## Routing path B: static routing table (when the CLI is unavailable, execute in order)
 
-1. **定位大类**：用下方「路由表」按 服务类型 / 漏洞类别 / 技术关键词 / CVE 命中一行；
-2. **选 primary**：在该行的 3-5 个 slug 中，按 frontmatter 的 when-to-use 选 1-3 个最贴切的；
-3. **slug → 路径**：静态表只给 slug 不给路径，用 Glob 解析（一次调用可传多个 pattern）：`{2}/**/<slug>/SKILL.md`，再用 Read 打开。库内 skill **没有**注册成 Claude Code skill，**不要用 Skill 工具加载它们**，只能 Read 文件后自己照做；
-4. **不够再扩**：大类标了〔二级子类→ref〕的（本类 skill 多），展开 `{2}/attack-skill-router/reference.md` 按子标签细选；其余用 Grep 工具（`path` 设为 `{2}`，`-i` 开）按关键词定向补，不要全库通读；
-5. **报告**：最终报告末尾列出实际加载的 slug（与评测工作流一致）。
+1. **Locate the category**: use the "Routing table" below to match a row by service type / vulnerability class / technique keyword / CVE;
+2. **Pick a primary**: among that row's 3-5 slugs, choose the 1-3 best fits by their frontmatter `when-to-use`;
+3. **slug → path**: the static table gives slugs but not paths, so resolve them with Glob (one call can take multiple patterns): `{2}/**/<slug>/SKILL.md`, then open with Read. Library skills are **not** registered as Claude Code skills - **do not load them with the Skill tool**; Read the file and follow it yourself;
+4. **Expand if that is not enough**: for categories marked `[sub-cats → ref]` (many skills in that category), open `reference.md` (next to this SKILL.md, in the registered skill directory - it is **not** under `{2}`) and narrow down by sub-tag; for the rest use the Grep tool (`path` set to `{2}`, `-i` on) to search targeted keywords - do not read through the whole library;
+5. **Report**: list the slugs actually loaded at the end of the final report (consistent with the evaluation workflow).
 
-## 选用规则（A / B 通用）
+Note: the {1} category names and their trigger words below stay Chinese on purpose - they are data derived from the Chinese `INDEX.md` (the classification authority) and they are the Chinese matching surface of routing path B.
 
-- **方法论优先于工具**：先选 methodology skill（教你利用链），工具改写 skill（单个工具的说明书）在方法论缺具体命令时补；
-- **同主题只装一个**：路由表内同主题已做去重（见 `{2}/attack-skill-router/MERGES.md`，已完成人工裁决 13 并 / 7 不并），若 CLI 返回或 grep 仍命中多个相似 slug，选 frontmatter 里 when-to-use 与当前服务/版本最贴合的那个；
-- **版本敏感型任务**（Java 反序列化 gadget、内核 exploit 等）：方法论 skill 只能给思路，gadget 适配属 exploit 工程，按 skill 指引 + 目标版本自建，不要反复重试库内旧 gadget。
+## Selection rules (common to A and B)
 
-## 路由表（{1} 类 · 每类 primary 5 个 · 一行一类）
+- **Methodology over tooling**: prefer methodology skills (they teach you the exploitation chain); tool-wrapper skills (a manual for one tool) fill in when the methodology lacks concrete commands;
+- **Load only one skill per topic**: same-topic entries are already deduplicated inside the routing table (see `MERGES.md`, next to this SKILL.md; human adjudication complete, 13 merged / 7 not merged). If the CLI or grep still returns several similar slugs, pick the one whose frontmatter `when-to-use` best fits the current service/version;
+- **Version-sensitive tasks** (Java deserialization gadgets, kernel exploits, etc.): a methodology skill can only give you the approach; gadget adaptation is exploit engineering - build it yourself from the skill's guidance plus the target version, and do not keep retrying the library's stale gadgets.
+
+## Routing table ({1} categories, 5 primaries each, one line per category)
 
 '''.format(n_total, len(cats), LIB))
 
@@ -349,19 +351,19 @@ for cat, items in cats.items():
     en_kw = en_keywords(items)
     trig = cat.split(' ', 1)[1].replace('与', ' / ')
     slug_list = ', '.join('`{0}`'.format(p['Skill名称']) for p in primary)
-    ref = '〔二级子类→ref〕' if len(items) > SUBTAG_MIN_CAT else ''
-    more = '' if len(items) > SUBTAG_MIN_CAT else ' ; 更多 {0} 个 grep 扩'.format(len(items) - len(primary))
-    w('- **{0}**（{1}）{2} 触发:{3} ; {4} → {5}{6}\n'.format(cat, len(items), ref, trig, ', '.join(en_kw[:3]), slug_list, more))
+    ref = ' [sub-cats → ref]' if len(items) > SUBTAG_MIN_CAT else ''
+    more = '' if len(items) > SUBTAG_MIN_CAT else ' ; {0} more, grep to expand'.format(len(items) - len(primary))
+    w('- **{0}** ({1}){2} triggers: {3} ; {4} → {5}{6}\n'.format(cat, len(items), ref, trig, ', '.join(en_kw[:3]), slug_list, more))
 
 w('''
-## 附
+## Appendix
 
-- primary 总数：{0}（磁盘总量 {1}，二级子类见 `{2}/attack-skill-router/reference.md`，其余按需 grep，不主动加载）
-- 维护：新增/删除 skill 后重跑 `python attack-skill-router/gen_router.py`（直扫仓库 + INDEX.md，无需 CSV；会覆写本文件与 reference.md）。**警示：当前脚本重跑会改写约 39/50 行 primary 挑选（与已提交表格存在漂移，因 INDEX.md/仓库快照与脚本排序逻辑版本不同步），重跑后必须 `git diff` 逐行人工复核再提交，禁止盲提交**；类别内排名按「方法论仓库优先级 + 工具名字序」，FORCE_PRIMARY 名单见脚本
-- 路由 CLI 维护：skill 增删改后另需 `{2}/scripts/search_skills --rebuild-index` 重建 `_index/` 向量索引，并跑 `{2}/demo/router_demo.py` 复标 L1 top-k（门禁 Recall@20 ≥ 95%、L3 后 Recall@5 ≥ 85%，见 DESIGN.md §7）
-- Claude Code 接入：跑 `bash {2}/scripts/install_skill.sh` —— 它探测可用解释器写入 `.python-path`、把 `SKILL.md`（及能写的 `reference.md`/`MERGES.md`）**软链**进 `~/.claude/skills/attack-skill-router/`，最后从 `/tmp` 自检一次 CLI。软链而非复制 = 仓库即唯一真源，改完立刻生效、不会副本漂移；本文所有配套文件都写绝对路径，故**只有 SKILL.md 必须在 skill 目录里**，其余软链被沙箱拦下也不影响使用。改了本文件后无需重装
-- 路由服务：`bash {2}/scripts/router_server.sh start` 起常驻 HTTP 服务（约 5-10s 就绪，之后单次查询约 0.1s）。服务不是开机自启的，重启机器后需手动再 start；Agent 侧的第 0 步会在探测不到 `/health` 时自动拉起一次。改了 `search_skills.py` 的排序逻辑后必须 `restart`，常驻进程不会自动重载。pidfile 与日志在 `{2}/.run/`，与 `.python-path` 一样已 gitignore（因机器而异）。**服务无鉴权**且默认绑 `0.0.0.0`，只适合可信隔离网段，收窄方式见 A 节「服务托管」
-- 配套文件：`{2}/attack-skill-router/reference.md`（本脚本生成的展开层）、`{2}/attack-skill-router/MERGES.md`（重叠团合并裁决记录，已完成人工裁决 13 并 / 7 不并，非本脚本生成）、`{2}/scripts/router_server.py`（HTTP 服务实现，仅标准库）、`{2}/scripts/router_server.sh`（进程托管：start/stop/status/logs/curl）、`{2}/scripts/search_skills`（本地 CLI 入口，无扩展名 bash 包装，兼作降级路径）、`{2}/scripts/search_skills.py`（检索实现，`Router` 类被 CLI 与 HTTP 服务共用，排序不分叉）、`{2}/DESIGN.md`（三层漏斗设计与评测数据）
+- Total primaries: {0} ({1} on disk; sub-categories in `reference.md` next to this SKILL.md, the rest by grep on demand and never loaded proactively)
+- Maintenance: after adding/removing skills re-run `python attack-skill-router/gen_router.py` (it scans the repo + INDEX.md directly, no CSV needed; it overwrites this file and reference.md). **Warning: re-running the current script rewrites the primary picks of about 39/50 rows (drift against the committed table, because the INDEX.md/repo snapshot and the script's sorting logic are out of version sync). After re-running you must review every row with `git diff` before committing - blind commits are forbidden.** Within a category the ranking follows "methodology-repo priority + tool-name alphabetical order"; see the script for the FORCE_PRIMARY list. This document is now English, so the generator's template must stay English too - otherwise a re-run silently reverts it to Chinese
+- Routing CLI maintenance: after skills are added/removed/changed you must also rebuild the `_index/` vector index with `{2}/scripts/search_skills --rebuild-index`, and re-calibrate L1 top-k by running `{2}/demo/router_demo.py` (gates: Recall@20 ≥ 95%, Recall@5 ≥ 85% after L3; see DESIGN.md section 7)
+- Claude Code integration: run `bash {2}/scripts/install_skill.sh` - it probes for a usable interpreter and writes `.python-path`, **symlinks** `SKILL.md` (plus `reference.md`/`MERGES.md` where writable) into `~/.claude/skills/attack-skill-router/`, and finally self-tests the CLI once from `/tmp`. Symlink rather than copy = the repo is the single source of truth, edits take effect immediately and no copy can drift; every companion file referenced in this document is written as an absolute path, so **only SKILL.md must live in the skill directory** - the other symlinks being blocked by a sandbox does not affect usage. No reinstall is needed after editing this file
+- Routing service: `bash {2}/scripts/router_server.sh start` starts the resident HTTP service (~7-12s to ready, because it also prewarms the L3 cross-encoder; then ~1.4s per query, or ~0.1s with `rerank=0`). The service is not started at boot, so after a machine restart you must start it manually again; the Agent-side step 0 brings it up once automatically when `/health` cannot be reached. After changing the ranking logic in `search_skills.py` you must `restart` - the resident process does not hot-reload. The pidfile and logs live in `{2}/.run/`, gitignored like `.python-path` (machine-specific). **The service has unauthenticated access** and binds `0.0.0.0` by default, so it suits only a trusted isolated subnet; see section A "Service supervision" for how to narrow it
+- Companion files: `{2}/attack-skill-router/reference.md` (the expansion layer generated by this script), `{2}/attack-skill-router/MERGES.md` (merge adjudication record for overlapping clusters, human adjudication complete with 13 merged / 7 not merged, not generated by this script), `{2}/scripts/router_server.py` (HTTP service implementation, standard library only), `{2}/scripts/router_server.sh` (process supervision: start/stop/status/logs/curl), `{2}/scripts/search_skills` (local CLI entry point, extension-less bash wrapper, doubles as the degradation path), `{2}/scripts/search_skills.py` (retrieval implementation; its `Router` class is shared by the CLI and the HTTP service so the ranking cannot diverge), `{2}/DESIGN.md` (three-stage funnel design and evaluation data)
 '''.format(total_primary, n_total, LIB))
 out.close()
 
