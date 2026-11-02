@@ -7,6 +7,11 @@ when-to-use: "At the start of a pentest engagement; when an already-loaded skill
 
 # Attack Skill Router (v2.2)
 
+> ## GLOBAL RULE - how a library skill gets loaded (applies to routing path A, B and every fallback)
+>
+> The **Skill tool works for exactly 3 registered skills**: `attack-skill-router`, `engagement-discipline`, `java-deserialization-gadget-selector`. **All the other 994 library skills are plain markdown files, NOT registered Claude Code skills** - the only way to load one is to open its absolute path with the **Read** tool (`candidates[].path` from path A, or the Glob-resolved path from path B) and follow it yourself.
+> Calling `Skill(<library slug>)` always returns `Unknown skill`: it wastes a turn and silently breaks the routing chain, so never treat a `slug` from this router as a skill name.
+
 ## Purpose
 
 This library holds 996 skills across 50 attack categories. Searching the whole library directly confronts the Agent with too many homogeneous options (measured: one deserialization query pulled in 3 overlapping skills at once).
@@ -29,7 +34,7 @@ Three-stage funnel semantic routing (L1 embedding top-k coarse filter → L2 RRF
 ### Step 0: confirm the service is alive (run once at the start of a task, not before every query)
 
 ```bash
-curl -sf --max-time 2 "${ROUTER_API:-http://10.1.96.86:8787}/health"
+curl -sf --max-time 2 "${ROUTER_API:-http://10.22.16.51:8787}/health"
 ```
 
 - Reachable → returns silently; go straight to the standard call;
@@ -38,7 +43,7 @@ curl -sf --max-time 2 "${ROUTER_API:-http://10.1.96.86:8787}/health"
 ### Standard call (copy this verbatim, do not rewrite it)
 
 ```bash
-curl -sS --max-time 30 -G "${ROUTER_API:-http://10.1.96.86:8787}/search" \
+curl -sS --max-time 30 -G "${ROUTER_API:-http://10.22.16.51:8787}/search" \
   --data-urlencode 'query=<one-sentence task description>' \
   --data-urlencode top_k=5 --data-urlencode desc_chars=120
 ```
@@ -47,14 +52,14 @@ curl -sS --max-time 30 -G "${ROUTER_API:-http://10.1.96.86:8787}/search" \
 - Pass `query` via `--data-urlencode` - English, spaces and quotes all need no escaping on your side;
 - `top_k=5 desc_chars=120` is the standard configuration chosen to control context tokens; the response body is about 800 tokens;
 - Do **not** add `rerank=1` - it is already the default. Add `--data-urlencode rerank=0` only if you are batch-screening many queries and can accept a visibly worse head of the list (~0.1s instead of ~1.4s);
-- The result JSON goes to stdout and can be parsed directly; **`candidates[].path` is an absolute path** - just open it with Read, no need to prepend the repo root;
+- The result JSON goes to stdout and can be parsed directly; **`candidates[].path` is an absolute path inside the deployed skill library** - just open it with Read, no need to prepend the repo root;
 
 ### Agent execution sequence
 
 1. Run step 0 to confirm the service;
 2. Write the current obstacle as a one-sentence "task + signal words" query in English and run the standard call;
 3. Read the JSON and pick **1-3** `slug`s out of `candidates`. Judge by whether the `description` matches the current service / version / tech stack, **not by the absolute value of `score`**;
-4. Open the corresponding `path` with Read and follow that skill's steps. **Do not read all 5, and do not grep the whole library again**;
+4. Open the corresponding `path` with Read and follow that skill's steps. **The Skill tool is only valid for the 3 registered skills listed in the GLOBAL RULE at the top - every library skill must be loaded as `Read <path>`, never as `Skill(<slug>)`. Do not read all 5, and do not grep the whole library again**;
 5. If none of the top-5 is relevant, escalate in this order, trying each step only once:
    - (1) Rewrite the query, adding the service name / version number / error keywords / current privilege state → re-run the standard call;
    - (2) Fall back to routing path B (static table);
@@ -79,11 +84,15 @@ curl -sS --max-time 30 -G "${ROUTER_API:-http://10.1.96.86:8787}/search" \
 {"query": "...",
  "candidates": [{"slug": "database-attacker", "name": "...",
                  "description": "...", "path": "/opt/attack-skill-library/database-attacker/SKILL.md",
-                 "score": 0.5484, "l1_sim": 0.575, "rerank_score": 0.5484}],
+                 "score": 0.5484, "l1_sim": 0.575, "rerank_score": 0.5484,
+                 "load": "Read the \"path\" field above. This is NOT a registered Claude skill - the Skill tool only knows attack-skill-router / engagement-discipline / java-deserialization-gadget-selector"}],
  "meta": {"l1_kept": 50, "n_skills": 994, "l1_topk": 50, "rrf_k0": 60,
           "emb_model": "BAAI/bge-m3", "rerank": true, "degraded": false,
-          "ready_ms": 5206, "latency_ms": {"l1": 72, "l2": 8, "l3": 1347, "total": 1427}}}
+          "ready_ms": 5206, "latency_ms": {"l1": 72, "l2": 8, "l3": 1347, "total": 1427},
+          "consume": "Load each candidate with the Read tool on its absolute \"path\" field. Only attack-skill-router / engagement-discipline / java-deserialization-gadget-selector are registered skills; every other library skill is a plain file, so Skill(<slug>) returns \"Unknown skill\"."}}
 ```
+
+The directory prefix of `path` is whatever the deployment configured (`--lib-prefix`, default `/opt/attack-skill-library`); it is always absolute, so Read it verbatim. `load` / `meta.consume` restate the GLOBAL RULE inside the data itself - obey them: a `slug` is a retrieval key for reporting, never a Skill-tool argument.
 
 `score` is the ranking criterion of the current stage. With the default `rerank: true` it equals `rerank_score`, the cross-encoder score in 0-1 - and it **does** discriminate: measured top1 0.5484 vs top2 0.0165 for an unauthenticated-Redis query, so a large gap between #1 and #2 is a real signal that #1 is the right skill. With `rerank=0` it is instead the RRF fused score (magnitude ~0.03, and the top candidates come out nearly tied - **use it only for relative ordering; the absolute value is meaningless, do not treat it as a similarity threshold**). `l1_sim` is always the cosine similarity. `ready_ms` is the one-off loading time at service startup (not counted in this query); `latency_ms.total` is this query's own latency (including concurrent queueing), ~1.4s of which is L3 on CPU. `n_skills=994` is the retrieval-corpus figure (996 on disk minus the registered skills such as this routing layer), consistent with the evaluation harness.
 
@@ -95,7 +104,7 @@ On error the response is `{"error": {"code": 4xx/5xx, "message": "...", "hint": 
 
 1. **Locate the category**: use the "Routing table" below to match a row by service type / vulnerability class / technique keyword / CVE;
 2. **Pick a primary**: among that row's 3-5 slugs, choose the 1-3 best fits by their frontmatter `when-to-use`;
-3. **slug → path**: the static table gives slugs but not paths, so resolve them with Glob (one call can take multiple patterns): `/opt/attack-skill-library/**/<slug>/SKILL.md`, then open with Read. Library skills are **not** registered as Claude Code skills - **do not load them with the Skill tool**; Read the file and follow it yourself;
+3. **slug → path**: the static table gives slugs but not paths, so resolve them with Glob (one call can take multiple patterns): `/opt/attack-skill-library/**/<slug>/SKILL.md` - if that root does not exist on this machine, use the directory a previous path-A `candidates[].path` pointed into - then open with Read. Per the GLOBAL RULE at the top these are plain files: **Read them, never `Skill(<slug>)`**;
 4. **Expand if that is not enough**: for categories marked `[sub-cats → ref]` (many skills in that category), open `reference.md` (next to this SKILL.md, in the registered skill directory - it is **not** under `/opt/attack-skill-library`) and narrow down by sub-tag; for the rest use the Grep tool (`path` set to `/opt/attack-skill-library`, `-i` on) to search targeted keywords - do not read through the whole library;
 5. **Report**: list the slugs actually loaded at the end of the final report (consistent with the evaluation workflow).
 

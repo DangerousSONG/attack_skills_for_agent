@@ -9,6 +9,11 @@ cd /home/panjiahao/safe-range/attack_skills_for_agent
 ```
 
 
+## 部署skill-router和skill-library
+python3 scripts/deploy.py   --skills-dir  /home/panjiahao/.claude/skills   --library-dir /home/panjiahao/safe-range/attack-skill-library
+
+
+
 ## 服务器启动
 ```bash
 cd /home/panjiahao/safe-range/attack_skills_for_agent

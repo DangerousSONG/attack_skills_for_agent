@@ -9,11 +9,14 @@
 (走 docker 网桥网关; 该地址因机器而异, 本机是 172.16.0.1 而非 docker 默认的 172.17.0.1,
  容器内可从 /proc/net/route 里 Destination=00000000 那行的 Gateway 取)。
 
-返回体里的 candidates[].path 会被改写成**容器内文件库**的路径(--lib-prefix, 默认
-/opt/attack-skill-library/<slug>/SKILL.md), 容器里 Read 这个路径就能直接读到原文。
+返回体里的 candidates[].path 会被改写成**消费方文件库**的路径(--lib-prefix, 默认
+/opt/attack-skill-library/<slug>/SKILL.md), Agent Read 这个路径就能直接读到原文。
 之所以按 slug 重组而不是简单换前缀: 服务跑在宿主, 语料根是本仓库, 布局是
 <category>/<slug>/SKILL.md; 消费方是 scripts/deploy.py 部署的**扁平**库(<slug>/SKILL.md),
-两边前缀不同、层级也少一层。传 --lib-prefix '' 可关闭改写, 拿回宿主机真实路径。
+两边前缀不同、层级也少一层。该前缀指向的是**消费方**(靶机/容器)的文件系统, 宿主上通常并不
+存在, 所以这里刻意不做存在性校验 —— 按宿主 FS 校验会把本来正确的 /opt 路径"修正"成消费方
+Read 不到的宿主仓库路径, 反而逼 Agent 退回去误调 Skill 工具(库 skill 未注册, 只会
+Unknown skill)。传 --lib-prefix '' 可关闭改写, 拿回宿主机真实路径。
 
 L3 精排**默认开启**(不带 rerank 参数就是开, 而不是要显式 rerank=1 才开): 只靠 L1+L2 的 RRF
 融合分排头部, 会把"语义相关但不对症"的 skill 顶到 top1 —— 实测 query
@@ -198,20 +201,39 @@ def parse_params(raw):
 
 
 # ---------------------------------------------------------------- 路径改写
+# 已注册(= 能被 Skill 工具加载)的 skill 名单只有一份真源: ss.REGISTERED。这里把它拼进返回体,
+# 让"其余全是文件、只能 Read"这条禁令随数据一起到达 Agent, 而不是只写在 SKILL.md 里等着被忽略。
+REGISTERED_HINT = ' / '.join(sorted(ss.REGISTERED))
+
+
 def rewrite_paths(result, lib_prefix):
-    """把 candidates[].path 改写成容器内文件库路径, 就地改并返回同一个 dict。
+    """把 candidates[].path 改写成消费方文件库里的绝对路径, 就地改并返回同一个 dict。
 
     不能只做前缀替换: 宿主语料根下是 <category>/<slug>/SKILL.md(deploy.py 的 find_skills
     递归收集, 层级还不止两种), 而它部署出来的库是扁平的 <slug>/SKILL.md。少的那层
     category 只能丢掉, 所以按 slug 重组 —— slug 本来就在候选里, 且 deploy.py 保证
     库目录名 == slug(重名会拒绝部署)。
+
+    **不要在这里做存在性校验然后回落到语料真实路径**: 服务跑在宿主, 消费方(Agent)通常在靶机
+    /容器里, 两边不是同一个文件系统 —— 库部署在消费方的 /opt/attack-skill-library, 宿主上没有
+    这个目录。按宿主 FS 校验只会把本来正确的 /opt 路径改成消费方根本 Read 不到的
+    /home/<user>/... 仓库路径, 而 Read 失败的下一步往往就是拿 slug 去调 Skill 工具(库 skill
+    未注册, 只会 Unknown skill), 路由链就此断掉。前缀是否真存在于消费方, 只能在消费方侧保证
+    (靶机内跑 deploy.py, 默认 --library-dir 就是这个前缀)。
     lib_prefix 为空串则原样保留宿主真实路径(服务与消费方都在宿主时用)。
     """
-    if not lib_prefix:
-        return result
-    prefix = lib_prefix.rstrip('/')
+    prefix = (lib_prefix or '').rstrip('/')
     for c in result.get('candidates', []):
-        c['path'] = '%s/%s/SKILL.md' % (prefix, c['slug'])
+        if prefix:
+            c['path'] = '%s/%s/SKILL.md' % (prefix, c['slug'])
+        # 数据面禁令: 把消费方式绑死在 path 上, 打断 agent 把 slug 当已注册 skill 名
+        # 去调 Skill 工具的误映射(库 skill 未注册, Skill 工具必报 Unknown skill)
+        c['load'] = ('Read the "path" field above. This is NOT a registered Claude skill - '
+                     'the Skill tool only knows %s' % REGISTERED_HINT)
+    result.setdefault('meta', {})['consume'] = (
+        'Load each candidate with the Read tool on its absolute "path" field. Only %s are '
+        'registered skills; every other library skill is a plain file, so Skill(<slug>) '
+        'returns "Unknown skill".' % REGISTERED_HINT)
     return result
 
 
@@ -412,6 +434,13 @@ def main():
         log('      或 --host <docker 网桥地址>(仅容器可达, LAN 上连不上)。')
     log('语料 %d 条, 冷启动 %sms' % (len(router.slugs), router.ready_ms))
     log('返回体 path 前缀: %s' % (args.lib_prefix or '(不改写, 宿主真实路径)'))
+    if args.lib_prefix and not os.path.isdir(args.lib_prefix):
+        # 只做提示不做改写: 前缀指向的是**消费方**(靶机/容器)的库目录, 宿主上没有它是正常的,
+        # 详见 rewrite_paths 的 docstring。真正要确认的是消费方那边跑过 deploy.py。
+        log('提示: %s 在宿主不存在(消费方在靶机/容器时属正常) —— 请确认消费方已执行'
+            % args.lib_prefix)
+        log('      python3 scripts/deploy.py --library-dir %s, 否则 Agent Read 不到 path'
+            % args.lib_prefix)
     log('L3 精排: 默认%s(单次查询带 rerank=0 可退回 L1+L2, 约 0.09s), 启动预热=%s'
         % ('开' if DEFAULT_RERANK else '关', '否' if args.lazy_reranker else '是'))
     log('健康检查: curl -s http://127.0.0.1:%d/health' % args.port)
