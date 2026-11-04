@@ -5,6 +5,7 @@
   "cve": 36,
   "tool_alias": 22,
   "curated": 43,
+  "curated_vuln": 4,
   "categories": 47
  },
  "entities": [
@@ -142,12 +143,14 @@
   {
    "type": "cve",
    "value": "CVE-2020-1472",
-   "aliases": [],
+   "aliases": [
+    "zerologon"
+   ],
    "skills": [
     "exploiting-zerologon-vulnerability-cve-2020-1472",
     "scansploit-exploit-scan"
    ],
-   "provenance": "regex:SKILL.md",
+   "provenance": "regex:SKILL.md+curated",
    "confidence": 1.0
   },
   {
@@ -233,14 +236,19 @@
   {
    "type": "cve",
    "value": "CVE-2021-44228",
-   "aliases": [],
+   "aliases": [
+    "log4j 漏洞",
+    "log4j2",
+    "log4j2 rce",
+    "log4shell"
+   ],
    "skills": [
     "jndi-injection",
     "log4j-scan-cve",
     "logmepwn-log4j-mass",
     "rext-exploit-db"
    ],
-   "provenance": "regex:SKILL.md",
+   "provenance": "regex:SKILL.md+curated",
    "confidence": 1.0
   },
   {
@@ -1201,6 +1209,36 @@
     "cewl-wordlist"
    ],
    "cat": "C25",
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "cve",
+   "value": "CVE-2017-0144",
+   "aliases": [
+    "eternalblue",
+    "ms17-010",
+    "ms17010",
+    "永恒之蓝",
+    "永恒蓝"
+   ],
+   "skills": [
+    "exploiting-ms17-010-eternalblue-vulnerability"
+   ],
+   "provenance": "curated:manual",
+   "confidence": 1.0
+  },
+  {
+   "type": "cve",
+   "value": "CVE-2014-0160",
+   "aliases": [
+    "heartbleed",
+    "心脏出血",
+    "心脏滴血"
+   ],
+   "skills": [
+    "offensive-tls-attacks"
+   ],
    "provenance": "curated:manual",
    "confidence": 1.0
   }

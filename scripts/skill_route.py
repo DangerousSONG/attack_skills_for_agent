@@ -106,7 +106,7 @@ def load_index():
 
 
 def l1_dict_match(text, slugs):
-    """L1: CVE 正则 + 工具别名命中, 返回 (hit_slugs, matched_entities)"""
+    """L1: CVE 正则/俗名别名 + 工具别名命中, 返回 (hit_slugs, matched_entities)"""
     if not os.path.exists(REGISTRY):
         return [], []
     reg = json.load(open(REGISTRY, encoding='utf-8'))
@@ -114,16 +114,19 @@ def l1_dict_match(text, slugs):
     hits, ents = [], []
     for e in reg['entities']:
         if e['type'] == 'cve':
-            for m in CVE_RE.findall(text):
-                if m.upper() == e['value']:
-                    hits += e['skills']; ents.append(e['value'])
+            cve_hit = any(m.upper() == e['value'] for m in CVE_RE.findall(text))
+            alias_hit = any(a.lower() in low for a in e.get('aliases', []))
+            if cve_hit or alias_hit:
+                hits += e['skills']; ents.append(e['value'])
         elif e['type'] == 'tool':
             names = [e['value']] + e.get('aliases', [])
             if any(n.lower() in low for n in names):
                 hits += e['skills']; ents.append(e['value'])
     seen = set()
     uniq = [s for s in hits if not (s in seen or seen.add(s))]
-    return [s for s in uniq if s in set(slugs)], ents
+    eseen = set()
+    uents = [s for s in ents if not (s in eseen or eseen.add(s))]
+    return [s for s in uniq if s in set(slugs)], uents
 
 
 def l2_recall(text, slugs, vec_w, vec_c, X, bm25, k, mask=None, third=None):
