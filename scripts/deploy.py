@@ -14,9 +14,9 @@
 import os, sys, io, shutil, argparse
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-REGISTERED = ['attack-skill-router', 'engagement-discipline', 'java-deserialization-gadget-selector']
+REGISTERED = []   # flat-skills 分支: 无注册层, 全部平铺进文件库
 # 库根索引: (仓库内路径, 库内文件名)，存在才拷
-ROOT_FILES = [('INDEX.md', 'INDEX.md'), ('attack-skill-router/MERGES.md', 'MERGES.md')]
+ROOT_FILES = [('INDEX.md', 'INDEX.md')]
 
 def find_skills(base):
     """返回 {slug: abs_dir}，校验重名"""

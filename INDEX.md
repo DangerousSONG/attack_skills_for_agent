@@ -1,4 +1,4 @@
-# 攻击侧 Skills 完整清单（996 个 · v2.0）
+# 攻击侧 Skills 完整清单（994 个 · v2.0）
 
 > 现成 435（10 个开源仓库精选）+ 工具改写 561（含 2 个原创专项）。按 50 个攻击大类分组。
 
@@ -15,10 +15,10 @@
 | C01 资产测绘与指纹识别 | 62 |
 | C46 二进制漏洞利用与Pwn | 46 |
 | C10 API与业务逻辑攻击 | 54 |
-| C09 Web应用漏洞利用 | 171 |
+| C09 Web应用漏洞利用 | 170 |
 | C05 外部攻击面与云资产暴露 | 31 |
 | C15 持久化与后门植入 | 13 |
-| C50 红队方法论与自动化 | 38 |
+| C50 红队方法论与自动化 | 37 |
 | C40 嗅探与中间人攻击 | 36 |
 | C43 移动端攻击 | 21 |
 | C07 载荷开发与武器化 | 24 |
@@ -433,7 +433,7 @@
 - [myjwt-jwt-audit](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/myjwt-jwt-audit/SKILL.md) · `工具改写(mBouamama/MyJWT)` · Apache-2.0 (上游 MIT) — MyJWT: JWT multi-attack-surface testing. Signals: API attack, interface testing, JWT key brute force, KID injection, JKU bypass.
 
 
-## C09 Web应用漏洞利用（171 个）
+## C09 Web应用漏洞利用（170 个）
 
 - [bypassing-authentication-with-forced-browsing](https://github.com/mukul975/Anthropic-Cybersecurity-Skills/blob/HEAD/skills/bypassing-authentication-with-forced-browsing/SKILL.md) · `mukul975/Anthropic-Cybersecurity-Skills` · Apache-2.0 — Discover and access unprotected pages, APIs, and administrative interfaces. Signals: web vulnerabilities, injection, SQL injection.
 - [escaping-containers-to-host](https://github.com/mukul975/Anthropic-Cybersecurity-Skills/blob/HEAD/skills/escaping-containers-to-host/SKILL.md) · `mukul975/Anthropic-Cybersecurity-Skills` · Apache-2.0 — Escape from container to host using privileged Pods, host mounts, runC CVEs, and exposed Docker sockets. Signals: container escape, docker escape, pri…
@@ -605,7 +605,6 @@
 - [v3n0m-sql-xss](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/v3n0m-sql-xss/SKILL.md) · `工具改写(v3n0m-Scanner/V3n0M-Scanner)` · Apache-2.0 (上游 GPL-3.0) — V3n0M-Scanner: Multi-vulnerability batch scanning. Signals: web vulnerabilities, injection, dork scan, SSRF patterns, XSS patterns.
 - [corstest-cors](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/corstest-cors/SKILL.md) · `工具改写(RUB-NDS/CORStest)` · Apache-2.0 (上游 GPL-2.0) — CORStest: Validates CORS configurations. Signals: web vulnerability, injection, CORS testing, batch.
 - [hsecscan-header-audit](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/hsecscan-header-audit/SKILL.md) · `工具改写(riramar/hsecscan)` · Apache-2.0 (上游 GPL-2.0) — hsecscan audits OWASP security headers. Signals: web vulnerability, injection, security header scan, verbose, passive mode.
-- [java-deserialization-gadget-selector](https://github.com/DangerousSONG/attack_skills_for_agent/tree/main/java-deserialization-gadget-selector) · `工具改写(DangerousSONG/attack_skills_for_agent 原创)` · Apache-2.0 — Java deserialization gadget version decision table: for Java services (RMI, HTTP Invoker, JMX, queues) with unknown CommonsCollections/Rhino/Groovy/Be…
 
 
 ## C05 外部攻击面与云资产暴露（31 个）
@@ -660,7 +659,7 @@
 - [portia-post-exploit](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/portia-post-exploit/SKILL.md) · `工具改写(SpiderLabs/portia)` · Apache-2.0 (上游 Apache-2.0) — AD post-exploitation automation. Signals: persistence, backdoor, modules.
 
 
-## C50 红队方法论与自动化（38 个）
+## C50 红队方法论与自动化（37 个）
 
 - [conducting-full-scope-red-team-engagement](https://github.com/mukul975/Anthropic-Cybersecurity-Skills/blob/HEAD/skills/conducting-full-scope-red-team-engagement/SKILL.md) · `mukul975/Anthropic-Cybersecurity-Skills` · Apache-2.0 — Plan and execute full-cycle red team engagements using MITRE ATT&CK, from threat modeling through post-exploitation, to test detection, protection, an…
 - [designing-adversary-engagement-with-mitre-engage](https://github.com/mukul975/Anthropic-Cybersecurity-Skills/blob/HEAD/skills/designing-adversary-engagement-with-mitre-engage/SKILL.md) · `mukul975/Anthropic-Cybersecurity-Skills` · Apache-2.0 — Design adversary engagement using MITRE Engage. Signals: red team, methodology, penetration testing process.
@@ -699,7 +698,6 @@
 - [cloudfail-cloud-origin](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/cloudfail-cloud-origin/SKILL.md) · `工具改写(m0rtem/CloudFail)` · Apache-2.0 (上游 MIT) — CloudFail: Locates origin IPs behind CDNs. Signals: red team, methodology, bypassing Cloudflare to find origin IP, scanning all subdomains, Tor exit n…
 - [interlace-parallel](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/interlace-parallel/SKILL.md) · `工具改写(codingo/Interlace)` · Apache-2.0 (上游 GPL-3.0) — Interlace parallelizes penetration testing commands. Signals: red team, methodology, parallel command execution, placeholders, port list.
 - [reconnoitre-auto-recon](https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/reconnoitre-auto-recon/SKILL.md) · `工具改写(codingo/Reconnoitre)` · Apache-2.0 (上游 GPL-3.0) — reconnoitre: Automates internal network reconnaissance. Signals: red team, methodology, service enumeration, DNS enumeration, full scan.
-- [engagement-discipline](https://github.com/DangerousSONG/attack_skills_for_agent/tree/main/engagement-discipline) · `工具改写(DangerousSONG/attack_skills_for_agent 原创)` · Apache-2.0 — General operational discipline for long penetration tests: use time-boxed attempts, switch paths on failure, parallelize work, regularly checkpoint pr…
 
 
 ## C40 嗅探与中间人攻击（36 个）

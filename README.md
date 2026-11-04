@@ -1,4 +1,4 @@
-# Attack Skills for Agent · 攻击侧 Skills 集（996 个 · 1k 达成）
+# Attack Skills for Agent · 攻击侧 Skills 集（994 个 · 平铺版 flat-skills）
 
 > 面向渗透测试 Agent 的即插即用 SKILL.md 能力库：每个 skill = frontmatter + 方法论 + 命令速查 + 攻击场景 Playbook，Agent 按需加载、照抄执行。
 > 逐条明细（名称/来源/License/简介/链接）见 [INDEX.md](INDEX.md)。维护流程（新增/修改 skill 的三步级联 + 门禁）见 [CONTRIBUTING](CONTRIBUTING.md)。
@@ -6,10 +6,10 @@
 
 ## 核心价值
 
-- **两层部署，根治 token 爆炸**：996 个 skill 全量注册时每个 step 携带约 20K tokens 索引，实测 prompt cache 命中率 84.9% → 14.8%，成本放大 3.9 倍。改为「3 注册 + 993 文件库」后常驻索引 <2K tokens/step（详见下文部署模型）。
+- **平铺部署，零路由税**：994 个 skill 全部扁平存放在文件库，不带注册层；Agent 用 `grep -ril <关键词>` 或检索方案（如 song_1030 / skill-rag-pjh）在库内定位后 Read 按需加载，常驻索引零开销。
 - **检索质量可量化**：107 条中文渗透任务查询 × 人工金标 slug 的 Recall 评测，当前 **Recall@5 = 82.2% / Recall@20 = 100.0%**（description 全英文 + `zh-signals` 中文检索信号口径），description 历经 3 轮数据驱动迭代（详见下文质量评测）。
 - **口径干净**：攻击侧 only（剔除无线/硬件、纯防御、纯逆向）；跨 10 个源零重名；License 全部可二创（Apache-2.0 / MIT / CC BY 4.0），工具改写类逐条标注上游 License。
-- **56% 自研资产**：561 个工具改写 skill（一个真实工具一个 playbook）+ 路由表 + gadget 决策表，独立知识产权，二创版权最干净。
+- **56% 自研资产**：559 个工具改写 skill（一个真实工具一个 playbook），独立知识产权，二创版权最干净。
 
 ## 仓库结构
 
@@ -22,36 +22,33 @@
 | `pentest-ai-agents/` | 上游 0xSteph（MIT）：角色型 skill（recon/planner/opsec…） | 38 |
 | `offensive-claude/` | 上游 hypnguyen1209（MIT）：纪律类（scope/engagement/finding） | 29 |
 | `Claude-OSINT/` `ctf-skills/` `awesome-web3-security/` `yak-skills/` `awesome-ai-security/` | 上游 OSINT/CTF/Web3/Yakit/LLM 安全 | 26 |
-| `attack-skill-router/` | 注册层：压缩路由主表（15KB）+ reference.md 展开层 + MERGES 合并裁决 + 生成脚本 | 1 |
-| `engagement-discipline/` | 注册层：纪律元技能（scope 边界/授权约束） | 1 |
-| `java-deserialization-gadget-selector/` | 注册层：Java 反序列化 gadget 决策表 | 1 |
 | `scripts/` | 治理/部署/评测脚本（见下） | — |
-| `INDEX.md` / `攻击侧Skills清单.csv` / `attack-skill-router/MERGES.md` | 全量清单 / 结构化导出 / 重名合并裁决记录 | — |
+| `INDEX.md` / `攻击侧Skills清单.csv` | 全量清单 / 结构化导出 | — |
 
 ### scripts/ 速查
 
 | 脚本 | 用途 |
 | --- | --- |
-| `deploy.py` | 两层部署：`--dry-run` 预演、`--clean` 清空重布、路径可用 `--skills-dir`/`--library-dir` 覆盖 |
-| `govern_skills.py` | 质量门禁：frontmatter 校验、断链扫描（含"未随库分发"豁免）、路径存在性检查 |
+| `deploy.py` | 平铺部署到文件库：`--dry-run` 预演、`--clean` 清空重布、`--library-dir` 覆盖目标路径 |
+| `govern_skills.py` | 质量门禁：frontmatter 校验、断链扫描、路径存在性检查 |
 | `eval_recall.py` | 检索质量评测：BEFORE=git HEAD / AFTER=工作区，输出 Recall@5/@20 对比 |
-| `attack-skill-router/gen_router.py` / `regenerate_index.py` / `export_csv.py` | 路由表两层生成（主表+reference）/ INDEX.md 再生成 / CSV 清单导出 |
+| `regenerate_index.py` / `export_csv.py` | INDEX.md 再生成 / CSV 清单导出 |
 
-## 部署（两层模型 · v2.0）
+## 部署（平铺模型 · flat-skills）
+
+994 个 skill 全部进文件库，无注册层：
 
 | 层 | 位置 | 内容 | 加载方式 |
 | --- | --- | --- | --- |
-| 注册层（Skill 协议） | `/root/.claude/skills/` | 3 个：`attack-skill-router`、`engagement-discipline`、`java-deserialization-gadget-selector` | Agent 原生 skill 索引 |
-| 文件库（Read 协议） | `/opt/attack-skill-library/` | 993 个 skill 扁平存放 + `INDEX.md` + `MERGES.md` | 按路由表 Read 按需加载 |
+| 文件库（Read 协议） | `/opt/attack-skill-library/` | 994 个 skill 扁平存放 + `INDEX.md` | 检索定位后 Read 按需加载 |
 
-**Agent 入口**：3 个注册 skill 常驻索引（<2K tokens/step）→ 路由表命中场景 → Read 打开 `/opt/attack-skill-library/<slug>/SKILL.md`。
+**Agent 入口**：按任务关键词用 `grep -ril <关键词> /opt/attack-skill-library` 或配套检索方案（song_1030 的 `skill_route` / skill-rag-pjh 的向量管线）定位 slug → Read 打开 `<slug>/SKILL.md`。
 
 ```bash
-python scripts/deploy.py [--dry-run] [--clean] [--skills-dir 注册层目录] [--library-dir 文件库目录]
+python scripts/deploy.py [--dry-run] [--clean] [--library-dir 文件库目录]
 ```
 
-- 默认注册层 `/root/.claude/skills/`、文件库 `/opt/attack-skill-library/`（环境变量 `SKILL_LIBRARY` 可覆盖）
-- 换文件库路径需同步改 `attack-skill-router/SKILL.md` 中的基准路径
+- 默认文件库 `/opt/attack-skill-library/`（环境变量 `SKILL_LIBRARY` 可覆盖）
 
 ## 质量评测（Recall）
 
@@ -72,7 +69,7 @@ python scripts/eval_recall.py   # 约 1-2 分钟，输出 BEFORE(HEAD) vs AFTER(
 - License 全部开源可二创；CC BY 内容需署名（见末节）
 - 工具改写 skill 标注上游仓库与上游 License，二创以 Apache-2.0 发布
 
-## 来源分布（996 = 现成 435 + 工具改写 561）
+## 来源分布（994 = 现成 435 + 工具改写 559）
 
 | 来源 | License | 数量 |
 | --- | --- | ---: |
@@ -86,8 +83,8 @@ python scripts/eval_recall.py   # 约 1-2 分钟，输出 BEFORE(HEAD) vs AFTER(
 | gmh5225/awesome-web3-security | MIT | 5 |
 | yaklang/yak-skills | MIT | 5 |
 | gmh5225/awesome-ai-security | MIT | 3 |
-| 本仓库 tool-skills/ 改写 + 原创（router/discipline/gadget） | Apache-2.0（上游 License 逐条见各 SKILL.md） | 561 |
-| **合计** | | **996** |
+| 本仓库 tool-skills/ 改写 | Apache-2.0（上游 License 逐条见各 SKILL.md） | 559 |
+| **合计** | | **994** |
 
 ## 攻击大类分布（50 类全覆盖 · ATT&CK 骨架）
 
@@ -148,7 +145,7 @@ Top 12：C09 Web应用漏洞利用 171 · C01 资产测绘与指纹识别 62 · 
 | C37 数据外传 | 1 | 1 | 2 |
 | C23 无文件与LOLBins滥用 | 0 | 2 | 2 |
 | C21 流量混淆与加密隧道 | 1 | 0 | 1 |
-| **合计** | **435** | **561** | **996** |
+| **合计** | **435** | **559** | **994** |
 
 </details>
 
@@ -159,6 +156,7 @@ Top 12：C09 Web应用漏洞利用 171 · C01 资产测绘与指纹识别 62 · 
 - v2.0：补 nuclei/gobuster/ffuf/hydra/frp/chisel/john 七工具 → 996；两层部署（router 15KB 主表 + reference 展开层 + deploy.py）；description 三轮迭代 + Recall 评测 @20 100%；评测集扩至 107 条（零覆盖大类补齐）@5 84.1% / @20 100%
 - v2.1：治理修复 —— 路由表数据源由外部旧 CSV 改为「INDEX.md + 仓库直扫」重生成（7 新工具全收录、数字口径 996 全同步）；CSV 清单重导出（599 → 996）；4 处 frontmatter name 与目录名对齐；死金标清理；gen_router 修复多强制项互相挤占 bug
 - v2.2：997 个 SKILL.md description 全英文统一（when-to-use / 检索一致性），中文检索信号改存 `zh-signals` 字段（仅检索用、不进展示）；评测口径同步为 `name×3 + description + zh-signals`，Recall @5 82.2% / @20 100%（英文版 R@20 守住 100%）
+- flat-skills：静态路由表版（static-router）的平铺变体 —— 移除 3 个注册层 skill（attack-skill-router / engagement-discipline / java-deserialization-gadget-selector），994 个 skill 全部平铺进文件库，部署/索引/清单同步刷新
 
 ## 署名与许可
 

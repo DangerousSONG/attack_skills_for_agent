@@ -132,7 +132,7 @@ for dp, dirs, files in os.walk(ROOT):
     if 'SKILL.md' not in files:
         continue
     slug = os.path.relpath(dp, ROOT).replace(os.sep, '/')
-    if slug.split('/')[0] in ('attack-skill-router', 'engagement-discipline', 'java-deserialization-gadget-selector', 'scripts'):
+    if slug.split('/')[0] in ('scripts',):   # flat-skills: 无注册层目录, 仅豁免 scripts
         continue
     s = io.open(os.path.join(dp, 'SKILL.md'), encoding='utf-8', errors='replace').read()
     fm = re.search(r'^---\n(.*?)\n---', s, re.S)
