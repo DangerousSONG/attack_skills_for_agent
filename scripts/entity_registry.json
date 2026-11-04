@@ -5,7 +5,7 @@
   "cve": 36,
   "tool_alias": 22,
   "curated": 43,
-  "curated_vuln": 4,
+  "curated_vuln": 3,
   "categories": 47
  },
  "entities": [
@@ -143,14 +143,12 @@
   {
    "type": "cve",
    "value": "CVE-2020-1472",
-   "aliases": [
-    "zerologon"
-   ],
+   "aliases": [],
    "skills": [
     "exploiting-zerologon-vulnerability-cve-2020-1472",
     "scansploit-exploit-scan"
    ],
-   "provenance": "regex:SKILL.md+curated",
+   "provenance": "regex:SKILL.md",
    "confidence": 1.0
   },
   {
@@ -237,10 +235,7 @@
    "type": "cve",
    "value": "CVE-2021-44228",
    "aliases": [
-    "log4j 漏洞",
-    "log4j2",
-    "log4j2 rce",
-    "log4shell"
+    "log4j 漏洞"
    ],
    "skills": [
     "jndi-injection",
@@ -1216,7 +1211,6 @@
    "type": "cve",
    "value": "CVE-2017-0144",
    "aliases": [
-    "eternalblue",
     "ms17-010",
     "ms17010",
     "永恒之蓝",
@@ -1232,7 +1226,6 @@
    "type": "cve",
    "value": "CVE-2014-0160",
    "aliases": [
-    "heartbleed",
     "心脏出血",
     "心脏滴血"
    ],
