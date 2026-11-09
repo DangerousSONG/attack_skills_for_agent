@@ -5,6 +5,7 @@ name: skill-base-sync
 # 冲突 = 有人在方案分支直接改了底座（违反 SYNC-RULES 铁律 1/2），以 main 为准。
 
 on:
+  workflow_dispatch:
   push:
     branches: [main]
     paths:
@@ -27,6 +28,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  issues: write
 
 jobs:
   sync:
@@ -47,11 +49,16 @@ jobs:
           git config user.name "skill-base-sync[bot]"
           git config user.email "skill-base-sync[bot]@users.noreply.github.com"
           git fetch origin main
-          if git merge origin/main --no-edit; then
-            echo "merged=true" >> "$GITHUB_OUTPUT"
-          else
+          if ! git merge origin/main --no-edit; then
             echo "merged=false" >> "$GITHUB_OUTPUT"
             git merge --abort || true
+            exit 0
+          fi
+          # 合并后与方案分支无差异（快进/已同步）→ 无事可做
+          if git diff --quiet ${{ matrix.branch }}; then
+            echo "merged=noop" >> "$GITHUB_OUTPUT"
+          else
+            echo "merged=true" >> "$GITHUB_OUTPUT"
           fi
 
       - name: 无冲突 → 开同步 PR
@@ -76,8 +83,4 @@ jobs:
         run: |
           gh issue create \
             --title "底座同步冲突：main → ${{ matrix.branch }}" \
-            --body "main 的 skill 底座变更无法干净合并进 \`${{ matrix.branch }}\`。按 [SYNC-RULES.md](https://github.com/${{ github.repository }}/blob/main/SYNC-RULES.md) 铁律 2：底座路径冲突一律以 main 为准，请把方案分支上的底座改动重做到 main 后重新同步。触发 commit：${{ github.event.head_commit.url }}" \
-            --label skill-base-sync || \
-          gh issue create \
-            --title "底座同步冲突：main → ${{ matrix.branch }}" \
-            --body "main 的 skill 底座变更无法干净合并进 \`${{ matrix.branch }}\`。按 SYNC-RULES.md 铁律 2：底座路径冲突一律以 main 为准。触发 commit：${{ github.event.head_commit.url }}"
+            --body "main 的 skill 底座变更无法干净合并进 \`${{ matrix.branch }}\`。按 [SYNC-RULES.md](https://github.com/${{ github.repository }}/blob/main/SYNC-RULES.md) 铁律 2：底座路径冲突一律以 main 为准，请把方案分支上的底座改动重做到 main 后重新同步。触发 commit：${{ github.event.head_commit.url }}"
