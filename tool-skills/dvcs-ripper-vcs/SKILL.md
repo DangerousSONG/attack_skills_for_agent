@@ -1,6 +1,7 @@
 ---
 name: dvcs-ripper-vcs
-description: dvcs-ripper: 泄露的 .git 全量还原。信号:供应链,cicd,SVN,Mercurial,Bazaar。
+description: "dvcs-ripper: full recovery of leaked .git repositories. Signals: supply chain, CI/CD, SVN, Mercurial, Bazaar."
+zh-signals: "dvcs-ripper: 泄露的 .git 全量还原。信号:供应链,cicd,SVN,Mercurial,Bazaar。"
 ---
 
 # dvcs-ripper

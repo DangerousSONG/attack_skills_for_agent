@@ -1,6 +1,7 @@
 ---
 name: outguess-jpeg-stego
-description: outguess: JPEG 隐写植入/提取。信号:隐写,steganography,嵌入文件到 JPEG,提取嵌入数据,reveal。
+description: "JPEG steganography implant and extraction. Signals: steganography, embed files in JPEG, extract embedded data, reveal."
+zh-signals: "outguess: JPEG 隐写植入/提取。信号:隐写,steganography,嵌入文件到 JPEG,提取嵌入数据,reveal。"
 ---
 
 # outguess

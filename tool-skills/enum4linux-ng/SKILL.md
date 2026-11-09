@@ -1,6 +1,7 @@
 ---
 name: enum4linux-ng
-description: enum4linux-ng: 匿名/凭据双模式域信息收割、工作组环境快速摸底。信号:内网枚举,网络发现,所有模块,带凭据。
+description: "enum4linux-ng: anonymous/credential domain information harvesting and quick workgroup discovery. Signals: internal enumeration, network discovery, all modules, with credentials."
+zh-signals: "enum4linux-ng: 匿名/凭据双模式域信息收割、工作组环境快速摸底。信号:内网枚举,网络发现,所有模块,带凭据。"
 ---
 
 # enum4linux-ng

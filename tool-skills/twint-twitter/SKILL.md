@@ -1,6 +1,7 @@
 ---
 name: twint-twitter
-description: twint: 目标账号全量考古。信号:邮箱收集,员工信息,拉取用户全部推文,关键词搜索,时间窗。
+description: "twint archives target accounts comprehensively. Signals: email collection, employee information, pull all user tweets, keyword search, time window"
+zh-signals: "twint: 目标账号全量考古。信号:邮箱收集,员工信息,拉取用户全部推文,关键词搜索,时间窗。"
 ---
 
 # twint

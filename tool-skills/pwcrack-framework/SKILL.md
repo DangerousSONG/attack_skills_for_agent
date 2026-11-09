@@ -1,6 +1,7 @@
 ---
 name: pwcrack-framework
-description: pwcrack: 在线哈希破解聚合。信号:密码破解,哈希破解,多引擎,批量。
+description: "pwcrack: Aggregates online hash cracking. Signals: password cracking, hash cracking, multi-engine, batch."
+zh-signals: "pwcrack: 在线哈希破解聚合。信号:密码破解,哈希破解,多引擎,批量。"
 ---
 
 # pwcrack

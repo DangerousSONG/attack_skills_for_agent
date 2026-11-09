@@ -1,6 +1,7 @@
 ---
 name: identywaf-fingerprint
-description: identYwaf: 渗透前识别防护。信号:web漏洞,注入,识别 WAF 品牌/型号,从请求文件识别,随机 UA。
+description: "identYwaf identifies web protections before testing. Signals: web vulnerability, injection, identify WAF brand or model, request file input, random UA."
+zh-signals: "identYwaf: 渗透前识别防护。信号:web漏洞,注入,识别 WAF 品牌/型号,从请求文件识别,随机 UA。"
 ---
 
 # identYwaf

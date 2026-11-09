@@ -1,6 +1,7 @@
 ---
 name: graphw00f-graphql-finger
-description: graphw00f: GraphQL 端点定位+技术栈。信号:api攻击,接口测试,指纹库全检测。
+description: "graphw00f locates GraphQL endpoints and fingerprints technology stacks. Signals: API attacks, interface testing, full fingerprint database detection."
+zh-signals: "graphw00f: GraphQL 端点定位+技术栈。信号:api攻击,接口测试,指纹库全检测。"
 ---
 
 # graphw00f

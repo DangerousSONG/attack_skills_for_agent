@@ -1,6 +1,7 @@
 ---
 name: volana-c2
-description: volana: 隐蔽信道 C2。信号:c2,命令控制,隐蔽 C2,加密,伪装进程。
+description: "volana: Covert channel C2. Signals: C2, command and control, covert C2, encryption, disguised process."
+zh-signals: "volana: 隐蔽信道 C2。信号:c2,命令控制,隐蔽 C2,加密,伪装进程。"
 ---
 
 # volana

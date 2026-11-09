@@ -1,6 +1,7 @@
 ---
 name: testing-for-json-web-token-vulnerabilities
-description: "Tests JWT implementations for algorithm confusion, \"none\" algorithm bypass 信号:api攻击,接口测试,graphql。"
+description: "Tests JWT algorithm confusion and none algorithm bypass. Signals: API attacks, interface testing, GraphQL."
+zh-signals: "Tests JWT implementations for algorithm confusion, \'none\' algorithm bypass 信号:api攻击,接口测试,graphql。"
 when-to-use: Tests JWT implementations for algorithm confusion, "none" algorithm bypass,
   kid/jku parameter injection, and weak secret exploitation using jwt_tool and Burp Suite's
   JWT Editor extension, aiming to achieve authentication bypass and privilege escalation.

@@ -1,6 +1,7 @@
 ---
 name: crackpkcs12-pfx
-description: crackpkcs12: PFX 证书口令爆破。信号:密码破解,哈希破解,PFX 口令爆破,详细。
+description: "crackpkcs12: Brute-forces PFX certificate passwords. Signals: password cracking, hash cracking, PFX password brute force, verbose."
+zh-signals: "crackpkcs12: PFX 证书口令爆破。信号:密码破解,哈希破解,PFX 口令爆破,详细。"
 ---
 
 # crackpkcs12

@@ -1,6 +1,7 @@
 ---
 name: conducting-internal-reconnaissance-with-bloodhound-ce
-description: "用 BloodHound CE 图数据库 + SharpHound(AD)/AzureHound(Entra ID)采集器做内网 AD 侦察,把 AC信号:bloodhound,sharphound。"
+description: "Use BloodHound CE with SharpHound (AD) and AzureHound (Entra ID) collectors for internal AD reconnaissance and attack-path mapping. Signals: BloodHound, SharpHound."
+zh-signals: "用 BloodHound CE 图数据库 + SharpHound(AD)/AzureHound(Entra ID)采集器做内网 AD 侦察,把 AC信号:bloodhound,sharphound。"
 when-to-use: Conduct internal Active Directory reconnaissance using BloodHound Community Edition's graph database with the SharpHound (AD) and AzureHound (Entra ID) collectors, mapping ACLs, sessions, and group me
 domain: cybersecurity
 subdomain: red-teaming

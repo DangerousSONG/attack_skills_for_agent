@@ -1,6 +1,7 @@
 ---
 name: phishery-basicauth
-description: phishery: 文档钓鱼收割域凭据。信号:钓鱼,社会工程,成功状态码伪装。
+description: "Document phishing to harvest domain credentials. Signals: phishing, social engineering, fake success status codes."
+zh-signals: "phishery: 文档钓鱼收割域凭据。信号:钓鱼,社会工程,成功状态码伪装。"
 ---
 
 # phishery

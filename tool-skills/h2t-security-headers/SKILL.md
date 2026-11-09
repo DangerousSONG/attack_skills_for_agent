@@ -1,6 +1,7 @@
 ---
 name: h2t-security-headers
-description: h2t: 安全头配置审计。信号:web漏洞,注入,扫描 HTTP 安全头,检测不安全配置,输出修复建议。
+description: "h2t audits HTTP security header configuration. Signals: web vulnerabilities, injection, HTTP security header scanning, insecure configuration detection, remediation recommendations."
+zh-signals: "h2t: 安全头配置审计。信号:web漏洞,注入,扫描 HTTP 安全头,检测不安全配置,输出修复建议。"
 ---
 
 # h2t

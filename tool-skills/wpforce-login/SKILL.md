@@ -1,6 +1,7 @@
 ---
 name: wpforce-login
-description: WPForce: WP 后台爆破。信号:暴力破解,口令喷射,WP 登录爆破,线程,XMLRPC 模式。
+description: "WPForce: WP backend brute force. Signals: brute force, password spraying, WP login brute force, threads, XMLRPC mode."
+zh-signals: "WPForce: WP 后台爆破。信号:暴力破解,口令喷射,WP 登录爆破,线程,XMLRPC 模式。"
 ---
 
 # WPForce

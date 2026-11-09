@@ -1,6 +1,7 @@
 ---
 name: spraykatz-credentials
-description: spraykatz: 域内远程 mimikatz。信号:内存转储,lsass,远程凭据收割,wordlist。
+description: "spraykatz runs remote mimikatz in domain. Signals: memory dump, lsass, remote credential harvesting, wordlist"
+zh-signals: "spraykatz: 域内远程 mimikatz。信号:内存转储,lsass,远程凭据收割,wordlist。"
 ---
 
 # spraykatz

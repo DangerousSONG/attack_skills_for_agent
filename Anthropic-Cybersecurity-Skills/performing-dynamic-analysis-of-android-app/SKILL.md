@@ -1,6 +1,7 @@
 ---
 name: performing-dynamic-analysis-of-android-app
-description: "Performs runtime dynamic analysis of Android applications using Frida 信号:移动端,android攻击,ios攻击。"
+description: "Perform runtime dynamic analysis of Android applications using Frida. Signals: mobile, android attack, ios attack."
+zh-signals: "Performs runtime dynamic analysis of Android applications using Frida 信号:移动端,android攻击,ios攻击。"
 when-to-use: 'Performs runtime dynamic analysis of Android applications using Frida,
   Objection, and Android Debug Bridge to observe application behavior during execution,
   intercept function calls, modify runtime values, and identify vulnerabilities that

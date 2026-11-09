@@ -1,6 +1,7 @@
 ---
 name: datajackproxy-modbus
-description: DatajackProxy: PLC 通信篡改。信号:中间人,mitm,工控协议中间人,调试。
+description: "DatajackProxy: Tamper with PLC communications. Signals: man-in-the-middle, MITM, industrial control protocol MITM, debugging."
+zh-signals: "DatajackProxy: PLC 通信篡改。信号:中间人,mitm,工控协议中间人,调试。"
 ---
 
 # DatajackProxy

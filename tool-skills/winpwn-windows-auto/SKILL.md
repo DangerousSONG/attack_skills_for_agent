@@ -1,6 +1,7 @@
 ---
 name: winpwn-windows-auto
-description: WinPwn: Windows 内网自动横向。信号:windows提权,uac绕过,交互菜单,本地提权,内存加载工具集。
+description: "WinPwn: Windows internal network automated lateral movement. Signals: windows privilege escalation, UAC bypass, interactive menu, local privilege escalation, memory-loaded toolset."
+zh-signals: "WinPwn: Windows 内网自动横向。信号:windows提权,uac绕过,交互菜单,本地提权,内存加载工具集。"
 ---
 
 # WinPwn

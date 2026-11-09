@@ -1,6 +1,7 @@
 ---
 name: sslstrip-downgrade
-description: sslstrip: HTTPS 降级 HTTP。信号:中间人,mitm,日志,仅 post。
+description: "sslstrip downgrades HTTPS to HTTP. Signals: MITM, mitm, logging, POST only"
+zh-signals: "sslstrip: HTTPS 降级 HTTP。信号:中间人,mitm,日志,仅 post。"
 ---
 
 # sslstrip

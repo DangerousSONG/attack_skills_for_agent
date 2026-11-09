@@ -1,6 +1,7 @@
 ---
 name: jwt-hack-token
-description: jwt-hack: 快速令牌拆解与爆破。信号:api攻击,接口测试,解码,爆破密钥。
+description: "jwt-hack quickly decodes and brute-forces tokens. Signals: API attack, interface testing, token decoding, key brute force."
+zh-signals: "jwt-hack: 快速令牌拆解与爆破。信号:api攻击,接口测试,解码,爆破密钥。"
 ---
 
 # jwt-hack

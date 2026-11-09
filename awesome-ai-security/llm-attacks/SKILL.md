@@ -1,6 +1,7 @@
 ---
 name: llm-attacks
-description: "LLM 攻击指南:提示注入、越狱、数据抽取的资源组织与防御要点。信号:llm攻击,提示注入,越狱,数据抽取,ai安全。"
+description: "LLM attack guide: prompt injection, jailbreaks, data extraction, defenses. Signals: LLM attack, prompt injection, jailbreak, data extraction, AI security."
+zh-signals: "LLM 攻击指南:提示注入、越狱、数据抽取的资源组织与防御要点。信号:llm攻击,提示注入,越狱,数据抽取,ai安全。"
 when-to-use: "Guide for LLM security attacks: prompt injection, jailbreaking, data extraction, and where to place resources in README.md."
 ---
 

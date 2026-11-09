@@ -1,6 +1,7 @@
 ---
 name: conducting-cloud-penetration-testing
-description: "This skill outlines methodologies for performing authorized penetration 信号:pwn,二进制利用,栈溢出。"
+description: "Outline methodologies for authorized penetration testing. Signals: pwn, binary exploitation, stack overflow."
+zh-signals: "This skill outlines methodologies for performing authorized penetration 信号:pwn,二进制利用,栈溢出。"
 when-to-use: 'This skill outlines methodologies for performing authorized penetration
   testing against AWS, Azure, and GCP cloud environments. It covers understanding
   the shared responsibility model for testing scope, leveraging cloud-specific attack

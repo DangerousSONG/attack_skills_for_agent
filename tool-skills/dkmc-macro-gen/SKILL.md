@@ -1,6 +1,7 @@
 ---
 name: dkmc-macro-gen
-description: DKMC: 钓鱼文档批量生成。信号:恶意软件开发,免杀开发,生成宏投递,起 HTTP 服务投递。
+description: "DKMC: phishing document batch generation. Signals: malware development, evasion development, macro delivery generation, HTTP service delivery."
+zh-signals: "DKMC: 钓鱼文档批量生成。信号:恶意软件开发,免杀开发,生成宏投递,起 HTTP 服务投递。"
 ---
 
 # DKMC

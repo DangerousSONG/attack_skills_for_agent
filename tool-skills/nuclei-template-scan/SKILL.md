@@ -1,6 +1,7 @@
 ---
 name: nuclei-template-scan
-description: nuclei: 全量 CVE 与暴露面扫描、定向验证某组件漏洞。信号:web扫描,漏洞扫描,单目标,批量目标。
+description: "Scan CVEs and exposure surface, verify component vulnerabilities. Signals: web scanning, vulnerability scanning, single target, batch targets."
+zh-signals: "nuclei: 全量 CVE 与暴露面扫描、定向验证某组件漏洞。信号:web扫描,漏洞扫描,单目标,批量目标。"
 ---
 
 # nuclei

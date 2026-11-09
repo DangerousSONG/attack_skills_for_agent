@@ -1,6 +1,7 @@
 ---
 name: whichcdn-detect
-description: whichCDN: CDN 识别选绕过策略。信号:web漏洞,注入,批量。
+description: "whichCDN: CDN identification for bypass strategy selection. Signals: web vulnerabilities, injection, batch."
+zh-signals: "whichCDN: CDN 识别选绕过策略。信号:web漏洞,注入,批量。"
 ---
 
 # whichCDN

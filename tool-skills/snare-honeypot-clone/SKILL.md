@@ -1,6 +1,7 @@
 ---
 name: snare-honeypot-clone
-description: SNARE: 克隆目标站钓鱼。信号:web漏洞,注入,起蜜罐,克隆站点,联动 Tanner 判定。
+description: "SNARE: clones target sites for phishing. Signals: web vulnerability, injection, start honeypot, clone site, Tanner verdict integration."
+zh-signals: "SNARE: 克隆目标站钓鱼。信号:web漏洞,注入,起蜜罐,克隆站点,联动 Tanner 判定。"
 ---
 
 # SNARE

@@ -1,6 +1,7 @@
 ---
 name: nili-network
-description: nili: 扫描+MITM 一体。信号:端口扫描,nmap,网络扫描+中间人,嗅探,ARP 欺骗。
+description: "nili: Combined scanning and MITM. Signals: port scanning, nmap, network scanning+MITM, sniffing, ARP spoofing."
+zh-signals: "nili: 扫描+MITM 一体。信号:端口扫描,nmap,网络扫描+中间人,嗅探,ARP 欺骗。"
 ---
 
 # nili

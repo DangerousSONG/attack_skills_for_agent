@@ -1,6 +1,7 @@
 ---
 name: angry-ip-scan
-description: Angry IP Scanner (ipscan): 轻量存活探测。信号:端口扫描,nmap,GUI 扫描,CLI 输出存活+端口。
+description: "Angry IP Scanner (ipscan): performs lightweight host discovery. Signals: port scan, nmap, GUI scan, CLI output alive+ports"
+zh-signals: "Angry IP Scanner (ipscan): 轻量存活探测。信号:端口扫描,nmap,GUI 扫描,CLI 输出存活+端口。"
 ---
 
 # Angry IP Scanner (ipscan)

@@ -1,6 +1,7 @@
 ---
 name: dcrawl-fast-crawl
-description: dcrawl: 批量 URL 轻爬。信号:资产测绘,子域名,批量快速爬取,深度。
+description: "dcrawl: Performs lightweight batch URL crawling. Signals: asset mapping, subdomains, fast batch crawling, depth."
+zh-signals: "dcrawl: 批量 URL 轻爬。信号:资产测绘,子域名,批量快速爬取,深度。"
 ---
 
 # dcrawl

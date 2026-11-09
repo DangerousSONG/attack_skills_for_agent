@@ -1,7 +1,12 @@
 # 取证/评测临时产物
 scripts/_*.txt
 scripts/_before_tmp/
+scripts/_retrieval_index.pkl
+scripts/_exp_cache.json
+scripts/_vec_index.npz
+scripts/_exp_scores.json
 
 # Python
 __pycache__/
 *.pyc
+scripts/_coarse_cache/

@@ -1,6 +1,7 @@
 ---
 name: brutespray-service-brute
-description: Brutespray: Nmap 结果直通爆破。信号:密码破解,哈希破解,仅爆破 SSH,限速防锁。
+description: "Brutespray: Feeds Nmap results directly into brute-force attacks. Signals: password cracking, hash cracking, SSH-only brute force, rate limiting to avoid lockout."
+zh-signals: "Brutespray: Nmap 结果直通爆破。信号:密码破解,哈希破解,仅爆破 SSH,限速防锁。"
 ---
 
 # Brutespray

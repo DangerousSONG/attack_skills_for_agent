@@ -1,6 +1,7 @@
 ---
 name: dublin-traceroute-nat
-description: dublin-traceroute: NAT 路径测绘。信号:端口扫描,nmap,JSON,可读。
+description: "dublin-traceroute: NAT path mapping. Signals: port scanning, nmap, JSON, readable."
+zh-signals: "dublin-traceroute: NAT 路径测绘。信号:端口扫描,nmap,JSON,可读。"
 ---
 
 # dublin-traceroute

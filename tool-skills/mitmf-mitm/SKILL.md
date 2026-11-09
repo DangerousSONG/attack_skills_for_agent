@@ -1,6 +1,7 @@
 ---
 name: mitmf-mitm
-description: MITMf: ARP 欺骗+JS 注入、欺骗+凭据收割。信号:中间人,mitm,SSL 降级,集成 Responder。
+description: "MITMf: ARP spoofing plus JS injection and credential harvesting. Signals: man-in-the-middle, MITM, SSL downgrade, integrated Responder."
+zh-signals: "MITMf: ARP 欺骗+JS 注入、欺骗+凭据收割。信号:中间人,mitm,SSL 降级,集成 Responder。"
 ---
 
 # MITMf

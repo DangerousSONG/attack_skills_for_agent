@@ -1,6 +1,7 @@
 ---
 name: dnsmap-subdomain
-description: dnsmap: 快速子域初筛。信号:资产测绘,子域名,子域爆破,自定义字典,结果文件。
+description: "dnsmap: fast subdomain initial screening. Signals: asset mapping, subdomain, subdomain brute force, custom dictionary, result file."
+zh-signals: "dnsmap: 快速子域初筛。信号:资产测绘,子域名,子域爆破,自定义字典,结果文件。"
 ---
 
 # dnsmap

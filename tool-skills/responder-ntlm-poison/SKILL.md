@@ -1,6 +1,7 @@
 ---
 name: responder-ntlm-poison
-description: Responder: 内网哈希收割、签名关闭主机中继。信号:中间人,mitm,强制 WPAD 伪造,分析模式(只观察不投毒)。
+description: "Responder: Harvests internal hashes and relays to hosts with SMB signing disabled. Signals: man-in-the-middle, MITM, forced WPAD spoofing, analysis mode, observe only, no poisoning."
+zh-signals: "Responder: 内网哈希收割、签名关闭主机中继。信号:中间人,mitm,强制 WPAD 伪造,分析模式(只观察不投毒)。"
 ---
 
 # Responder

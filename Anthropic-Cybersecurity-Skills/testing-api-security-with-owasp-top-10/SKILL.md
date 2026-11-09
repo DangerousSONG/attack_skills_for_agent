@@ -1,6 +1,7 @@
 ---
 name: testing-api-security-with-owasp-top-10
-description: "Systematically assesses REST, GraphQL, and gRPC API endpoints against the OWASP 信号:api攻击,接口测试。"
+description: "Assesses REST, GraphQL, and gRPC APIs against OWASP. Signals: API attacks, interface testing."
+zh-signals: "Systematically assesses REST, GraphQL, and gRPC API endpoints against the OWASP 信号:api攻击,接口测试。"
 when-to-use: Systematically assesses REST, GraphQL, and gRPC API endpoints against the OWASP
   API Security Top 10 (2023) using Burp Suite and Postman for automated and manual testing.
   Use during authorized API penetration tests, before deploying new endpoints to production,

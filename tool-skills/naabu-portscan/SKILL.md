@@ -1,6 +1,7 @@
 ---
 name: naabu-portscan
-description: naabu: 与 nmap 联动的攻击面流水线。信号:端口扫描,nmap,单目标,批量,top 100 端口。
+description: "naabu: Attack surface pipeline integrated with nmap. Signals: port scanning, nmap, single target, batch, top 100 ports."
+zh-signals: "naabu: 与 nmap 联动的攻击面流水线。信号:端口扫描,nmap,单目标,批量,top 100 端口。"
 ---
 
 # naabu

@@ -1,6 +1,7 @@
 ---
 name: autorecon-auto
-description: AutoRecon: 打靶/授权环境全自动侦察。信号:端口扫描,nmap,单目标全自动枚举,批量,端口范围。
+description: "AutoRecon: performs fully automated recon for authorized targets. Signals: port scan, nmap, single-target full enumeration, batch, port range"
+zh-signals: "AutoRecon: 打靶/授权环境全自动侦察。信号:端口扫描,nmap,单目标全自动枚举,批量,端口范围。"
 ---
 
 # AutoRecon

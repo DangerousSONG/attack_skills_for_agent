@@ -1,6 +1,7 @@
 ---
 name: performing-vlan-hopping-attack
-description: "Performing VLAN Hopping Attack 信号:红队,方法论,渗透流程。"
+description: "Performs VLAN hopping attacks. Signals: red team, methodology, penetration testing workflow."
+zh-signals: "Performing VLAN Hopping Attack 信号:红队,方法论,渗透流程。"
 when-to-use: >-
   Simulates VLAN hopping attacks using switch spoofing and 802.1Q double
   tagging techniques in authorized lab environments to test VLAN segmentation

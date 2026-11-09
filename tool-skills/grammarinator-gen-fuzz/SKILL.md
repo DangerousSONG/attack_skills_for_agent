@@ -1,6 +1,7 @@
 ---
 name: grammarinator-gen-fuzz
-description: grammarinator: ANTLR 语法驱动 fuzz。信号:pwn,二进制利用,生成测试样本,解析已有样本变异。
+description: "grammarinator performs ANTLR grammar-driven fuzzing. Signals: pwn, binary exploitation, test sample generation, mutation of parsed samples."
+zh-signals: "grammarinator: ANTLR 语法驱动 fuzz。信号:pwn,二进制利用,生成测试样本,解析已有样本变异。"
 ---
 
 # grammarinator

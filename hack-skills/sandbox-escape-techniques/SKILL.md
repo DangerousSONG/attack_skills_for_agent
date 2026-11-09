@@ -1,6 +1,7 @@
 ---
 name: sandbox-escape-techniques
-description: "Sandbox escape playbook 信号:linux提权,suid,sudo滥用。"
+description: "Sandbox escape playbook. Signals: Linux privilege escalation, SUID, sudo abuse."
+zh-signals: "Sandbox escape playbook 信号:linux提权,suid,sudo滥用。"
 when-to-use: >-
   Sandbox escape playbook. Use when breaking out of Python sandbox, Lua sandbox, seccomp filter, chroot jail, container/Docker, browser sandbox, or namespace isolation to achieve unrestricted code execution or file access.
 ---

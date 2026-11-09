@@ -1,6 +1,7 @@
 ---
 name: prototype-pollution-advanced
-description: "高级原型污染:服务端 RCE、客户端 gadget、过滤器绕过与检测,基础篇见 prototype-pollution。信号:原型污染,prototype pollution。"
+description: "Advanced prototype pollution: server-side RCE, client gadgets, filter bypass and detection; see prototype-pollution for basics. Signals: prototype pollution, prototype pollution."
+zh-signals: "高级原型污染:服务端 RCE、客户端 gadget、过滤器绕过与检测,基础篇见 prototype-pollution。信号:原型污染,prototype pollution。"
 when-to-use: >-
   Advanced prototype pollution playbook — server-side RCE, client-side gadgets, filter bypasses, and detection techniques. Companion to ../prototype-pollution/ for basics. Use when you've confirmed pollution and need to escalate to code execution or find framework-specific gadgets.
 ---

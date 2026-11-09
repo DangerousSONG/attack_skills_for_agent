@@ -1,6 +1,7 @@
 ---
 name: interlace-parallel
-description: Interlace: 渗透命令并行化。信号:红队,方法论,并行命令执行,占位符,端口列表。
+description: "Interlace parallelizes penetration testing commands. Signals: red team, methodology, parallel command execution, placeholders, port list."
+zh-signals: "Interlace: 渗透命令并行化。信号:红队,方法论,并行命令执行,占位符,端口列表。"
 ---
 
 # Interlace

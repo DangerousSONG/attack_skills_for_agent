@@ -1,6 +1,7 @@
 ---
 name: fuzzowski-network-fuzz
-description: fuzzowski: 私有协议 fuzz 入门。信号:pwn,二进制利用,FTP 协议 fuzz,HTTP fuzz,自定义请求脚本。
+description: "fuzzowski provides introductory private protocol fuzzing. Signals: pwn, binary exploitation, FTP protocol fuzzing, HTTP fuzzing, custom request scripts."
+zh-signals: "fuzzowski: 私有协议 fuzz 入门。信号:pwn,二进制利用,FTP 协议 fuzz,HTTP fuzz,自定义请求脚本。"
 ---
 
 # fuzzowski

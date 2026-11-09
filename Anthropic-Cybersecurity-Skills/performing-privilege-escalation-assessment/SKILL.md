@@ -1,6 +1,7 @@
 ---
 name: performing-privilege-escalation-assessment
-description: "Performs privilege escalation assessments on compromised Linux and Windows 信号:c2,命令控制,远控。"
+description: "Performs privilege escalation assessments on compromised Linux and Windows. Signals: C2, command and control, remote control."
+zh-signals: "Performs privilege escalation assessments on compromised Linux and Windows 信号:c2,命令控制,远控。"
 when-to-use: 'Performs privilege escalation assessments on compromised Linux and Windows
   systems to identify paths from low-privilege access to root or SYSTEM-level control.
   The tester enumerates misconfigurations, vulnerable services, kernel exploits, SUID

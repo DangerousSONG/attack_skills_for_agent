@@ -1,6 +1,7 @@
 ---
 name: reconnoitre-auto-recon
-description: reconnoitre: 内网自动侦察。信号:红队,方法论,服务枚举,DNS 枚举,全量。
+description: "reconnoitre: Automates internal network reconnaissance. Signals: red team, methodology, service enumeration, DNS enumeration, full scan."
+zh-signals: "reconnoitre: 内网自动侦察。信号:红队,方法论,服务枚举,DNS 枚举,全量。"
 ---
 
 # reconnoitre

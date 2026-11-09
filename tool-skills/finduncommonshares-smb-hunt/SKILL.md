@@ -1,6 +1,7 @@
 ---
 name: finduncommonshares-smb-hunt
-description: pyFindUncommonShares: 非常规共享找敏感数据。信号:内网枚举,网络发现,全网非常规共享扫描,特定共享名类型,顺带检查当前用户可读。
+description: "pyFindUncommonShares finds sensitive data via uncommon shares. Signals: internal enumeration, network discovery, whole-network uncommon-share scan, specific share-name types, current-user readability checks."
+zh-signals: "pyFindUncommonShares: 非常规共享找敏感数据。信号:内网枚举,网络发现,全网非常规共享扫描,特定共享名类型,顺带检查当前用户可读。"
 ---
 
 # pyFindUncommonShares

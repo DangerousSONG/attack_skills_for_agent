@@ -1,6 +1,7 @@
 ---
 name: collecting-open-source-intelligence
-description: "Collects and synthesizes open-source intelligence (OSINT) about threat 信号:资产测绘,指纹识别,技术栈识别。"
+description: "Collect and synthesize OSINT about threats. Signals: asset mapping, fingerprinting, technology-stack identification."
+zh-signals: "Collects and synthesizes open-source intelligence (OSINT) about threat 信号:资产测绘,指纹识别,技术栈识别。"
 when-to-use: 'Collects and synthesizes open-source intelligence (OSINT) about threat
   actors, malicious infrastructure, and attack campaigns using publicly available
   data sources, passive reconnaissance tools, and dark web monitoring. Use when investigating

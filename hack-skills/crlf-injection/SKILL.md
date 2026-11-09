@@ -1,6 +1,7 @@
 ---
 name: crlf-injection
-description: "CRLF 注入(HTTP 响应拆分):头部注入、双 CRLF 响应体注入、XSS 升级、缓存投毒、编码绕过。信号:crlf注入,响应拆分,头部注入,缓存投毒,http拆分。"
+description: "CRLF injection (HTTP response splitting): header injection, double-CRLF body injection, XSS escalation, cache poisoning, encoding bypass. Signals: CRLF injection, response splitting, header injection, cache poisoning, HTTP splitting."
+zh-signals: "CRLF 注入(HTTP 响应拆分):头部注入、双 CRLF 响应体注入、XSS 升级、缓存投毒、编码绕过。信号:crlf注入,响应拆分,头部注入,缓存投毒,http拆分。"
 when-to-use: 0. RELATED ROUTING
   CRLF injection playbook. Use when user input reaches HTTP response headers, Location redirects, Set-Cookie values, or log files where carriage-return/line-feed characters can split or inject content.
 ---

@@ -1,6 +1,7 @@
 ---
 name: tracking-threat-actor-infrastructure
-description: "Discovers and maps adversary-controlled infrastructure (C2 servers) 信号:c2,命令控制,远控。"
+description: "Discovers and maps adversary-controlled C2 infrastructure. Signals: C2, command and control, remote control."
+zh-signals: "Discovers and maps adversary-controlled infrastructure (C2 servers) 信号:c2,命令控制,远控。"
 when-to-use: Discovers and maps adversary-controlled infrastructure (C2 servers,
   phishing domains, exploit-kit hosts, bulletproof hosting) by pivoting across passive
   DNS, certificate transparency logs, Shodan/Censys scans, WHOIS records, and network

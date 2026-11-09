@@ -1,6 +1,7 @@
 ---
 name: amass-attack-surface
-description: Amass: 子域名全量枚举与攻击面测绘、带 API key 的增强枚举。信号:资产测绘,子域名,被动+主动枚举,纯被动。
+description: "Amass: performs full subdomain enumeration and attack surface mapping, enhanced with API keys. Signals: asset mapping, subdomain, passive+active enumeration, passive-only"
+zh-signals: "Amass: 子域名全量枚举与攻击面测绘、带 API key 的增强枚举。信号:资产测绘,子域名,被动+主动枚举,纯被动。"
 ---
 
 # Amass

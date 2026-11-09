@@ -1,6 +1,7 @@
 ---
 name: gospider-js-crawl
-description: gospider: JS 端点提取喂漏扫。信号:web漏洞,注入,批量,深度,解析 JS 提取端点。
+description: "gospider extracts JavaScript endpoints for vulnerability scanning. Signals: web vulnerabilities, injection, bulk scanning, depth, JS endpoint extraction."
+zh-signals: "gospider: JS 端点提取喂漏扫。信号:web漏洞,注入,批量,深度,解析 JS 提取端点。"
 ---
 
 # gospider

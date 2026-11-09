@@ -1,6 +1,7 @@
 ---
 name: omnibus-osint
-description: Omnibus: IP/域名快速情报。信号:邮箱收集,员工信息,OSINT CLI,IP 情报,域名情报。
+description: "Fast IP/domain intelligence. Signals: email collection, employee info, OSINT CLI, IP intelligence, domain intelligence."
+zh-signals: "Omnibus: IP/域名快速情报。信号:邮箱收集,员工信息,OSINT CLI,IP 情报,域名情报。"
 ---
 
 # Omnibus

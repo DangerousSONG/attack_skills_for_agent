@@ -1,6 +1,7 @@
 ---
 name: gitem-github-org
-description: Gitem: 组织仓库批量克隆审计。信号:资产测绘,子域名,拉组织全部 repos,只 metadata。
+description: "Gitem bulk clones and audits organization repositories. Signals: asset mapping, subdomains, pull all organization repos, metadata only."
+zh-signals: "Gitem: 组织仓库批量克隆审计。信号:资产测绘,子域名,拉组织全部 repos,只 metadata。"
 ---
 
 # Gitem

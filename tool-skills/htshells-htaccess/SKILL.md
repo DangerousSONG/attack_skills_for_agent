@@ -1,6 +1,7 @@
 ---
 name: htshells-htaccess
-description: htshells: .htaccess webshell。信号:webshell,rce,PHP 执行,CGI 执行。
+description: "htshells provides .htaccess webshells. Signals: webshell, RCE, PHP execution, CGI execution."
+zh-signals: "htshells: .htaccess webshell。信号:webshell,rce,PHP 执行,CGI 执行。"
 ---
 
 # htshells

@@ -1,6 +1,7 @@
 ---
 name: clickjacking
-description: "Clickjacking (UI redress) techniques 信号:web漏洞,注入,sql注入。"
+description: "Clickjacking (UI redress) techniques. Signals: web vulnerabilities, injection, SQL injection."
+zh-signals: "Clickjacking (UI redress) techniques 信号:web漏洞,注入,sql注入。"
 when-to-use: 1. CORE CONCEPT
   Clickjacking playbook. Use when testing whether target pages can be framed, whether X-Frame-Options or CSP frame-ancestors are properly configured, and whether UI redress attacks can trigger sensitive actions.
 ---

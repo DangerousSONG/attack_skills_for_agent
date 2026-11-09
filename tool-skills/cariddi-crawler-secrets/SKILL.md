@@ -1,6 +1,7 @@
 ---
 name: cariddi-crawler-secrets
-description: cariddi: 源码级秘密收割。信号:api攻击,接口测试,cariddi`,只爬不扫描,扩展名过滤。
+description: "cariddi: Harvests secrets from source code. Signals: API attack, interface testing, cariddi, crawl only without scanning, extension filtering."
+zh-signals: "cariddi: 源码级秘密收割。信号:api攻击,接口测试,cariddi`,只爬不扫描,扩展名过滤。"
 ---
 
 # cariddi

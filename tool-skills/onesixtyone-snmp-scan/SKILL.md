@@ -1,6 +1,7 @@
 ---
 name: onesixtyone-snmp-scan
-description: onesixtyone: 默认团体串全网扫描。信号:端口扫描,nmap,CIDR 直接扫,超时。
+description: "Network-wide scan for default SNMP community strings. Signals: port scanning, nmap, direct CIDR scanning, timeout."
+zh-signals: "onesixtyone: 默认团体串全网扫描。信号:端口扫描,nmap,CIDR 直接扫,超时。"
 ---
 
 # onesixtyone

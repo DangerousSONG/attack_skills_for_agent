@@ -1,6 +1,7 @@
 ---
 name: windows-boundaries
-description: "Windows 安全边界穿越:内核/用户穿越(win32k/dxgkrnl UAF CVE-2025-24983)、BYOVD 内核 R/W、UAC/COM 提权、App信号:沙箱逃逸,byovd。"
+description: "Covers Windows security boundary traversal: kernel/user boundary (win32k/dxgkrnl UAF CVE-2025-24983), BYOVD kernel R/W, UAC/COM elevation, and AppContainer. Signals: sandbox escape, byovd."
+zh-signals: "Windows 安全边界穿越:内核/用户穿越(win32k/dxgkrnl UAF CVE-2025-24983)、BYOVD 内核 R/W、UAC/COM 提权、App信号:沙箱逃逸,byovd。"
 when-to-use: Use when crossing a Windows security boundary or escaping a sandbox — kernel/user crossing (win32k/dxgkrnl UAF CVE-2025-24983), BYOVD kernel R/W, UAC/COM elevation, AppContainer/LPAC & Chromium-Mojo s
 metadata:
   type: offensive

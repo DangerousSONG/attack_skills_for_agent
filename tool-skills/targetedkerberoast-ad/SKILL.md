@@ -1,6 +1,7 @@
 ---
 name: targetedkerberoast-ad
-description: targetedKerberoast: 精确 Kerberoast 攻击。信号:ad攻击,域渗透,线程。
+description: "targetedKerberoast performs precise Kerberoast attacks. Signals: AD attack, domain penetration, threads"
+zh-signals: "targetedKerberoast: 精确 Kerberoast 攻击。信号:ad攻击,域渗透,线程。"
 ---
 
 # targetedKerberoast

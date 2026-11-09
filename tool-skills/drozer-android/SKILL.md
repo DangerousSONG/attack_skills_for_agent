@@ -1,6 +1,7 @@
 ---
 name: drozer-android
-description: Drozer: Android 组件暴露审计。信号:移动端,android攻击,连接 agent,列包,攻击面分析。
+description: "Drozer: Android component exposure audit. Signals: mobile, Android attack, connect agent, list packages, attack surface analysis."
+zh-signals: "Drozer: Android 组件暴露审计。信号:移动端,android攻击,连接 agent,列包,攻击面分析。"
 ---
 
 # Drozer

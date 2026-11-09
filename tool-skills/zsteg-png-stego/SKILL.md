@@ -1,6 +1,7 @@
 ---
 name: zsteg-png-stego
-description: zsteg: CTF/渗透图片隐写分析。信号:隐写,steganography,全方法暴力,提取指定位平面,限制输出。
+description: "zsteg: CTF/pentest image steganography analysis. Signals: stego, steganography, all-method brute force, extract specified bit plane, limit output."
+zh-signals: "zsteg: CTF/渗透图片隐写分析。信号:隐写,steganography,全方法暴力,提取指定位平面,限制输出。"
 ---
 
 # zsteg

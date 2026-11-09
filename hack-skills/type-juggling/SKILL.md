@@ -1,6 +1,7 @@
 ---
 name: type-juggling
-description: "PHP type juggling and weak comparison (`==`) bypass 信号:pwn,二进制利用,栈溢出。"
+description: "PHP type juggling and weak comparison (`==`) bypass. Signals: pwn, binary exploitation, stack overflow."
+zh-signals: "PHP type juggling and weak comparison (`==`) bypass 信号:pwn,二进制利用,栈溢出。"
 when-to-use: >-
   PHP type juggling and weak comparison (`==`) bypass. Use when authentication, HMAC/signature checks, or token validation uses loose equality, numeric coercion, or hash comparisons without strict types — common in legacy PHP and CTF-style code paths.
 ---

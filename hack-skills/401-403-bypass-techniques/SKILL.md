@@ -1,6 +1,7 @@
 ---
 name: 401-403-bypass-techniques
-description: "401/403 禁止绕过 playbook:管理面板/API/受限路径访问被拒时的路径操纵、HTTP 方法篡改、头部注入(X-Original-URL 等)与自动化绕过。信号:401绕过,403绕过。"
+description: "401/403 forbidden bypass playbook: path manipulation, HTTP method tampering, header injection (X-Original-URL, etc.), and automated bypasses for denied admin panels/APIs/restricted paths. Signals: 401 bypass, 403 bypass."
+zh-signals: "401/403 禁止绕过 playbook:管理面板/API/受限路径访问被拒时的路径操纵、HTTP 方法篡改、头部注入(X-Original-URL 等)与自动化绕过。信号:401绕过,403绕过。"
 when-to-use: >-
   401/403 bypass playbook. Use when encountering access-denied responses on admin panels, API endpoints, or restricted paths. Covers path manipulation, HTTP method tampering, header injection, protocol downgrade, and automated bypass tools.
 ---

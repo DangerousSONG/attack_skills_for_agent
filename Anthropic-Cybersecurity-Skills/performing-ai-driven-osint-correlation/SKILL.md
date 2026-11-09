@@ -1,6 +1,7 @@
 ---
 name: performing-ai-driven-osint-correlation
-description: "Use AI/LLM-based reasoning with Sherlock, theHarvester, and SpiderFoot 信号:资产测绘,指纹识别,技术栈识别。"
+description: "Use AI/LLM-based reasoning with Sherlock, theHarvester, and SpiderFoot. Signals: asset mapping, fingerprinting, technology stack identification."
+zh-signals: "Use AI/LLM-based reasoning with Sherlock, theHarvester, and SpiderFoot 信号:资产测绘,指纹识别,技术栈识别。"
 when-to-use: Use AI/LLM-based reasoning with Sherlock, theHarvester, and SpiderFoot
   to correlate OSINT findings—usernames, emails, social profiles, domain records,
   breach databases, and dark-web mentions—into unified, confidence-scored intelligence

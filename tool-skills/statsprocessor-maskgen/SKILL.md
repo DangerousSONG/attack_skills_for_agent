@@ -1,6 +1,7 @@
 ---
 name: statsprocessor-maskgen
-description: Statsprocessor: 基于语料的定向字典生成。信号:密码破解,哈希破解,从字典生成马尔可夫统计,按统计生成候选,长度范围。
+description: "Statsprocessor generates targeted dictionaries from corpora. Signals: password cracking, hash cracking, Markov statistics from dictionary, candidate generation by statistics, length range"
+zh-signals: "Statsprocessor: 基于语料的定向字典生成。信号:密码破解,哈希破解,从字典生成马尔可夫统计,按统计生成候选,长度范围。"
 ---
 
 # Statsprocessor

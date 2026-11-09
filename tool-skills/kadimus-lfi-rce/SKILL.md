@@ -1,6 +1,7 @@
 ---
 name: kadimus-lfi-rce
-description: Kadimus: 日志污染拿 shell。信号:web漏洞,注入,LFI 检测,日志污染路径,自包含反弹 shell。
+description: "Kadimus gains shells via log poisoning. Signals: web vulnerability, injection, LFI detection, log poisoning path, self-contained reverse shell."
+zh-signals: "Kadimus: 日志污染拿 shell。信号:web漏洞,注入,LFI 检测,日志污染路径,自包含反弹 shell。"
 ---
 
 # Kadimus

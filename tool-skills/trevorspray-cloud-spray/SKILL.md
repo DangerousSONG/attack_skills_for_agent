@@ -1,6 +1,7 @@
 ---
 name: trevorspray-cloud-spray
-description: TREVORspray: 代理池 O365 喷洒。信号:密码破解,哈希破解,自定义 IdP,SSH 代理池喷洒,线程。
+description: "TREVORspray performs proxy-pool O365 spraying. Signals: password cracking, hash cracking, custom IdP, SSH proxy-pool spraying, threads"
+zh-signals: "TREVORspray: 代理池 O365 喷洒。信号:密码破解,哈希破解,自定义 IdP,SSH 代理池喷洒,线程。"
 ---
 
 # TREVORspray

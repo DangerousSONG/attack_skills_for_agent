@@ -1,6 +1,7 @@
 ---
 name: graphqlmap-graphql
-description: GraphQLmap: GraphQL 接口攻击面枚举。信号:api攻击,接口测试,交互模式,NoSQL 注入测试,测试 mutation。
+description: "GraphQLmap enumerates GraphQL interface attack surfaces. Signals: API attacks, interface testing, interactive mode, NoSQL injection testing, mutation testing."
+zh-signals: "GraphQLmap: GraphQL 接口攻击面枚举。信号:api攻击,接口测试,交互模式,NoSQL 注入测试,测试 mutation。"
 ---
 
 # GraphQLmap

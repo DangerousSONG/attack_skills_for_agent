@@ -1,6 +1,7 @@
 ---
 name: mimikatz-credentials
-description: mimikatz: 单机提权后收割会话凭证、DCSync 全域哈希。信号:内存转储,lsass,提升调试权限,内存抓明文/NTLM。
+description: "mimikatz: Post-local privilege escalation session credential harvesting and DCSync domain-wide hashes. Signals: memory dump, lsass, enable debug privilege, memory plaintext/NTLM capture."
+zh-signals: "mimikatz: 单机提权后收割会话凭证、DCSync 全域哈希。信号:内存转储,lsass,提升调试权限,内存抓明文/NTLM。"
 ---
 
 # mimikatz

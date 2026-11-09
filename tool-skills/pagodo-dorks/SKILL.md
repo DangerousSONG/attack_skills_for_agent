@@ -1,6 +1,7 @@
 ---
 name: pagodo-dorks
-description: pagodo: GHDB 漏洞指纹 dork 批跑。信号:资产测绘,子域名,限速,并发。
+description: "Batch GHDB vulnerability fingerprint dorks. Signals: asset mapping, subdomains, rate limiting, concurrency."
+zh-signals: "pagodo: GHDB 漏洞指纹 dork 批跑。信号:资产测绘,子域名,限速,并发。"
 ---
 
 # pagodo

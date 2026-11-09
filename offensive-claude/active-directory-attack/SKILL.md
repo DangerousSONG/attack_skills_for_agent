@@ -1,6 +1,7 @@
 ---
 name: active-directory-attack
-description: "AD 域攻击:Kerberos roasting/委派、强制认证+NTLM/Kerberos 中继(CVE-2025-33073)、ADCS ESC1-16(EKUwu)、票据信号:ad攻击,域渗透。"
+description: "AD domain attacks: Kerberos roasting/delegation, authentication coercion plus NTLM/Kerberos relay (CVE-2025-33073), ADCS ESC1-16 (EKUwu), tickets. Signals: AD attack, domain penetration."
+zh-signals: "AD 域攻击:Kerberos roasting/委派、强制认证+NTLM/Kerberos 中继(CVE-2025-33073)、ADCS ESC1-16(EKUwu)、票据信号:ad攻击,域渗透。"
 when-to-use: Use when attacking a Windows Active Directory domain — Kerberos roasting/delegation, coercion + NTLM/Kerberos relay (CVE-2025-33073), ADCS ESC1-16 (EKUwu), ticket forgery & DCSync, dMSA BadSuccessor (
 metadata:
   type: offensive

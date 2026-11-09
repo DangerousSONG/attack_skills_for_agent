@@ -1,6 +1,7 @@
 ---
 name: performing-dns-enumeration-and-zone-transfer
-description: "Enumerates DNS records, attempts zone transfers, brute-forces subdomains 信号:子域名,域名枚举,dns枚举。"
+description: "Enumerate DNS records, attempt zone transfers, and brute-force subdomains. Signals: subdomain, domain enumeration, dns enumeration."
+zh-signals: "Enumerates DNS records, attempts zone transfers, brute-forces subdomains 信号:子域名,域名枚举,dns枚举。"
 when-to-use: 'Enumerates DNS records, attempts zone transfers, brute-forces subdomains,
   and maps DNS infrastructure during authorized reconnaissance to identify attack
   surface, misconfigurations, and information disclosure in target domains.

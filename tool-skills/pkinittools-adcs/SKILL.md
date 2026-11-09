@@ -1,6 +1,7 @@
 ---
 name: pkinittools-adcs
-description: PKINITtools: ADCS PFX 武器化。信号:ad攻击,域渗透,PFX 换票据,S4U,NT 哈希恢复。
+description: "Weaponize ADCS PFX. Signals: AD attack, domain penetration, PFX ticket exchange, S4U, NT hash recovery."
+zh-signals: "PKINITtools: ADCS PFX 武器化。信号:ad攻击,域渗透,PFX 换票据,S4U,NT 哈希恢复。"
 ---
 
 # PKINITtools

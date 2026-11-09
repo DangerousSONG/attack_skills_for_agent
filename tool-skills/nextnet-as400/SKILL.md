@@ -1,6 +1,7 @@
 ---
 name: nextnet-as400
-description: nextnet: 工控/遗留系统发现。信号:端口扫描,nmap,特殊协议发现,AS400 扫描。
+description: "nextnet: ICS/legacy system discovery. Signals: port scanning, nmap, special protocol discovery, AS400 scanning."
+zh-signals: "nextnet: 工控/遗留系统发现。信号:端口扫描,nmap,特殊协议发现,AS400 扫描。"
 ---
 
 # nextnet

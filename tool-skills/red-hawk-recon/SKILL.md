@@ -1,6 +1,7 @@
 ---
 name: red-hawk-recon
-description: RED_HAWK: PHP 一体化信息收集。信号:资产测绘,子域名,交互输入目标。
+description: "RED_HAWK: Integrated PHP information gathering. Signals: asset mapping, subdomains, interactive target input."
+zh-signals: "RED_HAWK: PHP 一体化信息收集。信号:资产测绘,子域名,交互输入目标。"
 ---
 
 # RED_HAWK

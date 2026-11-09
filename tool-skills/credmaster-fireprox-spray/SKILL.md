@@ -1,6 +1,7 @@
 ---
 name: credmaster-fireprox-spray
-description: CredMaster: FireProx 轮换 IP 喷洒。信号:密码破解,哈希破解,OAuth2 喷洒,ADFS 喷洒,OWA 喷洒。
+description: "CredMaster: Sprays passwords with rotating IPs via FireProx. Signals: password cracking, hash cracking, OAuth2 spraying, ADFS spraying, OWA spraying."
+zh-signals: "CredMaster: FireProx 轮换 IP 喷洒。信号:密码破解,哈希破解,OAuth2 喷洒,ADFS 喷洒,OWA 喷洒。"
 ---
 
 # CredMaster

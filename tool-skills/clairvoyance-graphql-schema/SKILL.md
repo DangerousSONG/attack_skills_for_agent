@@ -1,6 +1,7 @@
 ---
 name: clairvoyance-graphql-schema
-description: clairvoyance: 关闭内省的 GraphQL 信息收集。信号:api攻击,接口测试,带认证,字典增强。
+description: "clairvoyance: Collects information from introspection-disabled GraphQL. Signals: API attack, interface testing, authenticated requests, dictionary enhancement."
+zh-signals: "clairvoyance: 关闭内省的 GraphQL 信息收集。信号:api攻击,接口测试,带认证,字典增强。"
 ---
 
 # clairvoyance

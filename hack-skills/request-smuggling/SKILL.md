@@ -1,6 +1,7 @@
 ---
 name: request-smuggling
-description: "HTTP request smuggling and desynchronization testing 信号:web漏洞,注入,sql注入。"
+description: "HTTP request smuggling and desynchronization testing. Signals: web vulnerability, injection, SQL injection."
+zh-signals: "HTTP request smuggling and desynchronization testing 信号:web漏洞,注入,sql注入。"
 when-to-use: >-
   HTTP request smuggling and desynchronization testing. Use when front proxies,
   CDNs, or load balancers disagree with the origin on message framing

@@ -1,6 +1,7 @@
 ---
 name: maryam-osint-framework
-description: Maryam: 模块化 OSINT 调查。信号:邮箱收集,员工信息,OSINT 框架 CLI,模块选择,数据源。
+description: "Maryam: Modular OSINT investigation. Signals: email collection, employee information, OSINT framework CLI, module selection, data sources."
+zh-signals: "Maryam: 模块化 OSINT 调查。信号:邮箱收集,员工信息,OSINT 框架 CLI,模块选择,数据源。"
 ---
 
 # Maryam

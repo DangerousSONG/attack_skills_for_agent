@@ -1,6 +1,7 @@
 ---
 name: atscan-web-scan
-description: ATSCAN: dork+漏洞双引擎。信号:端口扫描,nmap,dork 扫描,XSS/SQLi 扫描,线程。
+description: "ATSCAN: combines dork and vulnerability scanning engines. Signals: port scan, nmap, dork scan, XSS/SQLi scan, threads"
+zh-signals: "ATSCAN: dork+漏洞双引擎。信号:端口扫描,nmap,dork 扫描,XSS/SQLi 扫描,线程。"
 ---
 
 # ATSCAN

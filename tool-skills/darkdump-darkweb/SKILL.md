@@ -1,6 +1,7 @@
 ---
 name: darkdump-darkweb
-description: darkdump: 暗网情报搜索。信号:web漏洞,注入,暗网搜索,页数。
+description: "darkdump: Searches dark web intelligence. Signals: web vulnerability, injection, dark web search, page count."
+zh-signals: "darkdump: 暗网情报搜索。信号:web漏洞,注入,暗网搜索,页数。"
 ---
 
 # darkdump

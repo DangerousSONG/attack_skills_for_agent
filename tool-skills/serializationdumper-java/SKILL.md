@@ -1,6 +1,7 @@
 ---
 name: serializationdumper-java
-description: SerializationDumper: Java 序列化数据分析。信号:web漏洞,注入,从 URL 拉取解析,从文件解析。
+description: "SerializationDumper: Java serialization data analysis. Signals: web vulnerability, injection, fetch and parse from URL, parse from file."
+zh-signals: "SerializationDumper: Java 序列化数据分析。信号:web漏洞,注入,从 URL 拉取解析,从文件解析。"
 ---
 
 # SerializationDumper

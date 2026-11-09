@@ -1,6 +1,7 @@
 ---
 name: netdiscover-arp
-description: Netdiscover: 二层存活发现(绕过禁 ping)。信号:内网枚举,网络发现,ARP 存活扫描,指定网卡,被动模式。
+description: "Netdiscover: Layer 2 alive discovery bypassing ping blocks. Signals: internal network enumeration, network discovery, ARP alive scan, specified interface, passive mode."
+zh-signals: "Netdiscover: 二层存活发现(绕过禁 ping)。信号:内网枚举,网络发现,ARP 存活扫描,指定网卡,被动模式。"
 ---
 
 # Netdiscover

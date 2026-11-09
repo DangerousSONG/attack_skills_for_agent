@@ -1,6 +1,7 @@
 ---
 name: performing-graphql-depth-limit-attack
-description: "Execute and test GraphQL depth limit attacks using deeply nested recursive 信号:api攻击,接口测试,graphql。"
+description: "Execute and test GraphQL depth limit attacks using deeply nested recursive queries. Signals: api attack, interface testing, graphql."
+zh-signals: "Execute and test GraphQL depth limit attacks using deeply nested recursive 信号:api攻击,接口测试,graphql。"
 when-to-use: Execute and test GraphQL depth limit attacks using deeply nested recursive
   queries to identify denial-of-service vulnerabilities in GraphQL APIs.
 domain: cybersecurity

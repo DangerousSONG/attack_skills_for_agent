@@ -1,6 +1,7 @@
 ---
 name: stowaway-pivot
-description: Stowaway: 多层内网穿透。信号:内网穿透,隧道,agent 监听,admin 连接,密钥。
+description: "Stowaway provides multi-layer internal network pivoting. Signals: internal pivoting, tunneling, agent listen, admin connection, key"
+zh-signals: "Stowaway: 多层内网穿透。信号:内网穿透,隧道,agent 监听,admin 连接,密钥。"
 ---
 
 # Stowaway

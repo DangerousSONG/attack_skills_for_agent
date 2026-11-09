@@ -1,6 +1,7 @@
 ---
 name: profiling-threat-actor-groups
-description: "Develops comprehensive threat actor profiles for APT groups, criminal 信号:邮箱收集,员工信息,人员情报。"
+description: "Develops threat actor profiles for APT groups and criminals. Signals: email collection, employee information, personnel intelligence."
+zh-signals: "Develops comprehensive threat actor profiles for APT groups, criminal 信号:邮箱收集,员工信息,人员情报。"
 when-to-use: 'Develops comprehensive threat actor profiles for APT groups, criminal
   organizations, and hacktivist collectives by aggregating TTP documentation, historical
   campaign data, tooling fingerprints, and attribution indicators from multiple intelligence

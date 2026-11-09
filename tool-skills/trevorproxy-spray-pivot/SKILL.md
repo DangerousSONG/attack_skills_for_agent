@@ -1,6 +1,7 @@
 ---
 name: trevorproxy-spray-pivot
-description: TREVORproxy: 多源 IP 喷洒。信号:内网穿透,隧道,代理池喷洒,组合,列表。
+description: "TREVORproxy sprays from multiple source IPs. Signals: internal pivoting, tunneling, proxy-pool spraying, combinations, lists"
+zh-signals: "TREVORproxy: 多源 IP 喷洒。信号:内网穿透,隧道,代理池喷洒,组合,列表。"
 ---
 
 # TREVORproxy

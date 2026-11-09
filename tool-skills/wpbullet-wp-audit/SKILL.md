@@ -1,6 +1,7 @@
 ---
 name: wpbullet-wp-audit
-description: wpbullet: WP 插件漏洞扫描。信号:web漏洞,注入,WP 漏洞扫描,激进模式,仅插件。
+description: "wpbullet: WP plugin vulnerability scanning. Signals: web vulnerabilities, injection, WP vulnerability scan, aggressive mode, plugins only."
+zh-signals: "wpbullet: WP 插件漏洞扫描。信号:web漏洞,注入,WP 漏洞扫描,激进模式,仅插件。"
 ---
 
 # wpbullet

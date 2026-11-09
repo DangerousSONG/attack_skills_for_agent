@@ -1,6 +1,7 @@
 ---
 name: subbrute-dns-spider
-description: SubBrute: 免字典元查询枚举。信号:子域名,域名枚举,元查询蜘蛛枚举,小字典快扫,自定义 resolver。
+description: "SubBrute enumerates subdomains without dictionaries via meta queries. Signals: subdomain, domain enumeration, meta-query spider enumeration, small-dictionary quick scan, custom resolver"
+zh-signals: "SubBrute: 免字典元查询枚举。信号:子域名,域名枚举,元查询蜘蛛枚举,小字典快扫,自定义 resolver。"
 ---
 
 # SubBrute

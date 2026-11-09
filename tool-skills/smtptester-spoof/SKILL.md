@@ -1,6 +1,7 @@
 ---
 name: smtptester-spoof
-description: SMTPTester: SPF/DKIM 绕过测试。信号:钓鱼,社会工程,SMTP 伪造测试,TLS。
+description: "SMTPTester: SPF and DKIM bypass testing. Signals: phishing, social engineering, SMTP spoof test, TLS."
+zh-signals: "SMTPTester: SPF/DKIM 绕过测试。信号:钓鱼,社会工程,SMTP 伪造测试,TLS。"
 ---
 
 # SMTPTester

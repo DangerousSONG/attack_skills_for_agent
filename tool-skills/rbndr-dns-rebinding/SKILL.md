@@ -1,6 +1,7 @@
 ---
 name: rbndr-dns-rebinding
-description: rbndr: 浏览器同源策略绕过。信号:中间人,mitm,DNS 重绑定,A 记录,TTL 控制。
+description: "rbndr: Bypasses browser same-origin policy. Signals: man-in-the-middle, MITM, DNS rebinding, A records, TTL control."
+zh-signals: "rbndr: 浏览器同源策略绕过。信号:中间人,mitm,DNS 重绑定,A 记录,TTL 控制。"
 ---
 
 # rbndr

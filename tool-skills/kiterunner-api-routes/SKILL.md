@@ -1,6 +1,7 @@
 ---
 name: kiterunner-api-routes
-description: kiterunner: API 隐藏路由爆破。信号:资产测绘,子域名,API 路由扫描,内置字典,最大连接。
+description: "kiterunner brute-forces hidden API routes. Signals: asset mapping, subdomain, API route scanning, built-in dictionary, maximum connections."
+zh-signals: "kiterunner: API 隐藏路由爆破。信号:资产测绘,子域名,API 路由扫描,内置字典,最大连接。"
 ---
 
 # kiterunner

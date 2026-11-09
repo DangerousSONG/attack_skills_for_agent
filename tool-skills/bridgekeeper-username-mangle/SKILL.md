@@ -1,6 +1,7 @@
 ---
 name: bridgekeeper-username-mangle
-description: BridgeKeeper: HR 名单变喷洒字典。信号:邮箱收集,员工信息,人名→用户名规则生成,指定格式。
+description: "BridgeKeeper: Converts HR rosters into sprayable password dictionaries. Signals: email harvesting, employee information, name-to-username rule generation, custom format."
+zh-signals: "BridgeKeeper: HR 名单变喷洒字典。信号:邮箱收集,员工信息,人名→用户名规则生成,指定格式。"
 ---
 
 # BridgeKeeper

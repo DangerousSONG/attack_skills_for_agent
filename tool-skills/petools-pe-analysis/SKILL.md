@@ -1,6 +1,7 @@
 ---
 name: petools-pe-analysis
-description: pe-tools: PE 文件静态解剖。信号:逆向,反汇编,详细输出,DOS 头解析,提取资源。
+description: "Static PE file analysis. Signals: reverse engineering, disassembly, detailed output, DOS header parsing, resource extraction."
+zh-signals: "pe-tools: PE 文件静态解剖。信号:逆向,反汇编,详细输出,DOS 头解析,提取资源。"
 ---
 
 # pe-tools

@@ -1,6 +1,7 @@
 ---
 name: name-that-hash
-description: name-that-hash: 未知哈希类型识别。信号:密码破解,哈希破解,识别哈希,批量文件,静默。
+description: "name-that-hash: Identify unknown hash types. Signals: password cracking, hash cracking, identify hash, batch files, silent."
+zh-signals: "name-that-hash: 未知哈希类型识别。信号:密码破解,哈希破解,识别哈希,批量文件,静默。"
 ---
 
 # name-that-hash

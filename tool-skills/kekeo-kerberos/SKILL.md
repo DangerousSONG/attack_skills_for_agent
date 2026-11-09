@@ -1,6 +1,7 @@
 ---
 name: kekeo-kerberos
-description: Kekeo: Kerberos 票据攻防。信号:kerberos,票据攻击,交互,请求 TGT,请求服务票。
+description: "Kekeo performs Kerberos ticket attacks and defenses. Signals: Kerberos, ticket attack, interactive mode, request TGT, request service ticket."
+zh-signals: "Kekeo: Kerberos 票据攻防。信号:kerberos,票据攻击,交互,请求 TGT,请求服务票。"
 ---
 
 # Kekeo

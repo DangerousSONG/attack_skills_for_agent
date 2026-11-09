@@ -1,6 +1,7 @@
 ---
 name: smbmap-share-enum
-description: smbmap: 共享盘敏感文件收割、批量可写共享排查。信号:内网枚举,网络发现,匿名/当前会话列共享,指定凭据。
+description: "smbmap: harvests sensitive share files and checks writable shares. Signals: internal enumeration, network discovery, anonymous or current session list shares, specified credentials."
+zh-signals: "smbmap: 共享盘敏感文件收割、批量可写共享排查。信号:内网枚举,网络发现,匿名/当前会话列共享,指定凭据。"
 ---
 
 # smbmap

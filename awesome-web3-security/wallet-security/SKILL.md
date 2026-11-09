@@ -1,6 +1,7 @@
 ---
 name: wallet-security
-description: "钱包安全:MPC/TSS、密钥管理、钱包 UX 安全与钓鱼防护。信号:钱包安全,密钥管理,mpc,钓鱼,web3。"
+description: "Wallet security: MPC/TSS, key management, UX security, phishing protection. Signals: wallet security, key management, MPC, phishing, Web3."
+zh-signals: "钱包安全:MPC/TSS、密钥管理、钱包 UX 安全与钓鱼防护。信号:钱包安全,密钥管理,mpc,钓鱼,web3。"
 when-to-use: "Guide for wallet security topics: MPC/TSS, key management, wallet UX security, phishing, and how to categorize related resources in README.md."
 ---
 

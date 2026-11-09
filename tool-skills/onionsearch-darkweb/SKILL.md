@@ -1,6 +1,7 @@
 ---
 name: onionsearch-darkweb
-description: OnionSearch: 多引擎暗网情报聚合。信号:web漏洞,注入,多暗网引擎搜索,页数,指定引擎。
+description: "Multi-engine dark web intelligence aggregation. Signals: web vulnerability, injection, multi dark-web engine search, pages, specified engines."
+zh-signals: "OnionSearch: 多引擎暗网情报聚合。信号:web漏洞,注入,多暗网引擎搜索,页数,指定引擎。"
 ---
 
 # OnionSearch

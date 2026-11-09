@@ -1,6 +1,7 @@
 ---
 name: beef-browser-hook
-description: BeEF: 浏览器僵尸化。信号:web漏洞,注入,钓鱼弹窗/假登录页,扫描目标内网,确认框驻留。
+description: "BeEF: botnets browsers. Signals: web vulnerability, injection, phishing popups/fake login pages, scan target internal network, confirmation dialog persistence"
+zh-signals: "BeEF: 浏览器僵尸化。信号:web漏洞,注入,钓鱼弹窗/假登录页,扫描目标内网,确认框驻留。"
 ---
 
 # BeEF

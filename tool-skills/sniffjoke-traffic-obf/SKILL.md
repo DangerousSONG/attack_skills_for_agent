@@ -1,6 +1,7 @@
 ---
 name: sniffjoke-traffic-obf
-description: sniffjoke: 反嗅探流量混淆。信号:中间人,mitm,透明混淆,调试,静默。
+description: "sniffjoke: anti-sniffing traffic obfuscation. Signals: MITM, mitm, transparent obfuscation, debug, silent."
+zh-signals: "sniffjoke: 反嗅探流量混淆。信号:中间人,mitm,透明混淆,调试,静默。"
 ---
 
 # sniffjoke

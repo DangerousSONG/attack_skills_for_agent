@@ -1,6 +1,7 @@
 ---
 name: pinkerton-js-secret
-description: Pinkerton: 前端密钥收割。信号:web漏洞,注入,JS 密钥/端点提取,深度。
+description: "Harvest frontend keys. Signals: web vulnerability, injection, JS key/endpoint extraction, depth."
+zh-signals: "Pinkerton: 前端密钥收割。信号:web漏洞,注入,JS 密钥/端点提取,深度。"
 ---
 
 # Pinkerton

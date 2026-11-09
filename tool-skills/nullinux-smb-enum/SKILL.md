@@ -1,6 +1,7 @@
 ---
 name: nullinux-smb-enum
-description: Nullinux: Linux 上 SMB 枚举一把梭。信号:资产测绘,子域名,SMB/RPC 全枚举,共享枚举,用户枚举。
+description: "All-in-one SMB enumeration on Linux. Signals: asset mapping, subdomains, SMB/RPC enumeration, share enumeration, user enumeration."
+zh-signals: "Nullinux: Linux 上 SMB 枚举一把梭。信号:资产测绘,子域名,SMB/RPC 全枚举,共享枚举,用户枚举。"
 ---
 
 # Nullinux

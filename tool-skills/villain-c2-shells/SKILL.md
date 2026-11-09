@@ -1,6 +1,7 @@
 ---
 name: villain-c2-shells
-description: Villain: 多会话 shell 托管。信号:webshell,rce,起主控,级联节点,生成 payload。
+description: "Villain: Multi-session shell hosting. Signals: webshell, RCE, start master, cascade nodes, generate payload."
+zh-signals: "Villain: 多会话 shell 托管。信号:webshell,rce,起主控,级联节点,生成 payload。"
 ---
 
 # Villain

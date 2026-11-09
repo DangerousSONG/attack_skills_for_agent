@@ -1,6 +1,7 @@
 ---
 name: go-windapsearch-fast
-description: go-windapsearch: 高速批量 LDAP 枚举。信号:内网枚举,网络发现,枚举用户,自定义查询,全属性输出。
+description: "go-windapsearch performs fast bulk LDAP enumeration. Signals: internal enumeration, network discovery, user enumeration, custom queries, full attribute output."
+zh-signals: "go-windapsearch: 高速批量 LDAP 枚举。信号:内网枚举,网络发现,枚举用户,自定义查询,全属性输出。"
 ---
 
 # go-windapsearch

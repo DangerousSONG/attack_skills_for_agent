@@ -1,6 +1,7 @@
 ---
 name: bluffy-hollow
-description: bluffy: shellcode 免杀。信号:恶意软件开发,免杀开发,shellcode 混淆,AES 加密,直接 syscall。
+description: "bluffy: evades detection for shellcode. Signals: malware development, evasion development, shellcode obfuscation, AES encryption, direct syscall"
+zh-signals: "bluffy: shellcode 免杀。信号:恶意软件开发,免杀开发,shellcode 混淆,AES 加密,直接 syscall。"
 ---
 
 # bluffy

@@ -1,6 +1,7 @@
 ---
 name: torcrawl-darkweb-crawl
-description: TorCrawl: 暗网站点结构化提取。信号:web漏洞,注入,暗网站点爬取,爬取链接,提取邮箱。
+description: "TorCrawl structurally extracts dark-web sites. Signals: web vulnerability, injection, dark-web site crawl, crawl links, email extraction"
+zh-signals: "TorCrawl: 暗网站点结构化提取。信号:web漏洞,注入,暗网站点爬取,爬取链接,提取邮箱。"
 ---
 
 # TorCrawl

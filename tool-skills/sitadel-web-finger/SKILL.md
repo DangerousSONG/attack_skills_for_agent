@@ -1,6 +1,7 @@
 ---
 name: sitadel-web-finger
-description: Sitadel: Web 资产快速体检。信号:web漏洞,注入,全面 Web 扫描,仅指纹识别,目录爆破。
+description: "Sitadel: quick web asset assessment. Signals: web vulnerability, injection, comprehensive web scan, fingerprinting only, directory brute force."
+zh-signals: "Sitadel: Web 资产快速体检。信号:web漏洞,注入,全面 Web 扫描,仅指纹识别,目录爆破。"
 ---
 
 # Sitadel

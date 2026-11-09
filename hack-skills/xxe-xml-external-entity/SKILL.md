@@ -1,6 +1,7 @@
 ---
 name: xxe-xml-external-entity
-description: "XXE:XML/SVG/OOXML/SOAP/解析器导入解析外部实体、文件或内网资源。信号:xxe,xml实体,外部实体,文件读取,svg,soap。"
+description: "XXE: XML, SVG, OOXML, SOAP parsers import external entities, files, intranet resources. Signals: XXE, XML entity, external entity, file read, SVG, SOAP."
+zh-signals: "XXE:XML/SVG/OOXML/SOAP/解析器导入解析外部实体、文件或内网资源。信号:xxe,xml实体,外部实体,文件读取,svg,soap。"
 when-to-use: >-
   XXE playbook. Use when XML, SVG, OOXML, SOAP, or parser-driven imports may resolve external entities, files, or internal network resources.
 ---

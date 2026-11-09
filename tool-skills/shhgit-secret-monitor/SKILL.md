@@ -1,6 +1,7 @@
 ---
 name: shhgit-secret-monitor
-description: shhgit: Github 实时监控泄密。信号:攻击面,云资产,扫本地仓库,CSV 输出。
+description: "shhgit: real-time GitHub leak monitoring. Signals: attack surface, cloud assets, scan local repos, CSV output."
+zh-signals: "shhgit: Github 实时监控泄密。信号:攻击面,云资产,扫本地仓库,CSV 输出。"
 ---
 
 # shhgit

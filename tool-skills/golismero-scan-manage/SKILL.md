@@ -1,6 +1,7 @@
 ---
 name: golismero-scan-manage
-description: Golismero: 带知识库管理的扫描。信号:web漏洞,注入,全自动扫描,HTML 报告,启用插件。
+description: "Golismero performs scanning with knowledge-base management. Signals: web vulnerabilities, injection, fully automated scanning, HTML report, plugin enable."
+zh-signals: "Golismero: 带知识库管理的扫描。信号:web漏洞,注入,全自动扫描,HTML 报告,启用插件。"
 ---
 
 # Golismero

@@ -1,6 +1,7 @@
 ---
 name: dnsprobe-resolve
-description: dnsprobe: 子域批量解析。信号:子域名,域名枚举,dnsprobe`,记录类型。
+description: "dnsprobe: bulk subdomain resolution. Signals: subdomain, domain enumeration, dnsprobe, record types."
+zh-signals: "dnsprobe: 子域批量解析。信号:子域名,域名枚举,dnsprobe`,记录类型。"
 ---
 
 # dnsprobe

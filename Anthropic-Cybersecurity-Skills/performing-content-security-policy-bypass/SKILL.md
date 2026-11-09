@@ -1,6 +1,7 @@
 ---
 name: performing-content-security-policy-bypass
-description: "Analyze Content-Security-Policy headers and bypass them to achieve cross-site 信号:web漏洞,注入,sql注入。"
+description: "Analyze Content-Security-Policy headers and bypass them to achieve cross-site scripting. Signals: web vulnerability, injection, sql injection."
+zh-signals: "Analyze Content-Security-Policy headers and bypass them to achieve cross-site 信号:web漏洞,注入,sql注入。"
 when-to-use: Analyze Content-Security-Policy headers and bypass them to achieve cross-site
   scripting by exploiting unsafe-inline/unsafe-eval, whitelisted JSONP endpoints, base-uri
   and form-action gaps, and nonce/hash weaknesses, then exfiltrate data even without

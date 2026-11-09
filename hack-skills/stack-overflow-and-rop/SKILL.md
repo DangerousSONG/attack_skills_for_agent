@@ -1,6 +1,7 @@
 ---
 name: stack-overflow-and-rop
-description: "Stack overflow and ROP playbook 信号:内网穿透,隧道,frp。"
+description: "Stack overflow and ROP playbook. Signals: intranet penetration, tunneling, frp."
+zh-signals: "Stack overflow and ROP playbook 信号:内网穿透,隧道,frp。"
 when-to-use: >-
   Stack overflow and ROP playbook. Use when exploiting buffer overflows to hijack control flow via return address overwrite, ROP chains, ret2libc, ret2csu, ret2dlresolve, or SROP on Linux userland binaries.
 ---

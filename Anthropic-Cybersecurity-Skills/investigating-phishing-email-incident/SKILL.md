@@ -1,6 +1,7 @@
 ---
 name: investigating-phishing-email-incident
-description: "Investigates phishing email incidents from initial user report through 信号:钓鱼,社会工程,钓鱼邮件。"
+description: "Investigate phishing email incidents from initial user report through containment and remediation. Signals: phishing, social engineering, phishing email."
+zh-signals: "Investigates phishing email incidents from initial user report through 信号:钓鱼,社会工程,钓鱼邮件。"
 when-to-use: 'Investigates phishing email incidents from initial user report through
   header analysis, URL/attachment detonation, impacted user identification, and containment
   actions using SOC tools like Splunk, Microsoft Defender, and sandbox analysis platforms.

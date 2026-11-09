@@ -1,6 +1,7 @@
 ---
 name: maigret-username-osint
-description: Maigret: 用户名全网画像、定向核验。信号:邮箱收集,员工信息,6000+ 站点查用户名,全量模式(慢但全)。
+description: "Maigret: Full-web username profiling and targeted verification. Signals: email collection, employee information, 6000+ sites username lookup, full mode slow but complete."
+zh-signals: "Maigret: 用户名全网画像、定向核验。信号:邮箱收集,员工信息,6000+ 站点查用户名,全量模式(慢但全)。"
 ---
 
 # Maigret

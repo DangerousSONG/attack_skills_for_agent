@@ -1,6 +1,7 @@
 ---
 name: weevely-webshell
-description: Weevely: PHP webshell 全功能会话。信号:载荷开发,武器化,连接,执行 PHP,文件传输。
+description: "Weevely: PHP webshell full-featured session. Signals: payload development, weaponization, connect, execute PHP, file transfer."
+zh-signals: "Weevely: PHP webshell 全功能会话。信号:载荷开发,武器化,连接,执行 PHP,文件传输。"
 ---
 
 # Weevely

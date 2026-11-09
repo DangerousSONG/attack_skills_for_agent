@@ -1,6 +1,7 @@
 ---
 name: dirb-dir-scan
-description: dirb: 目录枚举经典款。信号:web扫描,漏洞扫描,标准扫描,大字典,扩展名。
+description: "dirb: classic directory enumeration. Signals: web scanning, vulnerability scanning, standard scan, large dictionary, extensions."
+zh-signals: "dirb: 目录枚举经典款。信号:web扫描,漏洞扫描,标准扫描,大字典,扩展名。"
 ---
 
 # dirb

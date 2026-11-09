@@ -1,6 +1,7 @@
 ---
 name: active-directory-kerberos-attacks
-description: "AD Kerberos 攻击:AS-REP roasting、Kerberoasting、黄金/白银/钻石票据、委派滥用、票据传递。信号:kerberos,asrep roasting。"
+description: "AD Kerberos attacks: AS-REP roasting, Kerberoasting, golden/silver/diamond tickets, delegation abuse, ticket passing. Signals: kerberos, asrep roasting."
+zh-signals: "AD Kerberos 攻击:AS-REP roasting、Kerberoasting、黄金/白银/钻石票据、委派滥用、票据传递。信号:kerberos,asrep roasting。"
 when-to-use: >-
   Kerberos attack playbook for Active Directory. Use when targeting AD authentication via AS-REP roasting, Kerberoasting, golden/silver/diamond tickets, delegation abuse, or pass-the-ticket attacks.
 ---

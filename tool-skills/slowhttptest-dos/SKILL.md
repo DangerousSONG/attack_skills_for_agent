@@ -1,6 +1,7 @@
 ---
 name: slowhttptest-dos
-description: slowhttptest: Web 服务慢速拒绝服务压测。信号:数据破坏,擦除,Slowloris 测试,Range 攻击,持续秒数。
+description: "slowhttptest: slow HTTP denial-of-service stress testing. Signals: data destruction, wipe, Slowloris test, Range attack, duration seconds."
+zh-signals: "slowhttptest: Web 服务慢速拒绝服务压测。信号:数据破坏,擦除,Slowloris 测试,Range 攻击,持续秒数。"
 ---
 
 # slowhttptest

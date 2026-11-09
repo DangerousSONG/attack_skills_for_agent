@@ -1,6 +1,7 @@
 ---
 name: webacoo-encoded-shell
-description: WeBaCoo: HTTP 隐蔽信道远控。信号:持久化,后门,连接 WebShell,交互 shell 模式,下载。
+description: "WeBaCoo: HTTP covert channel remote control. Signals: persistence, backdoor, connect webshell, interactive shell mode, download."
+zh-signals: "WeBaCoo: HTTP 隐蔽信道远控。信号:持久化,后门,连接 WebShell,交互 shell 模式,下载。"
 ---
 
 # WeBaCoo

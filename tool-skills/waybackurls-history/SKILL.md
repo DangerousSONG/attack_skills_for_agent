@@ -1,6 +1,7 @@
 ---
 name: waybackurls-history
-description: waybackurls: 历史 URL 收割。信号:资产测绘,子域名,带时间戳,不含子域,waybackurls`。
+description: "waybackurls: Historical URL harvesting. Signals: asset mapping, subdomains, with timestamps, without subdomains, waybackurls."
+zh-signals: "waybackurls: 历史 URL 收割。信号:资产测绘,子域名,带时间戳,不含子域,waybackurls`。"
 ---
 
 # waybackurls

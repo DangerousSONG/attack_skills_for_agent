@@ -1,6 +1,7 @@
 ---
 name: uacme-uac-bypass
-description: UACME: 标准用户绕过 UAC 提权。信号:windows提权,uac绕过,带参数的投递执行。
+description: "UACME: Standard user UAC bypass privilege escalation. Signals: windows privilege escalation, UAC bypass, parameterized delivery execution."
+zh-signals: "UACME: 标准用户绕过 UAC 提权。信号:windows提权,uac绕过,带参数的投递执行。"
 ---
 
 # UACME

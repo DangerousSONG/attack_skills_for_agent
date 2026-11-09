@@ -151,15 +151,17 @@ def load_skills(from_git=False):
             continue
         dm = re.search(r'^description:\s*(.+)$', fm.group(1), re.M)
         nm = re.search(r'^name:\s*(.+)$', fm.group(1), re.M)
+        zm = re.search(r'^zh-signals:\s*(.+)$', fm.group(1), re.M)
         if not dm:
             continue
-        docs[parts[-1]] = (nm.group(1).strip() if nm else parts[-1], dm.group(1).strip())
+        docs[parts[-1]] = (nm.group(1).strip() if nm else parts[-1], dm.group(1).strip(),
+                           zm.group(1).strip().strip('"').strip("'") if zm else '')
     return docs
 
 
 def evaluate(docs, tag):
     slugs = sorted(docs)
-    corpus = ['{0} {0} {0} {1}'.format(docs[s][0], docs[s][1]) for s in slugs]
+    corpus = ['{0} {0} {0} {1} {2}'.format(docs[s][0], docs[s][1], docs[s][2]) for s in slugs]
     vec_w = TfidfVectorizer(ngram_range=(1, 2), min_df=1)
     vec_c = TfidfVectorizer(analyzer='char_wb', ngram_range=(3, 5), min_df=1)
     X = hstack([vec_w.fit_transform(corpus), vec_c.fit_transform(corpus)])

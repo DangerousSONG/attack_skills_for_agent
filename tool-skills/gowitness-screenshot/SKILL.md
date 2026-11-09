@@ -1,6 +1,7 @@
 ---
 name: gowitness-screenshot
-description: gowitness: 资产可视化核查(先看脸再决定打谁)。信号:资产测绘,子域名,单 URL 截图+指纹,批量截图,启动结果浏览服务。
+description: "gowitness visualizes assets for triage and fingerprinting. Signals: asset mapping, subdomains, single URL screenshot and fingerprint, bulk screenshots, result browsing service."
+zh-signals: "gowitness: 资产可视化核查(先看脸再决定打谁)。信号:资产测绘,子域名,单 URL 截图+指纹,批量截图,启动结果浏览服务。"
 ---
 
 # gowitness

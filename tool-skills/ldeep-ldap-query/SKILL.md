@@ -1,6 +1,7 @@
 ---
 name: ldeep-ldap-query
-description: ldeep: 轻量 LDAP 查询替代 bloodhound。信号:内网枚举,网络发现,列域用户,详细信息,gMSA 账户枚举。
+description: "ldeep performs lightweight LDAP queries as a BloodHound alternative. Signals: internal enumeration, network discovery, list domain users, detailed information, gMSA enumeration."
+zh-signals: "ldeep: 轻量 LDAP 查询替代 bloodhound。信号:内网枚举,网络发现,列域用户,详细信息,gMSA 账户枚举。"
 ---
 
 # ldeep

@@ -1,6 +1,7 @@
 ---
 name: insecure-source-code-management
-description: "暴露的版本控制元数据检测与恢复:.git/.svn 泄露、备份产物与相关配置错误(仅授权测试)。信号:git泄露,svn泄露,源码暴露,备份文件,版本控制。"
+description: "Exposed version-control metadata detection and recovery: .git/.svn leaks, backup artifacts, related misconfigurations for authorized testing only. Signals: git leak, SVN leak, source exposure, backup files, version control."
+zh-signals: "暴露的版本控制元数据检测与恢复:.git/.svn 泄露、备份产物与相关配置错误(仅授权测试)。信号:git泄露,svn泄露,源码暴露,备份文件,版本控制。"
 when-to-use: 0. QUICK START
   Source control and artifact exposure (.git, .svn, .hg, backups, .env). Use when recon finds VCS paths, 403 on hidden dirs, or backup/config leaks during authorized testing.
 ---

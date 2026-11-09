@@ -1,6 +1,7 @@
 ---
 name: jackdaw-ad-graph
-description: jackdaw: 可视化域渗透路径。信号:ad攻击,域渗透,SMB 会话/共享枚举,启动 Web 界面看图谱,ACL 路径分析。
+description: "jackdaw visualizes domain penetration paths. Signals: AD attack, domain pentest, SMB session and share enumeration, web UI graph, ACL path analysis."
+zh-signals: "jackdaw: 可视化域渗透路径。信号:ad攻击,域渗透,SMB 会话/共享枚举,启动 Web 界面看图谱,ACL 路径分析。"
 ---
 
 # jackdaw

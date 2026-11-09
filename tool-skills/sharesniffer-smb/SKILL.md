@@ -1,6 +1,7 @@
 ---
 name: sharesniffer-smb
-description: sharesniffer: 内网共享批量发现。信号:内网枚举,网络发现,SMB 共享嗅探。
+description: "sharesniffer: batch internal network share discovery. Signals: internal enumeration, network discovery, SMB share sniffing."
+zh-signals: "sharesniffer: 内网共享批量发现。信号:内网枚举,网络发现,SMB 共享嗅探。"
 ---
 
 # sharesniffer

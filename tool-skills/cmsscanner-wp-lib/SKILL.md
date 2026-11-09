@@ -1,6 +1,7 @@
 ---
 name: cmsscanner-wp-lib
-description: CMSScanner: WPScan 引擎二次开发。信号:web漏洞,注入,通用 CMS 扫描,枚举插件/主题/用户,强制扫描。
+description: "CMSScanner: Uses a WPScan-based engine for generic CMS scanning. Signals: web vulnerability, injection, generic CMS scanning, plugin/theme/user enumeration, forced scan."
+zh-signals: "CMSScanner: WPScan 引擎二次开发。信号:web漏洞,注入,通用 CMS 扫描,枚举插件/主题/用户,强制扫描。"
 ---
 
 # CMSScanner

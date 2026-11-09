@@ -1,6 +1,7 @@
 ---
 name: ctf-web
-description: "CTF Web:XSS/SQLi/SSTI/SSRF/XXE/JWT/认证绕过/文件上传/请求走私/OAuth/SAML/原型污染。信号:ctf,web题,注入,xss,ssrf,jwt。"
+description: "CTF web: XSS, SQLi, SSTI, SSRF, XXE, JWT, authentication bypass, file upload, request smuggling, OAuth, SAML, prototype pollution. Signals: ctf, web challenge, injection, xss, ssrf, jwt."
+zh-signals: "CTF Web:XSS/SQLi/SSTI/SSRF/XXE/JWT/认证绕过/文件上传/请求走私/OAuth/SAML/原型污染。信号:ctf,web题,注入,xss,ssrf,jwt。"
 when-to-use: Provides web exploitation techniques for CTF challenges. Use when the target is primarily an HTTP application, API, browser client, template engine, identity flow, or smart-contract frontend/backend s
 license: MIT
 compatibility: Requires filesystem-based agent (Claude Code or similar) with bash, Python 3, and internet access for tool installation.

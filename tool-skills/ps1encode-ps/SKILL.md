@@ -1,6 +1,7 @@
 ---
 name: ps1encode-ps
-description: ps1encode: MSF payload PowerShell 化。信号:载荷开发,武器化,VBA 输出。
+description: "ps1encode: Converts MSF payloads to PowerShell. Signals: payload development, weaponization, VBA output."
+zh-signals: "ps1encode: MSF payload PowerShell 化。信号:载荷开发,武器化,VBA 输出。"
 ---
 
 # ps1encode

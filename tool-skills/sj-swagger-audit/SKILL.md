@@ -1,6 +1,7 @@
 ---
 name: sj-swagger-audit
-description: sj: OpenAPI 规范直连渗透。信号:api攻击,接口测试,自动构造 API 请求,路径爆破,全端点审计。
+description: "sj: OpenAPI specification direct pentesting. Signals: API attack, interface testing, auto API request construction, path brute force, full endpoint audit."
+zh-signals: "sj: OpenAPI 规范直连渗透。信号:api攻击,接口测试,自动构造 API 请求,路径爆破,全端点审计。"
 ---
 
 # sj

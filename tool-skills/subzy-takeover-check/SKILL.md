@@ -1,6 +1,7 @@
 ---
 name: subzy-takeover-check
-description: Subzy: 子域接管终检。信号:子域名,域名枚举,批量接管检测,并发,只显示命中。
+description: "Subzy performs final subdomain takeover checks. Signals: subdomain, domain enumeration, batch takeover detection, concurrency, show hits only"
+zh-signals: "Subzy: 子域接管终检。信号:子域名,域名枚举,批量接管检测,并发,只显示命中。"
 ---
 
 # Subzy

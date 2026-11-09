@@ -1,6 +1,7 @@
 ---
 name: conducting-network-penetration-test
-description: "Conducts comprehensive network penetration tests against authorized 信号:pwn,二进制利用,栈溢出。"
+description: "Conduct comprehensive authorized network penetration tests. Signals: pwn, binary exploitation, stack overflow."
+zh-signals: "Conducts comprehensive network penetration tests against authorized 信号:pwn,二进制利用,栈溢出。"
 when-to-use: 'Conducts comprehensive network penetration tests against authorized
   target environments by performing host discovery, port scanning, service enumeration,
   vulnerability identification, and controlled exploitation to assess the security

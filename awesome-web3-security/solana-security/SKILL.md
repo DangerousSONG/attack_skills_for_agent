@@ -1,6 +1,7 @@
 ---
 name: solana-security
-description: "Solana/Sealevel 安全研究资源组织指南。信号:solana,web3安全,合约审计,区块链安全。"
+description: "Resource guide for Solana/Sealevel security research. Signals: Solana, Web3 security, contract audit, blockchain security."
+zh-signals: "Solana/Sealevel 安全研究资源组织指南。信号:solana,web3安全,合约审计,区块链安全。"
 when-to-use: Guide for Solana/Sealevel security research and where to organize Solana-specific resources in README.md.
 ---
 

@@ -1,6 +1,7 @@
 ---
 name: assessing-vector-and-embedding-weaknesses
-description: "Test RAG vector stores (Pinecone, Qdrant, Weaviate, Chroma, pgvector) 信号:ai安全,大模型攻击,llm攻击。"
+description: "Test RAG vector stores (Pinecone, Qdrant, Weaviate, Chroma, pgvector). Signals: AI security, large-model attacks, LLM attacks."
+zh-signals: "Test RAG vector stores (Pinecone, Qdrant, Weaviate, Chroma, pgvector) 信号:ai安全,大模型攻击,llm攻击。"
 when-to-use: Test RAG vector stores (Pinecone, Qdrant, Weaviate, Chroma, pgvector,
   FAISS) for embedding inversion, cross-tenant data leakage, and data poisoning per
   OWASP LLM08:2025. Use when performing an authorized security assessment of a RAG

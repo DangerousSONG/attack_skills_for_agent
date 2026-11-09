@@ -1,6 +1,7 @@
 ---
 name: liffy-lfi
-description: Liffy: LFI→RCE 链。信号:web漏洞,注入,LFI 利用,php://input,php://filter。
+description: "Liffy: LFI->RCE chain. Signals: web vulnerability, injection, LFI exploitation, php://input, php://filter."
+zh-signals: "Liffy: LFI→RCE 链。信号:web漏洞,注入,LFI 利用,php://input,php://filter。"
 ---
 
 # Liffy

@@ -1,6 +1,7 @@
 ---
 name: sipvicious-sip
-description: SIPVicious: VoIP 内网渗透。信号:端口扫描,nmap,SIP 设备发现,分机枚举,SIP 爆破。
+description: "SIPVicious: internal VoIP pentesting. Signals: port scan, nmap, SIP device discovery, extension enumeration, SIP brute force."
+zh-signals: "SIPVicious: VoIP 内网渗透。信号:端口扫描,nmap,SIP 设备发现,分机枚举,SIP 爆破。"
 ---
 
 # SIPVicious

@@ -1,6 +1,7 @@
 ---
 name: pupy-rat
-description: Pupy: 跨平台远控上线。信号:c2,命令控制,启动控制端,生成客户端,进程迁移。
+description: "Pupy: Cross-platform remote control implant. Signals: C2, command and control, start controller, generate client, process migration."
+zh-signals: "Pupy: 跨平台远控上线。信号:c2,命令控制,启动控制端,生成客户端,进程迁移。"
 ---
 
 # Pupy

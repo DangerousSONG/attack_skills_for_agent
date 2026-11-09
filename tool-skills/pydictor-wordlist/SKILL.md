@@ -1,6 +1,7 @@
 ---
 name: pydictor-wordlist
-description: pydictor: 全模式密码字典。信号:密码破解,哈希破解,基础字典生成,扩展模式,插件。
+description: "pydictor: Generates comprehensive password dictionaries. Signals: password cracking, hash cracking, basic dictionary generation, extended modes, plugins."
+zh-signals: "pydictor: 全模式密码字典。信号:密码破解,哈希破解,基础字典生成,扩展模式,插件。"
 ---
 
 # pydictor

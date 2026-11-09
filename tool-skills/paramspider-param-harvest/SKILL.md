@@ -1,6 +1,7 @@
 ---
 name: paramspider-param-harvest
-description: ParamSpider: 带参 URL 批量收割(喂漏洞扫描器)。信号:数据收集,打包,高爬取深度,排除扩展。
+description: "Harvest parameterized URLs for vulnerability scanners. Signals: data collection, packaging, high crawl depth, exclude extensions."
+zh-signals: "ParamSpider: 带参 URL 批量收割(喂漏洞扫描器)。信号:数据收集,打包,高爬取深度,排除扩展。"
 ---
 
 # ParamSpider

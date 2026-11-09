@@ -1,6 +1,7 @@
 ---
 name: proxybroker2-proxies
-description: proxybroker2: 公共代理池构建。信号:内网穿透,隧道,公共代理发现,代理池服务,抓取。
+description: "Build public proxy pool. Signals: intranet tunneling, tunnel, public proxy discovery, proxy pool service, scraping."
+zh-signals: "proxybroker2: 公共代理池构建。信号:内网穿透,隧道,公共代理发现,代理池服务,抓取。"
 ---
 
 # proxybroker2

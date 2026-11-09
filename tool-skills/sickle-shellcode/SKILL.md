@@ -1,6 +1,7 @@
 ---
 name: sickle-shellcode
-description: Sickle: shellcode 分析。信号:逆向,反汇编,坏字符,对比。
+description: "Sickle: shellcode analysis. Signals: reverse engineering, disassembly, bad characters, comparison."
+zh-signals: "Sickle: shellcode 分析。信号:逆向,反汇编,坏字符,对比。"
 ---
 
 # Sickle

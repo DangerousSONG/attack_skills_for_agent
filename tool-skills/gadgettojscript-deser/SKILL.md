@@ -1,6 +1,7 @@
 ---
 name: gadgettojscript-deser
-description: GadgetToJScript: Office 宏反序列化。信号:载荷开发,武器化,.NET 序列化载荷,VBS 输出,混淆。
+description: "GadgetToJScript builds Office macro deserialization payloads. Signals: payload development, weaponization, .NET serialized payloads, VBS output, obfuscation."
+zh-signals: "GadgetToJScript: Office 宏反序列化。信号:载荷开发,武器化,.NET 序列化载荷,VBS 输出,混淆。"
 ---
 
 # GadgetToJScript

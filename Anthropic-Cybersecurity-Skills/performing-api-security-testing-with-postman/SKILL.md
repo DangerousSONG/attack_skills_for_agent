@@ -1,6 +1,7 @@
 ---
 name: performing-api-security-testing-with-postman
-description: "Uses Postman to build structured API security test collections covering 信号:api攻击,接口测试,graphql。"
+description: "Use Postman to build structured API security test collections. Signals: api attack, interface testing, graphql."
+zh-signals: "Uses Postman to build structured API security test collections covering 信号:api攻击,接口测试,graphql。"
 when-to-use: 'Uses Postman to build structured API security test collections covering
   the OWASP API Security Top 10—authentication bypass, authorization flaws, injection,
   and data exposure—with multi-role environments, automated test scripts, and OWASP

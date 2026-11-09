@@ -1,6 +1,7 @@
 ---
 name: padre-padding-oracle
-description: padre: CBC 填充预言爆破明文。信号:密码学攻击,加密破解,自定义错误判定,线程,输出明文。
+description: "CBC padding oracle plaintext recovery. Signals: cryptographic attack, encryption cracking, custom error detection, threads, plaintext output."
+zh-signals: "padre: CBC 填充预言爆破明文。信号:密码学攻击,加密破解,自定义错误判定,线程,输出明文。"
 ---
 
 # padre

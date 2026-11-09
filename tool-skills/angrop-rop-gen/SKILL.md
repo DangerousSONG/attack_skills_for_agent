@@ -1,6 +1,7 @@
 ---
 name: angrop-rop-gen
-description: angrop: 自动 ROP 链构造。信号:pwn,二进制利用,ROP 链生成,自动链,内存写。
+description: "angrop: automatically constructs ROP chains. Signals: pwn, binary exploitation, ROP chain generation, automatic chain, memory write"
+zh-signals: "angrop: 自动 ROP 链构造。信号:pwn,二进制利用,ROP 链生成,自动链,内存写。"
 ---
 
 # angrop

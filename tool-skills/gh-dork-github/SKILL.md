@@ -1,6 +1,7 @@
 ---
 name: gh-dork-github
-description: gh-dork: 组织敏感文件 dork。信号:攻击面,云资产,组织仓库 dork,自定义,线程。
+description: "gh-dork dorks organization sensitive files. Signals: attack surface, cloud assets, organization repository dork, custom queries, threads."
+zh-signals: "gh-dork: 组织敏感文件 dork。信号:攻击面,云资产,组织仓库 dork,自定义,线程。"
 ---
 
 # gh-dork

@@ -1,6 +1,7 @@
 ---
 name: pwncat-shell-manager
-description: pwncat: shell 托管+自动提权。信号:webshell,rce,起监听,文件传输,列可用提权。
+description: "pwncat: Shell hosting and automatic privilege escalation. Signals: webshell, RCE, start listener, file transfer, list available privilege escalations."
+zh-signals: "pwncat: shell 托管+自动提权。信号:webshell,rce,起监听,文件传输,列可用提权。"
 ---
 
 # pwncat

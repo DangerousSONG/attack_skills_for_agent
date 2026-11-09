@@ -1,6 +1,7 @@
 ---
 name: preeny-pwn
-description: preeny: CTF/自动化 pwn 辅助。信号:pwn,二进制利用,去 fork,延时(暴力防提速)。
+description: "CTF/automated pwn assistance. Signals: pwn, binary exploitation, disable fork, delay to prevent brute-force speedup."
+zh-signals: "preeny: CTF/自动化 pwn 辅助。信号:pwn,二进制利用,去 fork,延时(暴力防提速)。"
 ---
 
 # preeny

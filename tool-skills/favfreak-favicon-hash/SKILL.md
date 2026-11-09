@@ -1,6 +1,7 @@
 ---
 name: favfreak-favicon-hash
-description: FavFreak: 同框架资产归并。信号:资产测绘,子域名,线程。
+description: "FavFreak: group assets by same framework. Signals: asset mapping, subdomain, threads."
+zh-signals: "FavFreak: 同框架资产归并。信号:资产测绘,子域名,线程。"
 ---
 
 # FavFreak

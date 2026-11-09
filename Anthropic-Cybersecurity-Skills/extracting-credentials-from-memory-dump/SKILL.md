@@ -1,6 +1,7 @@
 ---
 name: extracting-credentials-from-memory-dump
-description: "Extracts cached credentials, password hashes, Kerberos tickets, and 信号:kerberos,票据攻击,黄金票据。"
+description: "Extract cached credentials, password hashes, Kerberos tickets, and other secrets. Signals: Kerberos, ticket attack, golden ticket."
+zh-signals: "Extracts cached credentials, password hashes, Kerberos tickets, and 信号:kerberos,票据攻击,黄金票据。"
 when-to-use: Extracts cached credentials, password hashes, Kerberos tickets, and
   authentication tokens from Windows memory dumps using Volatility 3, Mimikatz,
   and pypykatz. Use when performing memory forensics or incident response on an

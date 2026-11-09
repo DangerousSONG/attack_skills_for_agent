@@ -1,6 +1,7 @@
 ---
 name: gobuster-dir-dns
-description: gobuster: 目录与后台发现、子域名枚举接资产梳理。信号:web扫描,漏洞扫描,目录/文件爆破,虚拟主机爆破。
+description: "gobuster discovers directories, admin panels, and subdomains for asset mapping. Signals: web scanning, vulnerability scanning, directory/file brute-forcing, virtual host brute-forcing."
+zh-signals: "gobuster: 目录与后台发现、子域名枚举接资产梳理。信号:web扫描,漏洞扫描,目录/文件爆破,虚拟主机爆破。"
 ---
 
 # gobuster

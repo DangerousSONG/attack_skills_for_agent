@@ -1,6 +1,7 @@
 ---
 name: intercepting-mobile-traffic-with-burpsuite
-description: "Intercepts and analyzes HTTP/HTTPS traffic from mobile applications 信号:移动端,android攻击,ios攻击。"
+description: "Intercept and analyze HTTP/HTTPS traffic from mobile applications. Signals: mobile, Android attack, iOS attack."
+zh-signals: "Intercepts and analyzes HTTP/HTTPS traffic from mobile applications 信号:移动端,android攻击,ios攻击。"
 when-to-use: 'Intercepts and analyzes HTTP/HTTPS traffic from mobile applications
   using Burp Suite proxy to identify insecure API communications, authentication flaws,
   data leakage, and server-side vulnerabilities. Use when performing mobile application

@@ -1,6 +1,7 @@
 ---
 name: ctf-ai-ml
-description: "CTF AI/ML 题技法:对抗样本、模型抽取、提示注入、成员推断、数据投毒、LoRA 适配器利用、LLM 越狱。信号:ctf,ai,提示注入,越狱,对抗样本,模型抽取。"
+description: "CTF AI/ML techniques: adversarial examples, model extraction, prompt injection, membership inference, data poisoning, LoRA adapter exploitation, LLM jailbreaks. Signals: ctf, ai, prompt injection, jailbreak, adversarial examples, model extraction."
+zh-signals: "CTF AI/ML 题技法:对抗样本、模型抽取、提示注入、成员推断、数据投毒、LoRA 适配器利用、LLM 越狱。信号:ctf,ai,提示注入,越狱,对抗样本,模型抽取。"
 when-to-use: Provides AI and machine learning techniques for CTF challenges. Use when attacking ML models, crafting adversarial examples, performing model extraction, prompt injection, membership inference, traini
 license: MIT
 compatibility: Requires filesystem-based agent (Claude Code or similar) with bash, Python 3, and internet access for tool installation.

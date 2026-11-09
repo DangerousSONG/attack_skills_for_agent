@@ -1,6 +1,7 @@
 ---
 name: sprayhound-ad-spray
-description: sprayhound: 喷洒结果直通攻击路径。信号:暴力破解,口令喷射,喷洒+BH 联动,线程。
+description: "sprayhound sends spray results directly to attack paths. Signals: brute force, password spraying, spray+BH integration, threads"
+zh-signals: "sprayhound: 喷洒结果直通攻击路径。信号:暴力破解,口令喷射,喷洒+BH 联动,线程。"
 ---
 
 # sprayhound

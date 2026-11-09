@@ -1,6 +1,7 @@
 ---
 name: dependency-confusion
-description: "Expert dependency-confusion methodology 信号:供应链,cicd,流水线攻击。"
+description: "Expert dependency-confusion methodology. Signals: supply chain, CI/CD, pipeline attacks."
+zh-signals: "Expert dependency-confusion methodology 信号:供应链,cicd,流水线攻击。"
 when-to-use: 0. QUICK START
   Supply-chain testing via package-manager dependency confusion: when internal package names resolve to attacker-controlled public registries, leading to malicious install and script execution. Use for npm/pip/gem/Maven/Composer/Docker manifest review and authorized red-team supply-chain exercises.
 ---

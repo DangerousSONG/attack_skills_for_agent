@@ -1,6 +1,7 @@
 ---
 name: apachetomcatscanner-tomcat
-description: ApacheTomcatScanner: Tomcat 全网测绘。信号:端口扫描,nmap,Tomcat 扫描,弱口令。
+description: "ApacheTomcatScanner: maps Tomcat services network-wide. Signals: port scan, nmap, Tomcat scan, weak credentials"
+zh-signals: "ApacheTomcatScanner: Tomcat 全网测绘。信号:端口扫描,nmap,Tomcat 扫描,弱口令。"
 ---
 
 # ApacheTomcatScanner

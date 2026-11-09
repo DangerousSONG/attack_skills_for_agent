@@ -1,6 +1,7 @@
 ---
 name: opendoor-scanner
-description: OpenDoor: 目录扫描+多报告。信号:web漏洞,注入,字典,线程,指定路径。
+description: "Directory scanning with multiple reports. Signals: web vulnerability, injection, wordlist, threads, specified paths."
+zh-signals: "OpenDoor: 目录扫描+多报告。信号:web漏洞,注入,字典,线程,指定路径。"
 ---
 
 # OpenDoor

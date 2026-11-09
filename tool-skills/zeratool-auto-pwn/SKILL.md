@@ -1,6 +1,7 @@
 ---
 name: zeratool-auto-pwn
-description: Zeratool: CTF 自动 exploit。信号:pwn,二进制利用,泄漏模式,覆盖。
+description: "Zeratool: Automated CTF exploit. Signals: pwn, binary exploitation, leak mode, overwrite."
+zh-signals: "Zeratool: CTF 自动 exploit。信号:pwn,二进制利用,泄漏模式,覆盖。"
 ---
 
 # Zeratool

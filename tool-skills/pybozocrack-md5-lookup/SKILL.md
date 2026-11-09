@@ -1,6 +1,7 @@
 ---
 name: pybozocrack-md5-lookup
-description: PyBozoCrack: 弱哈希秒查。信号:密码破解,哈希破解,MD5 在线库查询,批量,含特殊字符。
+description: "PyBozoCrack: Quickly checks weak hashes. Signals: password cracking, hash cracking, MD5 online lookup, batch, includes special characters."
+zh-signals: "PyBozoCrack: 弱哈希秒查。信号:密码破解,哈希破解,MD5 在线库查询,批量,含特殊字符。"
 ---
 
 # PyBozoCrack

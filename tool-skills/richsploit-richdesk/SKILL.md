@@ -1,6 +1,7 @@
 ---
 name: richsploit-richdesk
-description: Richsploit: 富客户端漏洞利用。信号:pwn,二进制利用,列表。
+description: "Richsploit: Exploits rich client vulnerabilities. Signals: pwn, binary exploitation, list."
+zh-signals: "Richsploit: 富客户端漏洞利用。信号:pwn,二进制利用,列表。"
 ---
 
 # Richsploit

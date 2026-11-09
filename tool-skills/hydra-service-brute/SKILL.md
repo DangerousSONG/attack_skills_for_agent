@@ -1,6 +1,7 @@
 ---
 name: hydra-service-brute
-description: Hydra (thc-hydra): SSH 与 RDP 口令爆破、Web 登录表单爆破。信号:暴力破解,口令喷射,单个 / 字典用户名,单个 / 字典密码。
+description: "Hydra brute-forces SSH, RDP, and web login forms. Signals: brute force, password spraying, single or dictionary usernames, single or dictionary passwords."
+zh-signals: "Hydra (thc-hydra): SSH 与 RDP 口令爆破、Web 登录表单爆破。信号:暴力破解,口令喷射,单个 / 字典用户名,单个 / 字典密码。"
 ---
 
 # Hydra (thc-hydra)

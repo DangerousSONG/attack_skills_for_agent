@@ -1,6 +1,7 @@
 ---
 name: dnsvalidator-resolvers
-description: dnsvalidator: 构建干净 resolver 池。信号:子域名,域名枚举,验证 DNS 解析器,线程,并发。
+description: "dnsvalidator: build clean resolver pool. Signals: subdomain, domain enumeration, validate DNS resolvers, threads, concurrency."
+zh-signals: "dnsvalidator: 构建干净 resolver 池。信号:子域名,域名枚举,验证 DNS 解析器,线程,并发。"
 ---
 
 # dnsvalidator

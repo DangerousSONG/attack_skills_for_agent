@@ -1,6 +1,7 @@
 ---
 name: msmailprobe-o365
-description: msmailprobe: O365 环境侦察+喷洒。信号:暴力破解,口令喷射,用户枚举。
+description: "msmailprobe: O365 environment reconnaissance and spraying. Signals: brute force, password spraying, user enumeration."
+zh-signals: "msmailprobe: O365 环境侦察+喷洒。信号:暴力破解,口令喷射,用户枚举。"
 ---
 
 # msmailprobe

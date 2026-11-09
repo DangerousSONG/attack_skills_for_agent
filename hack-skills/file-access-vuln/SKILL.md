@@ -1,6 +1,7 @@
 ---
 name: file-access-vuln
-description: "文件访问漏洞路由入口:文件路径、下载端点、上传管道与文件预览处理。信号:文件访问,下载漏洞,lfi,文件包含,预览漏洞。"
+description: "File access vulnerability routing entry: file paths, download endpoints, upload pipelines, file preview handling. Signals: file access, download vulnerability, LFI, file inclusion, preview vulnerability."
+zh-signals: "文件访问漏洞路由入口:文件路径、下载端点、上传管道与文件预览处理。信号:文件访问,下载漏洞,lfi,文件包含,预览漏洞。"
 when-to-use: File Access Router
   Entry P1 category router for file access and upload workflows. Use when
   testing download endpoints, file paths, local file inclusion, upload flows,

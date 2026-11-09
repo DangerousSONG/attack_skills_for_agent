@@ -1,6 +1,7 @@
 ---
 name: cewl-wordlist
-description: CeWL: 目标定制口令字典。信号:密码破解,哈希破解,站点生成字典,爬深,最小长度。
+description: "CeWL: Generates target-specific password dictionaries. Signals: password cracking, hash cracking, site-based dictionary generation, crawl depth, minimum length."
+zh-signals: "CeWL: 目标定制口令字典。信号:密码破解,哈希破解,站点生成字典,爬深,最小长度。"
 ---
 
 # CeWL

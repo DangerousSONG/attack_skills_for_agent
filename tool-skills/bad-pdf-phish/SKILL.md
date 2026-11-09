@@ -1,6 +1,7 @@
 ---
 name: bad-pdf-phish
-description: Bad-Pdf: PDF NTLM 哈希窃取。信号:钓鱼,社会工程,恶意 PDF 生成,GUI。
+description: "Bad-Pdf: steals NTLM hashes via PDF. Signals: phishing, social engineering, malicious PDF generation, GUI"
+zh-signals: "Bad-Pdf: PDF NTLM 哈希窃取。信号:钓鱼,社会工程,恶意 PDF 生成,GUI。"
 ---
 
 # Bad-Pdf

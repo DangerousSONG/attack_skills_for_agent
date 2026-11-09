@@ -1,6 +1,7 @@
 ---
 name: ldapmonitor-live-enum
-description: ldapmonitor: 实时盯 AD 变更(找新特权账号)。信号:内网枚举,网络发现,实时监控 LDAP 变更,过滤条件,显示变更详情。
+description: "ldapmonitor watches AD changes to find new privileged accounts. Signals: internal enumeration, network discovery, real-time LDAP monitoring, filter conditions, change details."
+zh-signals: "ldapmonitor: 实时盯 AD 变更(找新特权账号)。信号:内网枚举,网络发现,实时监控 LDAP 变更,过滤条件,显示变更详情。"
 ---
 
 # ldapmonitor

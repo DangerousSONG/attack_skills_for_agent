@@ -1,6 +1,7 @@
 ---
 name: torpy-tor-client
-description: torpy: Tor 网络匿名请求。信号:内网穿透,隧道,Tor 客户端,Tor 内执行,跳数。
+description: "torpy makes anonymous requests over Tor. Signals: internal pivoting, tunneling, Tor client, execute over Tor, hops"
+zh-signals: "torpy: Tor 网络匿名请求。信号:内网穿透,隧道,Tor 客户端,Tor 内执行,跳数。"
 ---
 
 # torpy

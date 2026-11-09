@@ -1,6 +1,7 @@
 ---
 name: cmseek-cms-detect
-description: CMSeeK: CMS 指纹识别+深链检测。信号:web漏洞,注入,CMS 识别+漏洞检测,跟踪重定向,重扫。
+description: "CMSeeK: Identifies CMS fingerprints and detects deep links. Signals: web vulnerability, injection, CMS identification plus vulnerability detection, follow redirects, rescan."
+zh-signals: "CMSeeK: CMS 指纹识别+深链检测。信号:web漏洞,注入,CMS 识别+漏洞检测,跟踪重定向,重扫。"
 ---
 
 # CMSeeK

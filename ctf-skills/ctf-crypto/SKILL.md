@@ -1,6 +1,7 @@
 ---
 name: ctf-crypto
-description: "CTF 密码学攻击:RSA/AES/ECC/格/LWE 数学结构、Coppersmith/Pollard/Wiener、padding oracle、GCM、密钥推导弱点。信号:ctf,密码学。"
+description: "CTF cryptography attacks: RSA/AES/ECC/lattice/LWE math structures, Coppersmith/Pollard/Wiener, padding oracle, GCM, key derivation weaknesses. Signals: ctf, cryptography."
+zh-signals: "CTF 密码学攻击:RSA/AES/ECC/格/LWE 数学结构、Coppersmith/Pollard/Wiener、padding oracle、GCM、密钥推导弱点。信号:ctf,密码学。"
 when-to-use: Provides cryptography attack techniques for CTF challenges. Use when attacking encryption, hashing, signatures, ZKP, PRNG, or mathematical crypto problems involving RSA, AES, ECC, lattices, LWE, CVP, 
 license: MIT
 compatibility: Requires filesystem-based agent (Claude Code or similar) with bash, Python 3, and internet access for tool installation.

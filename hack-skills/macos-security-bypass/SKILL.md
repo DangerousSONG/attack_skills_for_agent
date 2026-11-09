@@ -1,6 +1,7 @@
 ---
 name: macos-security-bypass
-description: "macOS security bypass playbook 信号:持久化,后门,权限维持。"
+description: "macOS security bypass playbook. Signals: persistence, backdoors, privilege maintenance."
+zh-signals: "macOS security bypass playbook 信号:持久化,后门,权限维持。"
 when-to-use: >-
   macOS security bypass playbook. Use when targeting macOS endpoints and need to bypass TCC, Gatekeeper, SIP, sandbox, code signing, or entitlement-based protections during authorized red team or pentest engagements.
 ---

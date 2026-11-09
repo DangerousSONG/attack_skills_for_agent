@@ -1,6 +1,7 @@
 ---
 name: corstest-cors
-description: CORStest: CORS 配置验证。信号:web漏洞,注入,CORS 测试,批量。
+description: "CORStest: Validates CORS configurations. Signals: web vulnerability, injection, CORS testing, batch."
+zh-signals: "CORStest: CORS 配置验证。信号:web漏洞,注入,CORS 测试,批量。"
 ---
 
 # CORStest

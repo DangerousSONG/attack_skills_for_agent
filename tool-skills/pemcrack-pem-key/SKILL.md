@@ -1,6 +1,7 @@
 ---
 name: pemcrack-pem-key
-description: pemcrack: 私钥口令爆破(SSH 横向)。信号:暴力破解,口令喷射,PEM 私钥口令爆破,字典模式。
+description: "Private key passphrase cracking for SSH lateral movement. Signals: brute force, password spraying, PEM private key passphrase cracking, dictionary mode."
+zh-signals: "pemcrack: 私钥口令爆破(SSH 横向)。信号:暴力破解,口令喷射,PEM 私钥口令爆破,字典模式。"
 ---
 
 # pemcrack

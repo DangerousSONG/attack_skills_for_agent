@@ -1,6 +1,7 @@
 ---
 name: fakedns-dns-redirect
-description: FakeDns: DNS 钓鱼重定向。信号:中间人,mitm,DNS 伪造,重绑定,非权威。
+description: "FakeDns: DNS phishing redirection. Signals: man-in-the-middle, MITM, DNS spoofing, rebinding, non-authoritative."
+zh-signals: "FakeDns: DNS 钓鱼重定向。信号:中间人,mitm,DNS 伪造,重绑定,非权威。"
 ---
 
 # FakeDns

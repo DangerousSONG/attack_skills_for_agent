@@ -1,6 +1,7 @@
 ---
 name: demiguise-hta-crypt
-description: demiguise: HTA 钓鱼载荷。信号:恶意软件开发,免杀开发,生成加密 HTA,RC4 密钥。
+description: "demiguise: HTA phishing payload. Signals: malware development, evasion development, generate encrypted HTA, RC4 key."
+zh-signals: "demiguise: HTA 钓鱼载荷。信号:恶意软件开发,免杀开发,生成加密 HTA,RC4 密钥。"
 ---
 
 # demiguise

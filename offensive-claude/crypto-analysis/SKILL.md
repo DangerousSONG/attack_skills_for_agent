@@ -1,6 +1,7 @@
 ---
 name: crypto-analysis
-description: "密码学评估:TLS/PKI 审计、RSA/ECC 密钥攻击、ECDSA nonce 格恢复、对称/AEAD 误用、JWT/JOSE 伪造、哈希破解、后量子迁移。信号:密码学,tls审计,rsa。"
+description: "Cryptographic assessment: TLS/PKI audit, RSA/ECC key attacks, ECDSA nonce lattice recovery, symmetric/AEAD misuse, JWT/JOSE forgery, hash cracking, post-quantum migration. Signals: cryptography, TLS audit, RSA."
+zh-signals: "密码学评估:TLS/PKI 审计、RSA/ECC 密钥攻击、ECDSA nonce 格恢复、对称/AEAD 误用、JWT/JOSE 伪造、哈希破解、后量子迁移。信号:密码学,tls审计,rsa。"
 when-to-use: Use when assessing cryptography — TLS/PKI auditing, RSA/ECC key attacks, ECDSA nonce lattice recovery, symmetric/AEAD misuse, JWT/JOSE forgery, hash cracking, post-quantum migration review
 metadata:
   type: offensive

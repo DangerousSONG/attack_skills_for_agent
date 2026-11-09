@@ -1,6 +1,7 @@
 ---
 name: java-deserialization-gadget-selector
-description: Java 反序列化利用的 gadget 版本决策表。当目标为 Java 服务（RMI/HTTP Invoker/JMX/消息队列等）且 CommonsCollections/Rhino/Groovy/BeanUtils 等组件版本未知、ysoserial 现成 gadget 打不通时，按本表用最小代价完成「版本指纹 → gadget 基座」选择，避免盲目逐版本重试。
+description: "Java deserialization gadget version decision table: for Java services (RMI, HTTP Invoker, JMX, queues) with unknown CommonsCollections/Rhino/Groovy/BeanUtils versions and failed ysoserial gadgets, choose version fingerprint to gadget base with minimal cost. Signals: Java deserialization, gadget, version fingerprint, ysoserial."
+zh-signals: "Java 反序列化利用的 gadget 版本决策表。当目标为 Java 服务（RMI/HTTP Invoker/JMX/消息队列等）且 CommonsCollections/Rhino/Groovy/BeanUtils 等组件版本未知、ysoserial 现成 gadget 打不通时，按本表用最小代价完成「版本指纹 → gadget 基座」选择，避免盲目逐版本重试。"
 when-to-use: Java 反序列化 RCE 场景；gadget 触发 ClassNotFoundException / NPE / InvalidClassException / OptionalDataException 任一报错时立即回查本表。
 ---
 

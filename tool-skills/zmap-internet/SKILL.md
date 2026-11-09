@@ -1,6 +1,7 @@
 ---
 name: zmap-internet
-description: ZMap: 互联网级快速测量。信号:端口扫描,nmap,单端口全网扫,带宽限制,目标数上限。
+description: "ZMap: Internet-scale fast measurement. Signals: port scan, nmap, single-port internet-wide scan, bandwidth limit, target count cap."
+zh-signals: "ZMap: 互联网级快速测量。信号:端口扫描,nmap,单端口全网扫,带宽限制,目标数上限。"
 ---
 
 # ZMap

@@ -1,6 +1,7 @@
 ---
 name: padbuster-padding-oracle
-description: PadBuster: Web应用漏洞利用场景。信号:web漏洞,注入,加密任意明文,cookie 模式,不 URL 编码。
+description: "Web application exploitation scenario. Signals: web vulnerability, injection, encrypt arbitrary plaintext, cookie mode, no URL encoding."
+zh-signals: "PadBuster: Web应用漏洞利用场景。信号:web漏洞,注入,加密任意明文,cookie 模式,不 URL 编码。"
 ---
 
 # PadBuster

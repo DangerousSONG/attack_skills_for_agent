@@ -1,6 +1,7 @@
 ---
 name: performing-osint-with-spiderfoot
-description: "用 SpiderFoot API/CLI 调用 200+ 模块自动化 OSINT:域名/IP/邮箱/泄露凭据/DNS 记录汇总成目标情报档案。信号:osint,spiderfoot,攻击面测绘。"
+description: "Automates OSINT with SpiderFoot API/CLI modules to build target profiles. Signals: OSINT, SpiderFoot, attack surface mapping."
+zh-signals: "用 SpiderFoot API/CLI 调用 200+ 模块自动化 OSINT:域名/IP/邮箱/泄露凭据/DNS 记录汇总成目标情报档案。信号:osint,spiderfoot,攻击面测绘。"
 when-to-use: Automate OSINT collection with the SpiderFoot REST API and CLI (sf.py/spiderfoot-cli) across 200+ modules, selecting scan modes (footprint, investigate, passive) and parsing results for domains, IPs, 
 domain: cybersecurity
 subdomain: threat-intelligence

@@ -1,6 +1,7 @@
 ---
 name: nishang-powershell
-description: Nishang: PowerShell 渗透脚本全家桶。信号:红队,方法论,加载框架,反弹,端口扫。
+description: "Nishang: PowerShell penetration toolkit. Signals: red team, methodology, load framework, reverse shell, port scan."
+zh-signals: "Nishang: PowerShell 渗透脚本全家桶。信号:红队,方法论,加载框架,反弹,端口扫。"
 ---
 
 # Nishang

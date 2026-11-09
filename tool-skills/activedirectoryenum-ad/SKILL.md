@@ -1,6 +1,7 @@
 ---
 name: activedirectoryenum-ad
-description: ActiveDirectoryEnum: AD 枚举+攻击面分析。信号:ad攻击,域渗透,BloodHound。
+description: "ActiveDirectoryEnum: performs AD enumeration and attack surface analysis. Signals: ad attack, domain pentest, BloodHound"
+zh-signals: "ActiveDirectoryEnum: AD 枚举+攻击面分析。信号:ad攻击,域渗透,BloodHound。"
 ---
 
 # ActiveDirectoryEnum

@@ -1,6 +1,7 @@
 ---
 name: ntlm-relay-coercion
-description: "NTLM relay and authentication coercion playbook 信号:ad攻击,域渗透,域控。"
+description: "NTLM relay and authentication coercion playbook. Signals: AD attack, domain penetration, domain controller."
+zh-signals: "NTLM relay and authentication coercion playbook 信号:ad攻击,域渗透,域控。"
 when-to-use: >-
   NTLM relay and authentication coercion playbook. Use when capturing and relaying NTLM authentication to escalate privileges via SMB, LDAP, HTTP, or MSSQL relay targets, combined with PetitPotam, PrinterBug, and other coercion methods.
 ---

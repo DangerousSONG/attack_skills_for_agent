@@ -1,6 +1,7 @@
 ---
 name: appmon-ios-android
-description: appmon: 移动 App 行为监控。信号:移动端,android攻击,hook 脚本目录,抓包/数据输出,字符串监控。
+description: "appmon: monitors mobile app behavior. Signals: mobile, android attack, hook script directory, packet capture/data output, string monitoring"
+zh-signals: "appmon: 移动 App 行为监控。信号:移动端,android攻击,hook 脚本目录,抓包/数据输出,字符串监控。"
 ---
 
 # appmon

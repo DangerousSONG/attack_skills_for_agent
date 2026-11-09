@@ -1,6 +1,7 @@
 ---
 name: darkarmour-obfuscate
-description: darkarmour: EDR 环境载荷投递。信号:恶意软件开发,免杀开发,AES 加密,进程注入,间接 syscall。
+description: "darkarmour: Delivers payloads in EDR environments. Signals: malware development, evasion development, AES encryption, process injection, indirect syscall."
+zh-signals: "darkarmour: EDR 环境载荷投递。信号:恶意软件开发,免杀开发,AES 加密,进程注入,间接 syscall。"
 ---
 
 # darkarmour

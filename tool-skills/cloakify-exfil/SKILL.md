@@ -1,6 +1,7 @@
 ---
 name: cloakify-exfil
-description: cloakify: 敏感数据外传演练(DLP 规避)。信号:隐写,steganography,还原,加噪音混淆统计特征。
+description: "cloakify: Simulates exfiltration of sensitive data while evading DLP. Signals: steganography, reconstruction, noise obfuscation of statistical features."
+zh-signals: "cloakify: 敏感数据外传演练(DLP 规避)。信号:隐写,steganography,还原,加噪音混淆统计特征。"
 ---
 
 # cloakify
