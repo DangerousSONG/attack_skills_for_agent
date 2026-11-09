@@ -4,11 +4,11 @@ description: 攻击侧 Skill 库的路由层。当任务涉及渗透测试任一
 when-to-use: 任何渗透任务开题时；已加载 skill 不足以解决当前障碍时回来换路由。
 ---
 
-# Attack Skill Router · 攻击 Skill 路由层（v2.3）
+# Attack Skill Router · 攻击 Skill 路由层（v2.4）
 
 ## 用途
 
-本库共 996 个攻击 skill（C01–C50）+ 15 个协议审计 skill（C51，见 `rfc-audit-skills/`）。直接全库搜索会让 Agent 面对过量同质选项（实测：反序列化主题曾一次装入 3 个重叠 skill）。
+本库共 996 个攻击 skill（C01–C50）+ 20 个协议审计 skill（C51，见 `rfc-audit-skills/`）。直接全库搜索会让 Agent 面对过量同质选项（实测：反序列化主题曾一次装入 3 个重叠 skill）。
 **本路由层把「996 选 N」压缩为「51 类选 1 类 → 每类 3-5 个 primary 选 1-3 个」**。
 
 ## 使用流程（必须按序）
@@ -76,19 +76,19 @@ when-to-use: 任何渗透任务开题时；已加载 skill 不足以解决当前
 - **C48 区块链与Web3安全**（5） 触发:区块链 / Web3安全 ; security, mev, smart → `mev-security`, `smart-contract-security`, `solana-security`, `slither-solidity-audit` ; 更多 1 个 grep 扩
 - **C49 密码学攻击**（22） 触发:密码学攻击 ; crypto, attacks, rsa → `classical-cipher-analysis`, `lattice-crypto-attacks`, `rsa-attack-techniques`, `a2sv-ssl-vuln`, `cero-tls-cert` ; 更多 17 个 grep 扩
 - **C50 红队方法论与自动化**（38） 触发:红队方法论 / 自动化 ; team, offensive, engagement → `conducting-full-scope-red-team-engagement`, `designing-adversary-engagement-with-mitre-engage`, `emulating-cloud-attacks-with-stratus-red-team`, `cloudfail-cloud-origin`, `engagement-discipline` ; 更多 33 个 grep 扩
-- **C51 协议审计与RFC合规测试**（15） 触发:协议审计 / RFC合规差分 ; rfc, quic, http3, h3, must-not → `rfc9114-content-length-data-mismatch`, `rfc9114-qpack-decoded-size-limit`, `rfc9114-pseudo-header-field-validation`, `rfc9114-settings-frame-order`, `rfc9114-goaway-drain-enforcement`, `rfc9114-server-push-frame-rejection`, `rfc9297-capsule-content-length`, `rfc9218-priority-update-validation`, `rfc9204-qpack-dynamic-table-capacity`, `rfc9000-handshake-done-timing`, `rfc9000-flow-control-accounting`, `rfc9000-connection-id-retirement`, `rfc9000-path-validation-amplification`, `rfc9000-stateless-reset-token`, `rfc9368-version-negotiation-validation` ; 审计层位于 `rfc-audit-skills/`，15 个超过常规「3-5 primary」惯例，按协议族子组选用，见下节
+- **C51 协议审计与RFC合规测试**（20） 触发:协议审计 / RFC合规差分 ; rfc, quic, http3, h3, must-not → `rfc9114-content-length-data-mismatch`, `rfc9114-qpack-decoded-size-limit`, `rfc9114-pseudo-header-field-validation`, `rfc9114-settings-frame-order`, `rfc9114-goaway-drain-enforcement`, `rfc9114-server-push-frame-rejection`, `rfc9114-trailers-frame-sequence`, `rfc9297-capsule-content-length`, `rfc9218-priority-update-validation`, `rfc9204-qpack-dynamic-table-capacity`, `rfc9000-handshake-done-timing`, `rfc9000-flow-control-accounting`, `rfc9000-connection-id-retirement`, `rfc9000-path-validation-amplification`, `rfc9000-stateless-reset-token`, `rfc9368-version-negotiation-validation`, `rfc9000-ack-range-validation`, `rfc9000-transport-parameter-validation`, `rfc9001-retry-integrity-tag`, `rfc9000-new-token-replay` ; 审计层位于 `rfc-audit-skills/`，20 个超过常规「3-5 primary」惯例，按协议族子组选用，见下节
 
 ## 协议审计层两级路由（C51 · rfc-audit-skills/）
 
 C51 与 C01–C50 调度顺序不同——**先审计层（往哪打）、后攻击层（怎么打）**：
 
-1. 目标暴露 HTTP/3 / QUIC / HTTP/2 等服务时，从 C51 十五个 primary 中选贴切的 RFC Skill 加载，按其「违规判定条件」做定向差分审计；
-2. C51 按协议族分四个子组选用（15 个超过常规 3-5 primary 惯例，属类别内子组）：**H3 消息层**（content-length-data-mismatch / pseudo-header-field-validation / settings-frame-order / goaway-drain-enforcement / server-push-frame-rejection）、**H3 压缩层**（qpack-decoded-size-limit / qpack-dynamic-table-capacity）、**H3 扩展层**（capsule-content-length / priority-update-validation）、**QUIC 传输层**（handshake-done-timing / flow-control-accounting / connection-id-retirement / path-validation-amplification / stateless-reset-token / version-negotiation-validation）；
+1. 目标暴露 HTTP/3 / QUIC / HTTP/2 等服务时，从 C51 二十个 primary 中选贴切的 RFC Skill 加载，按其「违规判定条件」做定向差分审计；
+2. C51 按协议族分四个子组选用（20 个超过常规 3-5 primary 惯例，属类别内子组）：**H3 消息层**（content-length-data-mismatch / pseudo-header-field-validation / settings-frame-order / goaway-drain-enforcement / server-push-frame-rejection / trailers-frame-sequence）、**H3 压缩层**（qpack-decoded-size-limit / qpack-dynamic-table-capacity）、**H3 扩展层**（capsule-content-length / priority-update-validation）、**QUIC 传输层**（handshake-done-timing / flow-control-accounting / connection-id-retirement / path-validation-amplification / stateless-reset-token / version-negotiation-validation / ack-range-validation / transport-parameter-validation / retry-integrity-tag / new-token-replay）；
 3. 命中约束违背点（疑似漏洞 + 攻击面猜想）后，按该 Skill 第 6 字段落到本库既有 slug：`smuggler-desync` / `http2smugl-desync` / `h2csmuggler-http2`（走私利用）、`fuzzowski-network-fuzz` / `grammarinator-gen-fuzz` / `tlsfuzzer-fuzz` / `dharma-grammar-fuzz`（协议 fuzz）、`slowhttptest-dos`（DoS 验证）；
 4. 验证结论回流共享状态：确认 → 证据沉淀；排除 → 标记误报不再重测。
 
 ## 附
 
-- primary 总数：197（C01–C50，磁盘总量 996，二级子类见 reference.md，其余按需 grep，不主动加载）+ 15（C51 协议审计层，位于 rfc-audit-skills/http3/，不在 996 磁盘计数内）
+- primary 总数：197（C01–C50，磁盘总量 996，二级子类见 reference.md，其余按需 grep，不主动加载）+ 20（C51 协议审计层，位于 rfc-audit-skills/http3/，不在 996 磁盘计数内）
 - 维护：新增/删除 skill 后重跑 `python attack-skill-router/gen_router.py`（直扫仓库 + INDEX.md，无需 CSV）；类别内排名按「方法论仓库优先级 + 工具名字序」，FORCE_PRIMARY 名单见脚本
 - 配套文件：reference.md（本脚本生成的展开层）、MERGES.md（重叠团合并裁决记录，已完成人工裁决 13 并 / 7 不并，非本脚本生成）
