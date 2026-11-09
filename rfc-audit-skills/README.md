@@ -59,7 +59,7 @@ flowchart TD
 
 ## 试点交付进度
 
-HTTP/3 试点 25 个已全部交付（5 批 × 5 个，分支 rfc-audit-skills）；HTTP/2 + HPACK 第二条 P0 线已启动（目标约 20 个，第 1 批 5 个已交付，目录 `http2/`）：
+HTTP/3 试点 25 个已全部交付（5 批 × 5 个，分支 rfc-audit-skills）；HTTP/2 + HPACK 第二条 P0 线推进中（目标约 20 个，第 1 批、第 2 批各 5 个已交付，目录 `http2/`）：
 
 | 批次 | 数量 | 覆盖 |
 |---|---|---|
@@ -69,8 +69,9 @@ HTTP/3 试点 25 个已全部交付（5 批 × 5 个，分支 rfc-audit-skills�
 | H3 第 4 批 | 5 | QUIC 传输深化（ACK 范围/乐观确认、传输参数、Retry 完整性、NEW_TOKEN 重放、trailer 帧序列） |
 | H3 第 5 批 | 5 | 迁移与关闭态（迁移拥塞窗/反放大、closing/draining 帧义务、流重置成本对称/H3 Rapid Reset、0-RTT 反重放、GREASE 容忍双向精确性） |
 | H2 第 1 批 | 5 | H2 消息层与 HPACK 核心（CONTINUATION 限长执行 CVE-2024-27316、CL/DATA 降级走私 CVE-2021-21295、SETTINGS 洪泛 CVE-2020-11080、Rapid Reset 原版 CVE-2023-44487、HPACK 动态表容量时序 #1660） |
+| H2 第 2 批 | 5 | H2 洪泛与终止生命周期（HPACK 解码有界性 CVE-2026-59248/TOB:JETTY-1/h2o#3602、PRIORITY 树资源循环 CVE-2019-9513、PING/空帧洪水与 0 长度头泄漏 CVE-2019-9512/9518/9516、h2c 升级隧道走私 CVE-2026-88008/88011/73548、GOAWAY draining 竞态 CVE-2026-12611 + nginx 优雅关闭实证） |
 
-登记：多维表格「RFC审计规则清单（主表 · 随批次追加）」30 条在册；Router C51 按六子组（H3 消息层 7 / H3 压缩层 2 / H3 扩展层 2 / QUIC 传输层 14 / H2 消息层 4 / H2 压缩层 1）两级路由。
+登记：多维表格「RFC审计规则清单（主表 · 随批次追加 · 当前35个）」35 条在册；Router C51 按六子组（H3 消息层 7 / H3 压缩层 2 / H3 扩展层 2 / QUIC 传输层 14 / H2 消息层 8 / H2 压缩层 2）两级路由。
 
 ## License
 
