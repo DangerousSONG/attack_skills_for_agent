@@ -173,8 +173,9 @@ Top 12：C09 Web应用漏洞利用 171 · C01 资产测绘与指纹识别 62 · 
 
 ## TODO
 ### 1. main分支更新路由表
-
-
+### 2. skill格式统一
+### 3. SKILL.md description 全英文统一（when-to-use / 检索一致性）
+### 4. 所有的skills（包括攻击skills、rfc skills）所涉及到的cve漏洞编号，都要写到对应skill的描述中 -- 这个我记下来，最后一起改？
 
 
 
