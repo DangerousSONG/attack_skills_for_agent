@@ -21,6 +21,7 @@
 | `pentest-ai-agents/` | 攻击 skill 源目录 |
 | `yak-skills/` | 攻击 skill 源目录 |
 | `tool-skills/` | 攻击 skill 源目录（1000 skills 主力目录） |
+| `extra-skill/` | 外部安全 skill 导入目录（1216 个，cfdba5f 起） |
 | `INDEX.md` | 全库索引（由底座变更驱动重生成） |
 | `攻击侧Skills清单.csv` | 清单数据 |
 
@@ -31,12 +32,12 @@
 | `attack-skill-router/` | router 方案（static-router / rfc-audit-skills / song_1030 各自演进） |
 | `rfc-audit-skills/` | RFC 审计规则层方案 |
 | `engagement-discipline/`、`java-deserialization-gadget-selector/` | meta/注册层 skill（flat-skills 方案明确移除，属方案层决策） |
-| `README.md`、方案文档（SKILL-PLAN / SKILL-SOLUTION / DESIGN 等） | 各分支自己的说明 |
-| `scripts/` | 方案配套脚本 |
+| `README.md`、`SKILL-PLAN.md`、`SKILL-RESEARCH.md`、`SKILL-SOLUTION.md`、`CONTRIBUTING.md` | main 上的流程/规划文档；方案分支可自带自己的版本 |
+| `scripts/` | 配套脚本（main 演进，方案分支不强制跟随） |
 
 ## 二、铁律
 
-1. **底座唯一写入口是 main**。任何人（含方案分支开发中）要新增/修改/删除攻击 skill，一律先提交到 main，再同步回方案分支；**禁止直接在方案分支改底座路径**。
+1. **底座唯一写入口是 main**。任何人（含方案分支开发中）要新增/修改/删除攻击 skill，一律先提交到 main（**入库流程按 [CONTRIBUTING.md](CONTRIBUTING.md)：regenerate_index → gen_router → export_csv 级联 + govern/eval 门禁全零**），再同步回方案分支；**禁止直接在方案分支改底座路径**。
 2. **方案分支只做 merge，不做底座改写**。方案分支与 main 的合并冲突中，凡涉及底座路径，一律 `git checkout --ours origin/main` 取 main 版本，再把改动重做到 main 上。
 3. **INDEX.md / 清单 CSV 跟随底座**。底座变更后重生成索引，与底座同 commit 进 main。
 4. **方案层互不同步**。router 的改动不进入 flat-skills，rag 的文档不进入 rfc-audit-skills——除非方案主动 merge 对方（不推荐）。

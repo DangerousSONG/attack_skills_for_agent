@@ -19,6 +19,7 @@ on:
       - 'pentest-ai-agents/**'
       - 'yak-skills/**'
       - 'tool-skills/**'
+      - 'extra-skill/**'
       - 'INDEX.md'
       - '攻击侧Skills清单.csv'
       - 'SYNC-RULES.md'
