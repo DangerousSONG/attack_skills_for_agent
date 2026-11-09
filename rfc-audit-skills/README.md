@@ -57,6 +57,20 @@ flowchart TD
 3. **第 3 步（4 周）**：按 P0 → P1 → P2 铺量，路由层同步新增「协议审计」类目
 4. **第 4 步**：挂入 range 评测端到端验证，对比"有 / 无审计规则层"的打点效率
 
+## 试点交付进度
+
+HTTP/3 试点 25 个已全部交付（5 批 × 5 个，分支 rfc-audit-skills）：
+
+| 批次 | 数量 | 覆盖 |
+|---|---|---|
+| 第 1 批 | 5 | H3 消息层基础约束（CL/DATA 一致性、QPACK 解码限长、伪头校验、SETTINGS 时序、GOAWAY 排水） |
+| 第 2 批 | 5 | H3 压缩/扩展层（QPACK 动态表容量、Capsule、优先级、Server-Push 拒绝、版本协商） |
+| 第 3 批 | 5 | QUIC 传输核心（流控记账、CID 生命周期、HANDSHAKE_DONE、路径验证反放大、无状态重置令牌） |
+| 第 4 批 | 5 | QUIC 传输深化（ACK 范围/乐观确认、传输参数、Retry 完整性、NEW_TOKEN 重放、trailer 帧序列） |
+| 第 5 批 | 5 | 迁移与关闭态（迁移拥塞窗/反放大、closing/draining 帧义务、流重置成本对称/H3 Rapid Reset、0-RTT 反重放、GREASE 容忍双向精确性） |
+
+登记：多维表格「RFC审计规则清单（主表 · 随批次追加）」25 条在册；Router C51 按四子组（H3 消息层 7 / 压缩层 2 / 扩展层 2 / QUIC 传输层 14）两级路由。
+
 ## License
 
 Apache-2.0，与 attack_skills_for_agent 全库同口径。约束条款原文引用遵循 RFC 版权规则（IETF Trust License，允许合理引用与演绎）；历史 CVE 模式描述为事实性内容，与 NVD 公开信息对齐。
