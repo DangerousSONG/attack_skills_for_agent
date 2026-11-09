@@ -59,17 +59,18 @@ flowchart TD
 
 ## 试点交付进度
 
-HTTP/3 试点 25 个已全部交付（5 批 × 5 个，分支 rfc-audit-skills）：
+HTTP/3 试点 25 个已全部交付（5 批 × 5 个，分支 rfc-audit-skills）；HTTP/2 + HPACK 第二条 P0 线已启动（目标约 20 个，第 1 批 5 个已交付，目录 `http2/`）：
 
 | 批次 | 数量 | 覆盖 |
 |---|---|---|
-| 第 1 批 | 5 | H3 消息层基础约束（CL/DATA 一致性、QPACK 解码限长、伪头校验、SETTINGS 时序、GOAWAY 排水） |
-| 第 2 批 | 5 | H3 压缩/扩展层（QPACK 动态表容量、Capsule、优先级、Server-Push 拒绝、版本协商） |
-| 第 3 批 | 5 | QUIC 传输核心（流控记账、CID 生命周期、HANDSHAKE_DONE、路径验证反放大、无状态重置令牌） |
-| 第 4 批 | 5 | QUIC 传输深化（ACK 范围/乐观确认、传输参数、Retry 完整性、NEW_TOKEN 重放、trailer 帧序列） |
-| 第 5 批 | 5 | 迁移与关闭态（迁移拥塞窗/反放大、closing/draining 帧义务、流重置成本对称/H3 Rapid Reset、0-RTT 反重放、GREASE 容忍双向精确性） |
+| H3 第 1 批 | 5 | H3 消息层基础约束（CL/DATA 一致性、QPACK 解码限长、伪头校验、SETTINGS 时序、GOAWAY 排水） |
+| H3 第 2 批 | 5 | H3 压缩/扩展层（QPACK 动态表容量、Capsule、优先级、Server-Push 拒绝、版本协商） |
+| H3 第 3 批 | 5 | QUIC 传输核心（流控记账、CID 生命周期、HANDSHAKE_DONE、路径验证反放大、无状态重置令牌） |
+| H3 第 4 批 | 5 | QUIC 传输深化（ACK 范围/乐观确认、传输参数、Retry 完整性、NEW_TOKEN 重放、trailer 帧序列） |
+| H3 第 5 批 | 5 | 迁移与关闭态（迁移拥塞窗/反放大、closing/draining 帧义务、流重置成本对称/H3 Rapid Reset、0-RTT 反重放、GREASE 容忍双向精确性） |
+| H2 第 1 批 | 5 | H2 消息层与 HPACK 核心（CONTINUATION 限长执行 CVE-2024-27316、CL/DATA 降级走私 CVE-2021-21295、SETTINGS 洪泛 CVE-2020-11080、Rapid Reset 原版 CVE-2023-44487、HPACK 动态表容量时序 #1660） |
 
-登记：多维表格「RFC审计规则清单（主表 · 随批次追加）」25 条在册；Router C51 按四子组（H3 消息层 7 / 压缩层 2 / 扩展层 2 / QUIC 传输层 14）两级路由。
+登记：多维表格「RFC审计规则清单（主表 · 随批次追加）」30 条在册；Router C51 按六子组（H3 消息层 7 / H3 压缩层 2 / H3 扩展层 2 / QUIC 传输层 14 / H2 消息层 4 / H2 压缩层 1）两级路由。
 
 ## License
 
