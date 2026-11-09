@@ -1,6 +1,6 @@
 ---
 name: rfc9001-retry-integrity-tag
-description: 审计 QUIC 实现对 Retry 包完整性与令牌生命周期的处理是否按 RFC 9000 §8.1.4/§17.2.5 与 RFC 9001 §5.8——完整性标签未验证、令牌可重放、多 Retry 循环未防护即握手前无认证攻击面
+description: 审计 QUIC 实现对 Retry 包完整性与令牌生命周期的处理是否按 RFC 9000 §8.1.4/§17.2.5 与 RFC 9001 §5.8——完整性标签未验证、令牌可重放、多 Retry 循环未防护即握手前无认证攻击面（盲区条款；warpsock 补齐 §17.2.5.1/§17.2.5.2 loop guards 实证）
 rfc: RFC 9000 §8.1.4（令牌完整性）/ §17.2.5（Retry 包）/ RFC 9001 §5.8（Retry Integrity Tag）
 license: Apache-2.0
 ---

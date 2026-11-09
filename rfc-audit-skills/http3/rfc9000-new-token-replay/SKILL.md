@@ -1,6 +1,6 @@
 ---
 name: rfc9000-new-token-replay
-description: 审计 QUIC 实现对 NEW_TOKEN 帧与令牌跨连接重放的防护是否按 RFC 9000 §19.7/§8.1.4——令牌单用约束、IP 绑定 MUST、重放未限即地址验证体系被绕过
+description: 审计 QUIC 实现对 NEW_TOKEN 帧与令牌跨连接重放的防护是否按 RFC 9000 §19.7/§8.1.4——令牌单用约束、IP 绑定 MUST、重放未限即地址验证体系被绕过（盲区条款；格式自定 + MUST 分散的高 variance 面）
 rfc: RFC 9000 §19.7（NEW_TOKEN 帧）/ §8.1.4（地址验证令牌完整性）
 license: Apache-2.0
 ---

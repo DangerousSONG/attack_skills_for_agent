@@ -1,6 +1,6 @@
 ---
 name: rfc9114-pseudo-header-field-validation
-description: 审计 HTTP/3 目标对畸形伪头/字段的处理是否严格按 RFC 9114 §4.1.2/§4.2/§4.3 判 malformed——宽容处理即存在解析分裂与 H3→H1 走私攻击面
+description: 审计 HTTP/3 目标对畸形伪头/字段的处理是否严格按 RFC 9114 §4.1.2/§4.2/§4.3 判 malformed——宽容处理即存在解析分裂与 H3→H1 走私攻击面（关联 nginx#1043 未修复；H2 历史模式复刻）
 rfc: RFC 9114 §4.1.2 / §4.2 / §4.3 / §10.3
 license: Apache-2.0
 ---

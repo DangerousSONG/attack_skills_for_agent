@@ -1,6 +1,6 @@
 ---
 name: rfc9000-connection-id-retirement
-description: 审计 QUIC 实现对 Connection ID 生命周期（NEW_CONNECTION_ID / RETIRE_CONNECTION_ID / active_connection_id_limit）义务的处理是否对称——义务不对称即存在内存耗尽攻击面
+description: 审计 QUIC 实现对 Connection ID 生命周期（NEW_CONNECTION_ID / RETIRE_CONNECTION_ID / active_connection_id_limit）义务的处理是否对称——义务不对称即存在内存耗尽攻击面（关联 CVE-2024-22189，7.5 HIGH）
 rfc: RFC 9000 §5.1（Connection IDs）/ §19（Frame 处理规则）
 license: Apache-2.0
 ---

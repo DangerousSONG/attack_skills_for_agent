@@ -1,6 +1,6 @@
 ---
 name: rfc9114-settings-frame-order
-description: 审计 HTTP/3 实现对 SETTINGS 帧严格性是否按 RFC 9114 §7.2.1——SETTINGS 必须是每个 control stream 的第一帧，重复 SETTINGS 必须按 H3_FRAME_UNEXPECTED 连接错误处理
+description: 审计 HTTP/3 实现对 SETTINGS 帧严格性是否按 RFC 9114 §7.2.1——SETTINGS 必须是每个 control stream 的第一帧，重复 SETTINGS 必须按 H3_FRAME_UNEXPECTED 连接错误处理（盲区条款，暂无公开 CVE）
 rfc: RFC 9114 §7.2.1（SETTINGS 帧）
 license: Apache-2.0
 ---

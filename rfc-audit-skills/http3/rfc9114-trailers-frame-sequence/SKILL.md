@@ -1,6 +1,6 @@
 ---
 name: rfc9114-trailers-frame-sequence
-description: 审计 HTTP/3 实现对 trailer 与多 HEADERS 帧序列的处理是否按 RFC 9114 §4.1/§4.2——trailing HEADERS 后的 DATA 即连接错误、trailer 与 Content-Length 一致性、重复响应头区块缺失校验即 H3 层消息走私面
+description: 审计 HTTP/3 实现对 trailer 与多 HEADERS 帧序列的处理是否按 RFC 9114 §4.1/§4.2——trailing HEADERS 后的 DATA 即连接错误、trailer 与 Content-Length 一致性、重复响应头区块缺失校验即 H3 层消息走私面（盲区条款；nginx#1043 同生态；H2 trailer/CL 历史走私模式复刻）
 rfc: RFC 9114 §4.1（HTTP 消息分帧）/ §4.2（请求/响应语义）/ RFC 9110 §8.6（Content-Length 与 trailer 一致性）
 license: Apache-2.0
 ---

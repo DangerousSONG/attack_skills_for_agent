@@ -1,6 +1,6 @@
 ---
 name: rfc9218-priority-update-validation
-description: 审计 HTTP/3 实现对 PRIORITY_UPDATE 帧（RFC 9218 §7.2）的校验是否完备——帧位置、目标流类型、越限流 ID、推送流引用、优先级字段值解析错误即连接错误处理义务缺失
+description: 审计 HTTP/3 实现对 PRIORITY_UPDATE 帧（RFC 9218 §7.2）的校验是否完备——帧位置、目标流类型、越限流 ID、推送流引用、优先级字段值解析错误即连接错误处理义务缺失（盲区条款；erlang_quic Strict PRIORITY_UPDATE parsing 修复实证）
 rfc: RFC 9218 §7（PRIORITY_UPDATE 帧）/ §4（urgency 与 incremental 参数）
 license: Apache-2.0
 ---

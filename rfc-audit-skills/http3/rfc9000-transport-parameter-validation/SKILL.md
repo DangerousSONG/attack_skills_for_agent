@@ -1,6 +1,6 @@
 ---
 name: rfc9000-transport-parameter-validation
-description: 审计 QUIC 实现对传输参数完整性与一致性校验是否按 RFC 9000 §18.2/§7.3——CID 相关参数缺失/错配、服务端专用参数被客户端携带、非法值未拒绝即握手前无认证攻击面与中间人注入 CID 面
+description: 审计 QUIC 实现对传输参数完整性与一致性校验是否按 RFC 9000 §18.2/§7.3——CID 相关参数缺失/错配、服务端专用参数被客户端携带、非法值未拒绝即握手前无认证攻击面与中间人注入 CID 面（盲区条款；CVE-2025-54939 lsquic QUIC-LEAK 同路径实证）
 rfc: RFC 9000 §18.2（Transport Parameter 定义）/ §7.3（使用 CID 参数的验证义务）
 license: Apache-2.0
 ---

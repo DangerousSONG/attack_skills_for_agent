@@ -1,6 +1,6 @@
 ---
 name: rfc9114-goaway-drain-enforcement
-description: 审计 HTTP/3 实现对 GOAWAY 优雅关闭语义是否严格按 RFC 9114 §5.2/§7.2.6——标识符单调性、收帧后拒新请求、无 GOAWAY 关闭的默认假设错误即连接生命周期与请求完整性漏洞
+description: 审计 HTTP/3 实现对 GOAWAY 优雅关闭语义是否严格按 RFC 9114 §5.2/§7.2.6——标识符单调性、收帧后拒新请求、无 GOAWAY 关闭的默认假设错误即连接生命周期与请求完整性漏洞（实证：quiche#2700、quic-go#5326、erlang_quic 1.0.0 修复；无独立 CVE）
 rfc: RFC 9114 §5.2（Connection Shutdown）/ §7.2.6（GOAWAY 帧）
 license: Apache-2.0
 ---

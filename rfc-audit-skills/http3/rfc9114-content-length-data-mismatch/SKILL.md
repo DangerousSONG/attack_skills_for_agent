@@ -1,6 +1,6 @@
 ---
 name: rfc9114-content-length-data-mismatch
-description: 审计 HTTP/3 目标是否违反 RFC 9114 §4.1.2 —— Content-Length 值必须等于收到的 DATA 帧长度之和；违规且被转发即存在 H3→H1 请求走私攻击面
+description: 审计 HTTP/3 目标是否违反 RFC 9114 §4.1.2 —— Content-Length 值必须等于收到的 DATA 帧长度之和；违规且被转发即存在 H3→H1 请求走私攻击面（关联 CVE-2026-33555 HAProxy）
 rfc: RFC 9114 §4.1.2
 license: Apache-2.0
 ---

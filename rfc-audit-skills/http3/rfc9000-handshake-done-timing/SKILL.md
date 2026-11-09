@@ -1,6 +1,6 @@
 ---
 name: rfc9000-handshake-done-timing
-description: 审计 QUIC 服务端对 HANDSHAKE_DONE 帧的发送时机与接收处理是否严格按 RFC 9000 §19.20 与 RFC 9001 §4.9.2——时序与密钥丢弃顺序错误可被恶意服务端/对端触发断言崩溃
+description: 审计 QUIC 服务端对 HANDSHAKE_DONE 帧的发送时机与接收处理是否严格按 RFC 9000 §19.20 与 RFC 9001 §4.9.2——时序与密钥丢弃顺序错误可被恶意服务端/对端触发断言崩溃（关联 CVE-2025-59530 quic-go，野外已观测）
 rfc: RFC 9000 §19.20（HANDSHAKE_DONE）/ RFC 9001 §4.9.2（密钥丢弃）
 license: Apache-2.0
 ---

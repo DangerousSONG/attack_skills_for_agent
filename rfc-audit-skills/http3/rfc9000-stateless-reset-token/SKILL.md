@@ -1,6 +1,6 @@
 ---
 name: rfc9000-stateless-reset-token
-description: 审计 QUIC 实现的无状态重置令牌生成、保密性与碰撞处理是否按 RFC 9000 §10.3/§21.11——令牌可推导/泄露/复用即连接被远程掐断，Stateless Reset Oracle 配置面即放大器
+description: 审计 QUIC 实现的无状态重置令牌生成、保密性与碰撞处理是否按 RFC 9000 §10.3/§21.11——令牌可推导/泄露/复用即连接被远程掐断，Stateless Reset Oracle 配置面即放大器（关联 CVE-2026-50009 Netty < 4.2.15.Final；xquic/Quicly fuzz 实证）
 rfc: RFC 9000 §10.3（Stateless Reset）/ §21.11（无状态重置 DoS 考量）
 license: Apache-2.0
 ---

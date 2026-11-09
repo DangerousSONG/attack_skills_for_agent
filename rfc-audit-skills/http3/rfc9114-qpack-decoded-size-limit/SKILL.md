@@ -1,6 +1,6 @@
 ---
 name: rfc9114-qpack-decoded-size-limit
-description: 审计 HTTP/3 目标是否只对 QPACK 压缩后帧长限长、而未对解压后字段区块限长——未限长即存在压缩放大内存耗尽攻击面（单连接可达数千倍放大）
+description: 审计 HTTP/3 目标是否只对 QPACK 压缩后帧长限长、而未对解压后字段区块限长——未限长即存在压缩放大内存耗尽攻击面（单连接可达数千倍放大；关联 CVE-2025-64702/CVE-2026-40898 quic-go、CVE-2026-12523 quiche、CVE-2025-13945 Wireshark）
 rfc: RFC 9114 §4.1.1 + RFC 9204（QPACK）
 license: Apache-2.0
 ---

@@ -1,6 +1,6 @@
 ---
 name: rfc9114-server-push-frame-rejection
-description: 审计 HTTP/3 客户端/服务端是否严格拒绝服务端推送遗留帧——PUSH_PROMISE 与 MAX_PUSH_ID 收到必须按 H3_FRAME_UNEXPECTED 终止连接（RFC 9114 §7.2.5/§7.2.7），静默吞掉即协议错误义务缺失
+description: 审计 HTTP/3 客户端/服务端是否严格拒绝服务端推送遗留帧——PUSH_PROMISE 与 MAX_PUSH_ID 收到必须按 H3_FRAME_UNEXPECTED 终止连接（RFC 9114 §7.2.5/§7.2.7），静默吞掉即协议错误义务缺失（实证：quic-go#5686，v0.60.0 同函数内不一致处理）
 rfc: RFC 9114 §7.2.5（PUSH_PROMISE）/ §7.2.7（MAX_PUSH_ID）/ §4.6（Server Push）
 license: Apache-2.0
 ---

@@ -1,6 +1,6 @@
 ---
 name: rfc9000-path-validation-amplification
-description: 审计 QUIC 实现对路径验证与反放大限制的强制执行是否按 RFC 9000 §8.1/§8.2.1/§9——PATH_CHALLENGE/PATH_RESPONSE 义务缺失或反放大限制未强制即未认证 DoS 放大原语
+description: 审计 QUIC 实现对路径验证与反放大限制的强制执行是否按 RFC 9000 §8.1/§8.2.1/§9——PATH_CHALLENGE/PATH_RESPONSE 义务缺失或反放大限制未强制即未认证 DoS 放大原语（关联 CVE-2023-49295 quic-go，HIGH）
 rfc: RFC 9000 §8.1（地址验证与反放大）/ §8.2.1（PATH_CHALLENGE/PATH_RESPONSE）/ §9（NAT 重绑定）
 license: Apache-2.0
 ---

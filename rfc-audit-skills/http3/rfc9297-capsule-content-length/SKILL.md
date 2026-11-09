@@ -1,6 +1,6 @@
 ---
 name: rfc9297-capsule-content-length
-description: 审计 HTTP Datagrams / Capsule Protocol 实现是否严格按 RFC 9297 §3.2/§3.3/§3.5——capsule 与 Content-Length 等头共存、截断 capsule、未知 capsule 类型处理错误即 HTTP 走私同族攻击面
+description: 审计 HTTP Datagrams / Capsule Protocol 实现是否严格按 RFC 9297 §3.2/§3.3/§3.5——capsule 与 Content-Length 等头共存、截断 capsule、未知 capsule 类型处理错误即 HTTP 走私同族攻击面（同族：分享会未公开走私案例、CVE-2025-64702 模式）
 rfc: RFC 9297 §2（HTTP Datagrams）/ §3.2（与 Content-Length 等头的互斥）/ §3.3（capsule 解析）/ §3.5（未知类型与中介行为）
 license: Apache-2.0
 ---

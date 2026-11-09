@@ -1,6 +1,6 @@
 ---
 name: rfc9368-version-negotiation-validation
-description: 审计 QUIC 实现对版本协商与降级防护是否按 RFC 8999 §6 与 RFC 9368 §4——Version Negotiation 包不变量、Version Information 校验全套 MUST 缺失即版本降级与解析崩溃攻击面
+description: 审计 QUIC 实现对版本协商与降级防护是否按 RFC 8999 §6 与 RFC 9368 §4——Version Negotiation 包不变量、Version Information 校验全套 MUST 缺失即版本降级与解析崩溃攻击面（实证：QUIC-FUZZ xquic VN 事件崩溃；CVE-2024-45396 Quicly 同类模式）
 rfc: RFC 8999 §6（Version Negotiation 包不变量）/ RFC 9368 §4（Version Downgrade Prevention）/ RFC 9369 §3（v2 义务）
 license: Apache-2.0
 ---

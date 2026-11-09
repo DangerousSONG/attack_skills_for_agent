@@ -1,6 +1,6 @@
 ---
 name: rfc9000-ack-range-validation
-description: 审计 QUIC 实现对 ACK 帧确认范围的校验是否按 RFC 9000 §13.1/§21.4——确认未发送的包、ACK 范围畸形、乐观确认（Optimistic ACK）未检测即拥塞控制被欺骗的 DDoS 放大原语
+description: 审计 QUIC 实现对 ACK 帧确认范围的校验是否按 RFC 9000 §13.1/§21.4——确认未发送的包、ACK 范围畸形、乐观确认（Optimistic ACK）未检测即拥塞控制被欺骗的 DDoS 放大原语（关联 CVE-2025-4820/CVE-2025-4821 quiche < 0.24.4；ANRW 2025：16 个 Interop 实现中 11 个脆弱）
 rfc: RFC 9000 §13.1 / §21.4（ACK 处理与乐观确认攻击）/ RFC 9002 §6（拥塞控制信号）
 license: Apache-2.0
 ---

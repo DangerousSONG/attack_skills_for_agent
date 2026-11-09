@@ -1,6 +1,6 @@
 ---
 name: rfc9000-flow-control-accounting
-description: 审计 QUIC 实现对流级/连接级流量控制的记账与上限处理是否严格按 RFC 9000 §4——记账错误即存在内存耗尽或整数回绕攻击面
+description: 审计 QUIC 实现对流级/连接级流量控制的记账与上限处理是否严格按 RFC 9000 §4——记账错误即存在内存耗尽或整数回绕攻击面（关联 CVE-2024-22189、CVE-2023-49295）
 rfc: RFC 9000 §4（Flow Control）/ §2.1（整数编码与算术）
 license: Apache-2.0
 ---
