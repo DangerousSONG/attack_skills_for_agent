@@ -46,6 +46,6 @@ H3→H1 转换型代理在 body 长度校验上的任何宽容，都会把"前�
 
 ## 6. 对接的攻击 Skill
 
-- 方法论：技能层 Web 应用大类「请求走私 / HTTP Desync」方法论 Skill（由 Router 层映射具体 slug）
-- 工具：h3i、aioquic（构造差分帧）、curl --http3（对照组）、Burp 类重放工具（注册表 Web 应用大类）
+- 技能层（怎么打）：`smuggler-desync`（走私探测与利用）、`http2smugl-desync`（H2/H3 desync 变体；均在 tool-skills/）
+- 工具层（用什么打）：h3i、aioquic（构造差分帧）、curl --http3（对照组）、Burp 类重放工具（注册表 Web 应用大类 272 个）
 - 命中后动作：走私确认探针（访问仅后端可达的路径）→ 升级为缓存投毒/会话劫持利用链

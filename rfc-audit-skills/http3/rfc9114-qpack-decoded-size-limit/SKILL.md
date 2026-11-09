@@ -47,6 +47,6 @@ RFC 9204（QPACK）：动态表使小压缩载荷可解码出大量大字段—�
 
 ## 6. 对接的攻击 Skill
 
-- 方法论：技能层「拒绝服务 / 资源耗尽」与「协议 fuzz」方法论 Skill（Router 映射 slug）
-- 工具：h3i、foxio QPACK PoC（2026-10 已公开）、aioquic
+- 技能层（怎么打）：`fuzzowski-network-fuzz`（协议 fuzz 框架）、`slowhttptest-dos`（DoS 验证思路；均在 tool-skills/）
+- 工具层（用什么打）：h3i、foxio QPACK PoC（2026-10 已公开）、aioquic
 - 命中后动作：按依赖链上报（库 → 下游产品 Caddy/Traefik/cloudflared/LiteSpeed），输出放大倍数与影响面评估

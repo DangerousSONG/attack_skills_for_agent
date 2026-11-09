@@ -16,7 +16,7 @@
 - ✅ 判定条件全部可程序化（探测编号 + 观测指标）
 - ✅ 每条标注了对照实现（差分基线）与误报排除规则
 - ✅ 均未包含攻击代码，只含判定规则与导航（攻击动作交给技能层 + 工具层）
-- ⏳ 定稿待办：由 Router 层把「对接的攻击 Skill」字段映射为库内具体 slug（当前写的是大类指引）
+- ✅ 已接通：5 个 Skill 的「对接的攻击 Skill」已映射库内真实 slug（`smuggler-desync` / `http2smugl-desync` / `fuzzowski-network-fuzz` / `slowhttptest-dos` / `grammarinator-gen-fuzz`）；Router 层新增 **C51 协议审计与RFC合规测试** 类目（两级路由：先审计层命中约束 → 后攻击层执行验证）
 
 ## 下一步（第 2 批候选）
 

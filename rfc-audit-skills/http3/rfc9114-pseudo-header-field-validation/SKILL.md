@@ -56,6 +56,6 @@ RFC 原文强调这些要求"deliberately strict because being permissive can ex
 
 ## 6. 对接的攻击 Skill
 
-- 方法论：技能层「请求走私 / HTTP Desync」+「Web 应用漏洞利用」大类（Router 映射 slug）
-- 工具：h3i（逐字段构造主力）、aioquic
+- 技能层（怎么打）：`smuggler-desync`、`http2smugl-desync`（走私原语组合利用；均在 tool-skills/）
+- 工具层（用什么打）：h3i（逐字段构造主力）、aioquic
 - 命中后动作：把每项违规标记为走私原语，组合 PH-x 分歧做端到端走私验证

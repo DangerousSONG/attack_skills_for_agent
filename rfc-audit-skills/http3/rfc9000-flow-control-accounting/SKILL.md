@@ -49,6 +49,6 @@ RFC 9000 §2.1：协议中的整数字段为 62 位（varint），实现做算�
 
 ## 6. 对接的攻击 Skill
 
-- 方法论：技能层「协议 fuzz / 状态机差分」方法论 Skill（Router 映射 slug）
-- 工具：aioquic（帧级控制）、quic-go 调试客户端、自研帧时序脚本
+- 技能层（怎么打）：`fuzzowski-network-fuzz`（协议状态机 fuzz）、`grammarinator-gen-fuzz`（自定义 QUIC 帧语法生成；均在 tool-skills/）
+- 工具层（用什么打）：aioquic（帧级控制）、quic-go 调试客户端、自研帧时序脚本
 - 命中后动作：最小化复现序列 → 按"记账错误/回绕/泄漏"分类 → 评估 DoS 放大比

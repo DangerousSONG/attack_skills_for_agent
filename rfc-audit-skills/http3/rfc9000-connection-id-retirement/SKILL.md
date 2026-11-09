@@ -46,6 +46,6 @@ RFC 9000 §5.1.1：`active_connection_id_limit` 传输参数限制对端可处�
 
 ## 6. 对接的攻击 Skill
 
-- 方法论：技能层「协议 fuzz / 状态机差分」+「拒绝服务」方法论 Skill（Router 映射 slug）
-- 工具：aioquic（帧级时序控制主力）、quic-go 客户端做对照
+- 技能层（怎么打）：`fuzzowski-network-fuzz`（状态机差分）、`slowhttptest-dos`（资源耗尽验证；均在 tool-skills/）
+- 工具层（用什么打）：aioquic（帧级时序控制主力）、quic-go 客户端做对照
 - 命中后动作：量化每轮迭代的状态堆积量 → 给出 N 轮内存耗尽的时间估计 → 输出影响版本面
