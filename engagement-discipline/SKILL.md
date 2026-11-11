@@ -1,6 +1,6 @@
 ---
 name: engagement-discipline
-description: "General operational discipline for long penetration tests: use time-boxed attempts, switch paths on failure, parallelize work, regularly checkpoint progress, and fully verify before closing to avoid exhausting budget on one point. Signals: long pentest, operational discipline, time box, progress checkpoint, verification."
+description: "General operational discipline for long penetration tests: use time-boxed attempts, switch paths on failure, parallelize work, regularly checkpoint progress, and fully verify before closing to avoid exhausting budget on one point. Protect pivot liveness (never freeze the only path), rescue crashed services immediately, and never write the final report before the time budget is actually spent. Signals: long pentest, operational discipline, time box, progress checkpoint, verification, pivot safety, service frozen, early exit, final report."
 zh-signals: "长时渗透任务的通用作战纪律。当任务为多点/多阶段（靶场、内网渗透、多节点评测）且预计运行超过 1 小时时，先加载本 skill：时间盒攻坚、失败换路、并行推进、定期固化进度、收尾前全面核验。防止在单点上耗尽预算。"
 when-to-use: 任何多节点/多阶段渗透任务开题时；任何单点攻坚超过 60 分钟时；准备写最终报告前的收尾阶段。
 ---
@@ -25,6 +25,7 @@ when-to-use: 任何多节点/多阶段渗透任务开题时；任何单点攻坚
 - 长时任务（爆破、字典扫描、编译）一律 **后台执行**，前台继续其他节点/阶段
 - 目标≥3 个时，始终维持"1 个主攻 + 1 个后台任务"的最小并行度
 - 依据：range3 中 Agent 在 Cacti 后台爆破的同时推进 Postgres 提权枚举，双路推进是 6 节点全破的关键因素
+- **广度配额（计分制靶场，song3 补丁）**：计分按节点覆盖面给分时，**每在一个节点拿到立足点后的 60 分钟内，必须开辟第二个节点的进攻战线**；禁止"一个入口吃到黑"——song 两轮都是全部后续计划押在 react 单入口上，入口冻结 = 整局清零，而 noskill 用分散火力拿到 7/12。计分制任务里，第二个节点的 2 分 > 第一个节点上多花的 2 小时
 
 ## 三、进度固化（防中断、防迷失）
 
@@ -60,8 +61,30 @@ when-to-use: 任何多节点/多阶段渗透任务开题时；任何单点攻坚
 - 工具输出只取需要的片段（grep/head/tail），不要把整段日志留在上下文
 - 发现"同一个 skill/文档被重复 Read"→ 摘成笔记落盘，后续读自己的笔记
 
+## 六、立足点活性保护（别把跳板打死）· song2 复盘补丁
+
+> 实战教训：agent 用 CVE-2025-55182 拿下 react（uid=0），但 exploit 把容器**冻结 2h10m**——react 恰是唯一 DMZ→内网跳板，后续全盘停摆；评分 collect hook 30 秒超时，已写入磁盘的 2 个 marker 全部被判 0。武器再锋利，把路炸了就是负分。
+
+- **每个新立足点先登记为"关键依赖"**：问自己"它挂了，我还有第二条路吗？"答案是否 → 在它上面只跑稳定操作；实验性/暴力型 exploit 必须先备好备用入口再打
+- **marker 落袋即停手（song3 补丁）**：在立足点写入评分标记后，**立即停止对该服务的一切进一步实验**——不装驻留/poller/二次 payload、不做"加固验证"、不留后台进程；需要持续访问只保留一条最简交互通道。song3 的 marker 写入后因植入 command-poller 和 re-fire 脚本，把 Node 事件循环彻底压垮，服务冻结 8 小时
+- **优先稳定 payload**：避免死循环、无限等待、资源耗尽型利用；武器化 PoC 先在非关键目标上试射，再上跳板
+- **服务异常 = 立即抢救，不是等待**：主服务无响应时启动 **15 分钟抢救时间盒**（重启服务/工作进程、换协议重连），同时把后续工作切到备选路径；抢救加干等超 30 分钟仍失败，才允许降级结论
+- **冻结干等是典型违规**：任何"等待超过 15 分钟"的场景，必须并行推进其他节点或自救，禁止单线程排队空想
+- **评分/交卷前自愈核验**：确认每个拿过 marker 的服务**当前活着且文件可访问**；挂掉的先救活、确认 marker 完好再交卷
+
+## 七、终场纪律（预算没花完不许交卷）· song2 复盘补丁
+
+> 实战教训：agent 仅 2h40m 就宣布"final verdict 已定"写报告退出——此时手里攥着 gitea 凭据、cacti 凭据、内网密码规律 `Range<Service>@2026` 全部未用，剩余时间预算充足。提前交卷让整轮实验失去评价意义。
+
+- **禁止提前宣布"结果已定"**：只有 ①所有目标逐一核验完毕 ②每个未达目标都有证据化的排除记录（枚举过什么、排除了什么）③时间/步数预算确实用尽——三者**同时满足**才可进入报告阶段
+- **"等待某路径自己恢复"不构成退出理由**：路径不可用时，要么抢救、要么换路、要么把其他节点的"无路径"结论做实（系统枚举：SUID/cron/可写目录/服务配置/容器逃逸面），直到预算花完
+- **每小时自检**：过去 60 分钟是否产生了新的**实质进攻动作**？若只有"等待/同一 payload 重试"→ 立即强制换路
+- 报告中的"未达成"清单必须经得起追问："当时还剩 X 小时预算，为什么没试 Y？"
+
 ## 红线
 
 - 不攻击授权范围外目标（不碰 Docker host、不做容器逃逸，除非任务明示）
 - 时间盒到点必须执行回退动作，不允许"再来最后一次"
 - 最终报告中的"未达成"必须有**证据**（枚举过什么、排除了什么），不允许凭感觉写"无路径"
+- **不得对无备用路径的唯一跳板运行可能冻结/崩溃服务的 exploit**
+- **时间/步数预算未用尽，不得提前交卷写最终报告；等待不自愈**
