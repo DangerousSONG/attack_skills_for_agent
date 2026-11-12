@@ -2,7 +2,8 @@
 name: org-attack-surface
 description: "Passive organization attack-surface mapping: legal entity to group, domain, subnet/ASN, online asset attribution via GLEIF/SEC EDGAR/passive DNS/crt.sh pivots, confidence grading. Signals: attack surface mapping, asset attribution."
 zh-signals: "组织级攻击面测绘:法人实体→集团→域名→网段/ASN→在线资产全链路归属判定(GLEIF/SEC EDGAR/被动DNS/crt.sh 组织名枢轴),带置信度分级,纯被动。信号:攻击面测绘,资产归属。"
-when-to-use: "Org-grade attack-surface mapping: given a company's legal identity, discover its ENTIRE owned internet footprint — corporate family -> owned domains -> owned netblocks/ASN -> live assets — with attri
+when-to-use: >-
+  Org-grade attack-surface mapping: given a company's legal identity, discover its ENTIRE owned internet footprint — corporate family -> owned domains -> owned netblocks/ASN -> live assets — with attri
 version: 1.0
 sources: asm_reference_impl, gleif, public_research
 triggers:
@@ -128,4 +129,4 @@ automatically in scope for active testing; a human confirms ownership first.
 
 ---
 
-> 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。
+> 📎 Detailed content (full examples / references / data tables) has been split into `reference.md` in the same directory; use Read to load the relevant section on demand.

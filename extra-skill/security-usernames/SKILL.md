@@ -1,6 +1,10 @@
 ---
 name: security-usernames
 description: "Top username lists for enumeration: common usernames, default credentials, names. Curated essentials for authorized testing."
+zh-signals: "提供用于用户名枚举的常用用户名与默认凭据字典，适用于授权测试。信号:用户名枚举,字典,seclists,默认凭据,用户发现"
+when-to-use: >-
+  Use when performing authorized username enumeration, default credential testing, or
+  user discovery against a target.
 ---
 
 # SecLists Usernames (Curated)

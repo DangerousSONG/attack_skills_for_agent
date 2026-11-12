@@ -1,6 +1,8 @@
 ---
 name: hunt-deserialization
 description: Hunt Insecure Deserialization — Java gadget chains (ysoserial), PHP object injection (phpggc), Python pickle RCE, .NET BinaryFormatter, Ruby Marshal.load, JNDI/Log4Shell. RCE via deserialization is almost always Critical. Use when target runs Java, PHP serialization, Python pickle, .NET, or Ruby on Rails.
+zh-signals: "狩猎不安全反序列化漏洞（Java、PHP、Python、.NET、Ruby、JNDI）。信号:反序列化,rce,ysoserial,phpggc,log4shell"
+when-to-use: "Use when a target runs Java, PHP serialization, Python pickle, .NET, or Ruby on Rails and you want to test for deserialization RCE."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

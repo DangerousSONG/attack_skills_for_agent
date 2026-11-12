@@ -1,6 +1,8 @@
 ---
 name: genotoxic
 description: "Graph-informed mutation testing triage. Parses codebases with Trailmark, runs mutation testing and necessist, then uses survived mutants, unnecessary test statements, and call graph data to identify false positives, missing test coverage, and fuzzing targets. Use when triaging survived mutants, analyzing mutation testing results, identifying test gaps, finding fuzzing targets from weak tests, running mutation frameworks (including circomvent and cairo-mutants), or using necessist."
+zh-signals: "结合代码图谱与变异测试结果进行分诊，识别误报、测试覆盖缺口与模糊测试目标。信号:变异测试分诊,存活变异体,测试覆盖缺口,模糊测试目标,necessist"
+when-to-use: "Use when triaging survived mutants from mutation testing or identifying high-impact tests and fuzzing targets using code graph analysis."
 ---
 
 # Genotoxic

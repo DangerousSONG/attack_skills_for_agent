@@ -1,6 +1,10 @@
 ---
 name: modern-cpp
 description: Guides C++ code toward modern idioms (C++20/23/26). Use when writing new C++ code, modernizing legacy patterns, or working on security-critical C++. Replaces raw pointers with smart pointers, SFINAE with concepts, printf with std::print, error codes with std::expected.
+zh-signals: "指导 C++ 代码采用 C++20/23/26 现代惯用法，以智能指针、概念、std::expected 等消除漏洞类别。信号:现代C++,C++20,智能指针,概念,安全编码"
+when-to-use: >-
+  Use when writing new C++ code, modernizing legacy C++ patterns, or working on
+  security-critical C++ that should adopt modern idioms.
 ---
 
 # Modern C++

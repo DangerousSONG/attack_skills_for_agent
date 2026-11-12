@@ -1,6 +1,8 @@
 ---
 name: red-team-tools
 description: "Implement proven methodologies and tool workflows from top security researchers for effective reconnaissance, vulnerability discovery, and bug bounty hunting. Automate common tasks while maintaining thorough coverage of attack surfaces."
+zh-signals: "整合顶级安全研究者的方法论与工具流程，用于侦察、漏洞发现与漏洞赏金狩猎并保持攻击面覆盖。信号:红队工具,侦察,漏洞发现,漏洞赏金,攻击面"
+when-to-use: "Use when planning reconnaissance, vulnerability discovery, or bug bounty workflows and you need proven tool chains that keep broad attack-surface coverage."
 risk: offensive
 source: community
 author: zebbern

@@ -1,6 +1,11 @@
 ---
 name: enterprise-vpn-attack
 description: External SSL VPN / remote-access appliance attack matrix — Cisco ASA/AnyConnect, Fortinet FortiGate/FortiOS, Citrix NetScaler/ADC, Palo Alto GlobalProtect, Pulse Secure / Ivanti Connect Secure, SonicWall, F5 Big-IP. Covers version fingerprinting, CVE matrix (2018-2026), AAA backend identification, default credentials, configuration-disclosure paths, pre-auth RCE/SSRF/path-traversal exploits where applicable. Built from authorized-engagement Cisco ASA testing plus 2024-2026 enterprise VPN CVE landscape. Use whenever the target's perimeter exposes any SSL VPN appliance or remote-access gateway — these are the most common initial-access points in 2024-2026 actor TTPs.
+zh-signals: "针对企业 SSL VPN 与远程接入网关（Cisco ASA、Fortinet、Citrix、Palo Alto、Pulse/Ivanti 等）进行指纹识别、CVE 检测与预认证漏洞利用。信号:SSL VPN,远程接入,CVE检测,FortiGate,NetScaler,预认证RCE"
+when-to-use: >-
+  Use when recon surfaces an external SSL VPN or remote-access gateway (Cisco ASA,
+  FortiGate, Citrix ADC, GlobalProtect, Pulse/Ivanti, SonicWall, F5) and you need to
+  fingerprint the vendor, test known CVEs, or identify the AAA backend.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

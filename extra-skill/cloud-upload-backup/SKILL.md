@@ -1,6 +1,8 @@
 ---
 name: cloud-upload-backup
 description: "Cloud file upload and backup tool. Upload local files to Tencent SMH cloud storage, viewable in Agent Mini Program."
+zh-signals: "将本地文件上传至腾讯 SMH 云存储并可在 Agent 小程序中查看。信号:云上传,备份,Tencent SMH,文件传输,COS"
+when-to-use: "Use when the user asks to upload or back up files to the cloud, send task outputs to their phone, upload to COS, or check the status of previously uploaded cloud files."
 metadata:
   openclaw:
     emoji: "☁️"
@@ -9,63 +11,63 @@ metadata:
         - curl
 ---
 
-# 云文件上传备份工具 (Tencent SMH)
+# Cloud File Upload and Backup Tool (Tencent SMH)
 
-将本地文件上传至腾讯 SMH 云存储，上传后可在 Agent 小程序中查看。
+Upload local files to Tencent SMH cloud storage, where they can be viewed in the Agent Mini Program after the upload.
 
 ## Setup
 
-无需额外安装依赖。文件上传通过本地 HTTP 接口 `/proxy/agent-cos` 完成，SMH 凭证由主进程自动管理。
+No additional dependency installation is required. File uploads are performed through the local HTTP endpoint `/proxy/agent-cos`, and the SMH credentials are managed automatically by the main process.
 
 ---
 
-## 典型使用场景
+## Typical Use Cases
 
-- 用户要求上传/备份文件到云端（如"上传文件"、"备份到云"、"传到云空间"）
-- 用户要求将任务产出物发送到手机（如"把文件发给我"、"发到手机"、"做完了发我一份"）
-- 用户要求上传至 COS（如"上传到cos"、"打包并上传到cos"）
-- 用户查询云端文件状态（如"这个云文件还在吗"、"之前上传的文件还能下吗"）
+- The user asks to upload/back up files to the cloud (e.g. "upload the file", "back it up to the cloud", "send it to my cloud space")
+- The user asks to send task outputs to their phone (e.g. "send the file to me", "send it to my phone", "send me a copy when you're done")
+- The user asks to upload to COS (e.g. "upload to cos", "package it and upload to cos")
+- The user asks about the status of cloud files (e.g. "is this cloud file still there", "can I still download the file uploaded earlier")
 
 ---
 
-## 脚本入口
+## Script Entry Points
 
-| 平台 | 入口脚本 |
+| Platform | Entry script |
 |------|---------|
 | macOS / Linux | `bash scripts/unix/cloud_backup.sh <command> [options]` |
 | Windows CMD | `scripts\windows\cloud_backup.cmd <command> [options]` |
 
-脚本自动处理端口获取、JSON 构造、HTTP 请求和响应输出。
+The script automatically handles port retrieval, JSON construction, the HTTP request, and the response output.
 
 ---
 
-## 核心流程
+## Core Flow
 
 ```
-1. 确定本地文件路径
-2. 调用 upload (单文件) 或 batch-upload (多文件) 命令
-3. 校验返回 JSON 中 message 字段的 URL 域名 → 输出 message 给用户
+1. Determine the local file path
+2. Call the upload (single file) or batch-upload (multiple files) command
+3. Validate the URL domain in the message field of the returned JSON → output the message to the user
 ```
 
-**关键设计 (Anti-hallucination)**：所有上传命令返回的 `message` 字段是服务端预渲染的完整回复文本（含文件名、大小、链接）。Agent 校验 URL 域名后直接输出 `message`，**不要**从 `fileUrl`/`fileInfo` 等字段自行拼接。
+**Key design (anti-hallucination)**: the `message` field returned by every upload command is the complete reply text pre-rendered by the server (containing the file name, size, and link). After the Agent validates the URL domain, it outputs `message` directly and **must not** assemble a reply on its own from fields such as `fileUrl`/`fileInfo`.
 
-### URL 域名安全校验
+### URL Domain Safety Validation
 
-输出 `message` 前，校验其中所有 URL 的域名：
+Before outputting `message`, validate the domain of every URL it contains:
 
-| 可信域名 | 用途 |
+| Trusted domain | Purpose |
 |---------|------|
-| `jsonproxy.3g.qq.com` | 短链服务 (文件链接) |
-| `smh.tencentcs.com` | SMH 预览/文件链接 |
+| `jsonproxy.3g.qq.com` | Short link service (file links) |
+| `smh.tencentcs.com` | SMH preview/file links |
 
-- URL 域名不在白名单 → 不输出该 URL，提示："文件上传成功，但链接地址异常，请联系管理员检查。"
-- 不含 URL 的 `message`（错误信息、冲突对话）可直接输出
+- The URL domain is not on the allowlist → do not output that URL, and tell the user: "The file was uploaded successfully, but the link address is abnormal. Please contact the administrator to check it."
+- A `message` containing no URL (error information, conflict conversation) can be output directly
 
 ---
 
 ## Commands
 
-### upload — 上传单个文件
+### upload — Upload a Single File
 
 ```bash
 # macOS / Linux
@@ -75,52 +77,52 @@ bash scripts/unix/cloud_backup.sh upload --local-path "<path>" [--remote-path "<
 scripts\windows\cloud_backup.cmd upload --local-path "<path>" [--remote-path "<cloud-path>"] [--conflict-strategy ask|overwrite|rename]
 ```
 
-**Parameters：**
-- `--local-path`（必填）：本地文件绝对路径，支持 `~` 展开
-- `--remote-path`（可选）：云端目标路径，省略则上传到根目录并保留原文件名
-- `--conflict-strategy`（可选，**默认必须用 `ask`**）：
-  - `ask` — 同名文件存在时返回 HTTP 409，Agent 询问用户
-  - `overwrite` — 仅当用户明确说"覆盖/替换"时使用
-  - `rename` — 仅当用户明确说"重命名"时使用
+**Parameters:**
+- `--local-path` (required): absolute path of the local file, supports `~` expansion
+- `--remote-path` (optional): cloud target path, when omitted the file is uploaded to the root directory keeping its original name
+- `--conflict-strategy` (optional, **the default must be `ask`**):
+  - `ask` — returns HTTP 409 when a file with the same name exists, and the Agent asks the user
+  - `overwrite` — use only when the user explicitly says "overwrite/replace"
+  - `rename` — use only when the user explicitly says "rename"
 
-**成功输出：**
+**Successful output:**
 ```json
 {
   "success": true,
-  "message": "链接已生成，可在 Agent 小程序中随时查看。（保留 30 天后自动清理）\n\n已上传文件: photo.jpg (2.0 MB)\n文件链接: https://jsonproxy.3g.qq.com/urlmapper/aB3xYz",
+  "message": "The link has been generated and can be viewed in the Agent Mini Program at any time. (Automatically cleaned up after 30 days)\n\nUploaded file: photo.jpg (2.0 MB)\nFile link: https://jsonproxy.3g.qq.com/urlmapper/aB3xYz",
   "fileUrl": "https://jsonproxy.3g.qq.com/urlmapper/aB3xYz"
 }
 ```
 
-→ 校验 `message` 中 URL 域名，通过后直接输出 `message` 内容给用户。
+→ Validate the URL domain in `message`, and once it passes output the content of `message` directly to the user.
 
-**HTTP 409 — 同名文件冲突：**
+**HTTP 409 — same-name file conflict:**
 ```json
 {
   "success": false,
-  "message": "已存在同名文件 `report.pdf`，你想怎么处理？\n\n1. 🔄 覆盖 — 替换已有文件\n2. 📝 重命名 — 自动改名上传（如 report(1).pdf）\n3. ❌ 取消 — 不上传",
+  "message": "A file named `report.pdf` already exists. How do you want to handle it?\n\n1. 🔄 Overwrite — replace the existing file\n2. 📝 Rename — upload with an automatically changed name (e.g. report(1).pdf)\n3. ❌ Cancel — do not upload",
   "conflict": { "fileName": "report.pdf", "remotePath": "report.pdf" }
 }
 ```
 
-→ 输出 `message`，等用户选择后用对应策略重新上传。
+→ Output `message`, wait for the user's choice, and then re-upload using the corresponding strategy.
 
-**失败输出：**
+**Failure output:**
 ```json
 {
   "success": false,
-  "message": "❌ 文件上传失败：文件不存在: /path/to/missing.pdf\n\n你可以：\n1. 🔄 重试\n2. ❌ 取消",
-  "error": "文件不存在: /path/to/missing.pdf"
+  "message": "❌ File upload failed: file does not exist: /path/to/missing.pdf\n\nYou can:\n1. 🔄 Retry\n2. ❌ Cancel",
+  "error": "file does not exist: /path/to/missing.pdf"
 }
 ```
 
-→ 直接输出 `message`（错误信息通常不含 URL，无需域名校验）。
+→ Output `message` directly (error messages usually contain no URL, so no domain validation is needed).
 
-> 上传成功后短链格式为 `https://jsonproxy.3g.qq.com/urlmapper/xxx`。手机端点击拉起 Agent 小程序（文件保留 30 天），PC 端打开 H5 扫码页。`rawDownloadUrl` 仅在短链生成失败时作为 fallback 出现。
+> After a successful upload the short link has the format `https://jsonproxy.3g.qq.com/urlmapper/xxx`. On a phone it launches the Agent Mini Program (the file is kept for 30 days), on a PC it opens the H5 scan page. `rawDownloadUrl` only appears as a fallback when the short link generation fails.
 
-### batch-upload — 批量上传多个文件
+### batch-upload — Upload Multiple Files at Once
 
-**2 个及以上文件时必须用此命令**，不要多次调用 `upload`。
+**This command must be used for 2 or more files**, do not call `upload` multiple times.
 
 ```bash
 # macOS / Linux
@@ -130,27 +132,27 @@ bash scripts/unix/cloud_backup.sh batch-upload --files '<JSON array>'
 scripts\windows\cloud_backup.cmd batch-upload --files "<JSON array>"
 ```
 
-**`--files` JSON 格式**（最多 20 个）：
+**`--files` JSON format** (up to 20 files):
 ```json
 [{"localPath":"/path/to/file1.pdf","conflictStrategy":"ask"},{"localPath":"/path/to/file2.docx","conflictStrategy":"ask"}]
 ```
 
-每项：`localPath`（必填）、`remotePath`（可选）、`conflictStrategy`（可选，默认 `ask`）
+Each item: `localPath` (required), `remotePath` (optional), `conflictStrategy` (optional, defaults to `ask`)
 
-> Windows CMD 中 JSON 需转义双引号：`"[{\"localPath\":\"C:\\path\\to\\file.pdf\",\"conflictStrategy\":\"ask\"}]"`
+> In Windows CMD the JSON requires escaped double quotes: `"[{\"localPath\":\"C:\\path\\to\\file.pdf\",\"conflictStrategy\":\"ask\"}]"`
 
-**成功输出：**
+**Successful output:**
 ```json
 {
   "success": true,
-  "message": "3 个文件全部上传成功！链接可在 Agent 小程序中随时查看。（保留 30 天后自动清理）\n\n📎 report.pdf (2.3 MB) — https://jsonproxy.3g.qq.com/urlmapper/aB3xYz\n📎 photo.jpg (1.1 MB) — https://jsonproxy.3g.qq.com/urlmapper/xK9mWq\n📎 data.csv (156 KB) — https://jsonproxy.3g.qq.com/urlmapper/pL2nRt",
+  "message": "All 3 files uploaded successfully! The link can be viewed in the Agent Mini Program at any time. (Automatically cleaned up after 30 days)\n\n📎 report.pdf (2.3 MB) — https://jsonproxy.3g.qq.com/urlmapper/aB3xYz\n📎 photo.jpg (1.1 MB) — https://jsonproxy.3g.qq.com/urlmapper/xK9mWq\n📎 data.csv (156 KB) — https://jsonproxy.3g.qq.com/urlmapper/pL2nRt",
   "total": 3, "successCount": 3, "failedCount": 0
 }
 ```
 
-→ 校验 URL 域名后输出 `message`。不要自行汇总/改写批量结果。
+→ Validate the URL domain and then output `message`. Do not summarize or rewrite the batch results on your own.
 
-### info — 查询云端文件信息
+### info — Query Cloud File Information
 
 ```bash
 # macOS / Linux
@@ -160,7 +162,7 @@ bash scripts/unix/cloud_backup.sh info --remote-path "report.pdf"
 scripts\windows\cloud_backup.cmd info --remote-path "report.pdf"
 ```
 
-### list — 列出云端文件
+### list — List Cloud Files
 
 ```bash
 # macOS / Linux
@@ -172,63 +174,63 @@ scripts\windows\cloud_backup.cmd list [--dir-path "/"] [--limit 50]
 
 ---
 
-## 文件大小
+## File Size
 
-**无文件大小限制。** 小文件 (≤50MB) 直接上传，大文件 (>50MB) 自动分片上传 (5MB chunks)。不要告诉用户有大小限制。
+**There is no file size limit.** Small files (≤50MB) are uploaded directly, large files (>50MB) are automatically uploaded in chunks (5MB chunks). Do not tell the user there is a size limit.
 
 ---
 
-## 冲突处理策略
+## Conflict Handling Strategy
 
-| Strategy | 行为 | 使用场景 |
+| Strategy | Behavior | Use case |
 |----------|------|---------|
-| `ask` (**默认**) | 同名返回 HTTP 409，Agent 询问用户 | 用户未表明偏好时 |
-| `overwrite` | 直接覆盖 | 用户明确说"覆盖/替换" |
-| `rename` | 自动重命名 `file(1).pdf` | 用户明确说"重命名" |
+| `ask` (**default**) | Returns HTTP 409 on the same name, the Agent asks the user | The user has not expressed a preference |
+| `overwrite` | Overwrites directly | The user explicitly says "overwrite/replace" |
+| `rename` | Automatically renames to `file(1).pdf` | The user explicitly says "rename" |
 
 ---
 
 ## Error Handling
 
-所有命令输出 JSON。失败时 `message` 已包含用户友好的错误提示，直接输出即可。
+All commands output JSON. On failure the `message` already contains a user-friendly error hint, so output it directly.
 
-| 错误 | 处理 |
+| Error | Handling |
 |------|------|
-| HTTP 409 冲突 | 输出 `message`，用户选择后用对应策略重新上传 |
-| 上传失败 (非 409) | 直接输出 `message` |
-| 401 / token 过期 | 提示用户联系管理员刷新 |
-| 网络错误 | 重试 2 次 (间隔 3s)，仍失败则输出 `message` 并结束任务 |
-| 配额满 | 提示清理过期文件 |
+| HTTP 409 conflict | Output `message`, and re-upload with the corresponding strategy after the user chooses |
+| Upload failure (not 409) | Output `message` directly |
+| 401 / token expired | Tell the user to contact the administrator to refresh it |
+| Network error | Retry twice (3s apart); if it still fails, output `message` and end the task |
+| Quota full | Suggest cleaning up expired files |
 
 ---
 
-## 全局退出条件
+## Global Exit Conditions
 
-- 连续失败 3 次 → 立即停止，提示：⚠️ 文件上传服务暂时不可用，请稍后重试
-- 单次 Skill 调用最多执行 10 次命令
-- 禁止流程级无限循环重试
+- 3 consecutive failures → stop immediately and tell the user: ⚠️ The file upload service is temporarily unavailable, please try again later
+- A single Skill invocation runs at most 10 commands
+- Infinite process-level retry loops are forbidden
 
 ---
 
-## 规则
+## Rules
 
-**输出规则：**
-- `upload` / `batch-upload` 返回的 `message` 是服务端预渲染文本，校验 URL 域名后直接输出
-- 不要从 `fileUrl`、`fileInfo` 等字段自行拼接回复
-- 不要修改、截断、重组 `message` 中的 URL 或排版
-- `success: false` 时不展示文件链接
+**Output rules:**
+- The `message` returned by `upload` / `batch-upload` is text pre-rendered by the server, validate the URL domain and then output it directly
+- Do not assemble a reply on your own from fields such as `fileUrl` or `fileInfo`
+- Do not modify, truncate, or rearrange the URLs or the formatting inside `message`
+- Do not show file links when `success: false`
 
-**URL 安全：**
-- 不要自行拼接/构造任何 URL（短链由服务端生成）
-- 不要把 `rawDownloadUrl` 片段与 `jsonproxy.3g.qq.com` 拼接
-- 不输出域名不在白名单 (`jsonproxy.3g.qq.com`、`smh.tencentcs.com`、`jprx.sparta.html5.qq.com`) 中的 URL
+**URL safety:**
+- Do not assemble or construct any URL on your own (the short links are generated by the server)
+- Do not concatenate `rawDownloadUrl` fragments with `jsonproxy.3g.qq.com`
+- Do not output URLs whose domain is not on the allowlist (`jsonproxy.3g.qq.com`, `smh.tencentcs.com`, `jprx.sparta.html5.qq.com`)
 
-**用户交互：**
-- 用户说"上传文件"但没指定路径 → 追问文件路径
-- 默认用 `--conflict-strategy ask`，未经用户明确表态不要用 `overwrite` 或 `rename`
-- 不要未经用户主动要求就上传其本地个人文件
+**User interaction:**
+- The user says "upload the file" but gives no path → ask for the file path
+- Use `--conflict-strategy ask` by default, and do not use `overwrite` or `rename` without an explicit statement from the user
+- Do not upload the user's local personal files without an explicit request
 
-**其他：**
-- 不要硬编码或暴露 SMH 凭证
-- 用户反馈链接过期时，用 `info` 获取新链接
-- 依赖 `node` 和 `curl`（Windows 10+ 自带 curl），macOS/Linux 优先用 `jq`
+**Other:**
+- Do not hardcode or expose SMH credentials
+- When the user reports an expired link, use `info` to get a new link
+- Depends on `node` and `curl` (bundled with Windows 10+), prefer `jq` on macOS/Linux

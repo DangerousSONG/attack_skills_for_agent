@@ -1,6 +1,8 @@
 ---
 name: rust-review
 description: Performs comprehensive Rust security review for safe/unsafe boundary issues, memory safety in unsafe blocks, concurrency hazards, panic-induced DoS, FFI safety, and async runtime mistakes. Use when auditing Rust crates, services, or libraries — particularly those with `unsafe`, FFI, or concurrent code.
+zh-signals: "Rust 安全审查，覆盖 unsafe 边界、内存安全、并发风险、FFI 与异步运行时问题。信号:Rust审计,unsafe,内存安全,并发,FFI"
+when-to-use: "Use when auditing Rust crates, services, or libraries for safe/unsafe boundary issues, memory safety in unsafe blocks, concurrency hazards, panic-induced DoS, FFI safety, or async runtime mistakes."
 allowed-tools: Agent AskUserQuestion SendMessage TaskCreate TaskUpdate TaskList Read Write Bash
 ---
 

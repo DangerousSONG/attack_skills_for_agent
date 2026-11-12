@@ -1,6 +1,11 @@
 ---
 name: using-lwc
 description: "Use when project decisions, code structure, research, incidents, or verified context must survive future coding-agent sessions through LWC memory and graph indexes."
+zh-signals: "通过 LWC 持久化记忆与图索引让项目决策、研究结论和代码结构跨会话留存并可检索。信号:持久记忆,知识图谱,代码索引,Wiki,上下文工程"
+when-to-use: >-
+  Use when project decisions, research, incidents, or verified context must persist
+  across coding-agent sessions, or when the task needs Wiki recall, document
+  relationships, or structural code questions.
 category: development
 risk: critical
 source: community

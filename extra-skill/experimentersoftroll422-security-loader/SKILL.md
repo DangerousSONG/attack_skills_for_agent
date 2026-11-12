@@ -1,6 +1,8 @@
 ---
 name: experimentersoftroll422-security-loader
 description: Windows filesystem security monitoring, access control, and encryption workflow integration using EaseFilter SDK with Rust bindings
+zh-signals: "使用 EaseFilter SDK 与 Rust 绑定实现 Windows 文件系统安全监控、访问控制与加密工作流集成。信号:Windows 文件监控,EaseFilter,Rust 绑定,访问控制,加密工作流"
+when-to-use: "Use when building or troubleshooting Windows filesystem security monitoring, access policy enforcement, or encryption workflows with the EaseFilter SDK and Rust bindings."
 triggers:
   - how do I monitor file activity on Windows with experimentersoftroll422
   - set up file access policies with experimentersoftroll422 security loader

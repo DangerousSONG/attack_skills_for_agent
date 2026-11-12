@@ -1,6 +1,11 @@
 ---
 name: hunt-session
 description: Hunt Session Management vulnerabilities
+zh-signals: "狩猎会话管理漏洞，覆盖会话固定、令牌预测、会话失效与 Cookie 属性缺陷。信号:会话管理,会话固定,会话劫持,Cookie安全,令牌"
+when-to-use: >-
+  Use when hunting session management vulnerabilities such as session fixation, token
+  prediction, missing expiration, or insecure cookie attributes. Requires explicit written
+  authorization and a defined target scope.
 category: security
 risk: offensive
 source: https://github.com/elementalsouls/Claude-BugHunter

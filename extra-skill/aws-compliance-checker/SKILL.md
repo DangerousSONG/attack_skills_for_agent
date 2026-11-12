@@ -1,6 +1,8 @@
 ---
 name: aws-compliance-checker
 description: "Automated compliance checking against CIS, PCI-DSS, HIPAA, and SOC 2 benchmarks"
+zh-signals: "针对 AWS 环境按 CIS、PCI-DSS、HIPAA、SOC 2 基线进行自动化合规检查。信号:AWS合规,CIS,PCI-DSS,HIPAA,SOC2,审计"
+when-to-use: "Use when validating an AWS environment against CIS, PCI-DSS, HIPAA, or SOC 2 benchmarks or preparing for a compliance audit."
 category: security
 risk: safe
 source: community

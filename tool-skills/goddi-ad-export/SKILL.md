@@ -2,36 +2,39 @@
 name: goddi-ad-export
 description: "goddi exports full Active Directory structure for offline analysis. Signals: AD attack, domain penetration, JSON."
 zh-signals: "goddi: AD 结构全量导出(离线分析)。信号:ad攻击,域渗透,json`。"
+when-to-use: >-
+  Use to dump the full Active Directory structure (users, groups, computers,
+  GPOs) to CSV or JSON for offline attack-path analysis.
 ---
 
 # goddi
 
-- 攻击大类:C30 AD与横向移动
-- 上游仓库:https://github.com/NetSPI/goddi
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C30 AD and Lateral Movement
+- Upstream Repository: https://github.com/NetSPI/goddi
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/NetSPI/goddi@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `goddi -username svc@corp.local -password pass -domain corp.local -dc 10.0.0.1 -unsafe` | 导出 AD 全量(用户/组/计算机/GPO) |
-| `-format csv|json` | 输出格式 |
+| `goddi -username svc@corp.local -password pass -domain corp.local -dc 10.0.0.1 -unsafe` | Export the full AD structure (users/groups/computers/GPOs) |
+| `-format csv|json` | Output format |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### AD 结构全量导出(离线分析)
+### Full AD Structure Export (Offline Analysis)
 
 ```bash
 goddi -u svc@corp.local -p pass -domain corp.local -dc 10.0.0.1 -unsafe
-# 拿 CSV 后离线画权限关系,挑提权路径
+# Take the CSV and map privilege relationships offline to pick an escalation path
 ```
 
-## 注意事项
+## Notes
 
-NetSPI 出品,AD 信息(用户/组/计算机/信任/GPO/OU)一键全导出为 CSV,适合离线建攻击路径图。
+By NetSPI, a one-click full export of AD information (users/groups/computers/trusts/GPOs/OU) to CSV, ideal for building an attack path graph offline.

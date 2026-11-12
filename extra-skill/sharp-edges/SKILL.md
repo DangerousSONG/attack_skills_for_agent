@@ -1,6 +1,8 @@
 ---
 name: sharp-edges
 description: "Identifies error-prone APIs, dangerous configurations, and footgun designs that enable security mistakes. Use when reviewing API designs, configuration schemas, cryptographic library ergonomics, or evaluating whether code follows 'secure by default' and 'pit of success' principles. Triggers: footgun, misuse-resistant, secure defaults, API usability, dangerous configuration."
+zh-signals: "识别易误用的 API、危险配置与设计陷阱，评估是否遵循安全默认与防误用原则。信号:API设计,安全默认,误用防护,配置审计,设计陷阱"
+when-to-use: "Use when reviewing API designs, configuration schemas, or cryptographic library ergonomics to judge whether they follow secure-by-default and misuse-resistant principles."
 allowed-tools: Read Grep Glob
 ---
 

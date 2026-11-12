@@ -1,6 +1,11 @@
 ---
 name: sparkfinderoven-security-compliance-suite
 description: Security audit and compliance automation suite with OWASP scanning, CVE detection, GDPR/SOC2 audits, threat modeling, and incident response playbooks
+zh-signals: "集成 OWASP 扫描、CVE 检测、GDPR/SOC2 审计、威胁建模与应急响应剧本的安全合规套件。信号:安全审计,OWASP,CVE检测,GDPR,SOC2"
+when-to-use: >-
+  Use when you need automated security audit and compliance workflows such as OWASP
+  scanning, dependency CVE checks, GDPR/SOC2 audits, threat modeling, or incident
+  response playbooks.
 triggers:
   - scan for OWASP vulnerabilities
   - check dependencies for CVEs

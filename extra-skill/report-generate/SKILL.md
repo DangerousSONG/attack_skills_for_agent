@@ -1,107 +1,108 @@
 ---
 name: report-generate
-description: "渗透测试报告生成。当完成安全评估需要输出正式报告时使用。覆盖报告结构模板、风险评级标准（CVSS）、漏洞描述写法、修复建议规范。适用于正式渗透测试报告和红队评估报告"
+description: "Penetration test report generation. Use when a security assessment is complete and a formal report must be produced. Covers the report structure template, risk rating criteria (CVSS), vulnerability description style, and remediation recommendation standards. Suitable for formal penetration test reports and red team assessment reports"
+zh-signals: "生成正式渗透测试与红队评估报告，涵盖结构模板、CVSS 评级与修复建议。信号:报告生成,渗透测试报告,CVSS,风险评级,修复建议,模板"
+when-to-use: "Use when a security assessment is complete and a formal penetration test or red team report needs to be produced."
 metadata:
-  tags: "report,报告,summary,documentation,渗透测试报告,风险评级,修复建议"
+  tags: "report,summary,documentation,penetration test report,risk rating,remediation recommendation"
   category: "general"
 ---
 
-# 渗透测试报告生成方法论
+# Penetration Test Report Generation Methodology
 
-报告是渗透测试的最终交付物——再厉害的攻击，如果报告写不好，客户看不懂，等于白做。
+The report is the final deliverable of a penetration test — however powerful the attack, if the report is poorly written the client cannot understand it, which means the work was wasted.
 
-## 数据采集
+## Data Collection
 
-先收集所有已有数据：
-- `get_store_stats` — 整体统计
-- `evidence_list`（按类型筛选）— 资产清单
-- `list_vulns` — 漏洞列表
-- `evidence_list` + `evidence_read`（筛选凭据类型）— 凭据（脱敏后放入报告）
+First collect all the data you already have:
+- `get_store_stats` — overall statistics
+- `evidence_list` (filter by type) — asset inventory
+- `list_vulns` — vulnerability list
+- `evidence_list` + `evidence_read` (filter for credential types) — credentials (redacted before being put into the report)
 
-## 报告结构模板
+## Report Structure Template
 
-### 1. 执行摘要（1 页，给管理层看）
-用非技术语言概述：
-- 评估范围和时间
-- **一句话结论**：整体安全状况如何（如"发现 3 个严重漏洞，攻击者可远程获取服务器完全控制权"）
-- 关键数字：资产数量、漏洞数量（按等级分布）
-- 最紧急的行动项
+### 1. Executive Summary (1 page, for management)
+Summarize in non-technical language:
+- Assessment scope and timeline
+- **One-sentence conclusion**: what the overall security posture looks like (e.g. "3 critical vulnerabilities were found, allowing an attacker to gain full control of the server remotely")
+- Key numbers: asset count, vulnerability count (distribution by severity)
+- The most urgent action items
 
-### 2. 评估范围与方法
-- 目标清单（域名/IP/应用）
-- 测试类型（黑盒/灰盒/白盒）
-- 使用的方法论和工具
-- 限制条件（时间、范围排除）
+### 2. Scope and Methodology
+- Target list (domains/IPs/applications)
+- Test type (black box/gray box/white box)
+- Methodologies and tools used
+- Limitations (time, out-of-scope exclusions)
 
-### 3. 发现总览
-漏洞统计图表：
+### 3. Findings Overview
+Vulnerability statistics chart:
 ```
-严重: ■■ 2
-高危: ■■■ 3
-中危: ■■■■■ 5
-低危: ■■■ 3
-信息: ■■■■■■ 6
+Critical: ■■ 2
+High: ■■■ 3
+Medium: ■■■■■ 5
+Low: ■■■ 3
+Info: ■■■■■■ 6
 ```
 
-### 4. 漏洞详情（核心部分）
-每个漏洞按以下结构描述：
+### 4. Vulnerability Details (the core section)
+Describe each vulnerability with the following structure:
 
-**[严重] SQL 注入 — 用户搜索功能**
-- **位置**：`https://target.com/search?q=`
-- **描述**：搜索参数未经过滤直接拼入 SQL 查询，攻击者可读取/修改/删除数据库内容
-- **影响**：可获取所有用户数据（含密码哈希）、可读取服务器文件
-- **复现步骤**：
-  1. 访问 `https://target.com/search?q=' OR 1=1--`
-  2. 页面返回所有记录（正常应只返回匹配项）
-  3. 使用 `UNION SELECT` 可提取 users 表
-- **修复建议**：使用参数化查询（Prepared Statement），禁止字符串拼接 SQL
+**[Critical] SQL Injection — user search feature**
+- **Location**: `https://target.com/search?q=`
+- **Description**: the search parameter is not filtered and is concatenated directly into the SQL query, allowing an attacker to read/modify/delete database content
+- **Impact**: all user data (including password hashes) can be obtained, server files can be read
+- **Steps to reproduce**:
+  1. Visit `https://target.com/search?q=' OR 1=1--`
+  2. The page returns all records (normally only matching items should be returned)
+  3. Use `UNION SELECT` to extract the users table
+- **Remediation recommendation**: use parameterized queries (Prepared Statement), never concatenate SQL strings
 
-### 5. 风险评级标准
+### 5. Risk Rating Criteria
+Use CVSS 3.1 or a simplified version:
 
-使用 CVSS 3.1 或简化版：
-
-| 等级 | CVSS | 典型场景 |
+| Severity | CVSS | Typical scenario |
 |------|------|----------|
-| 严重 | 9.0-10.0 | RCE、SQL注入可获取shell、认证完全绕过 |
-| 高危 | 7.0-8.9 | 敏感数据泄露、权限提升、任意文件读取 |
-| 中危 | 4.0-6.9 | 存储型XSS、CSRF、信息泄露 |
-| 低危 | 0.1-3.9 | 反射型XSS、目录列表、版本泄露 |
-| 信息 | 0 | 安全配置建议、最佳实践偏离 |
+| Critical | 9.0-10.0 | RCE, SQL injection to obtain a shell, complete authentication bypass |
+| High | 7.0-8.9 | Sensitive data exposure, privilege escalation, arbitrary file read |
+| Medium | 4.0-6.9 | Stored XSS, CSRF, information disclosure |
+| Low | 0.1-3.9 | Reflected XSS, directory listing, version disclosure |
+| Info | 0 | Security configuration recommendations, best practice deviations |
 
-### 6. 修复建议优先级
-按修复紧迫性排序：
-1. **立即修复**：严重和高危漏洞
-2. **计划修复**：中危漏洞（下个版本）
-3. **择机改进**：低危和信息级
+### 6. Remediation Priority
+Sort by remediation urgency:
+1. **Fix immediately**: critical and high severity vulnerabilities
+2. **Fix on plan**: medium severity vulnerabilities (next release)
+3. **Improve when possible**: low and informational severity
 
-### 7. 附录
-- 工具列表和版本
-- 详细测试时间线
-- 原始扫描数据（可选）
+### 7. Appendix
+- Tool list and versions
+- Detailed testing timeline
+- Raw scan data (optional)
 
-## 写作原则
-- **可复现**：技术人员看完复现步骤能自己验证；小型 PoC 可放在复现步骤，较长 PoC 放附录并在正文引用
-- **可理解**：管理层看完执行摘要能理解风险；漏洞影响要落到业务后果，而不是只写技术名词
-- **可操作**：修复建议具体到代码/配置级别
-- **不夸大**：客观描述风险，不为了显得重要而提升等级
-- **可交付**：最终交付优先使用 PDF；不要把可编辑的 Word/Markdown/LaTeX 作为唯一交付物
-- 避免主观情绪化表述，保持专业
+## Writing Principles
+- **Reproducible**: a technical reader should be able to verify the reproduction steps themselves; small PoCs can go in the reproduction steps, while longer PoCs go in the appendix and are referenced from the body
+- **Understandable**: management should understand the risk after reading the executive summary; the impact of a vulnerability must land on business consequences rather than only technical jargon
+- **Actionable**: remediation recommendations must be specific down to the code/configuration level
+- **Not exaggerated**: describe risk objectively; do not raise the severity to look more important
+- **Deliverable**: prefer PDF for the final delivery; do not make the editable Word/Markdown/LaTeX file the only deliverable
+- Avoid subjective or emotional wording, stay professional
 
-## 交付质量检查
+## Delivery Quality Checks
 
-### 敏感信息脱敏
-- 对密码、Token、身份证件、个人照片、客户数据做不可逆遮盖，避免只用半透明模糊
-- 截图导入文档前先在图片文件中完成遮盖；不要依赖 Word 里的覆盖图形，原图可能仍保存在文档包内
-- 对凭据只保留必要前后缀用于定位，例如 `AKIA...ABCD`
+### Sensitive Information Redaction
+- Irreversibly mask passwords, tokens, ID documents, personal photos, and customer data — avoid relying on semi-transparent blur alone
+- Mask inside the image file before importing screenshots into the document; do not rely on Word overlay shapes, since the original image may still be stored inside the document package
+- Keep only the necessary prefix and suffix of credentials for identification, e.g. `AKIA...ABCD`
 
-### 截图规范
-- 截图只保留能证明漏洞的最小区域，确保命令、URL、状态码和关键响应可读
-- 避免暗色透明终端；报告经常会被打印或压缩，低对比度截图会失真
-- 每张图加标题或说明，图中高亮关键证据
-- 命令行截图应包含实际命令；纯输出截图不利于复现
+### Screenshot Standards
+- Keep only the minimum area of the screenshot that proves the vulnerability, ensuring commands, URLs, status codes, and key responses stay readable
+- Avoid dark, transparent terminals; reports are often printed or compressed, and low-contrast screenshots get distorted
+- Add a title or caption to every image and highlight the key evidence in it
+- Command line screenshots should include the actual command; pure output screenshots make reproduction harder
 
-### 文档卫生
-- 列表要去重并排序（按严重度、域名、IP、端口或时间线）
-- 避免“多个”“一些”等模糊数量，能量化就写具体数量
-- 不要把客户敏感数据发送到不受控的在线 LLM；如需辅助写作，优先使用本地模型或先脱敏
-- 交付前检查拼写、链接、图片清晰度、目录、页眉页脚和附件是否完整
+### Document Hygiene
+- Deduplicate and sort lists (by severity, domain, IP, port, or timeline)
+- Avoid vague quantities such as "several" or "some" — quantify whenever possible
+- Do not send client sensitive data to uncontrolled online LLMs; for writing assistance, prefer a local model or redact the data first
+- Before delivery, check spelling, links, image clarity, table of contents, headers/footers, and whether the attachments are complete

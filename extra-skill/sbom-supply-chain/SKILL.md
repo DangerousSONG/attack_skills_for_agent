@@ -3,6 +3,10 @@ name: sbom-supply-chain
 description: Generate, sign, and verify SBOMs and provenance attestations to secure
   the software supply chain. Use when implementing SLSA controls, artifact trust policies,
   or compliance evidence for releases.
+zh-signals: "生成、签名并验证 SBOM 与来源证明，保障软件供应链安全。信号:sbom,供应链安全,slsa,来源证明,制品签名"
+when-to-use: >-
+  Use when producing or verifying SBOMs, implementing SLSA controls, enforcing artifact
+  trust policies, or preparing supply-chain compliance evidence.
 category: security
 risk: safe
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

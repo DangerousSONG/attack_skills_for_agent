@@ -1,90 +1,92 @@
 ---
 name: php-injection-audit
 description: |
-  PHP 源码注入类漏洞审计。当在 PHP 白盒审计中需要检测注入类漏洞时触发。
-  覆盖 6 种注入: SQL 注入(PDO/MySQLi/ORM)、NoSQL 注入(MongoDB)、
-  命令注入(system/exec/passthru)、LDAP 注入、表达式注入(eval/preg_replace /e)、SSRF。
-  需要 php-audit-pipeline 提供的数据流证据(EVID_*)作为审计输入。
+  PHP source code injection vulnerability audit. Triggered during PHP white-box audits when injection vulnerabilities need to be detected.
+  Covers 6 types of injection: SQL injection (PDO/MySQLi/ORM), NoSQL injection (MongoDB),
+  command injection (system/exec/passthru), LDAP injection, expression injection (eval/preg_replace /e), and SSRF.
+  Requires the data-flow evidence (EVID_*) provided by php-audit-pipeline as audit input.
+zh-signals: "PHP 源码注入类漏洞审计，覆盖 SQL、NoSQL、命令、LDAP、表达式注入与 SSRF 的 Source→Sink 验证。信号:PHP注入审计,SQL注入,命令注入,SSRF,源码审计"
+when-to-use: "Use when performing white-box PHP source audits to detect injection vulnerabilities and validate whether Source-to-Sink filtering is sufficient."
 metadata:
-  tags: php injection, sql injection, command injection, nosql, ldap injection, ssrf, eval, preg_replace, 注入审计, 代码注入, php source audit
+  tags: php injection, sql injection, command injection, nosql, ldap injection, ssrf, eval, preg_replace, injection audit, code injection, php source audit
   category: code-audit
 ---
 
-# PHP 注入类漏洞源码审计
-本 skill 聚焦源码层面判断"注入是否成立"，核心是验证 Source→Sink 路径上的过滤是否充分。构造 payload、绕 WAF 等运行时利用技术属于对应黑盒 exploit skill 范畴。
+# PHP Injection Vulnerability Source Code Audit
+This skill focuses on the source code level: determining whether "injection actually holds". Its core is verifying whether filtering along the Source→Sink path is sufficient. Runtime exploitation techniques such as crafting payloads or bypassing WAFs belong to the corresponding black-box exploit skills.
 
-## 深入参考
+## Further Reading
 
-- 6 种注入的危险模式 / 安全模式代码对比 / EVID 证据示例 → [references/injection-patterns.md](references/injection-patterns.md)
+- Dangerous patterns of the 6 injection types / secure vs. insecure code comparison / EVID evidence examples → [references/injection-patterns.md](references/injection-patterns.md)
 
 ---
 
-## 6 种注入速查表
+## Quick Reference Table of the 6 Injection Types
 
-| 类型 | 典型 Sink | 危险模式 | 严重度 |
+| Type | Typical Sink | Dangerous Pattern | Severity |
 |------|-----------|----------|--------|
-| SQL 注入 | `PDO::query`, `mysqli_query`, `DB::raw`, `whereRaw` | 字符串拼接进 SQL | Critical-High |
-| 命令注入 | `exec`, `system`, `shell_exec`, `passthru`, `proc_open`, 反引号 | 用户输入拼入命令串 | Critical |
-| SSRF | `curl_exec`, `file_get_contents`, `SoapClient` | 用户可控 URL 发起服务端请求 | High-Medium |
-| 表达式注入 | `eval`, `assert`, `preg_replace(/e)`, `create_function` | 用户输入进入代码执行上下文 | Critical |
-| NoSQL 注入 | MongoDB `find()`, `$where`, 操作符 `$ne/$gt/$regex` | 数组/对象参数绕过等值比较 | High |
-| LDAP 注入 | `ldap_search`, `ldap_list`, `ldap_bind` | 用户输入拼入过滤器字符串 | High-Medium |
+| SQL injection | `PDO::query`, `mysqli_query`, `DB::raw`, `whereRaw` | String concatenation into SQL | Critical-High |
+| Command injection | `exec`, `system`, `shell_exec`, `passthru`, `proc_open`, backticks | User input concatenated into the command string | Critical |
+| SSRF | `curl_exec`, `file_get_contents`, `SoapClient` | Server-side request with a user-controllable URL | High-Medium |
+| Expression injection | `eval`, `assert`, `preg_replace(/e)`, `create_function` | User input enters a code execution context | Critical |
+| NoSQL injection | MongoDB `find()`, `$where`, operators `$ne/$gt/$regex` | Array/object parameters bypass equality comparison | High |
+| LDAP injection | `ldap_search`, `ldap_list`, `ldap_bind` | User input concatenated into the filter string | High-Medium |
 
-## 通用审计流程（4 步）
+## General Audit Workflow (4 Steps)
 
-**Step 1 -- 确认 EVID 证据点**: 从 `php-audit-pipeline` Phase 3 产出的 EVID_* 证据中，筛选属于注入类的条目（EVID_SQL_*、EVID_CMD_*、EVID_SSRF_*、EVID_EXPR_*、EVID_LDAP_*）。没有 EVID 证据的 Sink 只能标"待验证"。
+**Step 1 -- Confirm the EVID evidence points**: from the EVID_* evidence produced by Phase 3 of `php-audit-pipeline`, select the entries belonging to injection classes (EVID_SQL_*, EVID_CMD_*, EVID_SSRF_*, EVID_EXPR_*, EVID_LDAP_*). Sinks without EVID evidence can only be marked "to be verified".
 
-**Step 2 -- 判断过滤有效性**: 追踪 Source→Sink 路径上的每一步过滤/转义操作，评估其是否对当前注入类型有效。常见陷阱: `addslashes` 对 GBK 宽字节无效、`intval` 对数组参数无效、`escapeshellarg` 在特定 locale 下可绕过。
+**Step 2 -- Judge filtering effectiveness**: trace every filtering/escaping operation along the Source→Sink path and evaluate whether it is effective for the current injection type. Common traps: `addslashes` is ineffective against GBK wide bytes, `intval` is ineffective against array parameters, and `escapeshellarg` can be bypassed in specific locales.
 
-**Step 3 -- 评估绕过可能性**: 过滤存在但不充分时，分析具体绕过路径（编码差异、类型混淆、二次处理等）。能给出绕过思路则标"已确认"，否则标"待验证"并记录已知过滤方式。
+**Step 3 -- Assess bypass feasibility**: when filtering exists but is insufficient, analyze the concrete bypass path (encoding differences, type confusion, secondary processing, etc.). If a bypass idea can be given, mark it "confirmed"; otherwise mark it "to be verified" and record the known filtering method.
 
-**Step 4 -- 确定严重度**: 使用 `php-audit-pipeline` 的三维度评分公式 `Score = R*0.40 + I*0.35 + C*0.25`。注入类漏洞的 Impact 通常较高（命令/表达式注入 I=3, SQL 注入 I=2-3），但需结合可达性和利用复杂度综合判断。
+**Step 4 -- Determine severity**: use the three-dimension scoring formula of `php-audit-pipeline`, `Score = R*0.40 + I*0.35 + C*0.25`. Impact is usually high for injection vulnerabilities (command/expression injection I=3, SQL injection I=2-3), but reachability and exploitation complexity must be considered together.
 
-## SQL 注入审计要点
+## SQL Injection Audit Points
 
-- **PDO 预编译**: 确认 `prepare()` + `execute()` 的占位符绑定完整。`PDO::query($sql)` 和 `PDO::exec($sql)` 是直接执行，拼接即危险
-- **ORM 陷阱**: `whereRaw`/`havingRaw`/`orderByRaw`/`selectRaw` 中的变量拼接不受 ORM 参数化保护
-- **动态 ORDER BY / LIMIT**: 这两个子句无法使用参数化绑定，`intval()` 或白名单是唯一安全方案
-- **sprintf %s 拼接**: `sprintf("SELECT * FROM t WHERE id='%s'", $input)` 本质仍是拼接
-- **二次注入**: 数据入库时转义、出库时未转义再拼入新查询，追踪需跨越存储边界
+- **PDO prepared statements**: confirm that placeholder binding with `prepare()` + `execute()` is complete. `PDO::query($sql)` and `PDO::exec($sql)` execute directly, so any concatenation is dangerous
+- **ORM traps**: variable concatenation in `whereRaw`/`havingRaw`/`orderByRaw`/`selectRaw` is not protected by ORM parameterization
+- **Dynamic ORDER BY / LIMIT**: these two clauses cannot use parameterized binding, so `intval()` or a whitelist is the only safe option
+- **sprintf %s concatenation**: `sprintf("SELECT * FROM t WHERE id='%s'", $input)` is essentially concatenation
+- **Second-order injection**: data is escaped when stored but not escaped when read back and concatenated into a new query; tracing must cross the storage boundary
 
-## 命令注入审计要点
+## Command Injection Audit Points
 
-- **escapeshellarg 有效性**: 单独使用通常有效，但与 `escapeshellcmd` 同时使用反而会引入绕过（引号配对被破坏）
-- **多参数拼接**: `exec("convert " . escapeshellarg($src) . " " . $dest)` — 如果 `$dest` 未转义则仍可注入
-- **反引号**: 容易被忽视的命令执行方式，全局搜索反引号中的变量引用
-- **proc_open 数组模式**: `proc_open([$cmd, $arg1, $arg2], ...)` 避免了 shell 解析，是安全的命令执行方式
+- **Effectiveness of escapeshellarg**: usually effective on its own, but when combined with `escapeshellcmd` it can actually introduce a bypass (the quote pairing is broken)
+- **Multi-argument concatenation**: `exec("convert " . escapeshellarg($src) . " " . $dest)` — if `$dest` is not escaped, injection is still possible
+- **Backticks**: an easily overlooked command execution method; search globally for variable references inside backticks
+- **proc_open array mode**: `proc_open([$cmd, $arg1, $arg2], ...)` avoids shell parsing and is a safe way to execute commands
 
-## SSRF 审计要点
+## SSRF Audit Points
 
-- **协议限制**: 检查是否限制了 `http/https` 以外的协议（`gopher://` 可打内网服务，`file://` 可读本地文件）
-- **IP 黑名单绕过**: 十进制 `2130706433`、八进制 `0177.0.0.1`、IPv6 `[::1]`、DNS Rebinding 都能绕过简单的 IP 检查
-- **重定向跟随**: `curl` 默认不跟随但 `CURLOPT_FOLLOWLOCATION=true` 时，可通过 302 跳转绕过 URL 白名单
-- **DNS 解析时序**: 先解析检查再发起请求的模式存在 TOCTOU 竞争（DNS Rebinding 利用点）
+- **Protocol restrictions**: check whether protocols other than `http/https` are restricted (`gopher://` can reach internal services, `file://` can read local files)
+- **IP blacklist bypasses**: decimal `2130706433`, octal `0177.0.0.1`, IPv6 `[::1]`, and DNS rebinding all bypass simple IP checks
+- **Redirect following**: curl does not follow redirects by default, but with `CURLOPT_FOLLOWLOCATION=true` a 302 redirect can be used to bypass the URL whitelist
+- **DNS resolution timing**: the pattern of resolving and checking first and then issuing the request has a TOCTOU race (the DNS rebinding exploitation point)
 
-## 表达式注入审计要点
+## Expression Injection Audit Points
 
-- **eval/assert**: 任何用户可控数据进入 `eval()` 都是 Critical。`assert()` 在 PHP < 8.0 可执行字符串
-- **preg_replace /e**: PHP 7.0 已移除，但遗留系统中仍可能存在。替代方案 `preg_replace_callback` 是安全的
-- **create_function**: 本质是 `eval`，PHP 8.0 已移除但老项目常见
-- **可控回调**: `array_map`/`usort`/`call_user_func` 的回调参数如果用户可控，等价于代码执行
+- **eval/assert**: any user-controllable data entering `eval()` is Critical. `assert()` can execute strings in PHP < 8.0
+- **preg_replace /e**: removed in PHP 7.0, but may still exist in legacy systems. The alternative `preg_replace_callback` is safe
+- **create_function**: essentially `eval`; removed in PHP 8.0 but common in older projects
+- **Controllable callbacks**: if the callback argument of `array_map`/`usort`/`call_user_func` is user-controllable, it is equivalent to code execution
 
-## NoSQL / LDAP 审计要点（简要）
+## NoSQL / LDAP Audit Points (brief)
 
-- **MongoDB 操作符注入**: PHP 数组参数 `$_GET['user'][$ne]=1` 可绕过等值匹配，检查是否对输入做了类型强制转换
-- **$where 注入**: MongoDB 的 `$where` 接受 JavaScript 表达式，用户可控时等价于代码执行
-- **LDAP 过滤器拼接**: `(&(uid=$input)(pass=$pass))` 中注入 `*)(uid=*))(|(uid=*` 可修改查询逻辑
-- **ldap_escape 缺失**: PHP 5.6+ 提供 `ldap_escape()` 但很多项目未使用，检查 `(`, `)`, `*`, `\`, `NUL` 是否被转义
+- **MongoDB operator injection**: the PHP array parameter `$_GET['user'][$ne]=1` can bypass equality matching; check whether the input is type-cast
+- **$where injection**: MongoDB's `$where` accepts JavaScript expressions, so user control over it is equivalent to code execution
+- **LDAP filter concatenation**: injecting `*)(uid=*))(|(uid=*` into `(&(uid=$input)(pass=$pass))` can modify the query logic
+- **Missing ldap_escape**: PHP 5.6+ provides `ldap_escape()`, but many projects do not use it; check whether `(`, `)`, `*`, `\`, and `NUL` are escaped
 
-## 检测清单
+## Detection Checklist
 
-- [ ] 所有注入类 EVID_* 证据点已逐一审查
-- [ ] SQL 拼接点均已验证是否使用参数化/预编译
-- [ ] ORM Raw 方法中的变量拼接已全部标记
-- [ ] 命令执行函数的每个参数段都已检查转义
-- [ ] SSRF Sink 的 URL 来源和协议限制已确认
-- [ ] eval/assert/preg_replace /e 的参数可控性已追踪
-- [ ] NoSQL 查询参数的类型强制已检查
-- [ ] LDAP 过滤器的转义处理已确认
-- [ ] 过滤不充分的点已给出具体绕过思路或标"待验证"
-- [ ] 严重度评分使用了统一公式，与 pipeline 一致
+- [ ] All injection EVID_* evidence points have been reviewed one by one
+- [ ] All SQL concatenation points have been verified for the use of parameterization/prepared statements
+- [ ] Variable concatenation in ORM Raw methods has been marked in full
+- [ ] Every argument segment of the command execution functions has been checked for escaping
+- [ ] The URL source and protocol restrictions of SSRF sinks have been confirmed
+- [ ] The argument controllability of eval/assert/preg_replace /e has been traced
+- [ ] Type coercion of NoSQL query parameters has been checked
+- [ ] The escaping handling of LDAP filters has been confirmed
+- [ ] Points with insufficient filtering have a concrete bypass idea or are marked "Unverified"
+- [ ] Severity scoring used the unified formula, consistent with the pipeline

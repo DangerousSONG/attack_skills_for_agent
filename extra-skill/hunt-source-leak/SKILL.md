@@ -1,6 +1,8 @@
 ---
 name: hunt-source-leak
 description: "Hunt source code and build artifact leakage — JavaScript source maps (.js.map) reconstructing TypeScript/ES6 source, Swagger/OpenAPI JSON endpoint discovery, .env/.git exposure, webpack chunks with hardcoded secrets, robots.txt/security.txt recon, build-info files, asset-manifest.json API route discovery, .DS_Store file listing. Use at the START of every recon session — these findings often unlock the entire attack surface."
+zh-signals: "在侦察初期排查源码与构建产物泄露，包括 Source Map 还原、Swagger 接口、.git/.env 暴露与硬编码密钥。信号:源码泄露,source map,Swagger,.git暴露,密钥泄露"
+when-to-use: "Use at the start of a recon session to hunt source code and build artifact leakage such as source maps, Swagger/OpenAPI specs, exposed .git/.env files, and hardcoded secrets."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

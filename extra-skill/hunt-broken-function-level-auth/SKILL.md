@@ -1,6 +1,8 @@
 ---
 name: hunt-broken-function-level-auth
 description: Hunt broken function-level authorization via verb drift, route shadowing, and transport gaps.
+zh-signals: "通过 HTTP 动词漂移、路由遮蔽与传输协议差异猎取功能级授权绕过漏洞。信号:功能级授权绕过,HTTP动词漂移,路由遮蔽,API权限缺陷,GraphQL授权"
+when-to-use: "Use when testing APIs with role-based endpoints, legacy routes, or parallel GraphQL, gRPC, and WebSocket transports for action-level authorization gaps."
 category: redteam
 version: 1.1.0
 revision_date: 2026-07-25

@@ -4,6 +4,8 @@ description: |
   Container and Kubernetes security assessment. Tests container escape vectors, Docker/containerd socket exposure, K8s RBAC misconfigurations, pod security violations, exposed API servers, etcd access, service account token abuse, image layer secrets, private registry attacks, SSRF to metadata services, cross-namespace network bypass, CIS benchmarks, crypto miner detection, resource exhaustion, and admission controller gaps.
 
   Both external and internal (compromised pod) perspectives. Uses trivy, kube-bench, kubectl, nuclei, dive, amicontained, and docker-bench-security. Covers OWASP Kubernetes Top 10 and all 22 Kubernetes Goat attack scenarios.
+zh-signals: "容器与 Kubernetes 安全评估，测试容器逃逸、Docker/containerd socket 暴露、RBAC 配置错误、Pod 安全违规、etcd 与镜像供应链风险。信号:容器逃逸,Kubernetes,RBAC,镜像扫描,Pod安全"
+when-to-use: "Use for container and Kubernetes security assessments from both external and compromised-pod perspectives. Covers escape vectors, RBAC abuse, exposed API servers/etcd, image supply chain, and CIS benchmark gaps."
 argument-hint: "<target> [type=docker|kubernetes|both] [perspective=external|internal|both] [depth=quick|standard|thorough]"
 user-invocable: true
 ---

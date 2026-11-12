@@ -1,112 +1,114 @@
 ---
 name: python-prototype-pollution
-description: "Python 原型链污染（属性注入/Class Pollution）检测与利用。当目标为 Python Web 应用（Flask/Sanic/Django/FastAPI）且存在递归合并(merge)、深度属性设置(pydash.set_)、JSON 配置更新接口时使用。覆盖污染入口识别、__globals__链构造、Flask SECRET_KEY/Jinja2定界符/searchpath污染、pydash路径过滤绕过、Sanic污染链、RCE/文件读取/权限提升利用"
+description: "Python prototype pollution (attribute injection/Class Pollution) detection and exploitation. Use when the target is a Python web application (Flask/Sanic/Django/FastAPI) that exposes recursive merge, deep attribute setting (pydash.set_), or JSON configuration update endpoints. Covers pollution entry point identification, __globals__ chain construction, Flask SECRET_KEY/Jinja2 delimiter/searchpath pollution, pydash path filter bypass, Sanic pollution chains, and RCE/file read/privilege escalation exploitation"
+zh-signals: "检测并利用 Python 原型链污染，通过 merge 或 pydash 等深度属性设置入口篡改全局对象实现 RCE、文件读取或权限提升。信号:Python 原型链污染,Class Pollution,pydash,merge 注入,Flask RCE"
+when-to-use: "Use when a Python web application (Flask/Sanic/Django/FastAPI) exposes recursive merge or deep attribute-setting interfaces such as pydash.set_ and you need to test or exploit class pollution."
 metadata:
-  tags: "prototype-pollution,python,pydash,merge,class-pollution,attribute-injection,flask,sanic,jinja2,rce,原型链污染,属性注入,deep,set_,__class__,__init__,proto,class pollution,深度设置,递归合并,globals,配置污染,cookie,octal,八进制,bypass,绕过,waf"
+  tags: "prototype-pollution,python,pydash,merge,class-pollution,attribute-injection,flask,sanic,jinja2,rce,proto,deep-set,recursive-merge,globals,config-pollution,cookie,octal,bypass,waf"
   category: "exploit"
 ---
 
-# Python 原型链污染方法论
+# Python Prototype Pollution Methodology
 
-Python 原型链污染（又称 Class Pollution / Attribute Injection）利用 Python 类继承和 `__globals__` 机制，通过递归合并函数或深度属性设置函数（如 `pydash.set_()`），从一个普通对象"跳出"当前作用域，修改全局变量、Flask 配置、Jinja2 引擎设置，实现 RCE、文件读取或权限提升。
+Python prototype pollution (also known as Class Pollution / Attribute Injection) abuses Python class inheritance and the `__globals__` mechanism. Through recursive merge functions or deep attribute-setting functions (such as `pydash.set_()`), it "escapes" the current scope from an ordinary object to modify global variables, Flask configuration, and Jinja2 engine settings, achieving RCE, file read, or privilege escalation.
 
-## 深入参考
+## Further Reading
 
-- Flask/Jinja2 完整污染目标清单 → [references/flask-jinja2-targets.md](references/flask-jinja2-targets.md)
-- Phase 3A-3I 详细利用 Payload 与 Phase 4 高级链 → [references/exploitation-payloads.md](references/exploitation-payloads.md)
-- pydash 路径过滤绕过 + Cookie 八进制绕过 → [references/pydash-bypass.md](references/pydash-bypass.md)
-- Sanic 框架污染链 → [references/sanic-pollution-chain.md](references/sanic-pollution-chain.md)
-- 完整污染链速查清单 → [references/quick-reference.md](references/quick-reference.md)
+- Complete Flask/Jinja2 pollution target list → [references/flask-jinja2-targets.md](references/flask-jinja2-targets.md)
+- Detailed Phase 3A-3I exploitation payloads and advanced Phase 4 chains → [references/exploitation-payloads.md](references/exploitation-payloads.md)
+- pydash path filter bypass + cookie octal bypass → [references/pydash-bypass.md](references/pydash-bypass.md)
+- Sanic framework pollution chain → [references/sanic-pollution-chain.md](references/sanic-pollution-chain.md)
+- Quick reference checklist of complete pollution chains → [references/quick-reference.md](references/quick-reference.md)
 
 ---
 
-## Phase 0: 识别污染入口
+## Phase 0: Identify Pollution Entry Points
 
-寻找将用户 JSON 输入递归合并/设置到 Python 对象的代码模式：
+Look for code patterns that recursively merge/set user JSON input into Python objects:
 
-| 入口类型 | 代码特征 | 常见接口 |
+| Entry point type | Code signature | Common endpoints |
 |---------|---------|---------|
-| 自定义 merge 函数 | `def merge(src, dst)` + `setattr(dst, k, v)` | POST JSON 配置更新 |
-| pydash.set_() | `pydash.set_(obj, path, value)` | API 属性设置 |
-| pydash.get() | `pydash.get(obj, path)` | API 属性查询 |
-| pydash.invoke() | `pydash.invoke(obj, path, arg)` | API 方法调用 |
-| 其他深度设置库 | `glom`, `box`, 任何 deep-set 实现 | 配置更新接口 |
+| Custom merge function | `def merge(src, dst)` + `setattr(dst, k, v)` | POST JSON configuration update |
+| pydash.set_() | `pydash.set_(obj, path, value)` | API attribute setting |
+| pydash.get() | `pydash.get(obj, path)` | API attribute query |
+| pydash.invoke() | `pydash.invoke(obj, path, arg)` | API method invocation |
+| Other deep-set libraries | `glom`, `box`, any deep-set implementation | Configuration update endpoints |
 
-**识别信号**：
-- 接口接受嵌套 JSON 对象（`{"a": {"b": {"c": "value"}}}` 格式）
-- 接口接受点分路径字符串（`"a.b.c"` 格式）
-- 响应头显示 Python/Flask/Werkzeug/uvicorn
-- 页面/源码/requirements.txt 提及 pydash、merge、update
+**Identification signals**:
+- The endpoint accepts nested JSON objects (`{"a": {"b": {"c": "value"}}}` format)
+- The endpoint accepts dotted path strings (`"a.b.c"` format)
+- Response headers reveal Python/Flask/Werkzeug/uvicorn
+- Pages/source code/requirements.txt mention pydash, merge, update
 
-## Phase 1: 确认污染可行性
+## Phase 1: Confirm Pollution Feasibility
 
-### 1.1 判断 obj 类型
+### 1.1 Determine the obj type
 
-| obj 类型 | 起步路径 | 识别方法 |
+| obj type | Starting path | Identification method |
 |---------|---------|---------|
-| **自定义类实例** | `__init__.__globals__` | 直接设 `__init__.__globals__.xxx` 有效 |
-| **字典 (dict)** | `__class__.__init__.__globals__` | 需先 `__class__` 跳出字典键值逻辑 |
+| **Custom class instance** | `__init__.__globals__` | Setting `__init__.__globals__.xxx` directly works |
+| **Dictionary (dict)** | `__class__.__init__.__globals__` | Must first use `__class__` to escape the dictionary key/value logic |
 
-### 1.2 无害探测（不破坏目标）
+### 1.2 Harmless probing (does not damage the target)
 
 ```bash
-# merge 函数场景: 嵌套 JSON
+# merge function scenario: nested JSON
 curl -X POST http://target/api/merge \
   -H 'Content-Type: application/json' \
   -d '{"__class__": {"__name__": "test"}}'
 
-# pydash.set_ 场景: 点分路径
+# pydash.set_ scenario: dotted path
 curl -X POST http://target/api/update \
   -H 'Content-Type: application/json' \
   -d '{"path": "__class__.__name__", "value": "test"}'
 
-# pydash.get 场景: 信息泄露探测
+# pydash.get scenario: information leak probe
 curl -X POST http://target/api/get \
   -H 'Content-Type: application/json' \
   -d '{"path": "__class__"}'
 ```
 
-## Phase 2: 选择污染目标
+## Phase 2: Select the Pollution Target
 
-### 决策树
+### Decision tree
 
 ```
-确认 Python 原型链污染可行
-├── 目标使用 pydash.invoke()？
-│   └── 是 → 直接 RCE（Phase 3A）
-├── 目标使用 Flask？
-│   ├── 需要提权？ → 污染类属性 is_admin（Phase 3B）
-│   ├── 有 session？ → 污染 SECRET_KEY → 伪造 session（Phase 3C）
-│   ├── 有 SSTI 但被过滤？ → 污染 Jinja2 定界符（Phase 3D）
-│   ├── 有 render_template？ → 污染 searchpath/静态目录（Phase 3E）
-│   └── 有 before_first_request？ → 重置 _got_first_request（Phase 3F）
-├── 目标有文件上传？
-│   ├── 代码调用相对路径命令 → PATH 劫持（Phase 3G）
-│   └── 代码有懒加载 import → sys.path 劫持（Phase 3H）
-└── 有函数 shell=False 等默认参数？
-    └── 污染 __defaults__ / __kwdefaults__（Phase 3I）
+Confirm Python prototype pollution is feasible
+├── Target uses pydash.invoke()?
+│   └── Yes → direct RCE (Phase 3A)
+├── Target uses Flask?
+│   ├── Need privilege escalation? → pollute class attribute is_admin (Phase 3B)
+│   ├── Has session? → pollute SECRET_KEY → forge session (Phase 3C)
+│   ├── Has SSTI but it is filtered? → pollute Jinja2 delimiters (Phase 3D)
+│   ├── Has render_template? → pollute searchpath/static directory (Phase 3E)
+│   └── Has before_first_request? → reset _got_first_request (Phase 3F)
+├── Target has file upload?
+│   ├── Code calls commands with relative paths → PATH hijacking (Phase 3G)
+│   └── Code has lazy-loaded imports → sys.path hijacking (Phase 3H)
+└── Has functions with default args such as shell=False?
+    └── Pollute __defaults__ / __kwdefaults__ (Phase 3I)
 ```
 
-> 各 Phase 的详细利用命令和代码见 [references/exploitation-payloads.md](references/exploitation-payloads.md)
+> Detailed exploitation commands and code for each Phase see [references/exploitation-payloads.md](references/exploitation-payloads.md)
 
-### 推荐攻击顺序
+### Recommended Attack Order
 
-从低风险到高风险逐步升级：
+Escalate gradually from low risk to high risk:
 
-1. **无害探测** → 确认污染可行（Phase 1.2）
-2. **信息泄露** → 通过 get 读取 SECRET_KEY、app.config 等（Phase 3C 步骤 1）
-3. **权限提升** → 污染 is_admin 或全局变量（Phase 3B）
-4. **文件读取** → _static_url_path 或 searchpath（Phase 3E）
-5. **RCE** → invoke / 定界符+SSTI / PATH 劫持（Phase 3A/3D/3G）
+1. **Harmless probing** → confirm pollution is feasible (Phase 1.2)
+2. **Information leak** → read SECRET_KEY, app.config, etc. via get (Phase 3C step 1)
+3. **Privilege escalation** → pollute is_admin or global variables (Phase 3B)
+4. **File read** → _static_url_path or searchpath (Phase 3E)
+5. **RCE** → invoke / delimiter+SSTI / PATH hijacking (Phase 3A/3D/3G)
 
-如果有 pydash 相关线索，同时通过 `search_vulndb("pydash")` 获取 CVE-2023-26145 条目中的详细利用链，两者互补。
+If there are pydash-related leads, also run `search_vulndb("pydash")` to obtain the detailed exploit chain from the CVE-2023-26145 entry; the two approaches complement each other.
 
-## 与 SSTI 和反序列化的关系
+## Relationship with SSTI and Deserialization
 
-| 技术 | 入口 | 关系 |
+| Technique | Entry point | Relationship |
 |------|------|------|
-| **原型链污染** | merge/set_ 接口 | 本 skill |
-| **SSTI** | 模板注入点 | 原型链污染可改 Jinja2 定界符绕过 SSTI 过滤 |
-| **反序列化** | pickle/json | SECRET_KEY 被污染后可伪造 session → 触发 pickle 反序列化 |
+| **Prototype pollution** | merge/set_ endpoints | This skill |
+| **SSTI** | Template injection points | Prototype pollution can change Jinja2 delimiters to bypass SSTI filters |
+| **Deserialization** | pickle/json | Once SECRET_KEY is polluted, sessions can be forged → trigger pickle deserialization |
 
-三者可组合使用：原型链污染 → 修改 SECRET_KEY → 伪造 session → pickle RCE。
+The three can be combined: prototype pollution → modify SECRET_KEY → forge session → pickle RCE.

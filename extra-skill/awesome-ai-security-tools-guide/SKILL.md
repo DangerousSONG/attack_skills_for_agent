@@ -1,6 +1,8 @@
 ---
 name: awesome-ai-security-tools-guide
 description: Navigate and recommend tools from the curated Awesome AI Security Tools list covering autotriage, agent security, AI/ML supply chain, pentest agents, LLM red-teaming, and more.
+zh-signals: "从 Awesome AI Security Tools 清单中检索并推荐 AI 安全工具。信号:AI安全工具,工具推荐,LLM红队,Agent安全,供应链"
+when-to-use: "Use when recommending AI security tools for LLM red-teaming, agent security, AI/ML supply chain, AI-powered SAST or fuzzing, SOC/SIEM triage, or reverse engineering with LLMs."
 triggers:
   - recommend AI security tools for my project
   - find tools for LLM red-teaming or prompt injection

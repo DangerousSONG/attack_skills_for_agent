@@ -1,6 +1,8 @@
 ---
 name: audit-prep-assistant
 description: Prepares codebases for security review using Trail of Bits' checklist. Helps set review goals, runs static analysis tools, increases test coverage, removes dead code, ensures accessibility, and generates documentation (flowcharts, user stories, inline comments). Use when preparing your own codebase to be audited by someone else, getting a repository review-ready before an external security review, deciding what to fix before auditors start, or asking what assessors need from a project. For understanding unfamiliar code you are about to audit, use audit-context-building instead.
+zh-signals: "帮助在正式安全审计前准备代码库，涵盖设定审查目标、运行静态分析、提升测试覆盖率、清理死代码与生成架构文档。信号:审计准备,静态分析,测试覆盖率,死代码,文档生成"
+when-to-use: "Use when preparing your own codebase for an external security audit, freezing a review-ready version, or assembling the artifacts auditors expect before a review begins."
 ---
 
 # Audit Prep Assistant

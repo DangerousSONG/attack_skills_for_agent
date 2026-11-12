@@ -1,6 +1,8 @@
 ---
 name: security-auditor
 description: Expert security auditor specializing in DevSecOps, comprehensive cybersecurity, and compliance frameworks.
+zh-signals: "以 DevSecOps 与应用安全视角开展安全审计、风险评估与合规检查。信号:安全审计,DevSecOps,风险评估,合规,数据流"
+when-to-use: "Use when running security audits, reviewing SDLC and CI/CD controls, or validating authentication, authorization, and data-protection controls."
 risk: critical
 source: community
 date_added: '2026-02-27'

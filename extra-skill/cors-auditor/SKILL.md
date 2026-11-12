@@ -7,6 +7,8 @@ description: >-
   credentialed CORS. Use when the user asks to "check my CORS config", "is my
   API's CORS safe", "test for CORS misconfiguration", or "why can any site call
   my API".
+zh-signals: "审查站点 CORS 配置并报告可利用的跨域错误配置。信号:跨域配置,通配符源,源反射,空源,凭据泄露。"
+when-to-use: "Use when auditing a site's CORS headers, testing whether an API reflects an arbitrary Origin, checking Access-Control-Allow-Origin wildcard with credentials, or evaluating null-origin and wildcard-method misconfigurations."
 license: MIT
 ---
 

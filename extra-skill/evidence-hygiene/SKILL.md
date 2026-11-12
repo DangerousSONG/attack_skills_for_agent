@@ -1,6 +1,10 @@
 ---
 name: evidence-hygiene
 description: "Evidence-capture and PoC-redaction discipline for bug-bounty submissions: cookie redaction protocol (which fields to mask, Preview annotation / Burp panel hiding / DevTools workflow), PII black-bar discipline (what to mask in other-user data — names, emails, phones, faces — vs what is safe to leave — usernames, trace IDs, request bodies), HAR file sanitization (jq filters for Cookie/Set-Cookie/Authorization headers), Burp Repeater/Intruder screenshot hygiene (hide request body, show only Results table for rate-limit attacks), Chrome DevTools Console PoC patterns (credentials include so cookies are not echoed, labeled console.log), screenshot capture order, filename conventions, post-submission rotation hygiene. Use BEFORE any PoC screenshot, BEFORE attaching a HAR, or whenever preparing evidence with session cookies or other-user PII. Pairs with bugcrowd-reporting and report-writing."
+zh-signals: "漏洞赏金证据采集与脱敏规范，涵盖 Cookie/PII 遮盖、HAR 清洗、截图规范与提交后轮换。信号:证据脱敏,Cookie遮盖,HAR清洗,PII,截图规范"
+when-to-use: >-
+  Use before capturing any PoC screenshot, attaching a HAR, or preparing evidence
+  containing session cookies or other-user PII for a bug-bounty submission.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

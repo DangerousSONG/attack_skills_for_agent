@@ -1,6 +1,8 @@
 ---
 name: offensive-zigbee-thread-matter
 description: "Zigbee, Thread, and Matter mesh-protocol attack methodology — IEEE 802.15.4 sniffing with TI CC2531 / CC2540 / Sonoff Zigbee Dongle E, KillerBee toolkit, Touchlink commissioning abuse with the well-known transport key, replay/injection attacks, Zigbee Cluster Library command abuse for door locks and bulbs, Thread network credential theft, Matter commissioning chain analysis, and 6LoWPAN/IPv6 routing exploitation. Use when targeting smart-home or commercial mesh deployments, Zigbee-based door locks, lighting, or sensor networks."
+zh-signals: "针对 Zigbee、Thread 与 Matter 网状协议的攻防方法论，涵盖 802.15.4 嗅探、Touchlink 滥用与命令注入。信号:Zigbee,Thread,Matter,802.15.4,Touchlink,物联网"
+when-to-use: "Use when targeting smart-home or commercial 802.15.4 mesh deployments such as Zigbee door locks, lighting, sensors, or Thread/Matter networks."
 ---
 
 # Zigbee / Thread / Matter Attacks

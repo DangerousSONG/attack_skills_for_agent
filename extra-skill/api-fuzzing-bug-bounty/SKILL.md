@@ -1,6 +1,8 @@
 ---
 name: api-fuzzing-bug-bounty
 description: "Provide comprehensive techniques for testing REST, SOAP, and GraphQL APIs during bug bounty hunting and penetration testing engagements. Covers vulnerability discovery, authentication bypass, IDOR exploitation, and API-specific attack vectors."
+zh-signals: "提供 REST、SOAP 与 GraphQL API 的漏洞发现、认证绕过、IDOR 利用与专项攻击面测试方法。信号:API模糊测试,REST测试,GraphQL漏洞,认证绕过,IDOR"
+when-to-use: "Use when testing REST, SOAP, or GraphQL APIs during authorized bug bounty or penetration testing engagements."
 risk: offensive
 source: community
 author: zebbern

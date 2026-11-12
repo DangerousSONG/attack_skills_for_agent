@@ -3,6 +3,8 @@ name: azure-keyvault
 description: Manage secrets and certificates in Azure Key Vault. Configure access
   policies, integrate with Azure services, and implement secure secret management.
   Use when managing secrets in Azure environments.
+zh-signals: "在 Azure Key Vault 中管理密钥、证书与机密，配置访问策略并实现安全机密管理。信号:Azure,Key Vault,机密管理,访问策略,证书"
+when-to-use: "Use when managing secrets, keys, or certificates in Azure Key Vault, configuring RBAC or access policies, or integrating Key Vault with Azure services."
 category: security
 risk: critical
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

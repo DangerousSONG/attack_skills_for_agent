@@ -6,6 +6,8 @@ description: >
   browser cache leakage (Cache-Control: no-store missing), session token predictability via Burp
   Sequencer analysis, server-side session not invalidated on logout, and SSO single-logout bypass.
   Tools: Burp Suite Repeater/Sequencer, OWASP ZAP, EditThisCookie, Tamper Data, Cookiebro.
+zh-signals: "审计并攻击会话 Cookie 的缺失安全属性、范围过宽、可预测性与登出不失效问题。信号:Cookie安全,Session,HttpOnly,SameSite,会话劫持"
+when-to-use: "Use when auditing session cookies for missing Secure/HttpOnly/SameSite flags, broad scope, predictability, or broken logout invalidation."
 license: MIT
 compatibility: Designed for Claude Code. Requires Burp Suite or OWASP ZAP.
 metadata:

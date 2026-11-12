@@ -1,6 +1,11 @@
 ---
 name: authz-security
 description: Review application source code for broken authorization — IDOR / Broken Object Level Authorization (OWASP API1), Broken Function Level Authorization (API5), mass assignment (API3), multi-tenant isolation gaps, and privilege escalation. Reads routes, controllers, resolvers, and data models offline and reports the missing ownership/role check at file:line with a framework-correct fix. No running app, no credentials, no tools. Trigger when reviewing endpoints/handlers, auditing a PR diff that adds or changes routes, hardening a multi-tenant SaaS, or when the user asks "is this endpoint authorized?", "can a user access another user's data?", "IDOR", "BOLA", or "broken access control".
+zh-signals: "审查源码中的授权缺陷，覆盖 IDOR/BOLA、BFLA、批量赋值、多租户隔离与提权。信号:授权审查,IDOR,BOLA,批量赋值,多租户"
+when-to-use: >-
+  Use when reviewing endpoints or route changes for missing ownership/role
+  checks, hardening multi-tenant SaaS, or assessing IDOR/BOLA and broken access
+  control offline.
 ---
 
 # Authorization Security Scanner

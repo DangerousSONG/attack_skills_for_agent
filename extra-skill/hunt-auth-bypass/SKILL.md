@@ -1,6 +1,9 @@
 ---
 name: hunt-auth-bypass
 description: Hunting skill for auth bypass vulnerabilities. Built from 12 public bug bounty reports across SAML XSW / parser-differential (GitHub Enterprise CVE-2025-25291/25292), SAML signature stripping (Uber, Rocket.Chat, samlify CVE-2025-47949), SAML domain enforcement bypass via control characters (HackerOne 2024), partner-portal cross-IdP assertion reuse (Slack), WordPress XMLRPC bypassing SSO (Uber), JWT alg-confusion HS256/RS256 (Jitsi), JWT signature-validation skip (Linktree, Newspack), and token-audience confusion (Argo CD CVE-2023-22482). Use when hunting auth bypass — see the Legacy-Protocol Matrix for branded-UI vs legacy-endpoint patterns.
+zh-signals: "猎取认证绕过漏洞，覆盖 SAML、JWT、遗留协议端点与跨门户令牌复用。信号:认证绕过,SAML,JWT,alg confusion,XMLRPC,遗留端点。"
+when-to-use: >-
+  Use when hunting authentication bypass across SAML/OAuth/OIDC, JWT validation, legacy protocol endpoints, partner portals, or SSO-protected applications, especially where branded login UIs coexist with native-auth endpoints.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

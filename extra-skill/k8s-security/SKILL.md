@@ -1,6 +1,8 @@
 ---
 name: k8s-security
 description: Kubernetes security review — RBAC discipline, Pod Security Standards (baseline/restricted), NetworkPolicy default-deny, admission controllers (Kyverno/Gatekeeper/VAP), External Secrets Operator, and runtime monitoring via Falco and audit logs.
+zh-signals: "Kubernetes 集群与工作负载安全审查方法论。信号:K8s安全,RBAC,PSS,NetworkPolicy,Falco。"
+when-to-use: "Use when reviewing Kubernetes manifests, Helm charts or Kustomize overlays, hardening RBAC and Pod Security Standards, writing default-deny NetworkPolicy, choosing Kyverno, Gatekeeper or ValidatingAdmissionPolicy, or setting up External Secrets Operator and Falco runtime monitoring."
 ---
 
 # Kubernetes Security

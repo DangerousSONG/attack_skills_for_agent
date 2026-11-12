@@ -1,6 +1,8 @@
 ---
 name: android-mobile-security-sandbox-jamboree
 description: JAMBOREE Android security testing framework integrating Magisk, Burp Suite, Objection, and Frida for comprehensive mobile app penetration testing
+zh-signals: "搭建 JAMBOREE Android 安全测试框架，整合 Magisk、Burp Suite、Objection 与 Frida 进行移动应用渗透测试。信号:Android,Magisk,Burp,Frida,Objection"
+when-to-use: "Use when setting up an Android mobile app penetration testing environment with traffic interception, SSL pinning bypass, and dynamic instrumentation."
 triggers:
   - set up android security testing environment
   - configure jamboree framework for mobile pentesting

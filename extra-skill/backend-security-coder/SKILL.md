@@ -1,6 +1,8 @@
 ---
 name: backend-security-coder
 description: Expert in secure backend coding practices specializing in input validation, authentication, and API security. Use PROACTIVELY for backend security implementations or security code reviews.
+zh-signals: "专注安全后端编码实践，覆盖输入校验、认证、API 安全与漏洞修复。信号:后端安全,安全编码,输入校验,认证,API安全"
+when-to-use: "Use when implementing backend security features, fixing vulnerabilities, or performing security-focused code reviews for backend applications."
 risk: critical
 source: community
 date_added: '2026-02-27'

@@ -2,6 +2,11 @@
 name: cors-misconfig
 description: >
   CORS misconfiguration allows attacker-controlled origins to read sensitive cross-origin responses when servers echo the `Origin` header in `Access-Control-Allow-Origin` or set it to `*` with `Access-Control-Allow-Credentials: true`. Detect via `Origin: https://attacker.com` reflection in `Access-Control-Allow-Origin` response header, wildcard `*` on credentialed endpoints, and null origin acceptance. Tools: OWASP ZAP, Burp Suite, manual `fetch()` with `credentials: include`.
+zh-signals: "识别与利用 CORS 配置错误，检测 Origin 反射、通配符与 null 源导致的跨域敏感数据读取。信号:CORS配置错误,跨域漏洞,Origin反射,凭证泄露,Web安全"
+when-to-use: >-
+  Use when testing web applications for CORS misconfigurations — origin reflection,
+  wildcard with credentials, or null-origin acceptance — to confirm cross-origin read
+  of sensitive data.
 license: MIT
 compatibility: Designed for Claude Code. Requires Burp Suite or OWASP ZAP, attacker-controlled HTTPS server for PoC.
 metadata:

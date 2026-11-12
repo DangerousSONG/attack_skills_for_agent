@@ -2,6 +2,8 @@
 name: llm-app-security
 description: Secure LLM-powered applications with input validation, output controls,
   tenant isolation, and abuse prevention.
+zh-signals: "LLM 应用安全加固，覆盖输入校验、输出控制、租户隔离与滥用防护。信号:LLM安全,提示注入防护,租户隔离,输出控制,AI应用安全"
+when-to-use: "Use when hardening chatbots, RAG pipelines, or AI features against prompt injection, data leakage, and abuse."
 category: security
 risk: safe
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

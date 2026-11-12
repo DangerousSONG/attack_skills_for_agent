@@ -1,6 +1,8 @@
 ---
 name: semgrep-rule-variant-creator
 description: Creates language variants of existing Semgrep rules. Use when porting a Semgrep rule to specified target languages. Takes an existing rule and target languages as input, produces independent rule+test directories for each language.
+zh-signals: "Semgrep 规则语言变体生成技能，将现有规则移植到指定目标语言并产出独立规则与测试目录。信号:Semgrep,规则移植,语言变体,静态分析,测试驱动"
+when-to-use: "Use when porting an existing Semgrep rule to specified target languages and producing independent rule plus test directories for each language."
 allowed-tools: Bash Read Write Edit Glob Grep WebFetch Workflow
 ---
 

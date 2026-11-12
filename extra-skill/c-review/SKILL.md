@@ -1,6 +1,8 @@
 ---
 name: c-review
 description: Performs comprehensive C/C++ security review for memory corruption, integer overflows, race conditions, and platform-specific vulnerabilities. Use when auditing native C/C++ applications, reviewing daemons or services for memory safety, or hunting integer overflow / use-after-free / race conditions in userspace code.
+zh-signals: "对 C/C++ 代码做全面安全审查，查找内存破坏、整数溢出、竞态条件与平台相关漏洞。信号:C/C++,代码审计,内存破坏,整数溢出,竞态条件"
+when-to-use: "Use when auditing native C/C++ userspace applications, daemons, or services for memory safety, integer overflow, use-after-free, or race conditions."
 allowed-tools: Workflow AskUserQuestion Bash Read
 ---
 

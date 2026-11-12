@@ -1,6 +1,8 @@
 ---
 name: triage-validation
 description: Finding validation before writing any report — 7-Question Gate (all 7 questions), 4 pre-submission gates, always-rejected list, conditionally valid with chain table, CVSS 3.1 quick reference, severity decision guide, report title formula, 60-second pre-submit checklist. Use BEFORE writing any report. One wrong answer = kill the finding and move on. Saves N/A ratio.
+zh-signals: "在撰写漏洞报告前通过 7 问门与提交前门禁验证发现，降低 N/A 比例并评估严重等级。信号:漏洞验证,7问门,CVSS,严重等级,报告提交"
+when-to-use: "Use before writing any vulnerability report to validate a finding through the 7-Question Gate and pre-submission gates, assign CVSS severity, and decide whether to submit."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

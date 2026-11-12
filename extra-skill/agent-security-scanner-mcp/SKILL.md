@@ -1,6 +1,9 @@
 ---
 name: agent-security-scanner-mcp
 description: Security scanner MCP server for AI coding agents with vulnerability detection, package hallucination checks, prompt injection firewall, AST analysis, and auto-fix capabilities
+zh-signals: "为 AI 编码代理提供漏洞检测、包幻觉检查、提示注入防护和自动修复的安全扫描 MCP。信号:MCP安全扫描,漏洞检测,包幻觉,提示注入,SBOM"
+when-to-use: >-
+  Use when an AI coding agent needs automated vulnerability scanning, package hallucination checks, prompt injection filtering, AST analysis, or SBOM generation.
 triggers:
   - scan this code for security vulnerabilities
   - check if this package is hallucinated

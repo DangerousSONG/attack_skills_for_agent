@@ -2,38 +2,41 @@
 name: sipvicious-sip
 description: "SIPVicious: internal VoIP pentesting. Signals: port scan, nmap, SIP device discovery, extension enumeration, SIP brute force."
 zh-signals: "SIPVicious: VoIP 内网渗透。信号:端口扫描,nmap,SIP 设备发现,分机枚举,SIP 爆破。"
+when-to-use: >-
+  Use during internal VoIP or network reconnaissance to discover SIP devices,
+  enumerate extensions, and brute-force SIP credentials.
 ---
 
 # SIPVicious
 
-- 攻击大类:C42 网络扫描与枚举
-- 上游仓库:https://github.com/EnableSecurity/sipvicious
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C42 Network Scanning and Enumeration
+- Upstream Repository: https://github.com/EnableSecurity/sipvicious
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install sipvicious
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `svmap 10.0.0.0/24` | SIP 设备发现 |
-| `svwar -m INVITE 10.0.0.5` | 分机枚举 |
-| `svcrack -u 100 -d wordlist.txt 10.0.0.5` | SIP 爆破 |
-| `svreport -t onlinehosts` | 报告 |
+| `svmap 10.0.0.0/24` | SIP device discovery |
+| `svwar -m INVITE 10.0.0.5` | Extension enumeration |
+| `svcrack -u 100 -d wordlist.txt 10.0.0.5` | SIP brute force |
+| `svreport -t onlinehosts` | Report |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### VoIP 内网渗透
+### Internal VoIP Penetration Testing
 
 ```bash
 svmap 10.0.0.0/24 && svwar -m INVITE 10.0.0.5
-# 发现+枚举+爆破
+# Discovery + enumeration + brute force
 ```
 
-## 注意事项
+## Notes
 
-EnableSecurity 出品,VoIP 安全测试标准工具。
+By EnableSecurity, the standard tool for VoIP security testing.

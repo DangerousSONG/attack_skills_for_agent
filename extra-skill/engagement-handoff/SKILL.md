@@ -1,6 +1,8 @@
 ---
 name: engagement-handoff
 description: Documents the current state of an active pentest engagement so the next agent session can continue without losing context, covering findings, coverage, next steps, and open threads. Trigger when the user says "handoff", "save progress", "pick this up next session", or "summarize the engagement", when the context window is getting long and work needs to continue in a fresh session, or at the end of a testing day or shift change.
+zh-signals: "记录进行中渗透测试的发现、覆盖范围与待办事项，便于下一次会话无缝接手。信号:渗透交接,进度保存,会话总结,覆盖范围,待办事项"
+when-to-use: "Use when the user asks to hand off, save progress, or summarize an active pentest engagement for continuation in a fresh session."
 license: MIT
 metadata:
   version: "1.0.0"

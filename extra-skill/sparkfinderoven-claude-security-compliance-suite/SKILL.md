@@ -1,6 +1,8 @@
 ---
 name: sparkfinderoven-claude-security-compliance-suite
 description: Security & compliance skill suite for OWASP scanning, CVE detection, GDPR/SOC2 auditing, threat modeling, and incident response workflows
+zh-signals: "提供安全与合规技能套件，覆盖 OWASP 扫描、CVE 检测、GDPR/SOC2 审计、威胁建模与事件响应。信号:OWASP,CVE检测,GDPR,SOC2,威胁建模,合规审计"
+when-to-use: "Use when scanning code for OWASP vulnerabilities or CVEs, running GDPR/SOC2 audits, creating threat models, or executing incident response workflows."
 triggers:
   - scan this code for OWASP vulnerabilities
   - check dependencies for CVEs

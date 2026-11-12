@@ -1,6 +1,8 @@
 ---
 name: ai-runtime-security-sandbox
 description: Demonstrate and test RAG chatbot security vulnerabilities (prompt injection, tool abuse, data leakage) with live attack scenarios and defensive controls
+zh-signals: "通过实时攻击场景演示并测试 RAG 聊天机器人安全漏洞（提示注入、工具滥用、数据泄露），并提供防御控制措施。信号:RAG安全,提示注入,LLM安全,工具滥用,数据泄露,AI沙箱"
+when-to-use: "Use when demonstrating or testing RAG chatbot vulnerabilities such as prompt injection, tool abuse, and data leakage, or when setting up the AI runtime security sandbox."
 triggers:
   - how do I run the AI security sandbox demo
   - test prompt injection attacks on RAG chatbots

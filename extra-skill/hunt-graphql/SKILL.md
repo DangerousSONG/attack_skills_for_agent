@@ -1,6 +1,8 @@
 ---
 name: hunt-graphql
 description: Hunting skill for graphql vulnerabilities.
+zh-signals: "GraphQL 漏洞狩猎技能，用于发现 GraphQL 接口中的查询滥用、信息泄露与授权缺陷。信号:GraphQL,漏洞狩猎,接口测试,信息泄露,授权缺陷"
+when-to-use: "Use when hunting for GraphQL vulnerabilities on an authorized target, including introspection abuse, query manipulation, field-level authorization flaws, and information disclosure."
 category: security
 risk: offensive
 source: https://github.com/elementalsouls/Claude-BugHunter

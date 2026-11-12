@@ -1,6 +1,11 @@
 ---
 name: avast-premium-security-analysis
 description: Analyze and understand Avast Premium Security components, antivirus protection mechanisms, and security software implementation patterns
+zh-signals: "分析 Avast Premium Security 组件与杀毒防护机制，并识别伪装成正版安全软件的盗版/恶意分发风险。信号:Avast,杀毒软件,安全软件分析,恶意分发,软件盗版"
+when-to-use: >-
+  Use when researching antivirus engine components, real-time protection, or
+  behavior-shield mechanisms, or when assessing whether a security-software
+  download source is legitimate.
 triggers:
   - how do I analyze Avast antivirus behavior
   - show me how to understand security software architecture

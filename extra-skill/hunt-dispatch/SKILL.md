@@ -1,6 +1,8 @@
 ---
 name: hunt-dispatch
 description: Skill-set loader for /hunt orchestrator. Fingerprints the target, picks the right platform attack skills, and loads the Red Team or WAPT skill set. Use when /hunt has just received a mode answer (redteam or wapt + blackbox|greybox) and needs to load the appropriate skills and print the taxonomy. Not for direct user invocation.
+zh-signals: "为 /hunt 编排器加载技能集，在指纹识别目标后选择红队或 WAPT 攻击技能并打印分类。信号:技能分发,红队,WAPT,目标指纹,编排器"
+when-to-use: "Use when /hunt has just received a mode answer (redteam or wapt + blackbox|greybox) and needs to load the right skill set and print the taxonomy. Not for direct user invocation."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

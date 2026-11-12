@@ -1,6 +1,10 @@
 ---
 name: hunt-sqli
 description: Hunting skill for sqli vulnerabilities.
+zh-signals: "猎取 SQL 注入漏洞，按响应反射选择 UNION 或盲注并验证利用。信号:sql注入,sqli,union注入,盲注,漏洞猎取"
+when-to-use: >-
+  Use when hunting SQL injection in web endpoints where responses reveal how to choose
+  between UNION-based and blind extraction techniques.
 category: security
 risk: offensive
 source: https://github.com/elementalsouls/Claude-BugHunter

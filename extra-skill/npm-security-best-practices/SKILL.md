@@ -1,6 +1,8 @@
 ---
 name: npm-security-best-practices
 description: Expert guidance on securing npm packages, preventing supply chain attacks, and hardening package manager configurations
+zh-signals: "加固 npm 包安装与配置，防御供应链攻击、依赖混淆与恶意 postinstall 脚本。信号:npm安全,供应链攻击,依赖混淆,postinstall,加固"
+when-to-use: "Use when securing npm dependencies, configuring npm security settings, or defending against supply-chain and dependency-confusion attacks."
 triggers:
   - how do I secure my npm dependencies
   - protect against supply chain attacks in npm

@@ -1,6 +1,8 @@
 ---
 name: xss-html-injection
 description: "Execute comprehensive client-side injection vulnerability assessments on web applications to identify XSS and HTML injection flaws, demonstrate exploitation techniques for session hijacking and credential theft, and validate input sanitization and output encoding mechanisms."
+zh-signals: "评估 Web 应用的 XSS 与 HTML 注入漏洞并验证输入净化与输出编码。信号:XSS,HTML注入,客户端注入,会话劫持,输出编码"
+when-to-use: "Use when assessing client-side injection flaws such as XSS or HTML injection and validating sanitization and output encoding."
 risk: offensive
 source: community
 author: zebbern

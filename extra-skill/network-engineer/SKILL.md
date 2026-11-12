@@ -1,6 +1,8 @@
 ---
 name: network-engineer
 description: Expert network engineer specializing in modern cloud networking, security architectures, and performance optimization.
+zh-signals: "云网络、安全架构与性能优化领域的网络工程指导，覆盖多云互联、服务网格与零信任。信号:网络工程,云网络,零信任,服务网格,性能优化"
+when-to-use: "Use when working on cloud networking, security architecture, load balancing, multi-cloud connectivity, or network performance and troubleshooting tasks."
 risk: safe
 source: community
 date_added: '2026-02-27'

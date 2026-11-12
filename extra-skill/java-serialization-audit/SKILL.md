@@ -1,68 +1,73 @@
 ---
 name: java-serialization-audit
 description: |
-  Java 源码序列化类漏洞审计。当在 Java 白盒审计中需要检测序列化/反序列化相关漏洞时触发。
-  覆盖 3 类风险: Java 原生反序列化(ObjectInputStream/Gadget Chain/ysoserial)、
-  XXE(DocumentBuilderFactory/SAXParser/XMLInputFactory/TransformerFactory/SchemaFactory 五种解析器)、
-  模板注入 SSTI(Velocity/FreeMarker/Thymeleaf 模板引擎代码执行)。
-  Java 反序列化是 Java 生态最具特色的高危漏洞类型，Gadget Chain 分析是核心难点。
+  Java source code audit for serialization-class vulnerabilities. Triggered during Java white-box audits when serialization/deserialization related vulnerabilities need to be detected.
+  Covers 3 risk classes: native Java deserialization (ObjectInputStream/Gadget Chain/ysoserial),
+  XXE (five parsers: DocumentBuilderFactory/SAXParser/XMLInputFactory/TransformerFactory/SchemaFactory),
+  and template injection SSTI (code execution via Velocity/FreeMarker/Thymeleaf template engines).
+  Java deserialization is the most distinctive high-risk vulnerability class in the Java ecosystem, and gadget chain analysis is the core difficulty.
+zh-signals: "Java 源码序列化类漏洞审计，覆盖反序列化、XXE 与模板注入 SSTI 的白盒检测。信号:Java反序列化,XXE,SSTI,gadget链,源码审计"
+when-to-use: >-
+  Use when auditing Java source code for deserialization, XXE, or SSTI
+  vulnerabilities, especially when ObjectInputStream or XML parsers process
+  user-controlled input.
 metadata:
-  tags: deserialization, xxe, ssti, objectinputstream, gadget chain, ysoserial, xml, velocity, freemarker, thymeleaf, 反序列化, 模板注入, java source audit
+  tags: deserialization, xxe, ssti, objectinputstream, gadget chain, ysoserial, xml, velocity, freemarker, thymeleaf, deserialization, template injection, java source audit
   category: code-audit
 ---
 
-# Java 序列化类漏洞源码审计
-本 skill 聚焦源码层面判断"反序列化/XXE/SSTI 是否成立"，核心工作是：白盒确认反序列化入口点、追踪数据来源、评估 classpath 中可用 Gadget 链、验证 XML 解析器安全配置、检查模板引擎渲染上下文。构造 exploit payload、远程利用链发送等运行时黑盒技术属于对应 exploit skill 范畴。
+# Java Serialization-Class Vulnerability Source Code Audit
+This skill focuses on source-level judgement of "whether deserialization/XXE/SSTI holds". The core work is: white-box confirmation of deserialization entry points, tracing data sources, assessing the gadget chains available in the classpath, verifying the secure configuration of XML parsers, and checking the rendering context of template engines. Runtime black-box techniques such as crafting exploit payloads and sending remote exploit chains fall within the scope of the corresponding exploit skill.
 
-## 深入参考
+## Further Reading
 
-- 3 类漏洞的危险模式 / 安全模式代码对比 / Gadget 依赖表 / EVID 证据示例 → [references/serialization-patterns.md](references/serialization-patterns.md)
+- Dangerous patterns / secure pattern code comparisons / Gadget dependency tables / EVID evidence examples for the 3 vulnerability classes → [references/serialization-patterns.md](references/serialization-patterns.md)
 
 ---
 
-## 3 类漏洞速查表
+## Quick Reference Table for the 3 Vulnerability Classes
 
-| 类型 | 典型 Sink | 利用条件 | 严重度 |
+| Type | Typical Sink | Exploitation Condition | Severity |
 |------|-----------|----------|--------|
-| Java 反序列化 | `ObjectInputStream.readObject()`, `XMLDecoder.readObject()` | 用户可控序列化流 + classpath 存在可用 Gadget Chain | Critical |
-| XXE | `DocumentBuilderFactory`, `SAXParser`, `XMLInputFactory`, `TransformerFactory`, `SchemaFactory` | 外部实体/DTD 未禁用 + 用户可控 XML 输入 | High-Critical |
-| SSTI | `Velocity.evaluate`, `FreeMarker Template`, Thymeleaf 预处理表达式 | 用户输入直接进入模板编译/渲染上下文 | Critical |
+| Java deserialization | `ObjectInputStream.readObject()`, `XMLDecoder.readObject()` | User-controllable serialized stream + a usable gadget chain in the classpath | Critical |
+| XXE | `DocumentBuilderFactory`, `SAXParser`, `XMLInputFactory`, `TransformerFactory`, `SchemaFactory` | External entities/DTD not disabled + user-controllable XML input | High-Critical |
+| SSTI | `Velocity.evaluate`, `FreeMarker Template`, Thymeleaf pre-processing expressions | User input flows directly into the template compilation/rendering context | Critical |
 
-## Java 反序列化审计要点
+## Java Deserialization Audit Points
 
-- **入口点识别**: `ObjectInputStream.readObject()`、`ObjectInputStream.readUnshared()`、`XMLDecoder.readObject()`、自定义 `readObject`/`readResolve`/`readExternal` 实现中的额外攻击面
-- **数据来源追踪**: HTTP 请求 body（魔术字节 `AC ED 00 05` 或 Base64 编码 `rO0AB`）、RMI/JMX 远程调用、JMS 消息队列、Redis/Memcached 缓存反序列化、文件读取、ViewState、Cookie/Session 序列化存储
-- **Gadget 可用性评估**: 检查 `pom.xml`/`build.gradle` 及 classpath 中是否存在已知 Gadget 链的依赖库（commons-collections 3.x/4.x、commons-beanutils、spring-core、Groovy、hibernate-core 等），版本是否在受影响范围内
-- **防御机制验证**: JEP 290 `ObjectInputFilter` 是否配置、白名单 vs 黑名单策略、`SerialKiller`/`NotSoSerial` 等第三方防护库是否启用、`resolveClass` 是否被重写为白名单校验
-- **readResolve/readObject 自定义逻辑**: 即使不存在通用 Gadget，自定义反序列化方法中的文件操作、网络请求、动态类加载等行为也构成攻击面
+- **Entry point identification**: `ObjectInputStream.readObject()`, `ObjectInputStream.readUnshared()`, `XMLDecoder.readObject()`, plus the extra attack surface in custom `readObject`/`readResolve`/`readExternal` implementations
+- **Data source tracing**: HTTP request body (magic bytes `AC ED 00 05` or Base64 encoded `rO0AB`), RMI/JMX remote calls, JMS message queues, Redis/Memcached cache deserialization, file reads, ViewState, Cookie/Session serialized storage
+- **Gadget availability assessment**: check `pom.xml`/`build.gradle` and the classpath for libraries with known gadget chains (commons-collections 3.x/4.x, commons-beanutils, spring-core, Groovy, hibernate-core, etc.), and whether the versions fall within the affected ranges
+- **Defense mechanism verification**: whether JEP 290 `ObjectInputFilter` is configured, allowlist vs blacklist strategy, whether third-party protection libraries such as `SerialKiller`/`NotSoSerial` are enabled, whether `resolveClass` has been overridden with allowlist validation
+- **readResolve/readObject custom logic**: even without a generic gadget, file operations, network requests, and dynamic class loading inside custom deserialization methods also constitute attack surface
 
-## XXE 审计要点
+## XXE Audit Points
 
-- **5 种 XML 解析器安全配置**:
+- **Secure configuration for the 5 XML parsers**:
   - `DocumentBuilderFactory`: `setFeature("http://apache.org/xml/features/disallow-doctype-decl", true)`
-  - `SAXParserFactory`: 同上 + `setFeature("http://xml.org/sax/features/external-general-entities", false)` + `setFeature("http://xml.org/sax/features/external-parameter-entities", false)`
+  - `SAXParserFactory`: same as above + `setFeature("http://xml.org/sax/features/external-general-entities", false)` + `setFeature("http://xml.org/sax/features/external-parameter-entities", false)`
   - `XMLInputFactory` (StAX): `setProperty(XMLInputFactory.SUPPORT_DTD, false)` + `setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false)`
   - `TransformerFactory`: `setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "")` + `setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "")`
   - `SchemaFactory`: `setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "")` + `setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, "")`
-- **数据流分析**: XML 输入来源（HTTP 请求体、文件上传、SOAP 消息、SVG/Office 文件） → 进入解析器 → 解析结果回显（直接 XXE）或无回显（盲注/带外 OOB）
-- **Java 特有协议**: `jar:` 协议可触发远程文件下载与解压、`netdoc:` 协议（旧版 JDK）等价于 `file://`
+- **Data flow analysis**: XML input source (HTTP request body, file upload, SOAP message, SVG/Office file) → enters the parser → parsed result echoed back (direct XXE) or not echoed (blind injection / out-of-band OOB)
+- **Java-specific protocols**: the `jar:` protocol can trigger remote file download and extraction, and the `netdoc:` protocol (older JDKs) is equivalent to `file://`
 
-## 模板注入 SSTI 审计要点
+## Template Injection SSTI Audit Points
 
-- **Velocity**: `Velocity.evaluate(context, writer, tag, userTemplate)` — 若 `userTemplate` 参数用户可控则直接 RCE
-- **FreeMarker**: `new Template("t", new StringReader(userInput), cfg).process(dataModel, writer)` — 用户输入作为模板源编译即危险
-- **Thymeleaf**: 控制器返回值拼接导致 SSTI，`return "user/" + input` 时 input 可注入 `__${expr}__` 预处理表达式触发 SpEL → RCE
-- **安全模式**: 模板名/路径白名单、FreeMarker 设置 `TemplateClassResolver.ALLOWS_NOTHING_RESOLVER` 禁用 `?new()` 内建函数、Velocity 使用 `SecureUberspector`、Thymeleaf 限制视图名不可拼接用户输入
+- **Velocity**: `Velocity.evaluate(context, writer, tag, userTemplate)` — if the `userTemplate` parameter is user-controllable it is a direct RCE
+- **FreeMarker**: `new Template("t", new StringReader(userInput), cfg).process(dataModel, writer)` — user input used as the template source is dangerous once compiled
+- **Thymeleaf**: controller return value concatenation leads to SSTI; with `return "user/" + input`, the input can inject the `__${expr}__` pre-processing expression to trigger SpEL → RCE
+- **Secure patterns**: template name/path allowlist, FreeMarker setting `TemplateClassResolver.ALLOWS_NOTHING_RESOLVER` to disable the `?new()` built-in function, Velocity using `SecureUberspector`, Thymeleaf restricting view names so user input cannot be concatenated
 
-## 检测清单
+## Detection Checklist
 
-- [ ] 所有 `ObjectInputStream.readObject()`/`XMLDecoder.readObject()` 调用点已逐一审查
-- [ ] 反序列化入口的数据来源（HTTP/RMI/JMS/缓存/文件）已追踪确认
-- [ ] classpath 依赖已检查是否包含已知 Gadget Chain 库及其受影响版本
-- [ ] JEP 290 ObjectInputFilter / SerialKiller / 白名单 resolveClass 等防御机制已验证
-- [ ] 自定义 readObject/readResolve 方法中的额外攻击面已排查
-- [ ] 5 种 XML 解析器的安全 Feature 配置已逐一确认
-- [ ] XML 输入来源（请求体/上传/SOAP/SVG）及回显方式已分析
-- [ ] Velocity/FreeMarker/Thymeleaf 模板渲染入口的用户输入可控性已检查
-- [ ] 模板引擎安全模式（沙箱/白名单/禁用危险函数）已验证
-- [ ] 严重度评分使用了统一公式，与 pipeline 一致
+- [ ] All `ObjectInputStream.readObject()`/`XMLDecoder.readObject()` call sites have been reviewed one by one
+- [ ] Data sources of deserialization entry points (HTTP/RMI/JMS/cache/file) have been traced and confirmed
+- [ ] Classpath dependencies have been checked for known gadget chain libraries and their affected versions
+- [ ] Defense mechanisms such as JEP 290 ObjectInputFilter / SerialKiller / allowlist resolveClass have been verified
+- [ ] Extra attack surface in custom readObject/readResolve methods has been ruled out
+- [ ] Secure feature configuration of the 5 XML parsers has been confirmed one by one
+- [ ] XML input sources (request body/upload/SOAP/SVG) and the echo behavior have been analyzed
+- [ ] User-input controllability of the Velocity/FreeMarker/Thymeleaf template rendering entry points has been checked
+- [ ] Template engine secure patterns (sandbox/allowlist/disabled dangerous functions) have been verified
+- [ ] Severity scoring used the unified formula, consistent with the pipeline

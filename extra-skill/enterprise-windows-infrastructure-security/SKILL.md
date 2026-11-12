@@ -1,6 +1,8 @@
 ---
 name: enterprise-windows-infrastructure-security
 description: Obsidian-based knowledge base for Windows Server administration, Active Directory, Group Policy, and defensive hardening with hands-on labs.
+zh-signals: "提供 Windows Server、Active Directory、组策略与防御加固的企业级知识库与实验。信号:Windows Server,Active Directory,组策略,加固,紫队"
+when-to-use: "Use when hardening Active Directory, Windows Server, Group Policy, DNS, or DHCP, or when building a purple-team Windows lab."
 triggers:
   - how do I harden Active Directory
   - show me Windows Server security best practices

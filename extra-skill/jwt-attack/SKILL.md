@@ -1,6 +1,8 @@
 ---
 name: jwt-attack
 description: Decode, forge, brute JWTs when Bearer auth header is seen.
+zh-signals: "在发现 Bearer 认证头时解码、伪造与爆破 JWT。信号:JWT,令牌,算法混淆,暴力破解,认证绕过"
+when-to-use: "Use when an API uses Authorization: Bearer JWTs, JS bundles contain eyJ tokens, or you need token forgery for auth bypass within scope."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

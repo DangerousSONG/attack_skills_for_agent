@@ -2,6 +2,8 @@
 name: pci-dss-compliance
 description: Implement PCI DSS requirements for payment card data. Configure cardholder
   data environment and security controls. Use when processing payment cards.
+zh-signals: "支付卡数据 PCI DSS 合规要求的实施与持卡人数据环境安全控制配置。信号:PCI DSS,合规,支付卡安全,CDE,数据加密"
+when-to-use: "Use when implementing PCI DSS requirements for systems that process, store, or transmit payment card data."
 category: security
 risk: safe
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

@@ -1,6 +1,8 @@
 ---
 name: security-patterns
 description: "Sensitive data patterns for security testing: API keys, credit cards, emails, SSNs, phone numbers, IPs, and more. Use for data discovery and validation."
+zh-signals: "提供敏感数据正则匹配模式用于安全测试与数据发现。信号:敏感数据,API密钥,信用卡,邮箱,SSN。"
+when-to-use: "Use when detecting API keys in code or logs, validating credit card formats, matching email, IP, SSN or phone number patterns, or performing sensitive data discovery with SecLists pattern files."
 ---
 
 # SecLists Pattern-Matching

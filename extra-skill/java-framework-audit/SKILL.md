@@ -1,79 +1,82 @@
 ---
 name: java-framework-audit
 description: |
-  Java 框架特定漏洞源码审计。当在 Java 白盒审计中需要检测框架层面的已知漏洞模式时触发。
-  覆盖 5 大框架/组件: Spring 全家桶(SpEL/Actuator/参数绑定/Spring Cloud Gateway)、
-  Struts2(OGNL/ActionMapping/Content-Type 解析)、Shiro(RememberMe 反序列化/URI 绕过)、
-  FastJSON/Jackson/Gson(反序列化 autotype/polymorphic)、MyBatis(${} 注入/动态 SQL)。
-  这些是 Java 生态中出现频率最高、影响面最广的框架级漏洞。
+  Java framework-specific vulnerability source code audit. Trigger it during Java white-box audits
+  when detecting known vulnerability patterns at the framework level.
+  Covers 5 major frameworks/components: the Spring family (SpEL/Actuator/parameter binding/Spring Cloud Gateway),
+  Struts2 (OGNL/ActionMapping/Content-Type parsing), Shiro (RememberMe deserialization/URI bypass),
+  FastJSON/Jackson/Gson (deserialization autotype/polymorphic), MyBatis (`${}` injection/dynamic SQL).
+  These are the framework-level vulnerabilities that occur most frequently and have the broadest impact in the Java ecosystem.
+zh-signals: "审计 Java 框架层面漏洞，涵盖 Spring、Struts2、Shiro、FastJSON/Jackson 与 MyBatis。信号:Java 框架审计,Spring 漏洞,Shiro 反序列化,FastJSON,源码审计"
+when-to-use: "Use when performing white-box Java source audit and you need to detect framework-level vulnerability patterns in Spring, Struts2, Shiro, JSON libraries, or MyBatis."
 metadata:
-  tags: spring, struts2, shiro, fastjson, jackson, mybatis, ognl, spel, actuator, rememberme, spring cloud, 框架漏洞, java source audit
+  tags: spring, struts2, shiro, fastjson, jackson, mybatis, ognl, spel, actuator, rememberme, spring cloud, framework vulnerabilities, java source audit
   category: code-audit
 ---
 
-# Java 框架特定漏洞源码审计
-框架漏洞的本质分两类: **框架自身缺陷**（已知 CVE，升级即修）和**框架误用**（开发者对框架安全机制理解不足导致的配置/编码缺陷）。本 skill 关注的核心问题是: 被审计项目的代码如何触发这些已知的框架缺陷模式。
+# Java Framework-Specific Vulnerability Source Code Audit
+Framework vulnerabilities fall into two categories: **flaws in the framework itself** (known CVEs, fixed by upgrading) and **framework misuse** (configuration/coding flaws caused by developers misunderstanding the framework's security mechanisms). The core question this skill addresses is: how does the code of the audited project trigger these known framework vulnerability patterns.
 
-## 深入参考
+## Further Reading
 
-- 5 大框架/组件漏洞模式详解 → [references/framework-vulns.md](references/framework-vulns.md)
+- Detailed vulnerability patterns for the 5 major frameworks/components → [references/framework-vulns.md](references/framework-vulns.md)
 
 ---
 
-## 5 大框架/组件速查表
+## Quick Reference Table for the 5 Major Frameworks/Components
 
-| 框架/组件 | 核心风险 | 首要搜索关键字 | 典型严重度 |
+| Framework/Component | Core Risk | Primary Search Keywords | Typical Severity |
 |-----------|---------|---------------|-----------|
-| Spring 全家桶 | SpEL 注入 / Actuator 暴露 / Mass Assignment | `@Value` `SpelExpression` `Actuator` `management.endpoints` | 高-严重 |
-| Struts2 | OGNL 注入 / Content-Type 解析 | `struts.xml` `ActionSupport` `ValueStack` `ognl` | 严重 |
-| Shiro | RememberMe 反序列化 / URI 绕过 | `setCipherKey` `rememberMe` `ShiroFilterChain` | 严重 |
-| FastJSON/Jackson/Gson | 反序列化 autotype / polymorphic | `JSON.parseObject` `JSON.parse` `enableDefaultTyping` `@JsonTypeInfo` | 严重 |
-| MyBatis | `${}` SQL 拼接注入 | `${` 在 Mapper XML / `@Select` `@Update` 注解 | 高 |
+| Spring family | SpEL injection / Actuator exposure / Mass Assignment | `@Value` `SpelExpression` `Actuator` `management.endpoints` | High-Critical |
+| Struts2 | OGNL injection / Content-Type parsing | `struts.xml` `ActionSupport` `ValueStack` `ognl` | Critical |
+| Shiro | RememberMe deserialization / URI bypass | `setCipherKey` `rememberMe` `ShiroFilterChain` | Critical |
+| FastJSON/Jackson/Gson | Deserialization autotype / polymorphic | `JSON.parseObject` `JSON.parse` `enableDefaultTyping` `@JsonTypeInfo` | Critical |
+| MyBatis | `${}` SQL concatenation injection | `${` in Mapper XML / `@Select` `@Update` annotations | High |
 
-### Spring 全家桶审计要点
+### Spring Family Audit Points
 
-- **Spring MVC 参数绑定（Mass Assignment）**: `@ModelAttribute` 会自动将请求参数绑定到对象字段。若实体类含 `role`/`isAdmin`/`price` 等敏感字段且未使用 `@InitBinder` + `WebDataBinder.setAllowedFields()` 做白名单，攻击者可通过添加额外参数覆写敏感属性
-- **Spring Boot Actuator**: 检查 `management.endpoints.web.exposure.include` 配置。高危端点: `/actuator/env`（泄露配置 + restart RCE）、`/actuator/jolokia`（JNDI 注入）、`/actuator/heapdump`（堆转储提取密钥/密码）、`/actuator/gateway/routes`（Gateway 路由注入）
-- **SpEL 注入**: 5 种常见注入点 — `@Value("#{externInput}")`、`@Cacheable(key="#root.args[0]")` 拼接用户输入、`@PreAuthorize` / `@PostAuthorize` 表达式拼接、`ExpressionParser.parseExpression()` 直接解析外部输入、Spring Data `@Query` 中的 SpEL `?#{...}`
-- **Spring Cloud Gateway**: CVE-2022-22947 类型漏洞，路由 Predicate/Filter 配置中嵌入 SpEL 表达式，通过 Actuator `/gateway/routes` 动态注册恶意路由
-- **Spring Security 配置陷阱**: `antMatchers` 顺序错误（宽松规则在前覆盖严格规则）、`.permitAll()` 范围过大、路径匹配与 Servlet 路径不一致（如尾部斜杠 `/admin` vs `/admin/`）
+- **Spring MVC parameter binding (Mass Assignment)**: `@ModelAttribute` automatically binds request parameters to object fields. If the entity class contains sensitive fields such as `role`/`isAdmin`/`price` and no `@InitBinder` + `WebDataBinder.setAllowedFields()` whitelist is used, an attacker can overwrite sensitive properties by adding extra parameters
+- **Spring Boot Actuator**: check the `management.endpoints.web.exposure.include` configuration. High-risk endpoints: `/actuator/env` (configuration leak + restart RCE), `/actuator/jolokia` (JNDI injection), `/actuator/heapdump` (heap dump for key/password extraction), `/actuator/gateway/routes` (Gateway route injection)
+- **SpEL injection**: 5 common injection points — `@Value("#{externInput}")`, `@Cacheable(key="#root.args[0]")` concatenating user input, `@PreAuthorize` / `@PostAuthorize` expression concatenation, `ExpressionParser.parseExpression()` directly parsing external input, and SpEL `?#{...}` in Spring Data `@Query`
+- **Spring Cloud Gateway**: CVE-2022-22947 type vulnerability, SpEL expressions embedded in route Predicate/Filter configuration, registering malicious routes dynamically through the Actuator `/gateway/routes`
+- **Spring Security configuration traps**: wrong `antMatchers` ordering (a permissive rule placed before a strict rule overrides it), overly broad `.permitAll()`, and path matching inconsistent with the Servlet path (e.g. trailing slash `/admin` vs `/admin/`)
 
-### Struts2 审计要点
+### Struts2 Audit Points
 
-- **OGNL 注入**: 用户可控数据进入 OGNL 表达式求值。参数名/值通过 `ParametersInterceptor` 进入 `ValueStack`，若 `SecurityMemberAccess` 限制不严，可执行任意代码
-- **Content-Type 解析**: Jakarta Multipart 解析器对异常 Content-Type 的错误处理导致 OGNL 执行（S2-045），Content-Disposition 的 filename 字段同理（S2-046）
-- **ActionMapping 参数前缀**: `method:`（调用任意 Action 方法）、`redirect:`/`redirectAction:`（OGNL 注入）。检查 `struts.enable.DynamicMethodInvocation` 和 `struts.mapper.alwaysSelectFullNamespace`
-- **版本 CVE 映射**: Struts 2.0.x~2.3.x 是高危区间，S2-001/005/009/012/013/015/016/019/032/033/037/045/046/048/052/053/057/059/061/062 均为远程代码执行级别
+- **OGNL injection**: user-controllable data enters OGNL expression evaluation. Parameter names/values enter the `ValueStack` through `ParametersInterceptor`; if `SecurityMemberAccess` restrictions are loose, arbitrary code execution is possible
+- **Content-Type parsing**: improper error handling for malformed Content-Type in the Jakarta Multipart parser leads to OGNL execution (S2-045); the filename field of Content-Disposition is similar (S2-046)
+- **ActionMapping parameter prefixes**: `method:` (invoke arbitrary Action methods), `redirect:`/`redirectAction:` (OGNL injection). Check `struts.enable.DynamicMethodInvocation` and `struts.mapper.alwaysSelectFullNamespace`
+- **Version CVE mapping**: Struts 2.0.x~2.3.x is the high-risk range; S2-001/005/009/012/013/015/016/019/032/033/037/045/046/048/052/053/057/059/061/062 are all remote code execution level
 
-### Shiro 审计要点
+### Shiro Audit Points
 
-- **RememberMe 反序列化**: Shiro 1.2.4 及之前版本使用硬编码 AES 密钥 `kPH+bIxk5D2deZiIxcaaaA==` 加密 RememberMe Cookie。即使升级后，若开发者使用自定义但可预测/泄露的密钥，风险依旧存在
-- **URI 绕过**: 分号截断 `/admin/;.js` 绕 Shiro 但被 Spring 正常路由、`/..;/admin` 路径穿越、双重 URL 编码、大小写混合绕 Filter。核心原因是 Shiro 的 URL 匹配与后端框架（Spring/Servlet）的解析规则不一致
-- **版本 CVE**: CVE-2016-4437（硬编码密钥）、CVE-2020-1957（`/toLogin;/../admin` 绕过）、CVE-2020-11989（双重编码）、CVE-2021-41303（路径标准化绕过）
+- **RememberMe deserialization**: Shiro 1.2.4 and earlier encrypt the RememberMe cookie with the hardcoded AES key `kPH+bIxk5D2deZiIxcaaaA==`. Even after upgrading, if the developer uses a custom but predictable/leaked key, the risk remains
+- **URI bypass**: semicolon truncation `/admin/;.js` bypasses Shiro but is routed normally by Spring, `/..;/admin` path traversal, double URL encoding, and mixed case to bypass the Filter. The root cause is that Shiro's URL matching is inconsistent with the parsing rules of the backend framework (Spring/Servlet)
+- **Version CVEs**: CVE-2016-4437 (hardcoded key), CVE-2020-1957 (`/toLogin;/../admin` bypass), CVE-2020-11989 (double encoding), CVE-2021-41303 (path normalization bypass)
 
-### FastJSON/Jackson/Gson 审计要点
+### FastJSON/Jackson/Gson Audit Points
 
-- **FastJSON**: `JSON.parseObject(input)` 或 `JSON.parse(input)` 默认支持 `@type` 字段指定反序列化类。autotype 黑名单随版本升级不断被绕过（1.2.24→1.2.47→1.2.68→1.2.80）。`Feature.SupportNonPublicField` 开启时可设置私有字段。1.2.83+ 引入 `safeMode` 彻底关闭 autotype
-- **Jackson**: `ObjectMapper.enableDefaultTyping()` 或 `ObjectMapper.activateDefaultTyping()` 开启全局多态反序列化，等同于全局 RCE 入口。字段级 `@JsonTypeInfo(use=Id.CLASS)` 或 `@JsonTypeInfo(use=Id.MINIMAL_CLASS)` 同样危险
-- **Gson**: 本身不支持多态反序列化，相对安全。但自定义 `TypeAdapter` / `JsonDeserializer` 中若使用 `Class.forName` 加载用户指定类名则引入风险
-- **检测方法**: 搜索 `JSON.parseObject` / `JSON.parse`（FastJSON）、`enableDefaultTyping` / `activateDefaultTyping` / `@JsonTypeInfo`（Jackson）、自定义 `TypeAdapter`（Gson）
+- **FastJSON**: `JSON.parseObject(input)` or `JSON.parse(input)` supports the `@type` field to specify the deserialization class by default. The autotype blacklist is bypassed over and over as versions increase (1.2.24→1.2.47→1.2.68→1.2.80). With `Feature.SupportNonPublicField` enabled, private fields can be set. 1.2.83+ introduced `safeMode`, which disables autotype entirely
+- **Jackson**: `ObjectMapper.enableDefaultTyping()` or `ObjectMapper.activateDefaultTyping()` enables global polymorphic deserialization, which is equivalent to a global RCE entry point. Field-level `@JsonTypeInfo(use=Id.CLASS)` or `@JsonTypeInfo(use=Id.MINIMAL_CLASS)` is equally dangerous
+- **Gson**: does not support polymorphic deserialization natively and is relatively safe. However, a custom `TypeAdapter` / `JsonDeserializer` that loads a user-supplied class name with `Class.forName` introduces risk
+- **Detection method**: search for `JSON.parseObject` / `JSON.parse` (FastJSON), `enableDefaultTyping` / `activateDefaultTyping` / `@JsonTypeInfo` (Jackson), and custom `TypeAdapter` (Gson)
 
-### MyBatis 审计要点
+### MyBatis Audit Points
 
-- **`${}` vs `#{}`**: `${}` 是字符串直接拼接（等同于 `String.format`），`#{}` 是预编译参数绑定。Mapper XML 和 `@Select`/`@Update`/`@Delete`/`@Insert` 注解中的 `${}` 均为 SQL 注入入口
-- **动态 SQL 中的 `${}`**: `<if test="sort != null">ORDER BY ${sort}</if>`、`<where>` 和 `<foreach>` 标签内的 `${}` 使用同样危险
-- **ORDER BY / LIKE / IN 安全写法**: ORDER BY 无法使用 `#{}` 预编译，应对列名做白名单校验; LIKE 应改写为 `LIKE CONCAT('%', #{keyword}, '%')`; IN 应使用 `<foreach collection="ids" item="id">#{id}</foreach>`
-- **两种入口**: Mapper XML 文件（`*Mapper.xml`）和注解模式（`@Select("SELECT * FROM ${table}")`），两者都需要审计
+- **`${}` vs `#{}`**: `${}` is direct string concatenation (equivalent to `String.format`), while `#{}` is precompiled parameter binding. `${}` in Mapper XML and in `@Select`/`@Update`/`@Delete`/`@Insert` annotations is a SQL injection entry point
+- **`${}` in dynamic SQL**: `${}` inside `<if test="sort != null">ORDER BY ${sort}</if>`, `<where>`, and `<foreach>` tags is equally dangerous
+- **Safe patterns for ORDER BY / LIKE / IN**: ORDER BY cannot use `#{}` precompilation, so the column name must be whitelist-validated; LIKE should be rewritten as `LIKE CONCAT('%', #{keyword}, '%')`; IN should use `<foreach collection="ids" item="id">#{id}</foreach>`
+- **Two entry points**: Mapper XML files (`*Mapper.xml`) and the annotation style (`@Select("SELECT * FROM ${table}")`); both need auditing
 
-## 检测清单
+## Detection Checklist
 
-- [ ] 已确认项目使用的框架及精确版本号，已比对已知 CVE
-- [ ] Spring Actuator 端点暴露范围已检查，敏感端点已确认是否需要认证
-- [ ] SpEL 注入的 5 种场景已逐一搜索排查
-- [ ] Spring MVC `@ModelAttribute` 绑定的实体是否有敏感字段未做白名单
-- [ ] Struts2 项目已确认 OGNL 安全配置和 `SecurityMemberAccess` 设置
-- [ ] Shiro `setCipherKey` 是否使用默认或弱密钥，Filter Chain 的 URI 匹配与实际路由是否一致
-- [ ] FastJSON 版本及 autotype 配置已确认，Jackson 是否开启 `enableDefaultTyping`
-- [ ] 所有 Mapper XML 和 `@Select` 注解中的 `${}` 使用已标记，不可避免的场景已确认有白名单防护
-- [ ] 动态 SQL 标签（`<if>` / `<where>` / `<foreach>`）中的 `${}` 已检查
-- [ ] 所有发现的框架漏洞均有 EVID_* 证据链（Source→Sink 路径 + 版本/配置证据）
+- [ ] The frameworks used by the project and their exact version numbers are confirmed and compared against known CVEs
+- [ ] The exposure scope of the Spring Actuator endpoints has been checked, and it is confirmed whether sensitive endpoints require authentication
+- [ ] All 5 SpEL injection scenarios have been searched for one by one
+- [ ] It has been checked whether entities bound via Spring MVC `@ModelAttribute` contain sensitive fields without a whitelist
+- [ ] For Struts2 projects, the OGNL security configuration and `SecurityMemberAccess` settings are confirmed
+- [ ] Whether Shiro `setCipherKey` uses the default or a weak key is confirmed, and whether the URI matching of the Filter Chain is consistent with the actual routes
+- [ ] The FastJSON version and autotype configuration are confirmed, as well as whether Jackson has `enableDefaultTyping` enabled
+- [ ] All uses of `${}` in Mapper XML and `@Select` annotations are marked, and unavoidable cases are confirmed to have whitelist protection
+- [ ] `${}` inside dynamic SQL tags (`<if>` / `<where>` / `<foreach>`) has been checked
+- [ ] Every discovered framework vulnerability has an EVID_* evidence chain (Source→Sink path + version/configuration evidence)

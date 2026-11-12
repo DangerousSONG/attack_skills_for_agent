@@ -1,6 +1,9 @@
 ---
 name: vuln-diagnose
 description: Builds deterministic, reproducible proof-of-concepts to validate suspected or partially-confirmed vulnerabilities (e.g., XSS, IDOR) and eliminate false positives. Triggered when tool outputs flag potential issues, or when manual confirmation of exploitability is required before documenting a finding.
+zh-signals: "构建确定性可复现的 PoC 以验证疑似漏洞并排除误报。信号:漏洞验证,PoC构建,误报排除,可复现性,影响确认。"
+when-to-use: >-
+  Use when tool output flags a potential vulnerability such as XSS or IDOR, or when a suspected finding needs a deterministic, reproducible proof of concept and confirmed impact before documentation.
 license: MIT
 metadata:
   version: "1.0.0"

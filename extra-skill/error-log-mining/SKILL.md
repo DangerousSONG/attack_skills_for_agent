@@ -1,6 +1,8 @@
 ---
 name: error-log-mining
 description: Mine error_log for creds, paths, SQL when leak hunt finds.
+zh-signals: "挖掘暴露的 PHP error_log，提取凭据、路径、SQL 与密钥等情报。信号:error_log,日志挖掘,凭据泄露,WordPress,信息收集"
+when-to-use: "Use after leak hunting finds an exposed error_log, or when a PHP/WordPress target may leak paths, DB credentials, or API keys."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

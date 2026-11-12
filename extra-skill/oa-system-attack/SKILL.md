@@ -1,106 +1,108 @@
 ---
 name: oa-system-attack
-description: "国产 OA/内网系统漏洞利用。当在内网发现致远(Seeyon)、泛微(Weaver/E-cology)、用友(Yonyou/NC/U8)、蓝凌(Landray)、通达(Tongda)、万户(Ezoffice)、金蝶(Kingdee)、红帆(iOffice) 等国产 OA 系统时使用。覆盖各系统的典型漏洞、默认口令、RCE 路径。国内 HW/比赛内网中高频出现，一定要使用此技能"
+description: "Exploitation of domestic Chinese OA/intranet systems. Use when domestic OA systems such as Seeyon, Weaver/E-cology, Yonyou/NC/U8, Landray, Tongda, Ezoffice, Kingdee, or iOffice are discovered in an intranet. Covers the typical vulnerabilities, default credentials, and RCE paths of each system. These appear very frequently in Chinese HW/CTF intranet environments, so this skill must be used"
+zh-signals: "国产 OA 与内网系统漏洞利用技能，覆盖致远、泛微、用友、蓝凌、通达、万户等系统的默认口令与 RCE 路径。信号:OA漏洞,致远,泛微,用友,RCE,内网"
+when-to-use: "Use when encountering domestic OA or intranet systems such as Seeyon, Weaver, Yonyou, Landray, Tongda, Ezoffice, Kingdee, or iOffice during internal engagements or competitions, to exploit their known vulnerabilities, default credentials, and RCE paths."
 metadata:
-  tags: "oa,seeyon,致远,泛微,weaver,ecology,用友,yonyou,nc,蓝凌,landray,通达,tongda,万户,金蝶,内网,国产系统,办公系统"
+  tags: "oa,seeyon,weaver,ecology,yonyou,nc,landray,tongda,ezoffice,kingdee,intranet,domestic-system,office-system"
   category: "lateral"
 ---
 
-# 国产 OA/内网系统漏洞利用
+# Exploitation of Domestic OA/Intranet Systems
 
-国内比赛内网环境几乎必有 OA 系统——它们历史漏洞多、补丁率低、权限通常较高。
+Chinese CTF intranet environments almost always contain OA systems—they have many historical vulnerabilities, a low patch rate, and typically high privileges.
 
-## ⛔ 深入参考（必读）
+## ⛔ Further Reading (Must Read)
 
-- 致远/泛微/用友详细漏洞利用 → [references/oa-exploits.md](references/oa-exploits.md)
-- 通达/蓝凌/其他系统漏洞利用 → [references/oa-exploits-more.md](references/oa-exploits-more.md)
+- Detailed exploitation of Seeyon/Weaver/Yonyou → [references/oa-exploits.md](references/oa-exploits.md)
+- Detailed exploitation of Tongda/Landray/other systems → [references/oa-exploits-more.md](references/oa-exploits-more.md)
 
 ---
 
-## Phase 1: OA 系统识别
+## Phase 1: OA System Identification
 
 ```bash
-# Web 指纹识别
+# Web fingerprinting
 whatweb http://TARGET
 curl -sI http://TARGET | grep -i "Server"
-curl -s http://TARGET | grep -iE "seeyon|致远|weaver|ecology|泛微|yonyou|用友|tongda|通达|landray|蓝凌|ezoffice|万户"
+curl -s http://TARGET | grep -iE "seeyon|weaver|ecology|yonyou|tongda|landray|ezoffice"
 
-# 常见路径指纹
-curl -s http://TARGET/seeyon/           # 致远 OA
-curl -s http://TARGET/weaver/           # 泛微 E-cology
-curl -s http://TARGET/mobile/           # 泛微 E-mobile
-curl -s http://TARGET/ispirit/          # 通达 OA
-curl -s http://TARGET/sys/             # 蓝凌 OA
-curl -s http://TARGET/portal/          # 用友 NC
+# Common path fingerprints
+curl -s http://TARGET/seeyon/           # Seeyon OA
+curl -s http://TARGET/weaver/           # Weaver E-cology
+curl -s http://TARGET/mobile/           # Weaver E-mobile
+curl -s http://TARGET/ispirit/          # Tongda OA
+curl -s http://TARGET/sys/             # Landray OA
+curl -s http://TARGET/portal/          # Yonyou NC
 ```
 
-## Phase 2: 系统 → 漏洞速查
+## Phase 2: System → Vulnerability Quick Reference
 
-### 致远 OA (Seeyon) — 漏洞最多
+### Seeyon OA — the most vulnerabilities
 
-| 漏洞 | 路径 | 类型 |
+| Vulnerability | Path | Type |
 |------|------|------|
-| Session 泄露 | /seeyon/thirdpartyController.do | 任意用户登录 |
-| 文件上传 | /seeyon/htmlofficeservlet | RCE |
-| 反序列化 | /seeyon/autoinstall.do.css | RCE |
+| Session leak | /seeyon/thirdpartyController.do | arbitrary user login |
+| File upload | /seeyon/htmlofficeservlet | RCE |
+| Deserialization | /seeyon/autoinstall.do.css | RCE |
 | SSRF | /seeyon/ajax.do | SSRF |
-| SQL 注入 | /seeyon/webmail.do | SQLi |
+| SQL injection | /seeyon/webmail.do | SQLi |
 
-### 泛微 OA (Weaver/E-cology) — 出现频率最高
+### Weaver OA (E-cology) — the most frequently encountered
 
-| 漏洞 | 路径 | 类型 |
+| Vulnerability | Path | Type |
 |------|------|------|
-| SQL 注入 | /mobile/browser/WorkflowCenterTreeData.jsp | SQLi |
-| 文件上传 | /weaver/bsh.servlet.BshServlet | RCE |
+| SQL injection | /mobile/browser/WorkflowCenterTreeData.jsp | SQLi |
+| File upload | /weaver/bsh.servlet.BshServlet | RCE |
 | SSRF | /ssrf/proxy | SSRF |
-| 数据库配置读取 | /mobile/DBconfigReader.jsp | 信息泄露 |
-| 命令执行 | /api/integration/workflowToDoc | RCE |
+| Database configuration read | /mobile/DBconfigReader.jsp | information disclosure |
+| Command execution | /api/integration/workflowToDoc | RCE |
 
-### 用友 NC (Yonyou) — 权限通常高
+### Yonyou NC — usually high privileges
 
-| 漏洞 | 路径 | 类型 |
+| Vulnerability | Path | Type |
 |------|------|------|
-| 反序列化 | /servlet/~ic/bsh.servlet.BshServlet | RCE |
-| 文件上传 | /servlet/FileReceiveServlet | 任意文件上传 |
-| 目录遍历 | /NCFindWeb | 信息泄露 |
+| Deserialization | /servlet/~ic/bsh.servlet.BshServlet | RCE |
+| File upload | /servlet/FileReceiveServlet | arbitrary file upload |
+| Path traversal | /NCFindWeb | information disclosure |
 | SSRF | /servlet/~uap/nc.itf.iufo.FunctionServlet | SSRF |
 
-### 通达 OA — 入门级目标
+### Tongda OA — an entry-level target
 
-| 漏洞 | 路径 | 类型 |
+| Vulnerability | Path | Type |
 |------|------|------|
-| 文件上传+包含 | /ispirit/im/upload.php + /ispirit/interface/gateway.php | RCE |
-| 任意用户登录 | /logincheck_code.php | 认证绕过 |
-| SQL 注入 | /general/approve_center/archive/getTableInfo.php | SQLi |
+| File upload + inclusion | /ispirit/im/upload.php + /ispirit/interface/gateway.php | RCE |
+| Arbitrary user login | /logincheck_code.php | authentication bypass |
+| SQL injection | /general/approve_center/archive/getTableInfo.php | SQLi |
 
-### 蓝凌 OA (Landray) — SSRF 到 RCE
+### Landray OA — SSRF to RCE
 
-| 漏洞 | 路径 | 类型 |
+| Vulnerability | Path | Type |
 |------|------|------|
 | SSRF → RCE | /sys/ui/extend/varkind/custom.jsp | RCE |
-| 任意文件读取 | /sys/ui/extend/varkind/custom.jsp | 文件读取 |
-| 反序列化 | /sys/search/sys_search_main/sysSearchMain.do | RCE |
+| Arbitrary file read | /sys/ui/extend/varkind/custom.jsp | file read |
+| Deserialization | /sys/search/sys_search_main/sysSearchMain.do | RCE |
 
-→ 详细 payload → references
+→ Detailed payloads → references
 
-## Phase 3: 通用攻击策略
+## Phase 3: Generic Attack Strategy
 
 ```
-发现 OA 系统后:
-1. 确认系统类型和版本
-2. 尝试默认口令
-3. 查已知 CVE / Nday
-4. nuclei 扫描: nuclei -u TARGET -tags oa,seeyon,weaver,tongda
-5. 手动验证高危漏洞（RCE > 文件上传 > SQLi > 信息泄露）
-6. 获取 shell 后收集内网凭据
+After discovering an OA system:
+1. Confirm the system type and version
+2. Try default credentials
+3. Look up known CVEs / Ndays
+4. nuclei scan: nuclei -u TARGET -tags oa,seeyon,weaver,tongda
+5. Manually verify high severity vulnerabilities (RCE > file upload > SQLi > information disclosure)
+6. After obtaining a shell, collect intranet credentials
 ```
 
-### 默认口令速查
-| 系统 | 用户名 | 默认密码 |
+### Default Credential Quick Reference
+| System | Username | Default password |
 |------|--------|---------|
-| 致远 OA | system | system |
-| 致远 OA | admin | seeyon123456 |
-| 泛微 OA | sysadmin | 1 |
-| 用友 NC | admin | admin |
-| 通达 OA | admin | admin00 |
-| 蓝凌 OA | admin | admin |
+| Seeyon OA | system | system |
+| Seeyon OA | admin | seeyon123456 |
+| Weaver OA | sysadmin | 1 |
+| Yonyou NC | admin | admin |
+| Tongda OA | admin | admin00 |
+| Landray OA | admin | admin |

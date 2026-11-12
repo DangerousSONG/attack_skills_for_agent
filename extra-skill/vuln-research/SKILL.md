@@ -1,6 +1,11 @@
 ---
 name: vuln-research
 description: "Research a specific CVE or vulnerability disclosure end-to-end — what version is affected, is your code reachable, is there a public PoC, is there a patch, what's the exposure window, what's the mitigation if you can't patch immediately. Use when the user mentions 'CVE,' 'vulnerability research,' 'is this CVE relevant,' 'zero-day,' 'CISA KEV,' 'GitHub Security Advisory,' 'reachability analysis,' 'patch analysis,' 'exploit availability,' 'EPSS,' 'CVSS,' or 'should we drop everything and patch this.'"
+zh-signals: "端到端研究特定 CVE 或漏洞披露，评估受影响版本、可达性、PoC、补丁、暴露窗口与缓解措施。信号:CVE,漏洞研究,可达性分析,补丁分析,EPSS"
+when-to-use: >-
+  Use when the user asks whether a CVE is relevant, whether code is reachable,
+  about exploit availability, EPSS, patch analysis, or whether to drop
+  everything and patch.
 allowed-tools: Read, Grep, Glob, Bash, WebSearch, WebFetch
 ---
 

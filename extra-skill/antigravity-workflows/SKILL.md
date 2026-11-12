@@ -1,6 +1,10 @@
 ---
 name: antigravity-workflows
 description: "Use when asked to ship a SaaS MVP, audit application security, build an AI agent, run browser QA, or design a domain model with multiple skills and verified checkpoints."
+zh-signals: "将复杂目标编排为多技能依次调用的工作流，覆盖 SaaS MVP、应用安全审计、AI Agent 构建与浏览器 QA。信号:多技能编排,工作流,SaaS MVP,安全审计,浏览器QA"
+when-to-use: >-
+  Use when a complex objective spans multiple skills or phases, such as shipping a SaaS MVP,
+  running a security audit, building an AI agent, or performing browser QA.
 risk: none
 source: self
 date_added: "2026-02-27"

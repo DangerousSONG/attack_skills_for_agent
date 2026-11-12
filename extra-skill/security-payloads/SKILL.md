@@ -1,6 +1,8 @@
 ---
 name: security-payloads
 description: "Essential exploitation payloads: anti-virus test files, file name exploits, malicious files. Curated for testing."
+zh-signals: "提供用于授权安全测试的漏洞利用 payload 集合，涵盖防病毒测试文件、文件名利用与恶意文件。信号:payload,文件上传,路径穿越,防病毒测试,SecLists"
+when-to-use: "Use when you need curated exploitation payloads for authorized antivirus validation, file-upload, or path-traversal testing in a lab or bug bounty scope."
 ---
 
 # SecLists Payloads (Curated)

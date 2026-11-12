@@ -10,6 +10,8 @@ description: |
   SSL-pinning bypass, runtime keystore/shared-prefs/SQLite dumps, traffic capture, deeplink & IPC
   abuse. Chains from /pentester and /codebase; into /api-security for backend endpoints,
   /web-exploit for injection, /post-exploit on device RCE, /ai-redteam on an embedded LLM.
+zh-signals: "基于 OWASP MASVS/MASTG 的 Android 应用安全评估，覆盖静态分析、动态测试与凭据泄露。信号:Android 安全,MASVS,MASTG,APK 分析,Frida"
+when-to-use: "Use when assessing an APK, package, or Android source tree against MASVS categories, with static analysis first and opt-in dynamic testing."
 argument-hint: "<app.apk | package-name | source-path> [depth=quick|standard|thorough]"
 user-invocable: true
 ---

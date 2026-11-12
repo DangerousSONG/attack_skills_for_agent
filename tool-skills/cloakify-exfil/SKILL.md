@@ -2,37 +2,40 @@
 name: cloakify-exfil
 description: "cloakify: Simulates exfiltration of sensitive data while evading DLP. Signals: steganography, reconstruction, noise obfuscation of statistical features."
 zh-signals: "cloakify: 敏感数据外传演练(DLP 规避)。信号:隐写,steganography,还原,加噪音混淆统计特征。"
+when-to-use: >-
+  Use when rehearsing data exfiltration past DLP controls by disguising files as
+  innocuous text such as DNA sequences or IP addresses, then restoring them later.
 ---
 
 # cloakify
 
-- 攻击大类:C38 隐写与隐藏通道
-- 上游仓库:https://github.com/TryCatchHCF/Cloakify
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C38 Steganography and Covert Channels
+- Upstream Repository: https://github.com/TryCatchHCF/Cloakify
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/TryCatchHCF/Cloakify && cd Cloakify
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python cloakify.py secret.txt ciphers/dna` | 把文件编码成 DNA 序列外观 |
-| `decloakify.py out.txt ciphers/dna` | 还原 |
-| `noiseTools/` | 加噪音混淆统计特征 |
+| `python cloakify.py secret.txt ciphers/dna` | Encode a file to look like a DNA sequence |
+| `decloakify.py out.txt ciphers/dna` | Restore |
+| `noiseTools/` | Add noise to obfuscate statistical features |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 敏感数据外传演练(DLP 规避)
+### Sensitive data exfiltration rehearsal (DLP evasion)
 
 ```bash
 python cloakify.py passwd.zip ciphers/ipAddresses > notes.txt
-# notes.txt 外观是一堆 IP 地址,经允许渠道传出后 decloakify 还原
+# notes.txt looks like a list of IP addresses; once it leaves through an allowed channel, decloakify restores it
 ```
 
-## 注意事项
+## Notes
 
-无加密,仅外观混淆;真敏感数据先加密再 cloakify。
+No encryption, only appearance obfuscation; encrypt genuinely sensitive data before cloaking it.

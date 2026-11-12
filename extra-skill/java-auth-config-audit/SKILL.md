@@ -1,99 +1,103 @@
 ---
 name: java-auth-config-audit
 description: |
-  Java 源码认证与配置安全审计。当在 Java 白盒审计中需要检测认证绕过、权限缺陷或安全配置问题时触发。
-  覆盖 6 类风险: 认证绕过(Spring Security/Shiro Filter 链 URI 解析差异)、
-  越权(IDOR/水平越权/垂直越权)、JWT 安全(算法混淆/密钥泄露/Claims 验证)、
-  加密配置(弱算法/硬编码密钥/不安全随机数)、信息泄露(错误堆栈/Actuator/Debug 模式)、
-  业务逻辑漏洞(竞争条件/金额篡改/流程绕过)。
+  Java source code authentication and configuration security audit. Trigger during Java white-box audits when authentication bypass, authorization flaws, or security configuration issues need to be detected.
+  Covers 6 risk categories: authentication bypass (Spring Security/Shiro Filter chain URI parsing differences),
+  broken access control (IDOR/horizontal privilege escalation/vertical privilege escalation), JWT security (algorithm confusion/key leakage/Claims validation),
+  crypto configuration (weak algorithms/hardcoded keys/insecure randomness), information disclosure (error stack traces/Actuator/Debug mode),
+  and business logic flaws (race conditions/amount tampering/process bypass).
+zh-signals: "审计 Java 源码中的认证绕过、越权、JWT、加密配置、信息泄露与业务逻辑漏洞。信号:认证绕过,越权,JWT,Shiro,Java审计"
+when-to-use: >-
+  Use during Java white-box audit when validating authentication bypass, authorization
+  flaws, JWT weaknesses, crypto config, information disclosure, or business logic bugs.
 metadata:
-  tags: authentication bypass, authorization, idor, jwt, shiro, spring security, 认证绕过, 越权, 加密配置, 信息泄露, actuator, 业务逻辑, java source audit
+  tags: authentication bypass, authorization, idor, jwt, shiro, spring security, crypto config, information disclosure, actuator, business logic, java source audit
   category: code-audit
 ---
 
-# Java 认证与配置安全源码审计
+# Java Authentication and Configuration Security Source Code Audit
 
-Java 后端项目中认证、授权与安全配置是最高频的漏洞产出面。本 skill 提供 6 大类白盒审计的完整检测思路，适用于 Spring Boot/Spring Security、Apache Shiro 及自定义框架。
+Authentication, authorization, and security configuration are the highest-yield vulnerability surfaces in Java backend projects. This skill provides complete detection approaches for 6 major categories of white-box audit, applicable to Spring Boot/Spring Security, Apache Shiro, and custom frameworks.
 
-## 相关 Skill
+## Related Skills
 
-- `java-framework-audit` — Spring/Struts/MyBatis 框架审计
-- `java-injection-audit` — SQL/OGNL/EL 注入审计
-- `java-serialization-audit` — 反序列化漏洞审计
-- `idor-methodology` — 黑盒 IDOR 测试方法论
+- `java-framework-audit` — Spring/Struts/MyBatis framework audits
+- `java-injection-audit` — SQL/OGNL/EL injection audits
+- `java-serialization-audit` — deserialization vulnerability audits
+- `idor-methodology` — black-box IDOR testing methodology
 
-## 深入参考
+## Further Reading
 
-- 6 类漏洞详细模式（危险代码/安全代码/EVID 证据）-> [references/auth-config-patterns.md](references/auth-config-patterns.md)
+- Detailed patterns for the 6 vulnerability categories (dangerous code/safe code/EVID evidence) -> [references/auth-config-patterns.md](references/auth-config-patterns.md)
 
 ---
 
-## 6 类风险速查表
+## Quick Reference Table of the 6 Risk Categories
 
-| # | 类别 | 关键搜索入口 | 危害等级 |
+| # | Category | Key search entry points | Severity |
 |---|------|-------------|---------|
-| 1 | 认证绕过 | `SecurityConfig`, `ShiroFilterFactory`, `doFilter` | 严重 |
-| 2 | 越权 | DAO/Mapper 查询语句, `@PreAuthorize`, Controller 参数 | 高 |
-| 3 | JWT 安全 | `Jwts.parser()`, `Algorithm.HMAC`, `SECRET_KEY` | 高 |
-| 4 | 加密配置 | `MessageDigest`, `Cipher.getInstance`, `new Random()` | 高 |
-| 5 | 信息泄露 | `application.yml` Actuator 配置, `@ExceptionHandler` | 中 |
-| 6 | 业务逻辑 | 余额/库存操作, 状态机流转, 支付回调 | 高 |
+| 1 | Authentication bypass | `SecurityConfig`, `ShiroFilterFactory`, `doFilter` | Critical |
+| 2 | Broken access control | DAO/Mapper query statements, `@PreAuthorize`, Controller parameters | High |
+| 3 | JWT security | `Jwts.parser()`, `Algorithm.HMAC`, `SECRET_KEY` | High |
+| 4 | Crypto configuration | `MessageDigest`, `Cipher.getInstance`, `new Random()` | High |
+| 5 | Information disclosure | `application.yml` Actuator configuration, `@ExceptionHandler` | Medium |
+| 6 | Business logic | balance/stock operations, state machine transitions, payment callbacks | High |
 
 ---
 
-## 1. 认证绕过审计要点
+## 1. Authentication Bypass Audit Points
 
-- **Spring Security**: 检查 `FilterChainProxy` 匹配规则，`AntPathRequestMatcher` 与 `MvcRequestMatcher` 差异（尾部斜杠/路径后缀）；`requestMatchers` 顺序——宽松规则 `permitAll()` 在前会覆盖后续拦截；`permitAll()` 是否过度开放（如 `/api/**`）
-- **Shiro**: URI 解析差异导致绕过——`/admin/` vs `/admin` vs `/admin/..;/`；CVE-2020-1957 / CVE-2020-11989 / CVE-2020-13933 等 path normalization 系列绕过
-- **自定义 Filter**: `doFilter()` 中 early return 导致后续 chain 未执行；白名单正则不严谨（如 `startsWith("/public")` 可被 `/publicevil` 匹配）
+- **Spring Security**: check `FilterChainProxy` matching rules, the differences between `AntPathRequestMatcher` and `MvcRequestMatcher` (trailing slash/path suffix); `requestMatchers` ordering—a permissive `permitAll()` rule placed first overrides later interceptors; whether `permitAll()` is overly broad (e.g. `/api/**`)
+- **Shiro**: bypass caused by URI parsing differences—`/admin/` vs `/admin` vs `/admin/..;/`; path normalization bypass series such as CVE-2020-1957 / CVE-2020-11989 / CVE-2020-13933
+- **Custom Filter**: an early return in `doFilter()` causes the rest of the chain not to execute; sloppy allowlist regex (e.g. `startsWith("/public")` also matches `/publicevil`)
 
-## 2. 越权审计要点
+## 2. Broken Access Control Audit Points
 
-- **水平越权**: 接口仅校验登录态未校验资源归属——DAO 层 `WHERE id = #{orderId}` 缺少 `AND user_id = #{currentUserId}` 条件
-- **垂直越权**: Controller/Service 方法缺少角色注解 `@PreAuthorize`/`@RequiresRoles`；枚举值（角色 ID）可猜解
-- **IDOR**: 自增 ID 可遍历；UUID 是否真正不可预测；批量接口跳过单条权限检查
+- **Horizontal privilege escalation**: the endpoint only validates login state but not resource ownership—the DAO layer `WHERE id = #{orderId}` lacks the `AND user_id = #{currentUserId}` condition
+- **Vertical privilege escalation**: Controller/Service methods lack role annotations `@PreAuthorize`/`@RequiresRoles`; enum values (role IDs) are guessable
+- **IDOR**: auto-increment IDs can be enumerated; whether UUIDs are truly unpredictable; bulk endpoints skip per-item permission checks
 
-## 3. JWT 安全审计要点
+## 3. JWT Security Audit Points
 
-- **算法混淆**: `alg: none` 绕过签名验证；RS256 -> HS256 攻击（用公钥作为 HMAC 密钥）
-- **密钥硬编码**: 源码中 `SECRET_KEY = "xxx"` 或 `application.yml` 明文配置
-- **Claims 校验缺失**: `exp`(过期)/`iss`(签发者)/`aud`(受众) 未验证导致 token 可跨环境复用
-- **刷新机制**: `refresh_token` 长期有效且未绑定用户/设备，被盗后可无限刷新
+- **Algorithm confusion**: `alg: none` bypasses signature verification; RS256 -> HS256 attack (using the public key as the HMAC key)
+- **Hardcoded keys**: `SECRET_KEY = "xxx"` in source code or plaintext configuration in `application.yml`
+- **Missing Claims validation**: `exp` (expiry)/`iss` (issuer)/`aud` (audience) are unvalidated, allowing tokens to be reused across environments
+- **Refresh mechanism**: `refresh_token` is long-lived and not bound to a user/device, allowing unlimited refresh after theft
 
-## 4. 加密配置审计要点
+## 4. Crypto Configuration Audit Points
 
-- **弱算法**: `MD5`/`SHA1` 做密码哈希、`DES`/`RC4` 加密、`ECB` 模式（泄露数据模式）
-- **正确做法**: 密码用 `bcrypt`/`scrypt`/`argon2`；对称加密用 `AES-GCM`/`AES-CBC+HMAC`
-- **硬编码密钥/盐值**: `private static final String KEY = "..."` 或盐值写死在代码中
-- **不安全随机**: `java.util.Random` 可预测，安全场景必须用 `SecureRandom`
+- **Weak algorithms**: `MD5`/`SHA1` for password hashing, `DES`/`RC4` for encryption, `ECB` mode (leaks data patterns)
+- **Correct practice**: use `bcrypt`/`scrypt`/`argon2` for passwords; use `AES-GCM`/`AES-CBC+HMAC` for symmetric encryption
+- **Hardcoded keys/salts**: `private static final String KEY = "..."` or the salt hardcoded in code
+- **Insecure randomness**: `java.util.Random` is predictable; security-sensitive scenarios must use `SecureRandom`
 
-## 5. 信息泄露审计要点
+## 5. Information Disclosure Audit Points
 
-- **Actuator 端点暴露**: `/env`(环境变量/密码)、`/heapdump`(堆内存含密钥)、`/jolokia`(远程代码执行)
-- **详细错误堆栈**: 全局异常处理器缺失，SQL 报错/类名/路径直接返回客户端
-- **Debug 模式**: `server.error.include-stacktrace=always`、`spring.devtools` 未移除
-- **敏感数据日志**: `log.info("用户密码: {}", password)` 或完整信用卡号写入日志文件
+- **Exposed Actuator endpoints**: `/env` (environment variables/passwords), `/heapdump` (heap memory containing keys), `/jolokia` (remote code execution)
+- **Verbose error stack traces**: no global exception handler, SQL errors/class names/paths returned directly to the client
+- **Debug mode**: `server.error.include-stacktrace=always`, `spring.devtools` not removed
+- **Sensitive data in logs**: `log.info("user password: {}", password)` or full credit card numbers written to log files
 
-## 6. 业务逻辑审计要点
+## 6. Business Logic Audit Points
 
-- **并发竞争**: 余额检查与扣款非原子操作（double-spending）；优惠券/积分重放
-- **参数篡改**: 金额/数量/折扣由客户端传入且服务端未重新计算；订单金额可为负数
-- **流程绕过**: 多步流程（注册-验证-设置密码）步骤间缺少状态校验，可直接跳到后续接口
+- **Concurrency race**: balance check and deduction are non-atomic (double-spending); coupon/points replay
+- **Parameter tampering**: amount/quantity/discount are passed by the client and not recomputed server-side; order amounts can be negative
+- **Process bypass**: multi-step flows (register-verify-set password) lack state validation between steps, allowing a direct jump to later endpoints
 
 ---
 
-## 检测清单
+## Detection Checklist
 
-审计时逐项确认，每发现一项即记录 EVID 证据:
+Confirm each item during the audit and record EVID evidence for every finding:
 
-- [ ] Spring Security 配置链顺序问题或过度 `permitAll`
-- [ ] Shiro `filterChainDefinitionMap` URI 解析差异绕过
-- [ ] 自定义 Filter/Interceptor early return 或白名单绕过
-- [ ] 数据查询是否绑定当前用户 ID（水平越权）
-- [ ] 敏感接口是否有角色/权限注解（垂直越权）
-- [ ] JWT 是否强制指定算法 + 密钥安全存储 + Claims 全验证
-- [ ] 密码存储 bcrypt/scrypt/argon2; 对称加密 AES-GCM 且密钥不硬编码
-- [ ] 随机数使用 SecureRandom
-- [ ] Actuator 端点限制访问 + 认证保护
-- [ ] 全局异常处理器吞掉堆栈; 生产关闭 debug/devtools; 日志无敏感数据
-- [ ] 金额/库存操作原子性; 多步流程状态机校验
+- [ ] Spring Security configuration chain ordering issues or overly broad `permitAll`
+- [ ] Shiro `filterChainDefinitionMap` URI parsing difference bypass
+- [ ] Custom Filter/Interceptor early return or allowlist bypass
+- [ ] Whether data queries bind the current user ID (horizontal privilege escalation)
+- [ ] Whether sensitive endpoints have role/permission annotations (vertical privilege escalation)
+- [ ] Whether JWT enforces a specified algorithm + secure key storage + full Claims validation
+- [ ] Password storage bcrypt/scrypt/argon2; symmetric encryption AES-GCM with no hardcoded keys
+- [ ] Random number generation uses SecureRandom
+- [ ] Actuator endpoints restricted + protected by authentication
+- [ ] Global exception handler swallows stack traces; debug/devtools disabled in production; no sensitive data in logs
+- [ ] Atomicity of amount/stock operations; state machine validation for multi-step flows

@@ -1,6 +1,8 @@
 ---
 name: jwt-cracker
 description: Full JWT attack methodology alg:none, RS256 to HS256 confusion, weak secret brute-force, kid injection, jku/jwk injection, and claim tampering. Trigger when the user asks to test JWT tokens, authentication bypass, or token forgery, wants to try alg:none/algorithm confusion/weak secret brute-force, needs to test kid/jku/x5u/jwk injection, asks to check if exp/iss/aud claims are validated, is trying to bypass authentication on an API or web app, or provides a string that looks like a JWT.
+zh-signals: "JWT 攻击方法论，覆盖 alg:none、算法混淆、弱密钥爆破、kid/jku/jwk 注入与声明篡改。信号:JWT攻击,算法混淆,弱密钥,令牌伪造,认证绕过"
+when-to-use: "Use when testing JWT tokens for authentication bypass or token forgery, trying alg:none or algorithm confusion, brute-forcing weak secrets, testing kid/jku/x5u/jwk injection, or checking exp/iss/aud validation."
 ---
 
 # JWT Attack Methodology

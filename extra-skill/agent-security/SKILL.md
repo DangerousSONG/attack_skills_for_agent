@@ -1,94 +1,99 @@
 ---
 name: agent-security
 description: |
-  AI Agent 系统安全测试方法论。当目标系统使用 AI Agent 执行工具调用、多 Agent 协作、
-  或自主决策时触发。覆盖 OWASP Agentic AI Security Top 10 (ASI01-ASI10):
-  目标劫持、工具滥用、身份权限、供应链、代码执行、记忆投毒、多 Agent 通信、
-  级联故障、人机信任利用、失控 Agent。
+  AI agent system security testing methodology. Triggered when the target system uses AI agents to perform tool calls, multi-agent collaboration,
+  or autonomous decision-making. Covers OWASP Agentic AI Security Top 10 (ASI01-ASI10):
+  goal hijacking, tool abuse, identity and permissions, supply chain, code execution, memory poisoning, multi-agent communication,
+  cascading failures, human-agent trust exploitation, and rogue agents.
+zh-signals: "面向 AI Agent 系统的安全测试方法论，覆盖 OWASP Agentic AI Security Top 10（ASI01-ASI10）的目标劫持、工具滥用、权限、记忆投毒与多 Agent 通信风险。信号:AI Agent安全,Agentic AI,工具滥用,记忆投毒,OWASP ASI"
+when-to-use: >-
+  Use when the target uses AI agents with tool calling, multi-agent
+  collaboration, or autonomous decision-making, and you need to test for
+  agentic AI risks.
 metadata:
-  tags: agent security, ai agent, agentic ai, owasp asi, tool abuse, agent hijack, multi-agent, 智能体安全, agent 劫持, 工具滥用, 权限越界, 级联故障, kill switch, agent蠕虫, morris ii
+  tags: agent security, ai agent, agentic ai, owasp asi, tool abuse, agent hijack, multi-agent, agent security, agent hijacking, tool abuse, privilege overreach, cascading failure, kill switch, agent worm, morris ii
   category: ai-security
 ---
 
-# AI Agent 安全测试方法论
+# AI Agent Security Testing Methodology
 
-## 概述
+## Overview
 
-AI Agent 与普通 LLM 应用的本质区别在于**自主行动能力**——Agent 拥有工具调用、代码执行、持久记忆和多步规划能力，这意味着一次成功的注入不再只是生成错误文本，而是可以触发真实的系统操作。攻击面从"模型输出"扩展到了"工具执行链、Agent 间通信、持久化状态"的全栈。
+The essential difference between AI agents and ordinary LLM applications lies in their **ability to act autonomously** — agents have tool calling, code execution, persistent memory, and multi-step planning capabilities, which means that a successful injection no longer merely produces erroneous text, it can trigger real system operations. The attack surface expands from "model output" to the full stack of "tool execution chains, inter-agent communication, and persisted state".
 
-## 深入参考
+## Further Reading
 
-- 各 ASI 编号的详细攻击场景、Payload 与测试方法 → [references/agent-attack-scenarios.md](references/agent-attack-scenarios.md)
+- Detailed attack scenarios, payloads, and testing methods for each ASI number → [references/agent-attack-scenarios.md](references/agent-attack-scenarios.md)
 
 ---
 
-## OWASP ASI01-ASI10 风险速查
+## OWASP ASI01-ASI10 Risk Quick Reference
 
-| 编号 | 风险名称 | 核心测试要点 |
+| Number | Risk name | Core testing points |
 |------|----------|-------------|
-| ASI01 | 目标劫持 | 直接/间接注入能否改变 Agent 执行目标 |
-| ASI02 | 工具滥用 | 未授权工具调用、参数注入、描述投毒 |
-| ASI03 | 身份与权限 | Agent 权限是否遵循最小权限、凭据隔离 |
-| ASI04 | 供应链 | 第三方 Skill/Plugin/MCP Server 是否可信 |
-| ASI05 | 代码执行 | 沙箱逃逸、任意命令注入 |
-| ASI06 | 记忆投毒 | 持久化上下文/历史对话是否可被污染 |
-| ASI07 | 多 Agent 通信 | Agent 间消息伪造、信任传递链漏洞 |
-| ASI08 | 级联故障 | 单 Agent 失败是否引发链式崩溃 |
-| ASI09 | 人机信任 | 用户是否无条件信任 Agent 输出并执行 |
-| ASI10 | 失控 Agent | 是否存在有效的终止/回滚机制 |
+| ASI01 | Goal hijacking | Whether direct/indirect injection can change the agent's execution goal |
+| ASI02 | Tool abuse | Unauthorized tool calls, parameter injection, description poisoning |
+| ASI03 | Identity and permissions | Whether agent permissions follow least privilege, credential isolation |
+| ASI04 | Supply chain | Whether third-party Skill/Plugin/MCP Server components are trustworthy |
+| ASI05 | Code execution | Sandbox escape, arbitrary command injection |
+| ASI06 | Memory poisoning | Whether persisted context/conversation history can be polluted |
+| ASI07 | Multi-agent communication | Message forgery between agents, flaws in trust propagation chains |
+| ASI08 | Cascading failures | Whether a single agent failure triggers a chain collapse |
+| ASI09 | Human-agent trust | Whether users unconditionally trust agent output and execute it |
+| ASI10 | Rogue agent | Whether an effective termination/rollback mechanism exists |
 
 ---
 
-## 方法论概览
+## Methodology Overview
 
-### Phase 0: Agent 架构侦察
-- 识别 Agent 类型（单体 ReAct / 多 Agent 编排 / 代码执行型）和底层框架（LangChain/AutoGen/CrewAI 等）
-- 枚举 Agent 可用工具集、权限边界、通信拓扑（Hub-Spoke / Mesh / 层级）
-- 确认人类监督节点（Human-in-the-loop）的位置和覆盖范围
+### Phase 0: Agent Architecture Reconnaissance
+- Identify the agent type (monolithic ReAct / multi-agent orchestration / code-executing type) and the underlying framework (LangChain/AutoGen/CrewAI, etc.)
+- Enumerate the agent's available tool set, permission boundaries, and communication topology (Hub-Spoke / Mesh / hierarchical)
+- Confirm the location and coverage of human supervision nodes (human-in-the-loop)
 
-### Phase 1: 目标劫持测试 (ASI01)
-- 通过直接对话和间接数据源（文件、网页、API 返回）注入偏离指令，验证 Agent 是否执行非预期操作
-- 关键判断：Agent 的目标锁定机制是否能抵抗上下文窗口中的对抗性指令
+### Phase 1: Goal Hijacking Testing (ASI01)
+- Inject off-task instructions through direct conversation and indirect data sources (files, web pages, API responses), and verify whether the agent performs unintended actions
+- Key judgement: whether the agent's goal-locking mechanism can withstand adversarial instructions in the context window
 
-### Phase 2: 工具滥用测试 (ASI02)
-- 构造恶意工具参数（路径遍历、命令拼接），测试 Agent 是否盲目传递用户可控输入到工具调用
-- 测试工具描述投毒——恶意描述能否改变 Agent 对工具的使用方式（详见 `mcp-security`）
+### Phase 2: Tool Abuse Testing (ASI02)
+- Craft malicious tool parameters (path traversal, command concatenation) to test whether the agent blindly passes user-controllable input into tool calls
+- Test tool description poisoning — whether a malicious description can change how the agent uses the tool (see `mcp-security` for details)
 
-### Phase 3: 供应链与代码执行 (ASI04/ASI05)
-- 审查第三方 Skill/Plugin/Rules 文件是否包含隐藏指令或后门
-- 代码执行型 Agent：测试沙箱隔离强度，尝试文件系统访问、网络外联、进程逃逸
+### Phase 3: Supply Chain and Code Execution (ASI04/ASI05)
+- Review third-party Skill/Plugin/Rules files for hidden instructions or backdoors
+- Code-executing agents: test the strength of sandbox isolation, attempting file system access, network egress, and process escape
 
-### Phase 4: 记忆投毒与持久化 (ASI06)
-- 向 Agent 的对话历史或长期记忆注入恶意上下文，验证是否在后续会话中被激活
-- 测试记忆的写入/读取权限控制——非特权交互能否修改系统级记忆
+### Phase 4: Memory Poisoning and Persistence (ASI06)
+- Inject malicious context into the agent's conversation history or long-term memory, and verify whether it is activated in later sessions
+- Test the write/read permission control of memory — whether non-privileged interactions can modify system-level memory
 
-### Phase 5: 多 Agent 通信安全 (ASI07)
-- 在多 Agent 系统中伪造来自其他 Agent 的消息，测试接收方是否验证消息来源
-- 检查信任传递链：若 Agent A 信任 Agent B，攻击 B 能否间接控制 A
+### Phase 5: Multi-Agent Communication Security (ASI07)
+- In multi-agent systems, forge messages coming from other agents and test whether the receiver verifies the message source
+- Check the trust propagation chain: if agent A trusts agent B, can compromising B indirectly control A
 
-### Phase 6: 监控与 Kill Switch (ASI08/ASI10)
-- 验证级联故障：单个 Agent 异常输出是否被下游 Agent 无条件信任并放大
-- 测试终止机制（Kill Switch）的有效性——Agent 在失控状态下能否被可靠中断
+### Phase 6: Monitoring and Kill Switch (ASI08/ASI10)
+- Verify cascading failures: whether abnormal output from a single agent is unconditionally trusted and amplified by downstream agents
+- Test the effectiveness of the termination mechanism (kill switch) — whether a runaway agent can be reliably interrupted
 
 ---
 
-## 实战检测清单
+## Practical Detection Checklist
 
 ```
-1. [ ] Agent 类型与架构已识别？工具集、权限模型、通信拓扑已枚举？
-2. [ ] 目标劫持：间接数据源注入能否改变 Agent 执行流？
-3. [ ] 工具滥用：用户输入是否直接拼接到工具参数？
-4. [ ] 权限边界：Agent 是否运行在最小权限下？凭据是否隔离？
-5. [ ] 供应链：第三方组件是否经过安全审计？
-6. [ ] 代码执行：沙箱是否能阻止文件/网络/进程访问？
-7. [ ] 记忆系统：是否有写入权限控制？历史是否可被投毒？
-8. [ ] 多 Agent：消息来源是否验证？信任传递链是否可被利用？
-9. [ ] 级联故障：异常是否被隔离？是否存在全局 Kill Switch？
+1. [ ] Has the agent type and architecture been identified? Have the tool set, permission model, and communication topology been enumerated?
+2. [ ] Goal hijacking: can indirect data source injection change the agent's execution flow?
+3. [ ] Tool abuse: is user input directly concatenated into tool parameters?
+4. [ ] Permission boundaries: does the agent run with least privilege? Are credentials isolated?
+5. [ ] Supply chain: have third-party components been security audited?
+6. [ ] Code execution: can the sandbox prevent file/network/process access?
+7. [ ] Memory system: is there write permission control? Can history be poisoned?
+8. [ ] Multi-agent: is the message source verified? Can the trust propagation chain be exploited?
+9. [ ] Cascading failures: are anomalies isolated? Is there a global kill switch?
 ```
 
 ---
 
-## 参考资源
+## Reference Resources
 
 - [OWASP Agentic AI Security Top 10](https://owasp.org/www-project-agentic-ai-security/)
 - [Morris II: Agent Worm — Self-Replicating Prompt Injection](https://sites.google.com/view/compromising-genai-agents/)

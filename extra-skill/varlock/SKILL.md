@@ -1,6 +1,9 @@
 ---
 name: varlock
 description: "Secure-by-default environment variable management for Claude Code sessions."
+zh-signals: "面向 Claude Code 会话的安全默认环境变量与密钥管理。信号:环境变量,密钥管理,varlock,安全默认,防泄露"
+when-to-use: >-
+  Use when handling environment variables or secrets in a Claude Code session while keeping them out of logs, diffs, and assistant context.
 risk: critical
 source: "https://github.com/dmno-dev/varlock"
 date_added: "2026-09-04"

@@ -1,6 +1,8 @@
 ---
 name: agentic-actions-auditor
 description: "Audits GitHub Actions workflows for security vulnerabilities in AI agent integrations including Claude Code Action, Gemini CLI, OpenAI Codex, and GitHub AI Inference. Detects attack vectors where attacker-controlled input reaches AI agents running in CI/CD pipelines, including env var intermediary patterns, direct expression injection, dangerous sandbox configurations, and wildcard user allowlists. Use when reviewing workflow files that invoke AI coding agents, auditing CI/CD pipeline security for prompt injection risks, or evaluating agentic action configurations."
+zh-signals: "审计 GitHub Actions 中 AI Agent 集成的工作流安全，检测提示注入与危险配置。信号:GitHub Actions,AI Agent,CICD安全,提示注入,工作流审计"
+when-to-use: "Use when reviewing workflow files that invoke AI coding agents (Claude Code Action, Gemini CLI, Codex) for prompt-injection and config risks."
 allowed-tools: Read Grep Glob Bash
 ---
 

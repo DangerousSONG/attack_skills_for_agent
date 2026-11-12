@@ -1,6 +1,8 @@
 ---
 name: burpsuite-project-parser
 description: Searches and explores Burp Suite project files (.burp) from the command line. Use when searching response headers or bodies with regex patterns, extracting security audit findings, dumping proxy history or site map data, or analyzing HTTP traffic captured in a Burp project.
+zh-signals: "从命令行搜索和解析 Burp Suite 项目文件，提取响应、审计发现、代理历史与站点地图。信号:Burp,项目文件,HTTP流量,审计发现,代理历史"
+when-to-use: "Use when searching response headers or bodies with regex, extracting audit findings, or dumping proxy history and site map data from a Burp Suite .burp project file."
 allowed-tools: Bash Read
 ---
 

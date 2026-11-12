@@ -1,6 +1,8 @@
 ---
 name: hunt-django
 description: "Hunt Django-specific vulnerabilities: DRF permission gaps, ORM injection, and admin exploitation."
+zh-signals: "猎取 Django 特有漏洞，涵盖 DRF 权限缺口、ORM 注入、模板注入与 admin 利用。信号:Django漏洞,DRF权限,ORM注入,模板注入,admin利用"
+when-to-use: "Use when the target runs Python/Django and you need to test DRF permissions, ORM injection, template injection, or admin exploitation."
 category: redteam
 version: 1.1.0
 revision_date: 2026-07-25

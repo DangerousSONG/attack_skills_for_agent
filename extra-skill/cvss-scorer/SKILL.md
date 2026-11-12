@@ -1,6 +1,10 @@
 ---
 name: cvss-scorer
 description: Computes an exact CVSS v3.1 base score and vector from a vulnerability description infers metrics from context, asks one sharp question only when ambiguity would change the severity level. Trigger when the user needs a CVSS score for a vulnerability finding, is writing a bug bounty report or pentest finding needing a severity vector, says "score this" or "what's the CVSS?", or has a vulnerability description and wants a severity level.
+zh-signals: "根据漏洞描述精确计算 CVSS v3.1 基础分与向量，必要时提一个决定性澄清问题。信号:CVSS评分,CVSS向量,严重度,漏洞分级,评分"
+when-to-use: >-
+  Use when you need a CVSS v3.1 score or vector for a vulnerability finding, bug bounty
+  report, or pentest finding.
 license: MIT
 metadata:
   version: "2.0.0"

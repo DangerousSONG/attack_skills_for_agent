@@ -1,6 +1,8 @@
 ---
 name: log-triage
 description: Identity-log triage workflow — anomaly patterns per provider (AWS CloudTrail, Azure AD/Entra, Google Workspace, Okta), session and token misuse, MFA-bypass signals, conditional-access evasion, and cross-provider correlation. Produces a prioritized finding list routed to ir-runbook or detection-engineer.
+zh-signals: "身份日志分诊工作流，按身份提供商识别异常、令牌滥用与 MFA 绕过。信号:日志分诊,身份安全,CloudTrail,Azure AD,异常检测"
+when-to-use: "Use when investigating identity-log anomalies or compromised accounts across AWS CloudTrail, Azure AD/Entra, Google Workspace, or Okta."
 ---
 
 # Log Triage

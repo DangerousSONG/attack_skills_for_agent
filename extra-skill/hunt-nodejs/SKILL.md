@@ -1,6 +1,8 @@
 ---
 name: hunt-nodejs
 description: Hunt Node.js specific vulnerabilities — Prototype Pollution → RCE chains (lodash/merge/assign), Express trust proxy misconfiguration, child_process/eval injection, template engine SSTI (EJS/Pug/Handlebars), path traversal in file servers, require() injection, environment variable exfil via /proc/self/environ. Use when target runs Node.js/Express/Fastify/NestJS/Koa.
+zh-signals: "针对 Node.js 服务排查原型链污染、SSTI、命令注入、trust proxy 与路径穿越等漏洞。信号:Node.js,原型链污染,RCE,SSTI,Express"
+when-to-use: "Use when the target runs Node.js/Express/Fastify/NestJS/Koa and you need to hunt prototype pollution chains, SSTI, command injection, trust proxy misconfiguration, or path traversal."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

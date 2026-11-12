@@ -1,6 +1,8 @@
 ---
 name: sast-orchestrator
 description: SAST orchestration for Semgrep, CodeQL and SonarQube. Covers tool selection, ruleset curation, PR-comment integration, noise reduction with baselines, and language-specific linters (bandit, gosec, brakeman, eslint-security) when they add coverage.
+zh-signals: "Semgrep/CodeQL/SonarQube SAST 编排与降噪。信号:SAST,Semgrep,CodeQL,SonarQube,规则集,降噪"
+when-to-use: "Use when setting up or tuning SAST tooling in CI, curating rulesets, integrating PR comments, or triaging existing SAST output."
 ---
 
 # SAST Orchestrator

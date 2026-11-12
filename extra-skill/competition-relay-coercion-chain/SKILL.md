@@ -1,6 +1,8 @@
 ---
 name: competition-relay-coercion-chain
 description: Internal downstream skill for ctf-sandbox-orchestrator. CTF-sandbox workflow for forced-auth coercion, relay chains, target selection, NTLM or related acceptance paths, and coercion-to-privilege transitions. Use when the user asks to trace a coercion primitive, follow a relay path, analyze forced authentication, determine which service accepts relayed auth, or connect a coercion step to resulting privilege, enrollment, or code execution. Use only after `$ctf-sandbox-orchestrator` has already established sandbox assumptions and routed here.
+zh-signals: "CTF 沙箱下行的强制认证与中继链分析，覆盖强制认证到权限提升路径。信号:强制认证,中继攻击,NTLM,CTF,权限提升"
+when-to-use: "Use only after ctf-sandbox-orchestrator is active, when a CTF challenge requires tracing coerced authentication through a relay chain to privilege."
 ---
 
 # Competition Relay Coercion Chain

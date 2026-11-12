@@ -2,6 +2,10 @@
 name: gcp-cloud-sql
 description: Provision Cloud SQL and Spanner databases. Configure high availability,
   backups, and security. Use when deploying managed databases on GCP.
+zh-signals: "在 GCP 上部署与配置 Cloud SQL 和 Spanner 数据库，含高可用、备份与安全。信号:GCP,Cloud SQL,Spanner,高可用,数据库安全"
+when-to-use: >-
+  Use when provisioning managed Cloud SQL or Spanner databases on GCP,
+  including high availability, backups, and security configuration.
 category: devops
 risk: critical
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

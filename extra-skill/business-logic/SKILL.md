@@ -12,6 +12,10 @@ description: |
   predictability. Domain-agnostic — applies to SaaS, e-commerce, banking, gaming, social
   platforms, APIs, or any multi-user application with stateful workflows. Chains from /pentester;
   chains into /param-fuzz when boundary violations or mass assignment are confirmed.
+zh-signals: "应用业务逻辑安全测试，覆盖数值滥用、流程绕过、越权与重放。信号:业务逻辑,越权,流程绕过,重放,竞态条件"
+when-to-use: >-
+  Use when testing any stateful multi-user application (checkout, banking, SaaS, APIs)
+  for value manipulation, workflow/state bypass, BOLA/BFLA, replay, and quota or time-based abuse.
 argument-hint: "<target-url> [focus=value|workflow|trust|replay|quota|all] [depth=quick|standard|thorough]"
 user-invocable: true
 ---

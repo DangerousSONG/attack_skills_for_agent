@@ -2,39 +2,42 @@
 name: subzy-takeover-check
 description: "Subzy performs final subdomain takeover checks. Signals: subdomain, domain enumeration, batch takeover detection, concurrency, show hits only"
 zh-signals: "Subzy: 子域接管终检。信号:子域名,域名枚举,批量接管检测,并发,只显示命中。"
+when-to-use: >-
+  Use to run a final batch subdomain takeover check over a list of subdomains
+  with high concurrency.
 ---
 
 # Subzy
 
-- 攻击大类:C02 域名与DNS侦察
-- 上游仓库:https://github.com/LukaSikic/subzy
-- 上游 License:GPL-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C02 Domain and DNS Reconnaissance
+- Upstream Repository: https://github.com/LukaSikic/subzy
+- Upstream License: GPL-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/LukaSikic/subzy@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `subzy run --targets subs.txt` | 批量接管检测 |
-| `--concurrency 20` | 并发 |
-| `--hide_fails` | 只显示命中 |
-| `--https` | 强制 HTTPS |
-| `--output out.json` | JSON 输出 |
+| `subzy run --targets subs.txt` | Batch takeover detection |
+| `--concurrency 20` | Concurrency |
+| `--hide_fails` | Show hits only |
+| `--https` | Force HTTPS |
+| `--output out.json` | JSON output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 子域接管终检
+### Final Subdomain Takeover Check
 
 ```bash
 subzy run --targets subs.txt --hide_fails --output takeover.json
 cat takeover.json | jq '.[].subdomain'
 ```
 
-## 注意事项
+## Notes
 
-并发高指纹全;与 subjack 互补,两个都跑降低漏报。
+High concurrency and complete fingerprint coverage; complements subjack, and running both reduces false negatives.

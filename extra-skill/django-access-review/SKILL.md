@@ -1,6 +1,8 @@
 ---
 name: django-access-review
 description: 'Use when reviewing Django or DRF access control: trace authorization flows, IDOR risks, object permissions, query scoping and tenant isolation before proposing a verified fix.'
+zh-signals: "审查 Django/DRF 访问控制，追踪授权流程、IDOR 风险、对象权限、查询作用域与多租户隔离，并在提出修复前完成验证。信号:Django,DRF,访问控制,IDOR,对象权限,租户隔离"
+when-to-use: "Use when reviewing Django or DRF access control and you need to trace authorization flows, IDOR risks, object permissions, query scoping, and tenant isolation before proposing a verified fix."
 metadata:
   aas-risk: critical
   aas-source: community

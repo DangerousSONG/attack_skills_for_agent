@@ -2,37 +2,39 @@
 name: pwcrack-framework
 description: "pwcrack: Aggregates online hash cracking. Signals: password cracking, hash cracking, multi-engine, batch."
 zh-signals: "pwcrack: 在线哈希破解聚合。信号:密码破解,哈希破解,多引擎,批量。"
+when-to-use: >-
+  Use when you have a hash and want to query multiple online cracking services at once, including batch mode for large hash sets.
 ---
 
 # pwcrack
 
-- 攻击大类:C25 哈希与密码破解
-- 上游仓库:https://github.com/L-codes/pwcrack-framework
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C25 Hash and Password Cracking
+- Upstream Repository: https://github.com/L-codes/pwcrack-framework
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/L-codes/pwcrack-framework && cd pwcrack-framework
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `./pwcrack md5:5d41402abc4b2a76b9719d911017c592` | 在线哈希破解 |
-| `./pwcrack md5:f0e1d2c3b4a5968778695a4b3c2d1e0f` | 多引擎 |
-| `-f file` | 批量 |
+| `./pwcrack md5:5d41402abc4b2a76b9719d911017c592` | Online hash cracking |
+| `./pwcrack md5:f0e1d2c3b4a5968778695a4b3c2d1e0f` | Multi-engine |
+| `-f file` | Batch |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 在线哈希破解聚合
+### Aggregated online hash cracking
 
 ```bash
 ./pwcrack md5:$HASH
-# 40+ 在线库一键查
+# One-shot lookup across 40+ online databases
 ```
 
-## 注意事项
+## Notes
 
-在线哈希破解框架,聚合多库。
+Online hash cracking framework aggregating multiple databases.

@@ -1,6 +1,8 @@
 ---
 name: awesome-ai-security-reference
 description: Navigate AI security resources, learning paths, and tools from the Awesome AI Security curated list
+zh-signals: "导航 Awesome AI Security 的 AI 安全资源、学习路径与工具。信号:AI安全,学习资源,提示注入,对抗攻击,工具导航"
+when-to-use: "Use when the user wants AI security learning resources, tool recommendations, or guidance on topics like prompt injection or model poisoning."
 triggers:
   - show me AI security learning resources
   - what are the best prompt injection defenses

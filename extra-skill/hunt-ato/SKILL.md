@@ -1,6 +1,10 @@
 ---
 name: hunt-ato
 description: "Hunt account takeover taxonomy — 9 distinct paths to ATO, plus chains. Paths: (1) password reset flaws (host-header injection redirects token, predictable/numeric token, Referer leak, no-expiry/reuse), (2) email change without re-auth, (3) OAuth account-link CSRF, (4) MFA bypass (per hunt-mfa-bypass), (5) session fixation, (6) JWT manipulation (alg:none, RS256→HS256 key confusion, weak HMAC secret, kid injection), (7) password change without step-up (chain with login timing/length oracle), (8) social-recovery / security-question brute-force, (9) SSO subdomain takeover at OAuth redirect_uri. Chains: cookie theft + password oracle + no step-up = persistent ATO; lax redirect_uri = auth-code theft; dangling-CNAME takeover at redirect_uri = ATO. Validate: demonstrate real takeover of test account B from attacker A's session; OOB/Collaborator confirm blind token-leak steps. Use when hunting ATO chains, testing password reset / email change / MFA / OAuth / session / JWT, or chaining primitives toward Critical."
+zh-signals: "梳理账户接管（ATO）的九条主要攻击路径（密码重置、邮箱修改、OAuth 关联、MFA 绕过、会话固定、JWT 操纵等）及其组合链条。信号:账户接管,ATO,密码重置,OAuth,MFA绕过,JWT"
+when-to-use: >-
+  Use when hunting account-takeover chains or testing password reset, email
+  change, MFA, OAuth, session handling, or JWT flaws on an authorized target.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

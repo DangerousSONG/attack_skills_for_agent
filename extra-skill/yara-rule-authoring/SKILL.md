@@ -6,6 +6,10 @@ description: >
   string selection, performance optimization, migration from legacy YARA, and false
   positive reduction. Triggers on: YARA, YARA-X, malware detection, threat hunting,
   IOC, signature, crx module, dex module.
+zh-signals: "指导编写高质量 YARA-X 恶意软件检测规则，覆盖字符串选择、性能优化与误报降低。信号:yara,yara-x,恶意软件检测,威胁狩猎,检测规则"
+when-to-use: >-
+  Use when writing, reviewing, or optimizing YARA-X rules, converting IOCs into
+  signatures, or migrating legacy YARA rules.
 ---
 
 # YARA-X Rule Authoring

@@ -1,6 +1,8 @@
 ---
 name: server-security-init-skill
 description: Agent skill for safely initializing and hardening fresh Ubuntu/Debian SSH servers with staged security improvements
+zh-signals: "全新 Ubuntu/Debian 服务器安全初始化与加固。信号:服务器加固,SSH安全,UFW,fail2ban,Linux"
+when-to-use: "Use when initializing or hardening a fresh Ubuntu/Debian SSH server, including key-based login, non-root sudo users, firewall, and fail2ban setup."
 triggers:
   - "help me secure a new Ubuntu server"
   - "initialize security on my fresh Debian VPS"

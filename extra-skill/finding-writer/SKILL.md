@@ -1,6 +1,10 @@
 ---
 name: finding-writer
 description: Converts raw pentest notes, logs, or observations into a structured audit finding ready for a security report. Trigger when the user pastes raw notes, tool output, or a quick observation from a pentest, describes a vulnerability needing structure for a client report, has a log snippet or HTTP request/response revealing a security issue, or wants to turn a single-line note into a deliverable write-up.
+zh-signals: "将渗透测试原始笔记、日志或观察结果转换为结构化审计发现，生成可直接用于安全报告的交付内容。信号:发现撰写,渗透报告,审计发现,漏洞描述,报告结构"
+when-to-use: >-
+  Use when the user pastes raw pentest notes, tool output, logs, or an HTTP request/response
+  revealing a security issue and wants it turned into a structured, report-ready audit finding.
 license: MIT
 metadata:
   version: "0.0.1"

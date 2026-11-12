@@ -1,6 +1,10 @@
 ---
 name: junta-leiloeiros
 description: Coleta e consulta dados de leiloeiros oficiais de todas as 27 Juntas Comerciais do Brasil. Scraper multi-UF, banco SQLite, API FastAPI e exportacao CSV/JSON.
+zh-signals: "采集并查询巴西全部 27 个商业委员会官方拍卖师数据，提供多州爬虫、SQLite 数据库、FastAPI 接口与 CSV/JSON 导出。信号:拍卖师数据,巴西商业委员会,网络爬虫,SQLite,FastAPI"
+when-to-use: >-
+  Use when the user asks about Brazilian auctioneer (leiloeiro) data from Juntas
+  Comerciais — scraping, querying, exporting, or serving it through the bundled API.
 risk: safe
 source: community
 date_added: '2026-03-06'

@@ -1,96 +1,98 @@
 ---
 name: cross-domain-attack-chain
 description: |
-  Web 与 AI 跨域攻击链方法论。当目标系统同时包含传统 Web 应用和 AI/LLM 组件、
-  需要评估 Web 漏洞对 AI 系统的影响或 AI 漏洞对 Web 系统的影响时触发。
-  覆盖双向攻击链: Web→AI(XSS 窃取对话/SSRF 调用模型 API/SQLi 污染 RAG/文件上传 RAG 投毒)
-  和 AI→Web(注入生成存储型 XSS/Agent 执行 SQL 命令/工具读取敏感文件/沙箱逃逸 RCE)。
+  Cross-domain attack chain methodology for Web and AI. Trigger when the target system contains both traditional web applications and AI/LLM components,
+  and you need to assess how Web vulnerabilities affect the AI system or how AI vulnerabilities affect the Web system.
+  Covers bidirectional attack chains: Web→AI (XSS conversation theft/SSRF to model APIs/SQLi RAG poisoning/file upload RAG poisoning)
+  and AI→Web (injection-generated stored XSS/Agent SQL command execution/tool-based sensitive file reads/sandbox escape RCE).
+zh-signals: "串联 Web 与 AI 组件的双向攻击链，将两个领域的低危漏洞组合为高危影响。信号:跨域攻击,Web安全,AI安全,攻击链,RAG投毒"
+when-to-use: "Use when a target combines traditional web applications with AI/LLM components and you need to assess Web-to-AI or AI-to-Web attack chains such as prompt injection, RAG poisoning, or sandbox escape."
 metadata:
-  tags: cross domain, web to ai, ai to web, 跨域攻击, attack chain, rag poisoning, xss ai, ssrf model api, agent sql injection, sandbox escape, 攻击链
+  tags: cross domain, web to ai, ai to web, attack chain, rag poisoning, xss ai, ssrf model api, agent sql injection, sandbox escape
   category: ai-security
 ---
 
-# Web/AI 跨域攻击链方法论
+# Web/AI Cross-Domain Attack Chain Methodology
 
-## 概述
+## Overview
 
-现代系统中 Web 服务与 AI/LLM 组件共享数据管道和基础设施。Web 层的低危漏洞（如受限 SSRF）接触到内部模型 API 时可升级为 Prompt 注入；反过来，Prompt 注入通过 Agent 工具链回写数据库可产生存储型 XSS。跨域攻击链的价值在于将两个领域的"中低危"串联为"高危/严重"。
+In modern systems, web services and AI/LLM components share data pipelines and infrastructure. A low-severity web-layer flaw (such as a restricted SSRF) can be upgraded to prompt injection once it reaches internal model APIs; conversely, prompt injection that writes back to the database through the Agent toolchain can produce stored XSS. The value of cross-domain attack chains lies in chaining "medium/low severity" issues from both domains into "high/critical severity" outcomes.
 
-## 跨域攻击路径总览
+## Overview of Cross-Domain Attack Paths
 
-| 方向 | 编号 | 入口漏洞 | 跨域跳板 | 最终影响 |
+| Direction | ID | Entry vulnerability | Cross-domain pivot | Final impact |
 |------|------|----------|----------|----------|
-| Web→AI | W2A-1 | XSS | 劫持 AI 对话接口 | 窃取对话内容/注入恶意上下文 |
-| Web→AI | W2A-2 | SSRF | 访问内部模型 API | 获取 embedding/直接执行 prompt |
-| Web→AI | W2A-3 | SQLi | 修改向量库记录 | 污染 RAG 检索结果 |
-| Web→AI | W2A-4 | 文件上传 | 上传含隐藏指令文档 | RAG 投毒/间接注入 |
-| Web→AI | W2A-5 | API 越权 | 管理接口未鉴权 | 篡改 System Prompt/模型配置 |
-| AI→Web | A2W-1 | Prompt 注入 | 模型输出未转义 | 生成存储型 XSS payload |
-| AI→Web | A2W-2 | Agent 劫持 | SQL/命令工具 | 执行任意 SQL 查询或系统命令 |
-| AI→Web | A2W-3 | 工具滥用 | 文件读取工具 | 读取服务器敏感文件 |
-| AI→Web | A2W-4 | 代码执行 | 沙箱逃逸 | 反弹 shell/RCE |
-| AI→Web | A2W-5 | MCP 投毒 | 外部回调工具 | 数据外泄到攻击者服务器 |
+| Web→AI | W2A-1 | XSS | hijack the AI conversation endpoint | steal conversation content/inject malicious context |
+| Web→AI | W2A-2 | SSRF | reach internal model APIs | obtain embeddings/directly execute prompts |
+| Web→AI | W2A-3 | SQLi | modify vector store records | poison RAG retrieval results |
+| Web→AI | W2A-4 | file upload | upload documents with hidden instructions | RAG poisoning/indirect injection |
+| Web→AI | W2A-5 | broken access control | unauthenticated admin endpoints | tamper with the System Prompt/model configuration |
+| AI→Web | A2W-1 | Prompt injection | model output not escaped | generate stored XSS payloads |
+| AI→Web | A2W-2 | Agent hijacking | SQL/command tools | execute arbitrary SQL queries or system commands |
+| AI→Web | A2W-3 | tool abuse | file read tools | read sensitive server files |
+| AI→Web | A2W-4 | code execution | sandbox escape | reverse shell/RCE |
+| AI→Web | A2W-5 | MCP poisoning | external callback tools | data exfiltration to the attacker server |
 
-## Phase 0: 攻击面映射
+## Phase 0: Attack Surface Mapping
 
-- 识别系统中 Web 与 AI 组件的所有交互点：RAG 数据源（数据库、文件存储、CMS）、模型 API 端点、共享缓存/队列
-- 绘制数据流图，标注哪些 Web 用户输入最终会进入 LLM 上下文（直接或经 RAG 检索）
-- 确认 AI 输出回写到 Web 层的路径：是否直接渲染到页面、存入数据库、或触发后端操作
+- Identify all interaction points between the web and AI components in the system: RAG data sources (databases, file storage, CMS), model API endpoints, shared caches/queues
+- Draw a data flow diagram marking which web user inputs eventually reach the LLM context (directly or through RAG retrieval)
+- Confirm the paths where AI output is written back to the web layer: whether it is rendered directly onto pages, stored in the database, or triggers backend actions
 
-## Phase 1: Web→AI 攻击路径
+## Phase 1: Web→AI Attack Paths
 
-**1.1 XSS → 窃取 AI 对话/注入上下文**
-利用 XSS 劫持用户与 AI 的 WebSocket 或 API 会话，窃取对话历史或注入恶意上下文（GAARM.0040.001）。关键在于 AI 聊天界面是否将 Markdown/HTML img 标签渲染为实际请求，从而通过 `img src` 外泄会话内容。
+**1.1 XSS → steal AI conversations/inject context**
+Use XSS to hijack the user's WebSocket or API session with the AI, then steal the conversation history or inject malicious context (GAARM.0040.001). The key is whether the AI chat interface renders Markdown/HTML img tags as real requests, so that session content leaks through `img src`.
 
-**1.2 SSRF → 调用内部模型 API**
-Web 层 SSRF 若能触达内网模型端点，可直接发送 prompt 请求、获取 embedding 或修改参数。Agent 自身的网络访问能力也可能成为 SSRF 跳板（GAARM.0041.001）。
+**1.2 SSRF → call internal model APIs**
+If the web-layer SSRF can reach internal model endpoints, it can directly send prompt requests, obtain embeddings, or modify parameters. The Agent's own network access capability may also become an SSRF pivot (GAARM.0041.001).
 
-**1.3 SQLi → 污染 RAG 向量库**
-当 RAG 系统使用关系型数据库存储文档 chunk 或元数据时，SQL 注入可修改检索内容，间接将恶意指令注入 LLM 上下文，实现持久化的间接 Prompt 注入。
+**1.3 SQLi → poison the RAG vector store**
+When the RAG system stores document chunks or metadata in a relational database, SQL injection can modify retrieved content, indirectly injecting malicious instructions into the LLM context and achieving persistent indirect prompt injection.
 
-**1.4 文件上传 → RAG 投毒**
-上传含隐藏指令的文档（PDF 中的白色文字、DOCX 中的隐藏段落、图片 EXIF 中的文本），文档被 RAG 管道索引后，隐藏指令在检索阶段被注入到模型上下文中。
+**1.4 File upload → RAG poisoning**
+Upload documents containing hidden instructions (white text in PDFs, hidden paragraphs in DOCX, text in image EXIF); once the document is indexed by the RAG pipeline, the hidden instructions are injected into the model context at retrieval time.
 
-**1.5 API 越权 → 修改 System Prompt/模型配置**
-管理接口若缺乏鉴权或存在 IDOR，攻击者可直接修改 System Prompt、调整模型温度参数、切换底层模型版本，从根本上改变 AI 的行为边界。
+**1.5 Broken access control → modify the System Prompt/model configuration**
+If admin endpoints lack authentication or suffer from IDOR, an attacker can directly modify the System Prompt, adjust model temperature parameters, and switch the underlying model version, fundamentally changing the AI's behavioral boundaries.
 
-## Phase 2: AI→Web 攻击路径
+## Phase 2: AI→Web Attack Paths
 
-**2.1 Prompt 注入 → 生成存储型 XSS**
-诱导模型生成包含 `<script>` 或事件处理器的 HTML 片段，若 Web 层对 AI 输出未做输出编码，payload 被存储并在其他用户浏览时执行。
+**2.1 Prompt injection → generate stored XSS**
+Trick the model into generating HTML fragments containing `<script>` or event handlers; if the web layer does not apply output encoding to AI output, the payload is stored and executes when other users browse the page.
 
-**2.2 Agent 劫持 → 执行 SQL/系统命令**
-通过间接注入劫持 Agent 目标，使其调用数据库查询工具执行 `DROP TABLE` 或调用 shell 工具执行系统命令（GAARM.0041.002），影响直接作用于 Web 后端基础设施。
+**2.2 Agent hijacking → execute SQL/system commands**
+Use indirect injection to hijack the Agent's objectives, making it call database query tools to execute `DROP TABLE` or call shell tools to run system commands (GAARM.0041.002), directly impacting the web backend infrastructure.
 
-**2.3 工具滥用 → 读取敏感文件**
-劫持 Agent 的文件系统工具读取 `.env`、数据库凭据、TLS 私钥等服务器敏感文件，并通过对话输出或回调机制将内容传递给攻击者。
+**2.3 Tool abuse → read sensitive files**
+Hijack the Agent's filesystem tools to read server-sensitive files such as `.env`, database credentials, and TLS private keys, then exfiltrate the content through conversation output or a callback mechanism.
 
-**2.4 沙箱逃逸 → 反弹 shell**
-代码执行型 Agent 若沙箱隔离不足，Prompt 注入可诱导生成并执行逃逸 payload，获取宿主机 shell 权限，完成从 AI 层到基础设施层的穿透。
+**2.4 Sandbox escape → reverse shell**
+If a code-executing Agent has insufficient sandbox isolation, prompt injection can induce generation and execution of an escape payload, gaining shell access on the host and completing the penetration from the AI layer to the infrastructure layer.
 
-**2.5 MCP 投毒 → 数据外泄**
-通过恶意 MCP Server 的工具描述投毒，劫持 Agent 在调用合法工具时附带数据外泄动作，将用户对话或内部数据通过 HTTP 回调发送到攻击者服务器。
+**2.5 MCP poisoning → data exfiltration**
+Poison the tool descriptions of a malicious MCP Server so that the Agent, while calling legitimate tools, also performs a data exfiltration action, sending user conversations or internal data to the attacker server via an HTTP callback.
 
-## 攻击链组合决策
+## Attack Chain Combination Decisions
 
-| 可用入口 | 推荐组合路径 | 预期严重度 |
+| Available entry point | Recommended combination path | Expected severity |
 |----------|-------------|-----------|
-| XSS + AI 聊天界面 | W2A-1 → 窃取对话 → 提取内部信息 | High |
-| SSRF + 内网模型端点 | W2A-2 → 直接 prompt → 信息泄露/后续注入 | Critical |
-| 文件上传 + RAG 管道 | W2A-4 → RAG 投毒 → A2W-1 存储型 XSS | Critical |
-| SQLi + 向量库 | W2A-3 → 持久化注入 → A2W-2 Agent 执行命令 | Critical |
-| Prompt 注入 + Agent 工具 | A2W-2/A2W-3 → 读取凭据 → 横向移动 | Critical |
-| MCP 第三方 Server | A2W-5 → 数据外泄 + A2W-2 命令执行 | High |
+| XSS + AI chat interface | W2A-1 → steal conversations → extract internal information | High |
+| SSRF + internal model endpoint | W2A-2 → direct prompt → information disclosure/follow-on injection | Critical |
+| File upload + RAG pipeline | W2A-4 → RAG poisoning → A2W-1 stored XSS | Critical |
+| SQLi + vector store | W2A-3 → persistent injection → A2W-2 Agent command execution | Critical |
+| Prompt injection + Agent tools | A2W-2/A2W-3 → read credentials → lateral movement | Critical |
+| Third-party MCP Server | A2W-5 → data exfiltration + A2W-2 command execution | High |
 
-## 检测清单
+## Detection Checklist
 
 ```
-1. [ ] Web 与 AI 组件的交互点已完整映射？数据流方向已标注？
-2. [ ] Web 用户输入到 LLM 上下文的路径是否存在注入点？
-3. [ ] AI 输出回写到 Web 层时是否做了输出编码和消毒？
-4. [ ] RAG 数据源（数据库/文件存储）是否对写入做了权限控制？
-5. [ ] 内部模型 API 是否限制了网络访问来源？
-6. [ ] Agent 工具调用是否有参数校验和权限隔离？
-7. [ ] 文件上传到 RAG 索引的管道是否检测隐藏指令？
-8. [ ] 跨域攻击链的组合路径是否纳入威胁建模？
+1. [ ] Have all interaction points between web and AI components been fully mapped? Are data flow directions marked?
+2. [ ] Is there an injection point on the path from web user input to the LLM context?
+3. [ ] Is output encoding and sanitization applied when AI output is written back to the web layer?
+4. [ ] Are RAG data sources (database/file storage) access-controlled for writes?
+5. [ ] Are internal model APIs restricted by network source?
+6. [ ] Do Agent tool calls have parameter validation and permission isolation?
+7. [ ] Does the file upload to RAG indexing pipeline detect hidden instructions?
+8. [ ] Are cross-domain attack chain combination paths included in threat modeling?
 ```

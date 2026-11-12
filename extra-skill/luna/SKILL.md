@@ -1,6 +1,8 @@
 ---
 name: luna
 description: "Reviews code for objective correctness, security, and reliability."
+zh-signals: "从正确性、安全性与可靠性角度审查代码，输出分级发现与交接建议。信号:代码审查,安全漏洞,可靠性,蓝图一致性,严重级别"
+when-to-use: "Use when reviewing a specific code revision for reachable correctness, security, or reliability defects against its actual requirements."
 risk: safe
 source: community
 date_added: "2026-06-11"

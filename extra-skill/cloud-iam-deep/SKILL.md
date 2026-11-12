@@ -1,6 +1,8 @@
 ---
 name: cloud-iam-deep
 description: Cloud IAM red-team attack chain across AWS, Azure, GCP
+zh-signals: "跨 AWS、Azure、GCP 的云 IAM 红队攻击链分析与利用。信号:云IAM,AWS,Azure,GCP,提权,攻击链"
+when-to-use: "Use when a cloud credential, metadata endpoint, or exposed IAM misconfiguration is found and an authorized attack-chain assessment across AWS, Azure, or GCP is required."
 category: security
 risk: offensive
 source: https://github.com/elementalsouls/Claude-BugHunter

@@ -1,6 +1,8 @@
 ---
 name: observability-engineer
 description: Build production-ready monitoring, logging, and tracing systems. Implements comprehensive observability strategies, SLI/SLO management, and incident response workflows.
+zh-signals: "构建生产级监控、日志与追踪体系，含 SLI/SLO 与事件响应流程。信号:可观测性,监控,日志,链路追踪,SLO"
+when-to-use: "Use when designing monitoring, logging, or tracing systems, defining SLIs/SLOs, or investigating production reliability regressions."
 risk: critical
 source: community
 date_added: '2026-02-27'

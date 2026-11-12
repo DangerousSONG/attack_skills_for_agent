@@ -2,38 +2,42 @@
 name: parampampam-param-hunt
 description: "Find hidden debug parameters. Signals: web vulnerability, injection, hidden GET parameters, POST parameters, custom wordlist."
 zh-signals: "ParamPamPam: 挖隐藏调试参数。信号:web漏洞,注入,发现隐藏 GET 参数,POST 参数,自定义字典。"
+when-to-use: >-
+  Use when hunting for hidden GET or POST parameters on a web endpoint using a
+  wordlist, often to find debug or admin switches. Supports concurrency and
+  custom wordlists.
 ---
 
 # ParamPamPam
 
-- 攻击大类:C09 Web利用(参数发现)
-- 上游仓库:https://github.com/Bo0oM/ParamPamPam
-- 上游 License:WTFPL(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Exploitation (Parameter Discovery)
+- Upstream Repository: https://github.com/Bo0oM/ParamPamPam
+- Upstream License: WTFPL (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/Bo0oM/ParamPamPam && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 parampampam.py -u 'https://t.com/page.php'` | 发现隐藏 GET 参数 |
-| `-m POST` | POST 参数 |
-| `-w params.txt` | 自定义字典 |
-| `-c 20` | 并发 |
+| `python3 parampampam.py -u 'https://t.com/page.php'` | Discover hidden GET parameters |
+| `-m POST` | POST parameters |
+| `-w params.txt` | Custom wordlist |
+| `-c 20` | Concurrency |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 挖隐藏调试参数
+### Hunting for hidden debug parameters
 
 ```bash
 python3 parampampam.py -u 'https://t.com/search.php' -c 50
-# 命中 admin/debug/export 类参数继续手工测
+# Manually test the admin/debug/export style parameters that hit
 ```
 
-## 注意事项
+## Notes
 
-暴力猜解未暴露的 GET/POST 参数,常用于找到 debug=1 之类后门开关。
+Brute-forces undisclosed GET/POST parameters, often used to find backdoor switches such as debug=1.

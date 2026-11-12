@@ -1,6 +1,9 @@
 ---
 name: offensive-z-wave
 description: "Z-Wave attack methodology — sniffing with Z-Force / EZ-Wave / RTL-SDR + ZniffMobile, S0 (legacy) network-key derivation flaw and key reuse, S2 (modern) ECDH commissioning analysis, replay/injection on unauthenticated nodes, default-key brute-force on test deployments, and home-automation hub pivots. Use when targeting Z-Wave smart home devices (door locks, sensors, garage controllers) — common in mid-2010s smart home deployments still in production."
+zh-signals: "针对 Z-Wave 智能家居设备的嗅探、密钥推导、重放与枢纽利用方法。信号:Z-Wave,智能家居,无线嗅探,S0密钥,重放攻击"
+when-to-use: >-
+  Use when targeting Z-Wave smart home devices such as locks, sensors, or garage controllers, including sniffing, key analysis, and node replay.
 ---
 
 # Z-Wave Attacks

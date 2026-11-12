@@ -1,6 +1,8 @@
 ---
 name: bugbounty-reporter
 description: Converts raw bug bounty findings into a complete, triage-ready report clear description, numbered reproduction steps, self-contained PoC, risk, and remediation. Trigger when the user has a confirmed bug bounty finding and needs to write it up, says "write this up", "report this", or "format this for H1/Bugcrowd/Intigriti", or has raw notes, a request/response, or a PoC needing a submission-ready report.
+zh-signals: "将原始漏洞赏金发现整理为可提交的完整报告，含复现步骤、PoC、风险与修复建议。信号:漏洞赏金报告,H1,Bugcrowd,复现步骤,PoC 编写"
+when-to-use: "Use when you have a confirmed bug bounty finding and need a triage-ready report with reproduction steps, PoC, risk, and remediation for HackerOne, Bugcrowd, or Intigriti."
 license: MIT
 metadata:
   version: "1.1.0"

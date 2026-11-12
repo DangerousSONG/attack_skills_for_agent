@@ -1,6 +1,9 @@
 ---
 name: dalonso-security-repo
 description: Microsoft Security threat hunting queries, KQL examples, Sentinel workbooks, and security analytics notebooks
+zh-signals: "微软安全威胁狩猎资源库，提供 KQL 查询、Sentinel 工作簿和安全分析笔记本。信号:KQL查询,威胁狩猎,Microsoft Sentinel,Defender,安全分析"
+when-to-use: >-
+  Use when the user needs Microsoft Sentinel or Defender threat hunting queries, KQL examples, workbooks, or security analytics notebooks.
 triggers:
   - how do I use KQL queries from Dalonso Security Repo
   - show me threat hunting examples for Microsoft Sentinel

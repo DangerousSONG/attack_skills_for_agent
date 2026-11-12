@@ -1,6 +1,8 @@
 ---
 name: offensive-network-attacks
 description: "Dense description covering ARP spoofing, LLMNR/NBT-NS/mDNS poisoning, DNS poisoning, MITM attacks, VLAN hopping, DHCP attacks, 802.1X/NAC bypass, IPv6 attacks. Tools: Bettercap, Responder, mitm6, Ettercap, Wireshark. MITRE T1557, T1040. Use when conducting internal network assessments or testing Layer 2/3 attack surface."
+zh-signals: "内部网络评估中的二层/三层攻击方法，涵盖 ARP 欺骗、名称解析投毒、MITM、VLAN 跳跃与 IPv6 攻击。信号:ARP 欺骗,中间人攻击,VLAN 跳跃,DHCP 攻击,IPv6"
+when-to-use: "Use when conducting authorized internal network assessments and testing Layer 2/3 attack surface such as ARP, DHCP, VLAN, and IPv6 trust."
 ---
 
 # Network Attacks (Layer 2/3) -- Offensive Methodology

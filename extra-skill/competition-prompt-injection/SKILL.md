@@ -1,6 +1,8 @@
 ---
 name: competition-prompt-injection
 description: Internal downstream skill for ctf-sandbox-orchestrator. CTF-sandbox workflow for prompt-injection, retrieval poisoning, memory contamination, planner drift, MCP or tool-boundary abuse, and agent exfiltration challenges. Use when the user asks to analyze prompt injection, retrieval poisoning, memory contamination, planner drift, tool-argument corruption, or secret exposure caused by an agent chain. Use only after `$ctf-sandbox-orchestrator` has already established sandbox assumptions and routed here.
+zh-signals: "CTF 沙箱下行的提示注入分析技能，覆盖检索投毒、记忆污染与工具边界滥用。信号:提示注入,检索投毒,记忆污染,CTF,Agent安全"
+when-to-use: "Use only after ctf-sandbox-orchestrator is active, when a CTF challenge involves prompt injection, retrieval poisoning, or agent tool-boundary abuse."
 ---
 
 # Competition Prompt Injection

@@ -1,6 +1,8 @@
 ---
 name: incident-runbook-templates
 description: "Adaptable templates for incident response runbooks covering detection, triage, mitigation, resolution, and communication."
+zh-signals: "提供覆盖检测、分诊、缓解、恢复与沟通的事件响应运行手册模板。信号:事件响应,运行手册,应急,分诊,恢复"
+when-to-use: "Use when creating or adapting incident response runbooks, escalation paths, or recovery procedures for active incidents."
 risk: critical
 source: community
 date_added: "2026-02-27"

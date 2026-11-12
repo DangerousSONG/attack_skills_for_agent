@@ -8,6 +8,11 @@ description: >
   "comment triggered workflow", "unauthenticated bot", "github-actions publish",
   "comment dispatch", no authorization check on workflow_dispatch from comment,
   chatops CI/CD, supply chain via PR comment.
+zh-signals: "检测 CI/CD 机器人注释命令注入漏洞，即 issue_comment 触发工作流却未校验评论者权限。信号:CI/CD,命令注入,issue_comment,工作流,供应链"
+when-to-use: >-
+  Use when reviewing GitHub Actions workflows that respond to issue_comment or
+  pull_request_review_comment triggers and may run privileged jobs without verifying
+  the commenter's authorization.
 license: MIT
 compatibility: Designed for Claude Code. Requires read access to .github/workflows/.
 metadata:

@@ -1,6 +1,8 @@
 ---
 name: hunt-file-upload
 description: "Hunt file upload bugs — RCE via webshell, XSS via SVG/HTML, SSRF via XXE in DOCX, path traversal via filename. Bypass tables (10 techniques): double extension (shell.php.jpg if server checks last ext only), magic bytes spoofing (PNG header on PHP), null byte (shell.php\0.jpg), case (PHP, .Php, .pHP), .htaccess upload to enable execution, SVG with <script>, HTML/SVG XSS, DOCX with embedded XXE, ZIP slip (../../../etc/passwd in archive), polyglot files. Detection: any /upload, /avatar, /profile-picture, /attachment, /import endpoint. Test: upload PHP/JSP/ASPX shells, request via direct URL, check response. Validate: actual code execution (whoami output) for RCE; reflected XSS in profile-photo URL. Use when testing file upload features, avatar/attachment endpoints, import/export functions, XML/DOCX/ZIP processors. Real paid examples."
+zh-signals: "猎取文件上传漏洞，涵盖扩展名与 MIME 绕过、Webshell RCE、SVG XSS、DOCX XXE 与 ZIP 路径穿越。信号:文件上传漏洞,Webshell上传,扩展名绕过,SVG XSS,ZIP穿越"
+when-to-use: "Use when testing file upload, avatar, attachment, or import endpoints for bypass, code execution, XSS, SSRF, or path traversal."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

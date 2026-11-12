@@ -1,6 +1,8 @@
 ---
 name: sql-injection-testing
 description: "Execute comprehensive SQL injection vulnerability assessments on web applications to identify database security flaws, demonstrate exploitation techniques, and validate input sanitization mechanisms."
+zh-signals: "对 Web 应用执行综合 SQL 注入评估，识别数据库缺陷并验证输入过滤。信号:SQL注入,SQLi评估,盲注,输入过滤,数据库安全"
+when-to-use: "Use when executing comprehensive SQL injection assessments on web applications to identify database security flaws, demonstrate exploitation, and validate input sanitization."
 risk: offensive
 source: community
 author: zebbern

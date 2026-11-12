@@ -1,6 +1,8 @@
 ---
 name: k7-total-security-unlock-patch
 description: K7 Total Security 16.0.1195 configuration framework for unified endpoint defense across Windows, macOS, and Linux
+zh-signals: "为 K7 Total Security 提供统一的终端防护配置框架，覆盖 Windows、macOS 与 Linux 的策略部署。信号:K7,终端防护,安全配置,策略部署,端点安全"
+when-to-use: "Use when deploying, configuring, or troubleshooting K7 Total Security endpoint protection policies across Windows, macOS, or Linux."
 triggers:
   - "deploy K7 Total Security configuration"
   - "configure K7 security profile"

@@ -1,6 +1,8 @@
 ---
 name: saas-security-posture
 description: Audit and harden your SaaS tool stack
+zh-signals: "审计并加固企业 SaaS 工具栈，覆盖 MFA、访问控制与 OAuth 治理。信号:SaaS安全,态势管理,OAuth审计,MFA,SOC2"
+when-to-use: "Use when preparing for SOC 2, investigating a suspicious OAuth app, reducing SaaS sprawl, or hardening SaaS access after phishing or credential leaks."
 category: devops
 risk: critical
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

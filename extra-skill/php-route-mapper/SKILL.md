@@ -1,25 +1,29 @@
 ---
 name: php-route-mapper
-description: PHP Web 源码路由与参数映射分析工具。从源码中提取所有入口路由与参数结构，输出完整请求模板与参数清单（禁止省略）。
+description: "PHP web source code route and parameter mapping analysis tool. Extracts every entry route and parameter structure from the source code and outputs complete request templates with a parameter inventory (omissions are not allowed)."
+zh-signals: "从 PHP 源码提取完整路由与参数结构，生成请求模板与参数清单。信号:php路由,参数映射,源码分析,请求模板,路由提取,burp"
+when-to-use: >-
+  Use when you need to map all HTTP routes and request parameters from PHP source code into
+  complete request templates for security testing.
 ---
 
-# PHP 源码 Route & Param Mapper
+# PHP Source Code Route & Param Mapper
 
-分析 PHP Web 项目源码，提取**完整**的 HTTP 路由入口与请求参数结构，生成可用于安全测试的请求模板（Burp/Repeater 风格），并自动保存为 Markdown。
+Analyze PHP web project source code, extract **complete** HTTP route entries and request parameter structures, generate request templates usable for security testing (Burp/Repeater style), and save them automatically as Markdown.
 
-## CRITICAL：完整输出（强制）
-此技能必须输出所有发现的路由与接口，不允许省略：
-- 禁止出现省略占位符；必须输出完整的路由与参数内容
-- 禁止只输出“关键路由/重要路由”
-- 每条路由必须包含：HTTP 方法、路径规则、处理器位置、完整参数结构、完整请求模板（在代码块里）
+## CRITICAL: Complete Output (Mandatory)
+This skill must output every discovered route and endpoint; omissions are not allowed:
+- No elision placeholders are allowed; the full route and parameter content must be output
+- Do not output only "key routes / important routes"
+- Every route must include: HTTP method, path rule, handler location, complete parameter structure, and a complete request template (inside a code block)
 
-## 核心输入
-用户提供：
-- `source_path`：PHP 项目源码根目录
-可选：
-- `context_path`：如果存在反向代理/网关前缀，可用于拼接完整路径（必须有证据来源）
+## Core Input
+Provided by the user:
+- `source_path`: root directory of the PHP project source code
+Optional:
+- `context_path`: if a reverse proxy / gateway prefix exists, it can be used to build the full path (must have an evidence source)
 
-## 输出目录结构（建议）
+## Output Directory Structure (Recommended)
 ```
 {output_path}/
 ├── route_mapping/
@@ -29,83 +33,83 @@ description: PHP Web 源码路由与参数映射分析工具。从源码中提�
     └── route_mapper_validation_{timestamp}.md
 ```
 
-路径与流水线合并模式下的对应关系见 **`shared/IO_PATH_CONVENTION.md`**（`route_mapping/*.md` 与报告内「路由/参数」章节等价）。
+The mapping between paths and the pipeline merge mode is described in **`shared/IO_PATH_CONVENTION.md`** (`route_mapping/*.md` is equivalent to the "Routes / Parameters" section of the report).
 
-## 识别范围（必做）
-1. 路由配置/定义（按框架识别）
-   - Laravel：`routes/web.php`、`routes/api.php`、`Route::get/post/{subpath}`、`Route::resource`、Route group 前缀与中间件
-   - Symfony：`config/routes/*`、PHP8 attribute `#[Route({route_options})]`、Annotation `@Route({route_options})`
-   - Slim：`$app->get/post/any({handler})`、自定义中间件
-   - WordPress：`admin-post.php`/`admin-ajax.php`、`add_action('admin_post_*')`、`add_action('wp_ajax_*')`
-   - 纯 PHP：front controller（如 `public/index.php`）的分发逻辑、基于 `$_SERVER['REQUEST_URI']` 的路由匹配
-2. 动态路由/参数化路由（必做）
-   - `{id}` / `(?P<id>{id_pattern})` / 正则路由：必须把可控参数列出来
-   - 路由约束（where/regex limit）：必须输出约束规则与可控性边界
+## Detection Scope (Mandatory)
+1. Route configuration / definitions (identified per framework)
+   - Laravel: `routes/web.php`, `routes/api.php`, `Route::get/post/{subpath}`, `Route::resource`, Route group prefixes and middleware
+   - Symfony: `config/routes/*`, PHP8 attribute `#[Route({route_options})]`, Annotation `@Route({route_options})`
+   - Slim: `$app->get/post/any({handler})`, custom middleware
+   - WordPress: `admin-post.php`/`admin-ajax.php`, `add_action('admin_post_*')`, `add_action('wp_ajax_*')`
+   - Plain PHP: front controller (e.g. `public/index.php`) dispatch logic, route matching based on `$_SERVER['REQUEST_URI']`
+2. Dynamic / parameterized routes (mandatory)
+   - `{id}` / `(?P<id>{id_pattern})` / regex routes: controllable parameters must be listed explicitly
+   - Route constraints (where / regex limit): the constraint rules and controllability boundaries must be output
 
-## 参数结构解析（必做）
-对每条路由输出以下参数来源与类型信息：
-- Path 参数：来自路由规则的占位（输出如 `{id}`）
-- Query 参数：`$_GET` / `request()->query({query})` / 框架 query 解析结果
-- Body 参数：`php://input`、`$_POST`、JSON `json_decode({json})`
-- Header 参数：`getallheaders()`、`$_SERVER[{value}]`、框架 request header API
-- Cookie 参数：`$_COOKIE`
-- File 参数：`$_FILES`（输出字段名与 filename 来源）
+## Parameter Structure Analysis (Mandatory)
+For each route, output the following parameter sources and type information:
+- Path parameters: placeholders taken from the route rule (output like `{id}`)
+- Query parameters: `$_GET` / `request()->query({query})` / framework query parsing result
+- Body parameters: `php://input`, `$_POST`, JSON `json_decode({json})`
+- Header parameters: `getallheaders()`, `$_SERVER[{value}]`, framework request header API
+- Cookie parameters: `$_COOKIE`
+- File parameters: `$_FILES` (output the field name and the filename source)
 
-## 处理器位置（必做）
-每条路由必须给出处理器来源证据：
-- 文件路径（相对/绝对均可，但必须一致）
-- 函数/类/方法签名（在源码中能定位到的名称）
-- 关键分发点：路由匹配如何进入 handler（如 switch case / include 文件链）
+## Handler Location (Mandatory)
+Every route must provide evidence of its handler source:
+- File path (relative or absolute are both fine, but must be consistent)
+- Function / class / method signature (names that can be located in the source code)
+- Key dispatch point: how the route match enters the handler (e.g. switch case / include file chain)
 
-## 输出格式（强制）
-### `routes_{timestamp}.md`：主索引（逐条列出）
-说明：本 skill 使用 `routes_{timestamp}.md` 中 `=== [N] {route_summary} ===` 的 `N` 作为 **HTTP 路由**的 `route_id`（流水线后续用于 `route_tracer/{route_id}/trace_{timestamp}.md` 文件分桶）。**CLI / hook / sink-only** 等合成 `route_id` 由 `php-audit-pipeline` 阶段 3 写入 `high_risk_routes_{timestamp}.md`，**不**占用本文件的 `[N]` 序号。
+## Output Format (Mandatory)
+### `routes_{timestamp}.md`: main index (listed one by one)
+Description: this skill uses the `N` in `=== [N] {route_summary} ===` inside `routes_{timestamp}.md` as the `route_id` of the **HTTP route** (the pipeline later uses it to bucket files into `route_tracer/{route_id}/trace_{timestamp}.md`). Synthetic `route_id` values such as **CLI / hook / sink-only** are written by `php-audit-pipeline` stage 3 into `high_risk_routes_{timestamp}.md` and **do not** consume the `[N]` sequence number in this file.
 ```markdown
-# {project_name} - 路由与接口索引（PHP）
-生成时间: {timestamp}
-分析路径: {source_path}
+# {project_name} - Route and Endpoint Index (PHP)
+Generated at: {timestamp}
+Analysis path: {source_path}
 
-## 路由清单（全部）
+## Route Inventory (All)
 === [1] GET /path/to/{id} ===
-HTTP 方法: GET
-路由路径规则: /path/to/{id}
-处理器: ControllerClass@method / functionName
-位置: path/to/file.php:line（若无法获取行号，标注“待定位：需人工打开文件确认”但仍给出文件路径）
-参数概览:
-  Path: id (类型推断/约束)
+HTTP method: GET
+Route path rule: /path/to/{id}
+Handler: ControllerClass@method / functionName
+Location: path/to/file.php:line (if the line number cannot be obtained, mark "to be located: manual file review required" but still give the file path)
+Parameter overview:
+  Path: id (type inference / constraint)
   Query: {query_params}
 
 === [2] POST /path/to/{id}/action ===
-HTTP 方法: POST
-路由路径规则: /path/to/{id}/action
-处理器: ControllerClass@action / functionName
-位置: path/to/file.php:line（若无法获取行号，标注“待定位：需人工打开文件确认”但仍给出文件路径）
-参数概览:
-  Path: id (类型推断/约束)
+HTTP method: POST
+Route path rule: /path/to/{id}/action
+Handler: ControllerClass@action / functionName
+Location: path/to/file.php:line (if the line number cannot be obtained, mark "to be located: manual file review required" but still give the file path)
+Parameter overview:
+  Path: id (type inference / constraint)
   Query: {query_params}
 ```
 
-### `params_{timestamp}.md`：参数详细（逐条列出）
+### `params_{timestamp}.md`: parameter details (listed one by one)
 ```markdown
-# {project_name} - 路由参数结构（逐条）
-生成时间: {timestamp}
+# {project_name} - Route Parameter Structure (One by One)
+Generated at: {timestamp}
 
-=== 路由: GET /path/to/{id} ===
-1) Path 参数
-| 参数 | 类型/约束 | 位置 | 必填 |
+=== Route: GET /path/to/{id} ===
+1) Path parameters
+| Parameter | Type / Constraint | Location | Required |
 |------|------------|------|------|
-| id   | int/regex{id_pattern} | Router rule | 是/否/不确定 |
+| id   | int/regex{id_pattern} | Router rule | Yes / No / Uncertain |
 
-2) Query 参数
-| 参数 | 类型 | 来源 | 必填 | 说明 |
+2) Query parameters
+| Parameter | Type | Source | Required | Description |
 
-3) Body 参数（如 JSON）
-| 字段 | 类型 | JSON 路径 | 必填 |
+3) Body parameters (e.g. JSON)
+| Field | Type | JSON path | Required |
 
-4) Header/ Cookie / File（如有）
-| 字段 | 类型 | 来源 | 必填 |
+4) Header / Cookie / File (if any)
+| Field | Type | Source | Required |
 
-5) 完整请求模板（必须在代码块里）
+5) Complete request template (must be inside a code block)
 ```http
 GET /path/to/{id}?a={a}&b={b} HTTP/1.1
 Host: {host}
@@ -117,8 +121,7 @@ Content-Type: application/json
 ```
 ```
 
-## 输出前自检（强制）
-- [ ] routes 与 params 中每条路由“序号/路由标识”一致
-- [ ] 没有出现省略占位符
-- [ ] 每条路由都有“完整请求模板”代码块
-
+## Self-Check Before Output (Mandatory)
+- [ ] The "index / route identifier" of every route is consistent between routes and params
+- [ ] No elision placeholders appear
+- [ ] Every route has a "complete request template" code block

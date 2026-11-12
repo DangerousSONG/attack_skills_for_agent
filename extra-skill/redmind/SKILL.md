@@ -1,6 +1,11 @@
 ---
 name: redmind
 description: Red team mindset that shifts the agent to offensive security thinking across any target or engagement type. Trigger when the goal of the engagement is offensive (finding what can be broken, bypassed, or abused), the user wants to understand a target's security posture from an attacker's perspective, or the objective is to find vulnerabilities, simulate an attacker, or test whether controls hold under pressure.
+zh-signals: "切换到进攻性安全思维，从攻击者视角审视目标攻击面，寻找可被破坏、绕过或滥用的点。信号:红队思维,攻击面,渗透测试,对手模拟,漏洞挖掘"
+when-to-use: >-
+  Use when the engagement goal is offensive — understanding a target's security
+  posture from an attacker's perspective, finding vulnerabilities, simulating an
+  attacker, or testing whether controls hold under pressure.
 license: MIT
 metadata:
   version: "1.1.0"

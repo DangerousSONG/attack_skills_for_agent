@@ -2,37 +2,41 @@
 name: ad-ldap-enum-ldap
 description: "ad-ldap-enum: Crowe LDAP enumeration tool. Signals: internal network enumeration, network discovery, LDAP full enumeration"
 zh-signals: "ad-ldap-enum: Crowe 出品 LDAP 枚举。信号:内网枚举,网络发现,LDAP 全枚举。"
+when-to-use: >-
+  Use when enumerating users, groups, computers, OUs, and GPOs from an LDAP
+  directory such as Active Directory; provide the LDAP URL and valid
+  credentials and export the results for further analysis.
 ---
 
 # ad-ldap-enum
 
-- 攻击大类:C29 内网发现与枚举
-- 上游仓库:https://github.com/CroweCybersecurity/ad-ldap-enum
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C29 Internal Network Discovery and Enumeration
+- Upstream Repository: https://github.com/CroweCybersecurity/ad-ldap-enum
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/CroweCybersecurity/ad-ldap-enum && cd ad-ldap-enum
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 ad-ldap-enum.py -l ldap://10.0.0.1 -u svc@corp.local -p pass -m` | LDAP 全枚举 |
-| `-l url -u u -p p -d` | 详情 |
-| `-o out/` | 输出 |
+| `python3 ad-ldap-enum.py -l ldap://10.0.0.1 -u svc@corp.local -p pass -m` | Full LDAP enumeration |
+| `-l url -u u -p p -d` | Details |
+| `-o out/` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Crowe 出品 LDAP 枚举
+### Crowe LDAP Enumeration
 
 ```bash
 python3 ad-ldap-enum.py -l ldap://dc01 -u svc@corp.local -p pass
-# 用户/组/计算机/OU/GPO 导出
+# Export users/groups/computers/OU/GPO
 ```
 
-## 注意事项
+## Notes
 
-CroweCyber 出品,简单直接的 LDAP 枚举。
+By CroweCyber, a simple and direct LDAP enumeration tool.

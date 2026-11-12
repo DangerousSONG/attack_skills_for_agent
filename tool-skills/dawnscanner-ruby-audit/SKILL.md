@@ -2,38 +2,41 @@
 name: dawnscanner-ruby-audit
 description: "dawnscanner: Audits Rails application code. Signals: web vulnerability, injection, Rails application static audit, Ruby version vulnerabilities, knowledge-base-only mode."
 zh-signals: "dawnscanner: Rails 应用代码审计。信号:web漏洞,注入,Rails 应用静态审计,Ruby 版本漏洞,仅知识库模式。"
+when-to-use: >-
+  Use when auditing Ruby on Rails application source code statically for known CVEs
+  and insecure code patterns, optionally running in knowledge-base-only mode.
 ---
 
 # dawnscanner
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/thesp0nge/dawnscanner
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/thesp0nge/dawnscanner
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 gem install dawnscanner
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `dawn -r /path/to/rails/app` | Rails 应用静态审计 |
-| `dawn --ruby myapp` | Ruby 版本漏洞 |
-| `-K` | 仅知识库模式 |
-| `-F txt` | 报告格式 |
+| `dawn -r /path/to/rails/app` | Rails application static audit |
+| `dawn --ruby myapp` | Ruby version vulnerabilities |
+| `-K` | Knowledge-base-only mode |
+| `-F txt` | Report format |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Rails 应用代码审计
+### Rails application code audit
 
 ```bash
 dawn -r /src/webapp
-# 静态分析 Ruby on Rails 已知 CVE 模式
+# Statically analyze Ruby on Rails code for known CVE patterns
 ```
 
-## 注意事项
+## Notes
 
-Ruby/Rails 静态安全审计,检测已知 CVE 对应的代码模式。
+Static security audit for Ruby/Rails that detects the code patterns associated with known CVEs.

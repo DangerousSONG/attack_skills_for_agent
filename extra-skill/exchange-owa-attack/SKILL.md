@@ -1,6 +1,11 @@
 ---
 name: exchange-owa-attack
 description: Exchange/OWA NTLM AD leak, spray attack when mail subdomain.
+zh-signals: "针对 Exchange/OWA 的 NTLM AD 信息泄露侦察与邮件子域场景下的口令喷洒测试。信号:Exchange,OWA,NTLM,口令喷洒,Active Directory"
+when-to-use: >-
+  Use when mail-related subdomains (owa/mail/webmail/exchange/autodiscover) are
+  found, port 443 returns NTLM authentication, or you assess Exchange/OWA with
+  explicit authorization.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

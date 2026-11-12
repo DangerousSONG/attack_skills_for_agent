@@ -1,6 +1,8 @@
 ---
 name: seo-technical
 description: "Audit technical SEO across crawlability, indexability, security, URLs, mobile, Core Web Vitals, structured data, JavaScript rendering, and related platform signals like robots.txt and AI crawler access."
+zh-signals: "审计网站技术 SEO，涵盖可抓取性、可索引性、性能、结构化数据、JavaScript 渲染与 AI 爬虫访问。信号:技术SEO,可抓取性,可索引性,Core Web Vitals,robots.txt"
+when-to-use: "Use when the user requests a technical SEO audit focused on crawlability, indexability, performance, rendering, or AI crawler access."
 risk: critical
 source: "https://github.com/AgriciDaniel/claude-seo"
 date_added: "2026-03-21"

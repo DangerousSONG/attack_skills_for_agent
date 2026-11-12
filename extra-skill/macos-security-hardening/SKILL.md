@@ -1,6 +1,8 @@
 ---
 name: macos-security-hardening
 description: Comprehensive guide for securing and hardening macOS systems with privacy-focused configurations, firewall rules, and security best practices
+zh-signals: "提供 macOS 系统加固指南，涵盖 FileVault 加密、防火墙、DNS 安全、隐私加固与安全配置。信号:macOS加固,系统安全,防火墙配置,隐私保护,FileVault"
+when-to-use: "Use when securing or hardening a macOS system, including firewall, encryption, DNS, and privacy configuration."
 triggers:
   - how do I secure my macOS system
   - improve privacy on Mac

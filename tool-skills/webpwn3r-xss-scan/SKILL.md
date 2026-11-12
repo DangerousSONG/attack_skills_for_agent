@@ -2,37 +2,38 @@
 name: webpwn3r-xss-scan
 description: "webpwn3r: Parameter-level vulnerability scanning. Signals: web vulnerabilities, injection, XSS/injection scan, batch."
 zh-signals: "webpwn3r: 参数级漏洞扫描。信号:web漏洞,注入,XSS/注入扫描,批量。"
+when-to-use: "Use to scan crawled parameters at scale for XSS and injection issues, including batch URL input."
 ---
 
 # webpwn3r
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/zigoo0/webpwn3r
-- 上游 License:GPL-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/zigoo0/webpwn3r
+- Upstream License: GPL-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/zigoo0/webpwn3r
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python webpwn3r.py -u https://t.com` | XSS/注入扫描 |
-| `-u url -w urls.txt` | 批量 |
-| `-o out.txt` | 输出 |
+| `python webpwn3r.py -u https://t.com` | XSS/injection scan |
+| `-u url -w urls.txt` | Batch |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 参数级漏洞扫描
+### Parameter-Level Vulnerability Scanning
 
 ```bash
 python webpwn3r.py -u https://t.com
-# 对爬到的参数逐一测试
+# Test each crawled parameter one by one
 ```
 
-## 注意事项
+## Notes
 
-参数量级 Web 漏洞扫描。
+Web vulnerability scanning at parameter scale.

@@ -1,6 +1,8 @@
 ---
 name: recon-fingerprint
 description: Web fingerprinting and WAF detection using wafw00f, whatweb, nuclei, and httpx. Use this skill when user needs to identify web technologies, detect WAF/CDN, analyze server headers, or fingerprint web applications and frameworks.
+zh-signals: "Web 指纹识别与 WAF 检测技能，使用 wafw00f、whatweb、nuclei、httpx 识别技术栈、WAF/CDN 与服务器头信息。信号:Web指纹,WAF检测,技术栈识别,httpx,nuclei"
+when-to-use: "Use when you need to identify web technologies, detect WAF or CDN, analyze server headers, or fingerprint web applications and frameworks."
 ---
 
 # Web Fingerprinting & WAF Detection

@@ -1,6 +1,8 @@
 ---
 name: soc-operations
 description: "Build, run, and improve a Security Operations Center — alert prioritization, runbook authoring, escalation criteria, on-call structure, alert tuning workflow, MTTD / MTTR / fidelity KPIs, analyst tiering, and shift handoffs. Use when the user mentions 'SOC,' 'security operations,' 'SOC analyst,' 'alert triage workflow,' 'runbook,' 'escalation,' 'on-call,' 'SOC tiering,' 'tier 1 / tier 2,' 'MTTD,' 'MTTR,' 'alert fatigue,' 'alert tuning,' 'shift handoff,' 'SOAR,' or wants to design or improve a security operations team."
+zh-signals: "安全运营中心（SOC）建设与运营技能，覆盖告警分级、运行手册、升级标准、值班编排与 MTTD/MTTR 指标。信号:SOC运营,告警分级,运行手册,值班升级,MTTD,告警疲劳"
+when-to-use: "Use when designing, running, or improving a Security Operations Center — alert prioritization, runbook authoring, escalation criteria, on-call structure, alert tuning, or SOC KPIs such as MTTD and MTTR."
 allowed-tools: Read, Write, Grep, Glob, WebSearch
 ---
 

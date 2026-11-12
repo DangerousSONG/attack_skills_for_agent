@@ -1,6 +1,10 @@
 ---
 name: competition-custom-protocol-replay
 description: Internal downstream skill for ctf-sandbox-orchestrator. CTF-sandbox workflow for custom binary or text protocol recovery, handshake reconstruction, framing, sequence control, checksums, stateful replay, and accepted-session reproduction. Use when the user asks to decode an unknown protocol, recover custom framing, build a replay harness, satisfy sequence or checksum rules, replay a captured session, or prove the smallest message order that reaches an accepted branch. Use only after `$ctf-sandbox-orchestrator` has already established sandbox assumptions and routed here.
+zh-signals: "CTF 自定义协议恢复与会话重放。信号:CTF,自定义协议,协议逆向,重放,校验和,握手"
+when-to-use: >-
+  Use only after $ctf-sandbox-orchestrator is active, when decoding an unknown binary or text
+  protocol, recovering framing or checksums, or replaying a captured session to an accepted branch.
 ---
 
 # Competition Custom Protocol Replay

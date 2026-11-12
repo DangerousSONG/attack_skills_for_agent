@@ -7,6 +7,8 @@ description: >-
   when the user asks to "check dependencies for vulnerabilities", "audit my
   requirements.txt / package.json", "scan for vulnerable packages", or "is my
   dependency tree secure".
+zh-signals: "审计项目依赖的已知漏洞版本与不安全的版本锁定。信号:依赖审计,漏洞扫描,供应链,requirements.txt,OSV"
+when-to-use: "Use when the user asks to audit requirements.txt or package.json for known-vulnerable or unpinned dependencies before release or in CI."
 license: MIT
 ---
 

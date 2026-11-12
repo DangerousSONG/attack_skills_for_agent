@@ -4,6 +4,8 @@ description: |
   Reverse shell generation and listener management. Generates platform-specific reverse shell payloads (bash, python, php, powershell, java, ruby, perl, netcat, socat, msfvenom) and sets up listeners in the Kali container.
 
   Supports one-liner generation, encoded payloads for WAF/filter bypass, listener setup with session capture, and shell stabilization. Chains from /pentester, /metasploit, or /post-exploit when command execution is confirmed.
+zh-signals: "生成各平台反向 shell payload 并在 Kali 容器中搭建监听与会话管理。信号:反向shell,payload生成,监听器,shell稳定化,msfvenom"
+when-to-use: "Use when command execution is confirmed and you need to generate platform-specific reverse shell payloads and set up a listener for interactive access."
 argument-hint: "<target-ip> <target-port> [lhost=ATTACKER_IP] [lport=4444] [type=bash|python|php|powershell|nc|msfvenom] [encode=base64|url]"
 user-invocable: true
 ---

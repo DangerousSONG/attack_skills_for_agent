@@ -1,56 +1,58 @@
 ---
 name: nerva-scan
-description: "使用 nerva 进行高性能服务指纹识别。当需要识别开放端口的具体服务时使用。nerva 支持 120+ 协议（数据库、远程访问、消息队列、工控、Web 等），是 fingerprintx 的升级版。任何涉及服务识别、协议探测、端口指纹的场景都应使用此技能"
+description: "Use nerva for high-performance service fingerprinting. Use it when you need to identify the specific service on open ports. nerva supports 120+ protocols (databases, remote access, message queues, ICS, web, etc.) and is an upgraded version of fingerprintx. Use this skill for any service identification, protocol probing, or port fingerprinting scenario."
+zh-signals: "使用 nerva 进行高性能服务指纹识别与协议探测。信号:服务识别,协议探测,端口指纹,nerva,120+协议"
+when-to-use: "Use when you need to identify services on open ports, fingerprint 120+ protocols (databases, remote access, message queues, ICS, web), or run TCP/UDP/SCTP probes."
 metadata:
-  tags: "nerva,fingerprint,scan,服务识别,协议探测,端口指纹,120+协议,工控,数据库"
+  tags: "nerva,fingerprint,scan,service-identification,protocol-probing,port-fingerprint,120+protocols,ICS,database"
   category: "tool"
 ---
 
-# nerva 高性能服务指纹识别方法论
+# nerva High-Performance Service Fingerprinting Methodology
 
-nerva 是 Praetorian 出品的服务指纹识别工具（fingerprintx 升级版）。核心优势：**120+ 协议** + **TCP/UDP/SCTP 多传输层** + **丰富元数据提取**。
+nerva is a service fingerprinting tool by Praetorian (an upgraded version of fingerprintx). Core strengths: **120+ protocols** + **TCP/UDP/SCTP multi-transport** + **rich metadata extraction**.
 
-项目地址：https://github.com/praetorian-inc/nerva
+Project URL: https://github.com/praetorian-inc/nerva
 
-## Phase 1: 基本使用
+## Phase 1: Basic Usage
 
 ```bash
-# 单个目标
+# Single target
 nerva -t 192.168.1.1:22
 
-# 多个目标
+# Multiple targets
 nerva -t 192.168.1.1:22,192.168.1.1:80,192.168.1.1:3306
 
-# 从文件读取
+# Read from a file
 nerva -l targets.txt
 
-# JSON 输出
+# JSON output
 nerva -t 192.168.1.1:22 --json
 ```
 
-## Phase 2: 扫描模式
+## Phase 2: Scan Modes
 
 ```bash
-# 快速模式（只尝试默认服务）
+# Fast mode (only tries default services)
 nerva -t 192.168.1.1:22 --fast
 
-# UDP 探测
+# UDP probing
 nerva -t 192.168.1.1:161 -U
 
-# 设置超时和并发
+# Set timeout and concurrency
 nerva -t targets -w 2000 -W 50
 
-# 限速
+# Rate limiting
 nerva -l targets.txt -R 100
 ```
 
-## Phase 3: 管道集成
+## Phase 3: Pipeline Integration
 
 ```bash
-# naabu 端口扫描 → 服务识别
+# naabu port scan -> service identification
 naabu -host 192.168.1.0/24 -silent | nerva --json
 
-# masscan → 服务识别
+# masscan -> service identification
 sudo masscan 10.0.0.0/24 -p 1-10000 -oL - | \
   grep "^open" | awk '{print $4":"$3}' | nerva --json -o services.json
 ```

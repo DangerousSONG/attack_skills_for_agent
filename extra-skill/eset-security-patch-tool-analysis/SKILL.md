@@ -1,6 +1,8 @@
 ---
 name: eset-security-patch-tool-analysis
 description: Analyze and safely evaluate ESET Security patch tools and licensing mechanisms
+zh-signals: "分析并安全评估 ESET 破解补丁工具与授权机制，识别软件盗版和恶意分发的迹象。信号:ESET补丁分析,恶意仓库识别,盗版软件风险,授权机制评估"
+when-to-use: "Use when a user presents an ESET patch tool, crack, or keygen repository and asks whether it is legitimate or how to analyze it safely."
 triggers:
   - "how do I analyze ESET security patches"
   - "evaluate ESET licensing mechanism"

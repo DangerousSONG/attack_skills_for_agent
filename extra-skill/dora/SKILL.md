@@ -1,6 +1,8 @@
 ---
 name: dora
 description: EU Digital Operational Resilience Act (2022/2554) compliance — scope (financial entities + critical ICT TPPs), five pillars (ICT risk management, incident reporting, resilience testing incl. TLPT, third-party risk, information sharing), and Dutch oversight via DNB/AFM.
+zh-signals: "欧盟数字运营弹性法案（DORA）合规差距分析。信号:dora,合规,金融实体,ict风险,tlpt"
+when-to-use: "Use when performing a DORA (EU 2022/2554) gap analysis, determining entity scope, incident classification, TLPT regime, or third-party ICT risk register."
 ---
 
 # DORA Compliance

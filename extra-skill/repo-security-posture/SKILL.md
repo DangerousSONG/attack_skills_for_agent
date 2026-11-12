@@ -1,6 +1,11 @@
 ---
 name: repo-security-posture
 description: Audit a GitHub repository's security posture and hardening gaps across branch protection, CODEOWNERS, GitHub Actions, publish/release integrity, collaborator access, security features, and dependency review. Use when reviewing or hardening a repo, assessing GitHub configuration, checking CI/CD or Actions security, evaluating supply-chain posture, preparing maintainer-facing security todos, or when the user says "repo security posture", "audit my repo", "harden this GitHub repo", "actions security", "protect against a compromised maintainer", or points at a GitHub URL and asks what to fix.
+zh-signals: "审计 GitHub 仓库的安全态势与加固缺口，覆盖分支保护、CODEOWNERS、Actions、发布完整性、协作者权限与依赖审查，输出按严重度排序的加固清单。信号:GitHub安全,分支保护,CODEOWNERS,Actions安全,供应链,仓库加固"
+when-to-use: >-
+  Use when reviewing or hardening a GitHub repository's security posture, assessing
+  CI/CD and Actions security, evaluating supply-chain configuration, or preparing
+  maintainer-facing hardening todos.
 ---
 
 # Repository Security Posture

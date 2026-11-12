@@ -1,6 +1,9 @@
 ---
 name: reverse-engineering
 description: Use when reverse-engineering a binary or firmware — static triage + decompilation (Ghidra/IDA/Binary Ninja), dynamic instrumentation (GDB/Frida 17/angr), anti-reversing & packer bypass, OLLVM/VM deobfuscation, UEFI/BIOS RE & Secure Boot research, patch-diffing for n-days
+zh-signals: "对二进制与固件进行静态分析、动态插桩、去混淆和补丁对比逆向。信号:逆向工程,Ghidra,反混淆,固件分析,补丁对比"
+when-to-use: >-
+  Use when reverse-engineering a binary, firmware, or packed sample and needing static triage, decompilation, dynamic instrumentation, or deobfuscation.
 metadata:
   type: offensive
   phase: analysis

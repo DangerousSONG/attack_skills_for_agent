@@ -2,38 +2,39 @@
 name: finduncommonshares-smb-hunt
 description: "pyFindUncommonShares finds sensitive data via uncommon shares. Signals: internal enumeration, network discovery, whole-network uncommon-share scan, specific share-name types, current-user readability checks."
 zh-signals: "pyFindUncommonShares: 非常规共享找敏感数据。信号:内网枚举,网络发现,全网非常规共享扫描,特定共享名类型,顺带检查当前用户可读。"
+when-to-use: "Use during internal network enumeration to find uncommon SMB shares across domain hosts that may contain scripts, backups, and credential files. Requires domain credentials and a DC IP to query."
 ---
 
 # pyFindUncommonShares
 
-- 攻击大类:C29 AD与LDAP枚举
-- 上游仓库:https://github.com/p0dalirius/pyFindUncommonShares
-- 上游 License:GPL-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C29 AD and LDAP Enumeration
+- Upstream Repository: https://github.com/p0dalirius/pyFindUncommonShares
+- Upstream License: GPL-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install git+https://github.com/p0dalirius/pyFindUncommonShares.git
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `finduncommonshares -u svc -p pass -d corp.local --dc-ip 10.0.0.1` | 全网非常规共享扫描 |
-| `-t DFS-R` | 特定共享名类型 |
-| `--check-user-access` | 顺带检查当前用户可读 |
-| `-v` | 详细 |
+| `finduncommonshares -u svc -p pass -d corp.local --dc-ip 10.0.0.1` | Whole-network uncommon share scan |
+| `-t DFS-R` | Specific share name types |
+| `--check-user-access` | Also check whether the current user can read them |
+| `-v` | Verbose |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 非常规共享找敏感数据
+### Finding sensitive data in uncommon shares
 
 ```bash
 finduncommonshares -u svc -p pass -d corp.local --dc-ip 10.0.0.1
-# backup$/scripts$/transfer$ 等共享,含密码脚本/凭据文件金矿
+# Shares such as backup$/scripts$/transfer$ are goldmines holding password scripts and credential files
 ```
 
-## 注意事项
+## Notes
 
-p0dalirius 出品,扫域内所有机器的非默认 SMB 共享,并验证访问权限。
+By p0dalirius; scans every machine in the domain for non-default SMB shares and verifies access permissions.

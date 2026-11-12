@@ -1,6 +1,10 @@
 ---
 name: azure-cosmos-db-py
 description: "Build production-grade Azure Cosmos DB NoSQL services following clean code, security best practices, and TDD principles."
+zh-signals: "以整洁代码、安全最佳实践与 TDD 原则构建生产级 Azure Cosmos DB NoSQL 服务。信号:Azure Cosmos DB,NoSQL,Python,安全实践,TDD"
+when-to-use: >-
+  Use when building production-grade Azure Cosmos DB NoSQL services with Python, clean code,
+  security best practices, and TDD.
 risk: critical
 source: community
 date_added: "2026-02-27"

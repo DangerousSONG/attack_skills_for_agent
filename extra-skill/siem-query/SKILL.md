@@ -1,6 +1,10 @@
 ---
 name: siem-query
 description: SIEM query-builder workflow — Splunk SPL, Microsoft Sentinel/Defender KQL, Elastic EQL/KQL, with cross-translation patterns, performance tuning (data models, summary indexes, CCS), and query-by-detection-need. Source layer for detection-engineer, log-triage, and threat-hunt.
+zh-signals: "构建 SIEM 查询，覆盖 Splunk SPL、Sentinel KQL、Elastic EQL，含跨语言转换、性能调优与按检测需求查询。信号:SIEM查询,Splunk SPL,KQL,EQL,性能调优"
+when-to-use: >-
+  Use when writing or translating SIEM queries across Splunk SPL, Microsoft
+  Sentinel/Defender KQL, or Elastic EQL, including performance tuning.
 ---
 
 # SIEM Query Builder

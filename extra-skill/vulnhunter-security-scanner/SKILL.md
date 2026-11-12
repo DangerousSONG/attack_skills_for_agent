@@ -1,6 +1,10 @@
 ---
 name: vulnhunter-security-scanner
 description: Agentic AI security tool that applies attacker-first analysis to source code, using falsification-based reasoning to minimize false positives
+zh-signals: "攻击者优先的代码安全扫描，采用反证式推理降低误报并定位可利用缺陷。信号:代码扫描,攻击者优先,反证推理,漏洞检测,误报降低"
+when-to-use: >-
+  Use when scanning source code for exploitable vulnerabilities with
+  attacker-first, falsification-based analysis to minimize false positives.
 triggers:
   - scan this code for security vulnerabilities
   - run vulnhunter to find exploitable bugs

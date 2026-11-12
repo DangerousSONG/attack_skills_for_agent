@@ -1,6 +1,8 @@
 ---
 name: security-audit
 description: Security guidance and vulnerability review for codebases, APIs, services, CLI tools, libraries, and daemons. Use for security questions, focused reviews, vulnerability research, security audits, or pen tests. Run the complete workflow only for explicit codebase audit or pen-test requests, full/comprehensive/end-to-end reviews, or requested report artifacts.
+zh-signals: "面向代码库、API 与服务的源码优先安全审计与漏洞审查工作流。信号:安全审计,代码审计,漏洞review,威胁边界,渗透测试"
+when-to-use: "Use for security questions, focused reviews, or vulnerability research; run the full audit workflow only for explicit codebase audit or pen-test requests."
 ---
 
 # Security Audit

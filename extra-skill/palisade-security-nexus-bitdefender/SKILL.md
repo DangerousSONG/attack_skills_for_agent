@@ -1,6 +1,8 @@
 ---
 name: palisade-security-nexus-bitdefender
 description: Deploy and configure BitDefender Total Security 2026 with advanced threat detection, sandboxing, VPN integration, and AI-powered heuristic analysis
+zh-signals: "部署与配置 BitDefender Total Security 2026，涵盖威胁检测、沙箱、VPN、防火墙与 AI 启发式分析。信号:BitDefender配置,终端安全,沙箱检测,VPN集成,AI威胁检测"
+when-to-use: "Use when deploying or configuring BitDefender Total Security features such as malware scanning, sandboxing, VPN, or AI threat detection."
 triggers:
   - "set up bitdefender total security suite"
   - "configure antivirus with sandbox environment"

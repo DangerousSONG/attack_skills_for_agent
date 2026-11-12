@@ -1,6 +1,9 @@
 ---
 name: hunt-csrf
 description: Hunting skill for csrf vulnerabilities.
+zh-signals: "猎取 CSRF 跨站请求伪造漏洞的方法论，覆盖令牌校验缺失、SameSite 配置与请求伪造场景。信号:CSRF,跨站请求伪造,令牌校验,SameSite,漏洞狩猎。"
+when-to-use: >-
+  Use when hunting CSRF vulnerabilities in web applications, especially state-changing endpoints that lack anti-CSRF tokens, rely on weak SameSite cookies, or accept cross-origin form submissions.
 category: security
 risk: offensive
 source: https://github.com/elementalsouls/Claude-BugHunter

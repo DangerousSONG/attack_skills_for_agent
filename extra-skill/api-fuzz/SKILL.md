@@ -1,100 +1,105 @@
 ---
 name: api-fuzz
-description: "REST/GraphQL API 安全测试方法论。当目标有 API 端点（/api/、JSON 响应）、Swagger/OpenAPI 文档暴露、通过 js-api-extract 或目录扫描获得端点列表时使用。覆盖 API 发现、认证测试、框架识别、语义分析智能 Fuzz（根据端点语义推断参数名/类型/业务含义构造精准 payload）、Prototype Pollution、请求走私。IDOR → idor-methodology | GraphQL → graphql-methodology | CSRF → csrf-methodology。任何涉及 API 端点安全测试、参数发现、权限边界测试的场景都应使用此 skill"
+description: "REST/GraphQL API security testing methodology. Use when the target has API endpoints (/api/, JSON responses), exposed Swagger/OpenAPI documentation, or an endpoint list obtained through js-api-extract or directory scanning. Covers API discovery, authentication testing, framework identification, semantic analysis-driven intelligent fuzzing (inferring parameter names/types/business meaning from endpoint semantics to build precise payloads), prototype pollution, and request smuggling. IDOR → idor-methodology | GraphQL → graphql-methodology | CSRF → csrf-methodology. Use this skill for any scenario involving API endpoint security testing, parameter discovery, or permission boundary testing"
+zh-signals: "REST/GraphQL API 安全测试方法论，覆盖端点发现、认证测试与语义驱动智能 Fuzz。信号:api测试,rest,graphql,swagger,fuzz,参数发现"
+when-to-use: >-
+  Use when the target exposes API endpoints, JSON responses, or Swagger/OpenAPI docs, and you
+  need endpoint discovery, authentication testing, semantic parameter fuzzing, or permission
+  boundary testing.
 metadata:
-  tags: "api,fuzz,rest,json,swagger,openapi,endpoint,认证,原型链污染,semantic,parameter,crud,权限,参数猜测,智能fuzz"
+  tags: "api,fuzz,rest,json,swagger,openapi,endpoint,authentication,prototype pollution,semantic,parameter,crud,permission,parameter guessing,intelligent fuzz"
   category: "exploit"
 ---
 
-# API 安全测试方法论
+# API Security Testing Methodology
 
-## ⛔ 深入参考（必读）
+## ⛔ Further Reading (Must Read)
 
-- 认证绕过技巧、参数注入、Mass Assignment、请求走私 → [references/api-attack-techniques.md](references/api-attack-techniques.md)
-- 403/405 绕过（资源后缀fuzz字典、POST空JSON、Vue Hash路由、前缀发现）→ [references/403-bypass-patterns.md](references/403-bypass-patterns.md)
-- 端点语义分析、RESTful CRUD 推断、参数发现、智能 Fuzz、权限边界测试、响应分析 → [references/api-semantic-fuzz.md](references/api-semantic-fuzz.md)
-- 按参数语义分类的 Fuzz payload 模板（ID/查询/文件/金额/命令/Header） → [references/api-fuzz-payloads.md](references/api-fuzz-payloads.md)
+- Authentication bypass techniques, parameter injection, Mass Assignment, request smuggling → [references/api-attack-techniques.md](references/api-attack-techniques.md)
+- 403/405 bypasses (resource suffix fuzz dictionaries, empty POST JSON, Vue hash routes, prefix discovery) → [references/403-bypass-patterns.md](references/403-bypass-patterns.md)
+- Endpoint semantic analysis, RESTful CRUD inference, parameter discovery, intelligent fuzzing, permission boundary testing, response analysis → [references/api-semantic-fuzz.md](references/api-semantic-fuzz.md)
+- Fuzz payload templates classified by parameter semantics (ID/query/file/amount/command/Header) → [references/api-fuzz-payloads.md](references/api-fuzz-payloads.md)
 
 ---
 
-## Phase 1: API 发现与文档
+## Phase 1: API Discovery and Documentation
 
-### 端点发现
-重点路径：`/api/`, `/v1/`, `/v2/`, `/graphql`, `/rest/`
+### Endpoint Discovery
+Key paths: `/api/`, `/v1/`, `/v2/`, `/graphql`, `/rest/`
 
-### 文档泄露（最大信息源）
+### Documentation Leakage (Largest Source of Information)
 - `/docs`, `/swagger`, `/swagger-ui`, `/swagger-ui.html`
 - `/api-docs`, `/openapi.json`, `/openapi.yaml`
 
-### 框架识别
-| 框架 | 特征 | 常见问题 |
+### Framework Identification
+| Framework | Characteristics | Common Issues |
 |------|------|----------|
-| Spring Boot | `/actuator` 端点 | Actuator 信息泄露、SpEL 注入 |
-| Express/Koa | `X-Powered-By: Express` | 原型链污染 |
-| FastAPI | `/docs` 自动生成 | 默认开启 Swagger |
-| Django REST | `/api/?format=json` | 序列化器过度暴露 |
+| Spring Boot | `/actuator` endpoints | Actuator information disclosure, SpEL injection |
+| Express/Koa | `X-Powered-By: Express` | Prototype pollution |
+| FastAPI | auto-generated `/docs` | Swagger enabled by default |
+| Django REST | `/api/?format=json` | Over-exposed serializers |
 | Laravel | JSON API + PHP | Mass Assignment |
 
-## Phase 2: 认证测试
+## Phase 2: Authentication Testing
 
 ```
-API 端点已确认？
-├─ 去掉认证头 → 未认证访问？
-├─ IP/路径/方法绕过 → [references/api-attack-techniques.md](references/api-attack-techniques.md)
-├─ JWT → 参考 jwt-attack-methodology
-└─ OAuth → 参考 oauth-sso-attack
+API endpoints confirmed?
+├─ Remove the auth header → unauthenticated access?
+├─ IP/path/method bypass → [references/api-attack-techniques.md](references/api-attack-techniques.md)
+├─ JWT → refer to jwt-attack-methodology
+└─ OAuth → refer to oauth-sso-attack
 ```
 
-## Phase 3: 语义分析与智能 Fuzz
+## Phase 3: Semantic Analysis and Intelligent Fuzzing
 
-拿到端点列表后，先分析每个端点的**业务含义**，不要盲目跑字典。
+After obtaining the endpoint list, first analyze the **business meaning** of each endpoint instead of blindly running a wordlist.
 
-### RESTful CRUD 推断
+### RESTful CRUD Inference
 
-发现 `GET /api/users/123` → 推断 POST(创建)/PUT(修改)/DELETE(删除)/PATCH(Mass Assignment) 端点
+Finding `GET /api/users/123` → infer the POST (create)/PUT (update)/DELETE (delete)/PATCH (Mass Assignment) endpoints
 
-### 路径语义→测试方向（关键速查）
+### Path Semantics → Testing Direction (Key Quick Reference)
 
-| 端点关键词 | 测试方向 |
+| Endpoint Keyword | Testing Direction |
 |-----------|----------|
-| `users/{id}`, `order/{id}` | IDOR 遍历 |
-| `search`, `query`, `q=` | SQL 注入、XSS |
-| `upload`, `import` | 文件上传绕过 |
-| `proxy`, `url=`, `redirect` | SSRF、开放重定向 |
+| `users/{id}`, `order/{id}` | IDOR traversal |
+| `search`, `query`, `q=` | SQL injection, XSS |
+| `upload`, `import` | File upload bypass |
+| `proxy`, `url=`, `redirect` | SSRF, open redirect |
 | `template`, `render` | SSTI |
-| `exec`, `run`, `cmd` | 命令注入 |
-| `pay`, `amount`, `price` | 金额篡改（负数/零/极大值） |
-| `admin`, `manage`, `config` | 越权访问（最高优先级） |
+| `exec`, `run`, `cmd` | Command injection |
+| `pay`, `amount`, `price` | Amount tampering (negative/zero/extreme values) |
+| `admin`, `manage`, `config` | Broken access control (highest priority) |
 
-→ 完整语义分析方法（参数发现、Content-Type 变体、响应分析、IDOR 批量验证、权限边界测试） → [references/api-semantic-fuzz.md](references/api-semantic-fuzz.md)
-→ 各类型参数的 Fuzz payload 模板 → [references/api-fuzz-payloads.md](references/api-fuzz-payloads.md)
+→ Full semantic analysis methodology (parameter discovery, Content-Type variants, response analysis, batch IDOR verification, permission boundary testing) → [references/api-semantic-fuzz.md](references/api-semantic-fuzz.md)
+→ Fuzz payload templates for each parameter type → [references/api-fuzz-payloads.md](references/api-fuzz-payloads.md)
 
-## Phase 4: 专项测试入口
+## Phase 4: Targeted Test Entry Points
 
-| 漏洞类型 | 关注点 |
+| Vulnerability Type | Focus |
 |---------|--------|
-| IDOR（越权访问他人数据） | 遍历 ID/UUID、对比不同用户响应 |
-| GraphQL 专项 | Introspection/注入/权限绕过 |
-| CSRF（跨站诱导执行操作） | Token 验证、SameSite、Referer 检查 |
-| CORS（跨域数据读取） | Origin 白名单、凭据模式 |
+| IDOR (accessing other users' data) | Traverse IDs/UUIDs, compare responses across users |
+| GraphQL specific | Introspection/injection/permission bypass |
+| CSRF (cross-site induced actions) | Token validation, SameSite, Referer checks |
+| CORS (cross-origin data reads) | Origin whitelist, credential mode |
 
-## Phase 5: 其他测试
+## Phase 5: Other Tests
 
-### Prototype Pollution / Node.js 特有
-- `__proto__` / `constructor.prototype` — 污染 payload
-- 利用链：eval、模板注入（SSTI）、服务端 JS 执行
+### Prototype Pollution / Node.js Specific
+- `__proto__` / `constructor.prototype` — pollution payload
+- Exploit chains: eval, template injection (SSTI), server-side JS execution
 
-### 请求走私
+### Request Smuggling
 - [references/api-attack-techniques.md](references/api-attack-techniques.md)
 
-### 路径解析差异
-- 前后端不一致或代理层差异可绕过鉴权
-- 路径变体：`/api/admin/.`、trailing dot、`/api/admin/..;/public`
+### Path Parsing Differences
+- Inconsistency between front end and back end, or proxy-layer differences, can bypass authentication
+- Path variants: `/api/admin/.`, trailing dot, `/api/admin/..;/public`
 
-## 注意事项
-- API 通常用 JSON，设置 `Content-Type: application/json`
-- 错误信息比 Web 更详细——重要的信息泄露来源
-- API 版本差异（v1 可能有漏洞但 v2 修复了，v1 未下线）
-- 先跑语义分析再 fuzz，不要盲目发请求浪费时间
-- 管理类端点（`/admin/`, `/manage/`）优先级最高
-- 每确认一个漏洞立即 `evidence_save` + `report_vuln`
+## Notes
+- APIs usually use JSON, so set `Content-Type: application/json`
+- Error messages are more detailed than on the Web — an important source of information leakage
+- API version differences (v1 may be vulnerable while v2 is fixed, with v1 still alive)
+- Run the semantic analysis before fuzzing; do not blindly send requests and waste time
+- Administrative endpoints (`/admin/`, `/manage/`) have the highest priority
+- Immediately run `evidence_save` + `report_vuln` for each confirmed vulnerability

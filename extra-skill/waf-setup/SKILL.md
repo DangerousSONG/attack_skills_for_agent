@@ -2,6 +2,10 @@
 name: waf-setup
 description: Deploy and tune Web Application Firewalls. Configure rules for OWASP
   Top 10 protection. Use when protecting web applications from common attacks.
+zh-signals: "部署并调优 Web 应用防火墙，配置覆盖 OWASP Top 10 的防护规则。信号:WAF,Web应用防火墙,AWS WAF,Cloudflare,规则调优"
+when-to-use: >-
+  Use when deploying or tuning a WAF (AWS WAF, Cloudflare, ModSecurity),
+  configuring rules for OWASP Top 10 protection, or reducing false positives.
 category: security
 risk: critical
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

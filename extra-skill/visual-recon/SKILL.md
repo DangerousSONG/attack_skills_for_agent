@@ -1,6 +1,10 @@
 ---
 name: visual-recon
 description: Screenshot all live hosts for rapid visual triage and technology fingerprinting.
+zh-signals: "对所有存活主机批量截图，用于快速可视化分级与技术指纹识别。信号:可视化侦察,截图,技术指纹,主机分级,存活主机"
+when-to-use: >-
+  Use when screenshotting live hosts for rapid visual triage and technology
+  fingerprinting across a target scope.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

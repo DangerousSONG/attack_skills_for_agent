@@ -1,6 +1,9 @@
 ---
 name: hunt-open-redirect
 description: Hunt Open Redirect — all types including low-impact, chained to OAuth token theft → ATO, phishing chains. URL parameter manipulation, JavaScript redirect, meta refresh, header injection. Use when hunting redirect bugs or building ATO chains.
+zh-signals: "猎取开放重定向漏洞，覆盖重定向参数发现、绕过技巧与 OAuth 令牌窃取链。信号:开放重定向,redirect_uri,URL跳转绕过,OAuth令牌窃取,漏洞狩猎。"
+when-to-use: >-
+  Use when a target has redirect parameters such as url, next, redirect, return, or redirect_uri on login/logout, OAuth, payment, or language-switch flows, and you need to test for open redirect or chain it to OAuth token theft.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

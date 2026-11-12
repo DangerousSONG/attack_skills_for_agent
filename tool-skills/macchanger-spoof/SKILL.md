@@ -2,37 +2,40 @@
 name: macchanger-spoof
 description: "macchanger: Spoof MAC addresses. Signals: man-in-the-middle, MITM, random MAC, specified MAC, view."
 zh-signals: "macchanger: MAC 地址伪装。信号:中间人,mitm,随机 MAC,指定 MAC,查看。"
+when-to-use: >-
+  Use when you need to change a NIC's MAC address to bypass MAC filtering or
+  blend into a network for MITM and sniffing.
 ---
 
 # macchanger
 
-- 攻击大类:C40 嗅探与中间人攻击
-- 上游仓库:https://github.com/alobbs/macchanger
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C40 Sniffing and Man-in-the-Middle Attacks
+- Upstream Repository: https://github.com/alobbs/macchanger
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 apt install macchanger
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `macchanger -r eth0` | 随机 MAC |
-| `-m 00:11:22:33:44:55` | 指定 MAC |
-| `-s eth0` | 查看 |
+| `macchanger -r eth0` | Random MAC |
+| `-m 00:11:22:33:44:55` | Specified MAC |
+| `-s eth0` | View |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### MAC 地址伪装
+### MAC address spoofing
 
 ```bash
 macchanger -r wlan0
-# 绕过 MAC 过滤
+# Bypass MAC filtering
 ```
 
-## 注意事项
+## Notes
 
-MAC 地址修改工具。
+MAC address modification tool.

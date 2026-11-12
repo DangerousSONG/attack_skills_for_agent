@@ -2,37 +2,40 @@
 name: scanless-public-scan
 description: "scanless: Performs anonymous port scanning. Signals: port scanning, nmap, public scan service proxy, specified engine."
 zh-signals: "scanless: 匿名端口扫描。信号:端口扫描,nmap,公共扫描服务代扫,指定引擎。"
+when-to-use: >-
+  Use when you need to port scan a target anonymously by proxying through
+  public online scanning services to hide your real source IP.
 ---
 
 # scanless
 
-- 攻击大类:C42 网络扫描与枚举
-- 上游仓库:https://github.com/vesche/scanless
-- 上游 License:Unlicense(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C42 Network Scanning and Enumeration
+- Upstream Repository: https://github.com/vesche/scanless
+- Upstream License: Unlicense (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install scanless
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `scanless -t 10.0.0.5` | 公共扫描服务代扫 |
-| `-s hackertarget` | 指定引擎 |
-| `-o out.txt` | 输出 |
+| `scanless -t 10.0.0.5` | Proxy scan via a public scanning service |
+| `-s hackertarget` | Specify engine |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 匿名端口扫描
+### Anonymous Port Scanning
 
 ```bash
 scanless -t target.com
-# 借第三方服务扫,隐藏真实 IP
+# Scan through third-party services to hide the real IP
 ```
 
-## 注意事项
+## Notes
 
-调用在线端口扫描服务,隐匿扫描来源。
+Uses online port scanning services to conceal the scan source.

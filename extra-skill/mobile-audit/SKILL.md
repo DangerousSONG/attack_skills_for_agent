@@ -1,6 +1,11 @@
 ---
 name: mobile-audit
 description: "Audit iOS and Android mobile applications against OWASP MASVS / MASTG — insecure storage, weak crypto, certificate pinning, deeplinks, IPC, jailbreak/root detection, reverse-engineering resistance. Use when the user mentions 'mobile security,' 'iOS security,' 'Android security,' 'mobile audit,' 'mobile pentest,' 'MASVS,' 'MASTG,' 'certificate pinning,' 'jailbreak detection,' 'root detection,' 'deeplink,' 'URL scheme,' 'app transport security,' 'keychain,' 'keystore,' 'mobile reverse engineering,' or has a mobile app to review."
+zh-signals: "依据 OWASP MASVS/MASTG 审计 iOS 与 Android 应用，覆盖不安全存储、弱加密、证书固定、Deeplink、IPC 与越狱/root 检测。信号:移动安全,移动审计,MASVS,MASTG,证书固定"
+when-to-use: >-
+  Use when reviewing the security posture of an iOS or Android app, auditing
+  against OWASP MASVS/MASTG, or assessing storage, crypto, certificate pinning,
+  deeplinks, or jailbreak/root detection.
 allowed-tools: Bash, Read, Write, Grep, Glob, WebSearch
 ---
 

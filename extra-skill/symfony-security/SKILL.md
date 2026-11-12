@@ -1,6 +1,8 @@
 ---
 name: symfony-security
 description: Symfony / PHP webapp security review — Security Component (firewalls, voters, access_control, role hierarchies), Doctrine ORM injection patterns (raw DQL, QueryBuilder, expr()), Twig auto-escape and |raw, CSRF + session, PHP-specific RCE classes (unserialize, include/require, system/exec, eval, type juggling), configuration discipline (.env, secrets vault, profiler in prod), and recent Symfony CVE patterns. Covers Symfony-based CMSes (Sulu, Ibexa, Bolt) and custom Symfony webapps.
+zh-signals: "Symfony/PHP Web 应用安全审查，覆盖 Security 组件、Doctrine 注入、Twig 转义与 PHP 反序列化等 RCE 风险。信号:Symfony,PHP 安全,Doctrine,Twig,SQL注入"
+when-to-use: "Use when reviewing a Symfony or PHP-based application's security configuration, Doctrine queries, Twig escaping, or PHP-specific RCE classes."
 ---
 
 # Symfony Security

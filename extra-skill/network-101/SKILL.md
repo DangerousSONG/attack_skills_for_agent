@@ -1,6 +1,9 @@
 ---
 name: network-101
 description: "Configure and test common network services (HTTP, HTTPS, SNMP, SMB) for penetration testing lab environments. Enable hands-on practice with service enumeration, log analysis, and security testing against properly configured target systems."
+zh-signals: "搭建并测试 HTTP/HTTPS/SNMP/SMB 网络服务以开展渗透测试实验。信号:网络服务配置,SNMP枚举,SMB枚举,服务日志,实验环境。"
+when-to-use: >-
+  Use when building an isolated pentest lab with HTTP, HTTPS, SNMP, or SMB services, or when practicing service enumeration, log analysis, and configuration verification against lab targets.
 risk: offensive
 source: community
 author: zebbern

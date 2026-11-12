@@ -1,35 +1,37 @@
 ---
 name: cloud-iam-audit
-description: "云 IAM 权限审计与提权。当获取了云平台凭据（AWS AK/SK、Azure SPN、GCP SA、腾讯云 SecretId/SecretKey）需要评估权限范围和提权路径时使用。覆盖 AWS/Azure/GCP/腾讯云的 IAM/CAM 策略分析、常见提权路径（PassRole、AssumeRole、Lambda/SCF 提权）、跨账号攻击、CloudTrail/CloudAudit 规避。发现任何云凭据、AK/SK、SecretId/SecretKey 时都应使用此技能"
+description: "Cloud IAM permission auditing and privilege escalation. Use when you have obtained cloud platform credentials (AWS AK/SK, Azure SPN, GCP SA, Tencent Cloud SecretId/SecretKey) and need to assess the permission scope and escalation paths. Covers IAM/CAM policy analysis for AWS/Azure/GCP/Tencent Cloud, common escalation paths (PassRole, AssumeRole, Lambda/SCF escalation), cross-account attacks, and CloudTrail/CloudAudit evasion. Use this skill whenever any cloud credential, AK/SK, SecretId/SecretKey is found"
+zh-signals: "审计 AWS/Azure/GCP/腾讯云凭据的权限范围与提权路径。信号:云IAM,提权,AWS,Azure,腾讯云,PassRole"
+when-to-use: "Use when you obtain cloud credentials such as AWS AK/SK, Azure SPN, GCP SA keys, or Tencent Cloud keys and must assess permissions and escalation paths."
 metadata:
-  tags: "cloud,iam,cam,audit,privilege,escalation,aws,azure,gcp,tencent,腾讯云,提权,权限,凭据,PassRole,SecretId"
+  tags: "cloud,iam,cam,audit,privilege,escalation,aws,azure,gcp,tencent,tencentcloud,escalation,permission,credential,PassRole,SecretId"
   category: "cloud"
 ---
 
-# 云 IAM 权限审计与提权方法论
+# Cloud IAM Permission Audit and Privilege Escalation Methodology
 
-IAM/CAM 权限就是攻击面——一个过度授权的策略比一个 RCE 漏洞更危险。
+IAM/CAM permissions are the attack surface — an over-permissive policy is more dangerous than an RCE vulnerability.
 
-## ⛔ 深入参考（必读）
+## ⛔ Further Reading (Must Read)
 
-- AWS 5 条提权路径详细命令、高价值数据搜索、CloudTrail 隐蔽性 → [references/aws-escalation.md](references/aws-escalation.md)
-- 腾讯云 CAM 提权路径、tccli/SDK 命令、CloudAudit 隐蔽性 → [references/tencent-cam-escalation.md](references/tencent-cam-escalation.md)
+- Detailed commands for the 5 AWS escalation paths, high-value data searches, and CloudTrail stealth → [references/aws-escalation.md](references/aws-escalation.md)
+- Tencent Cloud CAM escalation paths, tccli/SDK commands, and CloudAudit stealth → [references/tencent-cam-escalation.md](references/tencent-cam-escalation.md)
 
 ---
 
-## Phase 1: 凭据识别与身份确认
+## Phase 1: Credential Identification and Identity Confirmation
 
-| 凭据 | 格式 | 来源 |
+| Credential | Format | Source |
 |------|------|------|
-| AWS AK/SK | `AKIA...` (20字符) | 配置文件、环境变量、元数据 |
-| AWS 临时凭据 | `ASIA...` + SessionToken | IMDS、STS AssumeRole |
-| Azure SPN | client_id + client_secret + tenant_id | 配置文件 |
-| GCP SA Key | JSON 文件含 `private_key` | 服务账号密钥文件 |
-| 腾讯云 SecretId/SecretKey | `AKIDz...` (36字符) / `xxx=` (Base64) | 配置文件、环境变量、元数据 |
-| 腾讯云临时凭据 | SecretId/SecretKey + Token/ExpiredTime | 元数据、STS AssumeRole |
+| AWS AK/SK | `AKIA...` (20 characters) | Configuration file, environment variable, metadata |
+| AWS temporary credentials | `ASIA...` + SessionToken | IMDS, STS AssumeRole |
+| Azure SPN | client_id + client_secret + tenant_id | Configuration file |
+| GCP SA key | JSON file containing `private_key` | Service account key file |
+| Tencent Cloud SecretId/SecretKey | `AKIDz...` (36 characters) / `xxx=` (Base64) | Configuration file, environment variable, metadata |
+| Tencent Cloud temporary credentials | SecretId/SecretKey + Token/ExpiredTime | Metadata, STS AssumeRole |
 
 ```bash
-# AWS: 我是谁
+# AWS: who am I
 aws sts get-caller-identity
 
 # Azure
@@ -38,9 +40,9 @@ az account show
 # GCP
 gcloud auth list
 
-# 腾讯云: 我是谁（优先使用 tccli）
+# Tencent Cloud: who am I (prefer tccli)
 tccli sts GetCallerIdentity
-# 或使用 SDK
+# Or use the SDK
 python3 -c "
 from tencentcloud.sts.v20180813 import sts_client, models
 from tencentcloud.common import credential
@@ -50,141 +52,141 @@ print(client.GetCallerIdentity(models.GetCallerIdentityRequest()).to_json_string
 "
 ```
 
-### 腾讯云凭据配置
+### Tencent Cloud Credential Configuration
 
 ```bash
-# 交互式配置 tccli（优先）
+# Interactive tccli configuration (preferred)
 tccli configure
-# 输入: SecretId, SecretKey, Region(如 ap-guangzhou), Output(json)
+# Enter: SecretId, SecretKey, Region (e.g. ap-guangzhou), Output (json)
 
-# 使用临时凭据时需额外设置 Token
+# When using temporary credentials, set the Token additionally
 tccli configure set token "TOKEN_VALUE"
 
-# 也可通过环境变量设置
+# It can also be set through environment variables
 export TENCENTCLOUD_SECRET_ID="AKIDz..."
 export TENCENTCLOUD_SECRET_KEY="xxxx="
-export TENCENTCLOUD_SESSION_TOKEN="TOKEN"  # 临时凭据时
+export TENCENTCLOUD_SESSION_TOKEN="TOKEN"  # for temporary credentials
 ```
 
 ---
 
-## Phase 2: 权限枚举
+## Phase 2: Permission Enumeration
 
-### AWS 权限枚举
+### AWS Permission Enumeration
 ```bash
 aws iam list-attached-user-policies --user-name <user>
 aws iam list-attached-role-policies --role-name <role>
-# 暴力枚举
+# Brute-force enumeration
 aws s3 ls 2>&1; aws ec2 describe-instances 2>&1; aws iam list-users 2>&1
 ```
 
-### 腾讯云 CAM 权限枚举（tccli 优先）
+### Tencent Cloud CAM Permission Enumeration (prefer tccli)
 
 ```bash
-# 1. 账户概览
+# 1. Account overview
 tccli cam GetAccountSummary
 
-# 2. 列出子用户
+# 2. List sub-users
 tccli cam ListUsers
 
-# 3. 列出用户组
+# 3. List user groups
 tccli cam ListGroups --Page 1 --Rp 50
 
-# 4. 列出角色（关键——角色可被 AssumeRole 利用）
+# 4. List roles (critical — roles can be abused through AssumeRole)
 tccli cam DescribeRoleList --Page 1 --Rp 50
 
-# 5. 列出策略（自定义策略是提权关键）
-tccli cam ListPolicies --Scope Local --Page 1 --Rp 100   # 仅自定义策略
-tccli cam ListPolicies --Scope All --Page 1 --Rp 100      # 全部策略
+# 5. List policies (custom policies are the key to privilege escalation)
+tccli cam ListPolicies --Scope Local --Page 1 --Rp 100   # custom policies only
+tccli cam ListPolicies --Scope All --Page 1 --Rp 100      # all policies
 
-# 6. 查看具体策略内容
+# 6. View the content of a specific policy
 tccli cam GetPolicy --PolicyId <PolicyId> --PolicyVersion 1
 
-# 7. 查看用户关联的策略
+# 7. View the policies attached to a user
 tccli cam ListAttachedUserPolicies --TargetUin <UIN>
 
-# 8. 查看角色关联的策略
+# 8. View the policies attached to a role
 tccli cam ListAttachedRolePolicies --RoleId <RoleId>
 
-# 9. 查看用户组关联的策略
+# 9. View the policies attached to a user group
 tccli cam ListAttachedGroupPolicies --GroupId <GroupId>
 
-# 10. 列出用户的 AccessKey
+# 10. List a user's AccessKeys
 tccli cam ListAccessKeys
 
-# 11. 查看角色详情（含 Trust Policy——跨账号攻击关键）
+# 11. View role details (includes the trust policy — key for cross-account attacks)
 tccli cam GetRole --RoleId <RoleId>
 
-# 12. 查看用户所属的组
+# 12. View the groups a user belongs to
 tccli cam ListGroupsForUser --Uin <UIN>
 ```
 
-### 腾讯云暴力枚举（逐服务探测）
+### Tencent Cloud Brute-Force Enumeration (probe service by service)
 
 ```bash
-# COS 存储（tccli cos 不支持 GetService，需用 SDK 或 coscli）
+# COS storage (tccli cos does not support GetService, use the SDK or coscli)
 coscli ls 2>&1
-# 或 Python SDK:
+# Or the Python SDK:
 # pip install cos-python-sdk-v5
 # from qcloud_cos import CosConfig, CosS3Client
 # client = CosS3Client(CosConfig(Region='ap-guangzhou', SecretId='Sid', SecretKey='Skey'))
 # print(client.list_buckets())
 
-# CVM 实例
+# CVM instances
 tccli cvm DescribeInstances 2>&1
 
-# SCF 云函数（类似 Lambda 提权路径）
+# SCF cloud functions (similar to the Lambda escalation path)
 tccli scf ListFunctions --Namespace default --Limit 50 2>&1
 
-# CBS 云硬盘
+# CBS cloud disks
 tccli cbs DescribeDisks 2>&1
 
-# SSL 证书（可能包含私钥）
+# SSL certificates (may contain private keys)
 tccli ssl DescribeCertificates --Limit 50 2>&1
 
 # TDSQL/MySQL
 tccli cdb DescribeDBInstances 2>&1
 
-# 密钥管理（KMS）
+# Key management (KMS)
 tccli kms ListKeys --Limit 50 2>&1
 ```
 
-### 权限等级速查
-| 能做的操作 | 提权可能 |
+### Permission Level Quick Reference
+| Achievable Operations | Escalation Potential |
 |------------|----------|
-| GetCallerIdentity 仅此 | 低 |
-| cos:GetObject / s3:GetObject | 中（可能找到更多凭据） |
-| cam:List*, cam:Get* / iam:List*, iam:Get* | 中（可分析提权路径） |
-| cam:CreateUser/AttachUserPolicy | **高**（直接提权） |
-| cam:CreateRole/AttachRolePolicy | **高**（创建高权限角色） |
-| cam:PassRole + scf:CreateFunction | **高**（间接提权——SCF 挂高权限角色） |
-| sts:AssumeRole | **高**（跳到更高权限角色） |
+| GetCallerIdentity only | Low |
+| cos:GetObject / s3:GetObject | Medium (may find more credentials) |
+| cam:List*, cam:Get* / iam:List*, iam:Get* | Medium (enables analysis of escalation paths) |
+| cam:CreateUser/AttachUserPolicy | **High** (direct privilege escalation) |
+| cam:CreateRole/AttachRolePolicy | **High** (create a high-privilege role) |
+| cam:PassRole + scf:CreateFunction | **High** (indirect privilege escalation — attach a high-privilege role to SCF) |
+| sts:AssumeRole | **High** (hop to a higher-privilege role) |
 
 ---
 
-## Phase 3: 提权决策树
+## Phase 3: Privilege Escalation Decision Tree
 
 ```
-当前权限？
-├─ 能操作 IAM/CAM（CreatePolicy/AttachPolicy）→ 直接提权
-├─ 有 PassRole + Lambda/SCF → 间接提权（创建服务挂高权限 Role）
-├─ 有 AssumeRole → 角色链跳转
-├─ 只有数据读取 → 找更多凭据（COS/S3/Secrets/Lambda/SCF 代码/User-Data）
-└─ 详细命令
+Current privileges?
+├─ Can manipulate IAM/CAM (CreatePolicy/AttachPolicy) → direct privilege escalation
+├─ Has PassRole + Lambda/SCF → indirect privilege escalation (create a service bound to a high-privilege role)
+├─ Has AssumeRole → role chain hopping
+├─ Data read access only → find more credentials (COS/S3/Secrets/Lambda/SCF code/User-Data)
+└─ Detailed commands
     ├─ AWS → [references/aws-escalation.md](references/aws-escalation.md)
-    └─ 腾讯云 → [references/tencent-cam-escalation.md](references/tencent-cam-escalation.md)
+    └─ Tencent Cloud → [references/tencent-cam-escalation.md](references/tencent-cam-escalation.md)
 ```
 
-## 注意事项
-- 云凭据提权核心：能操作 **IAM/CAM 本身** 才能提权
-- 临时凭据有过期时间，优先用长期 AK/SK 或创建后门 Access Key
-- 跨账号 Trust Policy 是关键审计点
-- 腾讯云角色 Trust Policy 用 `qcs::cam::uin/ROOT_UIN:uin/ANY_UIN` 格式
-- 腾讯云策略语法与 AWS 类似但用 `qcs` 资源描述符
-- 操作会产生 CloudTrail/CloudAudit 日志，注意操作痕迹
+## Notes
+- The core of cloud privilege escalation: you must be able to manipulate **IAM/CAM itself** to escalate
+- Temporary credentials expire, so prefer long-lived AK/SK or create a backdoor Access Key
+- The cross-account trust policy is a critical audit point
+- The Tencent Cloud role trust policy uses the `qcs::cam::uin/ROOT_UIN:uin/ANY_UIN` format
+- Tencent Cloud policy syntax resembles AWS but uses the `qcs` resource descriptor
+- Operations generate CloudTrail/CloudAudit logs — watch your operational traces
 
-## 提权路径概览
-- **直接提权**：创建策略赋予自己 `*:*` 权限
-- **间接提权**：PassRole + SCF/Lambda 创建函数挂高权限角色
-- **角色链**：当前身份 → AssumeRole → 更高权限角色
-- **权限枚举工具**：enumerate-iam、Pacu (AWS)；自定义脚本 (腾讯云)
+## Escalation Path Overview
+- **Direct privilege escalation**: create a policy that grants yourself `*:*` permissions
+- **Indirect privilege escalation**: PassRole + SCF/Lambda creates a function bound to a high-privilege role
+- **Role chain**: current identity → AssumeRole → higher-privilege role
+- **Permission enumeration tools**: enumerate-iam, Pacu (AWS); custom scripts (Tencent Cloud)

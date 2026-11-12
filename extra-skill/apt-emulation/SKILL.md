@@ -1,53 +1,57 @@
 ---
 name: apt-emulation
-description: "APT 模拟与情报驱动红队方法论。基于已知 APT 组织的 TTP（MITRE ATT&CK）设计红队行动计划。当需要模拟特定威胁组织、设计高仿真攻击演练、或根据威胁情报制定攻击策略时使用"
+description: "APT emulation and intelligence-driven red team methodology. Design red team operation plans around the TTPs of known APT groups (MITRE ATT&CK). Use when you need to emulate a specific threat actor, design a high-fidelity adversary exercise, or build an attack strategy from threat intelligence"
+zh-signals: "基于已知 APT 组织的 MITRE ATT&CK TTP 设计高仿真红队攻击演练与行动计划。信号:APT模拟,威胁情报,红队,MITRE ATT&CK,TTP"
+when-to-use: >-
+  Use when emulating a specific threat actor, designing a high-fidelity adversary
+  exercise, or building an attack strategy from threat intelligence.
 metadata:
-  tags: "apt,emulation,mitre,attack,red-team,adversary,ttp,威胁模拟,APT模拟,紫队"
+  tags: "apt,emulation,mitre,attack,red-team,adversary,ttp,threat emulation,APT emulation,purple team"
   category: "threat-intel"
   mitre_attack: "TA0001-TA0011"
 ---
 
-# APT 模拟与情报驱动红队
+# APT Emulation and Intelligence-Driven Red Teaming
 
-> **目标**：不是随机攻击，而是模拟真实威胁者的完整攻击链，检验组织防御能力
+> **Goal**: not random attacks, but the complete attack chain of a real threat actor, used to test the organization's defensive capability
 
-## ⛔ 深入参考
+## ⛔ Further Reading
 
-- 攻击模拟框架与资源 → [references/emulation-frameworks.md](references/emulation-frameworks.md)
+- Attack emulation frameworks and resources → [references/emulation-frameworks.md](references/emulation-frameworks.md)
 
 ---
 
-## Phase 1: 威胁情报收集 — 选择模拟目标
+## Phase 1: Threat Intelligence Collection — choosing the emulation target
 
-### 1.1 确定相关威胁组织
-
-```
-根据目标行业选择 APT：
-├─ 金融 → APT38 (Lazarus), FIN7, Carbanak
-├─ 政府/国防 → APT29 (Cozy Bear), APT28 (Fancy Bear), Turla
-├─ 能源/工控 → Sandworm, Dragonfly, Triton
-├─ 科技/通信 → APT41 (Double Dragon), Salt Typhoon
-├─ 医疗 → APT10 (Stone Panda), FIN12
-└─ 跨行业 → Lazarus, APT41, FIN7
-```
-
-### 1.2 情报来源
+### 1.1 Identify the relevant threat actor
 
 ```
-TTP 情报获取：
+Select the APT based on the target industry:
+├─ Finance → APT38 (Lazarus), FIN7, Carbanak
+├─ Government/defense → APT29 (Cozy Bear), APT28 (Fancy Bear), Turla
+├─ Energy/ICS → Sandworm, Dragonfly, Triton
+├─ Technology/telecom → APT41 (Double Dragon), Salt Typhoon
+├─ Healthcare → APT10 (Stone Panda), FIN12
+└─ Cross-industry → Lazarus, APT41, FIN7
+```
+
+### 1.2 Intelligence sources
+
+```
+TTP intelligence gathering:
 ├─ MITRE ATT&CK Groups → attack.mitre.org/groups/
-├─ 厂商报告 → Mandiant/CrowdStrike/Kaspersky APT 报告
-├─ CISA Advisory → 美国网络安全局公告
-├─ Threat Intelligence 平台 → MISP/OpenCTI/AlienVault OTX
-└─ 学术研究 → APT Deception Papers
+├─ Vendor reports → Mandiant/CrowdStrike/Kaspersky APT reports
+├─ CISA Advisory → US cybersecurity agency advisories
+├─ Threat intelligence platforms → MISP/OpenCTI/AlienVault OTX
+└─ Academic research → APT deception papers
 ```
 
-## Phase 2: TTP 映射与攻击计划
+## Phase 2: TTP Mapping and Attack Planning
 
-### 2.1 攻击链设计模板
+### 2.1 Attack chain design template
 
 ```
-模拟 APT29 (Cozy Bear) 示例：
+Example emulating APT29 (Cozy Bear):
 
 Initial Access:
 ├─ T1566.001 - Spearphishing with ISO attachment
@@ -88,92 +92,92 @@ Exfiltration:
 └─ T1041 - Exfil over C2 Channel (HTTPS)
 ```
 
-### 2.2 行动约束（Rules of Engagement）
+### 2.2 Rules of Engagement
 
 ```
-⛔ 模拟前必须确认：
-├─ 书面授权（高管签字）
-├─ 范围定义（in-scope / out-of-scope 系统）
-├─ 紧急联系人（发现真实入侵时）
-├─ 停止条件（影响业务时）
-├─ 时间窗口
-└─ 数据处理规则（不外传真实敏感数据）
+⛔ Must be confirmed before emulation:
+├─ Written authorization (executive sign-off)
+├─ Scope definition (in-scope / out-of-scope systems)
+├─ Emergency contacts (when a real intrusion is found)
+├─ Stop conditions (when business is impacted)
+├─ Time window
+└─ Data handling rules (do not exfiltrate real sensitive data)
 ```
 
-## Phase 3: 攻击执行
+## Phase 3: Attack Execution
 
-### 3.1 基础设施搭建
+### 3.1 Infrastructure Setup
 
 ```
-匹配目标 APT 的基础设施特征：
-├─ APT29 → HTTPS C2, 合法域名伪装, 云服务作为 redirector
-├─ APT28 → 多层代理, VPN 节点, 一次性基础设施
-├─ Lazarus → 被入侵的合法网站作跳板, 自定义 C2 协议
-└─ FIN7 → 大规模钓鱼基础设施, Carbanak/Cobalt Strike
+Match the infrastructure profile of the target APT:
+├─ APT29 → HTTPS C2, legitimate domain masquerading, cloud services as redirector
+├─ APT28 → multi-layer proxies, VPN nodes, disposable infrastructure
+├─ Lazarus → compromised legitimate websites as pivots, custom C2 protocol
+└─ FIN7 → large-scale phishing infrastructure, Carbanak/Cobalt Strike
 ```
 
-### 3.2 工具选择映射
+### 3.2 Tool Selection Mapping
 
-| APT 组织 | 实际工具 | 红队模拟替代 |
+| APT group | Real tools | Red team emulation substitute |
 |----------|---------|-------------|
-| APT29 | SUNBURST, EnvyScout | Cobalt Strike + 自定义 loader |
-| APT28 | X-Agent, X-Tunnel | Sliver + 自定义隧道 |
-| Lazarus | BLINDINGCAN, DRATzarus | Havoc + 自定义后门 |
+| APT29 | SUNBURST, EnvyScout | Cobalt Strike + custom loader |
+| APT28 | X-Agent, X-Tunnel | Sliver + custom tunnel |
+| Lazarus | BLINDINGCAN, DRATzarus | Havoc + custom backdoor |
 | FIN7 | GRIFFON, BIRDDOG | Cobalt Strike + BAT2EXE |
-| APT41 | ShadowPad, Winnti | PlugX loader 仿写 |
+| APT41 | ShadowPad, Winnti | PlugX loader reimplementation |
 
-### 3.3 执行节奏
-
-```
-模拟真实 APT 的时间模式：
-├─ Day 1-3: 侦察 + 钓鱼投递
-├─ Day 4-7: 初始立足点 + 持久化
-├─ Day 7-14: 内网枚举 + 权限提升
-├─ Day 14-21: 横向移动 + 目标定位
-├─ Day 21-28: 数据收集 + 外传
-└─ ⛔ 不要一天完成所有阶段 → 不符合真实 APT 节奏
-
-Sleep 模式：
-├─ 工作时间操作（匹配 APT 时区）
-├─ 非工作时间 Beacon 保持 sleep
-├─ 模拟节假日暂停（APT 也有假期）
-└─ 被检测到部分基础设施 → 评估是否暂停
-```
-
-## Phase 4: 检测差距分析
-
-### 4.1 记录每步检测状态
+### 3.3 Execution Tempo
 
 ```
-| 攻击步骤 | MITRE ID | 执行成功 | 被检测 | 被阻止 | 备注 |
+Emulate the timing pattern of a real APT:
+├─ Day 1-3: reconnaissance + phishing delivery
+├─ Day 4-7: initial foothold + persistence
+├─ Day 7-14: internal network enumeration + privilege escalation
+├─ Day 14-21: lateral movement + target location
+├─ Day 21-28: data collection + exfiltration
+└─ ⛔ Do not complete every phase in one day → it does not match a real APT tempo
+
+Sleep pattern:
+├─ Operate during working hours (match the APT time zone)
+├─ Keep beacons sleeping outside working hours
+├─ Simulate holiday pauses (APTs take holidays too)
+└─ Some infrastructure is detected → assess whether to pause
+```
+
+## Phase 4: Detection Gap Analysis
+
+### 4.1 Record the detection status of every step
+
+```
+| Attack step | MITRE ID | Executed | Detected | Blocked | Notes |
 |----------|----------|---------|--------|--------|------|
-| 钓鱼投递 | T1566.001 | ✓ | ✗ | ✗ | 邮件网关未检出 |
-| PS 执行 | T1059.001 | ✓ | ✓ | ✗ | EDR 告警但未阻止 |
-| 持久化 | T1053.005 | ✓ | ✗ | ✗ | 无 Sysmon 规则 |
+| Phishing delivery | T1566.001 | ✓ | ✗ | ✗ | Not caught by the email gateway |
+| PS execution | T1059.001 | ✓ | ✓ | ✗ | EDR alerted but did not block |
+| Persistence | T1053.005 | ✓ | ✗ | ✗ | No Sysmon rule |
 | LSASS dump | T1003.001 | ✗ | ✓ | ✓ | Credential Guard |
-| 横向 PTH | T1550.002 | ✓ | ✓ | ✗ | 检测延迟 4h |
+| Lateral PTH | T1550.002 | ✓ | ✓ | ✗ | Detection delayed 4h |
 ```
 
-### 4.2 输出报告结构
+### 4.2 Report Structure
 
 ```
-报告框架：
-├─ 执行摘要（给管理层）
-├─ 威胁情报基础（模拟的 APT 背景）
-├─ 攻击链时间线（每步操作+时间）
-├─ 检测覆盖率矩阵（检测/遗漏比例）
-├─ 关键发现（高风险漏洞）
-├─ 建议修复措施（按优先级）
-└─ ATT&CK Navigator 热力图（覆盖 vs 缺口）
+Report framework:
+├─ Executive summary (for management)
+├─ Threat intelligence background (the emulated APT)
+├─ Attack chain timeline (each step + timing)
+├─ Detection coverage matrix (detected/missed ratio)
+├─ Key findings (high-risk vulnerabilities)
+├─ Recommended remediation (by priority)
+└─ ATT&CK Navigator heatmap (coverage vs gaps)
 ```
 
-## 资源与工具
+## Resources and Tools
 
-| 资源 | 用途 |
+| Resource | Purpose |
 |------|------|
-| MITRE ATT&CK Navigator | 可视化 TTP 覆盖 |
-| Atomic Red Team | 原子化攻击测试 |
-| MITRE CALDERA | 自动化攻击模拟 |
-| Red Canary Reports | 年度威胁报告 |
-| ATT&CK Evaluations | 厂商检测能力对比 |
-| Threat Actor Playbooks (SCYTHE) | 预制攻击剧本 |
+| MITRE ATT&CK Navigator | Visualize TTP coverage |
+| Atomic Red Team | Atomic attack testing |
+| MITRE CALDERA | Automated attack emulation |
+| Red Canary Reports | Annual threat reports |
+| ATT&CK Evaluations | Vendor detection capability comparison |
+| Threat Actor Playbooks (SCYTHE) | Pre-built attack playbooks |

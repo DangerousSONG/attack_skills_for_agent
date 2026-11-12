@@ -1,6 +1,8 @@
 ---
 name: linux-shell-scripting
 description: "Provide production-ready shell script templates for common Linux system administration tasks including backups, monitoring, user management, log analysis, and automation. These scripts serve as building blocks for security operations and penetration testing environments."
+zh-signals: "提供用于备份、监控、用户管理、日志分析和自动化的生产级 Linux Shell 脚本模板。信号:Shell脚本,Linux运维,备份,监控,自动化"
+when-to-use: "Use when you need production-ready bash templates for routine Linux administration or to build shell tooling for security operations and pentest environments."
 risk: critical
 source: community
 author: zebbern

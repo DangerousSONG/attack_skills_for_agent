@@ -1,6 +1,8 @@
 ---
 name: wordpress-penetration-testing
 description: "Assess WordPress installations for common vulnerabilities and WordPress 7.0 attack surfaces."
+zh-signals: "WordPress 站点漏洞评估与攻击面测试指南。信号:WordPress,渗透测试,插件漏洞,Web安全,漏洞评估"
+when-to-use: "Use when assessing WordPress installations for known vulnerabilities, plugin flaws, and configuration weaknesses under written authorization."
 risk: offensive
 source: community
 author: zebbern

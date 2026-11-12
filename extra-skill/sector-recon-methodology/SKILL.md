@@ -1,6 +1,10 @@
 ---
 name: sector-recon-methodology
 description: Pick sectors, compile targets, batch recon for campaigns.
+zh-signals: "选取行业、汇编目标清单并为大规模侦察行动编排批量扫描。信号:行业侦察,目标选取,批量侦察,资产测绘,行动编排"
+when-to-use: >-
+  Use when planning a campaign that requires picking sectors, compiling target lists,
+  and batching recon work.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

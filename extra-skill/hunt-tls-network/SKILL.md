@@ -1,6 +1,11 @@
 ---
 name: hunt-tls-network
 description: "Hunt TLS/SSL and DNS misconfigurations — missing HSTS (downgrade attack), weak cipher suites, expired/invalid certificates, mTLS bypass, missing SPF/DKIM/DMARC (email spoofing), DNS Zone Transfer (AXFR), dangling CNAME subdomain takeover, CAA records. Most of these are Info/Low on their own — this skill is opinionated about which findings actually pay (spoofable DMARC with delivered-to-inbox proof, AXFR returning internal hosts, dangling-CNAME takeover) versus which get rejected as best-practice noise (missing CAA, missing HSTS with no MitM position). Use during recon to find infrastructure weaknesses, and to TRIAGE them honestly before reporting."
+zh-signals: "狩猎 TLS/SSL 与 DNS 配置缺陷，并区分真正可利用的问题与最佳实践噪音。信号:tls,dns,misconfig,hsts,dmarc,子域接管"
+when-to-use: >-
+  Use during recon to find infrastructure weaknesses such as weak ciphers, missing HSTS,
+  spoofable DMARC, AXFR leaks, or dangling-CNAME takeover, and to triage them honestly
+  before reporting.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

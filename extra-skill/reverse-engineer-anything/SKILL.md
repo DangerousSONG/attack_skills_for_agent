@@ -1,6 +1,10 @@
 ---
 name: reverse-engineer-anything
 description: Use REA to investigate shipped apps, binaries, packages, and runtimes; trace features with evidence, compare versions, or guide reconstruction. Skip ordinary source-code analysis.
+zh-signals: "使用 REA 调查已发布应用、二进制与运行时，基于证据追踪功能、比较版本并指导重建。信号:逆向工程,REA,二进制分析,反编译,版本对比"
+when-to-use: >-
+  Use when a claim depends on a shipped application, binary, or package and you need decompilation,
+  evidence-backed feature tracing, or version comparison; skip for ordinary complete-source analysis.
 risk: safe
 source: "https://github.com/morluto/rea/tree/main/skill-src/reverse-engineer-anything"
 source_repo: "morluto/rea"

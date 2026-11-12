@@ -2,37 +2,38 @@
 name: torpy-tor-client
 description: "torpy makes anonymous requests over Tor. Signals: internal pivoting, tunneling, Tor client, execute over Tor, hops"
 zh-signals: "torpy: Tor 网络匿名请求。信号:内网穿透,隧道,Tor 客户端,Tor 内执行,跳数。"
+when-to-use: "Use torpy when you need scriptable, anonymous requests over the Tor network, such as routing curl commands through Tor with a configurable number of hops for pivoting or anonymity."
 ---
 
 # torpy
 
-- 攻击大类:C32 隧道与内网穿透
-- 上游仓库:https://github.com/torpyorg/torpy
-- 上游 License:Apache-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C32 Tunneling and Internal Network Pivoting
+- Upstream Repository: https://github.com/torpyorg/torpy
+- Upstream License: Apache-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install torpy
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python -m torpy -h` | Tor 客户端 |
-| `-c 'curl http://target'` | Tor 内执行 |
-| `--hops 3` | 跳数 |
+| `python -m torpy -h` | Tor client |
+| `-c 'curl http://target'` | Execute over Tor |
+| `--hops 3` | Number of hops |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Tor 网络匿名请求
+### Anonymous requests over the Tor network
 
 ```bash
 python -m torpy -c 'curl https://ifconfig.me'
-# 无需 Tor Browser,脚本化
+# No Tor Browser needed, fully scriptable
 ```
 
-## 注意事项
+## Notes
 
-纯 Python Tor 客户端,脚本化 Tor 网络访问。
+A pure-Python Tor client for scriptable access to the Tor network.

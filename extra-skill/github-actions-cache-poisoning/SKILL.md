@@ -9,6 +9,10 @@ description: >
   "ng-renovate", "cache stuffing", scheduled workflow cache restore, shared cache key,
   "hashFiles package.json", cross-workflow cache, PR workflow release workflow same key,
   "npm install prefer-offline", Cacheract, Gato-X, supply chain npm token.
+zh-signals: "狩猎 GitHub Actions 缓存投毒漏洞，识别可向 CI/CD 缓存注入恶意内容并被特权下游工作流恢复的攻击路径。信号:缓存投毒,GitHub Actions,CI/CD,供应链,Cacheract,工作流"
+when-to-use: >-
+  Use when hunting GitHub Actions cache poisoning where an attacker can inject malicious
+  content into the CI/CD cache and have it restored by a privileged downstream workflow.
 license: MIT
 compatibility: Designed for Claude Code. Requires read access to target repository's workflow files.
 metadata:

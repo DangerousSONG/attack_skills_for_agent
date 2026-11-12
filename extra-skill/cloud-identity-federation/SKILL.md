@@ -6,6 +6,9 @@ description: |
   Also covers ECS/Fargate task-role metadata (169.254.170.2), Azure IMDS managed-identity token theft, GCP metadata service-account tokens, and cloud-credential pivoting from a shell (~/.aws/credentials, gcloud creds, kubeconfig, CI env, projected SA tokens).
 
   Taught as attack PATTERNS to reason from. Uses aws/az/gcloud CLIs, kubectl, curl, jwt_tool, and http probing. Chains from /pentester, /cloud-security, or /web-exploit (on a confirmed SSRF); into /post-exploit and /cloud-security once credentials are obtained.
+zh-signals: "覆盖 AWS、Azure、GCP 的云身份联合攻击，包括 OIDC 信任滥用与元数据凭据链。信号:云身份,联合信任,OIDC,IMDS,工作负载身份"
+when-to-use: >-
+  Use when attacking cloud identity federation across AWS, Azure, or GCP, including OIDC CI/CD trust abuse, workload identity, and SSRF-to-IMDS credential chains.
 argument-hint: "<target> [provider=aws|azure|gcp] [entry=ssrf|shell|ci|k8s|creds] [depth=quick|standard|thorough]"
 user-invocable: true
 ---

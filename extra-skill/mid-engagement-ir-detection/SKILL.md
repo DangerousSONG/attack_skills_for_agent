@@ -1,6 +1,8 @@
 ---
 name: mid-engagement-ir-detection
 description: Methodology for detecting client SOC patches, attacker activity, and security-state changes that occur DURING a red-team engagement — and converting those observations into deliverable findings. Built from authorized red-team work where the client patched a confirmed SQLi within 30 minutes of detection AND an external attacker locked multiple new accounts during a single test session. Use when (a) running ANY active engagement against a monitored target, (b) a previously-confirmed finding stops reproducing, (c) baseline timing shifts unexpectedly, or (d) you notice response patterns changing during testing.
+zh-signals: "红队测试期间检测客户 SOC 响应、攻击者活动与安全状态变化的方法论。信号:红队检测,SOC响应,测试中变化,IR,威胁发现"
+when-to-use: "Use during any active red-team engagement against a monitored target when findings stop reproducing or response patterns shift."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

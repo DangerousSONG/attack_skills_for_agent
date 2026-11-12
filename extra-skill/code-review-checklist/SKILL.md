@@ -1,6 +1,8 @@
 ---
 name: code-review-checklist
 description: "Comprehensive checklist for conducting thorough code reviews covering functionality, security, performance, and maintainability"
+zh-signals: "系统性代码审查清单，覆盖功能、安全、性能与可维护性检查要点。信号:代码审查,清单,安全,性能,可维护性"
+when-to-use: "Use when reviewing pull requests, conducting code audits, establishing team review standards, or training developers on review practices."
 risk: critical
 source: community
 date_added: "2026-02-27"

@@ -1,6 +1,8 @@
 ---
 name: risk-assessor
 description: Scores a vulnerability using likelihood × impact, CIA triad analysis, CVSS correlation, and SLA-bound remediation urgency. Trigger when the user describes a vulnerability and wants to know how serious it is, asks "what's the risk level?" or "how urgent is this to fix?", has a CVSS score but wants it contextualized with compensating controls and business impact, needs to assign a remediation SLA, or wants to document risk treatment (mitigate, accept, transfer, avoid).
+zh-signals: "基于可能性×影响、CIA 三要素、CVSS 关联与 SLA 对漏洞进行结构化风险评分与处置建议。信号:风险评估,CVSS,CIA,修复SLA,风险处置"
+when-to-use: "Use when a concrete vulnerability or security risk is described and you need a likelihood×impact score, CVSS correlation, remediation SLA, or treatment recommendation."
 ---
 
 # Risk Assessor

@@ -1,94 +1,98 @@
 ---
 name: nikto-scan
-description: "使用 Nikto 进行 Web 服务器漏洞扫描。当需要检测 Web 服务器的已知漏洞、过时软件版本、危险文件/CGI、配置错误时使用。Nikto 内置 7000+ 检查项，覆盖 OWASP 常见问题。任何涉及 Web 漏洞扫描、服务器安全检查、配置审计的场景都应使用此技能"
+description: "Scan web servers for vulnerabilities using Nikto. Use when you need to detect known web server vulnerabilities, outdated software versions, dangerous files/CGI, or misconfigurations. Nikto ships with 7000+ checks covering common OWASP issues. This skill applies to any web vulnerability scanning, server security assessment, or configuration audit scenario"
+zh-signals: "使用 Nikto 扫描 Web 服务器已知漏洞、过时软件、危险文件与配置错误。信号:Nikto,Web扫描,漏洞扫描,CGI,配置错误"
+when-to-use: >-
+  Use when you need to scan a web server for known vulnerabilities, outdated software,
+  dangerous files/CGI, or misconfigurations.
 metadata:
-  tags: "nikto,web,scan,漏洞扫描,Web服务器,CGI,配置错误,OWASP,SSL,过时软件"
+  tags: "nikto,web,scan,vulnerability scanning,web server,CGI,misconfiguration,OWASP,SSL,outdated software"
   category: "tool"
 ---
 
-# Nikto Web 服务器漏洞扫描方法论
+# Nikto Web Server Vulnerability Scanning Methodology
 
-Nikto 是经典的 Web 服务器漏洞扫描器。核心优势：**检查项丰富**（7000+ 项）+ **开箱即用**（无需配置）+ **覆盖面广**（过时软件/危险文件/配置错误/已知漏洞）。
+Nikto is the classic web server vulnerability scanner. Core advantages: **rich check catalog** (7000+ checks) + **works out of the box** (no configuration) + **broad coverage** (outdated software / dangerous files / misconfigurations / known vulnerabilities).
 
-项目地址：https://github.com/sullo/nikto
+Project address: https://github.com/sullo/nikto
 
-## Phase 1: 基本扫描
+## Phase 1: Basic Scanning
 
 ```bash
-# 扫描单个目标
+# Scan a single target
 nikto -h http://target.com
 
-# 指定端口
+# Specify a port
 nikto -h target.com -p 8080
 
-# HTTPS 扫描
+# HTTPS scan
 nikto -h https://target.com
 
-# 多端口扫描
+# Multi-port scan
 nikto -h target.com -p 80,443,8080,8443
 ```
 
-## Phase 2: 扫描调优
+## Phase 2: Scan Tuning
 
 ```bash
-# 指定扫描类型（Tuning）
-# 1=文件上传 2=默认文件 3=信息泄露 4=注入 5=远程获取 6=DoS 7=远程shell 8=命令执行 9=SQL注入
+# Specify the scan type (Tuning)
+# 1=file upload 2=default file 3=information disclosure 4=injection 5=remote retrieval 6=DoS 7=remote shell 8=command execution 9=SQL injection
 nikto -h http://target.com -Tuning 123489
 
-# 只做信息泄露检查
+# Run only the information disclosure checks
 nikto -h http://target.com -Tuning 3
 
-# 排除 DoS 类检查
+# Exclude the DoS checks
 nikto -h http://target.com -Tuning x6
 
-# 指定插件
+# Specify plugins
 nikto -h http://target.com -Plugins apache_expect_xss,ssl
 
-# 设置最大扫描时间
+# Set the maximum scan time
 nikto -h http://target.com -maxtime 300
 ```
 
-## Phase 3: 认证和代理
+## Phase 3: Authentication and Proxy
 
 ```bash
 # Basic Auth
 nikto -h http://target.com -id admin:password
 
-# Cookie 认证
+# Cookie authentication
 nikto -h http://target.com -Add-header "Cookie: session=abc123"
 
-# 自定义 User-Agent
+# Custom User-Agent
 nikto -h http://target.com -useragent "Mozilla/5.0"
 
-# 通过代理
+# Go through a proxy
 nikto -h http://target.com -useproxy http://127.0.0.1:8080
 
-# 禁用 404 猜测（减少误报）
+# Disable 404 guessing (reduce false positives)
 nikto -h http://target.com -no404
 ```
 
-## Phase 4: 输出格式
+## Phase 4: Output Formats
 
 ```bash
-# JSON 输出
+# JSON output
 nikto -h http://target.com -Format json -output results.json
 
-# HTML 报告
+# HTML report
 nikto -h http://target.com -Format html -output report.html
 
-# CSV 输出
+# CSV output
 nikto -h http://target.com -Format csv -output results.csv
 
-# XML 输出
+# XML output
 nikto -h http://target.com -Format xml -output results.xml
 ```
 
-## 常用场景速查
+## Common Scenario Quick Reference
 
-| 场景 | 命令 |
+| Scenario | Command |
 |------|------|
-| 快速扫描 | `nikto -h http://target.com -maxtime 120` |
-| 全面扫描 | `nikto -h http://target.com -Tuning 123456789abc` |
-| SSL 检查 | `nikto -h https://target.com -Plugins ssl` |
-| 信息泄露 | `nikto -h http://target.com -Tuning 3` |
-| 带认证扫描 | `nikto -h http://target.com -id admin:pass` |
+| Quick scan | `nikto -h http://target.com -maxtime 120` |
+| Full scan | `nikto -h http://target.com -Tuning 123456789abc` |
+| SSL check | `nikto -h https://target.com -Plugins ssl` |
+| Information disclosure | `nikto -h http://target.com -Tuning 3` |
+| Authenticated scan | `nikto -h http://target.com -id admin:pass` |

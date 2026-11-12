@@ -1,6 +1,10 @@
 ---
 name: hunt-ldap
 description: "Hunt LDAP Injection and XPath Injection — authentication bypass, blind char-by-char attribute exfiltration, AD user/group enumeration, XML-store XPath bypass. Covers the LDAP special-character set (* ( ) \\ NUL /), search-filter-context vs DN-injection, parenthesis-balancing, AND/OR filter logic, and {SSHA}/{CRYPT} userPassword exfil on non-AD directories. Use when target uses LDAP/AD authentication, corporate SSO with a directory backend, an address-book/people-search API, or XML-based data stores queried with XPath."
+zh-signals: "猎取 LDAP 与 XPath 注入，覆盖认证绕过、盲注属性外带与 AD 枚举。信号:ldap注入,xpath注入,认证绕过,ad枚举,盲注外带"
+when-to-use: >-
+  Use when a target relies on LDAP/AD authentication, directory-backed SSO, a
+  people-search API, or XML data stores queried with XPath.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

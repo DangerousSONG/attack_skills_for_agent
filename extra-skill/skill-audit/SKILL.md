@@ -1,6 +1,8 @@
 ---
 name: skill-audit
 description: "Pre-install security scanner for AI agent skills. 7.5% of 14,706 skills are malicious. Audit before you trust."
+zh-signals: "AI 代理技能安装前的安全审计扫描，识别恶意模式与供应链风险。信号:技能审计,供应链安全,恶意检测,提示注入,安装前扫描"
+when-to-use: "Use before installing any third-party AI agent skill from GitHub, ClawHub, or another registry, or when the user asks to install or review a skill's security."
 category: security
 risk: safe
 source: community

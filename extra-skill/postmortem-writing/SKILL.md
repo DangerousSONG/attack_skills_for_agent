@@ -1,6 +1,8 @@
 ---
 name: postmortem-writing
 description: "Comprehensive guide to writing effective, blameless postmortems that drive organizational learning and prevent incident recurrence."
+zh-signals: "撰写有效的无责事后复盘报告，推动组织学习并防止事故重复发生。信号:事后复盘,无责分析,事件复盘,组织学习,事故防范"
+when-to-use: "Use when the user needs a blameless postmortem for a production incident or outage, capturing root causes, timeline, and prevention actions."
 risk: none
 source: community
 date_added: "2026-02-27"

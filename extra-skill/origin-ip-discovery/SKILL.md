@@ -1,6 +1,8 @@
 ---
 name: origin-ip-discovery
 description: Discover origin IPs behind CDN/WAF via favicon hash, DNS history, and SSL certs.
+zh-signals: "通过 favicon 哈希、DNS 历史与 SSL 证书发现 CDN/WAF 背后的真实源站 IP。信号:源站 IP,CDN 绕过,WAF 绕过,favicon 哈希,DNS 历史"
+when-to-use: "Use when a target sits behind Cloudflare, Akamai, or another CDN/WAF and you need to discover the origin server IP to bypass edge filtering."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

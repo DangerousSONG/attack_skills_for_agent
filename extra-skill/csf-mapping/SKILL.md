@@ -1,6 +1,10 @@
 ---
 name: csf-mapping
 description: "Map your security posture against the NIST Cybersecurity Framework 2.0 (Govern, Identify, Protect, Detect, Respond, Recover). Produce a gap analysis, current/target tier assessment, and roadmap in the governance language that boards, auditors, and CISOs actually use. Use when the user mentions 'NIST CSF,' 'CSF 2.0,' 'cybersecurity framework,' 'security posture,' 'governance mapping,' 'CSF gap analysis,' 'CSF tiers,' 'cybersecurity maturity,' 'security roadmap,' 'CISO report,' 'board reporting,' 'security program,' or needs to translate technical findings into governance language."
+zh-signals: "按 NIST CSF 2.0 六大功能映射安全现状并产出差距分析、成熟度评估与治理路线图。信号:NIST CSF,治理映射,差距分析,安全路线图,CISO报告"
+when-to-use: >-
+  Use when the user asks to map security posture to NIST CSF 2.0, run a CSF gap analysis,
+  assess CSF tiers, or translate technical findings into board-level governance language.
 allowed-tools: Read, Grep, Glob, Bash, WebSearch
 ---
 

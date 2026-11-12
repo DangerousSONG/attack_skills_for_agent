@@ -1,6 +1,9 @@
 ---
 name: openclaw-security-watchdog
 description: OpenClaw security scanning skill that performs comprehensive system security audits and generates human-friendly reports
+zh-signals: "使用 OpenClaw Security Watchdog 对系统执行 14 个维度的安全审计并生成报告。信号:系统安全审计,安全扫描,威胁情报,配置完整性,风险报告。"
+when-to-use: >-
+  Use when running a comprehensive system security audit, checking host hardening across runtime, permissions, supply chain, exposure, persistence, and secrets, or generating a human-readable risk report.
 triggers:
   - run security scan
   - perform security audit

@@ -1,6 +1,8 @@
 ---
 name: c2-hygiene
 description: Command-and-Control infrastructure hygiene for red teams — redirector architecture (HTTP/HTTPS/DNS), traffic shaping (sleep/jitter/staging), TLS-cert and domain aging, OPSEC checklist, and defensive detection opportunities mapped to ATT&CK Command and Control (TA0011).
+zh-signals: "红队 C2 基础设施架构与隐蔽性卫生（重定向器、流量整形、OPSEC 清单）。信号:c2,重定向器,流量整形,opsec,检测规避"
+when-to-use: "Use when designing, reviewing, or assessing C2 infrastructure for red-team engagements, including redirector architecture, traffic shaping, and OPSEC review."
 ---
 
 # C2 Hygiene

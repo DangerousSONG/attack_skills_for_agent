@@ -1,6 +1,8 @@
 ---
 name: penetration-testing
 description: Perform basic penetration testing and security assessments.
+zh-signals: "执行基础渗透测试与安全评估，覆盖常见漏洞探测与授权范围内的验证。信号:渗透测试,安全评估,漏洞探测,授权测试,安全审计"
+when-to-use: "Use when performing a basic authorized penetration test or security assessment within an agreed scope."
 category: security
 risk: offensive
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

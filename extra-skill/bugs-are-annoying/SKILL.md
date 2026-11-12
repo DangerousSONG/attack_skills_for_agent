@@ -1,6 +1,8 @@
 ---
 name: bugs-are-annoying
 description: Adversarial code auditor that hunts down bugs, logic errors, and security flaws. Use for deep correctness passes, not style reviews.
+zh-signals: "对抗式代码审计，猎取 bug、逻辑错误与安全缺陷。信号:bug审计,逻辑错误,代码审查,安全缺陷,对抗测试"
+when-to-use: "Use for deep correctness passes on a codebase—when asked to find bugs, audit code, or check for logic and security flaws rather than style reviews."
 risk: critical
 source: community
 date_added: "2026-06-19"

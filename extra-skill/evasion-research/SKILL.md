@@ -1,75 +1,77 @@
 ---
 name: evasion-research
-description: "GitHub 安全研究方法论：搜索 GitHub 上的免杀/Loader/C2 技术仓库，分析代码模式，提取新技术入库。当知识库中没有针对当前检测环境的免杀技术时使用——先搜索 GitHub 高星仓库，分析代码后写入 evasion-techniques-db.json 或 loader-components-db.json 入库"
+description: "GitHub security research methodology: search GitHub for AV evasion / Loader / C2 technique repositories, analyze code patterns, and add newly discovered techniques to the knowledge base. Use when the knowledge base has no AV evasion technique for the current detection environment — first search high-star GitHub repositories, analyze the code, then write the results into evasion-techniques-db.json or loader-components-db.json"
+zh-signals: "检索 GitHub 上的免杀、Loader 与 C2 技术仓库，分析代码模式并沉淀至知识库。信号:免杀研究,Loader技术,C2仓库,GitHub搜索,检测绕过"
+when-to-use: "Use when the knowledge base lacks an evasion technique for the current detection environment and you need to research GitHub repositories and record new methods."
 metadata:
-  tags: "research,github,evasion,loader,shellcode,technique,knowledge-base,规避研究,检测绕过,bypass研究,规避检测"
+  tags: "research,github,evasion,loader,shellcode,technique,knowledge-base,evasion-research,detection-bypass,bypass-research,evasion-detection"
   category: "evasion"
 ---
 
-# GitHub 安全研究方法论
+# GitHub Security Research Methodology
 
-## ⛔ 深入参考
+## ⛔ Further Reading
 
-- 完整研究流程与命令 → [references/research-workflow.md](references/research-workflow.md)
+- Full research workflow and commands → [references/research-workflow.md](references/research-workflow.md)
 
 ---
 
-## 5 步研究流程
+## 5-Step Research Workflow
 
 ```
-1. GitHub 搜索 → gh search repos / gh search code
-2. 仓库分析 → gh repo view + 读关键文件
-3. 模式提取 → 按 6 大类分类
-4. 去重检查 → 查已有知识库避免重复
-5. 入库保存 → 写入 evasion-techniques-db.json / loader-components-db.json
+1. GitHub search → gh search repos / gh search code
+2. Repository analysis → gh repo view + read the key files
+3. Pattern extraction → classify into the 6 major categories
+4. Duplicate check → query the existing knowledge base to avoid redundancy
+5. Save to the knowledge base → write into evasion-techniques-db.json / loader-components-db.json
 ```
 
-## GitHub 搜索命令速查
+## GitHub Search Command Quick Reference
 
 ```bash
-# 搜仓库
+# Search repositories
 gh search repos "shellcode loader language:C stars:>20" --limit 20
 gh search repos "AMSI bypass" --limit 15
 gh search repos "syscall direct" --language c --limit 15
 
-# 搜代码
+# Search code
 gh search code "VirtualAlloc PAGE_EXECUTE_READWRITE" --language c --limit 30
 gh search code "NtCreateThreadEx" --language c --limit 20
 ```
 
-## 6 大技术分类
+## 6 Major Technique Categories
 
-| 类别 | 搜索关键词 |
+| Category | Search Keywords |
 |------|-----------|
-| 内存分配 | VirtualAlloc, HeapCreate, NtAllocateVirtualMemory, MappedFile |
-| 代码执行 | CreateThread, EnumWindows, APC, Fiber, callback |
-| API 混淆 | API hashing, PEB walk, dynamic resolve |
-| 字符串混淆 | XOR, AES, stack strings, compile-time encryption |
-| 反分析 | IsDebuggerPresent, anti-VM, sandbox detection |
+| Memory Allocation | VirtualAlloc, HeapCreate, NtAllocateVirtualMemory, MappedFile |
+| Code Execution | CreateThread, EnumWindows, APC, Fiber, callback |
+| API Obfuscation | API hashing, PEB walk, dynamic resolve |
+| String Obfuscation | XOR, AES, stack strings, compile-time encryption |
+| Anti-Analysis | IsDebuggerPresent, anti-VM, sandbox detection |
 | Syscall | direct syscall, indirect syscall, SSN, Hell's Gate |
 
-## 去重规则
+## Deduplication Rules
 
-| 条件 | 操作 |
+| Condition | Action |
 |------|------|
-| 完全同名 | ❌ 跳过（重复） |
-| 同技术不同名 | ❌ 跳过（重复） |
-| 同目标不同实现 | ✅ 添加（都有价值） |
-| 不同目标类似 API | ✅ 添加（不同用途） |
+| Exact same name | ❌ Skip (duplicate) |
+| Same technique, different name | ❌ Skip (duplicate) |
+| Same target, different implementation | ✅ Add (both are valuable) |
+| Different target, similar API | ✅ Add (different use case) |
 
-## 输出格式
+## Output Format
 
 ```markdown
-## 研究报告
+## Research Report
 
-### 发现的技术
-1. [技术名] - [简述] - 复杂度: simple/medium/complex
+### Discovered Techniques
+1. [technique name] - [short summary] - Complexity: simple/medium/complex
 
-### 知识库状态
-- 新增: X 条
-- 重复跳过: Y 条
-- 变体补充: Z 条
+### Knowledge Base Status
+- Added: X entries
+- Skipped as duplicates: Y entries
+- Variant supplements: Z entries
 
-### 参考链接
+### Reference Links
 - <repository-url>
 ```

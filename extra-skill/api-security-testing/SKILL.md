@@ -1,6 +1,9 @@
 ---
 name: api-security-testing
 description: "API security testing workflow for REST and GraphQL APIs covering authentication, authorization, rate limiting, input validation, and security best practices."
+zh-signals: "面向 REST 与 GraphQL API 的认证、授权、限流与输入校验安全测试流程。信号:API安全,GraphQL,认证授权,限流,输入校验"
+when-to-use: >-
+  Use when testing REST or GraphQL API security, including authentication, authorization, rate limiting, and input validation, under explicit authorization.
 category: granular-workflow-bundle
 risk: offensive
 source: personal

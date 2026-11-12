@@ -1,6 +1,10 @@
 ---
 name: symfony-security-auditor
 description: AI-powered multi-agent security auditor for Symfony applications using LLMs to detect business logic flaws, broken access control, and complex vulnerabilities
+zh-signals: "使用 AI 多代理审计 Symfony 应用，检测业务逻辑缺陷、访问控制失效与复杂漏洞。信号:Symfony,安全审计,多代理,访问控制,业务逻辑"
+when-to-use: >-
+  Use when auditing a Symfony application for security vulnerabilities with
+  AI multi-agent analysis, especially business logic and broken access control.
 triggers:
   - audit my Symfony application for security vulnerabilities
   - run Symfony security audit with AI

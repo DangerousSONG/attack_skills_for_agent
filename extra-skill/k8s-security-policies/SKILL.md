@@ -1,6 +1,9 @@
 ---
 name: k8s-security-policies
 description: "Comprehensive guide for implementing NetworkPolicy, PodSecurityPolicy, RBAC, and Pod Security Standards in Kubernetes."
+zh-signals: "在 Kubernetes 中实施 NetworkPolicy、Pod 安全标准、RBAC 与准入控制策略。信号:NetworkPolicy,Pod安全标准,RBAC,准入控制,K8s合规。"
+when-to-use: >-
+  Use when implementing Kubernetes network segmentation, Pod Security Standards, least-privilege RBAC, admission control, or compliance-oriented cluster security policies.
 risk: critical
 source: community
 date_added: "2026-02-27"

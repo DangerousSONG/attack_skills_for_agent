@@ -2,6 +2,8 @@
 name: hunt-rce
 description: Hunting skill for rce vulnerabilities. Built from 67 public bug bounty
   reports. Use when hunting rce on any target.
+zh-signals: "基于 67 份公开漏洞赏金报告总结的 RCE 漏洞狩猎方法，用于在目标上定位远程代码执行问题。信号:RCE,远程代码执行,漏洞狩猎,漏洞赏金,注入,命令执行"
+when-to-use: "Use when hunting remote code execution (RCE) vulnerabilities on any target, drawing on patterns distilled from 67 public bug bounty reports."
 category: security
 risk: offensive
 source: https://github.com/elementalsouls/Claude-BugHunter

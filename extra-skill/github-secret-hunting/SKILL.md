@@ -1,6 +1,8 @@
 ---
 name: github-secret-hunting
 description: Find leaked API keys, tokens, and credentials in public GitHub repositories.
+zh-signals: "在公开 GitHub 仓库中搜索泄露的 API 密钥、令牌与凭据，结合 dork 与自动化扫描工具。信号:GitHub 密钥泄露,API Key,TruffleHog,代码搜索,dork"
+when-to-use: "Use when the target has public GitHub repositories or CI/CD workflows and you need to find leaked API keys, tokens, passwords, or internal configuration."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

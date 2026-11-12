@@ -2,6 +2,8 @@
 name: fuzzing-dictionary
 type: technique
 description: "Builds and applies fuzzing dictionaries so a fuzzer can produce the keywords, magic bytes, and tokens a target expects. Covers extracting tokens from source, headers, binaries, and specifications, dictionary syntax, and wiring one into libFuzzer or AFL++. Use when fuzzing a parser, protocol, or file format, when coverage stalls at input validation, or when a target compares against fixed strings."
+zh-signals: "构建并应用模糊测试字典，帮助 fuzzer 命中目标期望的关键字与魔数。信号:模糊测试,字典,libFuzzer,AFL++,魔数"
+when-to-use: "Use when fuzzing a parser, protocol, or file format, when coverage stalls at input validation, or when the target compares fixed strings."
 ---
 
 # Fuzzing Dictionary

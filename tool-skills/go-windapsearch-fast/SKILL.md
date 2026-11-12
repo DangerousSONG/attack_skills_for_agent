@@ -2,38 +2,41 @@
 name: go-windapsearch-fast
 description: "go-windapsearch performs fast bulk LDAP enumeration. Signals: internal enumeration, network discovery, user enumeration, custom queries, full attribute output."
 zh-signals: "go-windapsearch: 高速批量 LDAP 枚举。信号:内网枚举,网络发现,枚举用户,自定义查询,全属性输出。"
+when-to-use: >-
+  Use in AD or LDAP enumeration to quickly pull users, groups, and custom queries
+  from one or multiple domain controllers.
 ---
 
 # go-windapsearch
 
-- 攻击大类:C29 AD与LDAP枚举
-- 上游仓库:https://github.com/ropnop/go-windapsearch
-- 上游 License:BSD-3-Clause(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C29 AD and LDAP Enumeration
+- Upstream Repository: https://github.com/ropnop/go-windapsearch
+- Upstream License: BSD-3-Clause (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/ropnop/go-windapsearch@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `windapsearch -d corp.local -u svc -p pass --dc 10.0.0.1 --users` | 枚举用户 |
-| `--custom '(&(sAMAccountType=805306368)(adminCount=1))'` | 自定义查询 |
-| `--full` | 全属性输出 |
-| `--krb5 -k svc.ccache` | 票据认证 |
+| `windapsearch -d corp.local -u svc -p pass --dc 10.0.0.1 --users` | Enumerate users |
+| `--custom '(&(sAMAccountType=805306368)(adminCount=1))'` | Custom query |
+| `--full` | Full attribute output |
+| `--krb5 -k svc.ccache` | Ticket authentication |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 高速批量 LDAP 枚举
+### High-Speed Bulk LDAP Enumeration
 
 ```bash
 cat dcs.txt | xargs -I{} windapsearch -d corp.local -u svc -p pass --dc {} --users
-# Go 版并发快,跨多 DC 拉用户清单
+# The Go version is fast under concurrency, pulling user lists across multiple DCs
 ```
 
-## 注意事项
+## Notes
 
-windapsearch 的 Go 重写版,单文件无依赖+Kerberos 票据认证,适合受限环境。
+A Go rewrite of windapsearch, single file with no dependencies plus Kerberos ticket authentication, well suited to restricted environments.

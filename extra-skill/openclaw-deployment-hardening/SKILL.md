@@ -2,6 +2,8 @@
 name: openclaw-deployment-hardening
 description: Secure OpenClaw deployments with preflight hardening checks, CI/CD guardrails,
   container runtime restrictions, and post-deploy verification.
+zh-signals: "OpenClaw 部署加固指南，覆盖预检、CI/CD 防护与运行时限制。信号:OpenClaw,部署加固,容器安全,CI/CD,安全基线"
+when-to-use: "Use when hardening OpenClaw deployments with preflight checks, CI/CD guardrails, container restrictions, and post-deploy verification."
 category: security
 risk: critical
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

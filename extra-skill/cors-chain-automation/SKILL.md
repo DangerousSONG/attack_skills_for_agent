@@ -1,6 +1,8 @@
 ---
 name: cors-chain-automation
 description: Use when a bounded list of authorized API endpoints needs consistent CORS triage before browser validation.
+zh-signals: "对授权 API 端点列表批量筛查可利用的 CORS 错误配置，并生成浏览器 PoC 验证。信号:CORS,批量扫描,凭据跨域,错误配置,浏览器PoC"
+when-to-use: "Use when you have a bounded list of authorized API endpoints and need consistent CORS triage to separate credential-exploitable misconfigurations from false positives before browser validation."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

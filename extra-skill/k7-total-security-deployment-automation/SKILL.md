@@ -1,6 +1,8 @@
 ---
 name: k7-total-security-deployment-automation
 description: Deploy and configure K7 Total Security 16.0.1195 enterprise protection profiles across multi-platform endpoints with AI-powered threat analysis
+zh-signals: "K7 Total Security 企业端点防护部署自动化。信号:K7,端点安全,部署自动化,策略配置,企业防护"
+when-to-use: "Use when deploying or configuring K7 Total Security protection profiles and enterprise policies across multi-platform endpoints."
 triggers:
   - "configure K7 Total Security protection profile"
   - "deploy K7 endpoint security policy"

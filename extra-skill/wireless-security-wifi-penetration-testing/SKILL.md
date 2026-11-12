@@ -1,6 +1,10 @@
 ---
 name: wireless-security-wifi-penetration-testing
 description: Hands-on wireless security and Wi-Fi penetration testing with aircrack-ng, covering 802.11, WEP/WPA/WPA2/WPA3 attacks, evil twins, and enterprise assessment
+zh-signals: "使用 aircrack-ng 等工具开展无线安全评估，涵盖 802.11 抓包、WEP/WPA/WPA2/WPA3 攻击、邪恶双胞胎与企业无线测试。信号:WPA2破解,握手抓包,PMKID,邪恶双胞胎,WEP"
+when-to-use: >-
+  Use when performing authorized Wi-Fi penetration testing or wireless security
+  assessments against networks you own or have explicit written permission to test.
 triggers:
   - how do I crack WPA2 with aircrack-ng
   - capture WPA handshake with airodump-ng

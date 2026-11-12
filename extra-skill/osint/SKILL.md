@@ -6,6 +6,8 @@ description: |
   Uses theHarvester, amass, dnsrecon, fierce, dnstwist, dmitry, whatweb, wafw00f, exiftool, metagoofil, smtp-user-enum, swaks, waybackurls, subfinder, and crt.sh. Pure reconnaissance — no active exploitation.
 
   Produces: confidence-scored findings, infrastructure diagram, employee roster, email pattern confirmation, subdomain takeover candidates. Chains into /pentester for active testing.
+zh-signals: "基于 MITRE ATT&CK 侦察框架进行被动 OSINT 信息收集，涵盖邮箱、子域、证书与凭证泄露。信号:OSINT,信息收集,子域枚举,邮箱收集,凭证泄露"
+when-to-use: "Use when performing passive reconnaissance on a domain or organization to map employees, email patterns, infrastructure, and leaked credentials without active exploitation."
 argument-hint: "<domain-or-org> [depth=quick|standard|thorough] [focus=email|infra|social|all]"
 user-invocable: true
 ---

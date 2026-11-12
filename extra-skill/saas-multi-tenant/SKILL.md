@@ -1,6 +1,8 @@
 ---
 name: saas-multi-tenant
 description: "Design and implement multi-tenant SaaS architectures with row-level security, tenant-scoped queries, shared-schema isolation, and safe cross-tenant admin patterns in PostgreSQL and TypeScript."
+zh-signals: "设计并实现多租户 SaaS 架构，涵盖行级安全、租户隔离查询与跨租户管理安全模式。信号:多租户,SaaS,行级安全,租户隔离,PostgreSQL"
+when-to-use: "Use when building or reviewing a multi-tenant SaaS application that needs tenant isolation, PostgreSQL row-level security, or safe cross-tenant admin access."
 risk: safe
 source: community
 date_added: "2026-03-28"

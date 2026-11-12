@@ -2,6 +2,8 @@
 name: container-scanning
 description: Scan container images for vulnerabilities using Trivy, Grype, and cloud-native
   tools.
+zh-signals: "使用 Trivy/Grype 等扫描容器镜像漏洞。信号:容器扫描,镜像漏洞,Trivy,Grype,DevOps"
+when-to-use: "Use when building container images, scanning registry images, implementing container security gates, or hardening container deployments."
 category: security
 risk: safe
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

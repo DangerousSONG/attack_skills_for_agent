@@ -1,6 +1,11 @@
 ---
 name: staging-subdomain-hunt
 description: Hunt staging via crt.sh when production is WAF-hardened.
+zh-signals: "当生产环境受 WAF 保护时，通过 crt.sh 证书透明日志、DNS 爆破与 Web 探测挖掘 staging 及内部子域名。信号:staging子域名,crt.sh,子域名枚举,证书透明,攻击面"
+when-to-use: >-
+  Use when a production target is well-hardened, when pivoting to
+  staging/development environments, or when expanding subdomain discovery via
+  certificate transparency.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

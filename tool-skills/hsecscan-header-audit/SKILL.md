@@ -2,37 +2,40 @@
 name: hsecscan-header-audit
 description: "hsecscan audits OWASP security headers. Signals: web vulnerability, injection, security header scan, verbose, passive mode."
 zh-signals: "hsecscan: OWASP 安全头审计。信号:web漏洞,注入,安全头扫描,详细,被动模式。"
+when-to-use: >-
+  Use when you need a quick passive audit of OWASP security headers on a web target, optionally
+  running through a proxy in passive mode.
 ---
 
 # hsecscan
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/riramar/hsecscan
-- 上游 License:GPL-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/riramar/hsecscan
+- Upstream License: GPL-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/riramar/hsecscan && cd hsecscan
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python hsecscan.py -u https://t.com` | 安全头扫描 |
-| `-u url -d` | 详细 |
-| `-u url -p` | 被动模式 |
+| `python hsecscan.py -u https://t.com` | Security header scan |
+| `-u url -d` | Verbose |
+| `-u url -p` | Passive mode |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### OWASP 安全头审计
+### OWASP security header audit
 
 ```bash
 python hsecscan.py -u https://t.com
-# 全 header 检测
+# Full header detection
 ```
 
-## 注意事项
+## Notes
 
-OWASP 安全头项目实现。
+An implementation of the OWASP security headers project.

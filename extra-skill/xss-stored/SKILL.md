@@ -2,6 +2,8 @@
 name: xss-stored
 description: >
   Stored XSS (persistent XSS) occurs when attacker-supplied input is saved server-side and later rendered unencoded to other users. Common injection points include profile fields, comments, forum posts, file upload filenames, and application logs. Detect via PHP `$_GET/$_POST/$_REQUEST/$_FILES`, ASP `Request.Form`, JSP `request.getParameter`, and BeEF hook injection. Tools: Burp Suite, OWASP ZAP, BeEF, PHP Charset Encoder, Hackvertor.
+zh-signals: "检测并利用存储型 XSS，服务端持久化用户输入后在页面未编码渲染触发脚本执行。信号:存储型XSS,持久化XSS,输入未编码,BeEF,PHP"
+when-to-use: "Use when user-supplied input is stored server-side and later rendered unencoded — profile fields, comments, filenames, or logs — to test for stored/persistent XSS."
 license: MIT
 compatibility: Designed for Claude Code. Requires Burp Suite or OWASP ZAP.
 metadata:

@@ -1,6 +1,10 @@
 ---
 name: competition-supply-chain
 description: Internal downstream skill for ctf-sandbox-orchestrator. CTF-sandbox workflow for CI/CD, registry, dependency drift, artifact provenance, image build, release pipeline, and runtime consumer challenges. Use when the user asks to trace dependency drift, registry pulls, malicious packages, build or release tampering, CI execution, artifact signing, or which shipped artifact the runtime actually consumes. Use only after `$ctf-sandbox-orchestrator` has already established sandbox assumptions and routed here.
+zh-signals: "针对 CI/CD、镜像仓库与工件溯源的下游 CTF 技能，追踪依赖漂移、构建篡改与运行时实际消费工件。信号:供应链安全,CI/CD,依赖漂移,工件溯源,镜像构建"
+when-to-use: >-
+  Use after the CTF sandbox orchestrator has routed here, when the challenge concerns dependency drift,
+  registry pulls, build/release tampering, or artifact provenance.
 ---
 
 # Competition Supply Chain

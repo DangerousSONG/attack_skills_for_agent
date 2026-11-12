@@ -1,6 +1,8 @@
 ---
 name: spoof-suite-security-hardware
 description: Hardware-level spoofing toolkit for device identity obfuscation, network masking, and fingerprint randomization across multiple layers
+zh-signals: "在硬件与网络多层实施设备身份伪造，涵盖硬件标识、MAC、DNS、SNI 与浏览器指纹随机化。信号:硬件伪造,设备指纹,MAC伪装,网络身份伪装,指纹随机化"
+when-to-use: "Use when configuring hardware-level identity spoofing, network masking, or browser fingerprint randomization for privacy testing."
 triggers:
   - how do I spoof hardware identifiers with Hardware-HardSp00f
   - configure device fingerprint randomization for privacy

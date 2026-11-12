@@ -1,121 +1,123 @@
 ---
 name: ctf-misc
-description: CTF Misc综合。触发：隐写术(LSB/Zsteg)、流量分析(pcap/strings)、内存取证(volatility)、压缩包攻击、日志分析等场景。
+description: "CTF Misc general. Triggered for scenarios involving steganography (LSB/Zsteg), traffic analysis (pcap/strings), memory forensics (volatility), archive attacks, log analysis, and similar."
+zh-signals: "CTF Misc 综合技能，涵盖隐写术、流量分析、内存取证、压缩包攻击与日志分析。信号:CTF Misc,隐写术,流量分析,内存取证,压缩包"
+when-to-use: "Use when solving CTF miscellaneous challenges involving steganography, pcap traffic analysis, memory forensics, archive attacks, or log analysis."
 ---
 
-# ctf-misc — CTF Misc综合方向
+# ctf-misc — CTF Misc General Direction
 
-## 1. 图片隐写
+## 1. Image Steganography
 
-### 基础工具
+### Basic tools
 
 ```bash
 file image.jpg
-binwalk image.jpg          # 分离嵌入文件
-binwalk -e image.jpg       # 自动提取
-exiftool image.jpg         # 元数据
+binwalk image.jpg          # Separate embedded files
+binwalk -e image.jpg       # Automatic extraction
+exiftool image.jpg         # Metadata
 strings image.jpg | grep -i flag
 
-# 图片查看
+# Image viewing
 identify image.jpg
 display image.jpg
 ```
 
-### LSB 隐写（最低有效位）
+### LSB steganography (least significant bit)
 
-**zsteg（PNG/BMP）**
+**zsteg (PNG/BMP)**
 ```bash
-zsteg image.png            # 检测 LSB
-zsteg image.png -b 1       # 第1列
-zsteg image.png --lsb      # 所有层
-zsteg image.png --all      # 全部尝试
+zsteg image.png            # Detect LSB
+zsteg image.png -b 1       # Bit plane 1
+zsteg image.png --lsb      # All layers
+zsteg image.png --all      # Try everything
 ```
 
 **Steghide**
 ```bash
-steghide extract -sf image.jpg -p ""   # 无密码
+steghide extract -sf image.jpg -p ""   # No password
 steghide extract -sf image.jpg -p password
 steghide info image.jpg
 ```
 
-**StegSolve（Java GUI）**
+**StegSolve (Java GUI)**
 ```bash
 java -jar StegSolve.jar
 ```
 
-### PNG 特殊
+### PNG specifics
 
 ```bash
-# CRC 错误修复（修改宽高后 CRC 损坏）
+# CRC error repair (the CRC is broken after modifying width/height)
 pngcheck -v image.png
-python3 fixpng.py image.png   # 修复 CRC
+python3 fixpng.py image.png   # Repair the CRC
 
-# IHDR 块修改宽高（16进制编辑器）
+# Modify the width/height in the IHDR chunk (hex editor)
 ```
 
-## 2. 音频隐写
+## 2. Audio Steganography
 
 ```bash
-# 频谱分析
+# Spectrum analysis
 audacity audio.wav
 ffmpeg -i audio.mp3 -show_freqs audio.png
 
-# 频谱图转图片
+# Convert the spectrogram to an image
 sox audio.wav -n spectrogram -o spectrogram.png
 
-# 提取数据
+# Extract data
 strings audio.mp3 | grep -i flag
 ```
 
-**莫尔斯电码**：波形中找点和划线，或用 `morse2ascii` 工具
+**Morse code**: look for dots and dashes in the waveform, or use the `morse2ascii` tool
 
-## 3. 流量分析（PCAP）
+## 3. Traffic Analysis (PCAP)
 
 ```bash
-# tshark 命令行
+# tshark command line
 tshark -r capture.pcap -Y "http" -T fields -e http.host -e http.request.uri | grep flag
 tshark -r capture.pcap -Y "http.request.method == POST" -T fields -e http.file_data
 
-# 导出 HTTP 对象
+# Export HTTP objects
 tshark -r capture.pcap -Y "http" --export-objects http,output_dir
 
-# DNS 隧道检测
+# DNS tunnel detection
 tshark -r capture.pcap -Y "dns" -T fields -e dns.qry.name | grep -v "^[0-9]"
 
-# Base64 提取
+# Base64 extraction
 tshark -r capture.pcap -Y "http" -T fields -e http.file_data | grep -E "^[A-Za-z0-9+/]{20,}={0,2}$"
 ```
 
-## 4. PDF 隐写
+## 4. PDF Steganography
 
 ```bash
-pdftotext image.pdf -           # 提取文本
-pdfinfo image.pdf               # 元信息
+pdftotext image.pdf -           # Extract text
+pdfinfo image.pdf               # Metadata
 
-# 白色隐藏文字：改背景色或直接全选复制
-# 工具：pdf-c11.py
+# Hidden white text: change the background color or simply select all and copy
+# Tool: pdf-c11.py
 python3 pdf-c11.py image.pdf
 ```
 
-## 5. 压缩包攻击
+## 5. Archive Attacks
 
 ```bash
-# 基本信息
+# Basic information
 zipinfo archive.zip
 7z l archive.zip
 
-# 明文攻击（已知部分内容）
+# Plaintext attack (some known content)
 bkcrack -C archive.zip -c known.txt -k XXXXXXXX -r 0/
 
-# 暴力破解
+# Brute force
 fcrackzip -v -u -l 1-6 -p passwords.txt archive.zip
 fcrackzip -v -u -D -p rockyou.txt archive.zip
 
-# CRC32 攻击（小文件，4字节明文）
+# CRC32 attack (small files, 4 bytes of plaintext)
 python3 crc_attack.py
 ```
 
-## 6. 内存取证
+## 6. Memory Forensics
 
 ```bash
 volatility -f memory.dmp imageinfo
@@ -127,33 +129,33 @@ volatility -f memory.dmp --profile=Win7SP1x64 filescan
 volatility -f memory.dmp --profile=Win7SP1x64 dumpfiles -Q 0xXXXX -D output/
 ```
 
-## 7. 日志分析
+## 7. Log Analysis
 
 ```bash
 grep -i "flag\|password\|admin\|error\|fail" access.log
 
-# SQL 注入检测
+# SQL injection detection
 grep -iE "union.*select|concat.*\(|char\(|0x[0-9a-f]" access.log
 
-# XSS 检测
+# XSS detection
 grep -iE "<script|javascript:|onerror=" access.log
 
-# 时间分析
+# Timing analysis
 awk '{print $4}' access.log | sort | uniq -c | sort -rn | head -20
 ```
 
 ## 8. CyberChef
 
-**在线**：https://gchq.github.io/CyberChef/
+**Online**: https://gchq.github.io/CyberChef/
 
-**常用 Recipe**：
+**Common recipes**:
 ```
-Magic                  # 自动识别编码
-From Base64            # Base64 解码
-XOR ...                # 异或解密
-ROT13                  # 凯撒移位
-From Hex               # 16进制转字符
-Gunzip / Inflate       # 解压
-Reverse                # 反转字符串
-Find / Replace         # 替换
+Magic                  # Automatically identify the encoding
+From Base64            # Base64 decode
+XOR ...                # XOR decryption
+ROT13                  # Caesar shift
+From Hex               # Hex to characters
+Gunzip / Inflate       # Decompress
+Reverse                # Reverse a string
+Find / Replace         # Replace
 ```

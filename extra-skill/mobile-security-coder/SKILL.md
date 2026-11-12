@@ -1,6 +1,8 @@
 ---
 name: mobile-security-coder
 description: Expert in secure mobile coding practices specializing in input validation, WebView security, and mobile-specific security patterns.
+zh-signals: "提供移动端安全编码实践指导，覆盖输入校验、WebView 与移动特有安全模式。信号:移动安全,安全编码,WebView,输入校验,Android,iOS"
+when-to-use: "Use when developing or reviewing mobile app code that needs secure input validation, WebView hardening, or mobile-specific security patterns."
 risk: critical
 source: community
 date_added: '2026-02-27'

@@ -1,6 +1,8 @@
 ---
 name: bugcrowd-reporting
 description: "Bugcrowd-specific reporting tactics complementing report-writing: VRT category search-and-fallback strategy when no exact match exists, manual severity override when VRT defaults underrate impact, severity-request paragraph as first body section, OOS-clause rebuttal templates (rate limiting on auth-flow endpoints, debug-info framing, user-enumeration with sensitive PII, theoretical-issue counter), chained-finding cross-reference patterns, target selection for QA-vs-prod programs, researcher-side hygiene (Bugcrowdninja email alias, account state restoration, friendly-tester posture). Use when filing a Bugcrowd submission, when VRT default seems wrong, when triager closes as OOS or downgrades severity, when chaining linked submissions, or when scope distinguishes production from QA. Pairs with report-writing and triage-validation."
+zh-signals: "针对 Bugcrowd 平台的报告策略，含 VRT 选择、严重性申诉、OOS 反驳与关联提交。信号:Bugcrowd,漏洞报告,VRT,严重性,赏金"
+when-to-use: "Use when filing or defending a Bugcrowd submission, especially when VRT defaults underrate impact or a triager closes it as out of scope."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

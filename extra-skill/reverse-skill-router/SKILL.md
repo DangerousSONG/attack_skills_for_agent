@@ -1,6 +1,8 @@
 ---
 name: reverse-skill-router
 description: Use the reverse-skill repository from Codex for authorized reverse engineering, security analysis, CTF, and defensive testing tasks. Requires the reverse-skill repository to be available as the current workspace or an explicitly supplied local path.
+zh-signals: "将逆向工程、安全分析、CTF 与防御测试任务路由到 reverse-skill 仓库技能。信号:逆向路由,reverse-skill,CTF,安全分析,技能选择"
+when-to-use: "Use when the current workspace is the reverse-skill repository or a local path is supplied, and an authorized reverse engineering, security analysis, CTF, or defensive testing task needs routing to the primary skill."
 ---
 
 # Reverse Skill Codex adapter

@@ -6,6 +6,8 @@ description: >
   Signals include framework fingerprinting (WhatWeb, Wappalyzer, Nikto), exposed admin paths
   from robots.txt/dirbusting, and weak password policy acceptance of "Password1" or "123456".
   Tools: Burp Suite Intruder, Hydra, Medusa, OWASP ZAP.
+zh-signals: "识别并利用 Web 登录、管理面板、CMS 与嵌入式设备中的默认或弱口令。信号:默认口令,弱口令,管理面板,CMS 后台,暴力破解"
+when-to-use: "Use when testing login forms, admin panels, CMS backends, or embedded device interfaces for default or weak credentials after fingerprinting exposed administrative paths."
 license: MIT
 compatibility: Designed for Claude Code. Requires Burp Suite, Hydra, or OWASP ZAP.
 metadata:

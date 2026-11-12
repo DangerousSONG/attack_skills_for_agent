@@ -1,94 +1,97 @@
 ---
 name: masscan-scan
-description: "使用 masscan 进行超大规模高速端口扫描。当需要扫描大范围 CIDR 网段、全互联网规模扫描时使用。masscan 是异步无状态扫描器，速度可达每秒百万包级别，适合大规模资产发现。需要 root 权限。任何涉及大规模网段扫描、高速端口发现、互联网测绘的场景都应使用此技能"
+description: "Ultra-large-scale high-speed port scanning with masscan. Use when scanning large CIDR ranges or internet-scale targets. masscan is an asynchronous stateless scanner that can reach millions of packets per second, making it ideal for large-scale asset discovery. Requires root privileges. Use this skill for any scenario involving large-scale network segment scanning, high-speed port discovery, or internet-wide mapping"
+zh-signals: "使用 masscan 进行超大规模高速端口扫描与资产发现。信号:端口扫描,masscan,大规模扫描,CIDR,资产发现"
+when-to-use: >-
+  Use when scanning large CIDR ranges or internet-scale targets at very high packet rates and root privileges are available.
 metadata:
-  tags: "masscan,port,scan,端口扫描,高速扫描,大规模,CIDR,网段,资产发现,异步扫描"
+  tags: "masscan,port,scan,port scanning,high-speed scanning,large-scale,CIDR,network segment,asset discovery,asynchronous scanning"
   category: "tool"
 ---
 
-# masscan 超大规模高速端口扫描方法论
+# masscan Ultra-Large-Scale High-Speed Port Scanning Methodology
 
-masscan 是异步无状态端口扫描器，核心优势：**极致速度**（理论可达 1000 万包/秒）+ **大规模扫描**（专为全网扫描设计）+ **nmap 兼容输出**。需要 root 权限。
+masscan is an asynchronous stateless port scanner. Core advantages: **extreme speed** (theoretically up to 10 million packets/second) + **large-scale scanning** (designed for full-internet scans) + **nmap-compatible output**. Requires root privileges.
 
-项目地址：https://github.com/robertdavidgraham/masscan
+Project URL: https://github.com/robertdavidgraham/masscan
 
-## 工具选择策略
+## Tool Selection Strategy
 
-masscan 适合大规模网段（/16 以上）扫描，速度远超 nmap 和 naabu。但不做服务识别，推荐流程：masscan 快速发现端口 → nmap -sV 做服务识别。小范围扫描用 naabu 更方便。
+masscan is suited to large network segments (/16 and larger) and is far faster than nmap and naabu. However, it does not perform service identification. Recommended workflow: masscan for fast port discovery → nmap -sV for service identification. naabu is more convenient for small-range scans.
 
-## Phase 1: 基本扫描
+## Phase 1: Basic Scanning
 
 ```bash
-# 扫描单个目标（需 root）
+# Scan a single target (requires root)
 sudo masscan 192.168.1.1 -p 80,443,8080
 
-# 扫描网段
+# Scan a network segment
 sudo masscan 10.0.0.0/24 -p 1-1000
 
-# 全端口扫描
+# Full port scan
 sudo masscan 192.168.1.0/24 -p 0-65535
 
-# 控制发包速率（默认 100 包/秒）
+# Control the packet rate (default 100 packets/second)
 sudo masscan 10.0.0.0/16 -p 80,443 --rate 10000
 ```
 
-## Phase 2: 大规模扫描
+## Phase 2: Large-Scale Scanning
 
 ```bash
-# B 段扫描（65536 个 IP）
+# /16 scan (65536 IPs)
 sudo masscan 10.0.0.0/16 -p 22,80,443,3389 --rate 50000
 
-# A 段扫描（谨慎使用）
+# /8 scan (use with caution)
 sudo masscan 10.0.0.0/8 -p 80,443 --rate 100000
 
-# 从文件读取目标
+# Read targets from a file
 sudo masscan -iL targets.txt -p 80,443
 
-# 排除特定 IP
+# Exclude specific IPs
 sudo masscan 10.0.0.0/16 -p 80 --excludefile exclude.txt
 ```
 
-## Phase 3: 输出格式
+## Phase 3: Output Formats
 
 ```bash
-# List 格式（简洁，推荐）
+# List format (concise, recommended)
 sudo masscan 10.0.0.0/24 -p 80,443 -oL results.txt
 
-# JSON 格式
+# JSON format
 sudo masscan 10.0.0.0/24 -p 80,443 -oJ results.json
 
-# nmap XML 格式（兼容 nmap 工具链）
+# nmap XML format (compatible with the nmap toolchain)
 sudo masscan 10.0.0.0/24 -p 80,443 -oX results.xml
 
-# Grepable 格式
+# Grepable format
 sudo masscan 10.0.0.0/24 -p 80,443 -oG results.gnmap
 ```
 
-## Phase 4: 高级选项
+## Phase 4: Advanced Options
 
 ```bash
-# Banner 抓取
+# Banner grabbing
 sudo masscan 10.0.0.0/24 -p 80 --banners
 
-# 指定网卡
+# Specify the network interface
 sudo masscan 10.0.0.0/24 -p 80 -e eth0
 
-# 指定源 IP
+# Specify the source IP
 sudo masscan 10.0.0.0/24 -p 80 --adapter-ip 192.168.1.100
 
-# 暂停和恢复扫描
+# Pause and resume a scan
 sudo masscan 10.0.0.0/8 -p 80 --resume paused.conf
-# Ctrl+C 暂停时会生成 paused.conf
+# Ctrl+C generates paused.conf when pausing
 
-# 使用配置文件
+# Use a configuration file
 sudo masscan -c masscan.conf
 ```
 
-## 渗透测试常用组合
+## Common Penetration Testing Combinations
 
-| 场景 | 命令 |
+| Scenario | Command |
 |------|------|
-| 内网快速发现 | `sudo masscan 10.0.0.0/16 -p 22,80,443,3389 --rate 10000 -oL results.txt` |
-| Web 服务发现 | `sudo masscan CIDR -p 80,443,8080,8443 --rate 50000 -oL web.txt` |
-| 数据库端口 | `sudo masscan CIDR -p 3306,5432,1433,6379,27017 --rate 10000` |
-| 全端口扫描 | `sudo masscan target -p 0-65535 --rate 10000 -oL all.txt` |
+| Fast internal network discovery | `sudo masscan 10.0.0.0/16 -p 22,80,443,3389 --rate 10000 -oL results.txt` |
+| Web service discovery | `sudo masscan CIDR -p 80,443,8080,8443 --rate 50000 -oL web.txt` |
+| Database ports | `sudo masscan CIDR -p 3306,5432,1433,6379,27017 --rate 10000` |
+| Full port scan | `sudo masscan target -p 0-65535 --rate 10000 -oL all.txt` |

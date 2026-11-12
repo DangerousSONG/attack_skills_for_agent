@@ -1,6 +1,8 @@
 ---
 name: ai-engineering-toolkit
 description: "Overview of six AI engineering workflows: prompt evaluation (8-dimension scoring), context budget planning, RAG pipeline design, agent security audit (65-point checklist), eval harness building, and product sense coaching."
+zh-signals: "六类 AI 工程工作流概览，含提示评估、RAG 设计、代理安全审计与评测。信号:AI工程,提示评估,RAG,代理安全审计,评测框架"
+when-to-use: "Use when the task involves prompt evaluation, context budgeting, RAG pipeline design, agent security audit, eval harnesses, or product sense coaching."
 category: data-ai
 risk: offensive
 source: community

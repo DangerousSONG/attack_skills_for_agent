@@ -1,6 +1,8 @@
 ---
 name: hunt-jwt-crypto
 description: Hunt JWT cryptographic failures
+zh-signals: "挖掘 JWT 加密实现缺陷，通过伪造令牌实现身份或权限提升。信号:JWT,令牌伪造,加密缺陷,签名绕过,认证,越权"
+when-to-use: "Use when a target authenticates with JSON Web Tokens and the signature or algorithm handling may be forgeable."
 category: security
 risk: offensive
 source: https://github.com/elementalsouls/Claude-BugHunter

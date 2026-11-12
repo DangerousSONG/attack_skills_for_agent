@@ -1,6 +1,10 @@
 ---
 name: avast-premium-security-detection
 description: Identify and analyze suspicious software distribution repositories claiming to offer cracked or pirated security software
+zh-signals: "识别并分析伪装成 Avast 安全软件的恶意分发仓库与盗版样本。信号:恶意仓库,盗版软件,恶意软件检测,供应链投毒"
+when-to-use: >-
+  Use when evaluating a repository that claims to distribute cracked, pre-activated, or
+  keygen versions of Avast security software for malware and piracy indicators.
 triggers:
   - analyze this avast repository for legitimacy
   - check if this security software repo is malware

@@ -1,75 +1,79 @@
 ---
 name: ai-data-security
 description: |
-  AI 系统数据安全测试方法论。当需要评估 LLM/AI 系统的数据泄露风险、训练数据安全、
-  或 RAG/向量库数据完整性时触发。覆盖: System Prompt 泄露(元 Prompt/角色扮演/关键字定位)、
-  训练数据推导与提取、成员推断攻击、模型反演攻击、RAG 数据投毒、API 信息泄露、
-  级联幻觉攻击、外部数据源信息泄露。
+  AI system data security testing methodology. Triggered when you need to assess the data leakage risk of LLM/AI systems, training data security,
+  or RAG/vector store data integrity. Covers: System Prompt leakage (meta prompt/role-play/keyword location),
+  training data inference and extraction, membership inference attacks, model inversion attacks, RAG data poisoning, API information disclosure,
+  cascading hallucination attacks, external data source information leakage.
+zh-signals: "AI 系统数据安全测试方法论，覆盖提示泄露、训练数据提取、RAG 投毒等风险。信号:AI数据安全,数据泄露,训练数据提取,模型反演,RAG投毒"
+when-to-use: >-
+  Use when assessing data leakage risk in LLM or AI systems, including training
+  data safety, RAG/vector store integrity, and prompt or API information exposure.
 metadata:
-  tags: ai data security, data leakage, prompt leakage, training data extraction, membership inference, model inversion, rag poisoning, 数据泄露, 训练数据, 成员推断, 模型反演, 数据投毒, api 泄露
+  tags: ai data security, data leakage, prompt leakage, training data extraction, membership inference, model inversion, rag poisoning, data exfiltration, training data, membership inference, model inversion, data poisoning, api disclosure
   category: ai-security
 ---
 
-# AI 数据安全测试方法论
+# AI Data Security Testing Methodology
 
-## 攻击面总览
+## Attack Surface Overview
 
-| 阶段 | 攻击类型 | 目标 |
+| Layer | Attack Type | Target |
 |------|---------|------|
-| 应用层 | System Prompt 泄露、API 信息泄露、PII 窃取 | 配置/接口/用户数据 |
-| 模型层 | 训练数据推导、成员推断、模型反演 | 训练数据/模型参数 |
-| 部署层 | RAG 投毒、向量库越权、缓存泄露 | 知识库/基础设施 |
+| Application layer | System Prompt leakage, API information disclosure, PII theft | Configuration/interfaces/user data |
+| Model layer | Training data inference, membership inference, model inversion | Training data/model parameters |
+| Deployment layer | RAG poisoning, vector store broken access control, cache leakage | Knowledge base/infrastructure |
 
-### 与 prompt-leak 的边界
+### Boundary with prompt-leak
 
-`prompt-leak` 专注 System Prompt 泄露的 6 类技巧（直接请求、格式化、间接诱导、反射、侧信道、多轮提取）。本 skill 将 Prompt 泄露作为应用层攻击面之一，重点覆盖训练数据、模型层、RAG 数据链路等更广泛的数据安全问题。需要深入 Prompt 泄露时直接调用 `prompt-leak`。
-
----
-
-## Phase 0: 数据资产识别
-
-测试前先摸清 AI 系统的数据资产边界：
-
-- **训练数据** — 预训练语料、微调数据集、RLHF 标注数据
-- **RAG 知识库** — 文档库、向量数据库、检索索引
-- **API 端点** — 推理接口、管理接口、内部调试端点
-- **缓存与日志** — 对话历史、中间推理结果、审计日志
-
-## Phase 1: 应用层数据泄露
-
-- **System Prompt 泄露** — 详见 `prompt-leak` skill，此处不再展开
-- **API 信息泄露** — 构造 prompt 诱导模型输出 API 端点、模型版本、参数配置；探测 `/v1/models`、`/debug`、`/health` 等常见端点暴露内部信息
-- **隐私数据窃取** — 利用对话上下文提取 PII（姓名、电话、邮箱）；通过假定业务场景让模型复述其他用户的交互内容；关注多租户场景下的上下文隔离缺陷
-
-## Phase 2: 模型层数据攻击
-
-- **训练数据推导** — 前缀补全：提供训练数据的可能前缀让模型自动补全（"我的社保号是..."）；Divergence 攻击：要求模型无限重复某个词，当模型偏离正常分布后可能吐出训练样本
-- **成员推断攻击** — 训练 Shadow Model 模仿目标模型行为；比较目标模型对"训练集内"与"训练集外"数据的输出概率差异；高置信度输出往往意味着数据曾出现在训练集中
-- **模型反演攻击** — 白盒场景下通过梯度优化从模型输出反推输入特征；黑盒场景下通过大量 API 查询重建输入分布（如人脸重建攻击）
-
-## Phase 3: 数据投毒与篡改
-
-- **RAG 知识库投毒** — 向公开数据源注入恶意文档，等待 RAG 系统索引后影响检索结果；操纵 embedding 使恶意内容在语义上接近高频查询
-- **对话语料投毒** — 如系统使用用户反馈进行微调，注入特定对话模式污染训练集
-- **级联幻觉攻击** — 诱导模型生成错误信息，当下游系统依赖该输出时触发数据链路级错误
-
-## Phase 4: 部署层数据安全
-
-- **向量数据库未授权访问** — 检测 Milvus / Pinecone / Weaviate 等向量库的认证配置、网络暴露面
-- **备份/日志/缓存泄露** — 对话历史明文存储、推理日志包含敏感 prompt、模型快照未加密存放
+`prompt-leak` focuses on the 6 categories of System Prompt leakage techniques (direct request, formatting, indirect inducement, reflection, side channel, multi-turn extraction). This skill treats prompt leakage as one of the application-layer attack surfaces and focuses on broader data security issues such as training data, the model layer, and RAG data pipelines. Call `prompt-leak` directly when you need to go deeper into prompt leakage.
 
 ---
 
-## 检测清单
+## Phase 0: Data Asset Identification
 
-- [ ] System Prompt 是否可通过任意方法泄露
-- [ ] API 端点是否暴露模型版本/参数/内部配置
-- [ ] 模型是否在输出中泄露训练数据片段
-- [ ] 多租户场景下对话上下文是否隔离
-- [ ] RAG 数据源是否可被外部投毒
-- [ ] 向量数据库是否有认证与访问控制
-- [ ] 日志/缓存是否包含敏感数据且未加密
+Before testing, map out the data asset boundaries of the AI system:
 
-## 深入参考
+- **Training data** — pretraining corpora, fine-tuning datasets, RLHF annotation data
+- **RAG knowledge base** — document stores, vector databases, retrieval indexes
+- **API endpoints** — inference interfaces, management interfaces, internal debug endpoints
+- **Caches and logs** — conversation history, intermediate reasoning results, audit logs
 
-- 各攻击类型的详细技术步骤与 payload → [references/data-attack-techniques.md](references/data-attack-techniques.md)
+## Phase 1: Application-Layer Data Leakage
+
+- **System Prompt leakage** — see the `prompt-leak` skill, not expanded here
+- **API information disclosure** — craft prompts that induce the model to output API endpoints, model versions, and parameter configurations; probe common endpoints such as `/v1/models`, `/debug`, `/health` for exposed internal information
+- **Privacy data theft** — extract PII (names, phone numbers, email addresses) from the conversation context; assume business scenarios to make the model recite other users' interactions; pay attention to context isolation flaws in multi-tenant scenarios
+
+## Phase 2: Model-Layer Data Attacks
+
+- **Training data inference** — prefix completion: provide a plausible prefix of training data and let the model complete it ("My social security number is..."); divergence attacks: ask the model to repeat a word indefinitely — once the model deviates from the normal distribution it may spit out training samples
+- **Membership inference attacks** — train a shadow model that mimics the target model's behavior; compare the output probability differences of the target model on "in-training" versus "out-of-training" data; high-confidence outputs usually mean the data appeared in the training set
+- **Model inversion attacks** — in the white-box setting, recover input features from model outputs via gradient optimization; in the black-box setting, reconstruct the input distribution through large numbers of API queries (e.g. face reconstruction attacks)
+
+## Phase 3: Data Poisoning and Tampering
+
+- **RAG knowledge base poisoning** — inject malicious documents into public data sources and wait for the RAG system to index them so they influence retrieval results; manipulate embeddings so the malicious content is semantically close to high-frequency queries
+- **Conversation corpus poisoning** — if the system fine-tunes on user feedback, inject specific conversation patterns to pollute the training set
+- **Cascading hallucination attacks** — induce the model to generate incorrect information, triggering data-pipeline-level errors when downstream systems rely on that output
+
+## Phase 4: Deployment-Layer Data Security
+
+- **Unauthorized vector database access** — check the authentication configuration and network exposure of vector stores such as Milvus / Pinecone / Weaviate
+- **Backup/log/cache leakage** — conversation history stored in plaintext, inference logs containing sensitive prompts, model snapshots stored unencrypted
+
+---
+
+## Detection Checklist
+
+- [ ] Can the System Prompt be leaked by any method
+- [ ] Do API endpoints expose model versions/parameters/internal configuration
+- [ ] Does the model leak training data fragments in its output
+- [ ] Is conversation context isolated in multi-tenant scenarios
+- [ ] Can RAG data sources be poisoned externally
+- [ ] Does the vector database have authentication and access control
+- [ ] Do logs/caches contain sensitive data and remain unencrypted
+
+## Further Reading
+
+- Detailed technical steps and payloads for each attack type → [references/data-attack-techniques.md](references/data-attack-techniques.md)

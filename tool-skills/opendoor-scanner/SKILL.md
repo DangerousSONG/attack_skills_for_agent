@@ -2,39 +2,41 @@
 name: opendoor-scanner
 description: "Directory scanning with multiple reports. Signals: web vulnerability, injection, wordlist, threads, specified paths."
 zh-signals: "OpenDoor: 目录扫描+多报告。信号:web漏洞,注入,字典,线程,指定路径。"
+when-to-use: >-
+  Use when you need a multithreaded directory and admin panel scan of a web target with wordlist support and HTML/JSON/TXT reporting for deliverables.
 ---
 
 # OpenDoor
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/stanislav-web/OpenDoor
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/stanislav-web/OpenDoor
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/stanislav-web/OpenDoor && cd OpenDoor && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 opendoor.py --host https://t.com` | 目录扫描 |
-| `--wordlist /usr/share/wordlists/dirb/common.txt` | 字典 |
-| `--threads 25` | 线程 |
-| `--scan-dir /admin,/backup` | 指定路径 |
-| `--report json` | 报告 |
+| `python3 opendoor.py --host https://t.com` | Directory scan |
+| `--wordlist /usr/share/wordlists/dirb/common.txt` | Wordlist |
+| `--threads 25` | Threads |
+| `--scan-dir /admin,/backup` | Specify paths |
+| `--report json` | Report |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 目录扫描+多报告
+### Directory Scanning with Multiple Reports
 
 ```bash
 python3 opendoor.py --host https://t.com --threads 50 --report json
-# HTML/JSON/TXT 三种报告,适合交付
+# HTML/JSON/TXT report formats, suitable for delivery
 ```
 
-## 注意事项
+## Notes
 
-目录/后台扫描器,多线程+代理支持,报告输出齐全。
+A directory/admin panel scanner with multithreading and proxy support, and a complete set of report outputs.

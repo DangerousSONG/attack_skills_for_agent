@@ -1,6 +1,8 @@
 ---
 name: trailmark
 description: "Builds and queries multi-language source and binary code graphs for security analysis. Includes pre-analysis passes for blast radius, taint propagation, privilege boundaries, entry point enumeration, proxy/unresolved-call tracking, type/reference queries, structural traversal, graph diffs, audit augmentation, declared cross-language/FFI/external links via `.trailmark/links.toml`, and SQL schema graphs. Use when analyzing call paths, mapping attack surface, finding complexity hotspots, enumerating entry points, tracing taint propagation, measuring blast radius, importing SARIF/weAudit/binary findings, linking source graphs across language or RPC boundaries, or building a code graph for audit prioritization. Feature-gate version-specific Trailmark APIs before using them; prefer `trailmark.parse.detect_languages()` or `--language auto` when the target language is unknown or polyglot."
+zh-signals: "构建并查询多语言源码与二进制代码图，用于调用路径、污点传播与攻击面分析。信号:代码图,调用路径,污点分析,攻击面,二进制分析"
+when-to-use: "Use when analyzing call paths, mapping attack surface, tracing taint propagation, or building multi-language source/binary code graphs for security audit prioritization."
 ---
 
 # Trailmark

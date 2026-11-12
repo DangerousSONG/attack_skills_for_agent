@@ -1,6 +1,10 @@
 ---
 name: metasploit-framework
 description: "⚠️ AUTHORIZED USE ONLY > This skill is for educational purposes or authorized security assessments only. > You must have explicit, written permission from the system owner before using this tool. > Misuse of this tool is illegal and strictly prohibited."
+zh-signals: "使用 Metasploit Framework 开展授权渗透测试，覆盖漏洞利用、载荷生成、辅助扫描与后渗透。信号:Metasploit,漏洞利用,载荷生成,后渗透,框架"
+when-to-use: >-
+  Use when performing authorized penetration testing with the Metasploit Framework, from
+  exploitation to post-exploitation and maintaining access.
 risk: offensive
 source: community
 author: zebbern

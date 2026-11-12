@@ -6,6 +6,11 @@ description: >
   backup exposure, plaintext files, unencrypted databases, adb backup, iCloud backup, NSFileProtection,
   EncryptedSharedPreferences, SQLCipher, allowBackup, FLAG_SECURE, keyboard cache, sensitive logs.
   Covers MASVS-STORAGE-1 (local storage) and MASVS-STORAGE-2 (exposure to unauthorized actors).
+zh-signals: "检测移动端（Android/iOS）敏感数据的不安全存储，如明文 SharedPreferences、NSUserDefaults、未加密数据库、备份泄露与日志残留。信号:移动存储安全,SharedPreferences,NSUserDefaults,备份泄露,MASVS-STORAGE"
+when-to-use: >-
+  Use when auditing Android or iOS apps for insecure local storage of
+  credentials, tokens, or PII, including SharedPreferences, SQLite, Keychain,
+  backups, and logs.
 license: MIT
 compatibility: Designed for Claude Code. Android Studio, adb, apktool, jadx, objection, Frida, iMazing, idb recommended.
 metadata:

@@ -1,6 +1,8 @@
 ---
 name: avast-security-analysis
 description: Analyze and understand Avast antivirus security mechanisms, behavior shields, and protection components for security research
+zh-signals: "分析 Avast 杀毒软件防护组件与检测机制的研究指南。信号:Avast分析,杀毒软件,行为防护,逆向分析,安全研究"
+when-to-use: "Use when researching Avast security components, behavior shields, or real-time protection mechanisms for defensive or authorized research."
 triggers:
   - how do I analyze Avast security components
   - help me understand Avast behavior shield implementation

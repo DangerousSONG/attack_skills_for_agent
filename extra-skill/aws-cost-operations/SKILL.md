@@ -1,6 +1,10 @@
 ---
 name: aws-cost-operations
 description: "AWS cost optimization, monitoring, and operational excellence expert. Use when analyzing AWS bills, estimating costs, setting up CloudWatch alarms, querying logs, auditing CloudTrail activity, or assessing security posture."
+zh-signals: "AWS 成本优化、监控与运维，覆盖账单分析、成本估算、CloudWatch 告警、日志查询、CloudTrail 审计与安全态势评估。信号:AWS成本,CloudWatch,CloudTrail,日志查询,安全态势"
+when-to-use: >-
+  Use when analyzing AWS bills, estimating costs, setting up CloudWatch alarms,
+  querying logs, auditing CloudTrail activity, or assessing AWS security posture.
 risk: critical
 source: https://github.com/zxkane/aws-skills/tree/main/plugins/aws-cost-ops/skills/aws-cost-operations
 source_repo: zxkane/aws-skills

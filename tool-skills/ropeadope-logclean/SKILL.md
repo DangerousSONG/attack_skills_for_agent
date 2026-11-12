@@ -2,37 +2,40 @@
 name: ropeadope-logclean
 description: "ropeadope: Cleans Linux host logs. Signals: trace cleanup, anti-forensics, clear login records, clear authentication logs."
 zh-signals: "ropeadope: Linux 主机日志清理。信号:痕迹清理,反取证,清登录记录,清认证日志。"
+when-to-use: >-
+  Use when cleaning Linux host logs after an authorized red-team action and you need to clear
+  wtmp, btmp, auth logs, lastlog, and shell history.
 ---
 
 # ropeadope
 
-- 攻击大类:C20 反取证与痕迹清理
-- 上游仓库:https://github.com/BullsEye0/ropeadope
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C20 Anti-Forensics and Trace Cleanup
+- Upstream Repository: https://github.com/BullsEye0/ropeadope
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/BullsEye0/ropeadope && chmod +x ropeadope.sh
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `./ropeadope.sh` | 交互式 Linux 日志清理 |
-| `--wtmp` | 清登录记录 |
-| `--auth` | 清认证日志 |
-| `--shell` | 清 shell history |
+| `./ropeadope.sh` | Interactive Linux log cleanup |
+| `--wtmp` | Clear login records |
+| `--auth` | Clear authentication logs |
+| `--shell` | Clear shell history |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Linux 主机日志清理
+### Linux host log cleanup
 
 ```bash
-./ropeadope.sh  # 按菜单清 wtmp/btmp/auth.log/lastlog/shell history
+./ropeadope.sh  # Use the menu to clear wtmp/btmp/auth.log/lastlog/shell history
 ```
 
-## 注意事项
+## Notes
 
-脚本型工具需 root;清日志是高度敏感操作,授权演练中先快照留证再执行。
+Script-based tool requiring root; clearing logs is a highly sensitive operation, so snapshot the evidence first in authorized exercises.

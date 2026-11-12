@@ -1,84 +1,85 @@
 ---
 name: php-cmd-audit
-description: PHP Web 源码命令注入审计工具。识别命令执行 Sink（exec/system/shell_exec 等），追踪用户输入进入命令拼接，输出可利用性分级、PoC 与修复建议（禁止省略）。
+description: "PHP web source code command injection auditing tool. Identifies command execution sinks (exec/system/shell_exec etc.), traces user input into command string construction, and outputs exploitability ratings, PoCs, and remediation recommendations (no omissions allowed)."
+zh-signals: "PHP 源码命令注入审计，识别命令执行 Sink 并追踪用户输入到拼接点，输出分级与 PoC。信号:PHP审计,命令注入,Sink,数据流追踪,代码审计"
+when-to-use: "Use when performing a white-box security audit of a PHP codebase for OS command injection sink-to-source data flows."
 ---
 
-# PHP 命令注入审计（php-cmd-audit）
+# PHP Command Injection Audit (php-cmd-audit)
 
-分析 PHP 项目源码，识别系统命令执行相关代码，并追踪用户输入到命令构造点，验证是否存在命令注入风险。
+Analyze PHP project source code, identify code related to system command execution, and trace user input to command construction points to verify whether a command injection risk exists.
 
 ## CRITICAL
-- 必须使用数据流链证据判定可利用性
-- 禁止省略：不得出现任何省略占位符；每条条目必须包含完整的证据链与可观测验证框架
-- 每条高危/中危条目必须含：位置证据 + Source→Sink 数据流链 + 可利用前置条件 + 可执行 PoC + 修复建议
+- Exploitability must be judged using data flow chain evidence
+- No omissions allowed: no omission placeholders may appear; every entry must contain the complete evidence chain and an observable verification framework
+- Every high/medium severity entry must contain: location evidence + Source→Sink data flow chain + exploitation preconditions + executable PoC + remediation recommendation
 
-## 分级与编号
-- 详见 `shared/SEVERITY_RATING.md`
-- 漏洞编号：`{C/H/M/L}-CMD-{序号}`
+## Severity Rating and Numbering
+- See `shared/SEVERITY_RATING.md` for details
+- Vulnerability ID: `{C/H/M/L}-CMD-{sequence}`
 
-## 命令执行 Sink（必做）
-识别以下函数/语法：
+## Command Execution Sinks (Mandatory)
+Identify the following functions/syntax:
 - `exec/system/shell_exec/passthru`
 - `proc_open/popen/pcntl_exec`
-- 反引号语法：`` `cmd` ``
-危险模式：
-- 命令字符串通过拼接包含用户输入（GET/POST/Body/参数字段）
-- 未做白名单/未做 shell 转义，尤其包含 `;|&`、`$()`、反引号、换行等
+- Backtick syntax: `` `cmd` ``
+Dangerous patterns:
+- The command string includes user input through concatenation (GET/POST/Body/parameter fields)
+- No allowlist and no shell escaping, especially when it contains `;|&`, `$()`, backticks, newlines, etc.
 
-## 追踪与验证（必做）
-触发 `php-route-tracer` 的条件：
-- 命令字符串由多个变量组成
-- 存在参数经过 JSON 解码/多层传递
-- 命令构造被 if/try 分支影响
+## Tracing and Verification (Mandatory)
+Conditions that trigger `php-route-tracer`:
+- The command string is composed of multiple variables
+- A parameter goes through JSON decoding / multi-layer passing
+- Command construction is affected by if/try branches
 
-## 报告输出
-输出到：
+## Report Output
+Output to:
 ```
 {output_path}/vuln_audit/cmd_{timestamp}.md
 ```
 
-## 漏洞条目模板（强制）
+## Vulnerability Entry Template (Mandatory)
 ```markdown
-### [{等级前缀}-CMD-{序号}] {风险标题}
+### [{severity-prefix}-CMD-{sequence}] {risk title}
 
-| 项目 | 信息 |
+| Item | Information |
 |------|------|
-| 严重等级 | {🔴/🟠/🟡/🔵} (CVSS {score}) |
-| 可达性 (R) | {0-3} - {理由} |
-| 影响范围 (I) | {0-3} - {理由} |
-| 利用复杂度 (C) | {0-3} - {理由} |
-| 可利用性 | ✅ 已确认 / ⚠️ 待验证 / ❌ 不可利用 / 🔍 环境依赖 |
-| 位置 | {file}:{line} ({Function/Class}) |
+| Severity Level | {🔴/🟠/🟡/🔵} (CVSS {score}) |
+| Reachability (R) | {0-3} - {rationale} |
+| Impact Scope (I) | {0-3} - {rationale} |
+| Exploitation Complexity (C) | {0-3} - {rationale} |
+| Exploitability | ✅ Confirmed / ⚠️ Unverified / ❌ Not Exploitable / 🔍 Environment-Dependent |
+| Location | {file}:{line} ({Function/Class}) |
 
-#### 数据流链（Source → Sink）
-（逐行写出：请求参数读取 -> 拼接/拼装 -> 命令执行函数/语句）
+#### Data Flow Chain (Source → Sink)
+(Write out line by line: request parameter read -> concatenation/assembly -> command execution function/statement)
 
-#### 可利用前置条件
-- 鉴权要求：{无需/需登录/需特定权限}
-- 输入可控性：{完全可控/条件可控/不可控}
-- 触发条件：{分支/异常/环境依赖}
+#### Exploitability Preconditions
+- Authentication Requirement: {none / login required / specific privilege required}
+- Input Controllability: {fully controllable / conditionally controllable / not controllable}
+- Trigger Condition: {branch / exception / environment-dependent}
 
-#### 证据引用（强制：来自 php-route-tracer）
-每条命令注入疑似漏洞必须逐项引用 trace 输出中 `## 9) Sink Evidence Type Checklist` 的 **CMD 行**对应证据要点（允许状态为待验证，但证据引用必须存在）：
-1. `EVID_CMD_EXEC_POINT`：命令执行函数/语句位置（对应 trace 的 CMD 执行点证据）
-2. `EVID_CMD_COMMAND_STRING_CONSTRUCTION`：命令字符串/关键参数构造位置（拼接/模板化证据）
-3. `EVID_CMD_USER_PARAM_TO_CMD_FRAGMENT`：用户可控参数到命令关键片段的映射证据
+#### Evidence Citation (Mandatory: from php-route-tracer)
+Every suspected command injection vulnerability must cite, item by item, the corresponding evidence points of the **CMD row** in `## 9) Sink Evidence Type Checklist` of the trace output (the status may be pending verification, but the evidence citation must exist):
+1. `EVID_CMD_EXEC_POINT`: command execution function/statement location (corresponds to the CMD execution point evidence in the trace)
+2. `EVID_CMD_COMMAND_STRING_CONSTRUCTION`: command string / key parameter construction location (concatenation/templating evidence)
+3. `EVID_CMD_USER_PARAM_TO_CMD_FRAGMENT`: mapping evidence from a user-controllable parameter to a key command fragment
 
-#### tracer 证据缺失处理（强制）
-- 若无法定位上述 1~3 任一关键证据要点：该漏洞状态只能标记为 `⚠️待验证`，不得直接给出 `✅已确认可利用`。
+#### Handling Missing tracer Evidence (Mandatory)
+- If none of the key evidence points 1-3 above can be located: the vulnerability status may only be marked `⚠️ Unverified`, and must not be directly marked `✅ Confirmed Exploitable`.
 
-#### 验证 PoC（强制）
+#### Verification PoC (Mandatory)
 ```http
-POST {完整路径} HTTP/1.1
+POST {full-path} HTTP/1.1
 Host: {host}
-{必要 Cookie/Auth}
+{required Cookie/Auth}
 
 {Payload}
 ```
 
-#### 建议修复
-- 强制使用命令参数白名单 + 安全参数拼接策略（避免 shell=true 的情况）
-- 推荐替代实现（如使用不经 shell 的进程调用方式，或完全避免拼接）
-- 给出代码搜索语句（`rg`）定位同类拼接点
+#### Recommended Fix
+- Enforce a command argument allowlist plus a safe argument concatenation strategy (avoid shell=true)
+- Recommend alternative implementations (e.g., spawning a process without a shell, or avoiding concatenation entirely)
+- Provide code search commands (`rg`) to locate similar concatenation points
 ```
-

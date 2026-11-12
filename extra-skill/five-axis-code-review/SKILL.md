@@ -1,6 +1,8 @@
 ---
 name: five-axis-code-review
 description: "Five-axis code review checklist (correctness, security, readability, performance, test coverage) producing actionable comments instead of style nitpicks. Use when the user asks to review code, a diff, or a pull request."
+zh-signals: "五轴代码审查清单。信号:代码审查,PR审查,正确性,安全,性能,测试覆盖"
+when-to-use: "Use when the user asks to review code, a diff, or a pull request and wants actionable comments rather than style nitpicks."
 category: development
 risk: safe
 source: https://github.com/alapha888/agent-skills-en

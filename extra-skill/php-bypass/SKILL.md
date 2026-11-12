@@ -1,27 +1,29 @@
 ---
 name: php-bypass
-description: "PHP 安全特性绕过：disable_functions 和 open_basedir 限制突破。当已获取 webshell 但命令执行函数被禁用或文件操作被 open_basedir 限制时使用"
+description: "PHP security restriction bypass: breaking out of disable_functions and open_basedir limits. Use when you already have a webshell but command execution functions are disabled or file operations are restricted by open_basedir"
+zh-signals: "PHP 安全特性绕过方法，突破 disable_functions 与 open_basedir 限制。信号:PHP绕过,disable_functions,open_basedir,webshell,沙箱逃逸"
+when-to-use: "Use after obtaining a PHP webshell when command execution functions are disabled or file operations are restricted by open_basedir."
 metadata:
-  tags: "disable_functions,open_basedir,php,bypass,rce,webshell,LD_PRELOAD,putenv,FFI,iconv,imagick,绕过,沙箱逃逸"
+  tags: "disable_functions,open_basedir,php,bypass,rce,webshell,LD_PRELOAD,putenv,FFI,iconv,imagick,bypass,sandbox escape"
   category: "exploit"
 ---
 
-# PHP 安全特性绕过方法论
+# PHP Security Restriction Bypass Methodology
 
 
-当你已获取 webshell（能执行 PHP 代码）但无法执行系统命令时，本 skill 指导你突破 `disable_functions` 和 `open_basedir` 限制。
+When you already have a webshell (one that can execute PHP code) but cannot execute system commands, this skill guides you through breaking the `disable_functions` and `open_basedir` restrictions.
 
-## 深入参考
+## Further Reading
 
-- 方法 A-G 完整绕过代码 → [references/disable-functions-bypass.md](references/disable-functions-bypass.md)
-- open_basedir 绕过方法 → [references/open-basedir-bypass.md](references/open-basedir-bypass.md)
-- CTF PHP 技巧（OPcache 投毒、多态文件） → [references/ctf-php-tricks.md](references/ctf-php-tricks.md)
+- Full bypass code for Methods A-G → [references/disable-functions-bypass.md](references/disable-functions-bypass.md)
+- open_basedir bypass methods → [references/open-basedir-bypass.md](references/open-basedir-bypass.md)
+- CTF PHP tricks (OPcache poisoning, polymorphic files) → [references/ctf-php-tricks.md](references/ctf-php-tricks.md)
 
 ---
 
-## Phase 0: 信息收集（30 秒判断）
+## Phase 0: Information Gathering (30-second check)
 
-首先确认限制范围，这决定了攻击路径：
+First confirm the scope of the restrictions, as this determines the attack path:
 
 ```php
 <?php
@@ -30,7 +32,7 @@ echo "open_basedir: " . ini_get('open_basedir') . "\n";
 echo "PHP version: " . phpversion() . "\n";
 echo "OS: " . PHP_OS . "\n";
 echo "Loaded extensions: " . implode(', ', get_loaded_extensions()) . "\n";
-// 关键扩展检查
+// Key extension checks
 echo "FFI: " . (extension_loaded('ffi') ? 'YES' : 'NO') . "\n";
 echo "imagick: " . (extension_loaded('imagick') ? 'YES' : 'NO') . "\n";
 echo "iconv: " . (extension_loaded('iconv') ? 'YES' : 'NO') . "\n";
@@ -40,47 +42,47 @@ echo "error_log: " . (function_exists('error_log') ? 'YES' : 'NO') . "\n";
 ?>
 ```
 
-## Phase 1: disable_functions 绕过决策树
+## Phase 1: disable_functions Bypass Decision Tree
 
 ```
-putenv() 可用？
-├─ YES → mail()/error_log() 可用？
-│   ├─ YES → 方法 A: LD_PRELOAD 劫持（最稳定，首选）
-│   └─ NO → iconv 扩展加载？
-│       ├─ YES → 方法 B: iconv + LD_PRELOAD
-│       └─ NO → imagick 扩展？
-│           ├─ YES → 方法 C: ImageMagick delegate
-│           └─ NO → 下一分支
-├─ NO → FFI 扩展 (PHP ≥ 7.4)？
-│   ├─ YES → 方法 D: FFI 直接调用 system()
-│   └─ NO → PHP < 7.4.21 / 8.0 < 8.0.8？
-│       ├─ YES → 方法 E: PHP Backtrace UAF (CVE-2019-11043 等)
-│       └─ NO → PCNTL 扩展？
-│           ├─ YES → 方法 F: pcntl_exec()
-│           └─ NO → 方法 G: ShellShock (CVE-2014-6271) / Apache mod_cgi
+Is putenv() available?
+├─ YES → Are mail()/error_log() available?
+│   ├─ YES → Method A: LD_PRELOAD hijack (most stable, preferred)
+│   └─ NO → Is the iconv extension loadable?
+│       ├─ YES → Method B: iconv + LD_PRELOAD
+│       └─ NO → Is the imagick extension present?
+│           ├─ YES → Method C: ImageMagick delegate
+│           └─ NO → next branch
+├─ NO → Is the FFI extension available (PHP ≥ 7.4)?
+│   ├─ YES → Method D: call system() directly via FFI
+│   └─ NO → PHP < 7.4.21 / 8.0 < 8.0.8?
+│       ├─ YES → Method E: PHP Backtrace UAF (CVE-2019-11043 etc.)
+│       └─ NO → Is the PCNTL extension available?
+│           ├─ YES → Method F: pcntl_exec()
+│           └─ NO → Method G: ShellShock (CVE-2014-6271) / Apache mod_cgi
 ```
 
-> 每种方法的完整代码见 [references/disable-functions-bypass.md](references/disable-functions-bypass.md)
+> See [references/disable-functions-bypass.md](references/disable-functions-bypass.md) for the full code of each method.
 
 ---
 
-## 实战速查表
+## Practical Quick Reference Table
 
-| 看到什么 | 方法 | 命令 |
+| What you observe | Method | Command |
 |----------|------|------|
-| putenv + mail 可用 | LD_PRELOAD | 上传 .so → putenv → mail() |
-| putenv + error_log 可用 | LD_PRELOAD | 同上，用 error_log() 替代 |
-| putenv + iconv 可用 | GCONV_PATH | 上传 gconv-modules + .so |
-| imagick 已加载 | delegate 注入 | MVG/SVG payload |
-| PHP ≥ 7.4 + FFI | FFI::cdef | 直接调 system() |
-| pcntl 已加载 | pcntl_exec | fork + exec |
-| Bash ≤ 4.3 | ShellShock | putenv 环境变量注入 |
-| 全部不行 | UAF exploit | 搜索版本对应的利用脚本 |
+| putenv + mail available | LD_PRELOAD | upload .so → putenv → mail() |
+| putenv + error_log available | LD_PRELOAD | same as above, use error_log() instead |
+| putenv + iconv available | GCONV_PATH | upload gconv-modules + .so |
+| imagick loaded | delegate injection | MVG/SVG payload |
+| PHP ≥ 7.4 + FFI | FFI::cdef | call system() directly |
+| pcntl loaded | pcntl_exec | fork + exec |
+| Bash ≤ 4.3 | ShellShock | putenv environment variable injection |
+| Nothing works | UAF exploit | search for an exploit matching the version |
 
-## 注意事项
+## Notes
 
-- 优先检查 phpinfo() 确认环境，不要盲试
-- LD_PRELOAD 方法需要上传 .so 文件，确保有可写目录
-- FFI 方法最简洁但 PHP 版本要求高
-- 某些 Docker 环境 `/usr/sbin/sendmail` 不存在 → mail() 不触发 execve → 换 error_log
-- 成功执行命令后记得清理上传的 .so 文件
+- Check phpinfo() first to confirm the environment, do not blindly try
+- The LD_PRELOAD method requires uploading a .so file, so ensure a writable directory exists
+- The FFI method is the cleanest but requires a recent PHP version
+- In some Docker environments `/usr/sbin/sendmail` does not exist → mail() does not trigger execve → switch to error_log
+- After a command executes successfully, remember to clean up the uploaded .so file

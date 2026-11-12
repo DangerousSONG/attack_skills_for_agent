@@ -1,6 +1,10 @@
 ---
 name: recon-sector-expansion
 description: "Multi-sector batch domain expansion — identify untested/under-tested sectors, generate candidate company domains (national chains, franchises, regionals), filter against existing test coverage, probe alive domains, and run the full testing pipeline across 20+ new targets in a single session. Complements per-sector recon-* skills by telling you WHICH sectors to expand into next."
+zh-signals: "跨多个行业批量扩展域名，识别未测试领域、生成候选域名、过滤覆盖并探测存活目标。信号:批量侦察,行业扩展,域名发现,覆盖审计,资产测绘"
+when-to-use: >-
+  Use within authorized scoped programs when expanding coverage into new sectors and testing
+  20+ fresh company domains rather than digging deeper into one known target.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

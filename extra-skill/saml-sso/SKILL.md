@@ -6,6 +6,8 @@ description: |
   Plus SCIM provisioning abuse: JIT auto-provisioning role injection, active=true reactivation, PATCH privilege escalation, and cross-tenant user creation. And deep JWT: alg confusion (RS256 to HS256), alg:none, kid SQL/path-traversal injection, jku/x5u header SSRF, embedded jwk header key injection, and weak-secret brute force.
 
   Uses jwt_tool, xmllint, python, and manual http payloads. Chains from /pentester or /web-exploit; into /post-exploit and /cloud-identity-federation on takeover or federated-role access.
+zh-signals: "SAML、企业 SSO、SCIM 与 JWT 深度安全测试，覆盖签名包装、断言伪造与算法混淆。信号:SAML,SSO,SCIM,JWT,断言伪造"
+when-to-use: "Use when assessing a SAML/OIDC service provider, IdP, SCIM endpoint, or JWT verifier for authentication bypass and forgery."
 argument-hint: "<target-url> [protocol=saml|jwt|scim|oidc] [role=sp|idp|both] [depth=quick|standard|thorough]"
 user-invocable: true
 ---

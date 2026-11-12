@@ -1,6 +1,8 @@
 ---
 name: wp-mass-recon
 description: "Batch WP recon: users, CORS, XMLRPC, leaks across domains."
+zh-signals: "批量对多个域名进行 WordPress 侦察，检测用户枚举、CORS、XMLRPC 与信息泄露。信号:WordPress,批量侦察,用户枚举,CORS,XMLRPC,信息泄露"
+when-to-use: "Use when you have an authorized list of domains and need batch WordPress recon for user enumeration, CORS, XMLRPC, or leak detection."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

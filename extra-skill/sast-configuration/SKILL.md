@@ -1,6 +1,11 @@
 ---
 name: sast-configuration
 description: "Static Application Security Testing (SAST) tool setup, configuration, and custom rule creation for comprehensive security scanning across multiple programming languages."
+zh-signals: "配置并自定义 SAST 工具与规则，实现多语言代码的安全扫描、质量门禁与 CI/CD 集成。信号:SAST,静态扫描,规则配置,CI/CD,质量门禁"
+when-to-use: >-
+  Use when setting up SAST in CI/CD, creating custom security rules, configuring
+  quality gates, or integrating multiple SAST tools while reducing false
+  positives.
 risk: critical
 source: community
 date_added: "2026-02-27"

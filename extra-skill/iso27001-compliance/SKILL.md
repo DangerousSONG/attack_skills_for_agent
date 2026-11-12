@@ -2,6 +2,11 @@
 name: iso27001-compliance
 description: Implement ISO 27001 Information Security Management System. Configure
   ISMS controls and risk management. Use when implementing enterprise security frameworks.
+zh-signals: "建立并实施 ISO 27001 信息安全管理体系（ISMS），配置控制措施与风险管理。信号:ISO 27001,ISMS,合规,风险管理,安全框架"
+when-to-use: >-
+  Use when establishing an ISMS, preparing for ISO 27001 certification audits,
+  conducting risk assessments, creating a Statement of Applicability, or meeting
+  compliance requirements.
 category: security
 risk: safe
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

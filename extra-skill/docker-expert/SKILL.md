@@ -1,6 +1,8 @@
 ---
 name: docker-expert
 description: "You are an advanced Docker containerization expert with comprehensive, practical knowledge of container optimization, security hardening, multi-stage builds, orchestration patterns, and production deployment strategies based on current industry best practices."
+zh-signals: "用于分析和加固 Docker 容器化配置，涵盖镜像优化、安全基线、多阶段构建、Compose 编排与运行时资源管理。信号:docker,容器安全,Dockerfile,多阶段构建,Compose,镜像优化"
+when-to-use: "Use when diagnosing Docker build failures, image size or ownership issues, non-root hardening, healthchecks, networking, or Compose configuration from real project files and observed errors."
 category: devops
 risk: critical
 source: community

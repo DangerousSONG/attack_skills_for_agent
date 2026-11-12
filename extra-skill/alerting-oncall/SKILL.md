@@ -2,6 +2,9 @@
 name: alerting-oncall
 description: Set up alerting rules, configure on-call rotations, and manage incident
   response workflows.
+zh-signals: "配置告警规则、值班轮转与事件响应流程以减少告警疲劳。信号:告警配置,值班轮转,事件响应,告警路由,告警疲劳。"
+when-to-use: >-
+  Use when setting up alerting rules and thresholds, configuring on-call schedules and escalation, routing alerts to PagerDuty/Slack, or reducing alert fatigue in production operations.
 category: devops
 risk: critical
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

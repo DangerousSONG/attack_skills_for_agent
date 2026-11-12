@@ -1,6 +1,8 @@
 ---
 name: offensive-lorawan-sub-ghz
 description: "LoRaWAN and sub-GHz (433 / 868 / 915 MHz) attack methodology — LoRaWAN ABP/OTAA join attack, network/session key reuse, frame counter replay, downlink injection on TTN/Helium-style networks, sub-GHz protocol replay (KeeLoq garage doors, fixed-code remotes, TPMS spoofing, smart plug telemetry), HackRF / RTL-SDR / Flipper Zero workflows, signal analysis with Inspectrum / Universal Radio Hacker, and reconstruction of proprietary packet formats. Use for LoRaWAN deployments (smart cities, asset tracking, industrial telemetry), or any wireless device using the unlicensed 433/868/915 MHz bands (garage openers, doorbells, IoT sensors, RC equipment)."
+zh-signals: "提供 LoRaWAN 与 433/868/915 MHz sub-GHz 无线攻击方法，涵盖入网攻击、帧重放、下行注入与协议复现。信号:LoRaWAN攻击,sub-GHz,无线重放,下行注入,HackRF"
+when-to-use: "Use when testing LoRaWAN deployments or other unlicensed 433/868/915 MHz wireless devices such as garage openers, IoT sensors, or TPMS."
 ---
 
 # LoRaWAN & Sub-GHz Attacks

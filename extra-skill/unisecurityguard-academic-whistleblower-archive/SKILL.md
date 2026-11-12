@@ -1,6 +1,10 @@
 ---
 name: unisecurityguard-academic-whistleblower-archive
 description: Archive and documentation platform for academic employment transparency and whistleblowing in Chinese higher education institutions
+zh-signals: "提供学术就业透明与举报内容的归档和文档化平台方案，用于抵御审查与内容删除。信号:学术举报,内容归档,审查抵抗,证据保存,文档平台"
+when-to-use: >-
+  Use when archiving academic whistleblowing content, preserving evidence of institutional
+  misconduct, or setting up a censorship-resistant documentation platform.
 triggers:
   - how do I archive academic whistleblowing content
   - set up a backup platform for censored social media
@@ -122,9 +126,9 @@ The project uses 154+ issues as a documentation and Q&A system:
 ```markdown
 # Create structured issues for common questions
 
-Issue #1: "关于学校施压的详细情况" (Details about institutional pressure)
-Issue #2: "如何保护自己在类似情况下" (How to protect yourself in similar situations)
-Issue #3: "法律建议和资源" (Legal advice and resources)
+Issue #1: "Details about institutional pressure"
+Issue #2: "How to protect yourself in similar situations"
+Issue #3: "Legal advice and resources"
 ```
 
 ## Real-World Implementation Examples
@@ -189,7 +193,7 @@ Create `TIMELINE.md`:
 - Annual performance bonus: ¥6,000+
 
 ## Background: Academic Career
-- Undergraduate: C9 university (华五)
+- Undergraduate: C9 university (top-five East China universities)
 - PhD: QS50 US university (withdrawn)
 - Position: Associate professor at brother institution
 ```

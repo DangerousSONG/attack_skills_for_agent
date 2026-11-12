@@ -1,6 +1,9 @@
 ---
 name: ikb42603-cloud-security-essentials
 description: AWS cloud security lab exercises covering IAM, VPC, encryption, monitoring, and incident detection for hands-on security learning
+zh-signals: "基于 AWS 的云安全实验练习，覆盖 IAM、VPC、KMS 加密、CloudTrail/CloudWatch 监控与事件检测。信号:AWS安全,IAM配置,VPC隔离,KMS加密,CloudTrail。"
+when-to-use: >-
+  Use when completing hands-on AWS cloud security lab exercises, configuring IAM policies, VPC isolation, KMS encryption, or CloudTrail and CloudWatch monitoring and incident detection.
 triggers:
   - "help me with AWS cloud security labs"
   - "how do I configure IAM security in AWS"

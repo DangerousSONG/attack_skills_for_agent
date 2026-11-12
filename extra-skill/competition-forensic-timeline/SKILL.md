@@ -1,6 +1,8 @@
 ---
 name: competition-forensic-timeline
 description: Internal downstream skill for ctf-sandbox-orchestrator. CTF-sandbox workflow for DFIR chronology, cross-artifact correlation, persistence chains, and incident timeline reconstruction. Use when the user asks to build a forensic timeline, correlate EVTX, PCAP, registry, disk, memory, mailbox, or browser artifacts, explain the order of attacker actions, or pinpoint the stage where the decisive artifact appears. Use only after `$ctf-sandbox-orchestrator` has already established sandbox assumptions and routed here.
+zh-signals: "关联 EVTX、PCAP、注册表等多源证据重建 CTF DFIR 事件时间线。信号:DFIR,时间线,取证,EVTX,PCAP,事件关联"
+when-to-use: "Use only after $ctf-sandbox-orchestrator is active, when the challenge requires correlating many artifacts into a replayable forensic timeline."
 ---
 
 # Competition Forensic Timeline

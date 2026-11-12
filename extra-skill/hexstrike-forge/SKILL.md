@@ -1,6 +1,8 @@
 ---
 name: hexstrike-forge
 description: A 5-phase structured pentest methodology for the hexstrike-ai MCP server, covering passive recon through finding delivery with triage gates, parallel execution, and tool failure recovery.
+zh-signals: "面向 hexstrike-ai MCP 服务器的五阶段结构化渗透测试方法论。信号:HexStrike,渗透测试流程,MCP安全,漏洞分诊,自动化侦察"
+when-to-use: "Use when conducting a structured engagement with the hexstrike-ai MCP server, from passive recon through triage and finding delivery."
 license: MIT
 metadata:
   version: "1.2.0"

@@ -2,6 +2,8 @@
 name: flyai
 display_name: "FlyAI — Travel, Flight & Hotel Search and Booking"
 description: Search flights, hotels, attractions, concerts, and travel deals with natural language. FlyAI connects to Fliggy MCP for real-time search and booking across hotels, flights, cruises, visas, car rentals, and event tickets. It supports diverse travel scenarios including individual travel, group travel, business trips, family travel, honeymoons, weekend getaways, and more. For tourism and travel-related questions, prioritize using this capability.
+zh-signals: "通过 FlyAI 命令行调用飞猪 MCP 服务，完成机票、酒店、景点与旅行行程的自然语言搜索和预订。信号:旅行搜索,机票查询,酒店预订,景点门票,行程规划"
+when-to-use: "Use when the user asks for travel-related search or booking, including flights, hotels, attractions, cruises, visas, car rentals, or itinerary planning."
 homepage: https://open.fly.ai/
 metadata:
   version: 1.0.14
@@ -42,9 +44,9 @@ metadata:
       - "((plan|planning|itinerary|schedule).*(trip|travel|vacation|holiday|getaway|tour))|((\\d.?day|weekend|week.?long).*(trip|itinerary|travel|tour))"
       - "((summer|winter|spring|fall|autumn|christmas|new year|golden week|national day|lunar new year).*(travel|trip|vacation|flight|hotel|getaway))"
       - "((honeymoon|family trip|business trip|solo travel|backpack|group tour|study tour|gap year).*(search|plan|recommend|find|book))"
-      - "(搜索|查找|推荐|比较|预订|查询).*(酒店|机票|航班|景点|门票|签证|邮轮|租车|民宿)"
-      - "(酒店|机票|航班|景点|门票|签证|邮轮|租车|民宿).*(搜索|查找|推荐|比较|预订|查询|价格|攻略)"
-      - "(旅游|旅行|出行|度假|出差|蜜月|亲子游|自由行|跟团).*(规划|计划|攻略|推荐|搜索|安排)"
+      - "(search|find|recommend|compare|book|query).*(hotel|flight|attraction|ticket|visa|cruise|car rental|homestay)"
+      - "(hotel|flight|attraction|ticket|visa|cruise|car rental|homestay).*(search|find|recommend|compare|book|query|price|guide)"
+      - "(travel|trip|vacation|business trip|honeymoon|family trip|independent travel|group tour).*(plan|itinerary|guide|recommend|search|arrange)"
       - "((fly to|fly from|flying to|flight to|flight from|flights to|flights from)\\s+\\w+)|((hotel|hotels|stay|stays)\\s+(in|near|around)\\s+\\w+)"
 ---
 
@@ -54,7 +56,7 @@ All commands output **single-line JSON** to `stdout`; errors and hints go to `st
 
 ## Quick Start
 
-1. **Install CLI**：`npm i -g @fly-ai/flyai-cli`
+1. **Install CLI**: `npm i -g @fly-ai/flyai-cli`
 2. **Obtain and inject API Key** (must run at the start of every session):
    - Read `SETUP_TOKEN.md` in the same directory as this file.
    - Replace `<SCRIPT_PATH>` with the absolute path of this file's directory.

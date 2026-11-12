@@ -1,8 +1,13 @@
 ---
 name: cookie-analysis
-description: "Session cookie 分析与伪造方法论。当发现 Web 应用使用 cookie 进行认证、需要判断 cookie 类型并选择伪造方法时使用。覆盖 unsigned base64 cookie 直接伪造、Flask 签名 cookie（flask-unsign 爆破密钥）、加密/二进制 cookie 的识别。本技能负责 cookie 类型判断和分流：如果判断为 JWT（三段式 eyJ 开头），应转至 jwt-attack-methodology；如果判断为加密 cookie 需要 Padding Oracle，应转至 crypto-web-attack"
+description: "Session cookie analysis and forgery methodology. Use when a web application authenticates with cookies and you need to determine the cookie type and choose a forgery method. Covers direct forgery of unsigned base64 cookies, Flask signed cookies (brute-forcing the key with flask-unsign), and identification of encrypted/binary cookies. This skill handles cookie type triage and routing: if the cookie is a JWT (three segments starting with eyJ), switch to jwt-attack-methodology; if it is an encrypted cookie that needs a padding oracle, switch to crypto-web-attack"
+zh-signals: "分析与伪造 Session Cookie，判断 cookie 类型并选择相应伪造方法，涵盖 unsigned base64、Flask 签名与加密 cookie。信号:Cookie分析,Cookie伪造,Session,Flask签名,认证绕过"
+when-to-use: >-
+  Use when a web application uses cookies for authentication and you need to identify
+  the cookie type and choose a forgery method, routing JWT or padding-oracle cases to
+  dedicated skills.
 metadata:
-  tags: "cookie,session,flask,base64,forgery,authentication,bypass,cookie-analysis,认证绕过,flask-unsign,session cookie,itsdangerous,cookie伪造,unsigned cookie"
+  tags: "cookie,session,flask,base64,forgery,authentication,bypass,cookie-analysis,authentication bypass,flask-unsign,session cookie,itsdangerous,cookie forgery,unsigned cookie"
   category: "exploit"
 ---
 

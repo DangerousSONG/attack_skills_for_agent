@@ -2,6 +2,9 @@
 name: xss-reflected
 description: >
   Reflected XSS occurs when user-supplied input is echoed in an HTTP response without sanitization, allowing script execution in the victim's browser. Detect via injecting `<script>alert(1)</script>`, event handlers like `onfocus`, HTML entity bypass, and encoding variants. Tools: Burp Suite, OWASP ZAP, PHP Charset Encoder (PCE), Hackvertor, XSS-Proxy, ratproxy.
+zh-signals: "检测与利用反射型 XSS，覆盖上下文载荷构造、编码绕过与浏览器验证。信号:反射型XSS,输出编码,载荷绕过,会话劫持,XSS防护。"
+when-to-use: >-
+  Use when user-supplied input is reflected unencoded in an HTTP response and you need to identify the reflection context, craft a matching payload, bypass filters, and verify execution in a real browser.
 license: MIT
 compatibility: Designed for Claude Code. Requires Burp Suite or OWASP ZAP.
 metadata:

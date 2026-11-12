@@ -1,6 +1,8 @@
 ---
 name: wxmini-security-audit
 description: Automated WeChat mini-program security auditing framework using Claude Code Agent Teams with 7 specialized agents for comprehensive static analysis
+zh-signals: "使用多智能体对微信小程序做静态安全审计，覆盖敏感信息泄露、API 端点、加密与漏洞检测。信号:微信小程序审计,wxapkg,静态分析,敏感信息泄露,多智能体"
+when-to-use: "Use when performing static security audits of WeChat mini-programs or wxapkg directories, covering sensitive data leakage, API endpoint extraction, cryptographic analysis, and vulnerability detection."
 triggers:
   - audit this WeChat mini program
   - analyze this wxapkg directory for security issues

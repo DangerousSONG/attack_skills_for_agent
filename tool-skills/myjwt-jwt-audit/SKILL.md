@@ -2,39 +2,42 @@
 name: myjwt-jwt-audit
 description: "MyJWT: JWT multi-attack-surface testing. Signals: API attack, interface testing, JWT key brute force, KID injection, JKU bypass."
 zh-signals: "MyJWT: JWT 多攻击面测试。信号:api攻击,接口测试,JWT 密钥爆破,KID 注入,JKU 绕过。"
+when-to-use: >-
+  Use when auditing JWT implementations for multiple weaknesses at once, including weak key brute
+  force, KID injection, JKU bypass, and payload tampering.
 ---
 
 # MyJWT
 
-- 攻击大类:C10 API与业务逻辑攻击
-- 上游仓库:https://github.com/mBouamama/MyJWT
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C10 API and Business Logic Attacks
+- Upstream Repository: https://github.com/mBouamama/MyJWT
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install myjwt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `myjwt 'eyJ...' --crack /tmp/wordlist.txt` | JWT 密钥爆破 |
-| `myjwt 'token' --kid injection` | KID 注入 |
-| `--jku bypass` | JKU 绕过 |
-| `--modify-payload 'admin:true'` | payload 篡改 |
-| `--verify` | 校验签名 |
+| `myjwt 'eyJ...' --crack /tmp/wordlist.txt` | JWT key brute force |
+| `myjwt 'token' --kid injection` | KID injection |
+| `--jku bypass` | JKU bypass |
+| `--modify-payload 'admin:true'` | Payload tampering |
+| `--verify` | Verify the signature |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### JWT 多攻击面测试
+### Multi-Attack-Surface JWT Testing
 
 ```bash
 myjwt $TOKEN --crack rockyou.txt
-# 弱密钥/kid/jku/alg:none 全覆盖
+# Covers weak keys/kid/jku/alg:none in one pass
 ```
 
-## 注意事项
+## Notes
 
-JWT 漏洞 Swiss Army: 爆破/篡改/kid/jku/alg confusion。
+A Swiss Army knife for JWT vulnerabilities: cracking/tampering/kid/jku/alg confusion.

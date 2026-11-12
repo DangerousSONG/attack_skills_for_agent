@@ -2,37 +2,40 @@
 name: trevorproxy-spray-pivot
 description: "TREVORproxy sprays from multiple source IPs. Signals: internal pivoting, tunneling, proxy-pool spraying, combinations, lists"
 zh-signals: "TREVORproxy: 多源 IP 喷洒。信号:内网穿透,隧道,代理池喷洒,组合,列表。"
+when-to-use: >-
+  Use when you need to spray or pivot through multiple source IPs to avoid rate
+  limiting and blend traffic during internal engagements.
 ---
 
 # TREVORproxy
 
-- 攻击大类:C32 隧道与内网穿透
-- 上游仓库:https://github.com/blacklanternsecurity/TREVORproxy
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C32 Tunneling and Internal Network Pivoting
+- Upstream Repository: https://github.com/blacklanternsecurity/TREVORproxy
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install trevorproxy
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `trevorproxy -i eth0 -d target.com` | 代理池喷洒 |
-| `-i eth0 -d d -u u.txt` | 组合 |
-| `-l` | 列表 |
+| `trevorproxy -i eth0 -d target.com` | Proxy pool spraying |
+| `-i eth0 -d d -u u.txt` | Combinations |
+| `-l` | List |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 多源 IP 喷洒
+### Multi-Source IP Spraying
 
 ```bash
 trevorproxy -i eth0 -d corp.com
-# 多网卡 IP 轮换
+# Rotate across multiple NIC IPs
 ```
 
-## 注意事项
+## Notes
 
-Black Lantern 出品,多出口 IP 代理。
+By Black Lantern, a multi-egress-IP proxy.

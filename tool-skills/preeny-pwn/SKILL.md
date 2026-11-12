@@ -2,36 +2,39 @@
 name: preeny-pwn
 description: "CTF/automated pwn assistance. Signals: pwn, binary exploitation, disable fork, delay to prevent brute-force speedup."
 zh-signals: "preeny: CTF/自动化 pwn 辅助。信号:pwn,二进制利用,去 fork,延时(暴力防提速)。"
+when-to-use: >-
+  Use when solving CTF pwn challenges or automating binary exploitation and you need LD_PRELOAD
+  shims to desock, defork, or slow a target.
 ---
 
 # preeny
 
-- 攻击大类:C46 二进制漏洞利用与Pwn
-- 上游仓库:https://github.com/zardus/preeny
-- 上游 License:BSD-2-Clause(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C46 Binary Exploitation and Pwn
+- Upstream Repository: https://github.com/zardus/preeny
+- Upstream License: BSD-2-Clause (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/zardus/preeny && make
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `LD_PRELOAD=./desock.so ./chroot` | socket→stdio 转换 |
-| `LD_PRELOAD=./defork.so ./bin` | 去 fork |
-| `LD_PRELOAD=./slow.o ./bin` | 延时(暴力防提速) |
+| `LD_PRELOAD=./desock.so ./chroot` | socket to stdio conversion |
+| `LD_PRELOAD=./defork.so ./bin` | Disable fork |
+| `LD_PRELOAD=./slow.o ./bin` | Add delay (prevents brute-force speedup) |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### CTF/自动化 pwn 辅助
+### CTF/automated pwn assistance
 
 ```bash
-LD_PRELOAD=./desock.so ./target  # socket 程序变 stdin 交互,直接 pipe payload
+LD_PRELOAD=./desock.so ./target  # Turns a socket program into stdin interaction so you can pipe the payload directly
 ```
 
-## 注意事项
+## Notes
 
-pwn 常用 LD_PRELOAD 补丁集;CTF 自动化与 fuzz 降速都靠它。
+A common set of LD_PRELOAD patches for pwn; powers both CTF automation and fuzzing slowdown.

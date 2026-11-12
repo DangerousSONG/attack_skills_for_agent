@@ -1,6 +1,8 @@
 ---
 name: hunt-ssrf
 description: Hunting skill for ssrf vulnerabilities.
+zh-signals: "狩猎 SSRF 服务端请求伪造漏洞，验证参数可控的 URL 能否触达内网服务或云元数据。信号:SSRF,服务端请求伪造,内网探测,云元数据,漏洞狩猎"
+when-to-use: "Use when a target accepts URLs, hostnames, or file paths in parameters and you need to test whether server-side request forgery can reach internal services or cloud metadata."
 category: security
 risk: offensive
 source: https://github.com/elementalsouls/Claude-BugHunter

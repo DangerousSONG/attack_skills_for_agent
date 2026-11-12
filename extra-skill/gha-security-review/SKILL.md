@@ -1,6 +1,10 @@
 ---
 name: gha-security-review
 description: "Find exploitable vulnerabilities in GitHub Actions workflows. Every finding MUST include a concrete exploitation scenario — if you can't build the attack, don't report it."
+zh-signals: "查找 GitHub Actions 工作流中可利用的漏洞，且每条发现都必须附带具体利用场景。信号:GitHub Actions,CI安全,工作流漏洞,供应链攻击,pull_request_target"
+when-to-use: >-
+  Use when reviewing GitHub Actions workflows for exploitable vulnerabilities and you can
+  articulate a concrete attack scenario for each finding.
 risk: safe
 source: community
 date_added: 2026-03-16

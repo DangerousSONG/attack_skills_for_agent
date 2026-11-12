@@ -1,42 +1,47 @@
 ---
 name: ctf-solve
-description: "CTF 综合解题编排器。当面对未知类型的 CTF 挑战、需要自动分析挑战类型并选择正确解题路径时使用。自动调度对应的专项 skill（pwn/crypto/web/reverse/forensics/osint/malware/misc），适合给定挑战文件或服务端点但不确定属于哪个类别的场景"
+description: "CTF general-purpose solve orchestrator. Use when facing a CTF challenge of unknown type and you need to automatically analyze the challenge type and select the correct solving path. It automatically dispatches the matching specialized skill (pwn/crypto/web/reverse/forensics/osint/malware/misc), which suits scenarios where you are given challenge files or a service endpoint but cannot tell which category it belongs to"
+zh-signals: "CTF 综合解题编排，先分类挑战再调度 pwn/crypto/web/reverse/forensics/osint/malware/misc 专项技能。信号:CTF,解题编排,挑战分类,多类型挑战"
+when-to-use: >-
+  Use when facing an unknown-type CTF challenge, given challenge files or a service
+  endpoint but unsure which category it belongs to, and you need to classify it and
+  dispatch the right specialized skill.
 metadata:
-  tags: "ctf,solve,编排,orchestrator,challenge,解题"
+  tags: "ctf,solve,orchestration,orchestrator,challenge,solving"
   category: "ctf"
 ---
 
-# CTF 综合解题编排器
+# CTF General-Purpose Solve Orchestrator
 
-## Phase 1: 解题流程
+## Phase 1: Solving Workflow
 
-### 1.1 侦察
+### 1.1 Reconnaissance
 
 ```bash
-file *                          # 识别文件类型
-strings binary | grep -i flag   # 快速字符串搜索
-xxd binary | head -20           # Hex 头部
-binwalk -e firmware.bin         # 提取嵌入文件
-checksec --file=binary          # 检查保护
-nc host port                    # 连接远程服务
+file *                          # Identify file types
+strings binary | grep -i flag   # Quick string search
+xxd binary | head -20           # Hex header
+binwalk -e firmware.bin         # Extract embedded files
+checksec --file=binary          # Check protections
+nc host port                    # Connect to a remote service
 ```
 
-### 1.2 分类与 Skill 调度
+### 1.2 Classification and Skill Dispatch
 
-**按文件类型：**
+**By file type:**
 
-| 文件类型 | 分类 | 调度 Skill |
+| File type | Category | Dispatch Skill |
 |----------|------|-----------|
-| .pcap/.evtx/.raw/.dd | 取证 | ctf-forensics |
-| ELF/PE + 远程服务 | Pwn | ctf-pwn |
-| ELF/PE/APK/.pyc/WASM | 逆向 | ctf-reverse |
-| .py/.sage + 数字 | 密码学 | ctf-crypto |
+| .pcap/.evtx/.raw/.dd | Forensics | ctf-forensics |
+| ELF/PE + remote service | Pwn | ctf-pwn |
+| ELF/PE/APK/.pyc/WASM | Reverse | ctf-reverse |
+| .py/.sage + numbers | Cryptography | ctf-crypto |
 | Web URL/HTML/JS/PHP | Web | ctf-web-methodology |
-| 图片/音频/PDF(无明显内容) | 隐写取证 | ctf-forensics |
+| Image/audio/PDF (no obvious content) | Steganography forensics | ctf-forensics |
 
-**按关键词：**
+**By keyword:**
 
-| 关键词 | 分类 |
+| Keyword | Category |
 |--------|------|
 | overflow/ROP/shellcode/heap | ctf-pwn |
 | RSA/AES/cipher/lattice/LWE | ctf-crypto |
@@ -46,32 +51,32 @@ nc host port                    # 连接远程服务
 | obfuscated/C2/malware/beacon | ctf-malware |
 | jail/sandbox/encoding/game | ctf-misc |
 
-### 1.3 卡住时转向
+### 1.3 Pivot When Stuck
 
-1. **重新分类** — 很多题跨分类（Web+Crypto, Forensics+Crypto, Reverse+Pwn）
-2. **检查遗漏** — 隐藏文件、备用端口、响应头、注释、元数据
-3. **简化** — 检查是否有更简单路径（默认凭据、已知CVE、逻辑漏洞）
+1. **Reclassify** — many challenges span categories (Web+Crypto, Forensics+Crypto, Reverse+Pwn)
+2. **Check for missed items** — hidden files, backup ports, response headers, comments, metadata
+3. **Simplify** — check whether a simpler path exists (default credentials, known CVEs, logic flaws)
 
-**常见跨分类模式：**
-- 取证 + 密码学：PCAP/磁盘中的加密数据
-- Web + 逆向：WASM 或混淆 JS
-- Web + 密码学：JWT 伪造、自定义签名
-- 逆向 + Pwn：先逆向再利用
-- OSINT + 隐写：社交媒体 Unicode 同形字
+**Common cross-category patterns:**
+- Forensics + Cryptography: encrypted data inside PCAP/disk images
+- Web + Reverse: WASM or obfuscated JS
+- Web + Cryptography: JWT forgery, custom signatures
+- Reverse + Pwn: reverse first, then exploit
+- OSINT + Steganography: social media Unicode homoglyphs
 
-## Phase 2: 辅助信息
+## Phase 2: Supporting Information
 
-### 2.1 Flag 格式
+### 2.1 Flag Format
 
-常见：`flag{...}` / `CTF{...}` / 自定义前缀（`ENO{...}` / `HTB{...}`）
+Common: `flag{...}` / `CTF{...}` / custom prefixes (`ENO{...}` / `HTB{...}`)
 
 ```bash
 grep -rniE '(flag|ctf|eno|htb|pico)\{' .
 strings output.bin | grep -iE '\{.*\}'
 ```
 
-### 2.2 卡住时策略
-- 回退侦察：robots.txt、.git、备份文件、目录扫描
+### 2.2 Strategy When Stuck
+- Fall back to reconnaissance: robots.txt, .git, backup files, directory scanning
 
-### 2.3 文件类型识别
-- SQLite 数据库文件：用 sqlite3 命令打开，.tables 查询表结构
+### 2.3 File Type Identification
+- SQLite database file: open it with the sqlite3 command and use .tables to query the schema

@@ -1,6 +1,8 @@
 ---
 name: fp-check
 description: "Systematically verifies suspected security bugs to eliminate false positives, producing a TRUE POSITIVE or FALSE POSITIVE verdict with documented evidence for each. Use when asked whether a specific finding is real, exploitable, or a false positive, or to verify or validate a suspected vulnerability — not for hunting or discovering new bugs."
+zh-signals: "系统验证疑似安全缺陷以排除误报，对每个结论给出真阳性或假阳性的判定与证据。信号:误报排查,真阳性,漏洞验证,证据判定,安全审计"
+when-to-use: "Use when asked whether a specific finding is real, exploitable, or a false positive, or to verify or validate a suspected vulnerability — not for hunting new bugs."
 allowed-tools: Read Grep Glob LSP Bash Task Write Edit AskUserQuestion TaskCreate TaskUpdate TaskList TaskGet
 ---
 

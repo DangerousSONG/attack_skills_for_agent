@@ -10,6 +10,8 @@ description: >
   annotations, importing binary graph findings, cross-referencing Semgrep,
   CodeQL, or binary-analysis findings with call graph data, or visualizing audit
   findings in the context of code structure.
+zh-signals: "将 SARIF、weAudit 与二进制分析结果叠加到 Trailmark 代码图谱，并按严重性生成子图。信号:审计增强,SARIF导入,weAudit,代码图谱,发现映射"
+when-to-use: "Use when projecting SARIF, weAudit, or binary-analysis findings onto a Trailmark code graph for cross-referencing or visualization."
 ---
 
 # Audit Augmentation

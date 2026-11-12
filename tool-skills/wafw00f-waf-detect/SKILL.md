@@ -2,39 +2,42 @@
 name: wafw00f-waf-detect
 description: "WAFW00F: Probe WAF before attacking. Signals: asset mapping, subdomains, identify WAF, list identifiable products, full detection mode."
 zh-signals: "WAFW00F: 打前先探 WAF。信号:资产测绘,子域名,识别 WAF,列出可识别产品,全量检测模式。"
+when-to-use: >-
+  Use when fingerprinting a web target before attacking to identify the WAF
+  product and decide on bypass and rate-limiting strategy.
 ---
 
 # WAFW00F
 
-- 攻击大类:C01 资产测绘与指纹识别
-- 上游仓库:https://github.com/EnableSecurity/wafw00f
-- 上游 License:BSD-3-Clause(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C01 Asset Mapping and Fingerprinting
+- Upstream Repository: https://github.com/EnableSecurity/wafw00f
+- Upstream License: BSD-3-Clause (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install wafw00f
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `wafw00f target.com` | 识别 WAF |
-| `-l` | 列出可识别产品 |
-| `-a` | 全量检测模式 |
-| `-v` | 详细输出 |
-| `--proxy` | 代理 |
+| `wafw00f target.com` | Identify WAF |
+| `-l` | List identifiable products |
+| `-a` | Full detection mode |
+| `-v` | Verbose output |
+| `--proxy` | Proxy |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 打前先探 WAF
+### Probe the WAF before attacking
 
 ```bash
 wafw00f api.target.com
-# 输出如 'cloudflare'/'aliyun' → 决定后续绕过策略与限速
+# Output like 'cloudflare'/'aliyun' → decides the bypass strategy and rate limit
 ```
 
-## 注意事项
+## Notes
 
-先探明 WAF 再定打法;识别结果直接指导 whatwaf/手动绕过方案选择。
+Identify the WAF first, then decide the approach; the detection result directly guides whatwaf/manual bypass selection.

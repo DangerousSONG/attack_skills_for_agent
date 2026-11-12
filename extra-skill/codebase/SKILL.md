@@ -9,6 +9,10 @@ description: |
   When LLM/AI usage is detected, reviews OWASP LLM Top 10 patterns and chains into /ai-redteam for live testing.
 
   Chains into /pentester, /threat-modeling, /web-exploit, /api-security, /cloud-security, /analyze-cve, /supply-chain, /cloud-identity-federation, /business-logic, /credential-audit, and /ai-redteam for targeted, informed assessment.
+zh-signals: "基于 OWASP ASVS 5.0 的白盒源码安全评审，构建可复用的安全知识库。信号:白盒审计,ASVS,源码评审,污点分析,供应链"
+when-to-use: >-
+  Use when performing a white-box security review of an application's source code to map
+  attack surface, auth architecture, dangerous patterns, and downstream testing targets.
 argument-hint: "<codebase-path> [depth=quick|standard|thorough] [focus=all|auth|injection|crypto|config|iac|llm|business-logic|nhi]"
 user-invocable: true
 ---

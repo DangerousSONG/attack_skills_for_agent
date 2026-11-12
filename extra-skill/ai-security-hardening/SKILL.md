@@ -2,6 +2,8 @@
 name: ai-security-hardening
 description: Harden AI/LLM deployments against prompt injection, data exfiltration,
   model theft, and supply chain attacks.
+zh-signals: "加固 AI/LLM 部署，防御提示注入、数据外泄、模型窃取与供应链攻击。信号:AI安全,提示注入,数据外泄,模型窃取,供应链"
+when-to-use: "Use when hardening AI/LLM deployments or reviewing LLM applications for prompt injection, data exfiltration, model theft, and supply chain risks."
 category: security
 risk: safe
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

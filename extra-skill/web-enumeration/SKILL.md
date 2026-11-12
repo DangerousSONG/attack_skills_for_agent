@@ -1,6 +1,10 @@
 ---
 name: web-enumeration
 description: "Sensitive file scanning, path traversal bypass, vHost enum, .env extract, log mining, Varnish detect"
+zh-signals: "Web 枚举，覆盖敏感文件扫描、路径穿越绕过、vHost 枚举、.env 提取、日志挖掘与 Varnish 识别。信号:Web枚举,敏感文件,路径穿越,vHost,.env"
+when-to-use: >-
+  Use when enumerating web targets for sensitive files, path traversal bypasses,
+  virtual hosts, exposed .env files, and log-derived secrets.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

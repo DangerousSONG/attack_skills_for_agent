@@ -1,6 +1,10 @@
 ---
 name: competition-android-hooking
 description: Internal downstream skill for ctf-sandbox-orchestrator. CTF-sandbox workflow for Android APK hooking, Frida tracing, request-signing recovery, SSL pinning bypass, JNI boundary inspection, and app trust-boundary analysis. Use when the user asks to hook an APK, inspect signer logic, trace Java or native boundaries, bypass pinning or root checks, inspect shared prefs or app databases, or replay accepted mobile requests. Use only after `$ctf-sandbox-orchestrator` has already established sandbox assumptions and routed here.
+zh-signals: "针对 Android APK 的 Frida Hook 与请求签名恢复，绕过 SSL Pinning/root 检测并分析 JNI 信任边界。信号:APK Hook,Frida,签名恢复,SSL Pinning绕过,JNI"
+when-to-use: >-
+  Use after the CTF sandbox orchestrator has routed here, when the decisive path requires hooking an
+  Android app's signer logic, JNI boundary, or request builder, bypassing pinning/root checks, or replaying accepted mobile requests.
 ---
 
 # Competition Android Hooking

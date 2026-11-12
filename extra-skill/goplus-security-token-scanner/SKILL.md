@@ -1,6 +1,8 @@
 ---
 name: goplus-security-token-scanner
 description: Scan and analyze blockchain tokens for security risks using GoPlus Security API with enterprise features
+zh-signals: "使用 GoPlus Security API 扫描区块链代币与合约的安全风险。信号:代币安全,智能合约,goplus,蜜罐检测,区块链"
+when-to-use: "Use when scanning a blockchain token or smart contract for honeypots, rugpulls, malicious code, or trading risks before trading."
 triggers:
   - scan this token for security vulnerabilities
   - check token contract security with goplus

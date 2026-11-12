@@ -2,6 +2,10 @@
 name: aflpp
 type: fuzzer
 description: "Sets up and runs AFL++ for multi-core fuzzing of C/C++ projects built with afl-clang-fast or afl-gcc-fast. Covers instrumentation modes, parallel main and secondary campaigns, persistent mode, corpus minimization, and crash triage. Use when scaling fuzzing across cores, fuzzing a mature C/C++ codebase, reading the afl-fuzz status screen, or moving on after libFuzzer has plateaued."
+zh-signals: "为 C/C++ 项目搭建并运行 AFL++ 多核模糊测试，覆盖插桩模式、并行 campaign、持久模式与崩溃分类。信号:AFL++,模糊测试,多核,插桩,崩溃分类"
+when-to-use: >-
+  Use when scaling fuzzing across cores for a mature C/C++ codebase, reading the
+  afl-fuzz status screen, or continuing after libFuzzer has plateaued.
 ---
 
 # AFL++

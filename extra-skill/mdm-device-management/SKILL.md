@@ -1,6 +1,8 @@
 ---
 name: mdm-device-management
 description: Manage and secure company devices with MDM solutions
+zh-signals: "使用 MDM 解决方案管理与保护公司设备，覆盖部署、加固与策略配置。信号:MDM,设备管理,终端安全,策略配置,合规"
+when-to-use: "Use when provisioning, hardening, or operating mobile device management infrastructure for company devices within an authorized environment."
 category: devops
 risk: critical
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

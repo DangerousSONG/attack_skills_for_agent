@@ -2,6 +2,10 @@
 name: ssrf
 description: >
   Server-Side Request Forgery (SSRF) occurs when user-controlled input is used to construct URLs that the server fetches, enabling access to internal services, cloud metadata endpoints (169.254.169.254), and local files via `file://` scheme. Detect via parameters accepting URLs or hostnames, PDF/report generators rendering `<iframe>/<img>/<script>`, and blind SSRF via out-of-band DNS callbacks. Bypass filters using IP decimal/octal/hex encoding, URL-userinfo tricks, and URL fragments. Tools: Burp Collaborator, curl.
+zh-signals: "检测与利用服务端请求伪造（SSRF），覆盖内网探测、云元数据访问、file 协议与过滤绕过。信号:SSRF,内网探测,云元数据,OOB回调,过滤绕过"
+when-to-use: >-
+  Use when a parameter accepts URLs or hostnames, the app fetches remote content server-side,
+  or you need to test internal service access and blind SSRF via out-of-band callbacks.
 license: MIT
 compatibility: Designed for Claude Code. Requires Burp Suite with Collaborator, or interactsh/ngrok for OOB detection.
 metadata:

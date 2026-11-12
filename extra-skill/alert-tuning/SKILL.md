@@ -1,6 +1,9 @@
 ---
 name: alert-tuning
 description: SOC alert-tuning workflow — false-positive reduction via targeted suppressions (rule-id + reason + expiry), baseline learning, rule retirement, severity recalibration, and metrics (alert volume, mean-time-to-triage, fatigue index). Prevents detection collapse without losing coverage.
+zh-signals: "SOC 告警调优流程，通过定向抑制、基线学习与规则退役降低误报。信号:告警调优,误报抑制,基线学习,规则退役,SOC"
+when-to-use: >-
+  Use when reducing SOC false positives, suppressing noisy rules, or reviewing and recalibrating an existing alert-tuning stack.
 ---
 
 # Alert Tuning

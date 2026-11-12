@@ -1,6 +1,8 @@
 ---
 name: iam-audit
 description: "Audit, design, and migrate Identity and Access Management — cloud provider IAM (AWS, GCP, Azure), identity providers (Okta, Entra ID / Azure AD, Auth0, Google Workspace), application authorization (RBAC, ABAC, ReBAC), and federated identity. Use when the user mentions 'IAM,' 'identity,' 'access management,' 'least privilege,' 'role design,' 'SSO,' 'SAML,' 'OIDC,' 'OAuth,' 'JIT access,' 'just-in-time access,' 'break-glass,' 'service accounts,' 'RBAC,' 'ABAC,' 'privilege creep,' 'role explosion,' 'identity governance,' 'IAM strategy,' 'identity migration,' 'Okta,' 'Entra ID,' 'Azure AD,' 'Auth0,' 'Cognito,' or needs identity consultant-level guidance."
+zh-signals: "身份与访问管理（IAM）审计、设计与迁移。信号:IAM,身份,最小权限,SSO,SAML,RBAC"
+when-to-use: "Use when the user asks to audit, design, or migrate IAM across cloud providers, identity providers, application authorization models, or federated identity."
 allowed-tools: Bash, Read, Write, Grep, Glob, WebSearch
 ---
 

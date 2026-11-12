@@ -8,6 +8,8 @@ description: >
   miss. Use when comparing code between commits or tags, analyzing structural
   evolution, detecting attack surface growth, reviewing what changed between
   audit snapshots, or finding security-relevant changes that text diffs miss.
+zh-signals: "比较两个源码快照的 Trailmark 代码图，发现安全相关的结构性变化。信号:代码图,结构差异,攻击路径,污点传播,安全审计"
+when-to-use: "Use when comparing code between commits or tags and needing to detect new attack paths, blast radius growth, or other security-relevant structural changes."
 ---
 
 # Graph Evolution

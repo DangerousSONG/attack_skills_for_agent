@@ -2,6 +2,8 @@
 name: incident-management
 description: Implement incident management processes and escalation procedures. Configure
   on-call schedules and post-incident reviews. Use when managing production incidents.
+zh-signals: "事件管理流程与升级机制技能，用于配置值班排班、严重级别定义与无责复盘。信号:事件管理,升级机制,值班排班,严重级别,事后复盘"
+when-to-use: "Use when implementing incident management processes, defining severity levels and escalation matrices, coordinating war rooms, or running blameless post-incident reviews."
 category: security
 risk: safe
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

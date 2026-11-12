@@ -1,6 +1,8 @@
 ---
 name: yuandian
-description: 元典智库 — 企业尽调与法律合规一体化 Skill。提供法律法规检索与效力校验、司法案例与判决文书查询、企业工商信息与股权结构与涉诉记录全景查询。当用户需要做尽调简报、合同/文书法规引用核验、风控审查、投资决策时，优先使用本 Skill。
+description: "Yuandian Law Database — an all-in-one skill for enterprise due diligence and legal compliance. Provides legal and regulatory retrieval with validity verification, judicial case and judgment document lookup, and full-picture queries of company registration information, equity structure, and litigation records. Use this skill first for due diligence briefs, verification of legal citations in contracts or documents, risk control reviews, and investment decisions."
+zh-signals: "元典智库企业尽调与法律合规技能，提供法规检索校验、司法案例查询与企业工商涉诉信息全景查询。信号:企业尽调,法律合规,法规检索,司法案例,工商信息"
+when-to-use: "Use when performing due diligence briefs, verifying legal citations in contracts or documents, conducting risk control reviews, or supporting investment decisions with regulatory, case, and company data."
 license: MIT
 version: 1.0.0
 homepage: https://www.chineselaw.com
@@ -11,25 +13,25 @@ metadata:
     primaryEnv: YUANDIAN_API_KEY
 ---
 
-# 元典智库 — 企业尽调与法律合规
+# Yuandian Law Database — Enterprise Due Diligence and Legal Compliance
 
-通过 3 个原生 HTTP MCP server 提供能力，覆盖「法规」「案例」「企业」三类核心数据，由 `mcporter` 统一驱动调用。
+Capabilities are delivered through 3 native HTTP MCP servers covering the three core data categories "law", "case", and "company", all driven through `mcporter`.
 
-| MCP 服务名 | 用途 | 典型问题 |
+| MCP Server Name | Purpose | Typical Questions |
 |------------|------|----------|
-| `yuandian-law` | 法律法规检索、效力校验 | 「这条引用的法规还有效吗？」「最新的反不正当竞争法第 X 条原文」 |
-| `yuandian-case` | 司法案例、判决文书、诉讼记录 | 「这家公司被诉过哪些案件？」「类似案件的裁判倾向」 |
-| `yuandian-company` | 工商信息、股权结构、企业全景 | 「这家公司股东结构」「实际控制人」「关联企业」 |
+| `yuandian-law` | Legal and regulatory retrieval, validity verification | "Is this cited regulation still in force?" "What is the current text of Article X of the Anti-Unfair Competition Law?" |
+| `yuandian-case` | Judicial cases, judgment documents, litigation records | "Which cases has this company been sued in?" "What is the adjudication tendency for similar cases?" |
+| `yuandian-company` | Company registration information, equity structure, company overview | "Who are this company's shareholders?" "Who is the actual controller?" "Which affiliated companies exist?" |
 
-## ⚡ 强制初始化（每次加载 Skill 必须执行）
+## ⚡ Mandatory Initialization (Must Run Every Time the Skill Loads)
 
-**进入本 Skill 后，在执行任何用户操作之前，必须先完成 API Key 获取并将 3 个 MCP server 注册到 mcporter。不得跳过此步骤。**
+**After entering this skill and before performing any user operation, you must first obtain the API Key and register the 3 MCP servers with mcporter. This step must not be skipped.**
 
-### 执行步骤
+### Execution Steps
 
-1. **获取 API Key 并注册 MCP server**（`SKILL_DIR` 为本 skill 根目录）：
+1. **Obtain the API Key and register the MCP servers** (`SKILL_DIR` is the root directory of this skill):
 
-   - macOS / Linux：
+   - macOS / Linux:
      ```bash
      api_key=$(bash "${SKILL_DIR}/get-token.sh") && \
      mcporter config remove yuandian-law 2>/dev/null; \
@@ -49,7 +51,7 @@ metadata:
        --transport http --scope home
      ```
 
-   - Windows (PowerShell)：
+   - Windows (PowerShell):
      ```powershell
      $apiKey = & "${SKILL_DIR}\get-token.ps1"
      mcporter config remove yuandian-law 2>$null
@@ -69,86 +71,86 @@ metadata:
        --transport http --scope home
      ```
 
-2. **完成注入后**，使用 mcporter 调用：
+2. **After the injection is complete**, call via mcporter:
    ```bash
-   mcporter list yuandian-law --schema           # 查看法规服务的工具列表
-   mcporter list yuandian-case --schema          # 查看案例服务的工具列表
-   mcporter list yuandian-company --schema       # 查看企业服务的工具列表
+   mcporter list yuandian-law --schema           # view the tool list of the law service
+   mcporter list yuandian-case --schema          # view the tool list of the case service
+   mcporter list yuandian-company --schema       # view the tool list of the company service
    mcporter call yuandian-company.<tool> --args '{...}'
    ```
 
-3. **仅当脚本执行失败（exit code ≠ 0）或 mcporter 调用返回 401**，提示用户在集成面板中完成元典智库授权。
+3. **Only when the script execution fails (exit code ≠ 0) or an mcporter call returns 401**, prompt the user to complete the Yuandian authorization in the integration panel.
 
-### 🚫 禁止行为
+### 🚫 Forbidden Behaviors
 
-- ❌ **禁止**跳过 `get-token.sh` 直接询问用户手动输入 API Key（除非脚本失败）
-- ❌ **禁止**使用之前会话中缓存的 API Key 值
-- ❌ **禁止**将 API Key 明文输出到终端
-- ❌ **禁止**直接 curl 调用 https://open.chineselaw.com/mcp/* — 必须通过 mcporter
+- ❌ **Never** skip `get-token.sh` and ask the user to enter the API Key manually (unless the script fails)
+- ❌ **Never** use an API Key value cached from a previous session
+- ❌ **Never** print the API Key in plaintext to the terminal
+- ❌ **Never** call https://open.chineselaw.com/mcp/* directly with curl — you must go through mcporter
 
-## 使用准则
+## Usage Guidelines
 
-### 准则 1：调用方式
+### Guideline 1: Invocation Method
 
-所有工具调用统一通过 `mcporter call <server>.<tool>` 完成；先用 `mcporter list <server> --schema` 获取工具列表与参数规范，再按规范填参数。
+All tool calls go through `mcporter call <server>.<tool>`; first use `mcporter list <server> --schema` to obtain the tool list and parameter specification, then fill in the parameters according to that specification.
 
-### 准则 2：工具选择
+### Guideline 2: Tool Selection
 
-- 用户问"法规/法条/规定/条款是否有效/被废止/最新文本" → `yuandian-law`
-- 用户问"案件/判决/诉讼/裁判/案例" → `yuandian-case`
-- 用户问"公司/工商/股东/控股/关联企业/实际控制人/企业基本信息" → `yuandian-company`
-- 涉及多类数据（如「公司涉诉记录」既包含 case 也包含 company） → 分别调用，最后由 Agent 合并归纳
+- User asks about "law / statutes / regulations / whether a clause is valid / repealed / the latest text" → `yuandian-law`
+- User asks about "cases / judgments / litigation / rulings / precedents" → `yuandian-case`
+- User asks about "company / business registration / shareholders / shareholding / affiliated companies / actual controller / basic company information" → `yuandian-company`
+- When multiple data categories are involved (for example "the company's litigation records" covers both case and company) → call them separately and have the Agent merge and summarize the results
 
-### 准则 3：参数获取顺序
+### Guideline 3: Parameter Acquisition Order
 
-1. 用户**已提供精确实体名/法规名**：直接传入
-2. 用户**只给关键词或模糊描述**：先用对应 server 的检索类工具拿候选列表，向用户确认目标后再调用详情类工具
-3. 不得编造企业全名、法规序号、案号
+1. The user **has provided an exact entity name or regulation name**: pass it directly
+2. The user **only gave keywords or a vague description**: first use the corresponding server's search-type tool to get a candidate list, confirm the target with the user, then call the detail-type tool
+3. Never fabricate full company names, regulation article numbers, or case numbers
 
-### 准则 4：结果呈现
+### Guideline 4: Result Presentation
 
-- 输出使用 Markdown，关键字段（公司名、案号、法规名、生效日期、当事人、裁判结果）加粗或表格化
-- 引用法规/案例/企业全景时，必须保留原始来源链接或 ID 字段（mcporter 返回中通常带 `url` / `id` / `caseNo` / `creditCode`）
-- 涉及风险点（涉诉、行政处罚、股权异常）单独高亮，不要混在普通信息里
+- Output in Markdown, with key fields (company name, case number, regulation name, effective date, parties, adjudication result) bolded or tabulated
+- When citing a regulation, case, or company overview, the original source link or ID field must be preserved (mcporter results usually carry `url` / `id` / `caseNo` / `creditCode`)
+- Highlight risk items (litigation, administrative penalties, abnormal equity changes) separately; do not mix them into ordinary information
 
-## 典型场景示例
+## Typical Scenario Examples
 
-### 场景 1：企业风险简报
+### Scenario 1: Enterprise Risk Brief
 
-> 用户：「查一下北京华宇元典信息服务有限公司的基本信息、股东结构和涉诉记录，整理成一份风险简报」
+> User: "Look up the basic information, shareholder structure, and litigation records of Beijing Huayu Yuandian Information Services Co., Ltd., and organize them into a risk brief"
 
-执行顺序：
-1. `mcporter call yuandian-company.<search_or_detail>` —— 拿基本信息 + 股东结构
-2. `mcporter call yuandian-case.<list_by_company>` —— 拿涉诉记录
-3. Agent 整合输出风险简报：
-   - 基本信息（统一社会信用代码、注册资本、经营范围、成立日期）
-   - 股权结构（股东名称、持股比例、出资额）
-   - 涉诉摘要（案件总数、典型案件、裁判结果分布）
-   - 风险提示（如有重大诉讼、股权变更频繁、行政处罚）
+Execution order:
+1. `mcporter call yuandian-company.<search_or_detail>` — get basic information + shareholder structure
+2. `mcporter call yuandian-case.<list_by_company>` — get litigation records
+3. The Agent produces the consolidated risk brief:
+   - Basic information (Unified Social Credit Code, registered capital, business scope, date of establishment)
+   - Equity structure (shareholder names, shareholding percentages, capital contributions)
+   - Litigation summary (total case count, typical cases, distribution of adjudication outcomes)
+   - Risk warnings (e.g. major litigation, frequent equity changes, administrative penalties)
 
-### 场景 2：法规效力核验
+### Scenario 2: Regulation Validity Verification
 
-> 用户：「校验这段法律意见书引用的法规是否还有效，并标出失效或已修订的条款」
+> User: "Verify whether the regulations cited in this legal opinion are still in force, and mark the provisions that have expired or been amended"
 
-执行顺序：
-1. 解析用户提供的文本，逐条提取「法规名 + 条款序号」
-2. 对每条 `mcporter call yuandian-law.<verify_or_detail>` 拿当前效力状态与最新文本
-3. Agent 输出对照表：
-   - ✅ 有效条款：保留原文
-   - ⚠️ 已修订：原文 + 现行文本对比
-   - ❌ 已失效/废止：标注失效日期与替代法规
+Execution order:
+1. Parse the text provided by the user and extract each "regulation name + article number"
+2. For each one, `mcporter call yuandian-law.<verify_or_detail>` to get the current validity status and the latest text
+3. The Agent outputs a comparison table:
+   - ✅ Valid provision: keep the original text
+   - ⚠️ Amended: original text compared against the current text
+   - ❌ Expired/repealed: mark the expiry date and the replacement regulation
 
-## 错误处理
+## Error Handling
 
-| 现象 | 处理动作 |
+| Symptom | Handling Action |
 |------|---------|
-| `get-token.sh` 退出码 ≠ 0 | 提示用户在集成面板中完成元典智库授权，**禁止**引导用户去 open.chineselaw.com 手动取 Key 填入命令 |
-| `mcporter call` 返回 401/403 | 重新执行强制初始化步骤获取最新 token |
-| `mcporter list` 找不到 server | 检查初始化是否成功执行；可手动运行 `mcporter config list` 确认 3 个 server 已注册 |
-| 工具参数错误 | 重新阅读 `mcporter list <server> --schema` 输出，按返回的 schema 修正参数；**禁止**主动修改用户提供的实体名 |
+| `get-token.sh` exit code ≠ 0 | Prompt the user to complete the Yuandian authorization in the integration panel; **never** guide the user to open.chineselaw.com to fetch the Key manually and paste it into the command |
+| `mcporter call` returns 401/403 | Re-run the mandatory initialization steps to obtain the latest token |
+| `mcporter list` cannot find the server | Check whether initialization ran successfully; you can run `mcporter config list` manually to confirm the 3 servers are registered |
+| Incorrect tool parameters | Re-read the output of `mcporter list <server> --schema` and fix the parameters according to the returned schema; **never** proactively modify entity names provided by the user |
 
-## 不触发场景
+## Non-Triggering Scenarios
 
-- 通用法律咨询、法律意见生成（仅做规则引用核验时才走本 Skill）
-- 个人征信查询（与企业征信不同）
-- 实时舆情、新闻、社交媒体内容
+- General legal consultation and legal opinion drafting (this skill is only used for verifying rule citations)
+- Personal credit report queries (different from enterprise credit investigation)
+- Real-time public opinion, news, and social media content

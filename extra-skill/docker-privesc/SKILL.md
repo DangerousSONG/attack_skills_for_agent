@@ -1,6 +1,8 @@
 ---
 name: docker-privesc
 description: Escape Docker containers to host root via 5 techniques.
+zh-signals: "通过 5 种技术从 Docker 容器逃逸获取宿主机 root 权限。信号:Docker逃逸,容器逃逸,提权,docker.sock,宿主机root"
+when-to-use: "Use when you have shell access inside a Docker container, membership in the docker group, or access to a mounted /var/run/docker.sock and need to escalate to host root."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

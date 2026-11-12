@@ -1,6 +1,8 @@
 ---
 name: attack-tree-construction
 description: "Build comprehensive attack trees to visualize threat paths. Use when mapping attack scenarios, identifying defense gaps, or communicating security risks to stakeholders."
+zh-signals: "构建攻击树以可视化威胁路径。信号:攻击树,威胁建模,攻击路径,防御缺口,风险沟通"
+when-to-use: "Use when mapping attack scenarios, identifying defense gaps, or communicating security risks to stakeholders via attack-tree modeling."
 risk: offensive
 source: community
 date_added: "2026-02-27"

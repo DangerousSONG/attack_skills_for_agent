@@ -1,6 +1,10 @@
 ---
 name: hunt-xss
 description: Hunting skill for xss vulnerabilities.
+zh-signals: "基于公开漏洞报告整理 XSS 漏洞的挖掘方法，用于对目标开展跨站脚本猎取。信号:XSS,跨站脚本,漏洞挖掘,Bug Bounty"
+when-to-use: >-
+  Use when hunting XSS vulnerabilities on a target, with explicit written authorization and the
+  relevant testing tools available.
 category: security
 risk: offensive
 source: https://github.com/elementalsouls/Claude-BugHunter

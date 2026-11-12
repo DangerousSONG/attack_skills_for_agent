@@ -1,6 +1,11 @@
 ---
 name: less-aggressive-attack
 description: Tests for vulnerabilities less aggressively — read-only where possible, confirming a flaw without exercising its full impact or causing damage, under a strict set of safety rules. Not the default; activate only when the user explicitly signals safety as a constraint, e.g. "don't break anything", "read-only", "non-destructive testing", "careful with production", "keep it clean", or "just prove the finding, don't exploit it fully".
+zh-signals: "以只读、非破坏的方式验证漏洞确实存在，而不触发完整危害，在严格安全规则下开展进攻性测试。信号:只读测试,非破坏,安全约束,生产环境,漏洞验证"
+when-to-use: >-
+  Use only when the user explicitly signals safety as a constraint (read-only,
+  non-destructive, do not break anything, careful with production) and wants a
+  finding proven without exercising its full impact.
 license: MIT
 metadata:
   version: "1.0.0"

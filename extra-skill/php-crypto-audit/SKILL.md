@@ -1,39 +1,41 @@
 ---
 name: php-crypto-audit
-description: PHP Web 源码加密与密钥安全审计工具。识别弱哈希/弱加密/硬编码密钥/签名校验缺陷，输出分级、PoC 与修复建议（禁止省略）。
+description: "PHP web source code cryptographic and key security audit tool. Identifies weak hashing / weak encryption / hardcoded keys / signature verification flaws, and outputs severity ratings, PoC and remediation recommendations (must not be omitted)."
+zh-signals: "审计 PHP 源码中的弱哈希、弱加密、硬编码密钥与签名校验缺陷。信号:PHP加密审计,弱哈希,硬编码密钥,JWT校验,签名缺陷。"
+when-to-use: >-
+  Use when reviewing a PHP codebase for cryptographic weaknesses such as MD5/SHA1 password hashing, insecure cipher modes, fixed IVs, hardcoded keys, or flawed JWT/HMAC signature verification.
 ---
 
-# PHP 加密与密钥安全审计（php-crypto-audit）
+# PHP Cryptography and Key Security Audit (php-crypto-audit)
 
-分析 PHP 项目源码中密码/令牌/敏感数据的加密与哈希实现，检测：
-- 弱哈希（MD5/SHA1/无 salt）
-- 不安全的对称/非对称加密使用（ECB、固定 IV、错误模式）
-- 签名校验缺陷（JWT 未验证、HMAC 用错、算法选择可控）
-- 硬编码密钥/明文 key 泄露
+Analyze the cryptographic and hashing implementations for passwords / tokens / sensitive data in PHP project source code, and detect:
+- Weak hashing (MD5/SHA1/no salt)
+- Insecure symmetric/asymmetric encryption usage (ECB, fixed IV, wrong mode)
+- Signature verification flaws (JWT not verified, wrong HMAC usage, attacker-controllable algorithm selection)
+- Hardcoded keys / plaintext key exposure
 
-## 分级与编号
-- 详见：`shared/SEVERITY_RATING.md`
-- 漏洞编号：`{C/H/M/L}-CRYPTO-{序号}`
+## Severity Rating and Numbering
+- See `shared/SEVERITY_RATING.md` for details
+- Vulnerability ID: `{C/H/M/L}-CRYPTO-{seq}`
 
-## 必检 Sink（强制）
-必须搜索并分析以下实现点（按项目实际替换）：
-- 密码哈希：`md5/sha1/hash`（非 password_hash）、`crypt` 参数误用
-- 安全哈希：`password_hash`/`password_verify`（检查是否参数正确）
-- 对称加密：`openssl_encrypt/decrypt`（检查 mode/iv）
-- 签名：`hash_hmac`、`openssl_sign`、JWT verify/签名比较实现
+## Mandatory Sinks to Check (Required)
+You must search for and analyze the following implementation points (replace them with the project's actual equivalents):
+- Password hashing: `md5/sha1/hash` (not `password_hash`), misuse of `crypt` parameters
+- Secure hashing: `password_hash` / `password_verify` (check whether the parameters are correct)
+- Symmetric encryption: `openssl_encrypt/decrypt` (check mode/iv)
+- Signature: `hash_hmac`, `openssl_sign`, JWT verify / signature comparison implementations
 
-## 必检要求（强制）
-- 必须定位“密钥来源”：硬编码/环境变量/配置文件/请求参数
-- 必须判断“校验是否可靠”：是否存在算法可控或比较时序泄露
-- 必须输出修复建议与迁移方案（例如升级哈希算法、强制使用参数化模式）
+## Mandatory Checks (Required)
+- You must locate the "key source": hardcoded / environment variable / config file / request parameter
+- You must judge "whether verification is reliable": whether the algorithm is attacker-controllable or the comparison leaks timing
+- You must output remediation recommendations and a migration plan (e.g. upgrade the hashing algorithm, enforce parameterized modes)
 
-## PoC（强制框架）
-由于加密类漏洞可能依赖环境，PoC 至少要给出：
-- 可执行的“验证框架”（例如构造 JWT payload 并解释应当发生的验证失败/绕过）
-- 或给出可观测的证据（例如日志泄露、错误模式产生可逆结果）
+## PoC (Required Framework)
+Because cryptographic vulnerabilities may depend on the environment, the PoC must at minimum provide:
+- An executable "verification framework" (e.g. construct a JWT payload and explain which verification failure / bypass should occur)
+- Or observable evidence (e.g. log leakage, error patterns producing reversible results)
 
-## 报告输出
+## Report Output
 ```
 {output_path}/vuln_audit/crypto_{timestamp}.md
 ```
-

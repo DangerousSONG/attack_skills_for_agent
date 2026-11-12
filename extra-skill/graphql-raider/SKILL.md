@@ -1,6 +1,11 @@
 ---
 name: graphql-raider
 description: Complete GraphQL security testing methodology — introspection abuse and schema enumeration, field suggestion oracle (when introspection is disabled), query depth/batching DoS, alias-based rate limit bypass, injection through arguments (SQL/NoSQL/SSTI), broken object-level and field-level authorization (IDOR via mutations), CSRF via GET mutations and content-type bypass, subscription hijacking via WebSocket, circular fragment DoS, and mass assignment via mutations. Trigger when the user finds a /graphql endpoint, sees GraphQL queries in traffic, wants to test a GraphQL API for vulnerabilities, needs to enumerate a hidden schema without introspection, wants to bypass rate limits or brute-force credentials through GraphQL, or needs to escalate privileges through mutations.
+zh-signals: "GraphQL API 全流程安全测试，涵盖 introspection、字段建议、深度/批量 DoS、别名限速绕过、注入、IDOR 与订阅劫持。信号:GraphQL,introspection,IDOR,批量攻击,API安全"
+when-to-use: >-
+  Use when you find a /graphql endpoint or GraphQL traffic, need to enumerate a hidden
+  schema without introspection, bypass rate limits, or escalate privileges through
+  GraphQL mutations.
 license: MIT
 metadata:
   version: "1.0.0"

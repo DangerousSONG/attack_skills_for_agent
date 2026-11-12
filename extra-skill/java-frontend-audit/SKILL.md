@@ -1,90 +1,94 @@
 ---
 name: java-frontend-audit
 description: |
-  Java 源码前端安全类漏洞审计。当在 Java 白盒审计中需要检测前端安全漏洞时触发。
-  覆盖 5 类风险: XSS(JSP/Thymeleaf/FreeMarker 输出转义)、CSRF(Spring Security/自定义 Token)、
-  开放重定向(sendRedirect/forward)、CRLF 注入(Header/Cookie)、Session 管理(固定/超时/并发)。
-  需要 java-audit-pipeline 提供的数据流证据。
+  Java source code front-end security vulnerability audit. Triggered during Java white-box audits when front-end security vulnerabilities need to be detected.
+  Covers 5 categories of risk: XSS (JSP/Thymeleaf/FreeMarker output escaping), CSRF (Spring Security/custom token),
+  open redirect (sendRedirect/forward), CRLF injection (header/cookie), and session management (fixation/timeout/concurrency).
+  Requires the data-flow evidence provided by java-audit-pipeline.
+zh-signals: "审计 Java 源码中的 XSS、CSRF、开放重定向、CRLF 注入与 Session 管理前端安全漏洞。信号:XSS,CSRF,开放重定向,CRLF注入,Session管理,Java审计"
+when-to-use: >-
+  Use during Java white-box source audit when validating whether front-end security
+  vulnerabilities hold, relying on data-flow evidence produced by java-audit-pipeline.
 metadata:
-  tags: xss, csrf, open redirect, crlf injection, session, jsp, thymeleaf, freemarker, spring security, 前端安全, java source audit
+  tags: xss, csrf, open redirect, crlf injection, session, jsp, thymeleaf, freemarker, spring security, front-end security, java source audit
   category: code-audit
 ---
 
-# Java 前端安全类漏洞源码审计
-本 skill 聚焦源码层面判断"前端安全漏洞是否成立"，核心是验证用户输入在输出到 HTTP 响应（HTML/Header/Cookie/重定向）过程中的过滤与转义是否充分。构造 payload、绕 WAF 等运行时利用技术属于对应黑盒 exploit skill 范畴。
+# Java Front-End Security Vulnerability Source Code Audit
+This skill focuses on the source code level: determining whether a "front-end security vulnerability actually holds". Its core is verifying whether filtering and escaping are sufficient as user input flows into the HTTP response (HTML/header/cookie/redirect). Runtime exploitation techniques such as crafting payloads or bypassing WAFs belong to the corresponding black-box exploit skills.
 
-## 深入参考
+## Further Reading
 
-- 5 类前端漏洞的危险模式 / 安全模式代码对比 / EVID 证据示例 -> [references/frontend-vuln-patterns.md](references/frontend-vuln-patterns.md)
+- Dangerous patterns of the 5 front-end vulnerability categories / secure vs. insecure code comparison / EVID evidence examples -> [references/frontend-vuln-patterns.md](references/frontend-vuln-patterns.md)
 
 ---
 
-## 5 类前端安全漏洞速查表
+## Quick Reference Table of the 5 Front-End Security Vulnerability Categories
 
-| 类型 | 典型 Sink | 危险模式 | 严重度 |
+| Type | Typical Sink | Dangerous Pattern | Severity |
 |------|-----------|----------|--------|
-| XSS | JSP `<%= %>`, `th:utext`, `${var?no_esc}`, `out.println()` | 用户输入未经转义直接输出到 HTML/JS 上下文 | High-Medium |
-| CSRF | 状态变更 POST/PUT/DELETE 接口 | `csrf().disable()` 或缺少 Token 校验的写操作端点 | High-Medium |
-| 开放重定向 | `sendRedirect()`, `return "redirect:" + url` | 用户可控 URL 直接传入重定向函数 | Medium |
-| CRLF 注入 | `setHeader()`, `addHeader()`, `addCookie()` | 用户输入未过滤 `\r\n` 直接写入 HTTP 头 | Medium-High |
-| Session 管理 | `getSession()`, `Cookie` 构造, `session-timeout` | 登录后未重建 Session / Cookie 缺少安全属性 | Medium-High |
+| XSS | JSP `<%= %>`, `th:utext`, `${var?no_esc}`, `out.println()` | User input output to HTML/JS context without escaping | High-Medium |
+| CSRF | State-changing POST/PUT/DELETE endpoints | `csrf().disable()` or write endpoints lacking token validation | High-Medium |
+| Open redirect | `sendRedirect()`, `return "redirect:" + url` | User-controllable URL passed directly into a redirect function | Medium |
+| CRLF injection | `setHeader()`, `addHeader()`, `addCookie()` | User input written into the HTTP header without filtering `\r\n` | Medium-High |
+| Session management | `getSession()`, `Cookie` construction, `session-timeout` | Session not regenerated after login / cookie missing security attributes | Medium-High |
 
-## 通用审计流程（4 步）
+## General Audit Workflow (4 Steps)
 
-**Step 1 -- 确认 EVID 证据点**: 从 `java-audit-pipeline` Phase 3 产出的 EVID_* 证据中，筛选前端安全类条目（EVID_XSS_*、EVID_CSRF_*、EVID_REDIR_*、EVID_CRLF_*、EVID_SESSION_*）。没有 EVID 证据的 Sink 只能标"待验证"。
+**Step 1 -- Confirm the EVID evidence points**: from the EVID_* evidence produced by Phase 3 of `java-audit-pipeline`, select the front-end security entries (EVID_XSS_*, EVID_CSRF_*, EVID_REDIR_*, EVID_CRLF_*, EVID_SESSION_*). Sinks without EVID evidence can only be marked "to be verified".
 
-**Step 2 -- 判断过滤有效性**: 追踪 Source->Sink 路径上每一步过滤/转义操作，评估其对当前漏洞类型是否有效。常见陷阱: `<c:out>` 安全但 `<%= %>` 不转义、`th:text` 安全但 `th:utext` 不转义、URL 白名单可被 `//evil.com` 绕过。
+**Step 2 -- Judge filtering effectiveness**: trace every filtering/escaping operation along the Source->Sink path and evaluate whether it is effective for the current vulnerability type. Common traps: `<c:out>` is safe but `<%= %>` does not escape, `th:text` is safe but `th:utext` does not escape, and URL whitelists can be bypassed with `//evil.com`.
 
-**Step 3 -- 评估绕过可能性**: 过滤存在但不充分时，分析具体绕过路径（上下文切换、编码差异、URL 解析差异等）。能给出绕过思路则标"已确认"，否则标"待验证"并记录已知过滤方式。
+**Step 3 -- Assess bypass feasibility**: when filtering exists but is insufficient, analyze the concrete bypass path (context switching, encoding differences, URL parsing differences, etc.). If a bypass idea can be given, mark it "confirmed"; otherwise mark it "to be verified" and record the known filtering method.
 
-**Step 4 -- 确定严重度**: 使用 `java-audit-pipeline` 的三维度评分公式 `Score = R*0.40 + I*0.35 + C*0.25`。XSS 存储型 I=2-3，反射型 I=1-2；CSRF 取决于被保护操作的影响。
+**Step 4 -- Determine severity**: use the three-dimension scoring formula of `java-audit-pipeline`, `Score = R*0.40 + I*0.35 + C*0.25`. For XSS, stored has I=2-3 and reflected has I=1-2; CSRF depends on the impact of the protected operation.
 
-## XSS 审计要点
+## XSS Audit Points
 
-- **JSP 输出**: `<%= request.getParameter("x") %>` 和 `<% out.println(input); %>` 均不转义，直接输出到 HTML 即反射型 XSS；安全写法: `<c:out value="${param.x}"/>` 或 `${fn:escapeXml(param.x)}`，JSTL 默认转义 HTML 实体
-- **Thymeleaf**: `th:utext="${userInput}"` 不转义（原始 HTML 输出）——危险；`th:text="${userInput}"` 自动 HTML 转义——安全
-- **FreeMarker**: 全局配置 `output_format=HTMLOutputFormat` + `auto_escaping_policy=ENABLE_IF_SUPPORTED` 后默认转义；`${var?no_esc}` 显式跳过转义——危险；未配置全局转义时所有 `${}` 均危险
-- **上下文差异**: HTML body 转义 `< > & " '` 即可；HTML attribute 需额外处理引号闭合；JavaScript 上下文需 JS 编码而非 HTML 转义；URL 参数需 URL 编码——不同上下文使用错误的转义函数等于无防御
-- **DOM-based XSS**: 后端返回 JSON 被前端 `innerHTML` / `document.write()` / `eval()` 渲染，后端审计需确认 JSON 响应的 `Content-Type` 是否为 `application/json` 而非 `text/html`
-- **存储型 XSS**: 数据从数据库取出后未转义直接输出——追踪入库点是否做了过滤，出库点是否做了转义
-- **富文本场景**: 需使用白名单过滤库如 OWASP Java HTML Sanitizer (`PolicyFactory`) 或 `Jsoup.clean(html, Safelist.basic())`
+- **JSP output**: both `<%= request.getParameter("x") %>` and `<% out.println(input); %>` do not escape, so outputting directly into HTML is reflected XSS; secure pattern: `<c:out value="${param.x}"/>` or `${fn:escapeXml(param.x)}`, JSTL escapes HTML entities by default
+- **Thymeleaf**: `th:utext="${userInput}"` does not escape (raw HTML output) — dangerous; `th:text="${userInput}"` automatically HTML-escapes — safe
+- **FreeMarker**: after globally configuring `output_format=HTMLOutputFormat` + `auto_escaping_policy=ENABLE_IF_SUPPORTED`, output is escaped by default; `${var?no_esc}` explicitly skips escaping — dangerous; without global escaping configured, every `${}` is dangerous
+- **Context differences**: escaping `< > & " '` suffices for an HTML body; an HTML attribute additionally requires handling quote closure; a JavaScript context needs JS encoding rather than HTML escaping; a URL parameter needs URL encoding — using the wrong escaping function for a context is equivalent to no defense at all
+- **DOM-based XSS**: the backend returns JSON that the frontend renders via `innerHTML` / `document.write()` / `eval()`; the backend audit must confirm that the JSON response uses the `Content-Type` `application/json` rather than `text/html`
+- **Stored XSS**: data read from the database is output without escaping — trace whether the write point filters the data and whether the read point escapes it
+- **Rich text scenarios**: use a whitelist filtering library such as OWASP Java HTML Sanitizer (`PolicyFactory`) or `Jsoup.clean(html, Safelist.basic())`
 
-## CSRF 审计要点
+## CSRF Audit Points
 
-- **Spring Security 默认**: CSRF Token 默认开启，但 REST API 项目常见 `.csrf().disable()`（旧版）或 `http.csrf(csrf -> csrf.disable())`（Lambda DSL）——全局关闭后所有状态变更端点均暴露
-- **自定义 Token**: 评估生成强度（`SecureRandom` 安全 vs `Math.random()` 可预测）、是否绑定 Session、校验时机（Controller 层 vs Filter 层）
-- **Token 传递**: 表单用 `<input type="hidden" name="_csrf" value="..."/>`；AJAX 用 `X-CSRF-TOKEN` 请求头配合 `<meta name="_csrf">` 读取——缺失任一传递方式则该场景无防护
-- **CORS 与 CSRF 的关系**: 宽松 CORS（`Access-Control-Allow-Origin: *` + `Allow-Credentials: true`）可被跨域 JS 读取响应中的 CSRF Token，间接绕过 CSRF 防护
-- **GET 请求状态变更**: GET 执行写操作（如 `/deleteUser?id=1`）天然无 CSRF 防护——`<img src="">` 即可触发
+- **Spring Security default**: the CSRF token is enabled by default, but REST API projects commonly use `.csrf().disable()` (older versions) or `http.csrf(csrf -> csrf.disable())` (Lambda DSL) — once disabled globally, all state-changing endpoints are exposed
+- **Custom token**: evaluate the generation strength (`SecureRandom` is safe vs. `Math.random()` is predictable), whether it is bound to the session, and the validation timing (Controller layer vs. Filter layer)
+- **Token delivery**: forms use `<input type="hidden" name="_csrf" value="..."/>`; AJAX uses the `X-CSRF-TOKEN` request header together with `<meta name="_csrf">` — if either delivery method is missing, that scenario is unprotected
+- **Relationship between CORS and CSRF**: permissive CORS (`Access-Control-Allow-Origin: *` + `Allow-Credentials: true`) lets cross-origin JS read the CSRF token from the response, indirectly bypassing CSRF protection
+- **State-changing GET requests**: a GET performing a write operation (such as `/deleteUser?id=1`) inherently has no CSRF protection — `<img src="">` is enough to trigger it
 
-## 开放重定向审计要点
+## Open Redirect Audit Points
 
-- **Servlet 直接重定向**: `response.sendRedirect(request.getParameter("url"))` / `response.sendRedirect(request.getParameter("next"))` ——用户完全可控
-- **Spring MVC**: `return "redirect:" + target` 或 `RedirectView(url)` 中 target 来自请求参数
-- **绕过手法**: `//evil.com`（协议相对 URL）、`/\evil.com`（部分解析器视 `\` 为路径分隔符）、URL 编码 `%2F%2Fevil.com`、`@` 符号 `http://trusted.com@evil.com`、unicode 同形异义字
-- **安全模式**: 白名单域名校验 + 限制仅相对路径（以 `/` 开头且不以 `//` 开头）；使用 `UriComponentsBuilder` 解析后校验 host
+- **Direct servlet redirect**: `response.sendRedirect(request.getParameter("url"))` / `response.sendRedirect(request.getParameter("next"))` — fully user-controllable
+- **Spring MVC**: `return "redirect:" + target` or `RedirectView(url)` where target comes from a request parameter
+- **Bypass techniques**: `//evil.com` (protocol-relative URL), `/\evil.com` (some parsers treat `\` as a path separator), URL encoding `%2F%2Fevil.com`, the `@` symbol `http://trusted.com@evil.com`, and unicode homoglyphs
+- **Secure pattern**: whitelist domain validation + restricting to relative paths only (starting with `/` and not starting with `//`); parse with `UriComponentsBuilder` and then validate the host
 
-## CRLF 注入审计要点
+## CRLF Injection Audit Points
 
-- **HTTP Header 注入**: `response.setHeader("X-Custom", userInput)` 或 `response.addHeader("Location", "/path?lang=" + input)` ——注入 `\r\nSet-Cookie: admin=1` 可设置任意头
-- **Servlet 容器差异**: Tomcat 7.0.67+ / Jetty 9.2.15+ 默认拒绝 Header 值中的 `\r\n`；旧版本或自定义 HTTP 框架（如 Netty 原始 API）可能无此保护——确认容器版本是关键
-- **Cookie 值注入**: `new Cookie("lang", userInput)` ——注入 `\r\nSet-Cookie: session=evil` 可劫持 Session
-- **安全模式**: 过滤或拒绝值中的 `\r`、`\n`、`\0` 控制字符；升级到较新版本 Servlet 容器
+- **HTTP header injection**: `response.setHeader("X-Custom", userInput)` or `response.addHeader("Location", "/path?lang=" + input)` — injecting `\r\nSet-Cookie: admin=1` allows setting arbitrary headers
+- **Servlet container differences**: Tomcat 7.0.67+ / Jetty 9.2.15+ reject `\r\n` in header values by default; older versions or custom HTTP frameworks (such as the raw Netty API) may lack this protection — confirming the container version is key
+- **Cookie value injection**: `new Cookie("lang", userInput)` — injecting `\r\nSet-Cookie: session=evil` allows hijacking the session
+- **Secure pattern**: filter or reject the `\r`, `\n`, and `\0` control characters in values; upgrade to a newer Servlet container version
 
-## Session 管理审计要点
+## Session Management Audit Points
 
-- **Session 固定**: 登录前后 Session ID 不变——攻击者诱导受害者使用已知 Session ID；安全模式: 登录成功后 `request.getSession().invalidate()` + `request.getSession(true)` 重建；Spring Security `SessionFixationProtection.migrateSession` 默认启用
-- **Cookie 属性**: `HttpOnly` 防 XSS 窃取 Cookie（`cookie.setHttpOnly(true)`）；`Secure` 限制仅 HTTPS 传输（`cookie.setSecure(true)`）；`SameSite=Lax/Strict` 防 CSRF（Servlet 4.0+ 或 Spring `server.servlet.session.cookie.same-site`）
-- **超时配置**: `web.xml` 中 `<session-timeout>30</session-timeout>`（分钟）；Spring Boot `server.servlet.session.timeout=30m`；过长超时增加 Session 劫持窗口
-- **并发登录控制**: Spring Security `sessionManagement().maximumSessions(1).maxSessionsPreventsLogin(true)` ——未配置时同一账户可多点登录，被盗凭据难以发现
+- **Session fixation**: the session ID does not change before and after login — an attacker induces the victim to use a known session ID; secure pattern: after a successful login, rebuild it with `request.getSession().invalidate()` + `request.getSession(true)`; Spring Security `SessionFixationProtection.migrateSession` is enabled by default
+- **Cookie attributes**: `HttpOnly` prevents XSS from stealing cookies (`cookie.setHttpOnly(true)`); `Secure` restricts transmission to HTTPS (`cookie.setSecure(true)`); `SameSite=Lax/Strict` prevents CSRF (Servlet 4.0+ or Spring `server.servlet.session.cookie.same-site`)
+- **Timeout configuration**: `<session-timeout>30</session-timeout>` in `web.xml` (minutes); Spring Boot `server.servlet.session.timeout=30m`; an overly long timeout increases the session hijacking window
+- **Concurrent login control**: Spring Security `sessionManagement().maximumSessions(1).maxSessionsPreventsLogin(true)` — when not configured, the same account can log in from multiple places, making stolen credentials hard to detect
 
-## 检测清单
+## Detection Checklist
 
-- [ ] 所有前端安全类 EVID_* 证据点已逐一审查
-- [ ] JSP `<%= %>` / `out.println()` 输出点均已确认是否转义，Thymeleaf `th:utext` 已全部标记
-- [ ] CSRF 保护状态已确认（是否 disable、Token 传递方式、GET 写操作）
-- [ ] 重定向 Sink 的 URL 来源和白名单校验已确认
-- [ ] HTTP Header/Cookie 写入点的用户输入过滤已检查，容器版本已记录
-- [ ] Session 生命周期（固定/超时/并发/Cookie 属性）已审查
-- [ ] 过滤不充分的点已给出具体绕过思路或标"待验证"
-- [ ] 严重度评分使用了统一公式，与 pipeline 一致
+- [ ] All front-end security EVID_* evidence points have been reviewed one by one
+- [ ] Whether JSP `<%= %>` / `out.println()` output points escape has been confirmed, and all Thymeleaf `th:utext` occurrences have been marked
+- [ ] The CSRF protection status has been confirmed (whether it is disabled, the token delivery method, GET write operations)
+- [ ] The URL source and whitelist validation of redirect sinks have been confirmed
+- [ ] User input filtering at HTTP header/cookie write points has been checked, and the container version has been recorded
+- [ ] The session lifecycle (fixation/timeout/concurrency/cookie attributes) has been reviewed
+- [ ] Points with insufficient filtering have a concrete bypass idea or are marked "Unverified"
+- [ ] Severity scoring used the unified formula, consistent with the pipeline

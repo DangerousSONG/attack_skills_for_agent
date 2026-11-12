@@ -1,74 +1,76 @@
 ---
 name: john-crack
-description: "使用 John the Ripper 进行离线密码破解。当需要破解哈希（MD5/SHA/NTLM/Kerberos/ZIP/RAR/PDF/SSH Key 等）时使用。John 支持自动检测哈希类型、字典攻击、规则变形、增量爆破，内置 *2john 工具链从各种格式提取哈希。任何涉及离线密码破解、哈希还原、密码审计的场景都应使用此技能"
+description: "Offline password cracking with John the Ripper. Use when you need to crack hashes (MD5/SHA/NTLM/Kerberos/ZIP/RAR/PDF/SSH key, etc.). John supports automatic hash type detection, dictionary attacks, rule mutations, and incremental brute forcing, and includes the *2john toolchain to extract hashes from various formats. This skill should be used for any scenario involving offline password cracking, hash recovery, or password auditing"
+zh-signals: "使用 John the Ripper 进行离线密码破解，支持多种哈希格式、字典与规则攻击，并经 *2john 工具链提取哈希。信号:John the Ripper,离线破解,哈希,字典攻击,*2john"
+when-to-use: "Use when you need offline password cracking or hash recovery (MD5/SHA/NTLM/Kerberos/ZIP/RAR/PDF/SSH keys) and want John's auto hash detection, wordlists, rules, and *2john toolchain."
 metadata:
-  tags: "john,crack,password,密码破解,哈希,hash,MD5,NTLM,Kerberos,字典攻击,规则,暴力破解"
+  tags: "john,crack,password,password cracking,hash cracking,hash,MD5,NTLM,Kerberos,dictionary attack,rules,brute force"
   category: "tool"
 ---
 
-# John the Ripper 离线密码破解方法论
+# John the Ripper Offline Password Cracking Methodology
 
-John the Ripper 是最经典的离线密码破解工具。核心优势：**自动哈希识别** + **丰富规则引擎** + ***2john 提取工具链**。支持 200+ 哈希类型。
+John the Ripper is the most classic offline password cracking tool. Its core advantages: **automatic hash identification** + **rich rule engine** + ***2john extraction toolchain**. Supports 200+ hash types.
 
-项目地址：https://github.com/openwall/john
+Project address: https://github.com/openwall/john
 
-## Phase 1: 基本破解
+## Phase 1: Basic Cracking
 
 ```bash
-# 自动检测哈希类型并破解
+# Automatically detect the hash type and crack
 john hashes.txt
 
-# 指定哈希格式
+# Specify the hash format
 john --format=Raw-MD5 hashes.txt
 john --format=NT hashes.txt
 john --format=Raw-SHA256 hashes.txt
 
-# 字典攻击
+# Dictionary attack
 john --wordlist=rockyou.txt hashes.txt
 
-# 查看已破解的密码
+# Show the cracked passwords
 john --show hashes.txt
 ```
 
-## Phase 2: 规则变形攻击
+## Phase 2: Rule Mutation Attacks
 
 ```bash
-# 字典 + 默认规则
+# Wordlist + default rules
 john --wordlist=rockyou.txt --rules hashes.txt
 
-# 字典 + best64 规则（最常用）
+# Wordlist + best64 rules (most common)
 john --wordlist=rockyou.txt --rules=best64 hashes.txt
 
-# 字典 + Jumbo 规则（更全面）
+# Wordlist + Jumbo rules (more comprehensive)
 john --wordlist=rockyou.txt --rules=Jumbo hashes.txt
 
-# 字典 + KoreLogic 规则（最复杂，最慢）
+# Wordlist + KoreLogic rules (most complex, slowest)
 john --wordlist=rockyou.txt --rules=KoreLogic hashes.txt
 
-# 列出可用规则
+# List available rules
 john --list=rules
 ```
 
-## Phase 3: 哈希提取（*2john 工具链）
+## Phase 3: Hash Extraction (*2john Toolchain)
 
 ```bash
-# ZIP 文件
+# ZIP files
 zip2john secret.zip > zip_hash.txt
 john zip_hash.txt
 
-# RAR 文件
+# RAR files
 rar2john secret.rar > rar_hash.txt
 
-# PDF 文件
+# PDF files
 pdf2john.pl secret.pdf > pdf_hash.txt
 
-# SSH 私钥
+# SSH private keys
 ssh2john id_rsa > ssh_hash.txt
 
-# KeePass 数据库
+# KeePass databases
 keepass2john database.kdbx > keepass_hash.txt
 
-# Office 文档
+# Office documents
 office2john document.docx > office_hash.txt
 
 # Kerberos TGS (Kerberoasting)
@@ -81,48 +83,48 @@ john --format=krb5asrep --wordlist=rockyou.txt asrep_hashes.txt
 john --format=NT --wordlist=rockyou.txt ntlm_hashes.txt
 ```
 
-## Phase 4: 增量和掩码攻击
+## Phase 4: Incremental and Mask Attacks
 
 ```bash
-# 增量模式（纯暴力，自动递增长度）
+# Incremental mode (pure brute force, length grows automatically)
 john --incremental hashes.txt
 
-# 指定字符集
-john --incremental=Digits hashes.txt     # 纯数字
-john --incremental=Alnum hashes.txt      # 字母数字
-john --incremental=ASCII hashes.txt      # 全 ASCII
+# Specify the character set
+john --incremental=Digits hashes.txt     # digits only
+john --incremental=Alnum hashes.txt      # alphanumeric
+john --incremental=ASCII hashes.txt      # full ASCII
 
-# 掩码攻击（Hashcat 风格）
-john --mask='?d?d?d?d?d?d' hashes.txt          # 6 位数字
-john --mask='?u?l?l?l?d?d?d?s' hashes.txt      # 大写+小写x3+数字x3+特殊
+# Mask attack (Hashcat style)
+john --mask='?d?d?d?d?d?d' hashes.txt          # 6 digits
+john --mask='?u?l?l?l?d?d?d?s' hashes.txt      # uppercase+lowercase x3+digits x3+special
 ```
 
-## Phase 5: 实用技巧
+## Phase 5: Practical Tips
 
 ```bash
-# 恢复中断的破解
+# Resume an interrupted cracking run
 john --restore
 
-# 查看当前进度
+# Show the current progress
 john --status
 
-# 多核并行
+# Multi-core parallelism
 john --fork=4 --wordlist=rockyou.txt hashes.txt
 
-# 指定会话名称
+# Specify a session name
 john --session=my_crack --wordlist=rockyou.txt hashes.txt
 
-# 只破解特定用户
+# Crack specific users only
 john --users=admin hashes.txt
 ```
 
-## 渗透测试常用场景
+## Common Penetration Testing Scenarios
 
-| 场景 | 命令 |
+| Scenario | Command |
 |------|------|
-| NTLM 破解 | `john --format=NT --wordlist=rockyou.txt ntlm.txt` |
+| NTLM cracking | `john --format=NT --wordlist=rockyou.txt ntlm.txt` |
 | Kerberoasting | `john --format=krb5tgs --wordlist=rockyou.txt tgs.txt` |
-| SSH 密钥破解 | `ssh2john id_rsa > h.txt && john --wordlist=rockyou.txt h.txt` |
-| ZIP 密码破解 | `zip2john file.zip > h.txt && john h.txt` |
+| SSH key cracking | `ssh2john id_rsa > h.txt && john --wordlist=rockyou.txt h.txt` |
+| ZIP password cracking | `zip2john file.zip > h.txt && john h.txt` |
 | Linux shadow | `john --wordlist=rockyou.txt /tmp/shadow` |
-| 字典+规则 | `john --wordlist=rockyou.txt --rules=best64 hashes.txt` |
+| Wordlist + rules | `john --wordlist=rockyou.txt --rules=best64 hashes.txt` |

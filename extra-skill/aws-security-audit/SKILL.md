@@ -1,6 +1,8 @@
 ---
 name: aws-security-audit
 description: "Comprehensive AWS security posture assessment using AWS CLI and security best practices"
+zh-signals: "AWS 安全态势全面评估。信号:AWS,安全审计,合规,IAM,S3,云安全"
+when-to-use: "Use when auditing AWS security posture, identifying misconfigurations, or preparing for compliance assessments."
 category: security
 risk: safe
 source: community

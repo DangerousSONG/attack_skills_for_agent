@@ -1,64 +1,68 @@
 ---
 name: tlsx-probe
-description: "使用 tlsx 进行 TLS 证书和配置分析。当需要提取 SSL/TLS 证书信息（SAN/CN）、检测 TLS 版本、加密套件、JARM/JA3 指纹、证书错误配置时使用。tlsx 是 ProjectDiscovery 出品的 TLS 探针工具。任何涉及 SSL/TLS 分析、证书信息收集、JARM 指纹的场景都应使用此技能"
+description: "Use tlsx for TLS certificate and configuration analysis. Use it when you need to extract SSL/TLS certificate details (SAN/CN), detect TLS versions, cipher suites, JARM/JA3 fingerprints, or certificate misconfigurations. tlsx is a TLS probing tool by ProjectDiscovery. Use this skill for any SSL/TLS analysis, certificate information gathering, or JARM fingerprinting scenario."
+zh-signals: "使用 tlsx 提取 TLS 证书与配置信息，检测 TLS 版本、加密套件与 JARM/JA3 指纹。信号:tlsx,TLS证书,JARM,加密套件,证书分析"
+when-to-use: >-
+  Use when you need to extract SSL/TLS certificate details, probe TLS versions and cipher suites,
+  or fingerprint JARM/JA3 on authorized targets.
 metadata:
-  tags: "tlsx,tls,ssl,证书,certificate,SAN,CN,JARM,JA3,加密套件,projectdiscovery"
+  tags: "tlsx,tls,ssl,certificate,SAN,CN,JARM,JA3,cipher-suite,projectdiscovery"
   category: "tool"
 ---
 
-# tlsx TLS 证书分析方法论
+# tlsx TLS Certificate Analysis Methodology
 
-tlsx 是 ProjectDiscovery 出品的 TLS 探针工具。核心优势：**证书信息提取** + **JARM/JA3 指纹** + **配置错误检测** + **管道友好**。
+tlsx is a TLS probing tool by ProjectDiscovery. Core strengths: **certificate information extraction** + **JARM/JA3 fingerprinting** + **misconfiguration detection** + **pipeline friendly**.
 
-项目地址：https://github.com/projectdiscovery/tlsx
+Project URL: https://github.com/projectdiscovery/tlsx
 
-## Phase 1: 基本探测
+## Phase 1: Basic Probing
 
 ```bash
-# 单个目标
+# Single target
 echo target.com | tlsx
 
-# 提取证书信息
+# Extract certificate information
 echo target.com | tlsx -san -cn -so -silent
 
-# TLS 版本和加密套件
+# TLS versions and cipher suites
 echo target.com | tlsx -tv -cipher -silent
 
-# JARM 指纹
+# JARM fingerprint
 echo target.com | tlsx -jarm -silent
 ```
 
-## Phase 2: 证书分析
+## Phase 2: Certificate Analysis
 
 ```bash
-# 完整证书信息
+# Full certificate information
 echo target.com | tlsx -san -cn -so -tv -cipher -jarm -json
 
-# 证书过期检测
+# Certificate expiry detection
 echo target.com | tlsx -ex -silent
 
-# 自签名检测
+# Self-signed certificate detection
 echo target.com | tlsx -ss -silent
 
-# 域名不匹配检测
+# Domain mismatch detection
 echo target.com | tlsx -mm -silent
 
-# 批量检测证书问题
+# Batch check for certificate issues
 tlsx -l hosts.txt -ex -ss -mm -re -un -silent
 ```
 
-## Phase 3: 管道集成
+## Phase 3: Pipeline Integration
 
 ```bash
-# 子域名 → TLS 证书收集
+# Subdomains -> TLS certificate collection
 subfinder -d target.com -silent | tlsx -san -cn -resp-only -silent
 
-# 端口扫描 → TLS 探测
+# Port scan -> TLS probing
 naabu -host target.com -p 443,8443 -silent | tlsx -san -cn -silent
 
-# 从 TLS SAN 发现更多子域名
+# Discover more subdomains from TLS SANs
 echo target.com | tlsx -san -resp-only -silent | sort -u
 
-# JSON 输出
+# JSON output
 tlsx -l hosts.txt -san -cn -tv -jarm -json -o results.json
 ```

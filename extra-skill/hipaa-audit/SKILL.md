@@ -1,6 +1,9 @@
 ---
 name: hipaa-audit
 description: "Audit applications and infrastructure handling Protected Health Information against HIPAA — Security Rule (administrative, physical, technical safeguards), Privacy Rule, Breach Notification Rule, plus HITECH. Covers ePHI scoping, the 18 HIPAA identifiers, Business Associate Agreement (BAA) chain-of-liability, minimum-necessary standard, and breach notification timing. Use when the user mentions 'HIPAA,' 'HIPAA Security Rule,' 'HIPAA Privacy Rule,' 'PHI,' 'ePHI,' 'protected health information,' 'BAA,' 'business associate agreement,' 'covered entity,' 'business associate,' 'minimum necessary,' 'HIPAA breach,' 'HITECH,' 'healthcare compliance,' 'medical data,' 'patient data,' or audits any system that creates, receives, maintains, or transmits PHI."
+zh-signals: "审计处理受保护健康信息的应用与基础设施是否符合 HIPAA 各项规则。信号:HIPAA审计,PHI保护,安全规则,BAA,违规通知。"
+when-to-use: >-
+  Use when auditing systems that create, receive, maintain, or transmit PHI, or when the user asks about HIPAA Security Rule, Privacy Rule, Breach Notification Rule, HITECH, or business associate agreements.
 allowed-tools: Read, Grep, Glob, Bash, Write, WebSearch
 ---
 

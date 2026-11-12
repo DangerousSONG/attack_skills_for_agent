@@ -5,6 +5,8 @@ description: >
   non-root users, CVE scanning, SBOM/signing, seccomp/AppArmor, and Kubernetes
   pod security controls. Use for Dockerfile security reviews, container CVEs,
   image scanning, distroless images, or production hardening.
+zh-signals: "加固 Docker 与容器镜像及运行时部署，采用安全基础镜像、非 root 用户、CVE 扫描、SBOM/签名、seccomp/AppArmor 与 Kubernetes Pod 安全控制。信号:容器安全,Docker,镜像扫描,SBOM,seccomp,Kubernetes"
+when-to-use: "Use for Dockerfile security reviews, container CVE and image scanning, distroless or non-root hardening, SBOM and signing, seccomp/AppArmor, and Kubernetes pod security controls."
 category: security
 risk: safe
 source: community

@@ -1,283 +1,287 @@
 ---
 name: java-sql-audit
-description: Java Web 源码 SQL 注入漏洞审计工具。从源码中定位所有 SQL 执行入口并检测注入漏洞。适用于：(1) 识别 SQL 执行框架和实现方式，(2) 发现 SQL 注入漏洞，(3) 检查参数化查询使用情况，(4) 检测动态 SQL 拼接漏洞。支持 JDBC、MyBatis、Hibernate 三种主流框架。**支持反编译 .class/.jar 文件提取 SQL 逻辑**。结合 java-route-mapper 使用可实现完整的路由+SQL注入审计。
+description: "SQL injection audit tool for Java Web source code. Locates all SQL execution entry points in source code and detects injection vulnerabilities. Suitable for: (1) identifying SQL execution frameworks and implementation approaches, (2) discovering SQL injection vulnerabilities, (3) checking parameterized query usage, (4) detecting dynamic SQL concatenation flaws. Supports the three mainstream frameworks JDBC, MyBatis, and Hibernate. **Supports decompiling .class/.jar files to extract SQL logic**. Combined with java-route-mapper, it enables a complete route + SQL injection audit."
+zh-signals: "Java Web 源码 SQL 注入漏洞审计，定位 JDBC/MyBatis/Hibernate 的 SQL 执行入口并检测拼接型注入。信号:SQL注入,Java审计,MyBatis,JDBC,Hibernate"
+when-to-use: >-
+  Use when auditing Java Web source code (including decompiled .class/.jar files) for
+  SQL injection and parameterization gaps, typically after java-route-mapper has mapped the routes.
 ---
 
-# Java SQL 注入漏洞审计工具
+# Java SQL Injection Audit Tool
 
-扫描 Java Web 项目源码，定位所有 SQL 执行入口，检测 SQL 注入漏洞。
+Scans Java Web project source code, locates all SQL execution entry points, and detects SQL injection vulnerabilities.
 
-> **审计边界（本技能仅检测以下内容，不得超出此范围）：**
-> - ✅ SQL 注入漏洞（参数拼接、动态 SQL、ORDER BY 注入等）
-> - ✅ 参数化查询缺失
-> - ❌ 不包括：代码质量问题、架构安全问题、其他漏洞类型（XSS/SSRF/命令注入等）
-
----
-
-## 漏洞分级标准
-
-**详见 [SEVERITY_RATING.md](../shared/SEVERITY_RATING.md)**
-
-- 漏洞编号格式: `{C/H/M/L}-SQL-{序号}`
-- 严重等级 = f(可达性 R, 影响范围 I, 利用复杂度 C)
-- Score = R × 0.40 + I × 0.35 + C × 0.25，映射 CVSS 3.1
+> **Audit scope (this skill detects only the following, and must not go beyond this scope):**
+> - ✅ SQL injection vulnerabilities (parameter concatenation, dynamic SQL, ORDER BY injection, etc.)
+> - ✅ Missing parameterized queries
+> - ❌ Not included: code quality issues, architecture security issues, other vulnerability types (XSS/SSRF/command injection, etc.)
 
 ---
 
-## 核心要求
+## Vulnerability Severity Rating Standard
 
-**此技能必须完整分析所有 SQL 相关代码，不允许省略。**
+**See [SEVERITY_RATING.md](../shared/SEVERITY_RATING.md) for details**
 
-- ✅ 识别所有 SQL 执行入口点（JDBC/MyBatis/Hibernate）
-- ✅ 分析每个 SQL 操作的参数化情况
-- ✅ 检测所有潜在的 SQL 注入模式
-- ✅ 为每个风险点提供验证 PoC
-- ❌ 禁止省略任何 SQL 操作
-- ❌ 禁止跳过反编译步骤
+- Vulnerability ID format: `{C/H/M/L}-SQL-{index}`
+- Severity Level = f(Reachability R, Impact Scope I, Exploitation Complexity C)
+- Score = R × 0.40 + I × 0.35 + C × 0.25, mapped to CVSS 3.1
 
-### 禁止省略规则（强制）
+---
 
-**报告中的所有列表和表格必须完整输出，禁止使用任何形式的省略：**
+## Core Requirements
 
-| 禁止写法 | 正确做法 |
+**This skill must fully analyze all SQL-related code; omissions are not allowed.**
+
+- ✅ Identify all SQL execution entry points (JDBC/MyBatis/Hibernate)
+- ✅ Analyze the parameterization of each SQL operation
+- ✅ Detect all potential SQL injection patterns
+- ✅ Provide a verification PoC for each risk point
+- ❌ Never omit any SQL operation
+- ❌ Never skip the decompilation step
+
+### No-Omission Rules (Mandatory)
+
+**All lists and tables in the report must be output in full; any form of omission is forbidden:**
+
+| Forbidden Form | Correct Approach |
 |:---------|:---------|
-| `{...省略...}` | 完整列出所有条目 |
-| `... (其他N个)` | 完整列出所有条目 |
-| `等等` / `etc.` | 完整列出所有条目 |
-| `以此类推` | 完整列出所有条目 |
-| `更多见xxx` | 在当前位置完整列出 |
+| `{...omitted...}` | List every item in full |
+| `... (other N items)` | List every item in full |
+| `etc.` | List every item in full |
+| `and so on` | List every item in full |
+| `see xxx for more` | List everything in full at the current location |
 
-**示例 - 错误写法：**
+**Example - incorrect form:**
 ```markdown
-| # | 方法名 | 说明 |
+| # | Method Name | Description |
 |---|--------|------|
-| 1 | getCommonQuery | 通用查询 |
-| 2 | getCollisionQuery | 碰撞查询 |
-|{...省略...}| ... | ... |    ← ❌ 禁止
+| 1 | getCommonQuery | Common query |
+| 2 | getCollisionQuery | Collision query |
+|{...omitted...}| ... | ... |    ← ❌ Forbidden
 ```
 
-**示例 - 正确写法：**
+**Example - correct form:**
 ```markdown
-| # | 方法名 | 说明 |
+| # | Method Name | Description |
 |---|--------|------|
-| 1 | getCommonQuery | 通用查询 |
-| 2 | getCollisionQuery | 碰撞查询 |
-| 3 | getIntervalQuery | 区间查询 |
+| 1 | getCommonQuery | Common query |
+| 2 | getCollisionQuery | Collision query |
+| 3 | getIntervalQuery | Interval query |
 | ... | ... | ... |
-| 23 | getNewStaypointQuery | 新停留点查询 |    ← ✅ 完整列出
+| 23 | getNewStaypointQuery | New staypoint query |    ← ✅ Listed in full
 ```
 
-**必须完整列出的内容：**
-- 受影响的方法列表
-- SQL 操作映射表
-- 漏洞详情列表
-- 参数列表
-- 验证 Payload 列表
+**Content that must be listed in full:**
+- List of affected methods
+- SQL operation mapping table
+- Vulnerability detail list
+- Parameter list
+- Verification payload list
 
 ---
 
-## 技能协作流程（CRITICAL）
+## Skill Collaboration Workflow (CRITICAL)
 
-**java-sql-audit 应在 java-route-mapper 之后执行，基于已梳理的路由信息进行审计。**
+**java-sql-audit should run after java-route-mapper, auditing based on the already-mapped route information.**
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    完整审计流程                                  │
+│                    Complete Audit Workflow                      │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
-│  [步骤1] java-route-mapper                                      │
+│  [Step 1] java-route-mapper                                     │
 │     │                                                           │
-│     │ 输出：                                                    │
-│     │ ├─ 所有 HTTP 路由列表                                     │
-│     │ ├─ 每个路由的参数定义                                     │
-│     │ │   ├─ 参数名、类型                                       │
-│     │ │   └─ JSON 内部字段（如 pageJson.orderBy）               │
-│     │ └─ Burp Suite 请求模板                                    │
+│     │ Output:                                                   │
+│     │ ├─ List of all HTTP routes                                │
+│     │ ├─ Parameter definition for each route                    │
+│     │ │   ├─ Parameter name, type                               │
+│     │ │   └─ JSON internal fields (e.g. pageJson.orderBy)       │
+│     │ └─ Burp Suite request templates                           │
 │     │                                                           │
 │     ↓                                                           │
-│  [步骤2] java-sql-audit（本技能）                               │
+│  [Step 2] java-sql-audit (this skill)                           │
 │     │                                                           │
-│     │ 输入：java-route-mapper 的输出                            │
+│     │ Input: output of java-route-mapper                        │
 │     │                                                           │
-│     │ 执行：                                                    │
-│     │ ├─ 快速扫描高危文件                                       │
-│     │ ├─ 参数-SQL 映射分析                                      │
-│     │ ├─ 检查每个 String 参数是否进入 SQL                       │
-│     │ └─ 执行条件分析                                           │
+│     │ Execution:                                                │
+│     │ ├─ Quick scan of high-risk files                          │
+│     │ ├─ Parameter-SQL mapping analysis                         │
+│     │ ├─ Check whether each String parameter reaches SQL        │
+│     │ └─ Execution condition analysis                           │
 │     │                                                           │
-│     ├─── 需要深入追踪 ───→ java-route-tracer                    │
+│     ├─── Deep tracing needed ───→ java-route-tracer             │
 │     │                           │                               │
-│     │    ←── 返回调用链信息 ────┘                               │
+│     │    ←── returns call chain info ────┘                      │
 │     │                                                           │
 │     ↓                                                           │
-│  [步骤3] 输出综合审计报告                                       │
+│  [Step 3] Output the comprehensive audit report                 │
 │                                                                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### 输入依赖（来自 java-route-mapper）
+### Input Dependencies (from java-route-mapper)
 
-**在开始审计前，必须检查是否已有 java-route-mapper 的输出文件：**
+**Before starting the audit, check whether java-route-mapper output files already exist:**
 
 ```
 {project_name}_audit/
 ├── route_mapper/
-│   ├── {project_name}_route_mapper_{timestamp}.md    ← 主索引（先读此文件定位模块详情）
+│   ├── {project_name}_route_mapper_{timestamp}.md    ← Main index (read this file first to locate module details)
 │   ├── {module_name}/
-│   │   └── {project_name}_module_{module_name}_{timestamp}.md  ← 模块详情
+│   │   └── {project_name}_module_{module_name}_{timestamp}.md  ← Module details
 │   └── webservice/
 │       └── {project_name}_ws_{service_name}_{timestamp}.md
 └── sql_audit/
-    └── {project_name}_sql_audit_{timestamp}.md  ← 本技能输出
+    └── {project_name}_sql_audit_{timestamp}.md  ← Output of this skill
 ```
 
-**如果 route_mapper 输出不存在，必须先运行（未运行则停止审计，返回错误提示）：**
+**If route_mapper output does not exist, it must be run first (if not run, stop the audit and return an error message):**
 ```python
 Skill(skill="java-route-mapper", args="--project {project_path}")
 ```
 
-### 从 route_mapper 获取的关键信息
+### Key Information Obtained from route_mapper
 
-| 信息 | 用途 |
+| Information | Purpose |
 |:-----|:-----|
-| 路由路径 | 定位 Controller/Action 入口 |
-| 参数名 + 类型 | 识别 String 类型高危参数 |
-| JSON 内部字段 | 识别嵌套参数（如 `pageJson.orderBy`） |
-| 参数用途描述 | 判断是否用于 SQL（排序、分组等） |
+| Route path | Locate the Controller/Action entry point |
+| Parameter name + type | Identify high-risk String parameters |
+| JSON internal fields | Identify nested parameters (e.g. `pageJson.orderBy`) |
+| Parameter purpose description | Determine whether it is used in SQL (sorting, grouping, etc.) |
 
 ---
 
-## 工作流程（三阶段）
+## Workflow (Three Phases)
 
-### 阶段1: 快速扫描（优先执行）
+### Stage 1: Quick Scan (execute first)
 
-**目标：快速定位高危文件和模式，不遗漏关键点。**
+**Goal: quickly locate high-risk files and patterns without missing key points.**
 
 ```bash
-# 1.1 搜索分页/排序辅助类（最易遗漏）
+# 1.1 Search for pagination/sorting helper classes (most easily missed)
 find . -name "*Pagination*.java" -o -name "*PageHelper*.java" -o -name "*Pager*.java"
 find . -name "*JdbcSupport*.java" -o -name "*JdbcTemplate*.java"
 
-# 1.2 搜索 DAO 基类
+# 1.2 Search for DAO base classes
 find . -name "Abstract*Dao*.java" -o -name "Base*Dao*.java" -o -name "*Support.java"
 
-# 1.3 搜索 ORDER BY 拼接模式
+# 1.3 Search for ORDER BY concatenation patterns
 grep -ri "order by" --include="*.java" | grep -v "ORDER BY \?"
 grep -ri "getOrderBy\|getSortField\|getOrder\|getSortOrder" --include="*.java"
 grep -ri "append.*order" --include="*.java"
 
-# 1.4 搜索 SQL 执行点
+# 1.4 Search for SQL execution points
 grep -ri "executeQuery\|executeUpdate\|prepareStatement" --include="*.java"
 grep -ri "createQuery\|createNativeQuery\|createSQLQuery" --include="*.java"
 ```
 
-**输出：高危文件清单（按优先级排序）**
+**Output: list of high-risk files (sorted by priority)**
 
-| 优先级 | 文件类型 | 审计重点 |
+| Priority | File Type | Audit Focus |
 |:-------|:---------|:---------|
-| P0 | `*Pagination*.java`, `*PageHelper*.java` | orderBy, order, sort 参数 |
-| P1 | `Abstract*Dao.java`, `Base*Dao.java` | 通用 SQL 构建方法 |
-| P2 | `*Mapper.java`, `*Dao.java`, `*Repository.java` | 业务 SQL 操作 |
-| P3 | `*Mapper.xml` | MyBatis ${} 使用 |
+| P0 | `*Pagination*.java`, `*PageHelper*.java` | orderBy, order, sort parameters |
+| P1 | `Abstract*Dao.java`, `Base*Dao.java` | Generic SQL construction methods |
+| P2 | `*Mapper.java`, `*Dao.java`, `*Repository.java` | Business SQL operations |
+| P3 | `*Mapper.xml` | MyBatis ${} usage |
 
-### 阶段2: 参数-SQL 映射分析
+### Stage 2: Parameter-SQL Mapping Analysis
 
-**基于 java-route-mapper 的输出，分析每个参数是否进入 SQL。**
+**Based on java-route-mapper output, analyze whether each parameter reaches SQL.**
 
-#### 2.1 高危参数识别
+#### 2.1 High-Risk Parameter Identification
 
-从 route_mapper 输出中提取所有 String 类型参数：
+Extract all String-type parameters from the route_mapper output:
 
-| 参数来源 | 参数名 | 类型 | SQL注入等级 |
+| Parameter Source | Parameter Name | Type | SQL Injection Level |
 |:---------|:-------|:-----|:---------|
-| pageJson | `orderBy` | String | **高危** - 排序字段直接拼接 |
-| pageJson | `order` | String | **高危** - 排序方向直接拼接 |
-| searchJson | `keyword` | String | **高危** - 搜索关键词直接拼接 |
-| searchJson | `status` | String | 中危 - 状态筛选拼接 |
-| pageJson | `pageSize` | int | 低 - 数值类型难以注入 |
+| pageJson | `orderBy` | String | **High** - sort field concatenated directly |
+| pageJson | `order` | String | **High** - sort direction concatenated directly |
+| searchJson | `keyword` | String | **High** - search keyword concatenated directly |
+| searchJson | `status` | String | Medium - status filter concatenation |
+| pageJson | `pageSize` | int | Low - numeric type hard to inject |
 
-#### 2.2 参数追踪
+#### 2.2 Parameter Tracing
 
-对每个高危参数，追踪其在代码中的使用：
+For each high-risk parameter, trace its use in the code:
 
 ```
-HTTP 参数: pageJson.orderBy (String)
-    ↓ 反序列化
+HTTP parameter: pageJson.orderBy (String)
+    ↓ deserialization
 Page.orderBy
-    ↓ 传递
+    ↓ pass
 Service.method(page)
-    ↓ 传递
+    ↓ pass
 Dao.query(page)
-    ↓ 调用
+    ↓ call
 AbstractDao.findSql(page)
-    ↓ 使用
-sql.append(" order by ").append(page.getOrderBy())  ← SQL 拼接点
+    ↓ use
+sql.append(" order by ").append(page.getOrderBy())  ← SQL concatenation point
 ```
 
-#### 2.3 SQL 执行点检查
+#### 2.3 SQL Execution Point Check
 
-对阶段1发现的每个 SQL 执行点，检查：
+For each SQL execution point found in Stage 1, check:
 
-1. **是否使用参数化查询？**
-   - `PreparedStatement` + `?` 占位符 → 安全
-   - 字符串拼接 → 危险
+1. **Is a parameterized query used?**
+   - `PreparedStatement` + `?` placeholder → safe
+   - String concatenation → dangerous
 
-2. **拼接的参数来源？**
-   - 来自 HTTP 请求的 String 参数 → 高危
-   - 来自系统配置/常量 → 安全
-   - 来自数据库查询结果 → 需进一步分析
+2. **What is the source of the concatenated parameter?**
+   - String parameter from an HTTP request → high risk
+   - From system configuration/constants → safe
+   - From database query results → requires further analysis
 
-3. **是否有输入校验？**
-   - 白名单校验 → 安全
-   - 无校验直接拼接 → 高危
+3. **Is there input validation?**
+   - Whitelist validation → safe
+   - No validation, direct concatenation → high risk
 
-### 阶段3: 深入分析与报告
+### Stage 3: Deep Analysis and Reporting
 
-#### 3.1 触发 java-route-tracer
+#### 3.1 Triggering java-route-tracer
 
-当发现以下情况时，调用 java-route-tracer 获取完整调用链：
+When any of the following is found, call java-route-tracer to obtain the complete call chain:
 
-| 触发条件 | 调用方式 |
+| Trigger Condition | Invocation Method |
 |:---------|:---------|
-| 参数经过多层传递 | `Skill(skill="java-route-tracer", args="--route {route}")` |
-| 分支条件不明确 | `Skill(skill="java-route-tracer", args="--route {route}")` |
-| 父类 SQL 执行 | `Skill(skill="java-route-tracer", args="--route {route}")` |
+| Parameter passes through multiple layers | `Skill(skill="java-route-tracer", args="--route {route}")` |
+| Branch condition is unclear | `Skill(skill="java-route-tracer", args="--route {route}")` |
+| SQL execution in a parent class | `Skill(skill="java-route-tracer", args="--route {route}")` |
 
-#### 3.2 执行条件分析
+#### 3.2 Execution Condition Analysis
 
-发现 SQL 拼接后，必须分析执行条件（详见后续章节）。
+After discovering SQL concatenation, you must analyze the execution conditions (see later sections for details).
 
-#### 3.3 生成报告
+#### 3.3 Generate Report
 
-整合所有分析结果，生成综合审计报告。
+Integrate all analysis results and generate a comprehensive audit report.
 
 ---
 
-## SQL 框架识别
+## SQL Framework Identification
 
-| 框架 | 识别特征 | 配置文件 | 参考资料 |
+| Framework | Identification Features | Configuration Files | References |
 |------|----------|----------|----------|
 | JDBC | `java.sql.*`, `Statement`, `PreparedStatement`, `DriverManager` | - | [JDBC.md](references/JDBC.md) |
 | MyBatis | `@Mapper`, `@Select`, `SqlSession`, `#{}`/`${}` | `mybatis-config.xml`, `*Mapper.xml` | [MYBATIS.md](references/MYBATIS.md) |
 | Hibernate | `@Entity`, `Session.createQuery()`, `HQL`, `Criteria` | `hibernate.cfg.xml`, `persistence.xml` | [HIBERNATE.md](references/HIBERNATE.md) |
 
-### 3. 反编译阶段（CRITICAL）
+### 3. Decompilation Stage (CRITICAL)
 
-**当源码不可用时，必须使用 MCP Java Decompiler 反编译 SQL 相关类。**
+**When source code is unavailable, you must use the MCP Java Decompiler to decompile SQL-related classes.**
 
-详细策略参见 [DECOMPILE_STRATEGY.md](references/DECOMPILE_STRATEGY.md)
+See [DECOMPILE_STRATEGY.md](references/DECOMPILE_STRATEGY.md) for the detailed strategy
 
-#### 3.1 反编译工具调用
+#### 3.1 Decompiler Invocation
 
 ```python
-# 反编译单个 DAO/Mapper 类
+# Decompile a single DAO/Mapper class
 mcp__java-decompile-mcp__decompile_file(
     file_path="/path/to/UserMapper.class",
     output_dir="/path/to/decompiled",
     save_to_file=True
 )
 
-# 反编译 DAO 相关目录
+# Decompile a DAO-related directory
 mcp__java-decompile-mcp__decompile_directory(
     directory_path="/path/to/WEB-INF/classes/com/example/dao",
     output_dir="/path/to/decompiled",
@@ -286,7 +290,7 @@ mcp__java-decompile-mcp__decompile_directory(
     max_workers=4
 )
 
-# 反编译多个指定文件
+# Decompile multiple specified files
 mcp__java-decompile-mcp__decompile_files(
     file_paths=[
         "/path/to/UserDao.class",
@@ -298,402 +302,404 @@ mcp__java-decompile-mcp__decompile_files(
 )
 ```
 
-#### 3.2 必须反编译的类
+#### 3.2 Classes That Must Be Decompiled
 
-| 类型 | 匹配模式 | 目的 |
+| Type | Match Pattern | Purpose |
 |------|----------|------|
-| DAO/Mapper | `*Dao.class`, `*Mapper.class`, `*Repository.class` | 提取 SQL 执行逻辑 |
-| Service | `*Service.class`, `*ServiceImpl.class` | 追踪 SQL 调用链 |
-| 工具类 | `*SqlUtil*.class`, `*DbHelper*.class` | 提取通用 SQL 方法 |
-| 实体类 | `*Entity.class`, `*Model.class` | Hibernate 注解分析 |
+| DAO/Mapper | `*Dao.class`, `*Mapper.class`, `*Repository.class` | Extract SQL execution logic |
+| Service | `*Service.class`, `*ServiceImpl.class` | Trace the SQL call chain |
+| Utility classes | `*SqlUtil*.class`, `*DbHelper*.class` | Extract generic SQL methods |
+| Entity classes | `*Entity.class`, `*Model.class` | Hibernate annotation analysis |
 
 ---
 
-## 执行条件分析（CRITICAL - 避免误报）
+## Execution Condition Analysis (CRITICAL - Avoid False Positives)
 
-**发现 SQL 拼接代码后，必须分析该代码是否真的会被执行！**
+**After discovering SQL concatenation code, you must analyze whether that code will actually be executed!**
 
-### 1. 数据库类型分支检查
+### 1. Database Type Branch Check
 
-在发现 SQL 拼接后，必须检查是否存在数据库类型判断：
+After discovering SQL concatenation, you must check whether a database type check exists:
 
-| 检查模式 | 代码特征 | 处理方式 |
+| Check Pattern | Code Features | Handling |
 |----------|----------|----------|
-| Oracle 分支 | `isOracle()`, `getDbType().equals("oracle")` | 标注为 Oracle-only |
-| MySQL 分支 | `isMySQL()`, `isMySql()`, `getDbType().equals("mysql")` | 标注为 MySQL-only |
-| 通用代码 | 无数据库类型判断 | 标注为通用 |
+| Oracle branch | `isOracle()`, `getDbType().equals("oracle")` | Mark as Oracle-only |
+| MySQL branch | `isMySQL()`, `isMySql()`, `getDbType().equals("mysql")` | Mark as MySQL-only |
+| Common code | No database type check | Mark as common |
 
-**示例分析：**
+**Example analysis:**
 ```java
 public String getSql(QueryBean bean, List<Object> params) {
     if (this.isOracle()) {
-        return this.getOracleSql(bean, params);  // Oracle分支 - SQL拼接在这里
+        return this.getOracleSql(bean, params);  // Oracle branch - SQL concatenation happens here
     }
-    return "";  // ⚠️ MySQL分支 - 直接返回空字符串！
+    return "";  // ⚠️ MySQL branch - returns an empty string directly!
 }
 ```
 
-### 2. 代码路径可达性分析
+### 2. Code Path Reachability Analysis
 
-追踪从入口到 SQL 执行的完整路径，检查：
+Trace the complete path from entry point to SQL execution, and check:
 
-| 检查项 | 说明 | 影响 |
+| Check Item | Description | Impact |
 |--------|------|------|
-| 提前 return | `return ""`, `return null` | 代码不执行 |
-| 异常抛出 | `throw new Exception()` | 代码不执行 |
-| 条件不满足 | `if (false)` 等死代码 | 代码不执行 |
-| 环境限定 | 仅特定数据库/配置下执行 | 需确认环境 |
+| Early return | `return ""`, `return null` | Code does not execute |
+| Exception thrown | `throw new Exception()` | Code does not execute |
+| Condition unmet | Dead code such as `if (false)` | Code does not execute |
+| Environment-restricted | Executes only with a specific database/configuration | Environment must be confirmed |
 
-### 3. 结论分级（必须标注）
+### 3. Conclusion Grading (Must Be Annotated)
 
-| 状态 | 含义 | 后续操作 |
+| Status | Meaning | Follow-up Action |
 |------|------|----------|
-| ⚠️ **待验证** | 代码存在 SQL 拼接，但执行条件未确认 | 需确认目标环境 |
-| ✅ **已确认可利用** | 已验证代码路径在目标环境下会执行 | 进行漏洞利用测试 |
-| ❌ **不可利用** | 代码存在但在目标环境下不执行 | 标注原因，降低优先级 |
-| 🔍 **环境依赖** | 漏洞存在但仅在特定环境下可利用 | 标注环境条件 |
+| ⚠️ **To Be Verified** | SQL concatenation exists, but execution conditions are unconfirmed | Target environment must be confirmed |
+| ✅ **Confirmed Exploitable** | Code path verified to execute in the target environment | Perform exploitation testing |
+| ❌ **Not Exploitable** | Code exists but does not execute in the target environment | Annotate the reason and lower the priority |
+| 🔍 **Environment-Dependent** | Vulnerability exists but is exploitable only in a specific environment | Annotate the environment condition |
 
-### 4. 审计流程修正
+### 4. Audit Process Correction
 
 ```
-发现 SQL 拼接代码
+SQL concatenation code discovered
        ↓
-检查是否有数据库类型分支（isOracle/isMySQL）
+Check whether a database type branch exists (isOracle/isMySQL)
        ↓
   ┌────┴────┐
-  有        无
+ Present    Absent
   ↓         ↓
-分析各分支   继续常规分析
+Analyze each   Continue with
+branch         routine analysis
   ↓
-确认目标环境数据库类型
+Confirm the target environment's database type
   ↓
-判断漏洞代码是否会执行
+Determine whether the vulnerable code will execute
   ↓
   ┌────┴────┐
- 执行      不执行
+Executes   Does not execute
   ↓         ↓
-标注✅     标注❌
-已确认     不可利用
+Mark ✅     Mark ❌
+Confirmed  Not exploitable
 ```
 
-### 5. 报告输出要求
+### 5. Report Output Requirements
 
-**发现 SQL 拼接时，必须在报告中包含：**
+**When SQL concatenation is found, the report must include:**
 
 ```markdown
-### 执行条件分析
+### Execution Condition Analysis
 
-| 项目 | 值 |
+| Item | Value |
 |------|-----|
-| 代码位置 | AnalyseDaoImpl.java:187 |
-| 分支条件 | `if (this.isOracle())` |
-| Oracle 分支 | 调用 getOracleSql() → SQL 拼接 |
-| MySQL 分支 | `return ""` → 不执行 |
-| 目标环境 | MySQL |
-| **可利用性** | ❌ 不可利用（MySQL 环境下代码路径不执行） |
+| Code location | AnalyseDaoImpl.java:187 |
+| Branch condition | `if (this.isOracle())` |
+| Oracle branch | Calls getOracleSql() → SQL concatenation |
+| MySQL branch | `return ""` → does not execute |
+| Target environment | MySQL |
+| **Exploitability** | ❌ Not exploitable (code path does not execute in the MySQL environment) |
 ```
 
 ---
 
-## SQL 注入检测规则速查
+## SQL Injection Detection Rules Quick Reference
 
-### 核心检测原则
+### Core Detection Principles
 
-**基于行为识别，而非固定命名模式。开发者可能使用任意命名，固定模式会导致漏报！**
+**Identify by behavior, not fixed naming patterns. Developers may use arbitrary names, and fixed patterns will cause missed detections!**
 
-| 原则 | 说明 |
+| Principle | Description |
 |:-----|:-----|
-| 行为优先 | 搜索 SQL 关键字拼接行为，而非方法名/类名 |
-| 数据流追踪 | 追踪任何 String 参数是否流入 SQL |
-| 多数据库覆盖 | 检测需覆盖 Oracle、MySQL、PostgreSQL、SQL Server 等 |
+| Behavior first | Search for SQL keyword concatenation behavior, not method/class names |
+| Data flow tracing | Trace whether any String parameter flows into SQL |
+| Multi-database coverage | Detection must cover Oracle, MySQL, PostgreSQL, SQL Server, etc. |
 
-**详细检测策略请参考：[SQL_DETECTION_RULES.md](references/SQL_DETECTION_RULES.md)**
+**For detailed detection strategies, see: [SQL_DETECTION_RULES.md](references/SQL_DETECTION_RULES.md)**
 
-### 检测规则参考
+### Detection Rules Reference
 
-| 检测类型 | 说明 | 参考文档 |
+| Detection Type | Description | Reference Document |
 |:---------|:-----|:---------|
-| 通用行为检测 | SQL 关键字拼接、数据流追踪、分页排序 | [SQL_DETECTION_RULES.md](references/SQL_DETECTION_RULES.md) |
-| JDBC 框架 | Statement、PreparedStatement、参数化 | [JDBC.md](references/JDBC.md) |
-| MyBatis 框架 | `#{}` vs `${}`、动态 SQL | [MYBATIS.md](references/MYBATIS.md) |
-| Hibernate 框架 | HQL、Criteria、Native Query | [HIBERNATE.md](references/HIBERNATE.md) |
+| Generic behavior detection | SQL keyword concatenation, data flow tracing, pagination/sorting | [SQL_DETECTION_RULES.md](references/SQL_DETECTION_RULES.md) |
+| JDBC framework | Statement, PreparedStatement, parameterization | [JDBC.md](references/JDBC.md) |
+| MyBatis framework | `#{}` vs `${}`, dynamic SQL | [MYBATIS.md](references/MYBATIS.md) |
+| Hibernate framework | HQL, Criteria, Native Query | [HIBERNATE.md](references/HIBERNATE.md) |
 
-### 快速检测命令
+### Quick Detection Commands
 
 ```bash
-# 搜索 SQL 关键字拼接（通用，不依赖命名）
+# Search for SQL keyword concatenation (generic, not name-dependent)
 grep -ri "order by\|group by" --include="*.java" | grep -E "\+|\.append"
 grep -ri "limit\s|offset\s|rownum|row_number" --include="*.java"
 ```
 
 ---
 
-### ⚠️ 参数类型与注入风险
+### ⚠️ Parameter Types and Injection Risk
 
-**SQL 注入漏洞主要发生在 String 类型参数上！**
+**SQL injection vulnerabilities occur mainly on String-type parameters!**
 
-| 参数类型 | 注入风险 | 原因 |
+| Parameter Type | Injection Risk | Reason |
 |----------|----------|------|
-| `String` | **高危** | 可注入任意 SQL 片段 |
-| `Integer`/`int` | 低 | 非法输入会抛 NumberFormatException |
-| `Long`/`long` | 低 | 非法输入会抛 NumberFormatException |
-| `Boolean`/`boolean` | 低 | 只能是 true/false |
+| `String` | **High** | Can inject arbitrary SQL fragments |
+| `Integer`/`int` | Low | Invalid input throws NumberFormatException |
+| `Long`/`long` | Low | Invalid input throws NumberFormatException |
+| `Boolean`/`boolean` | Low | Can only be true/false |
 
-**审计要点：**
-- 重点关注 `String` 类型参数的 SQL 拼接
-- **特别关注 orderBy、order、groupBy 等排序/分组参数**
-- 数值类型参数即使拼接，也难以注入（但仍建议使用预编译）
-- 检查是否有 String 转数值的中间处理
+**Audit points:**
+- Focus on SQL concatenation of `String`-type parameters
+- **Pay special attention to sorting/grouping parameters such as orderBy, order, groupBy**
+- Numeric-type parameters are hard to inject even when concatenated (but precompilation is still recommended)
+- Check whether there is intermediate handling that converts String to numeric
 
 ---
 
-### JDBC 危险 vs 安全 → [详细规则](references/JDBC.md)
+### JDBC Dangerous vs Safe → [Detailed Rules](references/JDBC.md)
 
-| 类型 | 危险模式 | 安全模式 |
+| Type | Dangerous Pattern | Safe Pattern |
 |------|----------|----------|
-| 查询 | `stmt.executeQuery("..."+var)` | `pstmt.setXxx(1, var)` |
-| 拼接 | `+`, `StringBuilder`, `String.format` | `?` 占位符 |
-| **ORDER BY** | `" order by " + orderBy` | **白名单校验** |
+| Query | `stmt.executeQuery("..."+var)` | `pstmt.setXxx(1, var)` |
+| Concatenation | `+`, `StringBuilder`, `String.format` | `?` placeholder |
+| **ORDER BY** | `" order by " + orderBy` | **Whitelist validation** |
 
-### MyBatis 危险 vs 安全 → [详细规则](references/MYBATIS.md)
+### MyBatis Dangerous vs Safe → [Detailed Rules](references/MYBATIS.md)
 
-| 类型 | 危险模式 | 安全模式 |
+| Type | Dangerous Pattern | Safe Pattern |
 |------|----------|----------|
-| 参数 | `${param}` | `#{param}` |
+| Parameter | `${param}` | `#{param}` |
 | like | `'%${keyword}%'` | `CONCAT('%', #{keyword}, '%')` |
-| **order by** | `ORDER BY ${col}` | **白名单校验后使用** |
-| in | `IN (${ids})` | `<foreach>` 标签 |
+| **order by** | `ORDER BY ${col}` | **Use after whitelist validation** |
+| in | `IN (${ids})` | `<foreach>` tag |
 
-### Hibernate 危险 vs 安全 → [详细规则](references/HIBERNATE.md)
+### Hibernate Dangerous vs Safe → [Detailed Rules](references/HIBERNATE.md)
 
-| 类型 | 危险模式 | 安全模式 |
+| Type | Dangerous Pattern | Safe Pattern |
 |------|----------|----------|
 | HQL | `"FROM User WHERE name='"+n+"'"` | `query.setParameter("name", n)` |
-| Native | `createNativeQuery(sql+var)` | 参数绑定 |
+| Native | `createNativeQuery(sql+var)` | Parameter binding |
 | Criteria | `Restrictions.sqlRestriction(str)` | `CriteriaBuilder` API |
-| **排序** | `" order by " + sortField` | **白名单校验** |
+| **Sorting** | `" order by " + sortField` | **Whitelist validation** |
 
-**需要详细检测规则时，点击对应框架链接加载完整文档。**
+**When detailed detection rules are needed, click the corresponding framework link to load the full document.**
 
 ---
 
-## 审计检查清单（防遗漏）
+## Audit Checklist (to prevent omissions)
 
-### 必须搜索的危险模式
+### Dangerous Patterns That Must Be Searched
 
-**在审计开始时，必须执行以下搜索：**
+**At the start of the audit, the following searches must be performed:**
 
 ```bash
-# ORDER BY 注入检测
+# ORDER BY injection detection
 grep -r "order by" --include="*.java" | grep -v "ORDER BY \?"
 grep -r "getOrderBy\|getSortField\|getOrder\|getSortOrder" --include="*.java"
 grep -r "append.*order" --include="*.java"
 
-# GROUP BY 注入检测
+# GROUP BY injection detection
 grep -r "group by" --include="*.java" | grep -v "GROUP BY \?"
 grep -r "getGroupBy" --include="*.java"
 
-# 分页辅助类检测
+# Pagination helper class detection
 find . -name "*Pagination*.java" -o -name "*PageHelper*.java" -o -name "*JdbcSupport*.java"
 
-# 基类检测
+# Base class detection
 find . -name "Abstract*Dao*.java" -o -name "Base*Support*.java"
 ```
 
 ---
 
-## 数据流追踪（需要时加载 java-route-tracer）
+## Data Flow Tracing (load java-route-tracer when needed)
 
-### 何时需要参数追踪
+### When Parameter Tracing Is Needed
 
-当发现以下情况时，**必须调用 java-route-tracer 技能进行深度追踪**：
+When the following situations are found, **you must invoke the java-route-tracer skill for deep tracing**:
 
-| 场景 | 说明 | 操作 |
+| Scenario | Description | Operation |
 |------|------|------|
-| 参数经过多层传递 | HTTP 参数经 Controller → Service → DAO 多层传递后拼接 SQL | 加载 java-route-tracer |
-| 参数类型转换 | String JSON 反序列化为对象后，某字段用于 SQL | 加载 java-route-tracer |
-| 父类/基类 SQL 执行 | SQL 执行在父类 AbstractDao 等基类中 | 加载 java-route-tracer |
-| 变量名多次变化 | 同一参数在不同层使用不同变量名 | 加载 java-route-tracer |
+| Parameter passes through multiple layers | HTTP parameter passes through Controller → Service → DAO multiple layers before being concatenated into SQL | Load java-route-tracer |
+| Parameter type conversion | After a String JSON is deserialized into an object, one field is used in SQL | Load java-route-tracer |
+| Parent/base class SQL execution | SQL execution happens in a base class such as AbstractDao | Load java-route-tracer |
+| Variable name changes multiple times | The same parameter uses different variable names at different layers | Load java-route-tracer |
 
-### 自动触发 java-route-tracer（Claude Code 规范）
+### Auto-trigger java-route-tracer (Claude Code Convention)
 
-当发现以下场景时，**必须自动调用 java-route-tracer 技能**：
+When the following scenarios are found, **you must automatically invoke the java-route-tracer skill**:
 
 ```python
-# 当需要追踪参数流向时，自动调用 java-route-tracer
-mcp__cclsp__find_references  # 先分析方法引用
-# 然后自动触发
+# When parameter flow needs to be traced, automatically invoke java-route-tracer
+mcp__cclsp__find_references  # First analyze method references
+# Then trigger automatically
 Skill(
     skill="java-route-tracer",
     args="--route {controller_route} --project {project_path}"
 )
 ```
 
-### 基于 tracer 输出的漏洞判定（CRITICAL - 防止误判）
+### Vulnerability Determination Based on tracer Output (CRITICAL - Prevent Misjudgment)
 
-**java-sql-audit 必须基于 java-route-tracer 的"参数实际使用分析"输出进行漏洞判定。**
+**java-sql-audit must determine vulnerabilities based on the "actual parameter usage analysis" output of java-route-tracer.**
 
-#### 判定流程
+#### Determination Flow
 
 ```
-1. 调用 java-route-tracer 获取追踪报告
+1. Invoke java-route-tracer to obtain the tracing report
        ↓
-2. 读取"参数实际使用分析"章节
+2. Read the "Actual Parameter Usage Analysis" section
        ↓
-3. 筛选参数
-   ├─ "✅ 被使用" → 进行 SQL 注入检测
-   ├─ "❌ 未使用" → 跳过，不标记为漏洞
-   └─ "⚠️ 部分使用" → 仅检测被使用的字段
+3. Filter parameters
+   ├─ "✅ Used" → perform SQL injection detection
+   ├─ "❌ Not used" → skip, do not mark as a vulnerability
+   └─ "⚠️ Partially used" → detect only the fields that are used
        ↓
-4. 对"被使用"的参数进行详细分析
+4. Perform detailed analysis on the "used" parameters
        ↓
-5. 输出审计结论
+5. Output the audit conclusion
 ```
 
-#### tracer 输出示例与 audit 判定
+#### tracer Output Example and audit Determination
 
-| 参数 | tracer 输出（实际使用状态） | sql-audit 判定 |
+| Parameter | tracer Output (Actual Usage Status) | sql-audit Determination |
 |:-----|:---------------------------|:---------------|
-| page.orderBy | ❌ 未使用（被硬编码覆盖） | ⏭️ **跳过**，不检测 |
-| page.order | ❌ 未使用（被硬编码覆盖） | ⏭️ **跳过**，不检测 |
-| searchBean.keyword | ✅ 被使用（`#{keyword}` 参数化） | 🔍 检测 → 安全（参数化） |
-| searchBean.status | ✅ 被使用（`${status}` 拼接） | 🔍 检测 → **发现漏洞** |
+| page.orderBy | ❌ Not used (overridden by hardcoding) | ⏭️ **Skip**, do not detect |
+| page.order | ❌ Not used (overridden by hardcoding) | ⏭️ **Skip**, do not detect |
+| searchBean.keyword | ✅ Used (`#{keyword}` parameterized) | 🔍 Detect → safe (parameterized) |
+| searchBean.status | ✅ Used (`${status}` concatenation) | 🔍 Detect → **vulnerability found** |
 
-#### 审计报告中的体现
+#### Representation in the Audit Report
 
 ```markdown
-### [SQL-001] ORDER BY 注入分析
+### [SQL-001] ORDER BY Injection Analysis
 
-| 检查项 | 结果 |
+| Check Item | Result |
 |:-------|:-----|
-| 拼接代码位置 | PaginationJdbcSupport.java:115 |
-| 调用方法 | UserBulletinDaoImpl.getUserBulletinReplayList() |
-| **tracer 参数分析** | page.orderBy → ❌ 未使用（被硬编码覆盖） |
-| 硬编码详情 | `sql + " order by replayDateStr desc"` |
-| **结论** | ❌ **非漏洞** - 参数未实际使用 |
+| Concatenation code location | PaginationJdbcSupport.java:115 |
+| Calling method | UserBulletinDaoImpl.getUserBulletinReplayList() |
+| **tracer parameter analysis** | page.orderBy → ❌ Not used (overridden by hardcoding) |
+| Hardcoding details | `sql + " order by replayDateStr desc"` |
+| **Conclusion** | ❌ **Not a vulnerability** - parameter is not actually used |
 
 ---
 
-### [SQL-002] WHERE 条件 SQL 注入
+### [SQL-002] WHERE Condition SQL Injection
 
-| 检查项 | 结果 |
+| Check Item | Result |
 |:-------|:-----|
-| 拼接代码位置 | UserDaoImpl.java:89 |
-| 调用方法 | UserDaoImpl.searchUsers() |
-| **tracer 参数分析** | searchBean.status → ✅ 被使用（`${status}` 拼接） |
-| 参数来源 | HTTP 请求 searchJson.status |
-| **结论** | ✅ **确认漏洞** - 参数直接拼接到 SQL |
+| Concatenation code location | UserDaoImpl.java:89 |
+| Calling method | UserDaoImpl.searchUsers() |
+| **tracer parameter analysis** | searchBean.status → ✅ Used (`${status}` concatenation) |
+| Parameter source | HTTP request searchJson.status |
+| **Conclusion** | ✅ **Vulnerability confirmed** - parameter is concatenated directly into SQL |
 ```
 
-#### 必须检查的 tracer 输出字段
+#### tracer Output Fields That Must Be Checked
 
-| tracer 输出字段 | 用途 |
+| tracer Output Field | Purpose |
 |:----------------|:-----|
-| `实际使用状态` | 判断是否需要检测该参数 |
-| `是否被硬编码覆盖` | 排除硬编码场景的误判 |
-| `敏感操作类型` | 确定检测规则（SQL/命令/SSRF等） |
-| `硬编码覆盖详情` | 输出到审计报告作为证据 |
+| `Actual usage status` | Determine whether the parameter needs to be detected |
+| `Overridden by hardcoding` | Rule out false positives in hardcoded scenarios |
+| `Sensitive operation type` | Determine the detection rule (SQL/command/SSRF, etc.) |
+| `Hardcoding override details` | Output to the audit report as evidence |
 
-### 触发条件（自动调用）
+### Trigger Conditions (Auto-invocation)
 
-| 场景 | 操作 |
+| Scenario | Operation |
 |------|------|
-| 参数经过多层传递 | 调用 java-route-tracer 追踪完整调用链 |
-| 参数类型转换 | 调用 java-route-tracer 追踪参数转换过程 |
-| 父类/基类 SQL 执行 | 调用 java-route-tracer 追踪继承链 |
-| 变量名多次变化 | 调用 java-route-tracer 追踪变量名变化 |
-| 执行条件不明确 | 调用 java-route-tracer 分析分支条件 |
+| Parameter passes through multiple layers | Invoke java-route-tracer to trace the complete call chain |
+| Parameter type conversion | Invoke java-route-tracer to trace the parameter conversion process |
+| Parent/base class SQL execution | Invoke java-route-tracer to trace the inheritance chain |
+| Variable name changes multiple times | Invoke java-route-tracer to trace variable name changes |
+| Execution condition unclear | Invoke java-route-tracer to analyze branch conditions |
 
-### java-route-tracer 协作内容
+### java-route-tracer Collaboration Content
 
-**调用时传递的参数：**
-- `--route`: 对应的 HTTP 路由（如 `/api/users/getUserById`）
-- `--project`: 项目路径（用于反编译和代码分析）
+**Parameters passed on invocation:**
+- `--route`: the corresponding HTTP route (e.g. `/api/users/getUserById`)
+- `--project`: project path (used for decompilation and code analysis)
 
-**java-route-tracer 返回：**
-- 完整调用链信息（L1 → L2 → L3 → L4）
-- 各层的参数变量名变化
-- 执行路径的分支条件分析
-- 最终 SQL 使用点定位
-- HTTP 请求模板（Burp Suite 可用）
+**java-route-tracer returns:**
+- Complete call chain information (L1 → L2 → L3 → L4)
+- Parameter variable name changes at each layer
+- Branch condition analysis of the execution path
+- Final SQL usage point location
+- HTTP request template (usable in Burp Suite)
 
-**协作流程：**
+**Collaboration flow:**
 ```
 java-sql-audit                    java-route-tracer
      │                                   │
-     │  发现 SQL 注入点                   │
-     │  检测到需要深度追踪的场景          │
+     │  SQL injection point discovered   │
+     │  Scenario requiring deep trace    │
+     │  detected                         │
      │                                   │
-     └───────── Skill 工具调用 ──────────→│
+     └───────── Skill tool invocation ───→│
                                          │
-                                         │  追踪完整调用链
-                                         │  分析分支条件
-                                         │  输出参数流向
+                                         │  Trace the complete call chain
+                                         │  Analyze branch conditions
+                                         │  Output parameter flow
                                          │
-     ←───────── 自动返回结果 ─────────────┘
+     ←───────── Automatically returns ─────┘
      │
-     │  结合追踪结果标注可利用性
+     │  Annotate exploitability using tracing results
      ▼
 ```
 
 ---
 
-## 报告生成
+## Report Generation
 
-**输出单个综合审计报告文件：**
+**Output a single comprehensive audit report file:**
 
 ```
 {project_name}_audit/sql_audit/
 └── {route_name}/
-    └── {project_name}_sql_audit_{timestamp}.md      # 综合审计报告
+    └── {project_name}_sql_audit_{timestamp}.md      # Comprehensive audit report
 ```
 
-**路由名说明：**
-- 路由名从路由路径提取，去掉前缀斜杠和特殊字符
-- 例如：`/itc/ws/carQuery` → `itc_ws_carQuery`
-- 例如：`/api/user/login.action` → `api_user_login`
+**Route Name Notes:**
+- Route names are extracted from the route path, stripping leading slashes and special characters
+- For example: `/itc/ws/carQuery` → `itc_ws_carQuery`
+- For example: `/api/user/login.action` → `api_user_login`
 
 ---
 
-## 输出格式
+## Output Format
 
-**严格按照 [references/OUTPUT_TEMPLATE.md](references/OUTPUT_TEMPLATE.md) 中的填充式模板生成输出文件。**
+**Generate the output file strictly following the fill-in template in [references/OUTPUT_TEMPLATE.md](references/OUTPUT_TEMPLATE.md).**
 
-- 文件名格式: `{project_name}_sql_audit_{YYYYMMDD_HHMMSS}.md`
-- 不得修改模板结构、不得增删章节、不得调整顺序
-- 所有【填写】占位符必须替换为实际内容
-- 通用规范参考: [shared/OUTPUT_STANDARD.md](../shared/OUTPUT_STANDARD.md)
-
----
-
-## 验证检查清单
-
-**在标记审计完成前，必须执行以下检查：**
-
-### 代码分析检查
-- [ ] 所有 DAO/Mapper 类已分析
-- [ ] 所有 SQL 配置文件（*Mapper.xml）已解析
-- [ ] 每个 SQL 操作都有参数化状态标注
-
-### 执行条件检查（CRITICAL）
-- [ ] 检查了数据库类型分支（isOracle/isMySQL）
-- [ ] 分析了代码路径可达性
-- [ ] 标注了每个漏洞的可利用性状态
-
-### 漏洞检测检查
-- [ ] 所有 JDBC 拼接模式已检测
-- [ ] 所有 MyBatis ${} 使用已检测
-- [ ] 所有 Hibernate HQL 拼接已检测
-
-### 报告完整性检查
-- [ ] **综合审计报告已生成，且通过 OUTPUT_TEMPLATE.md 末尾的自检清单**
+- File name format: `{project_name}_sql_audit_{YYYYMMDD_HHMMSS}.md`
+- Do not modify the template structure, add or remove sections, or change their order
+- All [FILL IN] placeholders must be replaced with actual content
+- Common specification reference: [shared/OUTPUT_STANDARD.md](../shared/OUTPUT_STANDARD.md)
 
 ---
 
-## 参考资料
+## Verification Checklist
 
-- [OUTPUT_TEMPLATE.md](references/OUTPUT_TEMPLATE.md) - 输出报告填充式模板
-- [JDBC.md](references/JDBC.md) - JDBC SQL 注入审计详解
-- [MYBATIS.md](references/MYBATIS.md) - MyBatis SQL 注入审计详解
-- [HIBERNATE.md](references/HIBERNATE.md) - Hibernate SQL 注入审计详解
-- [DECOMPILE_STRATEGY.md](references/DECOMPILE_STRATEGY.md) - 反编译策略指南
+**Before marking the audit as complete, the following checks must be performed:**
+
+### Code Analysis Check
+- [ ] All DAO/Mapper classes have been analyzed
+- [ ] All SQL configuration files (*Mapper.xml) have been parsed
+- [ ] Every SQL operation has a parameterization status annotation
+
+### Execution Condition Check (CRITICAL)
+- [ ] Database type branches checked (isOracle/isMySQL)
+- [ ] Code path reachability analyzed
+- [ ] Exploitability status annotated for each vulnerability
+
+### Vulnerability Detection Check
+- [ ] All JDBC concatenation patterns detected
+- [ ] All MyBatis ${} usages detected
+- [ ] All Hibernate HQL concatenations detected
+
+### Report Completeness Check
+- [ ] **The comprehensive audit report has been generated and passes the self-check checklist at the end of OUTPUT_TEMPLATE.md**
+
+---
+
+## References
+
+- [OUTPUT_TEMPLATE.md](references/OUTPUT_TEMPLATE.md) - Fill-in template for the output report
+- [JDBC.md](references/JDBC.md) - Detailed JDBC SQL injection audit guide
+- [MYBATIS.md](references/MYBATIS.md) - Detailed MyBatis SQL injection audit guide
+- [HIBERNATE.md](references/HIBERNATE.md) - Detailed Hibernate SQL injection audit guide
+- [DECOMPILE_STRATEGY.md](references/DECOMPILE_STRATEGY.md) - Decompilation strategy guide

@@ -2,40 +2,42 @@
 name: gospider-js-crawl
 description: "gospider extracts JavaScript endpoints for vulnerability scanning. Signals: web vulnerabilities, injection, bulk scanning, depth, JS endpoint extraction."
 zh-signals: "gospider: JS 端点提取喂漏扫。信号:web漏洞,注入,批量,深度,解析 JS 提取端点。"
+when-to-use: >-
+  Use when crawling web targets to collect URLs, forms and JavaScript-derived API endpoints as input for vulnerability scanners like nuclei or dalfox.
 ---
 
 # gospider
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/jaeles-project/gospider
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/jaeles-project/gospider
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/jaeles-project/gospider@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `gospider -s https://t.com` | 整站爬取(URL/JS/表单) |
-| `-S urls.txt` | 批量 |
-| `-d 3` | 深度 |
-| `--js` | 解析 JS 提取端点 |
-| `-o out/` | 输出 |
-| `-t 20` | 线程 |
+| `gospider -s https://t.com` | Full-site crawl (URL/JS/forms) |
+| `-S urls.txt` | Batch |
+| `-d 3` | Depth |
+| `--js` | Parse JS to extract endpoints |
+| `-o out/` | Output |
+| `-t 20` | Threads |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### JS 端点提取喂漏扫
+### JS endpoint extraction feeds the vulnerability scanner
 
 ```bash
 gospider -S live_hosts.txt -d 3 --js -o spider/
-# 从 JS bundle 提 API 端点/参数,交 dalfox/nuclei
+# Extract API endpoints/parameters from JS bundles, hand off to dalfox/nuclei
 ```
 
-## 注意事项
+## Notes
 
-jaeles 生态的爬虫,JS 渲染+源映射解析,输出可直接接 nuclei/dalfox 的 URL 清单。
+Crawler from the jaeles ecosystem, JS rendering plus source map parsing, outputs a URL list that plugs straight into nuclei/dalfox.

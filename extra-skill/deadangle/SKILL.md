@@ -1,6 +1,8 @@
 ---
 name: deadangle
 description: A final accuracy check for offensive security work — it re-tests each conclusion against the evidence and labels every part confirmed, inferred, or assumed, so an unverified result never goes out as if it were proven. Trigger when the user says "deadangle" or "/deadangle", before delivering a finding/vulnerability conclusion/attack path, after completing recon and summarizing coverage, before presenting a multi-step attack chain, before assigning severity/impact/confidence to anything, or before using language like "this is vulnerable" or "I confirmed".
+zh-signals: "交付前对攻防结论做准确性复核，标注已确认、推断与假设。信号:结论复核,准确性检查,证据验证,攻防交付,置信度"
+when-to-use: "Use before delivering any vulnerability conclusion or attack path, to re-check evidence and label each claim as confirmed, inferred, or assumed."
 license: MIT
 metadata:
   version: "1.0.0"

@@ -2,39 +2,40 @@
 name: ppfuzz-prototype-pollution
 description: "Prototype pollution detection for JavaScript sites. Signals: web vulnerability, injection, batch, concurrency 30, JSON output."
 zh-signals: "ppfuzz: JS 站原型链污染探测。信号:web漏洞,注入,批量,并发 30,JSON 输出。"
+when-to-use: "Use when testing JavaScript-heavy web applications for client-side prototype pollution gadgets, scanning single URLs or batches with headless Chrome and JSON output."
 ---
 
 # ppfuzz
 
-- 攻击大类:C09 Web利用(原型链污染)
-- 上游仓库:https://github.com/dwisiswant0/ppfuzz
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Exploitation (Prototype Pollution)
+- Upstream Repository: https://github.com/dwisiswant0/ppfuzz
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/dwisiswant0/ppfuzz/cmd/ppfuzz@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `ppfuzz -u 'https://t.com'` | 单 URL 原型链污染扫描 |
-| `-l urls.txt` | 批量 |
-| `-c 30` | 并发 30 |
-| `-o out.json` | JSON 输出 |
-| `-X POST -d 'a=b'` | POST 模式 |
+| `ppfuzz -u 'https://t.com'` | Single-URL prototype pollution scan |
+| `-l urls.txt` | Batch |
+| `-c 30` | Concurrency 30 |
+| `-o out.json` | JSON output |
+| `-X POST -d 'a=b'` | POST mode |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### JS 站原型链污染探测
+### Prototype pollution probing on JavaScript sites
 
 ```bash
 ppfuzz -u 'https://app.t.com' -c 50 -o pp.json
-# 命中后人工验证: https://t.com/?__proto__[polluted]=yes
+# Manually verify after a hit: https://t.com/?__proto__[polluted]=yes
 ```
 
-## 注意事项
+## Notes
 
-基于 headless Chrome,扫 JS 库中的原型链污染点(Gadget 检测)。
+Built on headless Chrome; scans JavaScript libraries for prototype pollution points (gadget detection).

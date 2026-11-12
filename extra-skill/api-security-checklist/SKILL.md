@@ -1,6 +1,8 @@
 ---
 name: api-security-checklist
 description: Comprehensive API security checklist and best practices for designing, testing, and securing REST, GraphQL, and OAuth APIs
+zh-signals: "API 安全清单与最佳实践技能，覆盖 REST、GraphQL 与 OAuth 的认证、授权、输入验证与监控。信号:API安全,REST,GraphQL,OAuth,安全清单"
+when-to-use: "Use when designing, testing, auditing, or reviewing the security of REST, GraphQL, or OAuth APIs, or when you need an API security checklist and best-practice guidance."
 triggers:
   - "show me API security best practices"
   - "how do I secure my REST API"

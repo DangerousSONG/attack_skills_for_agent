@@ -1,6 +1,9 @@
 ---
 name: memory-forensics
 description: "Comprehensive techniques for acquiring, analyzing, and extracting artifacts from memory dumps for incident response and malware analysis."
+zh-signals: "获取与分析内存转储，提取进程、网络、注入与凭据等取证痕迹。信号:内存取证,Volatility,内存转储,进程注入,事件响应。"
+when-to-use: >-
+  Use when acquiring or analyzing memory dumps for incident response or malware analysis, including process, network, injection, registry, and credential artifact extraction with Volatility.
 risk: critical
 source: community
 date_added: "2026-02-27"

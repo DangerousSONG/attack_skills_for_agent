@@ -1,6 +1,10 @@
 ---
 name: cc-skill-security-review
 description: "This skill ensures all code follows security best practices and identifies potential vulnerabilities. Use when implementing authentication or authorization, handling user input or file uploads, or creating new API endpoints."
+zh-signals: "审查代码是否遵循安全最佳实践并识别潜在漏洞，覆盖认证授权、输入处理与新增 API。信号:安全评审,代码审计,认证授权,输入校验,API安全"
+when-to-use: >-
+  Use when implementing authentication or authorization, handling user input or file
+  uploads, or creating new API endpoints that need a security review.
 risk: critical
 source: community
 date_added: "2026-02-27"

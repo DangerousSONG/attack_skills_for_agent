@@ -1,6 +1,10 @@
 ---
 name: recon-sector
 description: Parameterized sector recon using sector database.
+zh-signals: "按行业加载 sector 数据库并运行 WordPress、CORS、XMLRPC、日志与源码泄露等标准化侦察探测。信号:行业侦察,WordPress,CORS,XMLRPC,源码泄露"
+when-to-use: >-
+  Use when starting recon on a target in a known SMB sector, after sector-recon-methodology
+  produces a target list, or when you need sector-aware path lists for probing.
 version: 2.0.0
 revision_date: 2026-07-25
 license: MIT

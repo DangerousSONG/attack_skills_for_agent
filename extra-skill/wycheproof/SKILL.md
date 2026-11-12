@@ -2,6 +2,10 @@
 name: wycheproof
 type: domain
 description: "Validates cryptographic implementations against Project Wycheproof's test vectors, which encode known attacks and edge cases across AES, RSA, ECDSA, ECDH, and more. Covers loading test vectors, mapping result flags onto pass and fail expectations, and reading a failure. Use when testing a crypto implementation against known attacks, checking a library against standard test vectors, or investigating why two implementations disagree on the same input."
+zh-signals: "使用 Project Wycheproof 测试向量验证密码学实现，覆盖 AES/RSA/ECDSA/ECDH 已知攻击与边界用例。信号:Wycheproof,密码学测试,测试向量,ECDSA,AES"
+when-to-use: >-
+  Use when testing a cryptographic implementation against known attacks, checking a library against
+  standard test vectors, or investigating divergent accept/reject behavior.
 ---
 
 # Wycheproof

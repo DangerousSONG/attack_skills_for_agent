@@ -1,6 +1,10 @@
 ---
 name: claude-code-cybersecurity-skill
 description: Use and extend 15 production-quality Claude Code Skills for cybersecurity operations including offensive security, defensive operations, reverse engineering, threat hunting, CSOC automation, and more
+zh-signals: "使用与扩展 15 个 Claude Code 网络安全技能，覆盖攻防、逆向、威胁狩猎与 CSOC 自动化。信号:Claude Code,网络安全技能,威胁狩猎,CSOC,技能扩展"
+when-to-use: >-
+  Use when setting up, activating, or extending the collection of Claude Code cybersecurity skills
+  for offensive, defensive, reverse engineering, threat hunting, or CSOC automation tasks.
 triggers:
   - "help me use the Claude cybersecurity skills"
   - "install the security skills for Claude Code"

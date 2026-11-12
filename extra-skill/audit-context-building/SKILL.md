@@ -1,6 +1,10 @@
 ---
 name: audit-context-building
 description: Understand a codebase before looking for bugs in it - what each function assumes, what it guarantees, and what it depends on elsewhere. Use when starting an audit, threat model, or architecture review on unfamiliar code, and before any vulnerability-hunting pass.
+zh-signals: "在漏洞挖掘前理解陌生代码库，梳理函数假设、保证与依赖关系。信号:代码审计,威胁建模,架构评审,上下文梳理,函数分析"
+when-to-use: >-
+  Use at the start of an audit, threat model, or architecture review on unfamiliar
+  code, and before any vulnerability-hunting pass.
 allowed-tools: Workflow Task Read Grep Glob
 ---
 

@@ -1,69 +1,72 @@
 ---
 name: social-engineering
-description: "目标组织的人员情报收集与社工攻击准备。当需要收集目标邮箱格式、关键人员信息、组织架构，或准备钓鱼攻击/水坑攻击/凭据猜测时使用。适合渗透测试中的社会工程学攻击准备阶段"
+description: "Personnel intelligence gathering and social engineering attack preparation for the target organization. Use when you need to collect target email formats, key personnel information, organizational structure, or prepare phishing attacks / watering hole attacks / credential guessing. Suitable for the social engineering preparation phase of a penetration test"
+zh-signals: "收集目标组织的人员情报（邮箱格式、关键人员、组织架构），为钓鱼、水坑和凭据猜测等社工攻击做准备。信号:社会工程,邮箱收集,人员情报,组织架构,钓鱼准备"
+when-to-use: >-
+  Use when performing authorized social-engineering preparation against an
+  organization — gathering email formats, key personnel, and org structure to plan
+  phishing, watering-hole, or credential-guessing activities.
 metadata:
-  tags: "osint,social,email,people,钓鱼,社工,邮箱,人员,organization,phishing"
+  tags: "osint,social,email,people,phishing,social-engineering,mail,personnel,organization,phishing"
   category: "recon"
 ---
 
-# 社会工程学情报收集方法论
+# Social Engineering Intelligence Gathering Methodology
 
-> **⛔ 深入参考**：钓鱼邮件模板、pretexting 话术、凭据猜测脚本、水坑攻击方法见 `references/social-engineering-techniques.md`
+> **⛔ Further Reading**: phishing email templates, pretexting scripts, credential guessing scripts, and watering hole attack techniques see `references/social-engineering-techniques.md`
 
-社工攻击的成功率取决于前期情报质量。本技能聚焦于人员和组织层面的情报收集，为后续的钓鱼/水坑/凭据猜测提供弹药。
+The success rate of social engineering attacks depends on the quality of earlier reconnaissance. This skill focuses on intelligence gathering at the personnel and organizational level, providing ammunition for subsequent phishing / watering hole / credential guessing.
 
-## Phase 1: 邮箱格式发现
-通过 `http_request` 或 `curl` 查询 Hunter API 搜索目标域名关联的邮箱地址。
+## Phase 1: Email Format Discovery
+Use `http_request` or `curl` to query the Hunter API and search for email addresses associated with the target domain.
 
-**关键目标**：
-- 确定邮箱命名规则（如 `first.last@`, `f.last@`, `flast@`）
-- 收集已知邮箱列表（用于后续钓鱼或密码喷射）
-- 识别通用邮箱（`info@`, `hr@`, `support@`）— 通常多人共享，更容易中招
+**Key objectives**:
+- Determine email naming rules (e.g. `first.last@`, `f.last@`, `flast@`)
+- Collect a list of known email addresses (for later phishing or password spraying)
+- Identify generic mailboxes (`info@`, `hr@`, `support@`) — usually shared by several people, easier to compromise
 
-## Phase 2: 组织信息收集
-通过 `http_request` 或 `curl` 查询 FOFA API 搜索目标域名关联的资产，关注：
+## Phase 2: Organization Information Gathering
+Use `http_request` or `curl` to query the FOFA API and search for assets associated with the target domain, focusing on:
 
-**内部系统暴露**：
-- OA/ERP 系统 → 泄露组织架构
-- VPN 入口 → 远程办公入口点
-- 邮件系统（OWA/Zimbra）→ 凭据攻击目标
-- HR/招聘系统 → 泄露岗位和技术栈信息
-- Wiki/Confluence → 可能有无认证的知识库
+**Internal system exposure**:
+- OA/ERP systems → leaks organizational structure
+- VPN portals → remote work entry points
+- Mail systems (OWA/Zimbra) → credential attack targets
+- HR/recruiting systems → leaks job posting and tech stack information
+- Wiki/Confluence → may host knowledge bases without authentication
 
-**信息泄露检查**：
-- 文档元数据（PDF/Word 中的作者名、内部路径）
-- GitHub/GitLab 公开仓库（搜索组织名或域名）
-- 招聘信息泄露技术栈（"熟悉 Spring Boot + MySQL"）
+**Information leak checks**:
+- Document metadata (author names, internal paths in PDF/Word files)
+- Public GitHub/GitLab repositories (search the organization name or domain)
+- Job postings leaking the tech stack ("familiar with Spring Boot + MySQL")
 
-## Phase 3: 关键人员识别
+## Phase 3: Key Personnel Identification
+Prioritize identifying the following roles (ordered by social engineering value):
+1. **IT administrators** — hold system privileges, technical emails easier to forge
+2. **HR/administrative staff** — used to opening attachments (resumes, contracts, etc.)
+3. **Finance staff** — common BEC (business email compromise) targets
+4. **Executives** — CEO/CFO identities can be used for internal phishing
+5. **New employees** — unfamiliar with internal processes, easier to deceive
 
-优先识别以下角色（按社工价值排序）：
-1. **IT 管理员** — 有系统权限，技术邮件更容易伪造
-2. **HR/行政** — 习惯打开附件（简历、合同等）
-3. **财务人员** — 常见 BEC（商业邮件欺诈）目标
-4. **高管** — CEO/CFO 身份可用于内部钓鱼
-5. **新员工** — 不熟悉内部流程，更容易上当
+## Phase 4: Social Engineering Attack Plan
+Based on the collected intelligence, evaluate feasible attack directions:
 
-## Phase 4: 社工攻击方案
-
-基于收集的情报，评估可行的攻击方向：
-
-| 攻击类型 | 前提条件 | 成功率 |
+| Attack Type | Prerequisites | Success Rate |
 |----------|----------|--------|
-| 钓鱼邮件 | 有邮箱列表 + 邮箱格式 | 高 |
-| 密码喷射 | 有邮箱列表 + 登录入口 | 中 |
-| 水坑攻击 | 知道目标常访问的网站 | 中 |
-| 凭据猜测 | 有人员姓名 + 邮箱格式 | 低-中 |
-| 电话社工 | 有组织架构 + 关键人员 | 场景依赖 |
+| Phishing email | Has email list + email format | High |
+| Password spraying | Has email list + login entry point | Medium |
+| Watering hole attack | Knows the sites the target frequently visits | Medium |
+| Credential guessing | Has personnel names + email format | Low-Medium |
+| Phone social engineering | Has org structure + key personnel | Scenario dependent |
 
-## 注意事项
-- 用 `evidence_save` 保存关键发现（邮箱列表、人员信息）以便后续使用
-- 社工情报有时效性，人员可能离职或换岗
-- 所有信息来源应标注可信度（搜索引擎/官网/推测）
+## Notes
+- Use `evidence_save` to save key findings (email lists, personnel information) for later use
+- Social engineering intelligence has a shelf life; personnel may leave or change roles
+- Tag every information source with its confidence level (search engine / official site / speculation)
 
-## 目标选择
-- 角色排序：按优先级选择目标（IT管理员 > 普通员工）
+## Target Selection
+- Role ranking: select targets by priority (IT admin > regular employee)
 
-## 密码模式推测
-- 常见模式：公司名+年份（2026）、季节等当前时间相关
-- 注意账户锁定策略（lockout），通常 5 次锁定
+## Password Pattern Guessing
+- Common patterns: company name + year (2026), season, and other time-dependent values
+- Mind the account lockout policy (lockout), it usually locks after 5 attempts

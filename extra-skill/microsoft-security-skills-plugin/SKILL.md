@@ -1,6 +1,10 @@
 ---
 name: microsoft-security-skills-plugin
 description: Install and use curated Microsoft Security skills for AI agents covering Defender, Sentinel, Entra, Purview, Intune, and Security Copilot workflows
+zh-signals: "安装并使用面向 AI Agent 的 Microsoft 安全技能集合，覆盖 Defender、Sentinel 与 Entra。信号:Microsoft安全,Defender,Sentinel,Entra,插件安装"
+when-to-use: >-
+  Use when installing or selecting curated Microsoft Security skills (Defender, Sentinel,
+  Entra, Purview, Intune, Security Copilot) for an AI coding agent.
 triggers:
   - "install Microsoft Security skills for my AI agent"
   - "how do I add security expertise to my coding assistant"

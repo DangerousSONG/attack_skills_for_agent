@@ -2,6 +2,8 @@
 name: ai-sre-incident-response
 description: Build AI-focused SRE incident response practices for LLM outages, degraded
   quality, runaway cost events, and safety regressions.
+zh-signals: "为 LLM 服务构建 AI 场景的 SRE 事件响应实践，覆盖质量回退、成本激增与安全回归。信号:AI SRE,事件响应,LLM故障,成本失控,安全回归"
+when-to-use: "Use when an LLM endpoint degrades, token spend spikes, a provider fails over, or a model deployment causes quality or safety regressions."
 category: devops
 risk: critical
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

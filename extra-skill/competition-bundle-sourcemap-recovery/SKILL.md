@@ -1,6 +1,10 @@
 ---
 name: competition-bundle-sourcemap-recovery
 description: Internal downstream skill for ctf-sandbox-orchestrator. CTF-sandbox workflow for source maps, build manifests, chunk registries, emitted bundles, obfuscated loader flow, and frontend runtime recovery. Use when the user asks to reconstruct served JavaScript structure, inspect source maps or chunk maps, trace bundle loading, recover hidden routes or APIs from emitted assets, or explain runtime behavior from built frontend artifacts. Use only after `$ctf-sandbox-orchestrator` has already established sandbox assumptions and routed here.
+zh-signals: "从打包产物、source map 与 chunk 注册表还原前端运行时结构与隐藏路由。信号:sourcemap,前端逆向,bundle,chunk,构建产物,隐藏路由"
+when-to-use: >-
+  Use only after $ctf-sandbox-orchestrator has established sandbox assumptions, when runtime
+  truth lives in served JavaScript bundles, source maps, or chunk manifests.
 ---
 
 # Competition Bundle Sourcemap Recovery

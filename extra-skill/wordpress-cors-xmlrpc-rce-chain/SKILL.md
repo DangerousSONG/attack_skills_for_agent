@@ -1,6 +1,8 @@
 ---
 name: wordpress-cors-xmlrpc-rce-chain
 description: Use when verified WordPress CORS, XML-RPC, role, upload, and execution behaviors may form one authorized attack path.
+zh-signals: "验证 WordPress 的 CORS、XML-RPC、角色、上传与执行行为能否构成一条经授权的攻击链，逐步确认每个前提。信号:wordpress,CORS,XML-RPC,上传,攻击链"
+when-to-use: "Use when verified WordPress CORS, XML-RPC, role, upload, and execution behaviors may form one authorized attack path, with each state-changing step explicitly permitted."
 version: 2.0.0
 license: MIT
 platforms: [linux, macos]

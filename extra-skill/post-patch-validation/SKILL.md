@@ -6,6 +6,10 @@ description: >
   introduced security failures. Use after a patch exists and before accepting, merging, or
   reporting it as fixed; also use when an AI-generated patch, remediation commit, pull request,
   or proposed upstream fix needs adversarial post-patch validation across any language.
+zh-signals: "以可复现的基线对比证据验证安全补丁，覆盖原始利用、根因变体与回归。信号:补丁验证,回归测试,漏洞修复,基线对比,安全测试"
+when-to-use: >-
+  Use after a security patch or remediation commit exists and before accepting or
+  merging it, especially for AI-generated patches and fixes needing adversarial validation.
 allowed-tools: Read Write Edit Grep Glob Bash Workflow
 ---
 

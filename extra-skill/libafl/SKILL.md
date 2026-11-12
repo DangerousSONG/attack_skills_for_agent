@@ -2,6 +2,10 @@
 name: libafl
 type: fuzzer
 description: "Builds custom fuzzers with LibAFL, the modular Rust fuzzing library. Covers composing observers, feedbacks, mutators, schedulers, and executors into a fuzzer for targets the standard tools do not fit. Use when writing a bespoke fuzzer or mutator, fuzzing a non-standard target or architecture, implementing a fuzzing research idea, or when libFuzzer and AFL++ lack the control you need."
+zh-signals: "使用 LibAFL 构建自定义模糊测试器，组合观察器、变异器与调度器。信号:LibAFL,模糊测试,Rust,自定义fuzzer,覆盖率"
+when-to-use: >-
+  Use when building a bespoke fuzzer with LibAFL, fuzzing a non-standard target or
+  architecture, or implementing fuzzing research ideas beyond libFuzzer/AFL++ capabilities.
 ---
 
 # LibAFL

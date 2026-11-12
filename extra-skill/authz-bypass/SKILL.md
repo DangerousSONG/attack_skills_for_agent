@@ -6,6 +6,11 @@ description: >
   injection (X-Original-URL, X-Rewrite-URL, X-Forwarded-For, X-Remote-IP, X-Client-IP with
   127.0.0.1/localhost/RFC1918 values). Tools: Burp Suite with Autorize/AuthMatrix extensions,
   OWASP ZAP Access Control Testing add-on.
+zh-signals: "测试水平与垂直越权及 IDOR，包含会话替换与特殊请求头注入。信号:越权,idor,访问控制,x-original-url,会话替换"
+when-to-use: >-
+  Use when testing object-level or function-level access control, swapping session IDs
+  between accounts, enumerating ID parameters, or probing X-Original-URL and IP-spoofing
+  headers for authorization bypass.
 license: MIT
 compatibility: Designed for Claude Code. Requires Burp Suite with Autorize or AuthMatrix extension.
 metadata:

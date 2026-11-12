@@ -2,6 +2,10 @@
 name: kubernetes-hardening
 description: Implement Kubernetes security contexts, Pod Security Standards, and network
   policies.
+zh-signals: "落实 Kubernetes 安全上下文、Pod 安全标准与网络策略以加固集群。信号:Kubernetes加固,安全上下文,Pod安全标准,网络策略,集群安全"
+when-to-use: >-
+  Use when hardening a Kubernetes cluster with security contexts, Pod Security Standards,
+  and network policies.
 category: security
 risk: critical
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

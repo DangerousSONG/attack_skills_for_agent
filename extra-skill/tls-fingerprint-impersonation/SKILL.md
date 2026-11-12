@@ -1,6 +1,10 @@
 ---
 name: tls-fingerprint-impersonation
 description: Spoof TLS ClientHello and JA4 fingerprints for browser impersonation.
+zh-signals: "伪造 TLS ClientHello 与 JA3/JA4 指纹以模拟浏览器，绕过 TLS 指纹检测。信号:TLS指纹,JA3/JA4,ClientHello,浏览器模拟,反检测"
+when-to-use: >-
+  Use when a target blocks non-browser TLS stacks or fingerprints ClientHello, and you need
+  JA3/JA4-identical requests without running a full browser.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

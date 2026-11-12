@@ -1,91 +1,94 @@
 ---
 name: java-file-audit
 description: |
-  Java 源码文件操作类漏洞审计。当在 Java 白盒审计中需要检测文件相关漏洞时触发。
-  覆盖 5 类文件风险: 任意文件上传(MultipartFile/Servlet Part/类型绕过)、任意文件读取(NIO/IO流/路径穿越)、
-  任意文件写入(覆盖配置/WebShell落地)、归档提取漏洞(ZipInputStream/Zip Slip)、文件删除/重命名竞争。
-  需要 java-audit-pipeline 提供的数据流证据。
+  Java source code file operation vulnerability audit. Triggered when file-related vulnerabilities must be detected during a Java white-box audit.
+  Covers 5 file risk classes: arbitrary file upload (MultipartFile/Servlet Part/type bypass), arbitrary file read (NIO/IO streams/path traversal),
+  arbitrary file write (configuration overwrite/webshell drop), archive extraction vulnerabilities (ZipInputStream/Zip Slip), and file delete/rename race conditions.
+  Requires the data-flow evidence provided by java-audit-pipeline.
+zh-signals: "审计 Java 源码中文件上传、读取、写入、归档提取与删除类漏洞。信号:Java审计,文件上传,路径穿越,Zip Slip,文件读写"
+when-to-use: >-
+  Use during Java white-box auditing when reviewing code touching MultipartFile, file streams, path handling, or archive extraction.
 metadata:
-  tags: file upload, file read, file write, path traversal, zip slip, 文件上传, 任意读取, 任意写入, java nio, multipartfile, 路径穿越
+  tags: file upload, file read, file write, path traversal, zip slip, file upload, arbitrary read, arbitrary write, java nio, multipartfile, path traversal
   category: code-audit
 ---
 
-# Java 文件操作类漏洞源码审计
-本 skill 聚焦源码层面判断"文件操作漏洞是否成立"，核心是验证路径可控性、文件名可控性和内容可控性。构造上传绕过 payload、目录穿越利用链等运行时利用技术属于对应黑盒 exploit skill 范畴。
+# Java File Operation Vulnerability Source Code Audit
+This skill focuses on determining at the source level whether "the file operation flaw holds", with the core task being verifying path controllability, filename controllability, and content controllability. Upload-bypass payloads, directory traversal exploit chains, and other runtime exploitation techniques belong to the corresponding black-box exploit skill.
 
-## 深入参考
+## Further Reading
 
-- 5 类文件漏洞的危险模式 / 安全模式代码对比 / EVID 证据示例 → [references/file-vuln-patterns.md](references/file-vuln-patterns.md)
+- Dangerous vs. safe code patterns for the 5 file vulnerability classes / EVID evidence examples → [references/file-vuln-patterns.md](references/file-vuln-patterns.md)
 
 ---
 
-## Sink 分类决策树
+## Sink Classification Decision Tree
 
-根据遇到的 Sink 函数类型，进入不同审计分支:
+Enter a different audit branch based on the type of sink function encountered:
 
-| Sink 函数 | 分支 | 典型严重度 |
+| Sink Function | Branch | Typical Severity |
 |-----------|------|-----------|
-| `MultipartFile.transferTo()` / `Part.write()` | 文件上传 | Critical-High |
-| `FileInputStream` / `Files.readAllBytes()` / `new File(path)` / `ClassLoader.getResourceAsStream()` | 文件读取 | High-Medium |
-| `FileOutputStream` / `Files.write()` / `FileWriter` | 文件写入 | Critical-High |
-| `ZipInputStream.getNextEntry()` / `ZipFile.entries()` | 归档提取 | High |
-| `File.delete()` / `Files.delete()` | 文件删除 | Medium |
+| `MultipartFile.transferTo()` / `Part.write()` | File upload | Critical-High |
+| `FileInputStream` / `Files.readAllBytes()` / `new File(path)` / `ClassLoader.getResourceAsStream()` | File read | High-Medium |
+| `FileOutputStream` / `Files.write()` / `FileWriter` | File write | Critical-High |
+| `ZipInputStream.getNextEntry()` / `ZipFile.entries()` | Archive extraction | High |
+| `File.delete()` / `Files.delete()` | File delete | Medium |
 
-## 文件上传审计要点
+## File Upload Audit Points
 
-上传漏洞本质是三要素同时满足: 可执行扩展名 + Web 可达存储路径 + 未被重命名/内容清洗。
+The essence of an upload vulnerability is that three conditions are met simultaneously: an executable extension + a web-reachable storage path + no renaming/content sanitization.
 
-- **MultipartFile**: `file.transferTo(new File(dir + file.getOriginalFilename()))` — `getOriginalFilename()` 返回客户端原始文件名，可含 `../` 路径穿越或恶意扩展名
-- **Servlet Part**: `part.write(uploadPath + fileName)` — 检查 `fileName` 是否来自 `part.getSubmittedFileName()` 且未净化
-- **ContentType 校验 vs 扩展名校验**: `file.getContentType()` 来自客户端 HTTP 头，完全可伪造；扩展名白名单更可靠但需 `toLowerCase()` 处理
-- **存储路径可控性**: 文件名中的 `../` 跳出上传目录，`Paths.get(dir, fileName).normalize()` 后需验证前缀
-- **Spring multipart-config**: `spring.servlet.multipart.location` / `max-file-size` / `max-request-size` 配置影响上传行为，检查是否限制合理
-- **文件头 Magic bytes 校验**: 真实类型检测需读取文件头字节（如 `ImageIO.read()` 或 Apache Tika），而非信任 Content-Type
+- **MultipartFile**: `file.transferTo(new File(dir + file.getOriginalFilename()))` — `getOriginalFilename()` returns the client-supplied original filename and may contain `../` path traversal or a malicious extension
+- **Servlet Part**: `part.write(uploadPath + fileName)` — check whether `fileName` comes from `part.getSubmittedFileName()` and is not sanitized
+- **ContentType validation vs extension validation**: `file.getContentType()` comes from the client's HTTP header and can be fully forged; an extension whitelist is more reliable but requires `toLowerCase()` handling
+- **Storage path controllability**: A `../` in the filename escapes the upload directory; after `Paths.get(dir, fileName).normalize()` the prefix must be validated
+- **Spring multipart-config**: `spring.servlet.multipart.location` / `max-file-size` / `max-request-size` settings affect upload behavior; check whether the limits are reasonable
+- **Magic bytes validation**: Real type detection requires reading the file header bytes (e.g. `ImageIO.read()` or Apache Tika) instead of trusting the Content-Type
 
-## 文件读取审计要点
+## File Read Audit Points
 
-路径穿越是文件读取漏洞的核心，`../` 及其变体可跳出预期目录:
+Path traversal is the core of file read vulnerabilities; `../` and its variants can escape the intended directory:
 
-- **路径穿越 `../`**: `new FileInputStream("/data/" + userPath)` — 用户输入 `../../etc/passwd` 读取任意文件
-- **NIO 安全模式**: `Path resolved = baseDir.resolve(userInput).normalize(); if (!resolved.startsWith(baseDir)) throw ...` — `normalize()` 消除 `../`，`startsWith()` 校验前缀
-- **URL 编码绕过**: `%2e%2e%2f`（`../`）、双重编码 `%252e%252e%252f` — 检查框架是否自动解码后再传入路径
-- **ClassLoader.getResourceAsStream**: 类路径读取受 ClassLoader 沙箱限制，通常不可穿越到文件系统任意路径，但可读取 classpath 内敏感配置
-- **Spring Resource 路径**: `classpath:` 协议限于类路径内，`file:` 协议可访问文件系统 — 检查协议是否用户可切换
+- **Path traversal `../`**: `new FileInputStream("/data/" + userPath)` — user input `../../etc/passwd` reads arbitrary files
+- **NIO safe pattern**: `Path resolved = baseDir.resolve(userInput).normalize(); if (!resolved.startsWith(baseDir)) throw ...` — `normalize()` eliminates `../`, `startsWith()` validates the prefix
+- **URL encoding bypass**: `%2e%2e%2f` (`../`), double encoding `%252e%252e%252f` — check whether the framework auto-decodes before passing the value into the path
+- **ClassLoader.getResourceAsStream**: Classpath reads are limited by the ClassLoader sandbox and usually cannot traverse to arbitrary filesystem paths, but sensitive configuration inside the classpath can still be read
+- **Spring Resource paths**: The `classpath:` protocol is limited to the classpath, while the `file:` protocol can access the filesystem — check whether the protocol is user-switchable
 
-## 文件写入审计要点
+## File Write Audit Points
 
-写入漏洞需要: 路径可控 + 内容可控 + 写入路径可被 Web 容器执行。
+Write vulnerabilities require: a controllable path + controllable content + a write path executable by the web container.
 
-- **WebShell 写入**: `Files.write(Paths.get(dir + filename), content.getBytes())` — 路径和内容同时可控时，写入 `.jsp` 到 Web 根即获得 RCE
-- **配置文件覆盖**: 覆写 `application.yml` / `application.properties` 修改数据源、重定向等配置；覆写 `web.xml` 添加恶意 Servlet 映射
-- **日志注入写马**: 日志框架记录用户输入 → 日志文件路径可预测 → 配合文件包含或直接写入 JSP 内容到日志
-- **模板文件覆盖**: Thymeleaf / FreeMarker 模板目录可写 → 覆盖模板注入 SSTI payload → 下次渲染时触发
-- **安全模式**: 路径白名单 + 内容类型校验 + 文件存储到 Web 根外 + 写入权限最小化
+- **Webshell write**: `Files.write(Paths.get(dir + filename), content.getBytes())` — when both path and content are controllable, writing `.jsp` into the web root yields RCE
+- **Configuration file overwrite**: Overwriting `application.yml` / `application.properties` modifies datasource, redirect, and other settings; overwriting `web.xml` adds a malicious Servlet mapping
+- **Log injection to plant a shell**: The logging framework records user input → the log file path is predictable → combine with file inclusion or directly write JSP content into the log
+- **Template file overwrite**: A writable Thymeleaf / FreeMarker template directory → overwrite the template with an SSTI payload → triggers on the next render
+- **Safe pattern**: Path whitelist + content type validation + store files outside the web root + minimize write permissions
 
-## 归档提取审计要点
+## Archive Extraction Audit Points
 
-Zip Slip 是归档提取最经典的漏洞，恶意归档条目名含 `../` 导致任意路径写入:
+Zip Slip is the most classic archive extraction vulnerability, where a malicious archive entry name contains `../` and leads to an arbitrary path write:
 
-- **ZipEntry.getName() 含 `../`**: `new File(destDir, entry.getName())` — 条目名如 `../../webapps/ROOT/shell.jsp` 直接写入 Web 目录
-- **安全模式 (Canonical Path 校验)**: 解压前获取 `file.getCanonicalPath()` 和 `destDir.getCanonicalPath()`，验证文件路径以目标目录为前缀
-- **TarInputStream / GzipInputStream**: 类似风险，tar 条目名同样可含路径穿越
-- **文件覆盖**: 即使不穿越目录，恶意归档可覆盖同目录下已有文件（配置文件、库文件）
+- **ZipEntry.getName() containing `../`**: `new File(destDir, entry.getName())` — an entry name such as `../../webapps/ROOT/shell.jsp` writes directly into the web directory
+- **Safe pattern (canonical path validation)**: Before extraction, obtain `file.getCanonicalPath()` and `destDir.getCanonicalPath()` and verify that the file path starts with the target directory
+- **TarInputStream / GzipInputStream**: Similar risk, since tar entry names can also contain path traversal
+- **File overwrite**: Even without directory traversal, a malicious archive can overwrite existing files in the same directory (configuration files, library files)
 
-## 文件删除审计要点
+## File Delete Audit Points
 
-- **路径穿越删除**: `new File(dir + userInput).delete()` — 用户输入 `../../important.conf` 删除关键文件
-- **TOCTOU 竞争**: 检查权限 → 执行删除之间的时间窗口，攻击者可替换目标为符号链接指向敏感文件
-- **符号链接跟随**: `Files.delete(path)` 删除链接目标而非链接本身（取决于实现），`File.delete()` 仅删除链接
+- **Path traversal delete**: `new File(dir + userInput).delete()` — user input `../../important.conf` deletes a critical file
+- **TOCTOU race**: The time window between the permission check and the delete lets an attacker replace the target with a symlink pointing at a sensitive file
+- **Symlink following**: `Files.delete(path)` deletes the link target rather than the link itself (implementation-dependent), while `File.delete()` only deletes the link
 
-## 检测清单
+## Detection Checklist
 
-- [ ] 所有文件类 EVID_* 证据点已逐一审查
-- [ ] 上传功能的文件名净化方式已确认（UUID 重命名 vs 原始文件名 vs 白名单扩展名）
-- [ ] 上传存储路径是否在 Web 根内、是否可直接通过 URL 访问已验证
-- [ ] ContentType 校验 vs 文件头 Magic bytes 校验方式已区分
-- [ ] 文件读取路径的穿越防护已检查（normalize + startsWith 模式）
-- [ ] 文件写入的路径和内容来源已追踪，是否可写入可执行位置已确认
-- [ ] 归档解压函数的条目名称校验已检查（Canonical Path 验证）
-- [ ] 文件删除操作的路径校验和符号链接风险已评估
-- [ ] 过滤不充分的点已给出绕过思路或标"待验证"
-- [ ] 严重度评分使用了统一公式，与 pipeline 一致
+- [ ] All file-class EVID_* evidence points have been reviewed one by one
+- [ ] The filename sanitization method of upload features has been confirmed (UUID renaming vs. original filename vs. extension whitelist)
+- [ ] Whether the upload storage path is inside the web root and directly reachable by URL has been verified
+- [ ] ContentType validation has been distinguished from file header magic bytes validation
+- [ ] Traversal protection on file read paths has been checked (normalize + startsWith pattern)
+- [ ] The path and content sources of file writes have been traced, and whether an executable location can be written has been confirmed
+- [ ] Entry name validation of archive extraction functions has been checked (canonical path verification)
+- [ ] Path validation and symlink risks of file delete operations have been assessed
+- [ ] Points with insufficient filtering have a concrete bypass idea or are marked "Unverified"
+- [ ] Severity scoring used the unified formula, consistent with the pipeline

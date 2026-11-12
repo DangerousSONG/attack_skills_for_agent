@@ -1,6 +1,10 @@
 ---
 name: prisma-expert
 description: "You are an expert in Prisma ORM with deep knowledge of schema design, migrations, query optimization, relations modeling, and database operations across PostgreSQL, MySQL, and SQLite."
+zh-signals: "Prisma ORM 专家指导，覆盖 schema 设计、迁移、查询优化、关系建模与 PostgreSQL/MySQL/SQLite 数据库操作。信号:Prisma,ORM,schema设计,迁移,查询优化"
+when-to-use: >-
+  Use when working with Prisma ORM on schema design, migrations, query optimization, relations
+  modeling, or database operations.
 risk: critical
 source: community
 date_added: "2026-02-27"

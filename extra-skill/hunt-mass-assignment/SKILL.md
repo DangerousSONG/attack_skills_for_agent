@@ -1,6 +1,10 @@
 ---
 name: hunt-mass-assignment
 description: Hunt mass assignment via sensitive field injection and ORM framework exploitation.
+zh-signals: "通过敏感字段注入与 ORM 框架缺陷猎取批量赋值漏洞。信号:批量赋值,mass assignment,字段注入,orm,权限提升"
+when-to-use: >-
+  Use when API endpoints blindly bind user-supplied fields, especially profile updates,
+  registration, checkout, or PATCH endpoints backed by bulk-assignment ORMs.
 category: redteam
 version: 1.1.0
 revision_date: 2026-07-25

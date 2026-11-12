@@ -1,6 +1,11 @@
 ---
 name: ai-risk-management
 description: "Apply the NIST AI Risk Management Framework (AI RMF 1.0) and adjacent guidance to AI / ML systems — model lifecycle governance, fairness and bias evaluation, robustness, transparency, accountability, third-party model risk, monitoring for drift, and AI incident response. Broader than prompt-injection (which is the security slice). Use when the user mentions 'AI risk,' 'AI governance,' 'NIST AI RMF,' 'AI compliance,' 'ML governance,' 'model risk management,' 'AI fairness,' 'AI bias,' 'algorithmic accountability,' 'AI Bill of Rights,' 'EU AI Act,' 'AI transparency,' 'model card,' 'AI red team,' 'AI safety,' 'responsible AI,' 'model drift,' 'concept drift,' 'AI monitoring,' 'AI incident,' or needs to assess or govern an AI / ML system."
+zh-signals: "依据 NIST AI RMF 对 AI/ML 系统开展模型生命周期治理，涵盖公平性、鲁棒性、透明度、漂移监控与 AI 事件响应。信号:AI风险管理,NIST AI RMF,模型治理,公平性评估,合规"
+when-to-use: >-
+  Use when assessing or governing an AI/ML system beyond security — model lifecycle
+  governance, fairness and bias evaluation, transparency, third-party model risk,
+  drift monitoring, AI incident response, or regulatory compliance.
 allowed-tools: Read, Grep, Glob, Bash, Write, WebSearch
 ---
 

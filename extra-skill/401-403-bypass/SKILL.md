@@ -1,114 +1,115 @@
 ---
 name: 401-403-bypass
-description: "401/403 访问拒绝绕过与 Spring MVC .do 鉴权绕过方法论。当遇到管理后台、API 端点返回 401/403 Forbidden、Spring MVC .do 接口鉴权绕过、302 登录跳转（login_tologin.do）、越权注册（registersysuser、goedituser）等场景时使用。覆盖路径操纵、HTTP 方法篡改、Header 注入、协议降级、.do 后缀鉴权绕过、302 跳转绕过、组合攻击"
+description: "401/403 access denial bypass and Spring MVC .do authorization bypass methodology. Use when an admin panel or API endpoint returns 401/403 Forbidden, when you need Spring MVC .do endpoint authorization bypass, 302 login redirects (login_tologin.do), or unauthorized registration (registersysuser, goedituser). Covers path manipulation, HTTP method tampering, header injection, protocol downgrade, .do suffix authorization bypass, 302 redirect bypass, and combined attacks"
+zh-signals: "绕过 401/403 访问控制，并利用 Spring MVC .do 后缀鉴权绕过与 302 跳转等技巧。信号:401 绕过,403 绕过,Spring MVC,鉴权绕过,路径操纵"
+when-to-use: "Use when admin panels or API endpoints return 401/403 and you need to test path manipulation, method or header tricks, or Spring MVC suffix-based authorization bypass."
 metadata:
-  tags: "403,401,bypass,forbidden,绕过,路径操纵,method override,X-Original-URL,X-Forwarded-For,access control,权限绕过,spring,mvc,.do,鉴权,302,login_tologin,registersysuser,goedituser,越权,注册,鉴权绕过"
+  tags: "403,401,bypass,forbidden,path-manipulation,method override,X-Original-URL,X-Forwarded-For,access control,privilege-bypass,spring,mvc,.do,authorization,302,login_tologin,registersysuser,goedituser,privilege-escalation,registration,auth-bypass"
   category: "exploit"
 ---
 
-# 401/403 绕过方法论
+# 401/403 Bypass Methodology
 
-核心思路：反向代理/WAF 检查一种路径格式，但后端做了不同的路径规范化。
+Core idea: the reverse proxy / WAF checks one path format, but the backend performs a different path normalization.
 
-## 深入参考
+## Further Reading
 
-- 路径操纵 Payload 完整列表 → [references/path-manipulation-payloads.md](references/path-manipulation-payloads.md)
-- HTTP 方法/Header 绕过 → [references/method-header-bypass.md](references/method-header-bypass.md)
-- 中间件特定绕过与组合攻击 → [references/middleware-combo-bypass.md](references/middleware-combo-bypass.md)
+- Full list of path manipulation payloads → [references/path-manipulation-payloads.md](references/path-manipulation-payloads.md)
+- HTTP method / header bypass → [references/method-header-bypass.md](references/method-header-bypass.md)
+- Middleware-specific bypasses and combined attacks → [references/middleware-combo-bypass.md](references/middleware-combo-bypass.md)
 
 ---
 
-## 决策树
+## Decision Tree
 
 ```
-遇到 401/403？
-├── 1. 路径操纵（成功率最高）
+Facing a 401/403?
+├── 1. Path manipulation (highest success rate)
 │   ├── /path/ → /PATH → /path%20 → /./path → //path
 │   ├── /path;x → /path..;/ → /%2e/path → /path%00
-│   └── 200？→ 绕过成功
-├── 2. 方法绕过
+│   └── 200? → bypass succeeded
+├── 2. Method bypass
 │   ├── POST/PUT/PATCH/DELETE/OPTIONS/HEAD
 │   ├── X-HTTP-Method-Override: PUT
-│   └── PROPFIND/自定义方法
-├── 3. Header 绕过
-│   ├── X-Original-URL: /path（Nginx/IIS）
-│   ├── X-Forwarded-For: 127.0.0.1（IP 白名单）
-│   └── Referer/Origin/Host 伪造
-├── 4. 协议绕过
+│   └── PROPFIND / custom methods
+├── 3. Header bypass
+│   ├── X-Original-URL: /path (Nginx/IIS)
+│   ├── X-Forwarded-For: 127.0.0.1 (IP allowlist)
+│   └── Referer/Origin/Host spoofing
+├── 4. Protocol bypass
 │   └── HTTP/1.0
-├── 5. 组合攻击
-│   └── Method + Path + Header 三合一
-├── 全部失败 → 其他思路
-│   ├── 请求走私 → cache-poisoning-smuggling
+├── 5. Combined attack
+│   └── Method + Path + Header all together
+├── All failed → other ideas
+│   ├── Request smuggling → cache-poisoning-smuggling
 │   ├── SSRF → ssrf-methodology
 │   ├── IDOR → idor-methodology
-│   └── 认证逻辑 → privilege-escalation-web
-└── 自动化扫描 byp4xx / 403bypasser
+│   └── Authentication logic → privilege-escalation-web
+└── Automated scanning with byp4xx / 403bypasser
 ```
 
 ---
 
-## 快速参考 — 路径操纵要点
+## Quick Reference — Path Manipulation Essentials
 
-| 技巧 | 示例 |
+| Technique | Example |
 |------|------|
-| 尾部斜杠/点 | `/admin/`  `/admin/.` |
-| 大小写 | `/Admin`  `/ADMIN` |
-| URL 编码 | `/%61dmin`  `/admi%6e` |
-| 双重编码 | `/%2561dmin` |
-| Unicode 过长编码 | `/admi%C0%AE` |
-| 点段/路径穿越 | `/./admin`  `//admin` |
-| NULL 字节 | `/admin%00`  `/admin%00.json` |
-| 路径参数 (Tomcat) | `/admin;foo`  `/;/admin` |
-| 反斜杠 (IIS) | `/admin\` |
+| Trailing slash / dot | `/admin/`  `/admin/.` |
+| Case variation | `/Admin`  `/ADMIN` |
+| URL encoding | `/%61dmin`  `/admi%6e` |
+| Double encoding | `/%2561dmin` |
+| Overlong Unicode encoding | `/admi%C0%AE` |
+| Dot segment / path traversal | `/./admin`  `//admin` |
+| NULL byte | `/admin%00`  `/admin%00.json` |
+| Path parameter (Tomcat) | `/admin;foo`  `/;/admin` |
+| Backslash (IIS) | `/admin\` |
 
-## 快速参考 — 方法/Header 要点
+## Quick Reference — Method / Header Essentials
 
-| 技巧 | 示例 |
+| Technique | Example |
 |------|------|
-| 方法切换 | `POST /admin`  `PUT /admin` |
+| Method switch | `POST /admin`  `PUT /admin` |
 | Method Override | `X-HTTP-Method-Override: PUT` |
-| URL 重写 | `X-Original-URL: /admin` |
-| IP 伪造 | `X-Forwarded-For: 127.0.0.1` |
-| 协议降级 | `GET /admin HTTP/1.0` |
+| URL rewrite | `X-Original-URL: /admin` |
+| IP spoofing | `X-Forwarded-For: 127.0.0.1` |
+| Protocol downgrade | `GET /admin HTTP/1.0` |
 
-## 中间件速查
+## Middleware Quick Reference
 
-| 服务器 | 关键技巧 |
+| Server | Key Techniques |
 |---|---|
-| **Apache** | `/admin/`(尾部斜杠), `/.admin`(点前缀) |
-| **Nginx** | `/Admin`(大小写), `X-Original-URL` |
+| **Apache** | `/admin/` (trailing slash), `/.admin` (dot prefix) |
+| **Nginx** | `/Admin` (case), `X-Original-URL` |
 | **IIS/ASP.NET** | `/admin;.css`, `/admin\`, `/admin::$DATA` |
 | **Tomcat/Java** | `/admin;foo`, `/admin..;/`, `/;/admin` |
-| **Spring** | `/admin.anything`(旧版后缀匹配) |
+| **Spring** | `/admin.anything` (older suffix matching) |
 
-> 完整 payload 列表见 references 文件
+> See the references files for the full payload list
 
-## Spring MVC `.do` 鉴权绕过与 302 登录跳转
+## Spring MVC `.do` Authorization Bypass and 302 Login Redirect
 
-Java 政务/企业系统常见 `*.do`（Spring MVC）接口，鉴权实现差异常导致绕过：
+Chinese government and enterprise Java systems commonly expose `*.do` (Spring MVC) endpoints, and their weak authorization implementations frequently allow bypasses:
 
 ```
-请求 .do 接口 → 302 跳转登录页 (login_tologin.do)
-├── 1. 去掉 .do 后缀重试：/user.do → /user
-├── 2. 加后缀绕过：/user.do → /user.do/、/user.do;.css、/user.do?x=
-├── 3. 大小写/编码：/User.do、/%75ser.do
-├── 4. 方法切换：GET → POST → PUT
-├── 5. 直接带参数访问：login_tologin.do 类登录/注册入口无鉴权时
-│   └── 尝试未授权调用 registersysuser / goedituser 类注册、改用户接口
-├── 6. 302 响应分析：Location 中泄露内部路径/参数
-└── 7. Cookie/Session 复用：登录接口 302 后 Set-Cookie 未校验
+Request a .do endpoint → 302 redirect to the login page (login_tologin.do)
+├── 1. Retry without the .do suffix: /user.do → /user
+├── 2. Add a suffix to bypass: /user.do → /user.do/, /user.do;.css, /user.do?x=
+├── 3. Case / encoding: /User.do, /%75ser.do
+├── 4. Method switch: GET → POST → PUT
+├── 5. Direct access with parameters: login_tologin.do style login/registration entry points have no authorization
+│   └── Try unauthorized calls to registersysuser / goedituser style registration and user-modification endpoints
+├── 6. 302 response analysis: internal paths / parameters leak in Location
+└── 7. Cookie/Session reuse: the Set-Cookie after the login endpoint 302 is not validated
 ```
 
-- `registersysuser`（注册用户）、`goedituser`（编辑用户）等接口名在生产环境中常见，若未鉴权即可未授权注册/修改用户（越权注册），测试时先确认接口存在再验证权限。
-- 判断标准：不携带登录态访问受保护接口，若返回业务数据/成功操作而非 401/403/302，则鉴权失效。
+- Endpoint names such as `registersysuser` (register user) and `goedituser` (edit user) are common in production environments; if they lack authorization they allow unauthorized registration or user modification (privilege escalation via registration). When testing, first confirm the endpoint exists and then verify its permissions.
+- Judging criterion: access a protected endpoint without any login session; if it returns business data / a successful operation instead of 401/403/302, the authorization has failed.
 
-## 国产/Java 系统鉴权绕过速查
+## Chinese / Java System Authorization Bypass Quick Reference
 
-| 场景 | 尝试 |
+| Scenario | Try |
 |------|------|
-| Spring MVC `.do` 接口 | 去后缀、加后缀、大小写、方法切换 |
-| 302 登录跳转 | 分析 Location、直接访问业务接口 |
-| 注册/改用户接口 | registersysuser、goedituser 未鉴权调用 |
-| 白名单路径 | `/api/health` 前缀 + 路径穿越 |
-
+| Spring MVC `.do` endpoint | Remove the suffix, add a suffix, change case, switch the method |
+| 302 login redirect | Analyze Location, access the business endpoint directly |
+| Registration / user-modification endpoint | Unauthorized calls to registersysuser, goedituser |
+| Allowlisted path | `/api/health` prefix + path traversal |

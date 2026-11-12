@@ -2,6 +2,11 @@
 name: hunt-shadow-api
 description: Hunt shadow / zombie / undocumented API surface (OWASP API9 Improper
   Inventory Management)
+zh-signals: "发现并比对影子、僵尸与未文档化 API 资产，定位旧版本与当前版本的安全控制差异。信号:影子API,僵尸API,API版本,资产清点,OWASP API9"
+when-to-use: >-
+  Use when versioned paths, version headers, deprecation notices, or multiple API specs
+  suggest untracked legacy or internal API surface that should be diffed.
+  Requires explicit written authorization and a defined target scope.
 category: security
 risk: offensive
 source: https://github.com/elementalsouls/Claude-BugHunter

@@ -10,7 +10,9 @@ name: php-file-upload-audit
 
 
 
-description: PHP Web 源码文件上传审计工具。识别上传入口与保存路径、文件名处理与校验逻辑，检测任意文件上传/路径穿越/可执行上传风险，输出可利用性分级、PoC 与修复建议（禁止省略）。
+description: "PHP web source code file upload auditing tool. Identifies upload entry points and save paths, filename handling and validation logic, detects arbitrary file upload / path traversal / executable upload risks, and outputs exploitability ratings, PoCs, and remediation recommendations (must not be omitted)."
+zh-signals: "审计 PHP 源码文件上传功能，检测任意上传、路径穿越与可执行上传风险。信号:PHP上传,文件上传审计,路径穿越,可执行文件,源码审计"
+when-to-use: "Use when auditing PHP source code for file upload entry points, filename handling, and executable upload or path traversal risks."
 
 
 
@@ -22,158 +24,158 @@ description: PHP Web 源码文件上传审计工具。识别上传入口与保�
 
 
 
-# PHP 文件上传审计（php-file-upload-audit）
+# PHP File Upload Audit (php-file-upload-audit)
 
 
 
 
 
-## 统一执行策略（强制）
+## Unified Execution Policy (Mandatory)
 
 
 
 
 
-必须遵循：`shared/PHP_AUDIT_EXECUTION_POLICY.md`。
+You must follow `shared/PHP_AUDIT_EXECUTION_POLICY.md`.
 
 
 
 
 
-执行时统一采用“双通道 + 证据分层”规则：
+During execution, always apply the "dual channel + layered evidence" rules:
 
 
 
 
 
-- 高召回通道：先做静态 `source/sink` 初筛，覆盖 HTTP 路由与非路由入口（CLI/cron/queue/include）
+- High-recall channel: first perform a static `source/sink` pre-filter, covering HTTP routes and non-route entry points (CLI/cron/queue/include)
 
 
 
 
 
-- 高置信通道：再用 `trace/EVID` 做确认与降噪
+- High-confidence channel: then use `trace/EVID` for confirmation and noise reduction
 
 
 
 
 
-状态判定统一为：`✅已确认 / 🟡高概率 / ⚠️待验证 / ❌不可利用 / 🔍环境依赖`
+Status determination is unified as: `✅ Confirmed / 🟡 High Probability / ⚠️ Unverified / ❌ Not Exploitable / 🔍 Environment-Dependent`
 
 
 
 
 
-- 满足最小证据集（可达片段 + 可控线索 + sink 触发线索）=> 可标记 `🟡高概率`
+- The minimum evidence set is met (reachable fragment + controllability lead + sink trigger lead) => may be marked `🟡 High Probability`
 
 
 
 
 
-- 满足完整 trace + EVID => 标记 `✅已确认`
+- The complete trace + EVID are met => mark `✅ Confirmed`
 
 
 
 
 
-- 证据不足 => 标记 `⚠️待验证`
+- Insufficient evidence => mark `⚠️ Unverified`
 
 
 
 
 
-严谨性要求保持不变，但不得因 trace 不完整而沉默：仍需输出疑似高危与缺失证据。
+The rigor requirements remain unchanged, but you must not stay silent because the trace is incomplete: still output suspected high-severity issues and missing evidence.
 
 
 
 
 
-分析 PHP 项目源码，识别文件上传逻辑：`$_FILES`、`move_uploaded_file` 等，追踪保存目录与文件名处理方式，检测：
+Analyze PHP project source code and identify file upload logic: `$_FILES`, `move_uploaded_file`, etc. Trace how the save directory and file name are handled, and detect:
 
 
 
 
 
-- 任意文件上传（任意类型/任意扩展名）
+- Arbitrary file upload (any type / any extension)
 
 
 
 
 
-- 路径穿越（使用原始文件名拼接）
+- Path traversal (concatenation with the original file name)
 
 
 
 
 
-- 可执行文件上传（上传到 Web 可访问目录且未限制执行）
+- Executable file upload (uploaded to a web-accessible directory without execution restrictions)
 
 
 
 
 
-- 覆盖/同名冲突风险
+- Overwrite / same-name conflict risk
 
 
 
 
 
 
-## 统一审计标准（强制）
-必须遵循：`shared/PHP_AUDIT_UNIFIED_STANDARD.md`。
+## Unified Audit Standard (Mandatory)
+You must follow `shared/PHP_AUDIT_UNIFIED_STANDARD.md`.
 
-状态顺序必须固定为：`✅已确认 / 🟡高概率 / ⚠️待验证 / ❌不可利用 / 🔍环境依赖`。
-trace 证据判定必须分层执行：
-- 满足最小证据集（入口可达 + 参数可控链路 + sink 执行线索 + 基本前置条件）=> `🟡高概率`
-- 满足完整证据集（trace COMPLETE + EVID 对齐 + 分支覆盖）=> `✅已确认`
-- 不满足最小证据集 => `⚠️待验证`
+The status order must be fixed as: `✅ Confirmed / 🟡 High Probability / ⚠️ Unverified / ❌ Not Exploitable / 🔍 Environment-Dependent`.
+Trace evidence determination must be performed in layers:
+- The minimum evidence set is met (entry reachable + parameter controllability chain + sink execution lead + basic preconditions) => `🟡 High Probability`
+- The complete evidence set is met (trace COMPLETE + EVID aligned + branch coverage) => `✅ Confirmed`
+- The minimum evidence set is not met => `⚠️ Unverified`
 
-误报抑制必须检查：硬编码覆盖、白名单生效、不可达分支、沙箱/权限边界。
-漏报抑制必须执行：trace 不全不沉默、sink-only 回退。
-输出最小字段必须包含：位置、source->sink、前置条件、状态、PoC、修复。
-执行优先级必须遵循：先发现、后文档。
+False positive suppression must check: hardcoded overrides, allowlist in effect, unreachable branches, sandbox/permission boundaries.
+False negative suppression must be performed: do not stay silent when the trace is incomplete, fall back to sink-only.
+The minimum output fields must include: location, source->sink, preconditions, status, PoC, remediation.
+The execution priority must be followed: discovery first, documentation second.
 
-## 证据置信度字段与复核清单（强制）
-证据置信度字段（强制）：按 `shared/PHP_AUDIT_UNIFIED_STANDARD.md` 输出 HIGH/MEDIUM/LOW，并给出判定依据（与状态一致）。
-复核清单（强制，至少 5 项）：
-- 是否已执行高召回通道（阶段0）或已启用 sink-only 回退，并覆盖非路由入口
-- 是否完成同类扩展检查（命中某类 upload sink 后横向扫同类入口/保存封装）
-- 是否按最小证据集/完整证据集规则给出 🟡高概率/✅已确认/⚠️待验证，并说明缺失点
-- 是否明确 source->sink 数据流链到文件名解析/扩展名净化/落点拼接/访问可达性
-- 是否对误报抑制做了硬编码/白名单/不可达/权限边界/格式不成立说明
-- 是否给出可执行 PoC 与可替换修复建议（含随机化策略/MIME 校验/访问面限制/搜索定位要点）
+## Evidence Confidence Fields and Review Checklist (Mandatory)
+Evidence confidence fields (mandatory): output HIGH/MEDIUM/LOW per `shared/PHP_AUDIT_UNIFIED_STANDARD.md`, and give the determination basis (consistent with the status).
+Review checklist (mandatory, at least 5 items):
+- Has the high-recall channel (stage 0) been executed or the sink-only fallback been enabled, covering non-route entry points
+- Has the same-class extension check been completed (after hitting an upload sink, sweep sibling entry points / save wrappers of the same class)
+- Has the 🟡 High Probability / ✅ Confirmed / ⚠️ Unverified status been given per the minimum/complete evidence set rules, with the missing points explained
+- Is the source->sink data flow chain explicit down to file name parsing / extension sanitization / destination concatenation / access reachability
+- Has false positive suppression been addressed with hardcoded / allowlist / unreachable / permission boundary / invalid-format explanations
+- Has an executable PoC and replaceable remediation recommendation been given (including randomization strategy / MIME validation / access surface restriction / search-and-locate key points)
 
-## 分级与编号
+## Severity Rating and Numbering
 
 
 
 
 
-- 详见：`shared/SEVERITY_RATING.md`
+- See `shared/SEVERITY_RATING.md` for details
 
 
 
 
 
-- 漏洞编号：`{C/H/M/L}-UPLOAD-{序号}`
+- Vulnerability ID: `{C/H/M/L}-UPLOAD-{index}`
 
 
 
 
 
-## 上传入口识别（必做）
+## Upload Entry Point Identification (Mandatory)
 
 
 
 
 
-识别：
+Identify:
 
 
 
 
 
-- `$_FILES['{value}']` 字段
+- `$_FILES['{value}']` field
 
 
 
@@ -185,103 +187,103 @@ trace 证据判定必须分层执行：
 
 
 
-- 保存路径拼接：`$uploadDir.$filename`、`sprintf`、`join` 等
+- Save path concatenation: `$uploadDir.$filename`, `sprintf`, `join`, etc.
 
 
 
 
 
-- 重命名：`uniqid`/`random_bytes`/时间戳（若仍可控 filename 仍高危）
+- Renaming: `uniqid`/`random_bytes`/timestamp (if the file name is still controllable it remains high severity)
 
 
 
 
 
-## 校验逻辑审计（必做）
+## Validation Logic Audit (Mandatory)
 
 
 
 
 
-必须逐点检查并输出证据：
+You must check every point and output evidence:
 
 
 
 
 
-- 扩展名/白名单：是否只校验后缀（可绕过）
+- Extension / allowlist: is only the suffix validated (bypassable)
 
 
 
 
 
-- 扩展名解析安全：是否存在“双后缀/多点后缀”绕过（如 `a.php.jpg`、`.pHp` 大小写绕过、尾部空白/Unicode 分隔符）
+- Extension parsing safety: are there "double extension / multi-dot extension" bypasses (e.g. `a.php.jpg`, `.pHp` case bypass, trailing whitespace / Unicode separators)
 
 
 
 
 
-- MIME/魔数：是否做 `finfo_file`/`mime_content_type`/文件头识别
+- MIME / magic number: is `finfo_file`/`mime_content_type`/file header identification performed
 
 
 
 
 
-- MIME/魔数一致性：是否检查“服务端实际内容类型”与“扩展名/后缀”是否一致（避免仅信任 `Content-Type`）
+- MIME / magic number consistency: is it checked whether the "actual server-side content type" matches the "extension/suffix" (avoid trusting only `Content-Type`)
 
 
 
 
 
-- 文件名净化：是否去除路径分隔符与危险字符（`../`、`\`、`:`、空字节等）
+- File name sanitization: are path separators and dangerous characters removed (`../`, `\`, `:`, null bytes, etc.)
 
 
 
 
 
-- 上传目录：是否在 Web 根目录；是否有执行权限控制
+- Upload directory: is it inside the web root; is execution permission controlled
 
 
 
 
 
-- 写入后可访问性链：是否存在上传目录的静态映射/直链访问（需要结合路由或 webserver 配置证据）
+- Post-write accessibility chain: is there a static mapping / direct-link access to the upload directory (this needs to be combined with route or webserver configuration evidence)
 
 
 
 
 
-- 鉴权：上传接口是否受保护
+- Authentication: is the upload endpoint protected
 
 
 
 
 
-## tracer 触发条件（必做）
+## tracer Trigger Conditions (Required)
 
 
 
 
 
-- 保存路径或文件名经过多层封装函数
+- The save path or file name passes through multiple layers of wrapper functions
 
 
 
 
 
-- 校验逻辑存在分支，难以确认对所有上传路径生效
+- The validation logic contains branches, making it hard to confirm that it applies to every upload path
 
 
 
 
 
-## 报告输出
+## Report Output
 
 
 
 
 
-输出到：
+Output to:
 
 
 
@@ -305,83 +307,83 @@ trace 证据判定必须分层执行：
 
 
 
-## 漏洞条目模板（强制）
+## Vulnerability Entry Template (Mandatory)
 
 
 
 
 
-必须包含：
+Must include:
 
 
 
 
 
-- 位置证据（保存/校验函数位置）
+- Location evidence (save / validation function location)
 
 
 
 
 
-- 数据流链（filename/path 来源 -> 校验 -> 目标路径 -> 写入）
+- Data flow chain (filename/path source -> validation -> target path -> write)
 
 
 
 
 
-- 证据引用（来自 `php-route-tracer` 输出，必须逐项引用）：必须对应并引用 trace 的 `## 9) Sink Evidence Type Checklist`（UPLOAD 行）中的证据要点
+- Evidence citation (from the `php-route-tracer` output, must cite item by item): it must correspond to and cite the evidence points in the trace's `## 9) Sink Evidence Type Checklist` (UPLOAD row)
 
 
 
 
 
-  - `EVID_UPLOAD_DESTPATH`：destPath（保存目录最终落点）
+  - `EVID_UPLOAD_DESTPATH`: destPath (the final landing point of the save directory)
 
 
 
 
 
-  - `EVID_UPLOAD_FILENAME_EXTENSION_PARSING_SANITIZE`：file name/extension parsing & sanitization（文件名/扩展名解析与净化逻辑）
+  - `EVID_UPLOAD_FILENAME_EXTENSION_PARSING_SANITIZE`: file name / extension parsing and sanitization logic
 
 
 
 
 
-  - `EVID_UPLOAD_ACCESSIBILITY_PROOF`：可访问面证据（写入后是否形成可访问面：静态直连证据/映射证据）
+  - `EVID_UPLOAD_ACCESSIBILITY_PROOF`: accessibility surface evidence (whether an accessible surface is created after the write: direct static access evidence / mapping evidence)
 
 
 
 
 
-  - `EVID_UPLOAD_EXEC_DISABLE_STRATEGY`：执行禁用策略证据（服务端执行禁用策略，如有）
+  - `EVID_UPLOAD_EXEC_DISABLE_STRATEGY`: execution disable policy evidence (server-side execution disable policy, if any)
 
 
 
 
 
-- 可利用前置条件（鉴权/目录可访问性/绕过条件）
+- Exploitability preconditions (authentication / directory accessibility / bypass conditions)
 
 
 
 
 
-- 验证 PoC（包含真实上传路由，给出必要的 multipart 请求结构）
+- Verification PoC (including the real upload route, with the necessary multipart request structure)
 
 
 
 
 
-- 修复建议（白名单 + 魔数校验 + 目录隔离 + 随机化文件名 + 覆盖策略 + Webserver 执行禁用要点）
+- Remediation recommendation (allowlist + magic number validation + directory isolation + randomized file names + overwrite strategy + webserver execution disable key points)
 
 
 
 
 
-## tracer 证据缺失处理（强制，遵循统一标准）
-- 若 trace 的 `## 9) Sink Evidence Type Checklist`（UPLOAD 行）中上述关键证据要点缺失：
-  - **满足最小证据集**（可达性 + 参数可控性线索 + Sink 执行线索 + 基本前置条件）：可标记为 `🟡高概率`，在报告中注明缺失的 EVID 点与补全建议。
-  - **不满足最小证据集**：只能标记为 `⚠️待验证`（不得直接给出 `✅已确认可利用`）。
-  - **满足完整证据集**（全部 EVID 对齐 + 完整 trace + 分支覆盖）：可标记为 `✅已确认可利用`。
+## Handling Missing tracer Evidence (Mandatory, per the unified standard)
+- If any of the above key evidence points is missing from the trace `## 9) Sink Evidence Type Checklist` (UPLOAD row):
+  - **The minimum evidence set is met** (reachability + parameter controllability lead + sink execution lead + basic preconditions): it may be marked `🟡 High Probability`, and the report must note the missing EVID points and the completion suggestions.
+  - **The minimum evidence set is not met**: it may only be marked `⚠️ Unverified` (it must not be marked `✅ Confirmed Exploitable` directly).
+  - **The complete evidence set is met** (all EVID aligned + complete trace + branch coverage): it may be marked `✅ Confirmed Exploitable`.
 
 
 

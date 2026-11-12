@@ -1,6 +1,10 @@
 ---
 name: vibecode-production-qa-validator
 description: "13-phase production QA for fullstack Next.js apps: build verification, SEO tags, OG images, favicon, route regression, API auth, page speed, lazy load, vulnerability scan, UI/UX cards, error boundaries, database, secure rendering, and cleanup."
+zh-signals: "对全栈 Next.js 应用执行 13 阶段生产 QA，涵盖构建、SEO、路由回归、API 鉴权、性能、安全扫描与清理。信号:生产QA,Next.js,构建验证,SEO,安全检查"
+when-to-use: >-
+  Use before shipping or promoting a fullstack Next.js app to production, or after large UI,
+  SEO, auth, API, database, or dependency changes need a launch-readiness pass.
 category: devops
 risk: safe
 source: self

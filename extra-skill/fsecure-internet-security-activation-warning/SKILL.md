@@ -1,6 +1,8 @@
 ---
 name: fsecure-internet-security-activation-warning
 description: Detect and warn about software piracy and malware distribution disguised as security software patches
+zh-signals: "识别并警示伪装成安全软件补丁的盗版与恶意软件分发行为。信号:F-Secure 激活,盗版软件,恶意软件分发,安全警告,钓鱼"
+when-to-use: "Use when a user asks about activating or cracking F-Secure Internet Security or requests patches, key generators, or activators that may distribute malware."
 triggers:
   - how do I activate F-Secure Internet Security
   - install F-Secure patch or activator

@@ -1,6 +1,8 @@
 ---
 name: differential-review
 description: "Performs security-focused differential review of code changes. Adapts analysis depth to codebase size, uses git blame for context, calculates blast radius by counting callers, checks test coverage of modified code, and generates a markdown report. Use when reviewing a PR, commit, or diff for security vulnerabilities, checking whether a change re-introduces a previously fixed bug, asking what else a change could break, or finding which modified code has no test covering it."
+zh-signals: "面向安全的差异代码审查。信号:差异审查,PR审查,代码审计,blast radius,git blame"
+when-to-use: "Use when reviewing a PR, commit, or diff for security vulnerabilities, regressions, blast radius, or missing test coverage of modified code."
 allowed-tools: Read Write Grep Glob Bash
 ---
 

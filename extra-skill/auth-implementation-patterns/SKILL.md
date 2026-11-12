@@ -1,6 +1,10 @@
 ---
 name: auth-implementation-patterns
 description: Implement or review authentication and authorization with explicit token, session and resource-access boundaries.
+zh-signals: "实现或评审认证与授权体系，明确 token、会话与资源访问边界。信号:认证授权,会话管理,OAuth2,SSO,RBAC"
+when-to-use: >-
+  Use when implementing or reviewing authentication and authorization (sessions, JWT,
+  OAuth2/OIDC, SSO, RBAC) or debugging identity and access-control issues.
 metadata:
   aas-risk: critical
   aas-source: community

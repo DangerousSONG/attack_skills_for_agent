@@ -1,138 +1,140 @@
 ---
 name: php-auth-audit
-description: PHP Web 源码鉴权机制审计工具。从源码中识别所有认证/鉴权实现并分析风险，输出路由-鉴权映射与漏洞分析（含 PoC 与修复建议）。
+description: PHP web source code authentication and authorization mechanism audit tool. Identify every authentication/authorization implementation in the source code and analyze the risk, then output a route-to-auth mapping and vulnerability analysis (with PoC and remediation recommendations).
+zh-signals: "PHP 源码鉴权机制审计技能，识别认证授权链路、路由鉴权状态与越权/IDOR 风险。信号:鉴权审计,认证绕过,越权,IDOR,路由映射"
+when-to-use: "Use when auditing PHP web application source code for authentication and authorization flaws, mapping each route's auth status, or detecting bypass, IDOR, and privilege escalation risks."
 ---
 
-# PHP 鉴权机制审计（Auth Audit）
+# PHP Authentication and Authorization Mechanism Audit (Auth Audit)
 
-分析 PHP Web 项目源码，识别认证与授权链路，判断每条路由的鉴权状态，并检测鉴权绕过/越权/IDOR 风险。
+Analyze PHP web project source code, identify the authentication and authorization chains, determine the auth status of every route, and detect auth bypass / privilege bypass / IDOR risks.
 
-## CRITICAL：完整分析（强制）
-- 必须处理所有在 `php-route-mapper` 中出现的路由
-- 必须识别认证链：Session/JWT/中间件/自定义校验函数
-- 必须输出路由-鉴权映射表（不做省略）
-- 对所有可疑点给出：位置证据 + 数据流链 + 可利用性分析 + 验证 PoC + 修复建议
+## CRITICAL: Complete Analysis (Mandatory)
+- Every route that appears in `php-route-mapper` must be processed
+- The authentication chains must be identified: session/JWT/middleware/custom validation functions
+- The route-to-auth mapping table must be output (no omissions)
+- For every suspicious point provide: location evidence + data flow chain + exploitability analysis + verification PoC + remediation recommendation
 
-## 运行模式（强制：与流水线阶段对齐）
-此技能支持两种模式，用于解决“尚未生成 trace 之前无法引用 EVID_*”的问题：
+## Run Modes (Mandatory: aligned with the pipeline stages)
+This skill supports two modes, which exist to solve the problem of "referencing EVID_* before the trace has been generated":
 
-1. `STATIC_MAPPING`（推荐用于流水线阶段 1）
-   - 只生成 `auth_mapping_{timestamp}.md`（以及可选的 `auth_README_{timestamp}.md`）
-   - 允许缺少 `php-route-tracer` 的 `EVID_*` 证据点引用
-   - 必须给出：鉴权状态分级（✅/⚠️/❌/❓）与 P0/P1 分桶依据（不需要 PoC）
+1. `STATIC_MAPPING` (recommended for pipeline stage 1)
+   - Only generates `auth_mapping_{timestamp}.md` (and optionally `auth_README_{timestamp}.md`)
+   - Allows missing `EVID_*` evidence point references from `php-route-tracer`
+   - Must provide: the auth status rating (✅/⚠️/❌/❓) and the P0/P1 bucketing rationale (no PoC required)
 
-2. `TRACE_AUDIT`（推荐用于流水线阶段 4，trace 已存在）
-   - 生成完整的 `auth_audit_report_{timestamp}.md`，并强制逐条引用 trace 契约中的 `EVID_*` 证据点
-   - PoC/修复建议必须齐全
+2. `TRACE_AUDIT` (recommended for pipeline stage 4, when the trace already exists)
+   - Generates the complete `auth_audit_report_{timestamp}.md`, and must cite the `EVID_*` evidence points from the trace contract item by item
+   - PoC and remediation recommendations must be complete
 
-## 漏洞分级
-详见：`shared/SEVERITY_RATING.md`
+## Vulnerability Severity Rating
+See: `shared/SEVERITY_RATING.md`
 
-## 输入依赖
-建议输入（与 `shared/IO_PATH_CONVENTION.md` 一致；合并流水线时读总报告中等价章节）：
-- `routes_{timestamp}.md`（独立落盘时常为 `route_mapping/routes_{timestamp}.md`）
-- `params_{timestamp}.md`（独立落盘时常为 `route_mapping/params_{timestamp}.md`）
+## Input Dependencies
+Recommended inputs (consistent with `shared/IO_PATH_CONVENTION.md`; when merging into the pipeline, read the equivalent section in the summary report):
+- `routes_{timestamp}.md` (when written independently it is usually `route_mapping/routes_{timestamp}.md`)
+- `params_{timestamp}.md` (when written independently it is usually `route_mapping/params_{timestamp}.md`)
 
-可选：
+Optional:
 - `source_path`
 
-## 识别鉴权实现（必做）
-按框架识别：
-- Laravel：
+## Identifying Authentication Implementations (Mandatory)
+Identify by framework:
+- Laravel:
   - `middleware('auth'|'can'|'role:')`
   - `Auth::check()/Auth::user()`
-  - Policies/Gates：`Gate::allows`、`->can({value})`
-  - 路由保护：`Route::middleware([{value}])->group({value})`
-- Symfony：
+  - Policies/Gates: `Gate::allows`, `->can({value})`
+  - Route protection: `Route::middleware([{value}])->group({value})`
+- Symfony:
   - security.yaml / access_control
-  - `denyAccessUnlessGranted`、`isGranted`
+  - `denyAccessUnlessGranted`, `isGranted`
   - voter/policy
-- 原生 PHP：
-  - `session_start` + `$_SESSION` 判断
+- Native PHP:
+  - `session_start` plus a `$_SESSION` check
   - `if (!isset($_SESSION['user']))`/`requireLogin()`
-  - 自定义函数：`checkAuth/authorize/hasRole/isAdmin`
+  - Custom functions: `checkAuth/authorize/hasRole/isAdmin`
 
-## 路由-鉴权映射（必做）
-对每条路由输出以下状态：
-- ✅ 公开：显式允许，无鉴权检查
-- ✅ 受保护：存在完整认证/授权检查
-- ⚠️ 仅认证：只校验登录态，无角色/资源级授权
-- ❌ 无鉴权：没有任何鉴权链路命中
-- ❓ 不确定：动态权限/复杂自定义逻辑导致难判（仍必须写出证据点）
+## Route-to-Auth Mapping (Mandatory)
+Output the following status for every route:
+- ✅ Public: explicitly allowed, no auth check
+- ✅ Protected: a complete authentication/authorization check exists
+- ⚠️ Authenticated only: only the login state is verified, with no role/resource-level authorization
+- ❌ No auth: no auth chain matches at all
+- ❓ Uncertain: dynamic permissions or complex custom logic make it hard to judge (the evidence points must still be written out)
 
-并输出风险类型：`AUTH`，包括：
-- 认证绕过（登录态校验被绕过）
-- 授权绕过/越权（角色校验缺失或错误）
-- IDOR（对象访问缺少所有权/归属校验）
+And output the risk type: `AUTH`, including:
+- Authentication bypass (the login state check is bypassed)
+- Authorization bypass / privilege bypass (the role check is missing or wrong)
+- IDOR (object access lacks an ownership/attribution check)
 
-## 可疑模式检测（必做，给出证据链）
-### 1) 路径/URI 匹配导致鉴权绕过
-在 PHP 中常见根因：
-- 用原始 `$_SERVER['REQUEST_URI']` 或 `parse_url` 结果做白名单匹配，但路径未规范化
-- 编码/大小写/重复斜杠/尾部字符差异导致匹配失败（实际路由进入受保护 handler）
+## Suspicious Pattern Detection (Mandatory, provide the evidence chain)
+### 1) Path/URI matching leads to auth bypass
+Common root causes in PHP:
+- The raw `$_SERVER['REQUEST_URI']` or the `parse_url` result is matched against an allowlist, but the path is not normalized
+- Differences in encoding/case/duplicate slashes/trailing characters cause the match to fail (the actual route reaches the protected handler)
 
-必须输出：
-- 白名单检查位置与代码片段
-- 绕过请求（PoC）与命中的 handler 证据
+Must output:
+- The allowlist check location and the code snippet
+- The bypass request (PoC) and the evidence of the handler it reaches
 
-### 2) 仅校验登录态，缺少角色/资源授权
-必须输出：
-- 路由的“认证检查”位置
-- “授权检查缺失”位置（例如只判断 `user!=null` 后直接执行敏感操作）
+### 2) Only the login state is verified, with no role/resource authorization
+Must output:
+- The location of the route's "authentication check"
+- The location of the "missing authorization check" (for example, only `user!=null` is tested before a sensitive operation runs)
 
-### 3) IDOR/越权
-必须输出：
-- 敏感对象 id 来自哪里（GET/POST/URL）
-- 用于查询/更新的“归属校验”是否存在（WHERE 里是否包含 user_id/owner_id）
-- 未校验的原因与可达性
+### 3) IDOR / privilege bypass
+Must output:
+- Where the sensitive object id comes from (GET/POST/URL)
+- Whether an "ownership check" for the query/update exists (whether the WHERE clause includes user_id/owner_id)
+- The reason it is not verified and its reachability
 
-## 报告输出（按运行模式）
-输出到：
+## Report Output (by run mode)
+Output to:
 ```
 {output_path}/auth_audit/
 ├── auth_audit_report_{timestamp}.md
 ├── auth_mapping_{timestamp}.md
 └── auth_README_{timestamp}.md
 ```
-强制规则：
-- `STATIC_MAPPING`：必须生成 `auth_mapping_{timestamp}.md`；`auth_audit_report_{timestamp}.md` 可以省略或生成空壳（并标注：仅分桶映射，不含 trace 证据）
-- `TRACE_AUDIT`：必须生成完整三文件，并要求 trace 证据点齐全
+Mandatory rules:
+- `STATIC_MAPPING`: must generate `auth_mapping_{timestamp}.md`; `auth_audit_report_{timestamp}.md` may be omitted or generated as an empty shell (and annotated: bucketing mapping only, contains no trace evidence)
+- `TRACE_AUDIT`: must generate all three files, and the trace evidence points must be complete
 
-### 文件1：主报告 `auth_audit_report_{timestamp}.md`
-包含：
-- 鉴权框架识别（含版本/实现证据）
-- 鉴权架构概览（middleware/函数/handler）
-- 风险统计
-- 每条风险的完整漏洞结构（编号/分级/数据流/PoC/修复）
+### File 1: Main Report `auth_audit_report_{timestamp}.md`
+Contains:
+- Authentication framework identification (with version/implementation evidence)
+- Authentication architecture overview (middleware/functions/handlers)
+- Risk statistics
+- The complete vulnerability structure for each risk (number/severity/data flow/PoC/remediation)
 
-### 文件2：映射表 `auth_mapping_{timestamp}.md`
-只列路由与鉴权状态、所需角色/条件（不要放漏洞详细分析）。
-但必须新增分桶字段（用于流水线阶段 3 选路）：
-- `p_bucket`：`P0` 或 `P1`
-  - `P0`：❌ 无鉴权
-  - `P1`：⚠️ 仅认证，或检测到存在授权绕过/越权/IDOR 风险（即使鉴权状态显示为“仅认证”，也要在 `p1_reason` 里说明为什么进入 P1）
-- `p1_reason`：一段简短静态依据（如“仅登录态，缺少 hasRole/authorize 或缺少 owner_id 校验”）
+### File 2: Mapping Table `auth_mapping_{timestamp}.md`
+Lists only the routes with their auth status and the required role/conditions (do not put detailed vulnerability analysis here).
+However, it must add the bucketing fields (used for route selection in pipeline stage 3):
+- `p_bucket`: `P0` or `P1`
+  - `P0`: ❌ No auth
+  - `P1`: ⚠️ Authenticated only, or an authorization bypass / privilege bypass / IDOR risk is detected (even when the auth status shows "authenticated only", explain in `p1_reason` why it lands in P1)
+- `p1_reason`: a short static rationale (e.g. "login state only, missing hasRole/authorize or missing owner_id check")
 
-### 文件3：说明文档 `auth_README_{timestamp}.md`
-只说明方法论、工具与验证指南，不包含具体漏洞细节。
+### File 3: Documentation `auth_README_{timestamp}.md`
+Describes only the methodology, tools, and verification guide, with no specific vulnerability details.
 
-## PoC 验证模板（强制）
-必须区分至少以下场景：
-- 未登录访问（无 cookie/session/JWT）
-- 普通用户访问（普通账号 cookie/JWT）
-- 管理员/高权限对照（如适用）
+## PoC Verification Template (Mandatory)
+At least the following scenarios must be distinguished:
+- Access without logging in (no cookie/session/JWT)
+- Access as a regular user (regular account cookie/JWT)
+- Administrator / high-privilege control case (where applicable)
 
-PoC 必须是可执行 HTTP 请求代码块，并且路由路径必须使用真实路由规则。
+The PoC must be an executable HTTP request code block, and the route path must use the real route rules.
 
-## 证据引用（按运行模式强制）
-- `STATIC_MAPPING`：不强制引用 trace 的 `EVID_*` 证据点（只需输出鉴权分级与 P0/P1 分桶依据）。
-- `TRACE_AUDIT`：每条疑似鉴权风险必须逐项引用 trace 输出中的证据（允许状态标记为待验证，但证据引用必须存在）：
-1. `EVID_AUTH_PATH_PROTECTED_MATCH`：路由进入受保护 handler 的路径匹配证据（对应 trace 的分支路径证据）
-2. `EVID_AUTH_TOKEN_DECODE_JUDGMENT`：登录态/Token 解码结果如何被判断的证据（对应 trace 中 session/JWT 读取与条件分支）
-3. `EVID_AUTH_PERMISSION_CHECK_EXEC`：权限判断函数或条件语句（如 `hasRole/authorize`）的执行证据（trace sink 定位或分支证据）
-4. `EVID_AUTH_IDOR_OWNERSHIP_CONDITION`：IDOR 归属校验（WHERE/条件）是否包含 owner_id/user_id 的证据（trace 中最终查询条件或状态更新语句）
+## Evidence Citation (Mandatory per run mode)
+- `STATIC_MAPPING`: citing the trace's `EVID_*` evidence points is not mandatory (only the auth rating and the P0/P1 bucketing rationale need to be output).
+- `TRACE_AUDIT`: every suspected auth risk must cite the evidence from the trace output item by item (a status may be marked as pending verification, but the evidence citation must exist):
+1. `EVID_AUTH_PATH_PROTECTED_MATCH`: path matching evidence that the route reaches the protected handler (corresponds to the branch path evidence in the trace)
+2. `EVID_AUTH_TOKEN_DECODE_JUDGMENT`: evidence of how the login state / token decoding result is judged (corresponds to the session/JWT read and conditional branch in the trace)
+3. `EVID_AUTH_PERMISSION_CHECK_EXEC`: execution evidence of the permission decision function or condition (such as `hasRole/authorize`) (trace sink location or branch evidence)
+4. `EVID_AUTH_IDOR_OWNERSHIP_CONDITION`: evidence of whether the IDOR ownership check (WHERE/condition) includes owner_id/user_id (the final query condition or state update statement in the trace)
 
-## tracer 证据缺失处理（强制）
-- `STATIC_MAPPING`：不适用（分桶依据以静态代码证据为准）。
-- `TRACE_AUDIT`：若 trace 契约校验失败或无法定位 1~4 任一关键证据点：该风险只能标记为 `⚠️待验证`，不得给出 `✅已确认可利用` 或“确定可绕过”的结论。
+## Handling Missing tracer Evidence (Mandatory)
+- `STATIC_MAPPING`: not applicable (the bucketing rationale is based on static code evidence).
+- `TRACE_AUDIT`: if the trace contract validation fails or any of the key evidence points 1~4 cannot be located: the risk can only be marked as `⚠️pending verification`, and must not be given a `✅confirmed exploitable` or "definitely bypassable" conclusion.
 

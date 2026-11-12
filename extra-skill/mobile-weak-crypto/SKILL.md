@@ -6,6 +6,8 @@ description: >
   arc4random, CommonCrypto, CryptoKit, Android Keystore, SecKey, AES-ECB, RSA without OAEP,
   insufficient key size, predictable seed, insecure key storage, broken hash, PBKDF2 iteration count.
   Covers MASVS-CRYPTO-1 (algorithm choice) and MASVS-CRYPTO-2 (key management).
+zh-signals: "检测移动应用中弱加密与错误密钥管理，覆盖 MASVS-CRYPTO-1/2。信号:移动安全,弱加密,ECB,硬编码密钥,MASVS"
+when-to-use: "Use when auditing Android/iOS apps for weak algorithms, insecure modes, static IVs, hardcoded keys, or poor key storage."
 license: MIT
 compatibility: Designed for Claude Code. jadx, apktool, MobSF, objection, Frida, semgrep recommended.
 metadata:

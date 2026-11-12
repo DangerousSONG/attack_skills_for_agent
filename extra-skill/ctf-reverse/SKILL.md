@@ -1,64 +1,66 @@
 ---
 name: ctf-reverse
-description: CTF Reverse逆向工程。触发：IDA/Ghidra反编译、PE/ELF分析、算法逆向、动态调试、脱壳、Patch修改等场景。
+description: "CTF reverse engineering. Triggers: IDA/Ghidra decompilation, PE/ELF analysis, algorithm reversing, dynamic debugging, unpacking, binary patching, and similar scenarios."
+zh-signals: "CTF 逆向工程分析。信号:CTF,逆向,IDA,Ghidra,脱壳,动态调试"
+when-to-use: "Use for CTF reverse challenges involving IDA or Ghidra decompilation, PE/ELF analysis, algorithm reversing, dynamic debugging, unpacking, or binary patching."
 ---
 
-# ctf-reverse — CTF Reverse逆向工程
+# ctf-reverse — CTF Reverse Engineering
 
-## 1. 基础工具链
+## 1. Basic Toolchain
 
 ```bash
-# 文件分析
+# File analysis
 file challenge
 strings challenge | grep -i flag
 strings challenge | head -50
 
-# 查壳
+# Detect packer
 rabin2 -I challenge        # rabin2 (r2)
-upx -d challenge           # 尝试脱 UPX 壳
+upx -d challenge           # try to unpack a UPX packer
 ```
 
-**常用工具**：
-- **IDA Pro / IDA Free** — 最强反编译器
-- **Ghidra** — NSA 开源逆向工具，免费
-- **x64dbg / OllyDbg** — Windows 动态调试
-- **gdb / pwndbg / gef** — Linux 动态调试
-- **radare2 / cutter** — 命令行逆向框架
+**Common tools**:
+- **IDA Pro / IDA Free** — the most powerful decompiler
+- **Ghidra** — NSA open-source reverse engineering tool, free
+- **x64dbg / OllyDbg** — Windows dynamic debugging
+- **gdb / pwndbg / gef** — Linux dynamic debugging
+- **radare2 / cutter** — command-line reverse engineering framework
 
-## 2. 分析流程
+## 2. Analysis Workflow
 
 ```
-1. file + strings 初步判断（语言、架构、是否加壳）
-2. 运行程序观察行为
-3. IDA/Ghidra 静态分析主逻辑
-4. 动态调试定位关键函数
-5. 写出逆向脚本或直接修改程序
+1. file + strings for an initial assessment (language, architecture, packed or not)
+2. Run the program and observe its behavior
+3. Statically analyze the main logic in IDA/Ghidra
+4. Use dynamic debugging to locate the key functions
+5. Write a reversing script or patch the program directly
 ```
 
-## 3. 常见算法逆向
+## 3. Common Algorithm Reversing
 
-### 简单算法（数组 / 循环）
+### Simple algorithms (arrays / loops)
 
 ```python
-# 观察 IDA 中的 for 循环
-# 找关键数组和索引
+# Observe the for loop in IDA
+# Locate the key array and the indices
 data = [...]
 for i in range(len(data)):
     data[i] = (data[i] ^ key[i % keylen]) - 0x20
 print(''.join(chr(c) for c in data))
 ```
 
-### Base64 变种
+### Base64 variants
 
 ```python
 import base64
 custom_table = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
-# 替换字母顺序
+# Replace the letter order
 import codecs
 codecs.encode(b"data", "base64")
 ```
 
-### 自定义加密
+### Custom encryption
 
 ```python
 def decrypt(data, key):
@@ -71,101 +73,101 @@ def decrypt(data, key):
 ### TEA/XTEA/XXTEA
 
 ```python
-# 找特征：DELTA = 0x9E3779B9（TEA 常数）
-# 32轮循环
+# Find the signature: DELTA = 0x9E3779B9 (the TEA constant)
+# A 32-round loop
 ```
 
-## 4. 动态调试
+## 4. Dynamic Debugging
 
 ### GDB / pwndbg
 
 ```bash
 gdb ./challenge
-# 或 pwndbg
+# or pwndbg
 pwndbg ./challenge
 
-# 常用命令
-break main          # 断点
-break *0x08048484  # 地址断点
-run                 # 运行
-nexti / ni          # 单步
-stepi / si          # 步入函数
-info registers      # 查看寄存器
-x/20x 0x08048000   # 内存查看（16进制）
-x/s 0x08048000     # 内存查看（字符串）
-continue / c        # 继续执行
-finish              # 运行到函数返回
+# Common commands
+break main          # breakpoint
+break *0x08048484  # address breakpoint
+run                 # run
+nexti / ni          # step over
+stepi / si          # step into function
+info registers      # view registers
+x/20x 0x08048000   # memory view (hex)
+x/s 0x08048000     # memory view (string)
+continue / c        # continue execution
+finish              # run until the function returns
 ```
 
-### Python 脚本动态修改
+### Dynamic Patching with Python Scripts
 
 ```python
 from pwn import *
 
 p = process('./challenge')
-# 或远程
+# or remote
 # p = remote('host', port)
 
-# 发送输入
+# Send input
 p.sendline(b'A' * 100)
 
-# 调试信息
+# Interactive debugging
 p.interactive()
 ```
 
-## 5. 脱壳
+## 5. Unpacking
 
-### UPX 脱壳
+### UPX Unpacking
 
 ```bash
 upx -d challenge -o challenge_unpacked
-# 如果加壳了自定义壳，用手动脱壳
+# If a custom packer is used, unpack it manually
 ```
 
-### 手动脱壳流程
+### Manual Unpacking Workflow
 
 ```
-1. 找 OEP（原始入口点）
-   - 在调试器中单步执行，直到来到程序真正入口
-   - OEP 特征：大量 pushad / pushfd 之后跳转到 OEP
+1. Find the OEP (Original Entry Point)
+   - Single-step in the debugger until you reach the real program entry
+   - OEP signature: a jump to the OEP after a long run of pushad / pushfd
 
-2. Dump 内存
-   - 在 OEP 处断下
-   - 用工具 dump 所有内存段
+2. Dump memory
+   - Break at the OEP
+   - Dump all memory segments with a dumping tool
 
-3. 修复 IAT（导入地址表）
-   - 重建导入表
+3. Fix the IAT (Import Address Table)
+   - Rebuild the import table
 ```
 
-## 6. Patch 与修改
+## 6. Patching and Modification
 
 ```python
 from pwn import *
 
 elf = ELF('./challenge')
-# 修改函数
+# Patch a function
 elf.asm(elf.symbols['check'], 'ret')
 
-# patch 字节
+# Patch a byte
 elf.patch_byte(0x08048567, 0x90)  # NOP
 
 elf.save()
 ```
 
-## 7. 常见逆向套路
+## 7. Common Reversing Patterns
 
 ```
-- 字符串比对 → 找关键函数 → 绕过
-- 迷宫问题 → 提取地图 → 找路径
-- 虚拟机保护 → 分析 opcode → 模拟执行
-- 自定义指令集 → 逆向字节码
-- 加密算法 → 提取密钥 → 解密
+- String comparison → locate the key function → bypass it
+- Maze problem → extract the map → find the path
+- Virtual machine protection → analyze the opcodes → emulate execution
+- Custom instruction set → reverse the bytecode
+- Encryption algorithm → extract the key → decrypt
 ```
 
-## 8. 解题模板
+## 8. Solution Template
 
 ```python
-data = [0x66, 0x6B, 0x63, 0x64, 0x7F, 0x6B]  # 提取的数据
+data = [0x66, 0x6B, 0x63, 0x64, 0x7F, 0x6B]  # extracted data
 key = [1, 2, 3]
 
 result = []

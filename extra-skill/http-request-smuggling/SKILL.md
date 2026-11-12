@@ -2,6 +2,10 @@
 name: http-request-smuggling
 description: >
   HTTP request smuggling exploits disagreements between a front-end proxy and back-end server on where one HTTP request ends and the next begins, using conflicting `Content-Length` and `Transfer-Encoding: chunked` headers (CL.TE, TE.CL, TE.TE variants). Enables bypassing access controls, cache poisoning, session hijacking, and capturing other users' requests. Detect via timing attacks, differential responses, and tools like Burp's HTTP Request Smuggler extension.
+zh-signals: "利用前后端对 Content-Length 与 Transfer-Encoding 解析差异实施 HTTP 请求走私。信号:请求走私,cl.te,te.cl,transfer-encoding,缓存投毒"
+when-to-use: >-
+  Use when the target sits behind a reverse proxy, load balancer, or CDN and you suspect
+  request-boundary desync enabling access-control bypass, cache poisoning, or request capture.
 license: MIT
 compatibility: Designed for Claude Code. Requires Burp Suite with HTTP Request Smuggler extension.
 metadata:

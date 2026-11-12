@@ -1,20 +1,25 @@
 ---
 name: mythic-c2
-description: "Mythic C2 操作方法论。当需要部署 Mythic、选择 Mythic Agent、安装 C2 Profile、配置 HTTP/DNS/WebSocket/SMB/TCP 通信、生成 payload、管理回连任务，或把 Mythic 作为跨平台 C2 框架用于授权红队演练时使用。覆盖 mythic-cli 安装、Agent/Profile 选择、SSL 证书配置、payload 构建和基础 OPSEC 判断"
+description: "Mythic C2 operational methodology. Use when deploying Mythic, selecting a Mythic Agent, installing a C2 Profile, configuring HTTP/DNS/WebSocket/SMB/TCP communications, generating payloads, managing callback tasks, or using Mythic as a cross-platform C2 framework for authorized red-team operations. Covers mythic-cli installation, Agent/Profile selection, SSL certificate configuration, payload construction, and basic OPSEC judgement"
+zh-signals: "Mythic C2 框架操作方法论，覆盖部署、Agent 与 Profile 选择、通信配置、payload 生成与基础 OPSEC 判断。信号:Mythic,C2,命令控制,红队,payload"
+when-to-use: >-
+  Use when deploying Mythic, selecting agents or C2 profiles, configuring
+  HTTP/DNS/WebSocket/SMB/TCP channels, generating payloads, or managing
+  callbacks in authorized red-team operations.
 metadata:
-  tags: "mythic,c2,command and control,agent,profile,http,dns,websocket,smb,tcp,red team,红队,c2框架"
+  tags: "mythic,c2,command and control,agent,profile,http,dns,websocket,smb,tcp,red team,c2-framework"
   category: "tool"
 ---
 
-# Mythic C2 操作方法论
+# Mythic C2 Operational Methodology
 
-Mythic 是模块化 C2 框架，核心由 Mythic 服务端、Agent 和 C2 Profile 组成。使用时先确定目标平台和通信路径，再安装对应 Agent/Profile；不要先安装一堆组件再临场选择。
+Mythic is a modular C2 framework whose core consists of the Mythic server, Agents, and C2 Profiles. When using it, first determine the target platform and communication path, then install the matching Agent/Profile; do not install a pile of components first and choose at the last minute.
 
 ---
 
-## Phase 1: 部署与启动
+## Phase 1: Deployment and Startup
 
-Mythic 通常部署在 Linux 服务器上，并依赖 Docker 运行各组件。基础安装流程如下：
+Mythic is usually deployed on a Linux server and relies on Docker to run its components. The basic installation flow is:
 
 ```bash
 sudo apt-get install build-essential
@@ -24,32 +29,32 @@ sudo make
 sudo ./mythic-cli start
 ```
 
-如果在 Ubuntu/Debian 上首次安装 Docker 依赖，可使用项目提供的安装脚本；脚本会改动系统 Docker 环境，执行前应确认这是专用 C2 服务器。
+If you are installing the Docker dependencies for the first time on Ubuntu/Debian, you can use the installation script provided by the project; the script modifies the system Docker environment, so before running it, confirm that this is a dedicated C2 server.
 
 ```bash
 ./install_docker_ubuntu.sh
 ./install_docker_debian.sh
 ```
 
-启动后先确认 Web UI、容器状态和日志，再进入 Agent/Profile 安装阶段。
+After startup, first confirm the Web UI, container status, and logs, then proceed to the Agent/Profile installation phase.
 
 ---
 
-## Phase 2: Agent 选择
+## Phase 2: Agent Selection
 
-Agent 决策取决于目标 OS、运行时限制和需要的后渗透能力。
+Agent choice depends on the target OS, runtime constraints, and the required post-exploitation capabilities.
 
-| Agent | 语言/平台侧重 | 适用判断 |
+| Agent | Language/platform focus | When to use it |
 |---|---|---|
-| Apollo | C# / .NET Framework | Windows 域环境、.NET 可用、需要成熟 Windows 后渗透能力 |
-| Athena | .NET | Windows/.NET 场景，优先确认当前维护状态和支持命令 |
-| Poseidon | Go / Linux / macOS | Linux/macOS 目标，或需要较好的跨平台能力 |
-| Medusa | Python | Python 环境可用、需要脚本化扩展时 |
-| Hannibal | PIC C | 对原生载荷和内存加载有要求时 |
-| Thanatos | Rust / Linux / Windows | 需要 Rust Agent 或跨平台实验能力时 |
-| Xenon | C / httpx | 需要 C Agent 并配合 httpx profile 时 |
+| Apollo | C# / .NET Framework | Windows domain environments, .NET available, mature Windows post-exploitation capability needed |
+| Athena | .NET | Windows/.NET scenarios; check the current maintenance status and supported commands first |
+| Poseidon | Go / Linux / macOS | Linux/macOS targets, or when good cross-platform capability is needed |
+| Medusa | Python | Python environments are available and scripted extensions are needed |
+| Hannibal | PIC C | When native payloads and in-memory loading are required |
+| Thanatos | Rust / Linux / Windows | When a Rust Agent or cross-platform experimentation is needed |
+| Xenon | C / httpx | When a C Agent is needed together with an httpx profile |
 
-安装 Agent：
+Installing an Agent:
 
 ```bash
 ./mythic-cli install github https://github.com/MythicAgents/Apollo
@@ -57,24 +62,24 @@ Agent 决策取决于目标 OS、运行时限制和需要的后渗透能力。
 ./mythic-cli install github https://github.com/MythicAgents/Athena
 ```
 
-选择前优先查看 Mythic Community Agent Feature Matrix，确认目标命令是否由该 Agent 支持；不同 Agent 的命令、注入、凭据和横向能力并不一致。
+Before choosing, check the Mythic Community Agent Feature Matrix first to confirm whether the target command is supported by that Agent; the commands, injection, credential, and lateral movement capabilities differ between Agents.
 
 ---
 
-## Phase 3: C2 Profile 选择
+## Phase 3: C2 Profile Selection
 
-C2 Profile 决定 Agent 如何回连。它应匹配目标网络出口，而不是只按“隐蔽性”排序。
+The C2 Profile determines how the Agent calls back. It should match the target's network egress, rather than being ranked only by "stealth".
 
-| Profile | 适用场景 | 注意点 |
+| Profile | Applicable scenario | Notes |
 |---|---|---|
-| `http` / `httpx` | 常规 Web 出网 | 需要域名、证书和流量特征设计 |
-| `websocket` | 长连接允许、需要低延迟交互 | 长连接在部分网络中更显眼 |
-| `dns` | HTTP 出网受限但 DNS 可用 | 速度慢，适合作为备用或低频通道 |
-| `dynamichttp` | 需要动态调整 HTTP 行为 | 先验证 Agent 支持情况 |
-| `smb` | 内网横向、不出网主机 | 依赖已控主机与目标之间 SMB 可达 |
-| `tcp` | 简单直连或内网绑定 | 易被网络边界阻断，适合受控实验或内网 |
+| `http` / `httpx` | Regular web egress | Requires domain, certificate, and traffic characteristic design |
+| `websocket` | Long connections allowed, low-latency interaction needed | Long connections are more conspicuous on some networks |
+| `dns` | HTTP egress restricted but DNS available | Slow, suitable as a backup or low-frequency channel |
+| `dynamichttp` | Dynamic adjustment of HTTP behavior needed | Verify Agent support first |
+| `smb` | Internal lateral movement, hosts without egress | Depends on SMB reachability between the compromised host and the target |
+| `tcp` | Simple direct connections or internal binding | Easily blocked at network boundaries, suitable for controlled labs or internal networks |
 
-安装 Profile：
+Installing a Profile:
 
 ```bash
 ./mythic-cli install github https://github.com/MythicC2Profiles/http
@@ -85,59 +90,59 @@ C2 Profile 决定 Agent 如何回连。它应匹配目标网络出口，而不�
 
 ---
 
-## Phase 4: SSL 与域名
+## Phase 4: SSL and Domains
 
-HTTP/HTTPS Profile 上线前先处理证书。生产演练中优先使用真实域名和有效证书；自签证书适合实验环境，但容易暴露异常特征。
+Handle certificates before an HTTP/HTTPS Profile goes live. In production exercises, prefer real domains with valid certificates; self-signed certificates suit lab environments but easily expose tell-tale anomalies.
 
-使用 certbot 获取证书：
+Use certbot to obtain a certificate:
 
 ```bash
 sudo apt install certbot
 certbot certonly --standalone -d "example.com" --register-unsafely-without-email --non-interactive --agree-tos
 ```
 
-把证书复制到对应 Profile 容器路径，并在 Profile 配置中设置 `key_path` 和 `cert_path` 对应文件名：
+Copy the certificates to the corresponding Profile container path, and set `key_path` and `cert_path` in the Profile configuration to the matching file names:
 
 ```bash
 docker cp /etc/letsencrypt/archive/example.com/fullchain1.pem http:/Mythic/http/c2_code/fullchain.pem
 docker cp /etc/letsencrypt/archive/example.com/privkey1.pem http:/Mythic/http/c2_code/privkey.pem
 ```
 
-如果 Profile 开启 `use_ssl` 且磁盘上没有证书，部分 Profile 会自动生成自签证书；这种方式只适合测试，不建议用于真实授权演练。
+If the Profile enables `use_ssl` and no certificate exists on disk, some Profiles automatically generate a self-signed certificate; this method is only suitable for testing and is not recommended for real authorized exercises.
 
 ---
 
-## Phase 5: Payload 构建与任务操作
+## Phase 5: Payload Construction and Task Operations
 
-基本流程：
+Basic flow:
 
 ```text
-安装 Agent → 安装 Profile → 创建 payload → 配置 callback 参数 → 生成并投递 → 等待 callback → 下发 task
+Install Agent → Install Profile → Create payload → Configure callback parameters → Generate and deliver → Wait for callback → Dispatch task
 ```
 
-构建 payload 时重点确认：
+When building a payload, confirm the following:
 
-- Agent 与目标 OS/架构匹配。
-- Profile 与目标出口网络匹配。
-- callback host 指向 redirector 或 C2 域名，而不是暴露管理端。
-- sleep/jitter 与演练噪声要求一致。
-- payload 格式与投递方式匹配。
+- The Agent matches the target OS/architecture.
+- The Profile matches the target's egress network.
+- The callback host points to the redirector or the C2 domain, not to the exposed management side.
+- sleep/jitter are consistent with the noise requirements of the exercise.
+- The payload format matches the delivery method.
 
-任务下发后先做低噪声验证，例如身份、主机名、当前目录和网络连通性；确认稳定后再进行文件、凭据或横向相关操作。
+After dispatching a task, first perform low-noise verification, such as identity, hostname, current directory, and network connectivity; once stability is confirmed, proceed with file, credential, or lateral movement operations.
 
 ---
 
-## OPSEC 与排障
+## OPSEC and Troubleshooting
 
-| 问题 | 判断方向 |
+| Problem | Direction to check |
 |---|---|
-| Agent 不回连 | callback host/port、Profile 容器状态、证书、目标出口策略 |
-| 回连后命令无输出 | Agent 是否支持该命令、任务是否完成、sleep 是否过长 |
-| HTTPS 异常 | 证书路径、域名 SNI、Profile `use_ssl` 配置 |
-| DNS Profile 慢 | 这是通道特性；只适合低频任务或备用通道 |
-| SMB/TCP 不通 | 先验证目标到 pivot 的网络可达性和端口监听 |
+| Agent does not call back | callback host/port, Profile container status, certificates, target egress policy |
+| No output from commands after check-in | Whether the Agent supports that command, whether the task completed, whether the sleep is too long |
+| HTTPS issues | Certificate paths, domain SNI, Profile `use_ssl` configuration |
+| DNS Profile is slow | This is a channel characteristic; only suitable for low-frequency tasks or backup channels |
+| SMB/TCP unreachable | First verify network reachability and port listening from the target to the pivot |
 
-Mythic 的模块化意味着“安装成功”不等于“能力可用”。每次演练前都应以当前 Agent/Profile 的官方文档和 feature matrix 为准，确认命令支持、平台限制和日志特征。
+Mythic's modularity means "installation succeeded" does not equal "capability available". Before every exercise, rely on the official documentation and feature matrix of the current Agent/Profile to confirm command support, platform limitations, and log characteristics.
 
 ## References
 

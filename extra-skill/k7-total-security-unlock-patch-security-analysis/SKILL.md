@@ -1,6 +1,9 @@
 ---
 name: k7-total-security-unlock-patch-security-analysis
 description: Analyze and document suspected piracy/cracking repositories masquerading as legitimate security software
+zh-signals: "分析并记录伪装成安全软件的 K7 盗版破解仓库及其风险指标。信号:盗版分析,破解补丁,K7,许可证绕过,仓库研判"
+when-to-use: >-
+  Use when evaluating a repository claiming to be K7 Total Security or an unlock patch and needing to document piracy indicators.
 triggers:
   - "analyze this security software repository"
   - "check if this k7 security project is legitimate"

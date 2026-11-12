@@ -2,38 +2,41 @@
 name: pwndora-network-map
 description: "pwndora: Maps enterprise network asset graph. Signals: network topology, internet mapping, large-scale network mapping."
 zh-signals: "pwndora: 企业网段资产图谱。信号:网络拓扑,互联网测绘,大规模网络测绘。"
+when-to-use: >-
+  Use when mapping a large enterprise CIDR range to build an asset graph with
+  ports, banners, fingerprints and web titles, and structured JSON output is needed.
 ---
 
 # pwndora
 
-- 攻击大类:C04 网络拓扑与互联网测绘
-- 上游仓库:https://github.com/alechilczenko/pwndora
-- 上游 License:Apache-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C04 Network Topology and Internet Mapping
+- Upstream Repository: https://github.com/alechilczenko/pwndora
+- Upstream License: Apache-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/alechilczenko/pwndora && cd pwndora
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 main.py -t 10.0.0.0/16` | 大规模网络测绘 |
-| `-t cidr -o out.json` | 输出 |
-| `-p top1000` | 端口 |
-| `-v` | 详细 |
+| `python3 main.py -t 10.0.0.0/16` | Large-scale network mapping |
+| `-t cidr -o out.json` | Output |
+| `-p top1000` | Ports |
+| `-v` | Verbose |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 企业网段资产图谱
+### Enterprise network asset graph
 
 ```bash
 python3 main.py -t 10.0.0.0/16
-# 端口+banner+指纹识别+Web 标题
+# Ports + banners + fingerprinting + web titles
 ```
 
-## 注意事项
+## Notes
 
-大规模网络资产测绘,输出结构化 JSON。
+Large-scale network asset mapping with structured JSON output.

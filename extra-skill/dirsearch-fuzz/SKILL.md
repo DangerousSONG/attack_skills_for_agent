@@ -1,96 +1,98 @@
 ---
 name: dirsearch-fuzz
-description: "使用 dirsearch 进行 Web 目录和文件暴力枚举。当需要发现隐藏的目录、文件、后台路径、备份文件时使用。dirsearch 内置高质量字典，支持多扩展名、递归扫描、状态码过滤。任何涉及目录枚举、路径发现、后台查找、敏感文件发现的场景都应使用此技能"
+description: "Web directory and file brute-force enumeration with dirsearch. Use when you need to discover hidden directories, files, admin panels, or backup files. dirsearch ships high-quality wordlists and supports multiple extensions, recursive scanning, and status code filtering. Use this skill for any scenario involving directory enumeration, path discovery, admin panel hunting, or sensitive file discovery"
+zh-signals: "使用 dirsearch 对 Web 目录与文件进行暴力枚举，发现隐藏路径、后台、备份文件与敏感资源。信号:目录扫描,路径枚举,后台发现,备份文件,dirsearch"
+when-to-use: "Use when you need to discover hidden directories, files, admin panels, or backup files on a web target through directory brute-force enumeration with dirsearch."
 metadata:
-  tags: "dirsearch,directory,fuzz,目录扫描,路径枚举,后台发现,文件发现,备份文件,web"
+  tags: "dirsearch,directory,fuzz,directory scanning,path enumeration,admin panel discovery,file discovery,backup file,web"
   category: "tool"
 ---
 
-# dirsearch Web 目录枚举方法论
+# dirsearch Web Directory Enumeration Methodology
 
-dirsearch 是功能丰富的 Web 目录暴力枚举工具。核心优势：**内置高质量字典** + **多扩展名支持** + **递归扫描** + **智能过滤**。
+dirsearch is a feature-rich web directory brute-force enumeration tool. Core advantages: **built-in high-quality wordlists** + **multi-extension support** + **recursive scanning** + **smart filtering**.
 
-项目地址：https://github.com/maurosoria/dirsearch
+Project URL: https://github.com/maurosoria/dirsearch
 
-## Phase 1: 基本扫描
+## Phase 1: Basic Scanning
 
 ```bash
-# 使用内置字典扫描
+# Scan with the built-in wordlist
 dirsearch -u http://target.com
 
-# 指定扩展名
+# Specify extensions
 dirsearch -u http://target.com -e php,asp,aspx,jsp
 
-# 指定字典
+# Specify a wordlist
 dirsearch -u http://target.com -w /path/to/wordlist.txt
 
-# 静默输出
+# Quiet output
 dirsearch -u http://target.com --quiet
 ```
 
-## Phase 2: 过滤和匹配
+## Phase 2: Filtering and Matching
 
 ```bash
-# 排除状态码
+# Exclude status codes
 dirsearch -u http://target.com -x 404,403,500
 
-# 只显示特定状态码
+# Show only specific status codes
 dirsearch -u http://target.com -i 200,301,302
 
-# 按响应大小过滤
+# Filter by response size
 dirsearch -u http://target.com --exclude-sizes 0B,4KB
 
-# 按响应内容过滤
+# Filter by response content
 dirsearch -u http://target.com --exclude-texts "Not Found"
 
-# 递归扫描（发现目录后继续扫描子目录）
+# Recursive scanning (keep scanning subdirectories after a directory is found)
 dirsearch -u http://target.com -r --recursion-depth 3
 ```
 
-## Phase 3: 高级选项
+## Phase 3: Advanced Options
 
 ```bash
-# 自定义请求头
+# Custom request headers
 dirsearch -u http://target.com -H "Cookie: session=abc"
 
-# 带认证
+# With authentication
 dirsearch -u http://target.com --auth admin:password --auth-type basic
 
-# 使用代理
+# Use a proxy
 dirsearch -u http://target.com --proxy http://127.0.0.1:8080
 
-# 控制线程
+# Control threads
 dirsearch -u http://target.com -t 50
 
-# 批量目标
+# Batch targets
 dirsearch -l urls.txt -e php,asp
 
-# 随机 User-Agent
+# Random User-Agent
 dirsearch -u http://target.com --random-agent
 
-# 强制扩展名（不使用 %EXT% 占位符）
+# Force extensions (do not use the %EXT% placeholder)
 dirsearch -u http://target.com -f -e php,asp
 ```
 
-## Phase 4: 输出
+## Phase 4: Output
 
 ```bash
-# 简单文本
+# Plain text
 dirsearch -u http://target.com -o results.txt --format plain
 
-# JSON 输出
+# JSON output
 dirsearch -u http://target.com -o results.json --format json
 
-# CSV 输出
+# CSV output
 dirsearch -u http://target.com -o results.csv --format csv
 ```
 
-## 常用场景速查
+## Common Scenario Quick Reference
 
-| 场景 | 命令 |
+| Scenario | Command |
 |------|------|
-| PHP 站点 | `dirsearch -u http://target -e php -x 404` |
-| Java 站点 | `dirsearch -u http://target -e jsp,do,action -x 404` |
-| 后台查找 | `dirsearch -u http://target -w admin-wordlist.txt` |
-| 备份文件 | `dirsearch -u http://target -e bak,old,zip,tar.gz,sql` |
-| 递归深扫 | `dirsearch -u http://target -r --recursion-depth 3 -e php` |
+| PHP site | `dirsearch -u http://target -e php -x 404` |
+| Java site | `dirsearch -u http://target -e jsp,do,action -x 404` |
+| Admin panel hunting | `dirsearch -u http://target -w admin-wordlist.txt` |
+| Backup files | `dirsearch -u http://target -e bak,old,zip,tar.gz,sql` |
+| Deep recursive scan | `dirsearch -u http://target -r --recursion-depth 3 -e php` |

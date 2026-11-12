@@ -1,6 +1,10 @@
 ---
 name: threat-mitigation-mapping
 description: "Map identified threats to appropriate security controls and mitigations. Use when prioritizing security investments, creating remediation plans, or validating control effectiveness."
+zh-signals: "将识别出的威胁映射到相应安全控制与缓解措施，用于优先级排序、修复规划与控制有效性验证。信号:威胁建模,安全控制,缓解措施,修复规划,风险管理"
+when-to-use: >-
+  Use when prioritizing security investments, creating remediation plans, validating
+  control coverage, or designing defense-in-depth.
 risk: safe
 source: community
 date_added: "2026-02-27"

@@ -1,6 +1,10 @@
 ---
 name: aws-cloud-security-essentials-lab
 description: Educational lab repository for AWS cloud computing security fundamentals including IAM, VPC, encryption, monitoring, and incident detection
+zh-signals: "AWS 云安全基础实验指导，涵盖 IAM、VPC、加密、访问控制与监控。信号:aws实验,iam,vpc,云安全,加密,cloudtrail"
+when-to-use: >-
+  Use when setting up or walking through AWS cloud security lab exercises covering
+  IAM, VPC isolation, encryption, access control, and monitoring.
 triggers:
   - how do I set up AWS IAM security labs
   - show me cloud security lab exercises

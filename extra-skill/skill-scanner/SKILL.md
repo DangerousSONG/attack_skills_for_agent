@@ -1,6 +1,8 @@
 ---
 name: skill-scanner
 description: "Scan agent skills for security issues before adoption. Detects prompt injection, malicious code, excessive permissions, secret exposure, and supply chain risks."
+zh-signals: "代理技能采用前的安全扫描，检测提示注入、恶意代码与供应链风险。信号:技能扫描,提示注入,恶意代码,权限审计,供应链风险"
+when-to-use: "Use when evaluating an agent skill for prompt injection, malicious code, excessive permissions, secret exposure, or supply-chain risk before adoption."
 risk: safe
 source: community
 date_added: "2026-09-04"
