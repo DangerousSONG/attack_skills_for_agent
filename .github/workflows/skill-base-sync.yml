@@ -55,13 +55,15 @@ jobs:
           git config user.name "skill-base-sync[bot]"
           git config user.email "skill-base-sync[bot]@users.noreply.github.com"
           git fetch origin main
+          BASE_SHA=$(git rev-parse HEAD)
 
           # 底座路径正则（与 SYNC-RULES.md 第一节一致）；命中即铁律 2 范围
           BASE_RE='^(Anthropic-Cybersecurity-Skills|Claude-OSINT|Claude-Red-pentest-set|awesome-ai-security|awesome-web3-security|ctf-skills|hack-skills|offensive-claude|pentest-ai-agents|yak-skills|tool-skills|extra-skill)/|^INDEX\.md$|^攻击侧Skills清单\.csv$'
 
           if git merge origin/main --no-edit; then
-            # 合并后与方案分支无差异（快进/已同步）→ 无事可做
-            if git diff --quiet ${{ matrix.branch }}; then
+            # 合并后与合并前无差异（已同步）→ 无事可做；用 HEAD 位移判断，
+            # 不能 git diff 分支名——checkout 到分支时 ref 随提交移动，永远 quiet
+            if [ "$(git rev-parse HEAD)" = "$BASE_SHA" ]; then
               echo "merged=noop" >> "$GITHUB_OUTPUT"
             else
               echo "merged=true" >> "$GITHUB_OUTPUT"
@@ -97,7 +99,7 @@ jobs:
           fi
 
           git commit --no-edit
-          if git diff --quiet ${{ matrix.branch }}; then
+          if [ "$(git rev-parse HEAD)" = "$BASE_SHA" ]; then
             echo "merged=noop" >> "$GITHUB_OUTPUT"
           else
             echo "merged=true" >> "$GITHUB_OUTPUT"
