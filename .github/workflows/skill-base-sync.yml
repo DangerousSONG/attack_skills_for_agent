@@ -50,6 +50,8 @@ jobs:
       - name: 合并 main 进方案分支
         id: merge
         run: |
+          # GitHub Actions 默认 bash -eo pipefail；冲突消解需要对失败命令逐一处理，关掉 -e
+          set +e
           git config user.name "skill-base-sync[bot]"
           git config user.email "skill-base-sync[bot]@users.noreply.github.com"
           git fetch origin main
@@ -75,14 +77,16 @@ jobs:
           if [ -n "$BASE_CONFLICTS" ]; then
             echo "底座路径冲突（铁律2取main版）: $BASE_CONFLICTS" >&2
             echo "$BASE_CONFLICTS" | while IFS= read -r f; do
-              git checkout --theirs -- "$f" && git add -- "$f"
-            done
+              git checkout --theirs -- "$f" && git add -- "$f" || echo "  [警告] 底座冲突消解失败: $f" >&2
+            done || true
           fi
           if [ -n "$PLAN_CONFLICTS" ]; then
             echo "方案层冲突（取本分支版）: $PLAN_CONFLICTS" >&2
             echo "$PLAN_CONFLICTS" | while IFS= read -r f; do
-              git checkout --ours -- "$f" && git add -- "$f"
-            done
+              # modify/delete 型冲突（如 flat-skills 删了 engagement-discipline）：本分支版不存在则直接 add 登记删除
+              git checkout --ours -- "$f" 2>/dev/null || git rm -q -- "$f" 2>/dev/null || echo "  [警告] 方案层冲突消解失败: $f" >&2
+              git add -- "$f" 2>/dev/null
+            done || true
           fi
 
           if git diff --name-only --diff-filter=U | grep -q .; then
