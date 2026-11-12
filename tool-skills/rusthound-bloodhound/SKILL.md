@@ -2,41 +2,42 @@
 name: rusthound-bloodhound
 description: "RustHound: Rust implementation of SharpHound. Signals: AD attack, domain penetration, domain controller IP, Kerberos, packaged output."
 zh-signals: "RustHound: Rust 版 SharpHound。信号:ad攻击,域渗透,域控 IP,Kerberos,打包输出。"
+when-to-use: "Use to collect Active Directory data for BloodHound in a Rust binary, including Kerberos, ADCS, and zipped output."
 ---
 
 # RustHound
 
-- 攻击大类:C30 AD域渗透与域控攻击
-- 上游仓库:https://github.com/OPFOR-Crown-Cottage/rusthound
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C30 AD Domain Penetration and Domain Controller Attacks
+- Upstream Repository: https://github.com/OPFOR-Crown-Cottage/rusthound
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
-cargo install rusthound 或 release 二进制
+cargo install rusthound or take the release binary
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `rusthound -d corp.local -u user -p pass` | BloodHound 数据收集 |
-| `-i 10.0.0.5` | 域控 IP |
+| `rusthound -d corp.local -u user -p pass` | BloodHound data collection |
+| `-i 10.0.0.5` | Domain controller IP |
 | `-k` | Kerberos |
-| `--zip` | 打包输出 |
-| `-c All` | 全收集 |
-| `--adcs` | 含 ADCS 数据 |
-| `--old-bloodhound` | 兼容旧版 JSON |
+| `--zip` | Packaged output |
+| `-c All` | Collect everything |
+| `--adcs` | Include ADCS data |
+| `--old-bloodhound` | Compatible with legacy JSON |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Rust 版 SharpHound
+### SharpHound in Rust
 
 ```bash
 rusthound -d corp.local -u svc -p pass -i 10.0.0.5 --zip --adcs
-# 输出 zip 直接拖进 BloodHound GUI/CE 分析攻击路径
+# Drop the output zip straight into BloodHound GUI/CE to analyze attack paths
 ```
 
-## 注意事项
+## Notes
 
-Rust 单二进制,跨平台免 .NET 依赖;支持 BloodHound CE 最新 schema。
+A single Rust binary, cross-platform and free of .NET dependencies; supports the latest BloodHound CE schema.

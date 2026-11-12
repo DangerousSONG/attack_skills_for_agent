@@ -2,42 +2,45 @@
 name: zmap-internet
 description: "ZMap: Internet-scale fast measurement. Signals: port scan, nmap, single-port internet-wide scan, bandwidth limit, target count cap."
 zh-signals: "ZMap: 互联网级快速测量。信号:端口扫描,nmap,单端口全网扫,带宽限制,目标数上限。"
+when-to-use: >-
+  Use when performing internet-wide single-port measurements at high speed and
+  you need to control bandwidth and cap the target count.
 ---
 
 # ZMap
 
-- 攻击大类:C42 网络扫描与枚举
-- 上游仓库:https://github.com/zmap/zmap
-- 上游 License:Apache-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C42 Network Scanning and Enumeration
+- Upstream Repository: https://github.com/zmap/zmap
+- Upstream License: Apache-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
-apt install zmap 或编译
+apt install zmap or build from source
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `zmap -p 443 10.0.0.0/8` | 单端口全网扫 |
-| `-B 10M` | 带宽限制 |
-| `-n 100000` | 目标数上限 |
-| `-o out.txt` | 输出 |
-| `-r 10000` | 速率 pps |
-| `--output-fields=sport,sip` | 字段 |
-| `-w whitelist.txt` | 白名单 |
-| `-c 3` | 发包次数 |
+| `zmap -p 443 10.0.0.0/8` | Single-port internet-wide scan |
+| `-B 10M` | Bandwidth limit |
+| `-n 100000` | Target count cap |
+| `-o out.txt` | Output |
+| `-r 10000` | Rate in pps |
+| `--output-fields=sport,sip` | Fields |
+| `-w whitelist.txt` | Allowlist |
+| `-c 3` | Number of packets sent |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 互联网级快速测量
+### Internet-scale fast measurement
 
 ```bash
 zmap -p 8443 -B 50M -n 1000000 -o vpn_gateways.txt
-# 45 分钟扫完全网 443 的恐怖效率;配 zgrab2 做应用层指纹
+# Scans the entire internet on port 443 in 45 minutes; pair with zgrab2 for application-layer fingerprinting
 ```
 
-## 注意事项
+## Notes
 
-学术级单包扫描引擎;务必确认授权范围,误用法律风险极高。
+An academic-grade single-packet scanning engine; always confirm the authorization scope, the legal risk of misuse is extremely high.

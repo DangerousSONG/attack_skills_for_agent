@@ -2,37 +2,38 @@
 name: jira-scan-cve
 description: "jira_scan batch-checks Jira vulnerabilities. Signals: web vulnerability, injection, detect anonymous access, silent mode."
 zh-signals: "jira_scan: Jira 漏洞批量核查。信号:web漏洞,注入,检测匿名访问,静默。"
+when-to-use: "Use when assessing a Jira or Atlassian instance for known CVEs, anonymous access, and exploitable endpoints. Requires a target URL and optionally silent mode."
 ---
 
 # jira_scan
 
-- 攻击大类:C09 Web利用(CVE利用)
-- 上游仓库:https://github.com/bcoles/jira_scan
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Exploitation (CVE Exploitation)
+- Upstream Repository: https://github.com/bcoles/jira_scan
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/bcoles/jira_scan && gem install jira_scan
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `jira-scan -u 'https://jira.t.com'` | 检测 Jira 未授权/漏洞 CVE-2019-11581 等 |
-| `-u url -c` | 检测匿名访问 |
-| `-q` | 静默 |
+| `jira-scan -u 'https://jira.t.com'` | Detect Jira unauthenticated access / vulnerabilities such as CVE-2019-11581 |
+| `-u url -c` | Detect anonymous access |
+| `-q` | Quiet |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Jira 漏洞批量核查
+### Jira Vulnerability Batch Check
 
 ```bash
 cat jira_hosts.txt | xargs -I{} jira-scan -u {}
-# 命中 CVE-2019-11581(SMTP 注入 RCE)可进一步武器化
+# A hit on CVE-2019-11581 (SMTP injection RCE) can be weaponized further
 ```
 
-## 注意事项
+## Notes
 
-Jira/Atlassian 系列 CVE 扫描器,输出受影响版本和可利用端点。
+A Jira/Atlassian CVE scanner that outputs affected versions and exploitable endpoints.

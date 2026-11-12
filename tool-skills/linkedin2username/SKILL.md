@@ -2,37 +2,40 @@
 name: linkedin2username
 description: "linkedin2username: Generate LinkedIn employee usernames. Signals: email collection, employee information, username generation, deep dive."
 zh-signals: "linkedin2username: LinkedIn 员工用户名。信号:邮箱收集,员工信息,员工用户名生成,深挖。"
+when-to-use: >-
+  Use during OSINT before password spraying when you need to turn a company's
+  LinkedIn employee listings into likely username or email candidates.
 ---
 
 # linkedin2username
 
-- 攻击大类:C03 邮箱与人员OSINT
-- 上游仓库:https://github.com/initstring/linkedin2username
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C03 Email and Personnel OSINT
+- Upstream Repository: https://github.com/initstring/linkedin2username
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/initstring/linkedin2username
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 linkedin2username.py -c target -u user@mail.com -p pass` | 员工用户名生成 |
-| `-c company -n` | 深挖 |
-| `-o out.txt` | 输出 |
+| `python3 linkedin2username.py -c target -u user@mail.com -p pass` | Employee username generation |
+| `-c company -n` | Deep dive |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### LinkedIn 员工用户名
+### LinkedIn Employee Usernames
 
 ```bash
 python3 linkedin2username.py -c 'Target Corp' -u me@mail.com
-# 登录态爬员工名录转用户名
+# scrape the employee directory with a logged-in session and convert it to usernames
 ```
 
-## 注意事项
+## Notes
 
-initstring 出品,LinkedIn 公司页转用户名字典。
+From initstring; converts a LinkedIn company page into a username wordlist.

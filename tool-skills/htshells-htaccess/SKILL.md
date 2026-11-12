@@ -2,37 +2,40 @@
 name: htshells-htaccess
 description: "htshells provides .htaccess webshells. Signals: webshell, RCE, PHP execution, CGI execution."
 zh-signals: "htshells: .htaccess webshell。信号:webshell,rce,PHP 执行,CGI 执行。"
+when-to-use: >-
+  Use when file-upload restrictions are strict but .htaccess uploads are allowed; deploy an
+  .htaccess webshell that triggers hidden PHP or CGI execution.
 ---
 
 # htshells
 
-- 攻击大类:C13 远程命令执行与WebShell
-- 上游仓库:https://github.com/wireghoul/htshells
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C13 Remote Command Execution and WebShell
+- Upstream Repository: https://github.com/wireghoul/htshells
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/wireghoul/htshells
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `.htaccess 上传` | 把 shell 作为 .htaccess 上传 |
-| `mod_php 模式` | PHP 执行 |
-| `mod_cgi 模式` | CGI 执行 |
+| `.htaccess upload` | Upload the shell as .htaccess |
+| `mod_php mode` | PHP execution |
+| `mod_cgi mode` | CGI execution |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
 ### .htaccess webshell
 
 ```bash
-# 上传受控 .htaccess 到可写 Apache 目录
-# 通过特定 UA/URI 触发隐藏的 PHP 后门
+# Upload a controlled .htaccess into a writable Apache directory
+# Trigger the hidden PHP backdoor via a specific UA/URI
 ```
 
-## 注意事项
+## Notes
 
-.htaccess 本身就是 webshell 的冷门技巧;适合文件名白名单严格但允许 .htaccess 的场景。
+Using .htaccess itself as a webshell is an obscure technique; ideal when filename whitelists are strict but .htaccess uploads are allowed.

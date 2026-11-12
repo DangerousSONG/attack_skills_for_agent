@@ -2,46 +2,48 @@
 name: trufflehog-secret-scan
 description: "trufflehog harvests GitHub key leaks and internal credentials from employee forks. Signals: attack surface, cloud assets, scan single repository, scan whole org"
 zh-signals: "trufflehog: Github 密钥泄露收割、员工 fork 仓库找内部凭证。信号:攻击面,云资产,扫单个仓库,扫整个 org。"
+when-to-use: >-
+  Use when scanning GitHub repositories, organizations, GitLab or local filesystems for leaked secrets, with verification to confirm which credentials are still live.
 ---
 
 # trufflehog
 
-- 攻击大类:C05 外部攻击面与云资产暴露
-- 上游仓库:https://github.com/trufflesecurity/trufflehog
-- 上游 License:AGPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C05 External Attack Surface and Cloud Asset Exposure
+- Upstream Repository: https://github.com/trufflesecurity/trufflehog
+- Upstream License: AGPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/trufflesecurity/trufflehog@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `trufflehog github --repo=https://github.com/org/repo` | 扫单个仓库 |
-| `trufflehog github --org=orgname` | 扫整个 org |
+| `trufflehog github --repo=https://github.com/org/repo` | Scan a single repository |
+| `trufflehog github --org=orgname` | Scan an entire org |
 | `trufflehog gitlab --endpoint=...` | GitLab |
-| `--only-verified` | 只报已验证可活的密钥 |
-| `-j` | JSON 输出 |
-| `trufflehog filesystem ./leak-repo` | 扫本地目录 |
+| `--only-verified` | Report only verified, live keys |
+| `-j` | JSON output |
+| `trufflehog filesystem ./leak-repo` | Scan a local directory |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Github 密钥泄露收割
+### Harvest GitHub Key Leaks
 
 ```bash
 trufflehog github --org=target-org --only-verified -j | tee keys.json
-# AWS key/Slack token/私钥等自动验证有效性
+# AWS keys/Slack tokens/private keys are automatically verified for validity
 ```
 
-### 员工 fork 仓库找内部凭证
+### Find Internal Credentials in Employee Fork Repositories
 
 ```bash
 trufflehog github --repo=https://github.com/employee/fork --only-verified
 ```
 
-## 注意事项
+## Notes
 
-支持 800+ 密钥类型并自动验证;--only-verified 大幅降低误报。
+Supports 800+ key types with automatic verification; --only-verified greatly reduces false positives.

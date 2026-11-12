@@ -2,58 +2,62 @@
 name: gobuster-dir-dns
 description: "gobuster discovers directories, admin panels, and subdomains for asset mapping. Signals: web scanning, vulnerability scanning, directory/file brute-forcing, virtual host brute-forcing."
 zh-signals: "gobuster: 目录与后台发现、子域名枚举接资产梳理。信号:web扫描,漏洞扫描,目录/文件爆破,虚拟主机爆破。"
+when-to-use: >-
+  Use when discovering directories, virtual hosts, DNS subdomains, or fuzzable
+  paths during web or asset reconnaissance; select the appropriate mode and
+  wordlist, and use wildcard handling for DNS.
 ---
 
 # gobuster
 
-- 攻击大类:C41 Web漏洞扫描与验证
-- 上游仓库:https://github.com/OJ/gobuster
-- 上游 License:Apache-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C41 Web Vulnerability Scanning and Validation
+- Upstream Repository: https://github.com/OJ/gobuster
+- Upstream License: Apache-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/OJ/gobuster/v3@latest
-# 或 apt install gobuster (Kali 自带)
+# or apt install gobuster (bundled with Kali)
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `dir -u URL -w wordlist.txt` | 目录/文件爆破 |
-| `dns -d target.com -w subdomains.txt` | 子域名枚举 |
-| `vhost -u URL -w vhosts.txt` | 虚拟主机爆破 |
-| `fuzz -u URL/FUZZ -w params.txt` | 参数/路径点 fuzz |
-| `-t 50` | 线程数 |
-| `-x php,txt,bak` | 目录模式追加扩展名 |
-| `-s 200,204,301,302,307` | 只显示这些状态码 |
-| `-k` | 忽略 HTTPS 证书错误 |
-| `--wildcard` | DNS 模式处理泛解析 |
-| `-o result.txt` | 输出到文件 |
+| `dir -u URL -w wordlist.txt` | Directory / file brute force |
+| `dns -d target.com -w subdomains.txt` | Subdomain enumeration |
+| `vhost -u URL -w vhosts.txt` | Virtual host brute force |
+| `fuzz -u URL/FUZZ -w params.txt` | Parameter / path point fuzzing |
+| `-t 50` | Number of threads |
+| `-x php,txt,bak` | Append extensions in directory mode |
+| `-s 200,204,301,302,307` | Only show these status codes |
+| `-k` | Ignore HTTPS certificate errors |
+| `--wildcard` | Handle wildcard resolution in DNS mode |
+| `-o result.txt` | Write output to a file |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 目录与后台发现
+### Directory and admin panel discovery
 
 ```bash
 gobuster dir -u https://target.com -w /usr/share/seclists/Discovery/Web-Content/common.txt -x php,html,bak -t 80 -o dirs.txt
 ```
 
-### 子域名枚举接资产梳理
+### Subdomain enumeration feeding asset mapping
 
 ```bash
 gobuster dns -d target.com -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt -o subs.txt
 cat subs.txt | awk '{print $2}' | sort -u
 ```
 
-### 隐藏虚拟主机与参数点发现
+### Hidden virtual host and parameter point discovery
 
 ```bash
 gobuster vhost -u https://target.com -w vhost-wordlist.txt -t 50
 gobuster fuzz -u "https://target.com/api/FUZZ" -w api-endpoints.txt -mc 200,401,403
 ```
 
-## 注意事项
+## Notes
 
-与 dirsearch/feroxbuster 功能重叠时优先选它做 DNS 与 vhost 模式;DNS 模式记得加 `--wildcard` 排除泛解析污染结果。
+When its functionality overlaps with dirsearch/feroxbuster, prefer it for DNS and vhost modes; in DNS mode remember to add `--wildcard` to exclude wildcard resolution from polluting the results.

@@ -2,38 +2,41 @@
 name: scannerl-dist-scan
 description: "scannerl: Distributed whole-network scanning in Erlang. Signals: port scanning, nmap, distributed fingerprint scanning, batch processing."
 zh-signals: "scannerl: Erlang 分布式全网扫描。信号:端口扫描,nmap,分布式指纹扫描,批处理。"
+when-to-use: >-
+  Use when you need to scan large networks (CIDR ranges) for open ports and
+  service fingerprints at scale using distributed, plugin-driven workers.
 ---
 
 # scannerl
 
-- 攻击大类:C42 网络扫描与枚举
-- 上游仓库:https://github.com/avast/scannerl
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C42 Network Scanning and Enumeration
+- Upstream Repository: https://github.com/avast/scannerl
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/avast/scannerl && cd scannerl && make
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `scannerl -H 10.0.0.0/24 -P 1-1000 -M banner` | 分布式指纹扫描 |
-| `-H cidr -p top100 -B` | 批处理 |
-| `-o out.txt` | 输出 |
-| `-F erlang` | 插件 |
+| `scannerl -H 10.0.0.0/24 -P 1-1000 -M banner` | Distributed fingerprint scanning |
+| `-H cidr -p top100 -B` | Batch processing |
+| `-o out.txt` | Output |
+| `-F erlang` | Plugin |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Erlang 分布式全网扫描
+### Erlang distributed whole-network scanning
 
 ```bash
 scannerl -H 10.0.0.0/16 -P top1000
-# Avast 出品,单节点扫 16 段
+# By Avast; a single node scans 16 segments
 ```
 
-## 注意事项
+## Notes
 
-Avast 出品的 Erlang 分布式端口扫描,性能怪兽。
+Avast's Erlang distributed port scanner, a performance beast.

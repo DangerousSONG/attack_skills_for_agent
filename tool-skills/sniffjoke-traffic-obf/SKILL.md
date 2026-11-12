@@ -2,37 +2,40 @@
 name: sniffjoke-traffic-obf
 description: "sniffjoke: anti-sniffing traffic obfuscation. Signals: MITM, mitm, transparent obfuscation, debug, silent."
 zh-signals: "sniffjoke: 反嗅探流量混淆。信号:中间人,mitm,透明混淆,调试,静默。"
+when-to-use: >-
+  Use when you need to obfuscate network traffic so that passive sniffers and IDS
+  fail to parse it; supports transparent addressing, debug, and silent modes.
 ---
 
 # sniffjoke
 
-- 攻击大类:C40 嗅探与中间人攻击
-- 上游仓库:https://github.com/vecna/sniffjoke
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C40 Sniffing and Man-in-the-Middle Attacks
+- Upstream Repository: https://github.com/vecna/sniffjoke
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 apt install sniffjoke
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `sniffjoke -r` | 透明混淆 |
-| `-d` | 调试 |
-| `-q` | 静默 |
+| `sniffjoke -r` | Transparent obfuscation |
+| `-d` | Debug |
+| `-q` | Quiet |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 反嗅探流量混淆
+### Anti-Sniffing Traffic Obfuscation
 
 ```bash
 sniffjoke
-# 让 IDS/嗅探器解析失败
+# make IDS/sniffers fail to parse the traffic
 ```
 
-## 注意事项
+## Notes
 
-网络流量混淆,对抗被动嗅探。
+Network traffic obfuscation to counter passive sniffing.

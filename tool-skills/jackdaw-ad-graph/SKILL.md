@@ -2,39 +2,42 @@
 name: jackdaw-ad-graph
 description: "jackdaw visualizes domain penetration paths. Signals: AD attack, domain pentest, SMB session and share enumeration, web UI graph, ACL path analysis."
 zh-signals: "jackdaw: 可视化域渗透路径。信号:ad攻击,域渗透,SMB 会话/共享枚举,启动 Web 界面看图谱,ACL 路径分析。"
+when-to-use: >-
+  Use when performing Active Directory penetration testing and you need to collect
+  LDAP/SMB data, build a graph, and compute shortest attack paths to Domain Admin.
 ---
 
 # jackdaw
 
-- 攻击大类:C30 AD与横向移动
-- 上游仓库:https://github.com/skelsec/jackdaw
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C30 AD and Lateral Movement
+- Upstream Repository: https://github.com/skelsec/jackdaw
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/skelsec/jackdaw && cd jackdaw && pip install .
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `jackdaw enum ldap -d corp.local -u svc -p pass -k` | AD 枚举入 SQLite |
-| `jackdaw enum smb -w -d corp.local -u svc -p pass 10.0.0.0/24` | SMB 会话/共享枚举 |
-| `jackdaw nest` | 启动 Web 界面看图谱 |
-| `jackdaw analyze -m all` | ACL 路径分析 |
+| `jackdaw enum ldap -d corp.local -u svc -p pass -k` | AD enumeration into SQLite |
+| `jackdaw enum smb -w -d corp.local -u svc -p pass 10.0.0.0/24` | SMB session/share enumeration |
+| `jackdaw nest` | Launch the web UI to view the graph |
+| `jackdaw analyze -m all` | ACL path analysis |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 可视化域渗透路径
+### Visualizing domain penetration paths
 
 ```bash
 jackdaw enum ldap -d corp.local -u svc -p pass -k
 jackdaw enum smb -w -d corp.local -u svc -p pass 10.0.0.0/24
-jackdaw nest  # 浏览器看 shortest path to DA
+jackdaw nest  # View the shortest path to DA in the browser
 ```
 
-## 注意事项
+## Notes
 
-skelsec 出品,AD 数据+SMB 信息采集后用图谱算法计算到域管的最短攻击路径(支持 Dijkstra)。
+By skelsec; after collecting AD and SMB data it computes the shortest attack path to Domain Admin with a graph algorithm (Dijkstra supported).

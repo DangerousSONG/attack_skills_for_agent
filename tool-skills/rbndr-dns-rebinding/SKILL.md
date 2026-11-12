@@ -2,37 +2,38 @@
 name: rbndr-dns-rebinding
 description: "rbndr: Bypasses browser same-origin policy. Signals: man-in-the-middle, MITM, DNS rebinding, A records, TTL control."
 zh-signals: "rbndr: 浏览器同源策略绕过。信号:中间人,mitm,DNS 重绑定,A 记录,TTL 控制。"
+when-to-use: "Use to bypass the browser same-origin policy by performing DNS rebinding attacks against internal services."
 ---
 
 # rbndr
 
-- 攻击大类:C40 嗅探与中间人攻击
-- 上游仓库:https://github.com/taviso/rbndr
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C40 Sniffing and Man-in-the-Middle Attacks
+- Upstream Repository: https://github.com/taviso/rbndr
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/taviso/rbndr && cd rbndr && make
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `./rbndr 10.0.0.5 target.com` | DNS 重绑定 |
-| `-a` | A 记录 |
-| `-t TTL` | TTL 控制 |
+| `./rbndr 10.0.0.5 target.com` | DNS rebinding |
+| `-a` | A record |
+| `-t TTL` | TTL control |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 浏览器同源策略绕过
+### Browser same-origin policy bypass
 
 ```bash
 ./rbndr 127.0.0.1 internal.corp.local
-# 打内网绕过 SOP
+# Attack the internal network to bypass the same-origin policy
 ```
 
-## 注意事项
+## Notes
 
-taviso 出品 DNS 重绑定工具。
+DNS rebinding tool from taviso.

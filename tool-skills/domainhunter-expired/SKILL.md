@@ -2,39 +2,42 @@
 name: domainhunter-expired
 description: "DomainHunter: select phishing domains from high-reputation expired domains. Signals: phishing, social engineering, search expired registrable domains, check category reputation, filter adult."
 zh-signals: "DomainHunter: 挑钓鱼域名(高信誉过期域名)。信号:钓鱼,社会工程,搜过期可注册域名,查分类信誉,过滤成人类。"
+when-to-use: >-
+  Use when selecting phishing infrastructure, to find expired but reputable
+  domains that can pass email gateway reputation checks.
 ---
 
 # DomainHunter
 
-- 攻击大类:C08 钓鱼与社会工程
-- 上游仓库:https://github.com/threatexpress/domainhunter
-- 上游 License:BSD-3-Clause(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C08 Phishing and Social Engineering
+- Upstream Repository: https://github.com/threatexpress/domainhunter
+- Upstream License: BSD-3-Clause (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/threatexpress/domainhunter && cd domainhunter && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python domainhunter.py -k keywords.txt` | 搜过期可注册域名 |
-| `-c` | 查分类信誉 |
-| `-f` | 过滤成人类 |
-| `-t` | 用 Tor 查信誉 |
-| `-r` | 只显示可注册 |
+| `python domainhunter.py -k keywords.txt` | Search expired registrable domains |
+| `-c` | Check category reputation |
+| `-f` | Filter adult content |
+| `-t` | Check reputation over Tor |
+| `-r` | Show only registrable domains |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 挑钓鱼域名(高信誉过期域名)
+### Pick Phishing Domains (High-Reputation Expired Domains)
 
 ```bash
 python domainhunter.py -k 'security,login,update' -c -r
-# 输出可注册域名+BlueCoat/McAfee 分类,挑'企业/金融'类注册做钓鱼基础设施
+# Outputs registrable domains plus BlueCoat/McAfee categories, pick the 'business/finance' category to register for phishing infrastructure
 ```
 
-## 注意事项
+## Notes
 
-自动查过期域名在 Symantec BlueCoat 的分类信誉;分类良好的域名能过邮件网关。
+Automatically checks the category reputation of expired domains in Symantec BlueCoat; domains with a good category pass email gateways.

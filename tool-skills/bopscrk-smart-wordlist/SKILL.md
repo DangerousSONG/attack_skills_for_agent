@@ -2,37 +2,40 @@
 name: bopscrk-smart-wordlist
 description: "bopscrk: intelligently generates social engineering wordlists. Signals: password cracking, hash cracking, interactive targeted dictionary generation, keywords+years"
 zh-signals: "bopscrk: 社工字典智能生成。信号:密码破解,哈希破解,交互生成定向字典,关键字+年份。"
+when-to-use: >-
+  Use before password cracking or spraying when you want to build a targeted
+  wordlist from social-engineering details like names, birthdays, and hobbies.
 ---
 
 # bopscrk
 
-- 攻击大类:C25 哈希与密码破解
-- 上游仓库:https://github.com/r3nt0n/bopscrk
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C25 Hash and Password Cracking
+- Upstream Repository: https://github.com/r3nt0n/bopscrk
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/r3nt0n/bopscrk && cd bopscrk
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 bopscrk.py -i` | 交互生成定向字典 |
-| `-w 'John,Target' -y 1990-2000` | 关键字+年份 |
-| `-o out.txt` | 输出 |
+| `python3 bopscrk.py -i` | Interactive targeted wordlist generation |
+| `-w 'John,Target' -y 1990-2000` | Keywords + years |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 社工字典智能生成
+### Smart Social Engineering Wordlist Generation
 
 ```bash
 python3 bopscrk.py -i
-# 姓名+生日+爱好→高命中率字典
+# name + birthday + hobbies → high-hit-rate wordlist
 ```
 
-## 注意事项
+## Notes
 
-社工信息转定向密码字典。
+Turns social engineering details into a targeted password wordlist.

@@ -2,38 +2,41 @@
 name: petools-pe-analysis
 description: "Static PE file analysis. Signals: reverse engineering, disassembly, detailed output, DOS header parsing, resource extraction."
 zh-signals: "pe-tools: PE 文件静态解剖。信号:逆向,反汇编,详细输出,DOS 头解析,提取资源。"
+when-to-use: >-
+  Use when performing static analysis of a Windows PE file and you need DOS
+  header parsing, disassembly or resource extraction.
 ---
 
 # pe-tools
 
-- 攻击大类:C47 逆向工程辅助
-- 上游仓库:https://github.com/petoolse/petools
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C47 Reverse Engineering Assistance
+- Upstream Repository: https://github.com/petoolse/petools
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/petoolse/petools
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 pe_parser.py sample.exe` | PE 结构解析(IAT/节/资源) |
-| `-v` | 详细输出 |
-| `-d` | DOS 头解析 |
-| `--extract-resources` | 提取资源 |
+| `python3 pe_parser.py sample.exe` | Parse PE structure (IAT/sections/resources) |
+| `-v` | Verbose output |
+| `-d` | DOS header parsing |
+| `--extract-resources` | Extract resources |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### PE 文件静态解剖
+### Static PE file analysis
 
 ```bash
 python3 pe_parser.py malware.exe -v
-# 导入表看功能(联网/注入 API),节名看壳(UPX/VMProtect)
+# Import table reveals capabilities (network/injection APIs), section names reveal the packer (UPX/VMProtect)
 ```
 
-## 注意事项
+## Notes
 
-纯 Python PE 解析器,无依赖看 PE 头/节/IAT/资源,免杀分析第一步。
+Pure Python PE parser; inspect PE headers, sections, IAT and resources with no dependencies, the first step of AV evasion analysis.

@@ -2,37 +2,40 @@
 name: webhandler-shell
 description: "webhandler: WebShell management. Signals: web vulnerabilities, injection, WebShell client, single command, interactive."
 zh-signals: "webhandler: WebShell 管理。信号:web漏洞,注入,WebShell 客户端,单命令,交互。"
+when-to-use: >-
+  Use after gaining WebShell access to manage files, execute commands, and open
+  an interactive terminal through a PHP WebShell client.
 ---
 
 # webhandler
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/lnxg33k/webhandler
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/lnxg33k/webhandler
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/lnxg33k/webhandler && cd webhandler
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python webhandler.py --url 'https://t.com/shell.php' --password x` | WebShell 客户端 |
-| `--url url --cmd id` | 单命令 |
-| `--interactive` | 交互 |
+| `python webhandler.py --url 'https://t.com/shell.php' --password x` | WebShell client |
+| `--url url --cmd id` | Single command |
+| `--interactive` | Interactive |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### WebShell 管理
+### WebShell management
 
 ```bash
 python webhandler.py --url 'https://t.com/c99.php' --password pass
-# 文件管理+命令执行+数据库
+# File management + command execution + database
 ```
 
-## 注意事项
+## Notes
 
-PHP WebShell 客户端,支持密码认证+交互终端。
+PHP WebShell client with password authentication and an interactive terminal.

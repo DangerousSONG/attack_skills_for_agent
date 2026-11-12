@@ -2,39 +2,40 @@
 name: httprobe-alive
 description: "httprobe filters subdomains to live sites. Signals: port scan, nmap, httprobe, concurrency, timeout ms."
 zh-signals: "httprobe: 子域→存活站点过滤。信号:端口扫描,nmap,httprobe`,并发,超时 ms。"
+when-to-use: "Use httprobe when filtering a list of subdomains or hosts into live HTTP/HTTPS services, typically as a pipeline stage before screenshotting or fingerprinting."
 ---
 
 # httprobe
 
-- 攻击大类:C42 网络扫描与枚举
-- 上游仓库:https://github.com/tomnomnom/httprobe
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C42 Network Scanning and Enumeration
+- Upstream Repository: https://github.com/tomnomnom/httprobe
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/tomnomnom/httprobe@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `cat hosts.txt | httprobe` | 批量探 HTTP/HTTPS 存活 |
-| `-c 50` | 并发 |
-| `-t 10000` | 超时 ms |
-| `-p xlarge` | 大端口集 |
-| `-s` | 只 HTTPS |
+| `cat hosts.txt | httprobe` | Probe HTTP/HTTPS liveness in bulk |
+| `-c 50` | Concurrency |
+| `-t 10000` | Timeout in ms |
+| `-p xlarge` | Large port set |
+| `-s` | HTTPS only |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 子域→存活站点过滤
+### Subdomain to Live Site Filtering
 
 ```bash
 subfinder -d corp.com -silent | httprobe -c 100 | tee alive.txt
-cat alive.txt | aquatone  # 下游截图/指纹
+cat alive.txt | aquatone  # downstream screenshotting/fingerprinting
 ```
 
-## 注意事项
+## Notes
 
-pd 流水线标配件;stdin 进 stdout 出,与其他工具零摩擦对接。
+A standard component of the pd pipeline; stdin in, stdout out, integrates with other tools without friction.

@@ -2,37 +2,41 @@
 name: juumla-joomla-check
 description: "juumla performs quick Joomla checks. Signals: web vulnerability, injection, backup file detection, component detection."
 zh-signals: "juumla: Joomla 快速体检。信号:web漏洞,注入,备份文件探测,组件检测。"
+when-to-use: >-
+  Use when quickly checking a Joomla site for version, vulnerable components,
+  exposed backup files, and readable configuration; point it at the target URL
+  during web enumeration.
 ---
 
 # juumla
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/oppsec/juumla
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/oppsec/juumla
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install juumla
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `juumla -u https://t.com` | Joomla 检测+漏洞扫描 |
-| `-u url --backup-files` | 备份文件探测 |
-| `-u url -c` | 组件检测 |
+| `juumla -u https://t.com` | Joomla detection and vulnerability scan |
+| `-u url --backup-files` | Backup file detection |
+| `-u url -c` | Component detection |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Joomla 快速体检
+### Quick Joomla health check
 
 ```bash
 juumla -u https://t.com
-# 版本/CVE/备份文件/可读配置一次出
+# Version/CVE/backup files/readable configuration in a single run
 ```
 
-## 注意事项
+## Notes
 
-轻量 Joomla 扫描,oppsec 出品。
+Lightweight Joomla scanner from oppsec.

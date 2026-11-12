@@ -2,39 +2,40 @@
 name: botb-container-attack
 description: "botb (Break Out The Box): assesses and escapes containers. Signals: cloud command execution, container escape, static container analysis, specify socket, enumeration only"
 zh-signals: "botb (Break Out The Box): 容器评估+逃逸一体。信号:云命令执行,容器逃逸,静态容器分析,指定 socket,仅枚举。"
+when-to-use: "Use botb when you have a foothold inside a container and need to statically analyze it and attempt escape, including Docker socket and dockerd discovery, during cloud or container engagements."
 ---
 
 # botb (Break Out The Box)
 
-- 攻击大类:C14 云与容器执行
-- 上游仓库:https://github.com/brompwnie/botb
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C14 Cloud and Container Execution
+- Upstream Repository: https://github.com/brompwnie/botb
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
-go install github.com/brompwnie/botb@latest 或 release 二进制
+go install github.com/brompwnie/botb@latest or take the release binary
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `botb -analyze` | 静态容器分析 |
-| `-socketpath /var/run/docker.sock` | 指定 socket |
-| `-recon` | 仅枚举 |
-| `-exploit` | 执行逃逸 |
-| `-findDockerd` | 找 dockerd |
+| `botb -analyze` | Static container analysis |
+| `-socketpath /var/run/docker.sock` | Specify socket |
+| `-recon` | Enumeration only |
+| `-exploit` | Perform escape |
+| `-findDockerd` | Locate dockerd |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 容器评估+逃逸一体
+### Container Assessment and Escape in One Tool
 
 ```bash
-botb -analyze  # 输出: capabilities/挂载/env secret/逃逸可行性评分
+botb -analyze  # Output: capabilities/mounts/env secrets/escape feasibility score
 botb -analyze -exploit
 ```
 
-## 注意事项
+## Notes
 
-Go 单文件方便投递进容器;与 deepce 互补(botb 偏静态分析)。
+A single Go file that is easy to drop into a container; complements deepce (botb focuses on static analysis).

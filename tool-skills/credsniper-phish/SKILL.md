@@ -2,37 +2,41 @@
 name: credsniper-phish
 description: "CredSniper: Phishes OAuth and 2FA credentials. Signals: phishing, social engineering, SSL."
 zh-signals: "CredSniper: OAuth/2FA 钓鱼。信号:钓鱼,社会工程,SSL。"
+when-to-use: >-
+  Use when running an authorized phishing simulation that must capture
+  credentials and relay or bypass 2FA. Supports SSL and mimics a target login
+  URL.
 ---
 
 # CredSniper
 
-- 攻击大类:C08 钓鱼与社会工程
-- 上游仓库:https://github.com/ustayready/CredSniper
-- 上游 License:Apache-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C08 Phishing and Social Engineering
+- Upstream Repository: https://github.com/ustayready/CredSniper
+- Upstream License: Apache-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/ustayready/CredSniper && cd CredSniper && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 credsniper.py --url https://login.microsoftonline.com -p 8443` | 2FA 钓鱼 |
+| `python3 credsniper.py --url https://login.microsoftonline.com -p 8443` | 2FA phishing |
 | `--url u -p port -s` | SSL |
-| `-o out.txt` | 输出 |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### OAuth/2FA 钓鱼
+### OAuth/2FA Phishing
 
 ```bash
 python3 credsniper.py --url https://login.microsoftonline.com
-# 中间人实时转发,过 2FA
+# man-in-the-middle relays in real time to pass 2FA
 ```
 
-## 注意事项
+## Notes
 
-支持 2FA 的钓鱼框架。
+A phishing framework with 2FA support.

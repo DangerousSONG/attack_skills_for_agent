@@ -2,41 +2,44 @@
 name: cariddi-crawler-secrets
 description: "cariddi: Harvests secrets from source code. Signals: API attack, interface testing, cariddi, crawl only without scanning, extension filtering."
 zh-signals: "cariddi: 源码级秘密收割。信号:api攻击,接口测试,cariddi`,只爬不扫描,扩展名过滤。"
+when-to-use: >-
+  Use to crawl targets and harvest secrets such as API keys, tokens, and
+  internal endpoints from source code and responses.
 ---
 
 # cariddi
 
-- 攻击大类:C10 API与业务逻辑攻击
-- 上游仓库:https://github.com/edoardottt/cariddi
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C10 API and Business Logic Attacks
+- Upstream Repository: https://github.com/edoardottt/cariddi
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/edoardottt/cariddi@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `cat hosts.txt | cariddi` | 爬站+秘密提取 |
-| `-s` | 只爬不扫描 |
-| `-e php,jsp` | 扩展名过滤 |
-| `-d 3` | 爬深 |
-| `-i ignore.txt` | 忽略路径 |
-| `-headers` | 输出头 |
-| `-secrets` | 开秘密扫描 |
+| `cat hosts.txt | cariddi` | Crawl the site and extract secrets |
+| `-s` | Crawl only, no scanning |
+| `-e php,jsp` | Extension filtering |
+| `-d 3` | Crawl depth |
+| `-i ignore.txt` | Ignore paths |
+| `-headers` | Output headers |
+| `-secrets` | Enable secret scanning |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 源码级秘密收割
+### Source-Code-Level Secret Harvesting
 
 ```bash
 echo https://target.com | cariddi -s -d 3 | tee urls.txt
-cat urls.txt | cariddi -secrets -headers  # API key/令牌/内部地址提取
+cat urls.txt | cariddi -secrets -headers  # Extract API keys/tokens/internal addresses
 ```
 
-## 注意事项
+## Notes
 
-Go 写的快爬虫,秘密提取正则覆盖 40+ 模式;管道友好。
+A fast crawler written in Go whose secret-extraction regexes cover 40+ patterns; pipeline friendly.

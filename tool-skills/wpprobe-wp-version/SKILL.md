@@ -2,37 +2,38 @@
 name: wpprobe-wp-version
 description: "wpprobe: WP component batch probing. Signals: web vulnerabilities, injection, WP version plus plugin probe, plugin file."
 zh-signals: "wpprobe: WP 组件批量探测。信号:web漏洞,注入,WP 版本+插件探测,插件文件。"
+when-to-use: "Use when probing a WordPress site to identify its version and installed plugins for vulnerability mapping."
 ---
 
 # wpprobe
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/Chocapikk/wpprobe
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/Chocapikk/wpprobe
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install wpprobe
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `wpprobe -u https://t.com` | WP 版本+插件探测 |
-| `-u url -f plugins.txt` | 插件文件 |
-| `-o out.txt` | 输出 |
+| `wpprobe -u https://t.com` | WP version + plugin probing |
+| `-u url -f plugins.txt` | Plugin file |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### WP 组件批量探测
+### Batch WP Component Probing
 
 ```bash
 wpprobe -u https://t.com -f plugins.txt
-# 基于 readme/version 指纹
+# Fingerprinting based on readme/version
 ```
 
-## 注意事项
+## Notes
 
-轻量 WP 探测器,支持插件级版本识别。
+A lightweight WP prober with plugin-level version identification.

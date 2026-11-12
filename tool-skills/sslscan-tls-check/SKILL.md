@@ -2,38 +2,39 @@
 name: sslscan-tls-check
 description: "sslscan audits weak TLS configurations. Signals: cryptographic attack, cryptographic cracking, TLS configuration audit, certificate details, skip cipher enumeration"
 zh-signals: "sslscan: TLS 弱配置审计。信号:密码学攻击,加密破解,TLS 配置审计,证书详情,跳过套件枚举。"
+when-to-use: "Use sslscan when auditing a server's TLS/SSL configuration to identify weak cipher suites, outdated protocol versions, and certificate issues."
 ---
 
 # sslscan
 
-- 攻击大类:C49 密码学攻击
-- 上游仓库:https://github.com/rbsec/sslscan
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C49 Cryptographic Attacks
+- Upstream Repository: https://github.com/rbsec/sslscan
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 apt install sslscan
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `sslscan t.com:443` | TLS 配置审计 |
-| `--show-certificate` | 证书详情 |
-| `--no-ciphersuites` | 跳过套件枚举 |
-| `--xml=out.xml` | XML 输出 |
+| `sslscan t.com:443` | TLS configuration audit |
+| `--show-certificate` | Certificate details |
+| `--no-ciphersuites` | Skip cipher suite enumeration |
+| `--xml=out.xml` | XML output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### TLS 弱配置审计
+### TLS Weak Configuration Audit
 
 ```bash
 sslscan --show-certificate t.com:443
-# 弱套件/协议版本/证书问题
+# Weak cipher suites / protocol versions / certificate issues
 ```
 
-## 注意事项
+## Notes
 
-TLS/SSL 配置审计,识别弱密码套件和过期协议。
+TLS/SSL configuration audit that identifies weak cipher suites and outdated protocols.

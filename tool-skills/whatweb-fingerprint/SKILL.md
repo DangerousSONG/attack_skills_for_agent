@@ -2,40 +2,41 @@
 name: whatweb-fingerprint
 description: "WhatWeb: Batch fingerprint batch scanning. Signals: asset mapping, subdomains, single target fingerprint, aggression level 1-4, JSON log."
 zh-signals: "WhatWeb: 批量指纹批扫。信号:资产测绘,子域名,单目标指纹,侵略等级(1-4),JSON 日志。"
+when-to-use: "Use for asset fingerprinting at scale, identifying web technologies, versions, and plugins on single or many targets."
 ---
 
 # WhatWeb
 
-- 攻击大类:C01 资产测绘与指纹识别
-- 上游仓库:https://github.com/urbanadventurer/WhatWeb
-- 上游 License:LGPL-2.1(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C01 Asset Mapping and Fingerprinting
+- Upstream Repository: https://github.com/urbanadventurer/WhatWeb
+- Upstream License: LGPL-2.1 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
-apt install whatweb 或 git clone + bundle install
+apt install whatweb or git clone + bundle install
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `whatweb target.com` | 单目标指纹 |
-| `-i hosts.txt` | 批量 |
-| `-a 3` | 侵略等级(1-4) |
-| `--log-json out.json` | JSON 日志 |
-| `-v` | 详细 |
-| `--follow-redirect=never` | 不重定向 |
+| `whatweb target.com` | Single target fingerprint |
+| `-i hosts.txt` | Batch |
+| `-a 3` | Aggression level (1-4) |
+| `--log-json out.json` | JSON log |
+| `-v` | Verbose |
+| `--follow-redirect=never` | Do not follow redirects |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 批量指纹批扫
+### Batch Fingerprinting
 
 ```bash
 whatweb -i ips.txt -t 50 --log-json=web.json
-# 从 json 提取插件命中: jq -r '.plugins | keys[]' web.json
+# Extract plugin hits from the JSON: jq -r '.plugins | keys[]' web.json
 ```
 
-## 注意事项
+## Notes
 
-插件式指纹库超 1800 个;侵略等级 3 会触发 WAF,授权边界内用。
+A plugin-based fingerprint database with more than 1800 entries; aggression level 3 may trigger WAFs, so use it within the authorized scope.

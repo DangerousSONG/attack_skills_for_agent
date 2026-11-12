@@ -146,4 +146,4 @@ Test the application's resistance to runtime attacks:
 - **Intent manipulation** (Android): Send crafted intents to exported components: `adb shell am start -n com.target.app/.InternalActivity -e "user_id" "admin"`
 - **Tampering detection**: Modify the APK/IPA (add code, change resources), re-sign, and install. Verify whether the app detects tampering.
 
-> 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。
+> 📎 Detailed content (full examples / references / data tables) has been split into `reference.md` in the same directory; use Read to load the relevant section on demand.

@@ -15,7 +15,7 @@ when-to-use: >-
 Before deep exploitation, you can first load:
 
 - [upload insecure files](../upload-insecure-files/SKILL.md) when the primary attack surface is an upload workflow rather than an include or read primitive
-- [ghost-bits-cast-attack](../ghost-bits-cast-attack/SKILL.md) when the target is a **Java backend** (Spring, Jetty, Undertow, Vert.x) and standard `../`, `%2e%2e`, `%252e` chains are WAF-blocked — Ghost Bits substitutes `.` with `阮` (U+962E) and `/` with `阯` (U+962F), re-enabling traversal through Spring CVE-2025-41242 and Jetty `%2>` hex-folding
+- [ghost-bits-cast-attack](../ghost-bits-cast-attack/SKILL.md) when the target is a **Java backend** (Spring, Jetty, Undertow, Vert.x) and standard `../`, `%2e%2e`, `%252e` chains are WAF-blocked — Ghost Bits substitutes `.` with `\u962E` (U+962E) and `/` with `\u962F` (U+962F), re-enabling traversal through Spring CVE-2025-41242 and Jetty `%2>` hex-folding
 
 ### First-pass traversal chains
 
@@ -144,4 +144,4 @@ C:\ProgramData\MySQL\MySQL Server 8\my.ini  ← MySQL config
 
 ## 4. PHP LFI → RCE TECHNIQUES
 
-> 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。
+> 📎 Detailed content (full examples / references / data tables) has been split into `reference.md` in the same directory; use Read to load the relevant section on demand.

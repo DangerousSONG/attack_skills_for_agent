@@ -2,38 +2,42 @@
 name: apkleaks-endpoint-scan
 description: "APKLeaks: checks mobile app API surface exposure. Signals: attack surface, cloud assets, scan APK endpoints/keys, custom rules, JSON output"
 zh-signals: "APKLeaks: 移动应用 API 面暴露检查。信号:攻击面,云资产,扫 APK 端点/密钥,自定义规则,JSON 输出。"
+when-to-use: >-
+  Use when assessing the external attack surface of a mobile app; decompile an
+  APK to extract hardcoded endpoints, URLs, and keys, optionally with custom
+  rules and JSON output.
 ---
 
 # APKLeaks
 
-- 攻击大类:C05 外部攻击面与云资产暴露
-- 上游仓库:https://github.com/dwisiswant0/apkleaks
-- 上游 License:Apache-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C05 External Attack Surface and Cloud Asset Exposure
+- Upstream Repository: https://github.com/dwisiswant0/apkleaks
+- Upstream License: Apache-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install apkleaks
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `apkleaks -f app.apk` | 扫 APK 端点/密钥 |
-| `-p rules.json` | 自定义规则 |
-| `-o out.json` | JSON 输出 |
-| `--json` | 强制 JSON |
+| `apkleaks -f app.apk` | Scan APK endpoints and keys |
+| `-p rules.json` | Custom rules |
+| `-o out.json` | JSON output |
+| `--json` | Force JSON output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 移动应用 API 面暴露检查
+### Mobile app API surface exposure check
 
 ```bash
 apkleaks -f target-app.apk -o leaks.json
-jq -r '.endpoints[]' leaks.json | sort -u  # 未公开 API/测试域名/硬编码 key
+jq -r '.endpoints[]' leaks.json | sort -u  # Undisclosed APIs, test domains, and hardcoded keys
 ```
 
-## 注意事项
+## Notes
 
-反编译 APK 提取 URL/endpoint/key;移动端的'git 泄露'级常送分。
+Decompiles the APK to extract URLs, endpoints, and keys; on mobile targets this often hands you points for free.

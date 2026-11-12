@@ -2,7 +2,8 @@
 name: osint-methodology
 description: "Six-stage OSINT recon methodology: seed, asset expansion, enrichment, exposure analysis, convergence, limited active validation; includes severity, identity mapping, time budget, deliverables. Signals: OSINT methodology, recon pipeline, attack surface assessment, intelligence workflow."
 zh-signals: "六阶段 OSINT 侦察方法论管线:种子→资产扩展→增强→暴露分析→收敛→有限主动验证,含严重度分级、身份面测绘、时间预算与交付模板。信号:osint方法论,侦察管线,攻击面评估,情报工作流。"
-when-to-use: "Comprehensive OSINT methodology for external red-team operations and authorized attack-surface assessments. Covers the 6-stage recon pipeline (seed → asset expansion → enrichment → exposure analysis 
+when-to-use: >-
+  Comprehensive OSINT methodology for external red-team operations and authorized attack-surface assessments. Covers the 6-stage recon pipeline (seed → asset expansion → enrichment → exposure analysis
 version: 2.3
 sources: community, public_research
 triggers:
@@ -144,4 +145,4 @@ Always use UTC timestamps.
 
 ---
 
-> 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。
+> 📎 Detailed content (full examples / references / data tables) has been split into `reference.md` in the same directory; use Read to load the relevant section on demand.

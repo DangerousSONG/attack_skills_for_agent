@@ -2,39 +2,42 @@
 name: ike-scan-vpn-enum
 description: "ike-scan probes VPN gateways and cracks PSKs. Signals: port scan, nmap, IKE service discovery and fingerprinting, readable multiline output."
 zh-signals: "ike-scan: VPN 网关探测+PSK 破解。信号:端口扫描,nmap,IKE 服务发现+指纹,多行输出(易读)。"
+when-to-use: >-
+  Use when enumerating IPsec/IKE VPN gateways for service fingerprinting and
+  capturing aggressive-mode PSK hashes for offline cracking.
 ---
 
 # ike-scan
 
-- 攻击大类:C42 网络服务枚举
-- 上游仓库:https://github.com/royhills/ike-scan
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C42 Network Service Enumeration
+- Upstream Repository: https://github.com/royhills/ike-scan
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 apt install ike-scan
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `ike-scan 10.0.0.1` | IKE 服务发现+指纹 |
-| `-M` | 多行输出(易读) |
-| `-A` |  aggressive 模式组名枚举 |
-| `-P` | PSK 抓取(hashcat -m 5400 破) |
-| `-n payload.txt` | 自定义 transform |
+| `ike-scan 10.0.0.1` | IKE service discovery and fingerprinting |
+| `-M` | Multiline output (easy to read) |
+| `-A` | Aggressive mode group name enumeration |
+| `-P` | PSK capture (crack with hashcat -m 5400) |
+| `-n payload.txt` | Custom transform |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### VPN 网关探测+PSK 破解
+### VPN Gateway Probing and PSK Cracking
 
 ```bash
 ike-scan -M -A 10.0.0.1
-# 出 IKE 指纹+AGGRESSIVE 模式握手哈希,hashcat -m 5400 破 PSK
+# Outputs the IKE fingerprint plus AGGRESSIVE mode handshake hashes, crack the PSK with hashcat -m 5400
 ```
 
-## 注意事项
+## Notes
 
-IPsec/IKE VPN 探测标准工具,aggressive 模式抓 PSK 哈希离线破解。
+The standard tool for IPsec/IKE VPN probing, capturing PSK hashes in aggressive mode for offline cracking.

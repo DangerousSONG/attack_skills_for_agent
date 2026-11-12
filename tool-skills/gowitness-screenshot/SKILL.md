@@ -2,38 +2,39 @@
 name: gowitness-screenshot
 description: "gowitness visualizes assets for triage and fingerprinting. Signals: asset mapping, subdomains, single URL screenshot and fingerprint, bulk screenshots, result browsing service."
 zh-signals: "gowitness: 资产可视化核查(先看脸再决定打谁)。信号:资产测绘,子域名,单 URL 截图+指纹,批量截图,启动结果浏览服务。"
+when-to-use: "Use during asset mapping to screenshot and fingerprint single or bulk URLs for visual triage and deciding what to attack. Requires httpx-style URL input and stores results in SQLite for browsing."
 ---
 
 # gowitness
 
-- 攻击大类:C01 资产测绘与指纹识别
-- 上游仓库:https://github.com/sensepost/gowitness
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C01 Asset Mapping and Fingerprinting
+- Upstream Repository: https://github.com/sensepost/gowitness
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/sensepost/gowitness@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `gowitness scan --url https://target.com` | 单 URL 截图+指纹 |
-| `file -f urls.txt --threads 20` | 批量截图 |
-| `server` | 启动结果浏览服务 |
-| `report export -f csv` | 导出报告 |
+| `gowitness scan --url https://target.com` | Single URL screenshot plus fingerprint |
+| `file -f urls.txt --threads 20` | Bulk screenshots |
+| `server` | Start the result browsing service |
+| `report export -f csv` | Export report |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 资产可视化核查(先看脸再决定打谁)
+### Visual asset triage (look before you decide who to attack)
 
 ```bash
 naabu -host target.com -top-ports 1000 | httpx | gowitness file -f - --threads 30
-gowitness server  # 浏览器翻截图挑管理后台
+gowitness server  # Browse the screenshots to pick admin panels
 ```
 
-## 注意事项
+## Notes
 
-Chrome headless 截图入库(SQLite),配 httpx 管道效果最佳。
+Headless Chrome screenshots stored in SQLite, works best paired with an httpx pipeline.

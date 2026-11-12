@@ -2,40 +2,44 @@
 name: knockpy-subdomain
 description: "Knock enumerates subdomains and detects takeovers. Signals: subdomain, domain enumeration, passive and dictionary enumeration, custom dictionary, brute-only mode."
 zh-signals: "Knock: 子域枚举+接管检测。信号:子域名,域名枚举,被动+字典枚举,自定义字典,纯爆破模式。"
+when-to-use: >-
+  Use when enumerating subdomains and checking for subdomain takeover; choose
+  passive-plus-dictionary mode or brute-force mode and supply a custom wordlist
+  if needed.
 ---
 
 # Knock
 
-- 攻击大类:C02 域名与DNS侦察
-- 上游仓库:https://github.com/guelfoweb/knock
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C02 Domain and DNS Reconnaissance
+- Upstream Repository: https://github.com/guelfoweb/knock
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install knockpy
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `knockpy target.com` | 被动+字典枚举 |
-| `-w wordlist.txt` | 自定义字典 |
-| `--bruteforce` | 纯爆破模式 |
-| `-o json` | JSON 输出 |
-| `--resolve` | 解析验证 |
-| `-t 5` | 线程 |
+| `knockpy target.com` | Passive + dictionary enumeration |
+| `-w wordlist.txt` | Custom wordlist |
+| `--bruteforce` | Brute-force only mode |
+| `-o json` | JSON output |
+| `--resolve` | Resolution verification |
+| `-t 5` | Threads |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 子域枚举+接管检测
+### Subdomain Enumeration + Takeover Detection
 
 ```bash
 knockpy corp.com -o json
-jq -r '.subdomains[] | select(.zone_transfer==true)' report/*.json  # zone transfer 直接通关
+jq -r '.subdomains[] | select(.zone_transfer==true)' report/*.json  # zone transfer solves it outright
 ```
 
-## 注意事项
+## Notes
 
-内置接管(three/others)检测;发现 zone transfer 时直接输出全部区域。
+Built-in takeover detection (three/others); when a zone transfer is found it dumps all zones directly.

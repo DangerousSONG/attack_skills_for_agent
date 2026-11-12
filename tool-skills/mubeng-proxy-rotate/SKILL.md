@@ -2,37 +2,38 @@
 name: mubeng-proxy-rotate
 description: "mubeng: Proxy pool rotation and load balancing. Signals: internal network penetration, tunnel, proxy rotation, rotation interval, detect proxies."
 zh-signals: "mubeng: 代理池轮换负载均衡。信号:内网穿透,隧道,代理轮换,轮换间隔,检测代理。"
+when-to-use: "Use during internal penetration or tunneling when requests must rotate through a proxy pool with health checking and load balancing. Requires a list of proxies and a rotation interval."
 ---
 
 # mubeng
 
-- 攻击大类:C32 隧道与内网穿透
-- 上游仓库:https://github.com/kitabisa/mubeng
-- 上游 License:Apache-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C32 Tunneling and Internal Network Pivoting
+- Upstream Repository: https://github.com/kitabisa/mubeng
+- Upstream License: Apache-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/kitabisa/mubeng@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `mubeng -f proxies.txt -a localhost:8080` | 代理轮换 |
-| `-f p.txt -r 10` | 轮换间隔 |
-| `-m` | 检测代理 |
+| `mubeng -f proxies.txt -a localhost:8080` | Proxy rotation |
+| `-f p.txt -r 10` | Rotation interval |
+| `-m` | Detect proxies |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 代理池轮换负载均衡
+### Proxy pool rotation with load balancing
 
 ```bash
 mubeng -f proxies.txt -a 127.0.0.1:8080
-# 大量请求分散出口
+# Spread large request volumes across egress points
 ```
 
-## 注意事项
+## Notes
 
-Go 代理池,自动轮换+健康检查。
+Go proxy pool with automatic rotation and health checking.

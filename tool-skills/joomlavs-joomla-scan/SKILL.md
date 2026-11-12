@@ -2,38 +2,41 @@
 name: joomlavs-joomla-scan
 description: "joomlavs scans Joomla component vulnerabilities. Signals: web vulnerability, injection, Joomla scan, component enumeration, all components."
 zh-signals: "joomlavs: Joomla 组件漏洞扫描。信号:web漏洞,注入,Joomla 扫描,组件枚举,全组件。"
+when-to-use: >-
+  Use when targeting a Joomla site and you need to enumerate installed components and compare
+  them against a vulnerability database.
 ---
 
 # joomlavs
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/rastating/joomlavs
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/rastating/joomlavs
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/rastating/joomlavs && gem install bundler && bundle install
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `ruby joomlavs.rb -u https://t.com` | Joomla 扫描 |
-| `-u url --components` | 组件枚举 |
-| `-u url -a` | 全组件 |
-| `-o out.txt` | 输出 |
+| `ruby joomlavs.rb -u https://t.com` | Joomla scan |
+| `-u url --components` | Component enumeration |
+| `-u url -a` | All components |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Joomla 组件漏洞扫描
+### Joomla component vulnerability scanning
 
 ```bash
 ruby joomlavs.rb -u https://t.com -a
-# 组件漏洞库比对
+# Compare components against the vulnerability database
 ```
 
-## 注意事项
+## Notes
 
-Joomla 漏洞扫描器,组件级漏洞库。
+Joomla vulnerability scanner with a component-level vulnerability database.

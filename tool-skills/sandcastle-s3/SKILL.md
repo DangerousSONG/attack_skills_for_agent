@@ -2,37 +2,41 @@
 name: sandcastle-s3
 description: "sandcastle: Brute-forces S3 bucket names. Signals: attack surface, cloud assets, S3 bucket discovery, dictionary."
 zh-signals: "sandcastle: S3 桶名爆破。信号:攻击面,云资产,S3 bucket 发现,字典。"
+when-to-use: >-
+  Use when hunting cloud assets and you need to brute-force S3 bucket names from
+  a target keyword and naming patterns; supports custom dictionaries and output
+  files.
 ---
 
 # sandcastle
 
-- 攻击大类:C05 外部攻击面与云资产暴露
-- 上游仓库:https://github.com/0xSearches/sandcastle
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C05 External Attack Surface and Cloud Asset Exposure
+- Upstream Repository: https://github.com/0xSearches/sandcastle
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/0xSearches/sandcastle
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 sandcastle.py -t corp` | S3 bucket 发现 |
-| `-t target -b buckets.txt` | 字典 |
-| `-o out.txt` | 输出 |
+| `python3 sandcastle.py -t corp` | S3 bucket discovery |
+| `-t target -b buckets.txt` | Wordlist |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### S3 桶名爆破
+### S3 Bucket Name Brute Force
 
 ```bash
 python3 sandcastle.py -t corp
-# 常见命名规律遍历
+# Iterate over common naming patterns
 ```
 
-## 注意事项
+## Notes
 
-S3 bucket 轻量枚举。
+Lightweight S3 bucket enumeration.

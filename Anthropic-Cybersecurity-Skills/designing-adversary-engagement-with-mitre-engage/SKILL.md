@@ -2,18 +2,8 @@
 name: designing-adversary-engagement-with-mitre-engage
 description: "Design adversary engagement using MITRE Engage. Signals: red team, methodology, penetration testing process."
 zh-signals: "Designing Adversary Engagement with MITRE Engage 信号:红队,方法论,渗透流程。"
-when-to-use: Designing Adversary Engagement with MITRE Engage
-  Plan, run, and measure an adversary engagement operation using the MITRE Engage
-  framework so that deployed deception is driven by strategy instead of deployed ad hoc.
-  Covers the Engage Matrix (Prepare, Expose, Affect, Elicit, Understand), the 10-Step
-  Operational Process, mapping engagement Activities to the ATT&CK techniques they
-  expose, and defining measurable Goals and Operational Objectives. Use when a team has
-  honeypots, honeytokens, or canary tokens but no coordinating strategy, when leadership
-  asks "should we engage attackers and how", when building a deception/denial program,
-  when writing an adversary engagement operation plan, or when deciding which deception
-  Activities to deploy against a specific threat actor. Keywords: MITRE Engage, adversary
-  engagement, cyber deception strategy, denial and deception, Engage Matrix, EAC, EGO,
-  Expose Affect Elicit, deception program, honeypot strategy, engagement operation.
+when-to-use: >-
+  Designing Adversary Engagement with MITRE Engage Plan, run, and measure an adversary engagement operation using the MITRE Engage framework so that deployed deception is driven by strategy instead of deployed ad hoc. Covers the Engage Matrix (Prepare, Expose, Affect, Elicit, Understand), the 10-Step Operational Process, mapping engagement Activities to the ATT&CK techniques they expose, and defining measurable Goals and Operational Objectives. Use when a team has honeypots, honeytokens, or canary tokens but no coordinating strategy, when leadership asks "should we engage attackers and how", when building a deception/denial program, when writing an adversary engagement operation plan, or when deciding which deception Activities to deploy against a specific threat actor. Keywords: MITRE Engage, adversary engagement, cyber deception strategy, denial and deception, Engage Matrix, EAC, EGO, Expose Affect Elicit, deception program, honeypot strategy, engagement operation.
 domain: cybersecurity
 subdomain: deception-technology
 tags:
@@ -102,7 +92,7 @@ For each technique your target adversary uses, find the Engage Activity that exp
 Pull the authoritative Activity list and IDs from the live matrix; Engage IDs use the prefixes **SGO/EGO** (Goals), **SAP/EAP** (Approaches), and **SAC/EAC** (Activities).
 
 ### 5. Design the engagement environment
-Decide realism and isolation. Choose between standalone, connected, or integrated decoy environments (see D3FEND honeynet types in `standards.md`（未随库分发）). Populate it with diverse, believable artifacts — Persona Creation, Pocket Litter, Artifact Diversity, Application Diversity — so the environment survives adversary scrutiny.
+Decide realism and isolation. Choose between standalone, connected, or integrated decoy environments (see D3FEND honeynet types in `standards.md` (not distributed with this library)). Populate it with diverse, believable artifacts — Persona Creation, Pocket Litter, Artifact Diversity, Application Diversity — so the environment survives adversary scrutiny.
 
 ### 6. Define gating criteria and rules of engagement
 Document, before deployment: what the adversary is allowed to reach, the maximum blast radius, the trigger for tear-down or hand-off to IR, evidence preservation steps, and who has authority to escalate. **Affect Activities are limited to the defender's own network** — never act on infrastructure you do not own.
@@ -151,7 +141,7 @@ Score the operation against the Operational Objectives from Step 2. Capture what
 
 ## Output Format
 
-Produce an **Adversary Engagement Operation Plan** using `template.md`（未随库分发）, containing:
+Produce an **Adversary Engagement Operation Plan** using `template.md` (not distributed with this library), containing:
 
 1. **Strategic context** — where DD&AE fits the cyber strategy; executive sponsor; legal sign-off reference.
 2. **Engagement Goals + Operational Objectives** — each objective falsifiable and time-bound.
@@ -164,4 +154,4 @@ Produce an **Adversary Engagement Operation Plan** using `template.md`（未随�
 
 Use `scripts/process.py` to validate technique→Activity coverage and generate the operation-plan skeleton from a threat-model input.
 
-> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`standards.md`、`template.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。
+> 📎 **Reference Document Notice**: this skill is adapted from an upstream open-source repository; the following reference documents are **not distributed with this library**: `standards.md`, `template.md`. The key points of the related topics are retained in the corresponding descriptions in this document; if you need the expanded content, grep the library using keywords from the body text or search on your own.

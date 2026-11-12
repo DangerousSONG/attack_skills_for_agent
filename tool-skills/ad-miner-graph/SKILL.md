@@ -2,39 +2,42 @@
 name: ad-miner-graph
 description: "AD Miner: visualizes BloodHound data and rates risk. Signals: ad attack, domain pentest, control path graph generation, control path depth, direct DC collection"
 zh-signals: "AD Miner: BH 数据可视化风险评级。信号:ad攻击,域渗透,生成控制路径图,控制路径层数,直接连域控采集。"
+when-to-use: >-
+  Use after collecting BloodHound data in an Active Directory assessment to
+  visualize attack paths, rate risk, and compute control paths to Domain Admin.
 ---
 
 # AD Miner
 
-- 攻击大类:C30 AD与横向移动
-- 上游仓库:https://github.com/Mazars-Tech/AD_Miner
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C30 AD and Lateral Movement
+- Upstream Repository: https://github.com/Mazars-Tech/AD_Miner
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install ad-miner
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `AD-miner -b mycontext -u neo4j -p pass` | 从 BloodHound 数据生成风险图 |
-| `-c -cf mycontext` | 生成控制路径图 |
-| `-l 3` | 控制路径层数 |
-| `-d 10.0.0.1` | 直接连域控采集 |
+| `AD-miner -b mycontext -u neo4j -p pass` | Generate a risk graph from BloodHound data |
+| `-c -cf mycontext` | Generate the control path graph |
+| `-l 3` | Control path depth |
+| `-d 10.0.0.1` | Collect directly from the domain controller |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### BH 数据可视化风险评级
+### BH Data Visualization and Risk Rating
 
 ```bash
 bloodhound-python -u svc -p pass -d corp.local -c All
 AD-miner -b context -u neo4j -p pass
-# 得到风险评分图,展示 tier0 资产暴露面
+# Obtain a risk score graph that shows the tier0 asset exposure surface
 ```
 
-## 注意事项
+## Notes
 
-Mazars 出品,消费 BloodHound 数据库生成 AD 风险的图形化评级报告。
+By Mazars, consumes a BloodHound database to produce a graphical risk rating report for Active Directory.

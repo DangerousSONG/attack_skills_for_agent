@@ -2,37 +2,38 @@
 name: mentalist-wordlist
 description: "Mentalist: GUI dictionary factory. Signals: password cracking, hash cracking, visual dictionary generation, mutation."
 zh-signals: "Mentalist: GUI 字典工厂。信号:密码破解,哈希破解,可视化字典生成,变异。"
+when-to-use: "Use when interactively building a targeted password dictionary with mutations for cracking engagements."
 ---
 
 # Mentalist
 
-- 攻击大类:C25 哈希与密码破解
-- 上游仓库:https://github.com/sc0tfree/mentalist
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C25 Hash and Password Cracking
+- Upstream Repository: https://github.com/sc0tfree/mentalist
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/sc0tfree/mentalist && cd mentalist && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 mentalist.py` | 可视化字典生成 |
-| `-w base.txt -m 'A1@'` | 变异 |
-| `-o out.txt` | 输出 |
+| `python3 mentalist.py` | Visual dictionary generation |
+| `-w base.txt -m 'A1@'` | Mutation |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### GUI 字典工厂
+### GUI Dictionary Factory
 
 ```bash
 python3 mentalalist.py
-# 交互构建高命中字典
+# Interactively build a high-hit-rate dictionary
 ```
 
-## 注意事项
+## Notes
 
-可视化密码字典生成器。
+A visual password dictionary generator.

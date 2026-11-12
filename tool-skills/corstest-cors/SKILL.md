@@ -2,37 +2,38 @@
 name: corstest-cors
 description: "CORStest: Validates CORS configurations. Signals: web vulnerability, injection, CORS testing, batch."
 zh-signals: "CORStest: CORS 配置验证。信号:web漏洞,注入,CORS 测试,批量。"
+when-to-use: "Use CORStest when validating a web application's CORS configuration, singly or in batch, to detect permissive cross-origin policies that could enable data theft."
 ---
 
 # CORStest
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/RUB-NDS/CORStest
-- 上游 License:GPL-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/RUB-NDS/CORStest
+- Upstream License: GPL-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/RUB-NDS/CORStest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python corstest.py -u https://t.com` | CORS 测试 |
-| `-u url -i urls.txt` | 批量 |
-| `-o out.txt` | 输出 |
+| `python corstest.py -u https://t.com` | CORS testing |
+| `-u url -i urls.txt` | Batch |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### CORS 配置验证
+### CORS Configuration Validation
 
 ```bash
 python corstest.py -u https://t.com
-# RUB-NDS 学术研究背书
+# Backed by RUB-NDS academic research
 ```
 
-## 注意事项
+## Notes
 
-学术级 CORS 测试工具,检测 9 种配置错误。
+An academic-grade CORS testing tool that detects 9 kinds of misconfiguration.

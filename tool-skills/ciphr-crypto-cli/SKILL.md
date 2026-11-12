@@ -2,37 +2,39 @@
 name: ciphr-crypto-cli
 description: "ciphr: Performs cryptographic operations from the command line. Signals: cryptographic attack, encryption cracking, ciphr --hex, hash calculation, AES decryption."
 zh-signals: "ciphr: 命令行密码学运算。信号:密码学攻击,加密破解,ciphr --hex`,哈希计算,AES 解密。"
+when-to-use: >-
+  Use when you need quick command-line encoding, decoding, hashing or AES encryption and decryption during penetration testing without writing scripts.
 ---
 
 # ciphr
 
-- 攻击大类:C49 密码学攻击
-- 上游仓库:https://github.com/frohoff/ciphr
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C49 Cryptographic Attacks
+- Upstream Repository: https://github.com/frohoff/ciphr
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 gem install ciphr
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `echo 'hello' | ciphr --hex` | 编码转换 |
-| `ciphr 'sha256(secret)'` | 哈希计算 |
-| `ciphr 'aes128cbc(key).decrypt(data)'` | AES 解密 |
+| `echo 'hello' | ciphr --hex` | Encoding conversion |
+| `ciphr 'sha256(secret)'` | Hash calculation |
+| `ciphr 'aes128cbc(key).decrypt(data)'` | AES decryption |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 命令行密码学运算
+### Command-line cryptographic operations
 
 ```bash
 echo 'ZGV2' | ciphr --base64 -d
-# 渗透中快速编解码
+# Fast encode/decode during a pentest
 ```
 
-## 注意事项
+## Notes
 
-Ruby 密码学 CLI,编码/哈希/加密一体。
+Ruby cryptographic CLI combining encoding, hashing and encryption.
