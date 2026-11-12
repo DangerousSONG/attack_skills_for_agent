@@ -1,8 +1,12 @@
 name: skill-base-sync
 
 # main 上的 skill 底座（见 SYNC-RULES.md 第一节）变更后，
-# 自动向各方案分支开同步 PR。方案分支负责人合并；
-# 冲突 = 有人在方案分支直接改了底座（违反 SYNC-RULES 铁律 1/2），以 main 为准。
+# 自动向各方案分支开同步 PR。方案分支负责人合并。
+# 冲突分流（对应 SYNC-RULES 两条铁律）：
+#   底座路径冲突 → 以 main 为准（铁律 2：方案分支不得改底座）；
+#   方案层冲突   → 以方案分支为准（铁律 3：方案层互不同步），
+#   全库合并时最常见的冲突就是各分支自己的 router/README，属此类，自动消解后继续开 PR。
+# 只有连"取 main 版底座"都无法完成的异常（如文件名带空格/二进制冲突）才转 issue。
 
 on:
   workflow_dispatch:
@@ -49,12 +53,46 @@ jobs:
           git config user.name "skill-base-sync[bot]"
           git config user.email "skill-base-sync[bot]@users.noreply.github.com"
           git fetch origin main
-          if ! git merge origin/main --no-edit; then
-            echo "merged=false" >> "$GITHUB_OUTPUT"
-            git merge --abort || true
+
+          # 底座路径正则（与 SYNC-RULES.md 第一节一致）；命中即铁律 2 范围
+          BASE_RE='^(Anthropic-Cybersecurity-Skills|Claude-OSINT|Claude-Red-pentest-set|awesome-ai-security|awesome-web3-security|ctf-skills|hack-skills|offensive-claude|pentest-ai-agents|yak-skills|tool-skills|extra-skill)/|^INDEX\.md$|^攻击侧Skills清单\.csv$'
+
+          if git merge origin/main --no-edit; then
+            # 合并后与方案分支无差异（快进/已同步）→ 无事可做
+            if git diff --quiet ${{ matrix.branch }}; then
+              echo "merged=noop" >> "$GITHUB_OUTPUT"
+            else
+              echo "merged=true" >> "$GITHUB_OUTPUT"
+            fi
             exit 0
           fi
-          # 合并后与方案分支无差异（快进/已同步）→ 无事可做
+
+          # ---- 有冲突：按路径分流消解 ----
+          CONFLICTS=$(git diff --name-only --diff-filter=U)
+          BASE_CONFLICTS=$(echo "$CONFLICTS" | grep -E "$BASE_RE" || true)
+          PLAN_CONFLICTS=$(echo "$CONFLICTS" | grep -vE "$BASE_RE" || true)
+
+          if [ -n "$BASE_CONFLICTS" ]; then
+            echo "底座路径冲突（铁律2取main版）: $BASE_CONFLICTS" >&2
+            echo "$BASE_CONFLICTS" | while IFS= read -r f; do
+              git checkout --theirs -- "$f" && git add -- "$f"
+            done
+          fi
+          if [ -n "$PLAN_CONFLICTS" ]; then
+            echo "方案层冲突（取本分支版）: $PLAN_CONFLICTS" >&2
+            echo "$PLAN_CONFLICTS" | while IFS= read -r f; do
+              git checkout --ours -- "$f" && git add -- "$f"
+            done
+          fi
+
+          if git diff --name-only --diff-filter=U | grep -q .; then
+            # 仍有未消解冲突（异常情况）→ 转 issue
+            git merge --abort || true
+            echo "merged=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          git commit --no-edit
           if git diff --quiet ${{ matrix.branch }}; then
             echo "merged=noop" >> "$GITHUB_OUTPUT"
           else
