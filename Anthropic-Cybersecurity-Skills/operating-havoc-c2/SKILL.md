@@ -148,4 +148,4 @@ Run the team server with your profile (privileged ports may require sudo):
 # Verbose run with a custom profile
 ./havoc server --profile profiles/engagement.yaotl -v
 
-> 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。
+> 📎 Detailed content (full examples / references / data tables) has been split into `reference.md` in the same directory; use Read to load the relevant section on demand.

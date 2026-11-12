@@ -31,7 +31,7 @@ When input can reflect into DOM or framework routing, pair with `alert(1)` / `co
 #__proto__[xxx]=alert(1)
 ```
 
-### Server-side first probes（JSON / form）
+### Server-side first probes (JSON / form)
 
 ```json
 {"__proto__":{"polluted":true}}

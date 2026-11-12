@@ -2,38 +2,42 @@
 name: hexstrike-ai
 description: "HexStrike-AI uses LLMs to assist penetration testing. Signals: AI security, LLM attack, AI-assisted pentest, modules, AI analysis."
 zh-signals: "HexStrike-AI: LLM 辅助渗透测试。信号:ai安全,大模型攻击,AI 辅助渗透,模块,AI 分析。"
+when-to-use: >-
+  Use when you want an LLM-driven penetration testing assistant to plan and
+  generate attack commands for a target. Requires the target URL or domain and
+  optionally specifies a module or enables AI analysis.
 ---
 
 # HexStrike-AI
 
-- 攻击大类:C44 AI与大模型安全
-- 上游仓库:https://github.com/0x4m4/hexstrike-ai
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C44 AI and LLM Security
+- Upstream Repository: https://github.com/0x4m4/hexstrike-ai
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/0x4m4/hexstrike-ai && cd hexstrike-ai && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 hexstrike.py -t 'https://t.com'` | AI 辅助渗透 |
-| `-t url -m nmap` | 模块 |
-| `-t url -ai` | AI 分析 |
-| `-o out.txt` | 输出 |
+| `python3 hexstrike.py -t 'https://t.com'` | AI-assisted pentest |
+| `-t url -m nmap` | Module |
+| `-t url -ai` | AI analysis |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### LLM 辅助渗透测试
+### LLM-assisted penetration testing
 
 ```bash
 python3 hexstrike.py -t corp.com
-# 多 agent AI 渗透,自动生成命令
+# Multi-agent AI pentest that generates commands automatically
 ```
 
-## 注意事项
+## Notes
 
-AI 驱动的渗透测试助手。
+AI-driven penetration testing assistant.

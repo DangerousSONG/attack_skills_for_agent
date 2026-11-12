@@ -2,38 +2,39 @@
 name: v3n0m-sql-xss
 description: "V3n0M-Scanner: Multi-vulnerability batch scanning. Signals: web vulnerabilities, injection, dork scan, SSRF patterns, XSS patterns."
 zh-signals: "V3n0M-Scanner: 多漏洞批量扫描。信号:web漏洞,注入,dork 扫描,SSRF 模式,XSS 模式。"
+when-to-use: "Use when batch-scanning web targets or dork results for SQLi, XSS, SSRF, and LFI at once during early vulnerability triage. Requires a dork or URL list and the Python dependencies installed."
 ---
 
 # V3n0M-Scanner
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/v3n0m-Scanner/V3n0M-Scanner
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/v3n0m-Scanner/V3n0M-Scanner
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/v3n0m-Scanner/V3n0M-Scanner && cd V3n0M-Scanner && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 v3n0m.py -d 'dork' -p 10` | dork 扫描 |
-| `-s 'dork' -x ssrf` | SSRF 模式 |
-| `-s dork -x xss` | XSS 模式 |
-| `-f out.txt` | 输出 |
+| `python3 v3n0m.py -d 'dork' -p 10` | Dork scan |
+| `-s 'dork' -x ssrf` | SSRF pattern |
+| `-s dork -x xss` | XSS pattern |
+| `-f out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 多漏洞批量扫描
+### Multi-vulnerability batch scanning
 
 ```bash
 python3 v3n0m.py -d 'inurl:php?id=' -p 20
-# SQLi/XSS/SSRF/LFI 四合一
+# SQLi/XSS/SSRF/LFI all in one
 ```
 
-## 注意事项
+## Notes
 
-老牌批量漏洞扫描,支持 6 种漏洞类型。
+A long-standing batch vulnerability scanner, supporting 6 vulnerability types.

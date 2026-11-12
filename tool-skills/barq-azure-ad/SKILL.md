@@ -2,37 +2,38 @@
 name: barq-azure-ad
 description: "barq: sprays Azure AD passwords. Signals: brute force, password spraying, Azure AD spraying, conditional access probing"
 zh-signals: "barq: Azure AD 密码喷洒。信号:暴力破解,口令喷射,Azure AD 喷洒,条件访问探测。"
+when-to-use: "Use barq when performing password spraying against Azure AD accounts and probing conditional access policies, to identify valid cloud credentials for a domain."
 ---
 
 # barq
 
-- 攻击大类:C28 暴力破解与口令喷射
-- 上游仓库:https://github.com/Voulnet/barq
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C28 Brute Force and Password Spraying
+- Upstream Repository: https://github.com/Voulnet/barq
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install barq
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `barq -u user@corp.com -p pass.txt` | Azure AD 喷洒 |
-| `-u u -p p -c` | 条件访问探测 |
-| `-o out.txt` | 输出 |
+| `barq -u user@corp.com -p pass.txt` | Azure AD spraying |
+| `-u u -p p -c` | Conditional access probing |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Azure AD 密码喷洒
+### Azure AD Password Spraying
 
 ```bash
 barq -u admin@corp.com -p top100.txt
-# 智能识别条件访问
+# Smart conditional access detection
 ```
 
-## 注意事项
+## Notes
 
-Azure AD 喷洒工具。
+An Azure AD spraying tool.

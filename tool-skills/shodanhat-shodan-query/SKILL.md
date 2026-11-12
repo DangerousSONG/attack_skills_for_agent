@@ -2,38 +2,42 @@
 name: shodanhat-shodan-query
 description: "ShodanHat: batch Shodan asset harvesting. Signals: network topology, internet mapping, certificate matching, combined filters."
 zh-signals: "ShodanHat: Shodan 批量资产收割。信号:网络拓扑,互联网测绘,证书匹配,组合过滤。"
+when-to-use: >-
+  Use during internet-facing asset discovery when you have a Shodan API key and
+  want to run bulk queries by org, SSL certificate, product, or country and
+  export the results for source-site and admin panel mapping.
 ---
 
 # ShodanHat
 
-- 攻击大类:C04 网络拓扑测绘
-- 上游仓库:https://github.com/HatBashBR/ShodanHat
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C04 Network Topology Mapping
+- Upstream Repository: https://github.com/HatBashBR/ShodanHat
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/HatBashBR/ShodanHat && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python ShodanHat.py -k $KEY -q 'org:Target'` | Shodan 搜索+结果落库 |
-| `-q 'ssl:corp.com'` | 证书匹配 |
-| `-q 'product:Apache' --country BR` | 组合过滤 |
-| `-o out.txt` | 输出 |
+| `python ShodanHat.py -k $KEY -q 'org:Target'` | Shodan search + write results to database |
+| `-q 'ssl:corp.com'` | Certificate matching |
+| `-q 'product:Apache' --country BR` | Combined filters |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Shodan 批量资产收割
+### Batch Shodan Asset Harvesting
 
 ```bash
 python ShodanHat.py -k KEY -q 'hostname:corp.com 200 OK'
-# 绕过 CDN 直打源站/管理后台
+# Bypass the CDN to hit origin servers and admin panels directly
 ```
 
-## 注意事项
+## Notes
 
-Shodan 查询封装+结果导出,附批量 IP 处理,配合 API key 做企业资产普查。
+A Shodan query wrapper with result export and bulk IP handling, useful with an API key for corporate asset inventories.

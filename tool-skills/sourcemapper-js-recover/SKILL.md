@@ -2,36 +2,40 @@
 name: sourcemapper-js-recover
 description: "sourcemapper: restores JS source to mine secrets. Signals: web vulnerability, injection, download and restore JS source, local map file."
 zh-signals: "sourcemapper: JS 源码还原挖密钥。信号:web漏洞,注入,下载并还原 JS 源码,本地 map 文件。"
+when-to-use: >-
+  Use when a JS bundle references a source map and you want to recover the
+  original source to mine secrets and internal endpoints. Accepts a remote
+  .map URL or a local map file.
 ---
 
 # sourcemapper
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/denandz/sourcemapper
-- 上游 License:BSD-3-Clause(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/denandz/sourcemapper
+- Upstream License: BSD-3-Clause (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/denandz/sourcemapper@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `sourcemapper -output dir 'https://t.com/static/js/app.js.map'` | 下载并还原 JS 源码 |
-| `-output dir app.js.map` | 本地 map 文件 |
+| `sourcemapper -output dir 'https://t.com/static/js/app.js.map'` | Download and restore JS source |
+| `-output dir app.js.map` | Local map file |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### JS 源码还原挖密钥
+### JS Source Recovery to Mine Secrets
 
 ```bash
 sourcemapper -o src/ 'https://t.com/js/main.bundle.js.map'
-# map 文件还原完整源码,grep apiKey/内部端点
+# Restore the full source from the map file and grep for apiKey/internal endpoints
 ```
 
-## 注意事项
+## Notes
 
-从 .map 文件还原原始 JS 源码,前端密钥/内部接口/业务逻辑全暴露,挖逻辑漏洞必备。
+Restores the original JS source from .map files, exposing frontend keys, internal interfaces, and business logic; essential for hunting logic flaws.

@@ -2,37 +2,39 @@
 name: lyricpass-music-wordlist
 description: "lyricpass: Lyric-based social engineering dictionary. Signals: password cracking, hash cracking, lyrics to password dictionary, single track."
 zh-signals: "lyricpass: 歌词社工字典。信号:密码破解,哈希破解,歌词转密码字典,单曲。"
+when-to-use: >-
+  Use when you need a personalized password wordlist generated from an artist's or song's lyrics for hash cracking or credential spraying against a target with known musical tastes.
 ---
 
 # lyricpass
 
-- 攻击大类:C25 哈希与密码破解
-- 上游仓库:https://github.com/initstring/lyricpass
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C25 Hash and Password Cracking
+- Upstream Repository: https://github.com/initstring/lyricpass
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/initstring/lyricpass && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 lyricpass.py -a 'Taylor Swift'` | 歌词转密码字典 |
-| `-a artist -s song` | 单曲 |
-| `-o out.txt` | 输出 |
+| `python3 lyricpass.py -a 'Taylor Swift'` | Lyrics to password dictionary |
+| `-a artist -s song` | Single track |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 歌词社工字典
+### Lyric-based social engineering dictionary
 
 ```bash
-python3 lyricpass.py -a '周杰伦'
-# 中文社工字典
+python3 lyricpass.py -a 'Jay Chou'
+# Chinese-language social engineering dictionary
 ```
 
-## 注意事项
+## Notes
 
-initstring 出品,歌词生成个性化字典。
+By initstring; generates personalized dictionaries from song lyrics.

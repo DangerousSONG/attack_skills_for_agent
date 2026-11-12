@@ -2,37 +2,40 @@
 name: subscraper-subdomains
 description: "SubScraper mines subdomains from DNS records. Signals: asset mapping, subdomain, passive+DNS record enumeration, DNS record parsing"
 zh-signals: "SubScraper: DNS 记录深挖子域。信号:资产测绘,子域名,被动+DNS 记录枚举,DNS 记录解析。"
+when-to-use: >-
+  Use during asset mapping to enumerate subdomains passively and by parsing DNS
+  records such as A and CNAME, with configurable threads.
 ---
 
 # SubScraper
 
-- 攻击大类:C01 资产测绘与指纹识别
-- 上游仓库:https://github.com/m8sec/subscraper
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C01 Asset Mapping and Fingerprinting
+- Upstream Repository: https://github.com/m8sec/subscraper
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install subscraper
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `subscraper target.com` | 被动+DNS 记录枚举 |
-| `-r` | DNS 记录解析 |
-| `-o subs.txt` | 输出 |
-| `-t 30` | 线程 |
+| `subscraper target.com` | Passive + DNS record enumeration |
+| `-r` | DNS record parsing |
+| `-o subs.txt` | Output |
+| `-t 30` | Threads |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### DNS 记录深挖子域
+### Mining Subdomains from DNS Records
 
 ```bash
-subscraper corp.com -r -o subs.txt  # 从 MX/NS/SPF/CNAME 记录关联子域
+subscraper corp.com -r -o subs.txt  # Correlate subdomains from MX/NS/SPF/CNAME records
 ```
 
-## 注意事项
+## Notes
 
-特色是从 DNS 记录关联而非纯字典;与证书透明度互补。
+Its distinguishing feature is correlating DNS records rather than relying on a pure wordlist; it complements certificate transparency.

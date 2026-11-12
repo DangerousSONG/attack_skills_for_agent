@@ -2,38 +2,41 @@
 name: protosint-email-osint
 description: "Email leak intelligence. Signals: email collection, employee info, phone number social database query, domain-associated email detection."
 zh-signals: "ProtOSINT: 邮箱泄露情报。信号:邮箱收集,员工信息,手机号社工库查询,域名关联邮箱探测。"
+when-to-use: >-
+  Use during social engineering reconnaissance when you need to check an email,
+  phone number, or domain against breach and paste sources for leaked data.
 ---
 
 # ProtOSINT
 
-- 攻击大类:C03 OSINT情报收集
-- 上游仓库:https://github.com/pixelbubble/ProtOSINT
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C03 OSINT Intelligence Gathering
+- Upstream Repository: https://github.com/pixelbubble/ProtOSINT
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/pixelbubble/ProtOSINT && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 protOSINT.py -m mail -e target@mail.com` | 邮箱多源 OSINT(HIBP/粘贴站) |
-| `-m phone -p +1234` | 手机号社工库查询 |
-| `-m domain -d t.com` | 域名关联邮箱探测 |
-| `-o report.txt` | 输出 |
+| `python3 protOSINT.py -m mail -e target@mail.com` | Multi-source email OSINT (HIBP / paste sites) |
+| `-m phone -p +1234` | Phone number social engineering database lookup |
+| `-m domain -d t.com` | Domain-associated email discovery |
+| `-o report.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 邮箱泄露情报
+### Email leak intelligence
 
 ```bash
 python3 protOSINT.py -m mail -e ceo@corp.com
-# 历史泄露密码/数据外泄事件,判断撞库与钓鱼素材
+# Historical leaked passwords / breach incidents to judge credential stuffing and phishing material
 ```
 
-## 注意事项
+## Notes
 
-邮箱/手机号/域名的泄露数据聚合查询,免 API key,适合社工前期情报。
+Aggregated breach lookups for emails, phone numbers, and domains; no API key required, ideal for pre-social-engineering intelligence.

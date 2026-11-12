@@ -2,39 +2,43 @@
 name: dwarf-android-hook
 description: "Dwarf: Android runtime analysis. Signals: mobile, Android attack, launch GUI/CLI, attach process, Java method hooking."
 zh-signals: "Dwarf: Android 运行时分析。信号:移动端,android攻击,启动 GUI/CLI,附加进程,Java 方法 hook。"
+when-to-use: >-
+  Use when performing authorized runtime analysis of an Android app: attach to
+  the process, hook Java or native methods, and trace calls to understand
+  authentication or anti-tampering logic.
 ---
 
 # Dwarf
 
-- 攻击大类:C43 移动平台攻击
-- 上游仓库:https://github.com/iGio90/Dwarf
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C43 Mobile Platform Attacks
+- Upstream Repository: https://github.com/iGio90/Dwarf
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip3 install dwarf-debugger
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `dwarf` | 启动 GUI/CLI |
-| `attach com.corp.app` | 附加进程 |
-| `hook Java com.corp.app.LoginActivity.check` | Java 方法 hook |
-| `hook native 0x1234` | native hook |
-| `trace java com.corp.app.**` | 调用跟踪 |
+| `dwarf` | Launch GUI/CLI |
+| `attach com.corp.app` | Attach to the process |
+| `hook Java com.corp.app.LoginActivity.check` | Java method hook |
+| `hook native 0x1234` | Native hook |
+| `trace java com.corp.app.**` | Call tracing |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Android 运行时分析
+### Android Runtime Analysis
 
 ```bash
-dwarf  # 选设备附加目标 App
-hook Java 加密函数 dump 密钥/明文
+dwarf  # Pick a device and attach to the target app
+hook Java crypto function dump key/plaintext
 ```
 
-## 注意事项
+## Notes
 
-基于 Frida 的 Android/iOS 调试器,Java/native hook+内存搜索+反反调试一体化。
+A Frida-based Android/iOS debugger that combines Java/native hooking, memory search and anti-anti-debugging in one tool.

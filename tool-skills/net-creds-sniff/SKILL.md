@@ -2,37 +2,41 @@
 name: net-creds-sniff
 description: "net-creds: Passive internal network credential harvesting. Signals: man-in-the-middle, MITM, passive credential sniffing, filter local host, PCAP analysis."
 zh-signals: "net-creds: 内网凭据被动收割。信号:中间人,mitm,被动凭据嗅探,过滤本机,PCAP 分析。"
+when-to-use: >-
+  Use when passively sniffing a network segment for credentials across HTTP,
+  FTP, POP, SNMP, and similar protocols, or analyzing an existing PCAP.
+  Supports filtering local traffic.
 ---
 
 # net-creds
 
-- 攻击大类:C40 嗅探与中间人攻击
-- 上游仓库:https://github.com/DanMcInerney/net-creds
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C40 Sniffing and Man-in-the-Middle Attacks
+- Upstream Repository: https://github.com/DanMcInerney/net-creds
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/DanMcInerney/net-creds && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python net-creds.py -i eth0` | 被动凭据嗅探 |
-| `-i eth0 -f` | 过滤本机 |
-| `-p` | PCAP 分析 |
+| `python net-creds.py -i eth0` | Passive credential sniffing |
+| `-i eth0 -f` | Filter local host |
+| `-p` | PCAP analysis |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 内网凭据被动收割
+### Passive internal network credential harvesting
 
 ```bash
 python net-creds.py -i eth0
-# HTTP/FTP/POP/SNMP 凭据全收
+# Captures credentials across HTTP/FTP/POP/SNMP
 ```
 
-## 注意事项
+## Notes
 
-被动嗅探凭据,协议覆盖全。
+Passive credential sniffing with broad protocol coverage.

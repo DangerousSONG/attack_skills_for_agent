@@ -2,39 +2,42 @@
 name: autorecon-auto
 description: "AutoRecon: performs fully automated recon for authorized targets. Signals: port scan, nmap, single-target full enumeration, batch, port range"
 zh-signals: "AutoRecon: 打靶/授权环境全自动侦察。信号:端口扫描,nmap,单目标全自动枚举,批量,端口范围。"
+when-to-use: >-
+  Use when you need fully automated enumeration of one or more authorized hosts, from port
+  scanning through service-specific checks and consolidated reports.
 ---
 
 # AutoRecon
 
-- 攻击大类:C42 网络扫描与枚举
-- 上游仓库:https://github.com/Tib3rius/AutoRecon
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C42 Network Scanning and Enumeration
+- Upstream Repository: https://github.com/Tib3rius/AutoRecon
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pipx install git+https://github.com/Tib3rius/AutoRecon.git
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `autorecon 10.0.0.5` | 单目标全自动枚举 |
-| `autorecon --targets targets.txt` | 批量 |
-| `-p 'T:80,443'` | 端口范围 |
-| `-o outdir` | 输出 |
-| `--single-target` | 见上游文档 |
+| `autorecon 10.0.0.5` | Single-target fully automated enumeration |
+| `autorecon --targets targets.txt` | Batch |
+| `-p 'T:80,443'` | Port range |
+| `-o outdir` | Output |
+| `--single-target` | See upstream documentation |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 打靶/授权环境全自动侦察
+### Fully Automated Recon for Lab / Authorized Environments
 
 ```bash
 autorecon 192.168.1.10 -o result
-# 自动: 端口扫描→服务识别→按服务跑专用脚本(nmap NSE/enum4linux/nikto...)→报告汇总
+# Automatic: port scan → service identification → run service-specific scripts (nmap NSE/enum4linux/nikto...) → consolidated report
 ```
 
-## 注意事项
+## Notes
 
-OSCP/打靶神器;按服务自动调度对应枚举工具,产出整理好的目录结构。
+A god tool for OSCP/labs; automatically schedules the matching enumeration tool per service and produces a well-organized directory structure.

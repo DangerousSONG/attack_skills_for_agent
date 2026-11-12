@@ -143,4 +143,4 @@ sudo tc class add dev $IFACE parent 1: classid 1:10 htb rate 1mbit ceil 2mbit
 sudo tc qdisc add dev $IFACE parent 1:10 handle 10: netem delay 200ms 50ms loss 5%
 sleep 300
 
-> 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。
+> 📎 Detailed content (full examples / references / data tables) has been split into `reference.md` in the same directory; use Read to load the relevant section on demand.

@@ -2,39 +2,43 @@
 name: kiterunner-api-routes
 description: "kiterunner brute-forces hidden API routes. Signals: asset mapping, subdomain, API route scanning, built-in dictionary, maximum connections."
 zh-signals: "kiterunner: API 隐藏路由爆破。信号:资产测绘,子域名,API 路由扫描,内置字典,最大连接。"
+when-to-use: >-
+  Use when brute-forcing hidden API routes that directory scanners miss; scan a
+  target with the built-in Assetnote route wordlists and tune connections and
+  crawl depth.
 ---
 
 # kiterunner
 
-- 攻击大类:C01 资产测绘与指纹识别
-- 上游仓库:https://github.com/assetnote/kiterunner
-- 上游 License:AGPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C01 Asset Mapping and Fingerprinting
+- Upstream Repository: https://github.com/assetnote/kiterunner
+- Upstream License: AGPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/assetnote/kiterunner/cmd/kr@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `kr scan https://api.target.com -w routes.kite` | API 路由扫描 |
-| `-A=apiroutes-210228` | 内置字典 |
-| `-x 100` | 最大连接 |
-| `-d 3` | 爬深 |
-| `kr scan targets.txt --depth 3 -A` | 批量 |
+| `kr scan https://api.target.com -w routes.kite` | API route scanning |
+| `-A=apiroutes-210228` | Built-in dictionary |
+| `-x 100` | Maximum connections |
+| `-d 3` | Crawl depth |
+| `kr scan targets.txt --depth 3 -A` | Batch |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### API 隐藏路由爆破
+### Brute-forcing hidden API routes
 
 ```bash
 kr scan https://api.target.com -w ~/kiterunner/routes.kite -x 100
-# Assetnote 出品,路由上下文感知,专出 /internal/v2/admin 这类端点
+# By Assetnote, route context aware, great at surfacing endpoints like /internal/v2/admin
 ```
 
-## 注意事项
+## Notes
 
-API 路由发现比目录爆破器准一个量级;字典基于真实 API 流量构建。
+API route discovery is an order of magnitude more accurate than directory brute forcers; the dictionary is built from real API traffic.

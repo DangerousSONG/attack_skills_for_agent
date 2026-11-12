@@ -2,38 +2,41 @@
 name: onionsearch-darkweb
 description: "Multi-engine dark web intelligence aggregation. Signals: web vulnerability, injection, multi dark-web engine search, pages, specified engines."
 zh-signals: "OnionSearch: 多引擎暗网情报聚合。信号:web漏洞,注入,多暗网引擎搜索,页数,指定引擎。"
+when-to-use: >-
+  Use when gathering threat intelligence about an authorized target from multiple dark-web
+  search engines and you need aggregated results across engines.
 ---
 
 # OnionSearch
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/megadose/OnionSearch
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/megadose/OnionSearch
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install onionsearch
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `onionsearch 'target'` | 多暗网引擎搜索 |
-| `-p 5` | 页数 |
-| `--engines ahmia,tor66` | 指定引擎 |
-| `-o out.txt` | 输出 |
+| `onionsearch 'target'` | Multi dark-web engine search |
+| `-p 5` | Pages |
+| `--engines ahmia,tor66` | Specified engines |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 多引擎暗网情报聚合
+### Multi-Engine Dark Web Intelligence Aggregation
 
 ```bash
 onionsearch 'corp.com'
-# ahmia/tor66 等 8+ 暗网引擎一次查
+# Query 8+ dark web engines such as ahmia/tor66 in one shot
 ```
 
-## 注意事项
+## Notes
 
-megadose 出品,聚合多个暗网搜索引擎,目标威胁情报收集。
+By megadose, aggregates multiple dark web search engines for threat intelligence collection on a target.

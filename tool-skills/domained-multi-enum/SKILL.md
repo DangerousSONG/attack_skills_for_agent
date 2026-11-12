@@ -2,36 +2,39 @@
 name: domained-multi-enum
 description: "Domained: multi-tool orchestrated subdomain collection. Signals: asset mapping, subdomain, passive plus active subdomains, brute force only, active only."
 zh-signals: "Domained: 多工具编排子域收集。信号:资产测绘,子域名,被动+主动子域,仅爆破,仅主动。"
+when-to-use: >-
+  Use when collecting subdomains with multiple orchestrated tools, combining
+  passive and active sources or brute-force alone.
 ---
 
 # Domained
 
-- 攻击大类:C01 资产测绘与指纹识别
-- 上游仓库:https://github.com/TypeError/domained
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C01 Asset Mapping and Fingerprinting
+- Upstream Repository: https://github.com/TypeError/domained
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/TypeError/domained && cd domained && python domained.py -i target.com -p
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python domained.py -i target.com -p` | 被动+主动子域 |
-| `-b` | 仅爆破 |
-| `-a` | 仅主动 |
+| `python domained.py -i target.com -p` | Passive plus active subdomains |
+| `-b` | Brute force only |
+| `-a` | Active only |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 多工具编排子域收集
+### Multi-tool orchestrated subdomain collection
 
 ```bash
-python domained.py -i corp.com -p  # 调 sublist3r/enumall/subfinder/amass 汇总
+python domained.py -i corp.com -p  # Calls sublist3r/enumall/subfinder/amass and merges the results
 ```
 
-## 注意事项
+## Notes
 
-一键编排多个子域工具去重汇总;省得自己写管道。
+One-shot orchestration of multiple subdomain tools with deduplication, so you do not have to build the pipeline yourself.

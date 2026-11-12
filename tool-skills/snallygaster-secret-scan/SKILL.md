@@ -2,38 +2,41 @@
 name: snallygaster-secret-scan
 description: "snallygaster: web server sensitive file survey. Signals: web vulnerability, injection, secret file scan, debug, disable HTTP."
 zh-signals: "snallygaster: Web 服务器敏感文件普查。信号:web漏洞,注入,秘密文件扫描,调试,禁 HTTP。"
+when-to-use: >-
+  Use during web server reconnaissance to check a host for exposed sensitive
+  files, debug endpoints, and insecure HTTP configurations.
 ---
 
 # snallygaster
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/hannob/snallygaster
-- 上游 License:0BSD(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/hannob/snallygaster
+- Upstream License: 0BSD (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install snallygaster
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `snallygaster target.com` | 秘密文件扫描 |
-| `-d` | 调试 |
-| `--nohttp` | 禁 HTTP |
-| `-n` | 忽略证书错误 |
+| `snallygaster target.com` | Secret file scan |
+| `-d` | Debug |
+| `--nohttp` | Disable HTTP |
+| `-n` | Ignore certificate errors |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Web 服务器敏感文件普查
+### Web server sensitive file survey
 
 ```bash
 snallygaster corp.com
-# 默认查 /.git/.env/.svn/备份文件/phpinfo/数据库 dump 等 50+ 高危路径
+# By default checks 50+ high-risk paths such as /.git/.env/.svn/backup files/phpinfo/database dumps
 ```
 
-## 注意事项
+## Notes
 
-覆盖最全的'秘密文件'扫描器之一;纯被动 GET,授权边界内无侵入。
+One of the most comprehensive 'secret file' scanners; purely passive GET requests, non-invasive within the authorized scope.

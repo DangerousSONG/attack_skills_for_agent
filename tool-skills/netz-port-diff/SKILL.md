@@ -2,37 +2,40 @@
 name: netz-port-diff
 description: "netz: Network change monitoring. Signals: port scanning, nmap, subnet snapshot, change detection."
 zh-signals: "netz: 网络变化监控。信号:端口扫描,nmap,网段快照,变化检测。"
+when-to-use: >-
+  Use when monitoring a network segment for changes between scans by taking
+  snapshots and diffing them to find newly appeared services during an engagement.
 ---
 
 # netz
 
-- 攻击大类:C42 网络扫描与枚举
-- 上游仓库:https://github.com/spectralops/netz
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C42 Network Scanning and Enumeration
+- Upstream Repository: https://github.com/spectralops/netz
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/spectralops/netz@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `netz 10.0.0.0/24` | 网段快照 |
-| `netz diff snap1.json snap2.json` | 变化检测 |
-| `-o out.json` | 输出 |
+| `netz 10.0.0.0/24` | Network segment snapshot |
+| `netz diff snap1.json snap2.json` | Change detection |
+| `-o out.json` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 网络变化监控
+### Network Change Monitoring
 
 ```bash
 netz 10.0.0.0/24 -o before.json
-# 渗透期间发现新上线服务
+# Spot newly appeared services during the engagement
 ```
 
-## 注意事项
+## Notes
 
-SpectralOps 出品,网段快照+差异对比。
+By SpectralOps, network segment snapshot plus diff comparison.

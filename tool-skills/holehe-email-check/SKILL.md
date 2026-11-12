@@ -2,39 +2,42 @@
 name: holehe-email-check
 description: "holehe profiles email registration footprints. Signals: email collection, employee info, check registered sites, show only registered, save cookies."
 zh-signals: "holehe: 邮箱注册足迹画像。信号:邮箱收集,员工信息,查邮箱注册站点,只显示已注册,保存 cookies。"
+when-to-use: >-
+  Use when profiling an email address to discover which online services it is
+  registered on via forgot-password side channels during people OSINT.
 ---
 
 # holehe
 
-- 攻击大类:C03 邮箱与人员OSINT
-- 上游仓库:https://github.com/megadose/holehe
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C03 Email and Personnel OSINT
+- Upstream Repository: https://github.com/megadose/holehe
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install holehe
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `holehe test@gmail.com` | 查邮箱注册站点 |
-| `--only-used` | 只显示已注册 |
-| `-C creds.json` | 保存 cookies |
-| `-p 20` | 并发 |
-| `--no-passwords` | 不触发找回逻辑 |
+| `holehe test@gmail.com` | Find sites the email is registered on |
+| `--only-used` | Show only registered sites |
+| `-C creds.json` | Save cookies |
+| `-p 20` | Concurrency |
+| `--no-passwords` | Do not trigger the password recovery logic |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 邮箱注册足迹画像
+### Email Registration Footprint Profiling
 
 ```bash
 holehe victim@corp.com --only-used
-# 输出 Twitter/Instagram/Adobe 等注册站点,勾勒目标画像
+# Output the sites where the account is registered (Twitter/Instagram/Adobe, etc.) to sketch a target profile
 ```
 
-## 注意事项
+## Notes
 
-通过忘记密码接口侧信道判断注册状态,不产生登录尝试,隐蔽性好。
+Determines registration status through forgot-password side channels without generating any login attempts, so it stays discreet.

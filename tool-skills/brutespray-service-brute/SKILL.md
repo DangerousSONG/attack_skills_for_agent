@@ -2,39 +2,43 @@
 name: brutespray-service-brute
 description: "Brutespray: Feeds Nmap results directly into brute-force attacks. Signals: password cracking, hash cracking, SSH-only brute force, rate limiting to avoid lockout."
 zh-signals: "Brutespray: Nmap 结果直通爆破。信号:密码破解,哈希破解,仅爆破 SSH,限速防锁。"
+when-to-use: >-
+  Use when you already have Nmap XML results and want to automatically brute-
+  force the discovered services such as SSH and FTP, with rate limiting to avoid
+  lockouts.
 ---
 
 # Brutespray
 
-- 攻击大类:C25 口令与哈希破解
-- 上游仓库:https://github.com/x90skysn3k/brutespray
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C25 Password and Hash Cracking
+- Upstream Repository: https://github.com/x90skysn3k/brutespray
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
-pip install brutespray 或 go install github.com/x90skysn3k/brutespray@latest
+pip install brutespray or go install github.com/x90skysn3k/brutespray@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `brutespray -f nmap.xml` | 从 Nmap 结果自动爆破所有开放服务 |
-| `-s ssh -u root -p pass.txt` | 仅爆破 SSH |
-| `-c 5 -t 100` | 限速防锁 |
-| `-o results.txt` | 输出 |
+| `brutespray -f nmap.xml` | Automatically brute force every open service from the Nmap results |
+| `-s ssh -u root -p pass.txt` | Brute force SSH only |
+| `-c 5 -t 100` | Rate limit to avoid lockouts |
+| `-o results.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Nmap 结果直通爆破
+### Nmap Results Straight into Brute Force
 
 ```bash
 nmap -sV -oX nmap.xml 10.0.0.0/24
 brutespray -f nmap.xml -u admin -p /usr/share/wordlists/top10.txt
-# 自动对 ssh/ftp/mysql/mssql 等服务起爆
+# Automatically attacks services such as ssh/ftp/mysql/mssql
 ```
 
-## 注意事项
+## Notes
 
-Medusa 引擎,自动解析 Nmap XML 并只对开放服务爆破,限速选项齐全。
+Uses the Medusa engine, parses Nmap XML automatically and only brute forces open services, with a complete set of rate limiting options.

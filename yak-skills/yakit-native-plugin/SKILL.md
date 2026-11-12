@@ -2,187 +2,176 @@
 name: yakit-native-plugin
 description: "Yakit plugins are divided into native plugins (saved as YakScript with independent execution page/parameter form) and other plugin types. Signals: yakit, plugin, yakscript."
 zh-signals: "Yakit 插件分'原生插件'(保存为 YakScript, 有独立执行页/参数表单)与"
-when-to-use: 0. 相关路由
-  Yakit 原生插件(yak / mitm 类型)与 cli 参数体系。讲清原生插件与热加载的区别、cli.* 如何变成
-  Yakit 执行页的参数表单(String/Int/Bool/Urls/Ports/StringSlice 下拉/File 等 + setRequired/
-  setDefault/setVerboseName/setCliGroup), 以及三个优秀案例: yak 原生插件用 cli 收用户输入、
-  mitm 原生插件被动扫描复杂内容并产出 risk、mitm + cli 交互式插件加载外部参数(关键词字典/作用域)
-  驱动扫描。当用户问"怎么写带参数表单的 yak/mitm 插件、cli 怎么用、mitm 插件怎么做被动扫描"时使用。
+when-to-use: >-
+  0. Related Routes Yakit native plugins (yak / mitm types) and the cli parameter system. Explains the difference between native plugins and hot reloads, how cli.* turns into Yakit's execution-page parameter form (String/Int/Bool/Urls/Ports/StringSlice dropdowns/File etc. + setRequired/setDefault/setVerboseName/setCliGroup), and three excellent cases: a yak native plugin taking user input via cli, a mitm native plugin passively scanning complex content and producing risks, and a mitm + cli interactive plugin loading external parameters (keyword dictionary/scope) to drive scanning. Use it when the user asks "how do I write a yak/mitm plugin with a parameter form, how do I use cli, how do I do passive scanning in a mitm plugin".
 ---
 
-# SKILL: Yakit 原生插件(yak / mitm) 与 cli 参数
+# SKILL: Yakit Native Plugins (yak / mitm) and cli Parameters
 
-> AI LOAD INSTRUCTION: Yakit 插件分"原生插件"(保存为 YakScript, 有独立执行页/参数表单)与
-> "热加载"(MITM/Fuzzer Tab 里的内联代码)。本页聚焦原生插件 + `cli` 参数体系: `cli.*` 调用会被
-> Yakit 静态扫描成参数表单, 运行时把用户填的值注入回脚本。给出三个可运行案例: yak 原生插件用
-> cli 收输入、mitm 原生插件被动扫描复杂内容、mitm + cli 交互式插件加载外部参数。所有示例
-> `yak <file>` 自测通过。
+> AI LOAD INSTRUCTION: Yakit plugins are split into "native plugins" (saved as YakScript, with an independent execution page/parameter form) and "hot reloads" (inline code inside a MITM/Fuzzer tab). This page focuses on native plugins + the `cli` parameter system: `cli.*` calls are statically scanned by Yakit into a parameter form, and at runtime the values the user fills in are injected back into the script. Three runnable cases are given: a yak native plugin taking input via cli, a mitm native plugin passively scanning complex content, and a mitm + cli interactive plugin loading external parameters. All examples pass the `yak <file>` self-test.
 
-## 0. 相关路由
+## 0. Related Routes
 
-- 总入口: yak
-- MITM 全部 hook 与去重语义(热加载视角, 但 hook 契约与原生 mitm 插件一致): [mitm-hotpatch](../mitm-hotpatch/SKILL.md)
-- 右键 codec 插件 + cli 选择提取项: yakit-rightclick-plugin
-- 历史数据提取/字典/发包: [yakit-data-extract-plugin](../yakit-data-extract-plugin/SKILL.md)
-- 数据库 / Payload 字典 / risk: yaklang-database
-- 验证工具链: yaklang-toolchain
+- Master entry point: yak
+- All MITM hooks and their deduplication semantics (hot-reload perspective, but the hook contract matches native mitm plugins): [mitm-hotpatch](../mitm-hotpatch/SKILL.md)
+- Right-click codec plugin + cli selection extraction: yakit-rightclick-plugin
+- Historical data extraction / wordlists / sending requests: [yakit-data-extract-plugin](../yakit-data-extract-plugin/SKILL.md)
+- Database / Payload wordlists / risk: yaklang-database
+- Verification toolchain: yaklang-toolchain
 
-## 1. 原生插件 vs 热加载(先分清)
+## 1. Native Plugin vs Hot Reload (Tell Them Apart First)
 
-| 维度 | 原生插件(本页) | 热加载(hot patch) |
+| Dimension | Native plugin (this page) | Hot reload (hot patch) |
 | --- | --- | --- |
-| 形态 | 保存为 YakScript, 有名字/类型/参数 | MITM/Fuzzer Tab 里的内联代码片段 |
-| 参数 | 用 `cli.*` 定义, Yakit 渲染成表单 | 无独立表单, 直接改代码 |
-| 入口 | 顶层语句直接执行(yak 类型); mitm 类型注册 hook | 注册 hook 函数 |
-| 适合 | 给团队复用的"成品工具" | 临时改流量/快速试验 |
-| 本库专题 | 本页 | [mitm-hotpatch](../mitm-hotpatch/SKILL.md) / [webfuzzer-hotpatch](../webfuzzer-hotpatch/SKILL.md) / [global-hotpatch](../global-hotpatch/SKILL.md) |
+| Form | Saved as YakScript, with a name/type/parameters | An inline code snippet inside a MITM/Fuzzer tab |
+| Parameters | Defined with `cli.*`, rendered by Yakit into a form | No independent form, you edit the code directly |
+| Entry point | Top-level statements execute directly (yak type); mitm type registers hooks | Register a hook function |
+| Best for | "Finished tools" reused by a team | Temporarily altering traffic / quick experiments |
+| Topic in this library | This page | [mitm-hotpatch](../mitm-hotpatch/SKILL.md) / [webfuzzer-hotpatch](../webfuzzer-hotpatch/SKILL.md) / [global-hotpatch](../global-hotpatch/SKILL.md) |
 
-> 关键: **mitm 原生插件与 MITM 热加载用的是同一套 hook**(`hijackHTTPRequest` / `mirror*` /
-> `hijackSaveHTTPFlow` ...), 契约见 [mitm-hotpatch](../mitm-hotpatch/SKILL.md)。区别只在于原生插件
-> 可以叠加 `cli` 参数表单, 且作为成品被保存/分发。
+> Key point: **a native mitm plugin and a MITM hot reload use the same set of hooks** (`hijackHTTPRequest` / `mirror*` /
+> `hijackSaveHTTPFlow` ...), and the contract is documented in [mitm-hotpatch](../mitm-hotpatch/SKILL.md). The only difference
+> is that a native plugin can additionally carry a `cli` parameter form and is saved/distributed as a finished artifact.
 
-## 2. cli 参数 -> Yakit 表单控件(核心对照表)
+## 2. cli Parameters -> Yakit Form Controls (Core Reference Table)
 
-`cli.*` 全部写在 **顶层**(模块加载时执行), Yakit 才能静态扫描出参数。运行时引擎把用户填的值注入。
+All `cli.*` calls must be written at the **top level** (executed at module load time) so that Yakit can statically scan out the parameters. At runtime the engine injects the values the user filled in.
 
-| cli 函数 | 返回类型 | Yakit 控件 | 说明 |
+| cli function | Return type | Yakit control | Description |
 | --- | --- | --- | --- |
-| `cli.String(name)` | string | 单行文本 | 最常用 |
-| `cli.Text(name)` | string | 多行文本框 | 大段文本 |
-| `cli.Int(name)` | int | 数字 | |
-| `cli.Float(name)` | float | 数字 | |
-| `cli.Bool(name)` | bool | 开关 | 存在即 true |
-| `cli.Urls(name)` | []string | URL 列表 | 自动补 `http(s)://` |
-| `cli.Ports(name)` | []int | 端口 | 支持 `80,443,8000-8010` |
-| `cli.Hosts(name)` | []string | 网络目标 | 支持 CIDR 展开 |
-| `cli.StringSlice(name)` | []string | 下拉/多选 | 配 `setSelectOption` 做下拉 |
-| `cli.File(name)` | []byte | 文件 | 读文件内容 |
-| `cli.FileOrContent(name)` | []byte | 文件或文本 | 文件读不到就当文本 |
-| `cli.LineDict(name)` | []string | 文件或多行 | **按行**切分(非逗号) |
-| `cli.YakitPlugin()` | []string | 插件选择 | 读 `yakit-plugin-file` |
-| `cli.Json(name)` | map | 复杂表单 | 配 `setJsonSchema` |
+| `cli.String(name)` | string | Single-line text | Most commonly used |
+| `cli.Text(name)` | string | Multi-line text box | Large blocks of text |
+| `cli.Int(name)` | int | Number | |
+| `cli.Float(name)` | float | Number | |
+| `cli.Bool(name)` | bool | Switch | True when present |
+| `cli.Urls(name)` | []string | URL list | Automatically prepends `http(s)://` |
+| `cli.Ports(name)` | []int | Ports | Supports `80,443,8000-8010` |
+| `cli.Hosts(name)` | []string | Network targets | Supports CIDR expansion |
+| `cli.StringSlice(name)` | []string | Dropdown/multi-select | Use `setSelectOption` for a dropdown |
+| `cli.File(name)` | []byte | File | Reads the file content |
+| `cli.FileOrContent(name)` | []byte | File or text | Falls back to text when the file cannot be read |
+| `cli.LineDict(name)` | []string | File or multi-line text | Split **by line** (not by comma) |
+| `cli.YakitPlugin()` | []string | Plugin selection | Reads `yakit-plugin-file` |
+| `cli.Json(name)` | map | Complex form | Use `setJsonSchema` |
 
-选项函数(option, 作为后续参数传入):
+Option functions (options are passed as subsequent arguments):
 
-| 选项 | 作用 |
+| Option | Purpose |
 | --- | --- |
-| `cli.setRequired(true)` | 必填; 缺失时 `cli.check()` 打印帮助并退出 |
-| `cli.setDefault(v)` | 默认值 |
-| `cli.setVerboseName("中文名")` | 表单显示的中文标签 |
-| `cli.setHelp("...")` | 帮助说明 |
-| `cli.setCliGroup("分组名")` | 参数分组 |
-| `cli.setSelectOption("显示名","值")` | 下拉选项(仅 `cli.StringSlice`) |
-| `cli.setMultipleSelect(false)` | 是否多选(仅 `cli.StringSlice`) |
+| `cli.setRequired(true)` | Required; when missing, `cli.check()` prints the help and exits |
+| `cli.setDefault(v)` | Default value |
+| `cli.setVerboseName("label")` | The label shown in the form |
+| `cli.setHelp("...")` | Help text |
+| `cli.setCliGroup("group")` | Parameter grouping |
+| `cli.setSelectOption("display name","value")` | Dropdown option (`cli.StringSlice` only) |
+| `cli.setMultipleSelect(false)` | Whether multi-select is allowed (`cli.StringSlice` only) |
 
-> 收尾必须调用 **`cli.check()`**: 校验必填项, 缺失则打印 Usage 并 `os.Exit(1)`。
+> You must call **`cli.check()`** at the end: it validates the required items and, if anything is missing, prints Usage and calls `os.Exit(1)`.
 
 ```yak
-target = cli.String("target", cli.setVerboseName("目标"), cli.setRequired(true))
+target = cli.String("target", cli.setVerboseName("target"), cli.setRequired(true))
 ports  = cli.Ports("ports", cli.setDefault("80,443"))
 mode   = cli.StringSlice("mode",
-    cli.setSelectOption("快速", "fast"), cli.setSelectOption("深度", "deep"),
+    cli.setSelectOption("fast", "fast"), cli.setSelectOption("deep", "deep"),
     cli.setMultipleSelect(false), cli.setDefault("fast"))
 cli.check()
 ```
 
-## 3. 三个优秀案例(examples/)
+## 3. Three Excellent Cases (examples/)
 
-| 案例 | 文件 | 要点 |
+| Case | File | Key points |
 | --- | --- | --- |
-| yak 原生插件用 cli 收输入 | [examples/yak-cli-input.yak](examples/yak-cli-input.yak) | `cli.Urls/Ports/Int/Bool` + `cli.check()`; 核心逻辑抽纯函数便于自测 |
-| mitm 原生插件被动扫描复杂内容 | [examples/mitm-passive-scan.yak](examples/mitm-passive-scan.yak) | `mirrorNewWebsitePathParams` 扫响应体里手机号/身份证/JWT/AKSK, 命中 `risk.NewRisk` |
-| mitm + cli 交互式加载外部参数 | [examples/mitm-cli-interactive.yak](examples/mitm-cli-interactive.yak) | `cli.LineDict` 读外部关键词字典 + `cli.String` 限定作用域, hook 闭包捕获并驱动扫描 |
+| A yak native plugin taking input via cli | [examples/yak-cli-input.yak](examples/yak-cli-input.yak) | `cli.Urls/Ports/Int/Bool` + `cli.check()`; the core logic is extracted into pure functions so it can be self-tested |
+| A mitm native plugin passively scanning complex content | [examples/mitm-passive-scan.yak](examples/mitm-passive-scan.yak) | `mirrorNewWebsitePathParams` scans phone numbers/ID numbers/JWT/AKSK in response bodies, hits produce `risk.NewRisk` |
+| A mitm + cli interactive plugin loading external parameters | [examples/mitm-cli-interactive.yak](examples/mitm-cli-interactive.yak) | `cli.LineDict` reads an external keyword dictionary + `cli.String` limits the scope, the hook closure captures them and drives the scan |
 
-### 3.1 yak 原生插件 + cli(优秀案例 1)
+### 3.1 Yak Native Plugin + cli (Excellent Case 1)
 
-yak 类型插件的入口就是 **顶层语句**(yak 不会自动调用 `func main()`)。真实插件顶层直接读 cli 参数并执行主流程:
+The entry point of a yak-type plugin is the **top-level statements** (yak does not automatically call `func main()`). A real plugin reads the cli parameters at the top level and runs the main flow directly:
 
 ```yak
 func runPlugin() {
     targets = cli.Urls("target", cli.setRequired(true))
     ports = cli.Ports("ports", cli.setDefault("80,443"))
     cli.check()
-    // ... 用参数做扫描/发包
+    // ... use the parameters to scan / send requests
 }
-runPlugin()   // 真实插件: 顶层直接调用
+runPlugin()   // Real plugin: called directly at the top level
 ```
 
-把核心逻辑(目标规整、去重)抽成 **纯函数**, 才能在 `YAK_MAIN` 自测块里脱离命令行/网络做可重复断言。
+Extract the core logic (target normalization, deduplication) into **pure functions** so that repeatable assertions can be made inside the `YAK_MAIN` self-test block, independently of the command line and the network.
 
-### 3.2 mitm 原生插件被动扫描(优秀案例 2)
+### 3.2 Mitm Native Plugin Passive Scanning (Excellent Case 2)
 
-mitm 插件不写 `main`, 而是 **注册 hook**。被动扫描首选 `mirrorNewWebsitePathParams`(按路径+参数结构去重, 省算力, 只读不影响转发):
+A mitm plugin does not write `main`; instead it **registers hooks**. For passive scanning the preferred hook is `mirrorNewWebsitePathParams` (deduplicated by path + parameter structure, saves compute, read-only and does not affect forwarding):
 
 ```yak
 mirrorNewWebsitePathParams = func(isHttps, url, req, rsp, body) {
-    for f in scanSensitive(string(body)) {      // scanSensitive 是纯函数, 可自测
+    for f in scanSensitive(string(body)) {      // scanSensitive is a pure function, self-testable
         risk.NewRisk(url, risk.title(...), risk.type("info-leak"),
             risk.severity("low"), risk.payload(f.value))
     }
 }
 ```
 
-- 规则表放顶层 **只读常量**(不要在并发 hook 里改全局, 会 data race)。
-- 命中产出 `risk.NewRisk(...)`, 在 Yakit "风险与漏洞"面板可见。
-- 自测只测 `scanSensitive` 纯逻辑, 不调用 `risk`(避免写库)。
+- Put the rule table at the top level as a **read-only constant** (do not modify globals in a concurrent hook, that causes a data race).
+- A hit produces `risk.NewRisk(...)`, visible in the Yakit "Risks and Vulnerabilities" panel.
+- The self-test only exercises the pure `scanSensitive` logic and never calls `risk` (to avoid writing to the database).
 
-### 3.3 mitm + cli 交互式(优秀案例 3)
+### 3.3 Mitm + cli Interactive (Excellent Case 3)
 
-同一个 mitm 插件, 用 cli 把"关键词字典""作用域"做成参数, 换目标不改代码:
+For the same mitm plugin, use cli to turn the "keyword dictionary" and "scope" into parameters, so switching targets does not require changing code:
 
 ```yak
-KEYWORDS = cli.LineDict("keywords", cli.setDefault("password\ntoken\nsecret"))  // 顶层读取
+KEYWORDS = cli.LineDict("keywords", cli.setDefault("password\ntoken\nsecret"))  // Read at the top level
 SCOPE    = cli.String("scope", cli.setDefault(""))
 cli.check()
 
-mirrorHTTPFlow = func(isHttps, url, req, rsp, body) {   // 闭包捕获 KEYWORDS/SCOPE
+mirrorHTTPFlow = func(isHttps, url, req, rsp, body) {   // The closure captures KEYWORDS/SCOPE
     if !inScope(url, SCOPE) { return }
     for kw in matchKeywords(string(rsp), KEYWORDS) { risk.NewRisk(url, ...) }
 }
 ```
 
-> 协作要点: cli 在 **顶层加载一次**, hook 闭包在运行时反复复用这些值。`cli.LineDict` 按 **行** 切分,
-> 想兼容 CSV 自己再 `str.Split(line, ",")` 摊平(见示例 `flattenKeywords`)。
+> Collaboration note: cli is loaded **once at the top level**, while the hook closure reuses these values at runtime. `cli.LineDict` splits **by line**; if you need CSV compatibility, flatten it yourself with `str.Split(line, ",")` (see the `flattenKeywords` example).
 
-## 4. 标准写法: 入口 + YAK_MAIN 自测
+## 4. Standard Pattern: Entry Point + YAK_MAIN Self-Test
 
 ```yak
-// yak 类型: 顶层执行; mitm 类型: 注册 hook + 顶层 cli
+// yak type: top-level execution; mitm type: register hooks + top-level cli
 mirrorHTTPFlow = func(isHttps, url, req, rsp, body) { /* ... */ }
 
-func runSelfTest() { /* 用纯函数 + mock 数据 + assert 验证 */ }
+func runSelfTest() { /* verify with pure functions + mock data + assert */ }
 
 if YAK_MAIN {
     runSelfTest()
 }
 ```
 
-`YAK_MAIN` 是引擎注入的全局布尔:
+`YAK_MAIN` is a global boolean injected by the engine:
 
-- `yak xxx.yak` 命令行运行: `YAK_MAIN = true` -> 跑自测。
-- Yakit 加载插件: 顶层 cli/hook 注册照常执行, 自测块按需守卫。
+- Running `yak xxx.yak` from the command line: `YAK_MAIN = true` -> run the self-test.
+- When Yakit loads the plugin: top-level cli/hook registration executes as usual, while the self-test block is guarded as needed.
 
-> 注意: `cli.Args()` 永远包含脚本文件名(长度 >= 1)。想区分"自测 / 真实带参运行"用
-> `len(cli.Args()) > 1` 判断(见 `yak-cli-input.yak`)。
+> Note: `cli.Args()` always contains the script file name (length >= 1). To distinguish "self-test / a real run with parameters", check `len(cli.Args()) > 1` (see `yak-cli-input.yak`).
 
-## 5. 验证
+## 5. Verification
 
 ```bash
 cd /Users/v1ll4n/Projects/yaklang
-# 自测(走默认/纯逻辑)
+# Self-test (uses defaults / pure logic)
 yak skills/yakit-native-plugin/examples/yak-cli-input.yak
-# 体验真实参数注入
+# Try real parameter injection
 yak skills/yakit-native-plugin/examples/yak-cli-input.yak --target "yaklang.com,example.com:8443" --ports 80,443 --probe
 ```
 
-合格标准: 10 秒内完成、所有 `assert` 通过、`log` 全英文、末尾出现 `... self test passed`。
-mitm 原生插件可进一步用 `yak hotpatch-mitm` 喂真实请求验证(见 yaklang-toolchain)。
+Acceptance criteria: finishes within 10 seconds, all `assert` statements pass, all `log` output is in English, and `... self test passed` appears at the end. A native mitm plugin can be further validated against real requests with `yak hotpatch-mitm` (see yaklang-toolchain).
 
-## 参考来源
+## References
 
-- cli 参数体系: `yaklang/common/utils/cli/cli.go`(CliExports)
-- mitm hook 契约: `yaklang/common/yak/hook_mixed_plugin_caller.go`
-- risk API: `yaklang/common/yak/yaklib/risk.go`(`risk.NewRisk` / `risk.title` / `risk.severity` ...)
-- 训练素材交叉引用: `yaklang-ai-training-materials/library-usage/cli`、`.../risk`
+- cli parameter system: `yaklang/common/utils/cli/cli.go` (CliExports)
+- mitm hook contract: `yaklang/common/yak/hook_mixed_plugin_caller.go`
+- risk API: `yaklang/common/yak/yaklib/risk.go` (`risk.NewRisk` / `risk.title` / `risk.severity` ...)
+- Cross-references in the training material: `yaklang-ai-training-materials/library-usage/cli`, `.../risk`
 
-> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`SKILL.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。
+> 📎 **Reference Document Notice**: this skill is adapted from an upstream open-source repository; the following reference document is **not distributed with this library**: `SKILL.md`. The key points of the related topics are retained in the corresponding descriptions in this document; if you need the expanded content, grep the library using keywords from the body text or search on your own.
