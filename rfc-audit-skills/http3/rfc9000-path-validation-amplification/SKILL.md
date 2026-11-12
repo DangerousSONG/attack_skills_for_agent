@@ -25,7 +25,7 @@ Core pattern in one sentence: **the anti-amplification limit and path validation
 | PV-1 | As a client from an unvalidated address, observe whether the server's cumulative bytes sent before completing address validation stay strictly ≤ 3× bytes received | Sending beyond the limit → anti-amplification violation (usable as a UDP amplifier) |
 | PV-2 | Flood PATH_CHALLENGEs (spoofed source addresses, high concurrency); observe whether the peer maintains pending-response state per challenge | State accumulates without a cap → memory-exhaustion surface (CVE-2023-49295 pattern) |
 | PV-3 | Send PATH_RESPONSEs while suppressing/dropping the peer's PATH_CHALLENGEs (or vice versa); observe whether the peer's path-validation state machine waits forever or misjudges validation success | Obligation asymmetry → availability destruction |
-| PV-4 | Simulate NAT-rebinding timing: start sending high-volume traffic immediately after the new-address突变; observe whether the peer accepts it before validation completes | Accepted without validation → source-address trust-hijacking surface |
+| PV-4 | Simulate NAT-rebinding timing: start sending high-volume traffic immediately after the abrupt new-address change; observe whether the peer accepts it before validation completes | Accepted without validation → source-address trust-hijacking surface |
 | PV-5 | Tamper with the PATH_RESPONSE payload (not echoing the original challenge data) | Accepted → validation is a formality |
 
 Method: aioquic spoofed-source-address scenario scripts; quic-go debug counters to observe the anti-amplification window; multi-connection stress to watch the challenge state-table growth.
