@@ -17,6 +17,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REGISTERED = ['attack-skill-router', 'engagement-discipline', 'java-deserialization-gadget-selector']
 # 库根索引: (仓库内路径, 库内文件名)，存在才拷
 ROOT_FILES = [('INDEX.md', 'INDEX.md'), ('attack-skill-router/MERGES.md', 'MERGES.md')]
+# 路由工具: 随库部署到 _router/, 镜像烘焙时已 build 好索引则一并带上
+ROUTER_FILES = ['skill_route.py', 'skill_retrieval.py', 'build_entity_registry.py', 'entity_registry.json']
 
 def find_skills(base):
     """返回 {slug: abs_dir}，校验重名"""
@@ -63,6 +65,14 @@ def main():
         fp = os.path.join(ROOT, f_src)
         if os.path.exists(fp):
             plan.append((fp, os.path.join(a.library_dir, f_dst), '库根索引'))
+    for f in ROUTER_FILES:
+        fp = os.path.join(ROOT, 'scripts', f)
+        if os.path.exists(fp):
+            plan.append((fp, os.path.join(a.library_dir, '_router', f), '路由工具'))
+    # 索引产物(烘焙进镜像时预建): 存在才带, 不存在则由 skill_retrieval.py build 现建
+    idx = os.path.join(ROOT, 'scripts', '_retrieval_index.pkl')
+    if os.path.exists(idx):
+        plan.append((idx, os.path.join(a.library_dir, '_router', '_retrieval_index.pkl'), '路由索引'))
 
     print('注册层 %d 个, 文件库 %d 个, 库根文件 %d 个' % (
         len(REGISTERED), len(lib), len([1 for _,_,k in plan if k=='库根索引'])))
