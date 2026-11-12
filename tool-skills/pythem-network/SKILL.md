@@ -2,38 +2,40 @@
 name: pythem-network
 description: "PytheM: Integrated network penetration framework. Signals: man-in-the-middle, MITM, network attack framework, ARP spoofing, sniffing."
 zh-signals: "PytheM: 网络渗透一体化。信号:中间人,mitm,网络攻击框架,ARP 欺骗,嗅探。"
+when-to-use: >-
+  Use when you need an integrated Python framework for local network attacks such as ARP spoofing, sniffing, DNS poisoning and service brute forcing.
 ---
 
 # PytheM
 
-- 攻击大类:C40 嗅探与中间人攻击
-- 上游仓库:https://github.com/m4n3dw0lf/PytheM
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C40 Sniffing and Man-in-the-Middle Attacks
+- Upstream Repository: https://github.com/m4n3dw0lf/PytheM
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/m4n3dw0lf/PytheM && cd PytheM && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 pythem.py -i eth0` | 网络攻击框架 |
-| `-i eth0 -arpspoof` | ARP 欺骗 |
-| `-i eth0 - sniff` | 嗅探 |
-| `-i eth0 - brute ssh` | 爆破 |
+| `python3 pythem.py -i eth0` | Network attack framework |
+| `-i eth0 -arpspoof` | ARP spoofing |
+| `-i eth0 - sniff` | Sniffing |
+| `-i eth0 - brute ssh` | Brute force |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 网络渗透一体化
+### Integrated Network Penetration
 
 ```bash
 python3 pythem.py -i eth0
-# ARP/DNS/嗅探/爆破 一体
+# ARP / DNS / sniffing / brute force in one framework
 ```
 
-## 注意事项
+## Notes
 
-Python 网络渗透多合一框架。
+An all-in-one Python framework for network penetration testing.

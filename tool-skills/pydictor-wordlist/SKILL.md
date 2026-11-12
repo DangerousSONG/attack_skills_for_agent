@@ -2,38 +2,41 @@
 name: pydictor-wordlist
 description: "pydictor: Generates comprehensive password dictionaries. Signals: password cracking, hash cracking, basic dictionary generation, extended modes, plugins."
 zh-signals: "pydictor: 全模式密码字典。信号:密码破解,哈希破解,基础字典生成,扩展模式,插件。"
+when-to-use: >-
+  Use when generating customized password dictionaries for cracking, including
+  base, extended, plugin and social-engineering modes tailored to target information.
 ---
 
 # pydictor
 
-- 攻击大类:C25 哈希与密码破解
-- 上游仓库:https://github.com/LandGrey/pydictor
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C25 Hash and Password Cracking
+- Upstream Repository: https://github.com/LandGrey/pydictor
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/LandGrey/pydictor && cd pydictor
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 pydictor.py -base d -len 6 8 -o out.txt` | 基础字典生成 |
-| `-extend word --level 4` | 扩展模式 |
-| `-plug pid6` | 插件 |
-| `--sedb` | 社工模式 |
+| `python3 pydictor.py -base d -len 6 8 -o out.txt` | Basic dictionary generation |
+| `-extend word --level 4` | Extended mode |
+| `-plug pid6` | Plugin |
+| `--sedb` | Social engineering mode |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 全模式密码字典
+### All-mode password dictionary
 
 ```bash
 python3 pydictor.py --sedb
-# 交互社工字典工厂
+# Interactive social-engineering dictionary factory
 ```
 
-## 注意事项
+## Notes
 
-强大密码字典生成框架,50+ 模式。
+A powerful password dictionary generation framework with 50+ modes.

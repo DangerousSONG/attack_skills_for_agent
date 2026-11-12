@@ -2,37 +2,40 @@
 name: bbqsql-blind-sqlmap
 description: "BBQSQL: manually configures semi-blind injection. Signals: web vulnerability, injection, run blind injection after configuration, export results"
 zh-signals: "BBQSQL: 半盲注手工配置。信号:web漏洞,注入,配置完成后执行盲注,导出结果。"
+when-to-use: >-
+  Use when sqlmap cannot handle a custom blind injection, such as comparison or
+  similarity logic, and you need to manually configure the injection point and technique.
 ---
 
 # BBQSQL
 
-- 攻击大类:C09 Web利用(SQL注入)
-- 上游仓库:https://github.com/neohapsis/bbqsql
-- 上游 License:BSD-3-Clause(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Exploitation (SQL Injection)
+- Upstream Repository: https://github.com/neohapsis/bbqsql
+- Upstream License: BSD-3-Clause (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install bbqsql
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `bbqsql` | 进入交互配置: URL/方法/注入点/对比请求 |
-| `run` | 配置完成后执行盲注 |
-| `export results.csv` | 导出结果 |
+| `bbqsql` | Enter interactive configuration: URL/method/injection point/comparison request |
+| `run` | Run the blind injection once configuration is complete |
+| `export results.csv` | Export results |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 半盲注手工配置
+### Manual Configuration for Semi-Blind Injection
 
 ```bash
 bbqsql
-# set url=https://t.com/report?id=1; injection point 选 id; technique=comparison; run
+# set url=https://t.com/report?id=1; injection point select id; technique=comparison; run
 ```
 
-## 注意事项
+## Notes
 
-SQL 盲注框架,适合 sqlmap 打不动的自定义对比逻辑(如两个响应相似度)。交互式配置菜单驱动。
+A SQL blind injection framework suited to custom comparison logic that sqlmap cannot crack (such as comparing the similarity of two responses), driven by an interactive configuration menu.

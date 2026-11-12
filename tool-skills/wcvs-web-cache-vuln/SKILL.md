@@ -2,38 +2,41 @@
 name: wcvs-web-cache-vuln
 description: "Web Cache Vulnerability Scanner (wcvs): Cache poisoning probing. Signals: web vulnerabilities, injection, web cache vulnerability scan, include cache poisoning, custom dictionary."
 zh-signals: "Web Cache Vulnerability Scanner (wcvs): 缓存投毒探测。信号:web漏洞,注入,Web 缓存漏洞扫描,包含缓存投毒,自定义字典。"
+when-to-use: >-
+  Use when testing an authorized web application or CDN for web cache poisoning and deception
+  issues, with optional custom wordlists and HTML reporting.
 ---
 
 # Web Cache Vulnerability Scanner (wcvs)
 
-- 攻击大类:C09 Web利用(缓存投毒)
-- 上游仓库:https://github.com/Hackmanit/Web-Cache-Vulnerability-Scanner
-- 上游 License:Apache-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Exploitation (Cache Poisoning)
+- Upstream Repository: https://github.com/Hackmanit/Web-Cache-Vulnerability-Scanner
+- Upstream License: Apache-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/Hackmanit/Web-Cache-Vulnerability-Scanner@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `wcvs -u 'https://t.com'` | Web 缓存漏洞扫描 |
-| `-u url -sp -sm` | 包含缓存投毒 |
-| `-u url -d wordlist.txt` | 自定义字典 |
-| `-o report.html` | HTML 报告 |
+| `wcvs -u 'https://t.com'` | Web cache vulnerability scan |
+| `-u url -sp -sm` | Include cache poisoning |
+| `-u url -d wordlist.txt` | Custom wordlist |
+| `-o report.html` | HTML report |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 缓存投毒探测
+### Cache poisoning probing
 
 ```bash
 wcvs -u 'https://t.com' -sp
-# 检测缓存键处理缺陷与投毒可行性
+# Detect cache key handling flaws and poisoning feasibility
 ```
 
-## 注意事项
+## Notes
 
-检测 Web 缓存投毒/欺骗(伪 URL、HTTP 头投毒、Cookie 投毒)。Hackmanit 学术团队出品。
+Detects web cache poisoning/deception issues (fake URLs, HTTP header poisoning, cookie poisoning). From the Hackmanit academic team.

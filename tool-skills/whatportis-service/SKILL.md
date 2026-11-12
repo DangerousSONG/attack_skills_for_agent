@@ -2,38 +2,41 @@
 name: whatportis-service
 description: "whatportis: Non-standard port identification. Signals: port scan, nmap, port service query, service reverse lookup, fuzzy."
 zh-signals: "whatportis: 非标准端口识别。信号:端口扫描,nmap,端口服务查询,服务反查,模糊。"
+when-to-use: >-
+  Use when you see non-standard ports and need to identify the likely service
+  through port-to-service queries and fuzzy reverse lookup.
 ---
 
 # whatportis
 
-- 攻击大类:C42 网络扫描与枚举
-- 上游仓库:https://github.com/ncrocfer/whatportis
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C42 Network Scanning and Enumeration
+- Upstream Repository: https://github.com/ncrocfer/whatportis
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install whatportis
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `whatportis 3306` | 端口服务查询 |
-| `whatportis mysql` | 服务反查 |
-| `--like` | 模糊 |
-| `-o out.txt` | 输出 |
+| `whatportis 3306` | Port service query |
+| `whatportis mysql` | Service reverse lookup |
+| `--like` | Fuzzy |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 非标准端口识别
+### Non-standard port identification
 
 ```bash
 whatportis 8443
-# 指纹识别辅助
+# Supports fingerprinting
 ```
 
-## 注意事项
+## Notes
 
-端口-服务映射查询,IOC 分析辅助。
+Port-to-service mapping lookups, useful for IOC analysis.

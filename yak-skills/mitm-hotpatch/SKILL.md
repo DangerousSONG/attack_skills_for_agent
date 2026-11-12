@@ -2,112 +2,112 @@
 name: mitm-hotpatch
 description: "Yakit MITM module-level hot reload: Uses Yaklang to dynamically take over HTTP traffic stages without interrupting proxy; review hook timing table and forward/drop semantics. Signals: yakit, mitm, hot reload."
 zh-signals: "Yakit MITM 模块级热加载:不中断代理用 Yaklang 动态接管 HTTP 流量各处理阶段,先看 Hook 时机表与 forward/drop 语义。信号:yakit,mitm,热加载。"
-when-to-use: 0. 相关路由
-  Yakit MITM 热加载 (Hot Patch) 专题。当用户需要在 MITM 中间人代理中用代码动态劫持/修改请求与响应、镜像分析流量、入库前打标签染色、或对危险操作做 mock 护栏时使用。覆盖 hijackHTTPRequest / hijackHTTPResponseEx / mirror 系列 / hijackSaveHTTPFlow / mockHTTPRequest 全部 Hook 与 forward/drop 语义。
+when-to-use: 0. Related Routes
+  Yakit MITM hot reload (Hot Patch) topic. Use it when the user needs to dynamically hijack and modify requests and responses in code inside the MITM man-in-the-middle proxy, mirror and analyze traffic, tag or dye traffic before it is stored, or mock dangerous operations as guardrails. Covers all the Hooks hijackHTTPRequest / hijackHTTPResponseEx / mirror family / hijackSaveHTTPFlow / mockHTTPRequest and the forward/drop semantics.
 ---
 
-# SKILL: Yakit MITM 热加载 (Hot Patch)
+# SKILL: Yakit MITM Hot Reload (Hot Patch)
 
-> AI LOAD INSTRUCTION: 这是 Yaklang 三层热加载体系中的"模块级 MITM"专题。MITM 热加载允许安全测试人员在不中断代理服务的情况下，用 Yaklang 代码动态接管 HTTP 流量的各个处理阶段。先读本页的 Hook 触发时机表与 forward/drop 语义，再看 `examples/` 下按 Hook 命名的示例，每个示例都可用 `yak <file>` 直接自测。
+> AI LOAD INSTRUCTION: This is the "module-level MITM" topic of Yaklang's three-tier hot reload system. MITM hot reload lets security testers dynamically take over each processing stage of HTTP traffic with Yaklang code without interrupting the proxy service. Read the Hook trigger-timing table and the forward/drop semantics on this page first, then look at the examples under `examples/`, which are named after each Hook and can each be self-tested directly with `yak <file>`.
 
-## 0. 相关路由
+## 0. Related Routes
 
-- 总入口与三层体系：yak
-- Web Fuzzer 热加载（单 Tab 发包加解密/重试）：[webfuzzer-hotpatch](../webfuzzer-hotpatch/SKILL.md)
-- 全局热加载（先于模块执行的全系统 hook）：[global-hotpatch](../global-hotpatch/SKILL.md)
+- Master entry point and three-tier architecture: yak
+- Web Fuzzer hot reload (per-tab request encryption/decryption and retries): [webfuzzer-hotpatch](../webfuzzer-hotpatch/SKILL.md)
+- Global hot reload (system-wide hooks that run before module execution): [global-hotpatch](../global-hotpatch/SKILL.md)
 
-## 1. 三个基本角色
+## 1. The Three Basic Roles
 
-理解 Hook 前先理解 MITM 的三方：
+Before understanding the Hooks, understand the three parties in a MITM:
 
 ```mermaid
 flowchart LR
-    Browser["MITM 客户端 (浏览器/App/脚本)"] --> Proxy["MITM 代理 (Yakit)"]
-    Proxy --> Server["目标服务器"]
+    Browser["MITM client (browser/app/script)"] --> Proxy["MITM proxy (Yakit)"]
+    Proxy --> Server["Target server"]
     Server --> Proxy
     Proxy --> Browser
 ```
 
-- 浏览器：把流量导向 Yakit 的一端（浏览器、移动 App、自动化脚本）。
-- MITM 代理（Yakit）：接收请求，可改可丢，再转发给目标；拿到响应后也可再改，回写客户端。所有 Hook 都挂在代理内部。
-- 目标服务器：真正的后端。
+- Browser: the side that directs traffic to Yakit (browser, mobile app, automation script).
+- MITM proxy (Yakit): receives requests, may modify or drop them, then forwards them to the target; after getting the response it may modify it again and write it back to the client. All Hooks are attached inside the proxy.
+- Target server: the real backend.
 
-## 2. Hook 三大类与触发时机
+## 2. The Three Hook Categories and Their Trigger Timing
 
-Yakit MITM 把 Hook 分成三类：请求响应劫持类（同步串行，可改可丢）、镜像类（只观察分析）、数据包存储处理类。
+Yakit MITM splits Hooks into three categories: request/response hijacking (synchronous and serial, can modify and drop), mirroring (observation and analysis only), and packet storage handling.
 
-| Hook | 触发时机 | 能否改写 | 提交方式 |
+| Hook | Trigger timing | Can rewrite | How it submits |
 |---|---|---|---|
-| `hijackHTTPRequest(isHttps, url, req, forward, drop)` | 浏览器发起请求后、发往目标前（最主要的请求拦截点） | 是 | `forward(req)` / `drop()` |
-| `hijackHTTPResponse(isHttps, url, rsp, forward, drop)` | 收到目标响应后、回写客户端前 | 是 | `forward(rsp)` / `drop()` |
-| `hijackHTTPResponseEx(isHttps, url, req, rsp, forward, drop)` | 同上，但同时拿到 req（推荐） | 是 | `forward(rsp)` / `drop()` |
-| `beforeRequest(isHttps, oreq, req)` | 请求出站前最后时刻（在 hijackHTTPRequest 之后） | 是（返回值提交） | `return req` |
-| `afterRequest(isHttps, oreq, req, orsp, rsp)` | 响应回写前最后时刻（在 hijack response 之后） | 是（返回值提交） | `return rsp` |
-| `mirrorHTTPFlow(isHttps, url, req, rsp, body)` | 每个请求响应完成后（含全部流量） | 否，仅观察 | 无 |
-| `mirrorFilteredHTTPFlow(isHttps, url, req, rsp, body)` | 仅通过过滤规则的流量 | 否，仅观察 | 无 |
-| `mirrorNewWebsite(isHttps, url, req, rsp, body)` | 发现新域名（每域名一次） | 否，仅观察 | 无 |
-| `mirrorNewWebsitePath(isHttps, url, req, rsp, body)` | 发现新路径（同域名同路径一次） | 否，仅观察 | 无 |
-| `mirrorNewWebsitePathParams(isHttps, url, req, rsp, body)` | 发现新参数组合（结构去重） | 否，仅观察 | 无 |
-| `hijackSaveHTTPFlow(flow, modify, drop)` | 入库 History 前最后一环 | 是（改 flow） | `modify(flow)` / `drop()` |
-| `mockHTTPRequest(isHttps, url, req, mockResponse)` | 请求出站前，可用本地响应替代 | 是（替代响应） | `mockResponse(rspStr)` |
+| `hijackHTTPRequest(isHttps, url, req, forward, drop)` | After the browser issues the request, before it goes to the target (the main request interception point) | Yes | `forward(req)` / `drop()` |
+| `hijackHTTPResponse(isHttps, url, rsp, forward, drop)` | After the target response arrives, before it is written back to the client | Yes | `forward(rsp)` / `drop()` |
+| `hijackHTTPResponseEx(isHttps, url, req, rsp, forward, drop)` | Same as above, but also receives req (recommended) | Yes | `forward(rsp)` / `drop()` |
+| `beforeRequest(isHttps, oreq, req)` | The last moment before the request goes out (after hijackHTTPRequest) | Yes (submitted via the return value) | `return req` |
+| `afterRequest(isHttps, oreq, req, orsp, rsp)` | The last moment before the response is written back (after hijack response) | Yes (submitted via the return value) | `return rsp` |
+| `mirrorHTTPFlow(isHttps, url, req, rsp, body)` | After every request/response completes (all traffic) | No, observation only | None |
+| `mirrorFilteredHTTPFlow(isHttps, url, req, rsp, body)` | Only traffic that passes the filter rules | No, observation only | None |
+| `mirrorNewWebsite(isHttps, url, req, rsp, body)` | When a new domain is discovered (once per domain) | No, observation only | None |
+| `mirrorNewWebsitePath(isHttps, url, req, rsp, body)` | When a new path is discovered (once per domain + path) | No, observation only | None |
+| `mirrorNewWebsitePathParams(isHttps, url, req, rsp, body)` | When a new parameter combination is discovered (deduplicated by structure) | No, observation only | None |
+| `hijackSaveHTTPFlow(flow, modify, drop)` | The last step before being stored in History | Yes (modifies the flow) | `modify(flow)` / `drop()` |
+| `mockHTTPRequest(isHttps, url, req, mockResponse)` | Before the request goes out, can be replaced by a local response | Yes (replaces the response) | `mockResponse(rspStr)` |
 
-### forward / drop 语义（劫持类的核心）
+### forward / drop Semantics (The Core of Hijack-Style Hooks)
 
-- `forward(req|rsp)`：放行（可改写后的）数据包。劫持类 hook **必须**对每个数据包调用 forward 或 drop，否则该请求被挂起。
-- `drop()`：丢弃数据包。
-- 未命中目标时也要 `forward(原始包)`，保证其余流量与后续插件继续处理。
+- `forward(req|rsp)`: pass the (possibly rewritten) packet through. A hijack-style hook **must** call forward or drop for every packet, otherwise the request hangs.
+- `drop()`: discard the packet.
+- When the target is not matched you must still call `forward(original packet)`, so the remaining traffic and subsequent plugins keep working.
 
-### beforeRequest / afterRequest 的特殊性
+### The Peculiarities of beforeRequest / afterRequest
 
-这里的 "Request" 沿用 Burp/Zap 习惯，指"浏览器发出请求 → 代理转发 → 代理拿到响应"整段往返。
+Here "Request" follows the Burp/Zap convention and refers to the whole round trip of "browser sends request -> proxy forwards -> proxy gets response".
 
-- `beforeRequest`：请求出站前最后修改机会，通过 **返回值** 提交；修改对用户劫持界面不可见。
-- `afterRequest`：响应回写前最后修改机会，同样通过返回值提交。
+- `beforeRequest`: the last chance to modify the request before it goes out, submitted through the **return value**; the modification is invisible in the user's hijack interface.
+- `afterRequest`: the last chance to modify the response before it is written back, also submitted through the return value.
 
-## 3. mirror 去重语义（重要）
+## 3. mirror Deduplication Semantics (Important)
 
-访问以下序列时：
+When the following sequence is visited:
 
 ```text
 http://a:8080/abc/        http://a:8080/abc/12      http://a:8080/abc/13
 http://a:8080/abc/14      http://a:8080/abc/14?x=1  http://b:8080/abc/14
 ```
 
-- `mirrorNewWebsite`：触发 2 次（域名 `a:8080`、`b:8080` 各一次）。
-- `mirrorNewWebsitePath`：触发 5 次（`a:8080` 下 4 个不同路径 + `b:8080/abc/14`；带 query 的 `/abc/14?x=1` 仍是 `/abc/14` 不重复）。
-- `mirrorNewWebsitePathParams`：按 query 参数 **结构** 去重（参数名相同值不同不重复触发）。
+- `mirrorNewWebsite`: triggers 2 times (once each for the domains `a:8080` and `b:8080`).
+- `mirrorNewWebsitePath`: triggers 5 times (4 distinct paths under `a:8080` + `b:8080/abc/14`; `/abc/14?x=1` with a query is still `/abc/14`, so it is not a duplicate).
+- `mirrorNewWebsitePathParams`: deduplicates by the **structure** of the query parameters (the same parameter names with different values do not trigger again).
 
-## 4. 全部 Hook 示例索引（examples/，一个函数一个示例）
+## 4. Index of All Hook Examples (examples/, one function per example)
 
-表中**每一个 Hook 都有独立示例 + YAK_MAIN 自测**，`yak <file>` 即可自证，证据见 `scripts/validate-skills.yak`。
+**Every** Hook in the table has its own example plus a YAK_MAIN self-test, so `yak <file>` proves it by itself; the evidence is in `scripts/validate-skills.yak`.
 
-| Hook | 示例场景 | 文件 |
+| Hook | Example scenario | File |
 |---|---|---|
-| `hijackHTTPRequest` | 出站前改 JSON 业务字段（金额） | [examples/hijack-request.yak](examples/hijack-request.yak) |
-| `hijackHTTPResponse` | 仅凭响应补安全头 + 抹版本号 | [examples/hijack-response.yak](examples/hijack-response.yak) |
-| `hijackHTTPResponseEx` | 删除阻断型 JS（alert/跳转）保留调试页面 | [examples/hijack-response-ex.yak](examples/hijack-response-ex.yak) |
-| `beforeRequest` | 出站前最后注入 Trace 头（返回值提交） | [examples/before-request.yak](examples/before-request.yak) |
-| `afterRequest` | 回写前打调试标记（返回值提交） | [examples/after-request.yak](examples/after-request.yak) |
-| `mirrorHTTPFlow` | 全量流量被动扫描敏感信息泄露 | [examples/mirror-http-flow.yak](examples/mirror-http-flow.yak) |
-| `mirrorFilteredHTTPFlow` | 仅过滤后流量按内容类型统计 | [examples/mirror-filtered-http-flow.yak](examples/mirror-filtered-http-flow.yak) |
-| `mirrorNewWebsite` | 新域名发现 → 资产清单 | [examples/mirror-new-website.yak](examples/mirror-new-website.yak) |
-| `mirrorNewWebsitePath` | 新路径发现与去重收集 | [examples/mirror-new-website-path.yak](examples/mirror-new-website-path.yak) |
-| `mirrorNewWebsitePathParams` | 新参数组合发现 → Fuzz 选靶 | [examples/mirror-new-website-path-params.yak](examples/mirror-new-website-path-params.yak) |
-| `hijackSaveHTTPFlow` | 入库前敏感词打标签 + 染色 | [examples/hijack-save-http-flow.yak](examples/hijack-save-http-flow.yak) |
-| `mockHTTPRequest` | 危险操作（DELETE/PUT）mock 护栏 | [examples/mock-http-request.yak](examples/mock-http-request.yak) |
+| `hijackHTTPRequest` | Rewrite a JSON business field (amount) before it goes out | [examples/hijack-request.yak](examples/hijack-request.yak) |
+| `hijackHTTPResponse` | Add missing security headers based on the response alone + strip the version banner | [examples/hijack-response.yak](examples/hijack-response.yak) |
+| `hijackHTTPResponseEx` | Remove blocking JavaScript (alert/redirect) while keeping the debug page | [examples/hijack-response-ex.yak](examples/hijack-response-ex.yak) |
+| `beforeRequest` | Inject a Trace header as the last step before going out (submitted via the return value) | [examples/before-request.yak](examples/before-request.yak) |
+| `afterRequest` | Mark the response for debugging before write-back (submitted via the return value) | [examples/after-request.yak](examples/after-request.yak) |
+| `mirrorHTTPFlow` | Passively scan all traffic for sensitive information leakage | [examples/mirror-http-flow.yak](examples/mirror-http-flow.yak) |
+| `mirrorFilteredHTTPFlow` | Count filtered traffic by content type | [examples/mirror-filtered-http-flow.yak](examples/mirror-filtered-http-flow.yak) |
+| `mirrorNewWebsite` | New domain discovery -> asset inventory | [examples/mirror-new-website.yak](examples/mirror-new-website.yak) |
+| `mirrorNewWebsitePath` | New path discovery and deduplicated collection | [examples/mirror-new-website-path.yak](examples/mirror-new-website-path.yak) |
+| `mirrorNewWebsitePathParams` | New parameter combination discovery -> fuzz target selection | [examples/mirror-new-website-path-params.yak](examples/mirror-new-website-path-params.yak) |
+| `hijackSaveHTTPFlow` | Tag with sensitive keywords + dye the flow before storing it | [examples/hijack-save-http-flow.yak](examples/hijack-save-http-flow.yak) |
+| `mockHTTPRequest` | Mock guardrail for dangerous operations (DELETE/PUT) | [examples/mock-http-request.yak](examples/mock-http-request.yak) |
 
-## 5. 标准写法：hook 函数 + YAK_MAIN 自测
+## 5. Standard Pattern: Hook Function + YAK_MAIN Self-Test
 
-所有 MITM 热加载脚本统一结构——注册 hook 为函数变量，再用 `if YAK_MAIN { runSelfTest() }` 守卫本地自测：
+All MITM hot reload scripts share the same structure — register the hook as a function variable, then guard the local self-test with `if YAK_MAIN { runSelfTest() }`:
 
 ```yak
 hijackHTTPRequest = func(isHttps, url, req, forward, drop) {
-    // ... 命中目标则改写, 未命中也要 forward 原包
+    // ... rewrite it when the target is matched, forward the original packet otherwise
     forward(req)
 }
 
 func runSelfTest() {
-    // 用自定义 forward/drop callback 捕获结果并 assert
+    // use custom forward/drop callbacks to capture the result and assert
 }
 
 if YAK_MAIN {
@@ -115,56 +115,56 @@ if YAK_MAIN {
 }
 ```
 
-`YAK_MAIN` 是引擎注入的全局布尔：
+`YAK_MAIN` is a global boolean injected by the engine:
 
-- `yak xxx.yak` 命令行运行：`YAK_MAIN = true`，跑 `runSelfTest()` 做 mock 自测。
-- yakit MITM 热加载窗口加载：`YAK_MAIN = false`，自测块不执行，仅注册 hook。
+- Running `yak xxx.yak` from the command line: `YAK_MAIN = true`, run `runSelfTest()` for a mock self-test.
+- Loading in the yakit MITM hot reload window: `YAK_MAIN = false`, the self-test block does not run, only the hook is registered.
 
-因此把含自测块的完整脚本粘贴回 yakit 是绝对安全的。
+Therefore it is completely safe to paste the full script, including the self-test block, back into yakit.
 
-> 并发与全局变量（重要，避免崩溃）：MITM 会 **并发** 调用同一份 hook。顶层全局变量请当作 **只读常量**（密钥/IV/规则表加载时赋值一次、hook 内绝不修改）。**不要在 hook 里写共享可变全局**（裸 `append` 全局 slice、给全局 map 赋值会触发 data race 直接 panic）。需要跨请求聚合时用 `sync.Map`/`sync.NewMutex()` 或 `db.*`/`risk.*` 落库；本库 `mirror-*` 示例里的全局累加只是 **单线程命令行自测** 的演示写法。详见 [webfuzzer-hotpatch 第 6 节](../webfuzzer-hotpatch/SKILL.md)。
+> Concurrency and global variables (important, avoids crashes): MITM calls the same hook **concurrently**. Treat top-level global variables as **read-only constants** (assign keys/IVs/rule tables once at load time and never modify them inside the hook). **Do not write to shared mutable globals inside the hook** (a bare `append` to a global slice or assigning to a global map triggers a data race and panics outright). When you must aggregate across requests, use `sync.Map`/`sync.NewMutex()` or store them in `db.*`/`risk.*`; the global accumulation in this library's `mirror-*` examples is only demo code for **single-threaded command-line self-testing**. See [webfuzzer-hotpatch section 6](../webfuzzer-hotpatch/SKILL.md) for details.
 
-### 各 Hook 的自测 mock 方式
+### How to Mock Each Hook in a Self-Test
 
-| Hook | 自测验证方式 |
+| Hook | Self-test verification |
 |---|---|
-| `hijackHTTPRequest` / `hijackHTTPResponseEx` | 自定义 `forward`/`drop` callback，断言捕获的包内容 |
-| `mirror*` | 直接调用 hook，断言外层状态（set/slice/染色字段）变更 |
-| `hijackSaveHTTPFlow` | 用 `map` 模拟 `*HTTPFlow`，stub `AddTag`/颜色方法，验证 `modify(flow)` 被调用 |
-| `mockHTTPRequest` | 自定义 `mockResponse` callback，验证目标触发、非目标不触发 |
+| `hijackHTTPRequest` / `hijackHTTPResponseEx` | Custom `forward`/`drop` callbacks, assert the captured packet content |
+| `mirror*` | Call the hook directly, assert that the outer state (set/slice/dye field) changed |
+| `hijackSaveHTTPFlow` | Use a `map` to simulate `*HTTPFlow`, stub `AddTag`/color methods, verify that `modify(flow)` was called |
+| `mockHTTPRequest` | Custom `mockResponse` callback, verify the target is triggered and non-targets are not |
 
-## 6. 常用 API 速查
+## 6. Quick Reference of Common APIs
 
-| 用途 | API |
+| Purpose | API |
 |---|---|
-| 取请求/响应 body | `poc.GetHTTPPacketBody(packet)` |
-| 替换 body | `poc.ReplaceHTTPPacketBody(packet, newBody)` |
-| 取/替换 header | `poc.GetHTTPPacketHeader(packet, key)` / `poc.ReplaceHTTPPacketHeader(packet, key, val)` |
-| 取请求方法 | `poc.GetHTTPRequestMethod(req)` |
-| 取响应状态码 | `poc.GetStatusCodeFromResponse(rsp)` |
-| flow 原文 | `codec.StrconvUnquote(flow.Request)~` / `codec.StrconvQuote(str)` |
-| 主动发包 | `poc.HTTP(raw, poc.https(b), poc.timeout(5), poc.save(false))~` |
+| Get the request/response body | `poc.GetHTTPPacketBody(packet)` |
+| Replace the body | `poc.ReplaceHTTPPacketBody(packet, newBody)` |
+| Get/replace a header | `poc.GetHTTPPacketHeader(packet, key)` / `poc.ReplaceHTTPPacketHeader(packet, key, val)` |
+| Get the request method | `poc.GetHTTPRequestMethod(req)` |
+| Get the response status code | `poc.GetStatusCodeFromResponse(rsp)` |
+| Raw flow text | `codec.StrconvUnquote(flow.Request)~` / `codec.StrconvQuote(str)` |
+| Send a request proactively | `poc.HTTP(raw, poc.https(b), poc.timeout(5), poc.save(false))~` |
 
-## 7. 验证
+## 7. Verification
 
 ```bash
 cd /Users/v1ll4n/Projects/yaklang
 go run common/yak/cmd/yak.go skills/mitm-hotpatch/examples/hijack-request.yak
-# 或已安装引擎: yak skills/mitm-hotpatch/examples/hijack-request.yak
+# Or with the installed engine: yak skills/mitm-hotpatch/examples/hijack-request.yak
 
-# 用与 Yakit gRPC 同款执行路径在真实请求上验证:
+# Validate on a real request using the same execution path as the Yakit gRPC:
 go build -o /tmp/yak ./common/yak/cmd/yak.go
 printf 'POST /api/order/create HTTP/1.1\r\nHost: shop.example.com\r\nContent-Type: application/json\r\n\r\n{"amount":100}' > /tmp/req.txt
 /tmp/yak hotpatch-mitm --script skills/mitm-hotpatch/examples/hijack-request.yak --request /tmp/req.txt
 ```
 
-每个示例应：10 秒内完成、所有 assert 通过、log 全英文、最终出现 `... self test passed`。
+Each example should: finish within 10 seconds, pass all asserts, log only in English, and finally print `... self test passed`.
 
-## 参考来源
+## References
 
-- yak-project-public 031 (2025-10-17) MITM 热加载全流程解析：一文拆解 Hook 函数四大实战场景
-- yak-project-public 030 (2025-10-24) Yakit 热加载实战技巧
-- yak-project-public 024 (2025-12-05) Mock 重塑无污染客户端测试
-- 引擎实现：`common/yak/hook_mixed_plugin_caller.go`
+- yak-project-public 031 (2025-10-17) Full breakdown of the MITM hot reload flow: one article dissecting the four practical Hook scenarios
+- yak-project-public 030 (2025-10-24) Yakit hot reload practical techniques
+- yak-project-public 024 (2025-12-05) Mock: reshaping pollution-free client testing
+- Engine implementation: `common/yak/hook_mixed_plugin_caller.go`
 
-> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`SKILL.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。
+> 📎 **Reference Document Notice**: this skill is adapted from an upstream open-source repository; the following reference document is **not distributed with this library**: `SKILL.md`. The key points of the related topics are retained in the corresponding descriptions in this document; if you need the expanded content, grep the library using keywords from the body text or search on your own.

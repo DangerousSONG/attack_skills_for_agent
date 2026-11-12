@@ -2,37 +2,38 @@
 name: wpbullet-wp-audit
 description: "wpbullet: WP plugin vulnerability scanning. Signals: web vulnerabilities, injection, WP vulnerability scan, aggressive mode, plugins only."
 zh-signals: "wpbullet: WP 插件漏洞扫描。信号:web漏洞,注入,WP 漏洞扫描,激进模式,仅插件。"
+when-to-use: "Use wpbullet when auditing a WordPress site for known plugin vulnerabilities, including aggressive mode and plugin-only checks, to identify exploitable components."
 ---
 
 # wpbullet
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/webarx-security/wpbullet
-- 上游 License:GPL-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/webarx-security/wpbullet
+- Upstream License: GPL-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/webarx-security/wpbullet && cd wpbullet && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python wpbullet.py -u https://t.com` | WP 漏洞扫描 |
-| `-u url --aggressive` | 激进模式 |
-| `-u url -e vp` | 仅插件 |
+| `python wpbullet.py -u https://t.com` | WP vulnerability scan |
+| `-u url --aggressive` | Aggressive mode |
+| `-u url -e vp` | Plugins only |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### WP 插件漏洞扫描
+### WP plugin vulnerability scan
 
 ```bash
 python wpbullet.py -u https://t.com
-# 50+ 插件漏洞 PoC
+# 50+ plugin vulnerability PoCs
 ```
 
-## 注意事项
+## Notes
 
-WebARX 出品的 WP 扫描器,插件漏洞库精。
+A WP scanner by WebARX with a fine-grained plugin vulnerability database.

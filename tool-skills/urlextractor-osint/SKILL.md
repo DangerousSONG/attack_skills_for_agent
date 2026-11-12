@@ -2,37 +2,41 @@
 name: urlextractor-osint
 description: "URLextractor: Target URL intelligence aggregation. Signals: web vulnerabilities, injection, target OSINT extraction, include subdomains, with port scan."
 zh-signals: "URLextractor: 目标 URL 情报聚合。信号:web漏洞,注入,目标 OSINT 提取,包含子域,含端口扫描。"
+when-to-use: >-
+  Use when you need OSINT URL and IP intelligence for a target domain as a
+  starting point for a web assessment. Can include subdomains and port
+  scanning.
 ---
 
 # URLextractor
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/eschultze/URLextractor
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/eschultze/URLextractor
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/eschultze/URLextractor && cd URLextractor
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `./extractor.sh t.com` | 目标 OSINT 提取 |
-| `-d t.com -s` | 包含子域 |
-| `-d t.com -p` | 含端口扫描 |
+| `./extractor.sh t.com` | Target OSINT extraction |
+| `-d t.com -s` | Include subdomains |
+| `-d t.com -p` | Include port scanning |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 目标 URL 情报聚合
+### Target URL intelligence aggregation
 
 ```bash
 ./extractor.sh corp.com
-# 多源收 URL+IP+技术栈
+# Collects URLs, IPs, and the tech stack from multiple sources
 ```
 
-## 注意事项
+## Notes
 
-多源 OSINT URL 收集,带技术栈识别。
+Multi-source OSINT URL collection with technology stack identification.

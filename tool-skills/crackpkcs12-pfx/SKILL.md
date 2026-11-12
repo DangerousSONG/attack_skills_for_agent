@@ -2,36 +2,39 @@
 name: crackpkcs12-pfx
 description: "crackpkcs12: Brute-forces PFX certificate passwords. Signals: password cracking, hash cracking, PFX password brute force, verbose."
 zh-signals: "crackpkcs12: PFX 证书口令爆破。信号:密码破解,哈希破解,PFX 口令爆破,详细。"
+when-to-use: >-
+  Use when you have obtained a PKCS#12 (.pfx/.p12) file and need to recover its
+  password offline via a wordlist in order to use the private key.
 ---
 
 # crackpkcs12
 
-- 攻击大类:C25 哈希与密码破解
-- 上游仓库:https://github.com/crackpkcs12/crackpkcs12
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C25 Hash and Password Cracking
+- Upstream Repository: https://github.com/crackpkcs12/crackpkcs12
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/crackpkcs12/crackpkcs12 && cd crackpkcs12 && make
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `./crackpkcs12 -d wordlist.txt cert.pfx` | PFX 口令爆破 |
-| `-d w.txt -f pfx -v` | 详细 |
+| `./crackpkcs12 -d wordlist.txt cert.pfx` | PFX password brute force |
+| `-d w.txt -f pfx -v` | Verbose |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### PFX 证书口令爆破
+### PFX Certificate Password Brute Force
 
 ```bash
 ./crackpkcs12 -d rockyou.txt backup.pfx
-# 得私钥签名任意
+# Obtain the private key and sign anything
 ```
 
-## 注意事项
+## Notes
 
-PKCS#12 证书口令爆破工具。
+A PKCS#12 certificate password brute-forcing tool.

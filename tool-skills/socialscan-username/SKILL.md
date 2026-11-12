@@ -2,38 +2,40 @@
 name: socialscan-username
 description: "socialscan: credential combination pre-reconnaissance. Signals: email collection, employee info, email availability or registration lookup, username bulk, specified platform."
 zh-signals: "socialscan: 凭据组合前置侦察。信号:邮箱收集,员工信息,邮箱可用性/注册查询,用户名批量,指定平台。"
+when-to-use: >-
+  Use before credential attacks to check whether target emails or usernames are registered on major platforms, helping build accurate username and email dictionaries.
 ---
 
 # socialscan
 
-- 攻击大类:C03 邮箱与人员OSINT
-- 上游仓库:https://github.com/iojw/socialscan
-- 上游 License:MPL-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C03 Email and Personnel OSINT
+- Upstream Repository: https://github.com/iojw/socialscan
+- Upstream License: MPL-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install socialscan
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `socialscan --email victim@x.com` | 邮箱可用性/注册查询 |
-| `--username user1 user2` | 用户名批量 |
-| `--platform twitter github` | 指定平台 |
-| `--json` | JSON 输出 |
+| `socialscan --email victim@x.com` | Email availability / registration lookup |
+| `--username user1 user2` | Usernames in bulk |
+| `--platform twitter github` | Specify platforms |
+| `--json` | JSON output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 凭据组合前置侦察
+### Pre-Reconnaissance for Credential Combinations
 
 ```bash
 socialscan --email a@corp.com --email b@corp.com --username ceo_corp
-# 确认常用用户名/邮箱占用情况,构造精准凭据字典
+# Confirm which common usernames/emails are taken to build a precise credential dictionary
 ```
 
-## 注意事项
+## Notes
 
-异步并发查询,速度比 holehe 快;结果用于 username-anarchy 生成变形字典。
+Asynchronous concurrent lookups, faster than holehe; the results feed username-anarchy to generate variant dictionaries.

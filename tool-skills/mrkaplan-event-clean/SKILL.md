@@ -2,38 +2,41 @@
 name: mrkaplan-event-clean
 description: "MrKaplan: Post-action targeted event log cleanup. Signals: red team, methodology, erase mode keep 1102, target event/log configuration, self-delete after run."
 zh-signals: "MrKaplan: 行动后事件日志定点清理。信号:红队,方法论,擦除模式(留 1102),目标事件/日志配置,运行后自删。"
+when-to-use: >-
+  Use when cleaning up Windows event logs after an authorized red-team action and you need
+  targeted removal of specific event IDs while keeping log 1102 intact.
 ---
 
 # MrKaplan
 
-- 攻击大类:C50 痕迹清理与反取证
-- 上游仓库:https://github.com/Idov31/MrKaplan
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C50 Trace Cleanup and Anti-Forensics
+- Upstream Repository: https://github.com/Idov31/MrKaplan
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
-git clone https://github.com/Idov31/MrKaplan && 编译 MrKaplan
+git clone https://github.com/Idov31/MrKaplan && build MrKaplan
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `MrKaplan.exe --operation伪装` | 伪装模式(事件 1102 不留痕删除) |
-| `--operation erase` | 擦除模式(留 1102) |
-| `config.yaml` | 目标事件/日志配置 |
-| `-d` | 运行后自删 |
+| `MrKaplan.exe --operation disguise` | Disguise mode (deletes without leaving a 1102 trace) |
+| `--operation erase` | Erase mode (keeps 1102) |
+| `config.yaml` | Target event/log configuration |
+| `-d` | Self-delete after running |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 行动后事件日志定点清理
+### Targeted Event Log Cleanup After an Action
 
 ```bash
 MrKaplan.exe --operation disguise -c config.yaml
-# 只删 config 里列的事件,4624/4672 等关键痕迹清除
+# Only deletes the events listed in config, clearing key traces such as 4624/4672
 ```
 
-## 注意事项
+## Notes
 
-定向 Windows 事件日志清理,比 wevtutil cl 全文清空(异常)更隐蔽,伪装模式不触发 1102。
+Targeted Windows event log cleanup, more covert than wiping everything with wevtutil cl (which raises an alert), and disguise mode does not trigger 1102.

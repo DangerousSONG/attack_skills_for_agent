@@ -2,39 +2,43 @@
 name: bbscan-batch-scan
 description: "BBScan: batch screens web sensitive paths. Signals: web vulnerability, injection, concurrent processes, custom PoC scripts, collect only, no PoC request"
 zh-signals: "BBScan: 批量 Web 敏感路径初筛。信号:web漏洞,注入,并发进程,自定义 PoC 脚本,仅收集,不请求 PoC。"
+when-to-use: >-
+  Use when you need lightweight batch screening of many web hosts for
+  sensitive paths such as git leaks, backups, and admin panels. Supports
+  concurrency and custom PoC scripts.
 ---
 
 # BBScan
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/lijiejie/BBScan
-- 上游 License:Apache-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/lijiejie/BBScan
+- Upstream License: Apache-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/lijiejie/BBScan && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python BBScan.py -u https://t.com` | 单目标敏感路径+信息泄露扫描 |
-| `python BBScan.py -f urls.txt` | 批量 |
-| `-p 20` | 并发进程 |
-| `--script scripts/` | 自定义 PoC 脚本 |
-| `-d` | 仅收集,不请求 PoC |
+| `python BBScan.py -u https://t.com` | Single-target sensitive path + information leak scan |
+| `python BBScan.py -f urls.txt` | Batch |
+| `-p 20` | Concurrent processes |
+| `--script scripts/` | Custom PoC scripts |
+| `-d` | Collect only, do not request PoC |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 批量 Web 敏感路径初筛
+### Batch Web Sensitive Path Screening
 
 ```bash
 python BBScan.py -f subs.txt -p 50
-# git/.svn/.env/备份文件/管理后台路径批量探,命中人工深挖
+# Probe git/.svn/.env/backup file/admin panel paths in bulk, then dig deeper manually on hits
 ```
 
-## 注意事项
+## Notes
 
-lijiejie 出品轻量批量扫描器,内置 git 泄露/目录穿越/备份文件等敏感路径规则,适合大资产初筛。
+Lightweight batch scanner by lijiejie, with built-in sensitive path rules for git leaks, path traversal, backup files, and more; ideal for large-scale asset screening.

@@ -2,38 +2,41 @@
 name: w13scan-passive-audit
 description: "w13scan: Passive traffic vulnerability auditing. Signals: web vulnerabilities, injection, passive scan, proxy mode traffic capture, proxy port."
 zh-signals: "w13scan: 被动流量漏洞审计。信号:web漏洞,注入,被动扫描,代理模式抓流量,代理端口。"
+when-to-use: >-
+  Use when performing an authorized full-site web audit and you want passive vulnerability
+  analysis of every request captured through the built-in proxy.
 ---
 
 # w13scan
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/boy-hack/w13scan
-- 上游 License:GPL-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/boy-hack/w13scan
+- Upstream License: GPL-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/boy-hack/w13scan && cd w13scan && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 w13scan.py -u https://t.com` | 被动扫描 |
-| `-u url --proxy` | 代理模式抓流量 |
-| `-p 8080` | 代理端口 |
-| `--level 5` | 检测等级 |
+| `python3 w13scan.py -u https://t.com` | Passive scan |
+| `-u url --proxy` | Proxy mode traffic capture |
+| `-p 8080` | Proxy port |
+| `--level 5` | Detection level |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 被动流量漏洞审计
+### Passive traffic vulnerability audit
 
 ```bash
 python3 w13scan.py -u https://t.com -p 8080
-# 浏览器过代理浏览全站,被动分析每个请求
+# Browse the whole site through the proxy and passively analyze every request
 ```
 
-## 注意事项
+## Notes
 
-被动式 Web 漏洞扫描器,基于流量分析,适合授权测试中的全站审计。
+Passive web vulnerability scanner based on traffic analysis, well suited to site-wide audits in authorized testing.

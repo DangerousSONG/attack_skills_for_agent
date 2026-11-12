@@ -2,41 +2,44 @@
 name: dirsearch-dir-bruteforce
 description: "dirsearch: backend and backup file discovery. Signals: web scanning, vulnerability scanning, extension-based directory enumeration, custom dictionary, recursive scan 3 levels."
 zh-signals: "dirsearch: 后台与备份文件发现。信号:web扫描,漏洞扫描,扩展名枚举目录,自定义字典,递归扫描 3 层。"
+when-to-use: >-
+  Use during web reconnaissance when you need to brute-force directories and
+  files, especially to discover admin panels, backups, and .git or .env leaks.
 ---
 
 # dirsearch
 
-- 攻击大类:C41 Web漏洞扫描与验证
-- 上游仓库:https://github.com/maurosoria/dirsearch
-- 上游 License:GPL-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C41 Web Vulnerability Scanning and Validation
+- Upstream Repository: https://github.com/maurosoria/dirsearch
+- Upstream License: GPL-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
-pip install dirsearch 或 git clone https://github.com/maurosoria/dirsearch
+pip install dirsearch or git clone https://github.com/maurosoria/dirsearch
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `-u URL -e php,html,bak` | 扩展名枚举目录 |
-| `-w /path/wordlist.txt` | 自定义字典 |
-| `-r -R 3` | 递归扫描 3 层 |
-| `--exclude-status=403,404` | 过滤无效状态码 |
-| `-t 50` | 50 线程 |
-| `-x 302` | 排除重定向 |
-| `--proxy=http://127.0.0.1:8080` | 过 Burp 调试 |
+| `-u URL -e php,html,bak` | Extension-based directory enumeration |
+| `-w /path/wordlist.txt` | Custom wordlist |
+| `-r -R 3` | Recursive scan 3 levels deep |
+| `--exclude-status=403,404` | Filter out invalid status codes |
+| `-t 50` | 50 threads |
+| `-x 302` | Exclude redirects |
+| `--proxy=http://127.0.0.1:8080` | Route through Burp for debugging |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 后台与备份文件发现
+### Backend and backup file discovery
 
 ```bash
 dirsearch -u https://target.com -e php,bak,old,zip -t 80 --exclude-status=404
 dirsearch -u https://target.com/admin/ -r -R 2
 ```
 
-## 注意事项
+## Notes
 
-默认字典在 db/ 目录;扫到 .git/.env/.bak 是常见突破口。
+The default wordlist lives in the db/ directory; hitting .git/.env/.bak is a common breakthrough.

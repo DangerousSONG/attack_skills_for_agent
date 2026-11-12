@@ -2,37 +2,40 @@
 name: msmailprobe-o365
 description: "msmailprobe: O365 environment reconnaissance and spraying. Signals: brute force, password spraying, user enumeration."
 zh-signals: "msmailprobe: O365 环境侦察+喷洒。信号:暴力破解,口令喷射,用户枚举。"
+when-to-use: >-
+  Use when probing an O365 or Exchange environment to identify the identity
+  provider, enumerate users, and perform password spraying.
 ---
 
 # msmailprobe
 
-- 攻击大类:C28 暴力破解与口令喷射
-- 上游仓库:https://github.com/busterb/msmailprobe
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C28 Brute Force and Password Spraying
+- Upstream Repository: https://github.com/busterb/msmailprobe
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/busterb/msmailprobe && cd msmailprobe && go build
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `./msmailprobe -domain t.com` | O365/Exchange 探测 |
-| `-domain d -usernames u.txt` | 用户枚举 |
-| `-domain d -spray pass.txt` | 喷洒 |
+| `./msmailprobe -domain t.com` | O365/Exchange probing |
+| `-domain d -usernames u.txt` | User enumeration |
+| `-domain d -spray pass.txt` | Spraying |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### O365 环境侦察+喷洒
+### O365 environment reconnaissance + spraying
 
 ```bash
 ./msmailprobe -domain corp.com -spray passwords.txt
-# 判断 IdP 类型+喷洒一体
+# Determine the IdP type and spray in one go
 ```
 
-## 注意事项
+## Notes
 
-O365/本地 Exchange 探测+用户枚举+喷洒。
+O365/on-premises Exchange probing plus user enumeration and spraying.

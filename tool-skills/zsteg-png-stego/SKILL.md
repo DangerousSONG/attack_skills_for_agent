@@ -2,38 +2,39 @@
 name: zsteg-png-stego
 description: "zsteg: CTF/pentest image steganography analysis. Signals: stego, steganography, all-method brute force, extract specified bit plane, limit output."
 zh-signals: "zsteg: CTF/渗透图片隐写分析。信号:隐写,steganography,全方法暴力,提取指定位平面,限制输出。"
+when-to-use: "Use during CTF challenges or penetration tests when analyzing PNG or BMP images for hidden steganographic data. Requires an image file and optionally a specific extraction method or bit plane."
 ---
 
 # zsteg
 
-- 攻击大类:C38 隐写与数据提取
-- 上游仓库:https://github.com/zed-0xff/zstest
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C38 Steganography and Data Extraction
+- Upstream Repository: https://github.com/zed-0xff/zstest
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 gem install zsteg
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `zsteg image.png` | PNG/BMP 隐写全检测 |
-| `zsteg -a image.png` | 全方法暴力 |
-| `zsteg -E 'b1,rgb,lsb,xy' image.png` | 提取指定位平面 |
-| `zsteg --all --limit 5 image.png` | 限制输出 |
+| `zsteg image.png` | Full PNG/BMP steganography detection |
+| `zsteg -a image.png` | Brute force all methods |
+| `zsteg -E 'b1,rgb,lsb,xy' image.png` | Extract a specified bit plane |
+| `zsteg --all --limit 5 image.png` | Limit output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### CTF/渗透图片隐写分析
+### CTF/pentest image steganography analysis
 
 ```bash
 zsteg -a sus.png
-# 检测 LSB/尾数据/zlib 隐藏,一键出可疑字符串
+# Detect LSB/appended data/zlib hiding, and surface suspicious strings in one shot
 ```
 
-## 注意事项
+## Notes
 
-PNG/BMP 隐写检测瑞士军刀,检测 LSB、尾部附加数据、zlib 压缩内容、已知工具指纹(stegano/openstego 等)。
+A Swiss army knife for PNG/BMP steganography detection, covering LSB, appended trailing data, zlib-compressed content and known tool fingerprints (stegano/openstego and others).

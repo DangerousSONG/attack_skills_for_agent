@@ -2,37 +2,38 @@
 name: teamsuserenum-teams
 description: "TeamsUserEnum enumerates valid Teams users. Signals: email collection, employee information, Teams user enumeration, threads"
 zh-signals: "TeamsUserEnum: Teams 用户有效性枚举。信号:邮箱收集,员工信息,Teams 用户枚举,线程。"
+when-to-use: "Use to validate Microsoft Teams accounts and enumerate employees from a candidate email list during OSINT."
 ---
 
 # TeamsUserEnum
 
-- 攻击大类:C03 邮箱与人员OSINT
-- 上游仓库:https://github.com/immense-mountain/TeamsUserEnum
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C03 Email and Personnel OSINT
+- Upstream Repository: https://github.com/immense-mountain/TeamsUserEnum
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/immense-mountain/TeamsUserEnum && cd TeamsUserEnum && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 teamsuserenum.py -u users.txt -d corp.com` | Teams 用户枚举 |
-| `-u u.txt -d d -t 10` | 线程 |
-| `-o out.txt` | 输出 |
+| `python3 teamsuserenum.py -u users.txt -d corp.com` | Teams user enumeration |
+| `-u u.txt -d d -t 10` | Threads |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Teams 用户有效性枚举
+### Teams User Validity Enumeration
 
 ```bash
 python3 teamsuserenum.py -u names.txt -d corp.com
-# 错误码判断用户存在,不出日志
+# Uses error codes to determine whether a user exists, leaving no logs
 ```
 
-## 注意事项
+## Notes
 
-Microsoft Teams 用户枚举,域内人员发现。
+Microsoft Teams user enumeration for in-domain personnel discovery.

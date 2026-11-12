@@ -2,37 +2,40 @@
 name: sharesniffer-smb
 description: "sharesniffer: batch internal network share discovery. Signals: internal enumeration, network discovery, SMB share sniffing."
 zh-signals: "sharesniffer: 内网共享批量发现。信号:内网枚举,网络发现,SMB 共享嗅探。"
+when-to-use: >-
+  Use during internal enumeration to batch-discover accessible SMB shares across
+  a subnet using anonymous or supplied credentials.
 ---
 
 # sharesniffer
 
-- 攻击大类:C29 内网发现与枚举
-- 上游仓库:https://github.com/shirosaidev/sharesniffer
-- 上游 License:Apache-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C29 Internal Network Discovery and Enumeration
+- Upstream Repository: https://github.com/shirosaidev/sharesniffer
+- Upstream License: Apache-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/shirosaidev/sharesniffer && cd sharesniffer
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 sharesniffer.py -h 10.0.0.0/24` | SMB 共享嗅探 |
-| `-h cidr -u user -p pass` | 凭据 |
-| `-o out.txt` | 输出 |
+| `python3 sharesniffer.py -h 10.0.0.0/24` | SMB share sniffing |
+| `-h cidr -u user -p pass` | Credentials |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 内网共享批量发现
+### Batch Internal Network Share Discovery
 
 ```bash
 python3 sharesniffer.py -h 10.0.0.0/24
-# 匿名+认证双模式
+# Dual mode: anonymous + authenticated
 ```
 
-## 注意事项
+## Notes
 
-SMB 共享发现+访问测试。
+SMB share discovery plus access testing.

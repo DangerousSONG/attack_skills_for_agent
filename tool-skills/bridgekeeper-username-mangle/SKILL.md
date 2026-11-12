@@ -2,38 +2,40 @@
 name: bridgekeeper-username-mangle
 description: "BridgeKeeper: Converts HR rosters into sprayable password dictionaries. Signals: email harvesting, employee information, name-to-username rule generation, custom format."
 zh-signals: "BridgeKeeper: HR 名单变喷洒字典。信号:邮箱收集,员工信息,人名→用户名规则生成,指定格式。"
+when-to-use: >-
+  Use when you have an employee name list and a corporate domain and need to generate username and password variants following common naming conventions for spraying.
 ---
 
 # BridgeKeeper
 
-- 攻击大类:C03 OSINT情报收集
-- 上游仓库:https://github.com/0xZDH/BridgeKeeper
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C03 OSINT Intelligence Gathering
+- Upstream Repository: https://github.com/0xZDH/BridgeKeeper
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/0xZDH/BridgeKeeper && cd BridgeKeeper
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python bridgekeeper.py -f names.txt -d corp.com` | 人名→用户名规则生成 |
-| `-f names.txt -d corp.com --format first.last` | 指定格式 |
-| `-o users.txt` | 输出 |
-| `--formats` | 列出所有规则 |
+| `python bridgekeeper.py -f names.txt -d corp.com` | Name-to-username rule generation |
+| `-f names.txt -d corp.com --format first.last` | Custom format |
+| `-o users.txt` | Output |
+| `--formats` | List all rules |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### HR 名单变喷洒字典
+### Turn an HR roster into a spray dictionary
 
 ```bash
 python bridgekeeper.py -f employees.txt -d corp.com -o users.txt
-# John Smith→john.smith/jsmith/j.smith 全变体
+# John Smith→john.smith/jsmith/j.smith all variants
 ```
 
-## 注意事项
+## Notes
 
-OSINT 拿到员工名单后按企业命名惯例生成用户名,喷洒/爆破的前置工具。
+After collecting an employee roster via OSINT, generates usernames following corporate naming conventions; a prerequisite tool for spraying/brute force.

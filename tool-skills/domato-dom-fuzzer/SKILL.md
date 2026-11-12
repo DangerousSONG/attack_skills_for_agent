@@ -2,37 +2,39 @@
 name: domato-dom-fuzzer
 description: "Domato: browser/DOM engine fuzzing. Signals: pwn, binary exploitation, custom grammar, feed to target."
 zh-signals: "Domato: 浏览器/DOM 引擎 fuzz。信号:pwn,二进制利用,自定义语法,喂给目标。"
+when-to-use: >-
+  Use when fuzzing browser or DOM engine implementations with grammar-aware HTML/JS test cases to discover memory corruption or use-after-free bugs.
 ---
 
 # Domato
 
-- 攻击大类:C46 模糊测试与漏洞挖掘
-- 上游仓库:https://github.com/googleprojectzero/domato
-- 上游 License:Apache-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C46 Fuzzing and Vulnerability Discovery
+- Upstream Repository: https://github.com/googleprojectzero/domato
+- Upstream License: Apache-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/googleprojectzero/domato
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python generator.py --output_dir out/ --no_of_files 100` | 生成 HTML fuzz 样本 |
-| `--grammar grammar.txt` | 自定义语法 |
-| `python fuzzer.py out/ target` | 喂给目标 |
+| `python generator.py --output_dir out/ --no_of_files 100` | Generate HTML fuzzing samples |
+| `--grammar grammar.txt` | Custom grammar |
+| `python fuzzer.py out/ target` | Feed samples to the target |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 浏览器/DOM 引擎 fuzz
+### Browser/DOM engine fuzzing
 
 ```bash
 python generator.py --output_dir cases/ --no_of_files 500
-# Project Zero 出品,语法感知样本,挖渲染器 UAF
+# From Project Zero, grammar-aware samples to uncover renderer UAF bugs
 ```
 
-## 注意事项
+## Notes
 
-Google Project Zero 出品的 DOM fuzzer,语法感知的样本生成,曾挖大量浏览器 CVE。
+DOM fuzzer by Google Project Zero; grammar-aware sample generation that has uncovered a large number of browser CVEs.

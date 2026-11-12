@@ -2,39 +2,40 @@
 name: arjun-param-discovery
 description: "Arjun: mines hidden parameters to expand attack surface. Signals: web scan, vulnerability scan, HTTP parameter discovery, POST methods, rate limiting to avoid WAF"
 zh-signals: "Arjun: 隐藏参数挖掘→扩大攻击面。信号:web扫描,漏洞扫描,HTTP 参数发现,POST 方法,降低速率防 WAF。"
+when-to-use: "Use Arjun when mapping a web application's hidden HTTP parameters to expand the attack surface, including POST endpoints, with rate limiting to avoid WAF detection."
 ---
 
 # Arjun
 
-- 攻击大类:C41 Web漏洞扫描与验证
-- 上游仓库:https://github.com/s0md3v/Arjun
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C41 Web Vulnerability Scanning and Validation
+- Upstream Repository: https://github.com/s0md3v/Arjun
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install arjun
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `arjun -u https://api.target.com/endpoint` | HTTP 参数发现 |
-| `-m POST` | POST 方法 |
-| `--stable` | 降低速率防 WAF |
-| `-t 20` | 线程 |
-| `-oJ out.json` | JSON 输出 |
+| `arjun -u https://api.target.com/endpoint` | HTTP parameter discovery |
+| `-m POST` | POST method |
+| `--stable` | Lower the rate to avoid WAF detection |
+| `-t 20` | Threads |
+| `-oJ out.json` | JSON output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 隐藏参数挖掘→扩大攻击面
+### Hidden Parameter Mining → Expand the Attack Surface
 
 ```bash
 arjun -u https://api.target.com/v1/users -m GET,POST -oJ params.json
-# 发现的 admin/debug/id 等参数转交 ffuf 深度测
+# Hand the discovered admin/debug/id parameters over to ffuf for deeper testing
 ```
 
-## 注意事项
+## Notes
 
-基于响应差异(长度/状态码)探测未文档参数;JS 里常先扒一遍参数名再跑。
+Detects undocumented parameters based on response differences (length/status code); it is common to first scrape parameter names from JS files and then run it.

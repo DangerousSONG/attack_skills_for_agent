@@ -2,38 +2,41 @@
 name: sippts-sip-attack
 description: "sippts: internal VoIP attack. Signals: port scan, nmap, SIP scan, extension enumeration, SIP brute force."
 zh-signals: "sippts: VoIP 内网攻击。信号:端口扫描,nmap,SIP 扫描,分机枚举,SIP 爆破。"
+when-to-use: >-
+  Use when attacking internal VoIP/SIP infrastructure and you need SIP scanning,
+  extension enumeration, credential brute forcing or CallerID spoofing.
 ---
 
 # sippts
 
-- 攻击大类:C42 网络扫描与枚举
-- 上游仓库:https://github.com/Pepelux/sippts
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C42 Network Scanning and Enumeration
+- Upstream Repository: https://github.com/Pepelux/sippts
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/Pepelux/sippts && cd sippts
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `./sippts scan -i 10.0.0.0/24` | SIP 扫描 |
-| `extenum -i ip -e 100-999` | 分机枚举 |
-| `crack -i ip -u 100 -w pass.txt` | SIP 爆破 |
-| `spoof -i ip` | CallerID 伪造 |
+| `./sippts scan -i 10.0.0.0/24` | SIP scan |
+| `extenum -i ip -e 100-999` | Extension enumeration |
+| `crack -i ip -u 100 -w pass.txt` | SIP brute force |
+| `spoof -i ip` | CallerID spoofing |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### VoIP 内网攻击
+### VoIP internal network attack
 
 ```bash
 ./sippts scan -i 10.0.0.0/24 && ./sippts extenum -i 10.0.0.5
-# 发现+枚举+爆破
+# Discovery + enumeration + brute force
 ```
 
-## 注意事项
+## Notes
 
-Pepelux 出品 SIP 工具集。
+A SIP toolset by Pepelux.

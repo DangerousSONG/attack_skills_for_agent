@@ -2,37 +2,41 @@
 name: talon-kerberos-check
 description: "Talon validates domain account existence. Signals: AD attack, domain penetration, domain controller"
 zh-signals: "Talon: 域账户有效性验证。信号:ad攻击,域渗透,域控。"
+when-to-use: >-
+  Use during AD enumeration when you need to validate which domain accounts
+  exist via Kerberos pre-authentication without triggering lockouts, or to find
+  AS-REP roastable users.
 ---
 
 # Talon
 
-- 攻击大类:C30 AD域渗透与域控攻击
-- 上游仓库:https://github.com/optiv/Talon
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C30 AD Domain Penetration and Domain Controller Attacks
+- Upstream Repository: https://github.com/optiv/Talon
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/optiv/Talon && cd Talon
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 talon.py -D corp.local -U users.txt -p 'Pass123!'` | Kerberos 预认证枚举 |
+| `python3 talon.py -D corp.local -U users.txt -p 'Pass123!'` | Kerberos pre-authentication enumeration |
 | `-D d -U u.txt -p p.txt -A` | AS-REP roastable |
-| `-t 10.0.0.1` | 域控 |
+| `-t 10.0.0.1` | Domain controller |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 域账户有效性验证
+### Domain Account Existence Validation
 
 ```bash
 python3 talon.py -D corp.local -U users.txt -p Pass1
-# 不出警报的账户枚举
+# account enumeration without triggering alerts
 ```
 
-## 注意事项
+## Notes
 
-optiv 出品,Kerberos 错误码枚举账户。
+From optiv; enumerates accounts through Kerberos error codes.

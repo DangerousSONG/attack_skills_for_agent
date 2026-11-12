@@ -2,37 +2,40 @@
 name: nexfil-username
 description: "nexfil: Cross-platform username tracking. Signals: email collection, employee information, username internet-wide existence, concurrency."
 zh-signals: "nexfil: 用户名跨平台追踪。信号:邮箱收集,员工信息,用户名全网存在性,并发。"
+when-to-use: >-
+  Use when you have a username or email and need to enumerate which social and
+  web platforms the target has registered on for OSINT or employee profiling.
 ---
 
 # nexfil
 
-- 攻击大类:C03 邮箱与人员OSINT
-- 上游仓库:https://github.com/thewhiteh4t/nexfil
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C03 Email and Personnel OSINT
+- Upstream Repository: https://github.com/thewhiteh4t/nexfil
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/thewhiteh4t/nexfil && cd nexfil && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 nexfil.py -u username` | 用户名全网存在性 |
-| `-u user -c 50` | 并发 |
-| `-o out.txt` | 输出 |
+| `python3 nexfil.py -u username` | Internet-wide username existence check |
+| `-u user -c 50` | Concurrency |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 用户名跨平台追踪
+### Cross-Platform Username Tracking
 
 ```bash
 python3 nexfil.py -u targetuser
-# 350+ 平台存在性
+# Existence across 350+ platforms
 ```
 
-## 注意事项
+## Notes
 
-whiteh4t 出品,用户名 OSINT。
+By whiteh4t, a username OSINT tool.

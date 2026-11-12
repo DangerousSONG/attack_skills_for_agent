@@ -2,7 +2,8 @@
 name: continuous-exposure-monitoring
 description: "Turns one-time external recon into continuous monitoring: scheduled diff scans, six-source adversary intelligence, watchlist matching, finding lifecycle state machine, alert pacing. Signals: continuous monitoring, exposure monitoring, attack surface diff, intelligence monitoring, alert fatigue."
 zh-signals: "把一次性外部侦察升级为持续监控:定时重扫diff、六源对抗情报监控、watchlist匹配、发现生命周期状态机与告警节奏控制。信号:持续监控,暴露面监控,攻击面diff,情报监控,告警疲劳。"
-when-to-use: "Turns one-shot external recon into a continuous monitoring program. Covers the scheduled re-scan-and-diff loop (baseline snapshot -> interval sleep -> re-scan -> asset/finding delta -> threshold-gate
+when-to-use: >-
+  Turns one-shot external recon into a continuous monitoring program. Covers the scheduled re-scan-and-diff loop (baseline snapshot -> interval sleep -> re-scan -> asset/finding delta -> threshold-gate
 version: 1.0
 sources: asm_reference_impl, public_research
 triggers:
@@ -141,4 +142,4 @@ in different places (the Finding's `confidence` field vs. `finding_lifecycle.sta
 
 ---
 
-> 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。
+> 📎 Detailed content (full examples / references / data tables) has been split into `reference.md` in the same directory; use Read to load the relevant section on demand.

@@ -2,38 +2,42 @@
 name: sj-swagger-audit
 description: "sj: OpenAPI specification direct pentesting. Signals: API attack, interface testing, auto API request construction, path brute force, full endpoint audit."
 zh-signals: "sj: OpenAPI 规范直连渗透。信号:api攻击,接口测试,自动构造 API 请求,路径爆破,全端点审计。"
+when-to-use: >-
+  Use when you have a Swagger/OpenAPI specification and want to automatically
+  construct and test all API endpoints for missing authentication and other
+  issues. Supports prepare, brute, audit, and automate modes.
 ---
 
 # sj
 
-- 攻击大类:C10 API与GraphQL攻击
-- 上游仓库:https://github.com/BishopFox/sj
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C10 API and GraphQL Attacks
+- Upstream Repository: https://github.com/BishopFox/sj
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/BishopFox/sj@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `sj prepare -u https://t.com/swagger.json` | 自动构造 API 请求 |
-| `sj brute -u https://t.com/swagger.json -w paths.txt` | 路径爆破 |
-| `sj audit -u https://t.com/openapi.json` | 全端点审计 |
-| `sj automate -u spec.json` | 半自动渗透 |
+| `sj prepare -u https://t.com/swagger.json` | Auto-construct API requests |
+| `sj brute -u https://t.com/swagger.json -w paths.txt` | Path brute force |
+| `sj audit -u https://t.com/openapi.json` | Full endpoint audit |
+| `sj automate -u spec.json` | Semi-automated pentest |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### OpenAPI 规范直连渗透
+### Direct pentesting through an OpenAPI specification
 
 ```bash
 sj audit -u https://api.t.com/openapi.json
-# 按规范逐个端点发请求,自动检测鉴权缺失
+# Send requests to each endpoint per the specification and automatically detect missing authentication
 ```
 
-## 注意事项
+## Notes
 
-BishopFox 出品,读取 Swagger/OpenAPI 规范自动生成并测试所有 API 端点。
+By BishopFox, reads Swagger/OpenAPI specifications to automatically generate and test every API endpoint.

@@ -2,40 +2,43 @@
 name: findomain-fast-enum
 description: "Findomain collects domain assets in bulk. Signals: asset mapping, subdomains, single-target enumeration, screenshots, port-scanning integration."
 zh-signals: "Findomain: 批量域名资产收集。信号:资产测绘,子域名,单目标枚举,截图,端口扫描联动。"
+when-to-use: >-
+  Use during asset mapping when you need fast bulk or single-target subdomain
+  enumeration, optionally with screenshots and port-scan integration.
 ---
 
 # Findomain
 
-- 攻击大类:C01 资产测绘与指纹识别
-- 上游仓库:https://github.com/Findomain/Findomain
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C01 Asset Mapping and Fingerprinting
+- Upstream Repository: https://github.com/Findomain/Findomain
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
-cargo install findomain 或 release 二进制
+cargo install findomain or take the release binary
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `-t target.com` | 单目标枚举 |
-| `-f domains.txt` | 批量 |
-| `-s` | 截图 |
-| `-p` | 端口扫描联动 |
-| `-o csv` | CSV 输出 |
-| `--external-subdomains` | 只输出外部资产 |
+| `-t target.com` | Single-target enumeration |
+| `-f domains.txt` | Bulk |
+| `-s` | Screenshots |
+| `-p` | Port scan integration |
+| `-o csv` | CSV output |
+| `--external-subdomains` | Output only external assets |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 批量域名资产收集
+### Bulk domain asset collection
 
 ```bash
 findomain -f domains.txt -o csv -p
-# 自动: 枚举→存活→端口→截图一条龙
+# Automatic: enumerate → live hosts → ports → screenshots in one pass
 ```
 
-## 注意事项
+## Notes
 
-Rust 编写极快,内置多数据源;--external-subdomains 对梳理影子资产很实用。
+Written in Rust and extremely fast, with multiple built-in data sources; --external-subdomains is very useful for mapping shadow assets.

@@ -2,39 +2,43 @@
 name: jaeles-vuln-scan
 description: "jaeles verifies vulnerabilities with signatures. Signals: web vulnerability, injection, built-in signature scan, signature family selection, custom signatures."
 zh-signals: "jaeles: 签名驱动漏洞验证。信号:web漏洞,注入,内置签名扫描,指定签名族,自定义签名。"
+when-to-use: >-
+  Use when verifying suspected web vulnerabilities with signature-based checks,
+  optionally scoping to specific signature families, custom signatures, or
+  routing through Burp.
 ---
 
 # jaeles
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/jaeles-project/jaeles
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/jaeles-project/jaeles
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/jaeles-project/jaeles@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `jaeles scan -u https://t.com` | 内置签名扫描 |
-| `-x 'sqli,xxe'` | 指定签名族 |
-| `jaeles config add -R ~/custom-signatures` | 自定义签名 |
-| `-o out/` | 输出 |
-| `--proxy http://127.0.0.1:8080` | 过 Burp |
+| `jaeles scan -u https://t.com` | Built-in signature scan |
+| `-x 'sqli,xxe'` | Specify signature families |
+| `jaeles config add -R ~/custom-signatures` | Custom signatures |
+| `-o out/` | Output |
+| `--proxy http://127.0.0.1:8080` | Route through Burp |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 签名驱动漏洞验证
+### Signature-Driven Vulnerability Validation
 
 ```bash
 jaeles scan -u https://t.com -x rce
-# YAML 签名,OOB 联动,比 nuclei 更灵活的结果判定
+# YAML signatures with OOB correlation, offering more flexible result determination than nuclei
 ```
 
-## 注意事项
+## Notes
 
-签名化漏洞扫描框架,YAML 签名支持多请求链+OOB 关联验证,gospider 同生态。
+Signature-based vulnerability scanning framework; YAML signatures support multi-request chains and OOB correlation validation, in the same ecosystem as gospider.

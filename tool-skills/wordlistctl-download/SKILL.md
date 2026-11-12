@@ -2,38 +2,41 @@
 name: wordlistctl-download
 description: "wordlistctl: BlackArch wordlist repository. Signals: password cracking, hash cracking, wordlist download, list, search."
 zh-signals: "wordlistctl: BlackArch 字典仓库。信号:密码破解,哈希破解,字典下载,列表,搜索。"
+when-to-use: >-
+  Use when you need to locate or download wordlists from the BlackArch repository for password or
+  hash cracking; list or search categories, then download the chosen list locally.
 ---
 
 # wordlistctl
 
-- 攻击大类:C25 哈希与密码破解
-- 上游仓库:https://github.com/BlackArch/wordlistctl
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C25 Hash and Password Cracking
+- Upstream Repository: https://github.com/BlackArch/wordlistctl
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/BlackArch/wordlistctl && cd wordlistctl
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 wordlistctl.py -f rockyou -d` | 字典下载 |
-| `-l` | 列表 |
-| `-s 'category'` | 搜索 |
-| `-o out.txt` | 输出 |
+| `python3 wordlistctl.py -f rockyou -d` | Wordlist download |
+| `-l` | List |
+| `-s 'category'` | Search |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### BlackArch 字典仓库
+### BlackArch Wordlist Repository
 
 ```bash
 python3 wordlistctl.py -f rockyou -d
-# 300+ 字典一键管理
+# One-click management of 300+ wordlists
 ```
 
-## 注意事项
+## Notes
 
-BlackArch 字典管理工具。
+A BlackArch wordlist management tool.

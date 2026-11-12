@@ -2,38 +2,42 @@
 name: identywaf-fingerprint
 description: "identYwaf identifies web protections before testing. Signals: web vulnerability, injection, identify WAF brand or model, request file input, random UA."
 zh-signals: "identYwaf: 渗透前识别防护。信号:web漏洞,注入,识别 WAF 品牌/型号,从请求文件识别,随机 UA。"
+when-to-use: >-
+  Use before web vulnerability testing to identify the WAF brand and model behind
+  a target URL or captured request, so you can choose an appropriate bypass
+  strategy; supports random user agents.
 ---
 
 # identYwaf
 
-- 攻击大类:C09 Web利用(WAF绕过)
-- 上游仓库:https://github.com/stamparm/identYwaf
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Exploitation (WAF Bypass)
+- Upstream Repository: https://github.com/stamparm/identYwaf
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/stamparm/identYwaf
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python identYwaf.py -u 'https://t.com'` | 识别 WAF 品牌/型号 |
-| `-r req.txt` | 从请求文件识别 |
-| `--random-agent` | 随机 UA |
-| `--health-check` | 连通性检查 |
+| `python identYwaf.py -u 'https://t.com'` | Identify the WAF brand/model |
+| `-r req.txt` | Identify from a request file |
+| `--random-agent` | Random UA |
+| `--health-check` | Connectivity check |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 渗透前识别防护
+### Identify protections before pentesting
 
 ```bash
 python identYwaf.py -u 'https://t.com'
-# 输出如 'Cloudflare (Cloudflare Inc.)' 决定后续绕过策略
+# Output like 'Cloudflare (Cloudflare Inc.)' decides the follow-up bypass strategy
 ```
 
-## 注意事项
+## Notes
 
-Miroslav Stampar(sqlmap 作者)出品,WAF 指纹库大且活跃,识别 80+ 种 WAF。
+By Miroslav Stampar (author of sqlmap), with a large and actively maintained WAF fingerprint database covering 80+ WAF products.

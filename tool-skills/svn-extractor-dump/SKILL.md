@@ -2,37 +2,40 @@
 name: svn-extractor-dump
 description: "svn-extractor recovers source from leaked .svn directories. Signals: attack surface, cloud assets, SVN leak export, filtering"
 zh-signals: "svn-extractor: .svn 泄露源码恢复。信号:攻击面,云资产,SVN 泄露导出,过滤。"
+when-to-use: >-
+  Use when a target exposes a .svn directory and you need to recover leaked
+  source code from the SVN metadata, with optional file-type filtering.
 ---
 
 # svn-extractor
 
-- 攻击大类:C05 外部攻击面与云资产暴露
-- 上游仓库:https://github.com/anantshri/svn-extractor
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C05 External Attack Surface and Cloud Asset Exposure
+- Upstream Repository: https://github.com/anantshri/svn-extractor
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/anantshri/svn-extractor && cd svn-extractor
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 svn_extractor.py --url https://t.com/.svn/entries` | SVN 泄露导出 |
-| `--url url --output out/` | 输出 |
-| `--match '.*.php'` | 过滤 |
+| `python3 svn_extractor.py --url https://t.com/.svn/entries` | SVN leak export |
+| `--url url --output out/` | Output |
+| `--match '.*.php'` | Filtering |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### .svn 泄露源码恢复
+### Recovering source code from a .svn leak
 
 ```bash
 python3 svn_extractor.py --url https://t.com/.svn/entries --output src/
-# 同 GitTools 但针对 SVN
+# Like GitTools but targeting SVN
 ```
 
-## 注意事项
+## Notes
 
-SVN 目录泄露利用工具。
+Tool for exploiting exposed SVN directories.

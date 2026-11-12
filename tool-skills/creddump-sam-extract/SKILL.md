@@ -2,37 +2,39 @@
 name: creddump-sam-extract
 description: "creddump: Extracts SAM hashes offline. Signals: password cracking, hash cracking, LSA key extraction."
 zh-signals: "creddump: 离线 SAM 哈希提取。信号:密码破解,哈希破解,提取 LSA 密钥。"
+when-to-use: >-
+  Use when you have offline Windows registry hives (SYSTEM, SAM, SECURITY) and need to extract local account hashes or cached domain credentials for offline cracking.
 ---
 
 # creddump
 
-- 攻击大类:C25 口令与哈希破解
-- 上游仓库:https://github.com/moyix/creddump
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C25 Password and Hash Cracking
+- Upstream Repository: https://github.com/moyix/creddump
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/moyix/creddump
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python2 pwdump.py SYSTEM SAM` | 从注册表 hive 提取 LM/NT 哈希 |
-| `python2 cachedump.py SYSTEM SECURITY` | 提取缓存域凭证(mscash) |
-| `python2 lsadump.py SYSTEM SECURITY` | 提取 LSA 密钥 |
+| `python2 pwdump.py SYSTEM SAM` | Extract LM/NT hashes from registry hives |
+| `python2 cachedump.py SYSTEM SECURITY` | Extract cached domain credentials (mscash) |
+| `python2 lsadump.py SYSTEM SECURITY` | Extract LSA keys |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 离线 SAM 哈希提取
+### Offline SAM hash extraction
 
 ```bash
 python2 pwdump.py /mnt/win/Windows/System32/config/SYSTEM /mnt/win/.../SAM
-# 得哈希后接 hashcat -m 1000
+# Feed the recovered hashes to hashcat -m 1000
 ```
 
-## 注意事项
+## Notes
 
-经典的离线注册表解析工具,Python2。同类现代替代 secretsdump(现有)无法离线时用它。
+Classic offline registry parsing tool, Python 2. Use it when modern alternatives such as secretsdump cannot run offline.

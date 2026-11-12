@@ -2,37 +2,38 @@
 name: activedirectoryenum-ad
 description: "ActiveDirectoryEnum: performs AD enumeration and attack surface analysis. Signals: ad attack, domain pentest, BloodHound"
 zh-signals: "ActiveDirectoryEnum: AD 枚举+攻击面分析。信号:ad攻击,域渗透,BloodHound。"
+when-to-use: "Use ActiveDirectoryEnum when you have domain credentials and need to enumerate Active Directory objects and analyze attack paths, optionally exporting BloodHound-compatible data for a domain penetration test."
 ---
 
 # ActiveDirectoryEnum
 
-- 攻击大类:C30 AD域渗透与域控攻击
-- 上游仓库:https://github.com/CasperGN/ActiveDirectoryEnum
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C30 AD Domain Penetration and Domain Controller Attacks
+- Upstream Repository: https://github.com/CasperGN/ActiveDirectoryEnum
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install activedirectoryenum
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `active-directory-enum -u svc -p pass -d corp.local -dc 10.0.0.1` | AD 枚举+攻击面 |
+| `active-directory-enum -u svc -p pass -d corp.local -dc 10.0.0.1` | AD enumeration + attack surface |
 | `-u u -p p -d d -dc ip -s` | BloodHound |
-| `-o out.txt` | 输出 |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### AD 枚举+攻击面分析
+### AD Enumeration and Attack Surface Analysis
 
 ```bash
 active-directory-enum -u svc -p pass -d corp.local
-# 枚举+漏洞路径+输出报告
+# enumeration + vulnerability paths + report output
 ```
 
-## 注意事项
+## Notes
 
-AD 枚举+攻击路径分析一体。
+AD enumeration and attack path analysis in one tool.

