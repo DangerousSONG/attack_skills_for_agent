@@ -2,6 +2,8 @@
 name: constant-time-testing
 type: domain
 description: "Measures timing side channels in cryptographic implementations by running them, using dudect for statistical analysis and Timecop over Valgrind for dynamic tracing. Covers the formal, symbolic, dynamic, and statistical tool categories and how to read a result. Use when testing whether a running implementation is constant-time, measuring timing variance on a compiled binary, or investigating a suspected timing attack. Not for statically inspecting compiler output — the constant-time-analysis plugin covers that."
+zh-signals: "常量时间测试技能，通过运行密码实现并用 dudect/Timecop 测量时序侧信道，判断是否存在时序泄漏。信号:时序侧信道,常量时间,dudect,Timecop,密码实现"
+when-to-use: "Use when testing whether a running cryptographic implementation is constant-time, measuring timing variance on a compiled binary, or investigating a suspected timing attack."
 ---
 
 # Constant-Time Testing

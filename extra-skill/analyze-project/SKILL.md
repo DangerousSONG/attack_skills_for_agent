@@ -1,6 +1,8 @@
 ---
 name: analyze-project
 description: Forensic root cause analyzer for Antigravity sessions. Classifies scope deltas, rework patterns, root causes, hotspots, and auto-improves prompts/health.
+zh-signals: "对 AI 辅助编码会话做根因分析，识别范围漂移、返工模式、问题热点并给出改进建议。信号:根因分析,会话复盘,范围蔓延,返工,项目健康"
+when-to-use: "Use when you need a postmortem of AI-assisted coding sessions, especially to separate spec ambiguity, agent errors, repo friction, and validation gaps."
 risk: critical
 source: community
 date_added: "2026-09-04"

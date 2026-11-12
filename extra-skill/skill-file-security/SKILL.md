@@ -1,6 +1,9 @@
 ---
 name: skill-file-security
 description: Battle-tested security checks for AI coding assistants — 29 categories covering OWASP Top 10, CWE Top 25, and ASVS Level 3
+zh-signals: "为 AI 编码助手提供 29 类经过实战检验的安全检查，覆盖 OWASP Top 10、CWE Top 25 与 ASVS Level 3。信号:AI编码助手,安全审计,OWASP Top 10,CWE Top 25,ASVS。"
+when-to-use: >-
+  Use when installing or configuring security checks for an AI coding assistant, or when auditing a project for OWASP Top 10, CWE Top 25, or ASVS Level 3 violations.
 triggers:
   - "install security skill"
   - "add security checks to my AI"

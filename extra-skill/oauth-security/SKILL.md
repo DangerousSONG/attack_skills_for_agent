@@ -4,6 +4,8 @@ description: |
   Deep OAuth 2.0 / OpenID Connect security assessment covering the full attack surface: redirect_uri validation bypass (path traversal, open redirect chains, subdomain confusion, parameter pollution, response mode switching), missing/broken state CSRF, PKCE downgrade and absent-challenge attacks, implicit grant token leakage, authorization code injection, scope escalation, client confusion, mutable-claims account takeover (iss+sub confusion, email-keyed identity merging), pre-account takeover, OIDC dynamic client registration SSRF (logo_uri, jwks_uri, request_uri), nonce replay, ID token validation failures, Device Code phishing, mobile custom URI scheme hijacking, refresh token persistence, consent screen clickjacking, host header injection, and cross-IdP mix-up attacks.
 
   Uses KOAuth, jwt_tool, nuclei oauth templates, and manual http payloads with verification logic. Chains from /pentester or /api-security; into /web-exploit, /post-exploit on account takeover, and /credential-audit when tokens are recovered.
+zh-signals: "全面评估 OAuth 2.0 / OpenID Connect 安全，覆盖 redirect_uri 绕过、state CSRF、PKCE 降级、令牌泄露与账户接管。信号:OAuth,OIDC,redirect_uri,PKCE,账户接管"
+when-to-use: "Use when assessing an OAuth/OIDC authorization server or client for redirect_uri bypass, token leakage, PKCE, scope, or claim-validation flaws."
 argument-hint: "<target-url> [flow=auth-code|implicit|device-code|pkce|oidc|mobile] [depth=quick|standard|thorough]"
 user-invocable: true
 ---

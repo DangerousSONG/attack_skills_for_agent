@@ -1,6 +1,8 @@
 ---
 name: macos-security-and-privacy-guide
 description: Comprehensive guide and commands for securing macOS systems, covering encryption, firewalls, DNS, privacy settings, and security hardening
+zh-signals: "面向 macOS 的系统加固与隐私配置指南，涵盖加密、防火墙与 DNS 安全。信号:macOS安全,隐私,FileVault,防火墙,DNS加密,加固"
+when-to-use: "Use when the user wants to secure or harden a macOS system, configure FileVault, firewall, or encrypted DNS, or disable telemetry."
 triggers:
   - how do I secure my Mac
   - configure macOS security settings

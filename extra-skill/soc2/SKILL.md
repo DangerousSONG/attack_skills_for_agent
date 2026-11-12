@@ -1,6 +1,9 @@
 ---
 name: soc2
 description: SOC 2 Type II prep — AICPA Trust Services Criteria (Security required plus Availability/Confidentiality/Processing Integrity/Privacy), Common Criteria CC1–CC9, Type I vs Type II choice, evidence-collection rhythm, auditor-friendly packaging, Complementary User Entity Controls.
+zh-signals: "开展 SOC 2 Type II 准备，覆盖信任服务准则选择、证据收集与审计打包。信号:SOC 2,Type II,AICPA信任服务准则,证据收集,CUEC。"
+when-to-use: >-
+  Use when preparing for a SOC 2 Type I or Type II examination, selecting Trust Services Criteria, building evidence-collection cadence, or packaging auditor-ready materials for a B2B SaaS.
 ---
 
 # SOC 2 Type II Prep

@@ -8,6 +8,8 @@ description: >
   "outside collaborator approval", "runs-on matrix", "persistent runner",
   "Gato GitHub Attack Toolkit", "runner agent", self-hosted CI/CD runner abuse,
   "git config token", "workflow log deletion", runner C2.
+zh-signals: "狩猎自托管 GitHub Actions Runner 投毒风险，聚焦 fork PR 在特权非临时 Runner 上执行。信号:自托管Runner,fork PR,CI/CD投毒,持久化,凭证泄露"
+when-to-use: "Use when hunting self-hosted GitHub Actions runner vulnerabilities where fork pull requests can execute arbitrary code on privileged non-ephemeral runners."
 license: MIT
 compatibility: Designed for Claude Code. Gato toolkit recommended for enumeration.
 metadata:

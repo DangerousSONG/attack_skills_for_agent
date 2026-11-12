@@ -1,6 +1,8 @@
 ---
 name: bitdefender-total-security-workflow
 description: Bitdefender Total Security workflow documentation for scan schedules, quarantine management, exclusions, and subscription maintenance on Windows
+zh-signals: "Bitdefender Total Security 在 Windows 上的运维流程，涵盖扫描计划、隔离区管理、排除项与订阅维护。信号:Bitdefender,杀毒软件,扫描计划,隔离区,订阅维护"
+when-to-use: "Use when documenting or configuring Bitdefender Total Security workflows on Windows, including scan schedules, quarantine review, exclusions, false positives, and subscription renewal."
 triggers:
   - how do I set up Bitdefender Total Security workflow
   - configure Bitdefender scan schedules and quarantine review

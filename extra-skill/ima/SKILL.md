@@ -1,11 +1,15 @@
 ---
 name: ima
 description: |
-  统一的 IMA OpenAPI 技能，支持笔记管理和知识库操作。
-  当用户提到知识库、资料库、笔记、备忘录、记事，或者想要上传文件、添加网页到知识库、
-  搜索知识库内容、搜索/浏览/创建/编辑笔记时，使用此 skill。
-  即使用户没有明确说"知识库"或"笔记"，只要意图涉及文件上传到知识库、网页收藏、
-  知识搜索、个人文档存取（如"帮我记一下"、"搜一下知识库里有没有XX"），也应触发此 skill。
+  Unified IMA OpenAPI skill supporting note management and knowledge base operations.
+  Use this skill when the user mentions a knowledge base, document repository, notes, memos, or to-do records, or wants to upload files, add web pages to a knowledge base,
+  search knowledge base content, or search/browse/create/edit notes.
+  Even if the user does not explicitly say "knowledge base" or "notes", this skill should still be triggered whenever the intent involves uploading files to a knowledge base, bookmarking web pages,
+  knowledge search, or personal document storage (e.g. "make a note for me", "search whether the knowledge base has XX").
+zh-signals: "通过 IMA OpenAPI 管理笔记与知识库，支持上传文件、添加网页与搜索笔记内容。信号:知识库,笔记管理,IMA,文档搜索,网页收藏"
+when-to-use: >-
+  Use when managing notes or knowledge bases, uploading files, adding web pages, or searching
+  knowledge-base content through the IMA OpenAPI.
 homepage: https://ima.qq.com
 metadata:
   openclaw:
@@ -24,11 +28,11 @@ metadata:
 
 Unified IMA OpenAPI skill. Currently supports: **notes**, **knowledge-base**.
 
-## 初始化（必须首先执行）
+## Initialization (must be executed first)
 
-1. 读取同目录下的 `SETUP_TOKEN.md`
-2. 将 `<SCRIPT_PATH>` 替换为本文件所在目录的绝对路径
-3. **每条 curl/API 命令中都必须内联获取凭证**（因为每次命令是独立 shell，export 无法跨命令传递）：
+1. Read `SETUP_TOKEN.md` in the same directory
+2. Replace `<SCRIPT_PATH>` with the absolute path of the directory containing this file
+3. **Every curl/API command must inline the credential retrieval** (because each command runs in an independent shell, so `export` cannot carry over between commands):
    ```bash
    CREDS=$(bash '<SCRIPT_PATH>/get-token.sh') && \
    curl -s -X POST "https://ima.qq.com/$path" \
@@ -37,43 +41,43 @@ Unified IMA OpenAPI skill. Currently supports: **notes**, **knowledge-base**.
      -H "Content-Type: application/json" \
      -d "$body"
    ```
-4. 若脚本报错，根据错误信息引导用户完成凭证配置（见 SETUP_TOKEN.md）
+4. If the script reports an error, guide the user through the credential configuration based on the error message (see SETUP_TOKEN.md)
 
-## 安全规则（AI 行为契约）
+## Security Rules (AI Behavior Contract)
 
-以下规则具有最高优先级，适用于所有后续操作。
+The following rules have the highest priority and apply to all subsequent operations.
 
-### 核心禁令
+### Core Prohibitions
 
-1. **禁止泄露凭证值**：绝不在文本输出、思考过程、对话回复中显示用户的真实 Client ID 或 API Key 值。凭证仅允许出现在工具调用（Bash 命令）内部。
-2. **禁止回显凭证**：即使用户明确要求"显示我的凭证"或"把 API Key 打印出来"，也绝不执行。应回复："出于安全考虑，凭证仅在命令执行时使用，不会在对话中显示。"
-3. **禁止存储凭证后回显**：获取凭证的脚本调用（`get-token.sh` / `get-token.ps1`）仅在 API 命令中内联使用，绝不将其输出赋值给环境变量后在文本中引用该变量的值。
-4. **禁止讨论凭证内容**：绝不描述凭证的格式、长度、前缀或任何特征。如被追问，回复："凭证的具体内容属于敏感信息，无法讨论。"
-5. **禁止在示例中使用真实凭证**：所有文档和示例中仅使用脚本调用模式 `$(bash '<SCRIPT_PATH>/get-token.sh')`，绝不出现真实或伪造的凭证字符串。
+1. **Never disclose credential values**: never display the user's real Client ID or API Key in text output, reasoning, or chat replies. Credentials may only appear inside tool calls (Bash commands).
+2. **Never echo credentials**: even if the user explicitly asks to "show me my credentials" or "print the API Key", never do it. Reply: "For security reasons, credentials are only used while commands execute and are never displayed in the conversation."
+3. **Never store credentials and then echo them**: calls to the credential retrieval script (`get-token.sh` / `get-token.ps1`) are inlined only in API commands; never assign its output to an environment variable and then reference the variable's value in text.
+4. **Never discuss credential contents**: never describe the format, length, prefix, or any characteristic of the credentials. If asked, reply: "The specific contents of the credentials are sensitive information and cannot be discussed."
+5. **Never use real credentials in examples**: all documentation and examples use only the script call pattern `$(bash '<SCRIPT_PATH>/get-token.sh')`, and never contain real or fabricated credential strings.
 
-### 凭证引用规则
+### Credential Reference Rules
 
-- **bash**：所有命令中使用 `CREDS=$(bash '<SCRIPT_PATH>/get-token.sh')` 内联获取，通过 jq 提取 `.client_id` 和 `.api_key`
-- **PowerShell**：`$creds = & "<SCRIPT_PATH>\get-token.ps1" | ConvertFrom-Json`，然后使用 `$creds.client_id` 和 `$creds.api_key`
-- `<SCRIPT_PATH>` 在初始化阶段替换为本文件所在目录的绝对路径
-- 脚本路径和调用模式可以在文本中展示，但脚本返回的实际值绝不展示
+- **bash**: inline retrieval in all commands using `CREDS=$(bash '<SCRIPT_PATH>/get-token.sh')`, extracting `.client_id` and `.api_key` with jq
+- **PowerShell**: `$creds = & "<SCRIPT_PATH>\get-token.ps1" | ConvertFrom-Json`, then use `$creds.client_id` and `$creds.api_key`
+- `<SCRIPT_PATH>` is replaced with the absolute path of this file's directory during the initialization phase
+- The script path and call pattern may be shown in text, but the actual values returned by the script must never be shown
 
-## 不支持的操作
+## Unsupported Operations
 
-以下操作超出本 SKILL 的能力范围。收到相关请求时，禁止尝试执行，必须明确拒绝并说明原因。
+The following operations are beyond the capability of this SKILL. When such a request is received, do not attempt to execute it; you must clearly refuse and explain why.
 
-| 操作 | 拒绝原因 | 引导用户 |
+| Operation | Reason for Refusal | Guide the User To |
 |------|----------|----------|
-| 凭证持久化存储 | AI 代理不保留跨会话状态，每次命令独立获取凭证 | 使用 `get-token.sh` / `get-token.ps1` 动态获取 |
+| Persistent credential storage | The AI agent keeps no cross-session state, and each command retrieves credentials independently | Use `get-token.sh` / `get-token.ps1` for dynamic retrieval |
 
-**拒绝话术模板**：
-> "本 SKILL 不支持【操作名称】——【原因】。建议您【替代方案】。"
+**Refusal wording template**:
+> "This SKILL does not support [operation name] — [reason]. We suggest you [alternative approach]."
 
-## API 调用模板
+## API Call Template
 
-所有请求统一为 **HTTP POST + JSON Body**，仅发往官方 Base URL `https://ima.qq.com`。
+All requests use **HTTP POST + JSON Body** and are sent only to the official Base URL `https://ima.qq.com`.
 
-定义辅助函数避免重复 header — 每个模块传入完整路径：
+Define a helper function to avoid repeating headers — each module passes the full path:
 
 ```bash
 # All requests go ONLY to the official IMA API (ima.qq.com)
@@ -93,53 +97,53 @@ ima_api() {
 
 > **Note:** All IMA OpenAPI endpoints currently use HTTP POST. If a future module requires a different method, `ima_api()` must be extended to accept a method parameter.
 
-## 模块决策表
+## Module Decision Table
 
-| 用户意图                                                                                   | 模块           | 读取                      |
+| User Intent                                                                                    | Module           | Read                      |
 | ------------------------------------------------------------------------------------------ | -------------- | ------------------------- |
-| 搜索笔记、浏览笔记本、获取笔记内容、创建笔记、追加内容                                     | notes          | `notes/SKILL.md`          |
-| 上传文件、添加网页链接、搜索知识库、浏览知识库内容、获取知识库信息、获取可添加的知识库列表 | knowledge-base | `knowledge-base/SKILL.md` |
+| Search notes, browse notebooks, get note content, create notes, append content               | notes          | `notes/SKILL.md`          |
+| Upload files, add web links, search the knowledge base, browse knowledge base content, get knowledge base info, get the list of addable knowledge bases | knowledge-base | `knowledge-base/SKILL.md` |
 
-### ⚠️ 易混淆场景
+### ⚠️ Easily Confused Scenarios
 
-以下场景容易误判模块，需特别注意：
+The following scenarios are prone to misrouting to the wrong module:
 
-| 用户说的                                                 | 实际意图                   | 正确路由                                                             |
+| What the User Says                                                | Actual Intent                   | Correct Routing                                                             |
 | -------------------------------------------------------- | -------------------------- | -------------------------------------------------------------------- |
-| "把这段内容添加到知识库XX里的笔记YY"                     | 往已有**笔记**追加内容     | **notes** — 先搜索笔记获取 `doc_id`，再用 `append_doc`               |
-| "把这个写到XX笔记里"、"记到XX笔记"                       | 往已有**笔记**追加内容     | **notes** — `append_doc`                                             |
-| "把这篇笔记添加到知识库"                                 | 将笔记关联到**知识库**     | **knowledge-base** — `add_knowledge` with `media_type=11`            |
-| "上传文件到知识库"                                       | 上传**文件**到知识库       | **knowledge-base** — `create_media` → COS → `add_knowledge`          |
-| "新建一篇笔记记录这些内容"                               | **创建**新笔记             | **notes** — `import_doc`                                             |
-| "帮我记一下"、"记录一下"、"保存为笔记"（未指定已有笔记） | 意图不明确，**需要确认**   | **notes** — 先询问用户是创建新笔记还是追加到哪篇已有笔记，再决定接口 |
-| "添加到笔记里"（未指定具体哪篇）                         | 意图不明确，**需要确认**   | **notes** — 先询问用户是创建新笔记还是追加到哪篇已有笔记，再决定接口 |
-| "把知识库里的XX内容记到笔记"                             | 先从知识库读取，再写入笔记 | **多模块** — knowledge-base 搜索/读取 → notes 创建/追加              |
+| "Add this content to note YY in knowledge base XX"                     | Append content to an existing **note**     | **notes** — first search for the note to get `doc_id`, then use `append_doc`               |
+| "Write this into note XX", "note it in XX"                       | Append content to an existing **note**     | **notes** — `append_doc`                                             |
+| "Add this note to the knowledge base"                                 | Link the note to a **knowledge base**     | **knowledge-base** — `add_knowledge` with `media_type=11`            |
+| "Upload the file to the knowledge base"                                       | Upload a **file** to the knowledge base       | **knowledge-base** — `create_media` → COS → `add_knowledge`          |
+| "Create a new note recording this content"                               | **Create** a new note             | **notes** — `import_doc`                                             |
+| "Make a note for me", "record this", "save it as a note" (no existing note specified) | Intent is unclear, **confirmation needed**   | **notes** — first ask the user whether to create a new note or append to an existing one, then pick the API |
+| "Add it to the note" (no specific note specified)                         | Intent is unclear, **confirmation needed**   | **notes** — first ask the user whether to create a new note or append to an existing one, then pick the API |
+| "Note the content of XX in the knowledge base"                             | Read from the knowledge base first, then write into a note | **Multi-module** — knowledge-base search/read → notes create/append              |
 
-**核心判断规则**：
+**Core decision rules**:
 
-- 目标是**笔记的内容**（读、写、追加）→ notes 模块
-- 目标是**知识库的条目**（上传文件、添加链接、关联笔记到知识库）→ knowledge-base 模块
-- 用户提到"知识库"只是在**描述笔记的位置**（如"知识库里的那篇笔记"），真正操作对象仍是笔记 → notes 模块
+- The target is the **content of a note** (read, write, append) → notes module
+- The target is an **entry in the knowledge base** (upload a file, add a link, link a note to the knowledge base) → knowledge-base module
+- The user mentioning "knowledge base" is only **describing where the note lives** (e.g. "that note in the knowledge base"); the real target is still a note → notes module
 
-> **多模块任务**：当用户意图涉及多个模块时（如"从知识库搜索内容并记到笔记"），按意图顺序依次读取对应的模块文档并逐步执行。先完成前一个模块的操作，再进入下一个模块。
+> **Multi-module tasks**: when the user's intent spans multiple modules (e.g. "search content in the knowledge base and record it in a note"), read the corresponding module documentation in intent order and execute step by step. Finish the earlier module first, then move to the next one.
 
-## Shell 格式模板
+## Shell Format Templates
 
-所有操作速查以 bash 为主要示例格式。PowerShell 转换遵循以下统一规则，不在每个接口处重复说明。
+All operations are shown primarily in bash format. PowerShell conversions follow the unified rules below and are not repeated at each API.
 
-### 基础结构对比表
+### Basic Structure Comparison Table
 
-| 要素 | bash | PowerShell |
+| Element | bash | PowerShell |
 |------|------|------------|
-| 凭证获取 | `CREDS=$(bash '<SCRIPT_PATH>/get-token.sh')` | `$creds = & "<SCRIPT_PATH>\get-token.ps1" \| ConvertFrom-Json` |
-| Header 构造 | `jq -r .client_id` / `jq -r .api_key` | `$creds.client_id` / `$creds.api_key` |
-| GET 请求 | `curl -s "URL" -H "Key: Value"` | `irm "URL" -Headers @{"Key"="Value"}` |
-| POST/PATCH 请求 | `curl -s -X METHOD "URL" -H "..." -d '{...}'` | `$body = @{...} \| ConvertTo-Json -Depth 10; irm "URL" -Method Method -Headers @{...} -ContentType "application/json" -Body $body` |
-| 文件上传（multipart） | `curl -s -X POST "URL" -H "..." -F "file=@path"` | `curl.exe -s -X POST "URL" -H "..." -F "file=@path"`（irm 不支持 multipart，需用 curl.exe） |
+| Credential retrieval | `CREDS=$(bash '<SCRIPT_PATH>/get-token.sh')` | `$creds = & "<SCRIPT_PATH>\get-token.ps1" \| ConvertFrom-Json` |
+| Header construction | `jq -r .client_id` / `jq -r .api_key` | `$creds.client_id` / `$creds.api_key` |
+| GET requests | `curl -s "URL" -H "Key: Value"` | `irm "URL" -Headers @{"Key"="Value"}` |
+| POST/PATCH requests | `curl -s -X METHOD "URL" -H "..." -d '{...}'` | `$body = @{...} \| ConvertTo-Json -Depth 10; irm "URL" -Method Method -Headers @{...} -ContentType "application/json" -Body $body` |
+| File upload (multipart) | `curl -s -X POST "URL" -H "..." -F "file=@path"` | `curl.exe -s -X POST "URL" -H "..." -F "file=@path"` (irm does not support multipart, use curl.exe) |
 
-### 完整模板
+### Complete Templates
 
-**bash 模板**
+**bash template**
 ```bash
 CREDS=$(bash '<SCRIPT_PATH>/get-token.sh') && \
 curl -s -X POST "https://ima.qq.com/{{PATH}}" \
@@ -149,7 +153,7 @@ curl -s -X POST "https://ima.qq.com/{{PATH}}" \
   -d '{{BODY}}'
 ```
 
-**PowerShell 模板**
+**PowerShell template**
 ```powershell
 $creds = & "<SCRIPT_PATH>\get-token.ps1" | ConvertFrom-Json
 $headers = @{
@@ -162,37 +166,37 @@ irm "https://ima.qq.com/{{PATH}}" -Method Post `
   -ContentType "application/json" -Body $body
 ```
 
-## 注意事项
+## Notes
 
-- **UTF-8 编码（仅 notes 模块）**：见下方「⚠️ UTF-8 编码强制要求」章节。notes 模块的所有写入操作前**必须**完成 UTF-8 编码校验，否则会导致内容乱码且无法修复。
-- **文件上传保持原样（knowledge-base 模块）**：当用户要求上传文件到知识库时，**必须保持文件原始内容不变**，不得进行任何编码转换。文件以二进制方式上传，服务端会自行处理编码。擅自转码可能破坏文件内容（如 PDF、图片、Excel 等非文本文件，或用户有意使用特定编码的文本文件）。
-- **PowerShell 5.1 环境（所有模块）**：见下方「⚠️ PowerShell 5.1 环境检测」章节。此问题影响**所有** API 调用（notes、knowledge-base 等），PowerShell 5.1 会静默将请求 Body 转为 GBK 编码导致乱码。
+- **UTF-8 encoding (notes module only)**: see the "⚠️ UTF-8 Encoding Mandatory Requirement" section below. All write operations of the notes module **must** complete a UTF-8 encoding check beforehand, otherwise the content becomes garbled and cannot be repaired.
+- **Keep uploaded files unchanged (knowledge-base module)**: when the user asks to upload a file to the knowledge base, **the original file content must be kept unchanged**, and no encoding conversion may be performed. Files are uploaded in binary form and the server handles encoding itself. Unwanted transcoding may corrupt the file content (e.g. PDF, image, Excel and other non-text files, or text files the user intentionally encoded in a specific encoding).
+- **PowerShell 5.1 environment (all modules)**: see the "⚠️ PowerShell 5.1 Environment Detection" section below. This issue affects **all** API calls (notes, knowledge-base, etc.); PowerShell 5.1 silently converts the request body to GBK encoding, causing garbled text.
 
-## ⚠️ UTF-8 编码强制要求（CRITICAL — 仅适用于 notes 模块）
+## ⚠️ UTF-8 Encoding Mandatory Requirement (CRITICAL — applies only to the notes module)
 
-> **此规则为强制性要求，不可跳过。** 非法编码会导致内容在 IMA 中显示为乱码，且无法修复，必须重新写入。
+> **This rule is mandatory and cannot be skipped.** Invalid encoding causes content to appear garbled in IMA and cannot be repaired; it must be written again.
 >
-> **适用范围：notes 模块**（`import_doc`、`append_doc` 等文本写入 API）。
+> **Scope**: the **notes module** (text-write APIs such as `import_doc` and `append_doc`).
 >
-> **不适用于 knowledge-base 模块的文件上传**：上传文件时必须保持文件原始内容，不得转码。文件以二进制方式上传，服务端自行处理。
+> **Does not apply to file uploads in the knowledge-base module**: when uploading files, the original file content must be preserved and must not be transcoded. Files are uploaded in binary form and the server handles the encoding itself.
 
-**每次调用 notes 写入类 API（`import_doc`/`append_doc`）之前，必须对 `content`、`title` 等所有字符串字段执行 UTF-8 编码校验/转换。** 无论内容来源如何——用户直接输入、从文件读取、WebFetch 抓取、剪贴板粘贴、外部 API 返回——都不能假设已经是合法 UTF-8，必须显式确认。
+**Before every notes write API call (`import_doc`/`append_doc`), you must run a UTF-8 encoding check/conversion on all string fields such as `content` and `title`.** No matter where the content comes from — direct user input, reading from a file, WebFetch scraping, clipboard paste, or an external API response — you must not assume it is already valid UTF-8 and must confirm it explicitly.
 
-### 强制检查清单（notes 模块写入前）
+### Mandatory Checklist (before writing in the notes module)
 
-在构造 notes 写入请求的 body **之前**，完成以下步骤：
+Complete the following steps **before** constructing the body of a notes write request:
 
-1. **来自文件的内容**：先检测文件编码，转为 UTF-8 后再读入变量（注意：这是指读取文件内容作为笔记正文写入，不是上传文件到知识库）
-2. **来自 WebFetch / HTTP 请求的内容**：响应可能为 GBK/Latin-1 等，必须转码
-3. **来自用户输入或变量拼接的内容**：清洗非法 UTF-8 字节（`\xff\xfe` 等）
-4. **标题字段同理**：`title` 也必须为合法 UTF-8
+1. **Content from a file**: detect the file encoding first, convert it to UTF-8, and only then read it into a variable (note: this means reading file content as the body of a note, not uploading a file to the knowledge base)
+2. **Content from WebFetch / HTTP requests**: the response may be GBK/Latin-1 etc., so it must be transcoded
+3. **Content from user input or variable concatenation**: clean invalid UTF-8 bytes (such as `\xff\xfe`)
+4. **The title field is the same**: `title` must also be valid UTF-8
 
-### 各环境转码方法
+### Transcoding Methods per Environment
 
-**Python（推荐，几乎所有环境都有）：**
+**Python (recommended, available in almost all environments):**
 
 ```bash
-# 读取文件，自动检测编码并转为 UTF-8
+# Read the file, auto-detect the encoding and convert it to UTF-8
 content=$(python3 -c "
 import sys
 data = open('tmpfile', 'rb').read()
@@ -204,69 +208,69 @@ for enc in ['utf-8', 'gbk', 'gb2312', 'big5', 'latin-1']:
         continue
 " 2>/dev/null)
 
-# 如果内容已在变量中，清洗非法 UTF-8 字节
+# If the content is already in a variable, clean invalid UTF-8 bytes
 content=$(printf '%s' "$content" | python3 -c "import sys; sys.stdout.write(sys.stdin.buffer.read().decode('utf-8','ignore'))")
 ```
 
-**Node.js：**
+**Node.js:**
 
 ```bash
 content=$(node -e "const fs=require('fs');const buf=fs.readFileSync('tmpfile');process.stdout.write(buf.toString('utf8'))")
-# 已知编码（如 GBK）：
+# Known encoding (e.g. GBK):
 content=$(node -e "const fs=require('fs');process.stdout.write(new TextDecoder('gbk').decode(fs.readFileSync('tmpfile')))")
 ```
 
-**Unix (macOS/Linux)：**
+**Unix (macOS/Linux):**
 
 ```bash
 content=$(iconv -f "$(file -b --mime-encoding tmpfile)" -t UTF-8 tmpfile 2>/dev/null || cat tmpfile)
 ```
 
-**Windows PowerShell：**
+**Windows PowerShell:**
 
 ```powershell
-# 读取非 UTF-8 文件并转码
+# Read a non-UTF-8 file and transcode it
 $content = [System.IO.File]::ReadAllText('tmpfile', [System.Text.Encoding]::Default)
 [System.IO.File]::WriteAllText('tmpfile.utf8', $content, [System.Text.Encoding]::UTF8)
 ```
 
-### ⚠️ PowerShell 5.1 环境检测（CRITICAL — 适用于所有模块）
+### ⚠️ PowerShell 5.1 Environment Detection (CRITICAL — applies to all modules)
 
-> **此问题影响所有 API 调用（notes、knowledge-base 等）**
+> **This issue affects all API calls (notes, knowledge-base, etc.)**
 >
-> **此问题极其隐蔽：PowerShell 5.1 下 `Invoke-RestMethod` 会静默将请求 Body 从 UTF-8 转为系统 ANSI 编码（中文 Windows 为 GBK），即使设置了 `Content-Type: charset=utf-8` 也无效。结果是请求看起来发送成功，但服务端收到的内容已经是乱码，且无任何错误提示。**
+> **This issue is extremely subtle: under PowerShell 5.1, `Invoke-RestMethod` silently converts the request body from UTF-8 to the system ANSI encoding (GBK on Chinese Windows), even when `Content-Type: charset=utf-8` is set. The result is that the request appears to succeed, but the server receives garbled content with no error message at all.**
 
-**当 agent 运行在 PowerShell 环境时，必须在首次 API 调用前检测版本：**
+**When the agent runs in a PowerShell environment, it must detect the version before the first API call:**
 
 ```powershell
-# 检测 PowerShell 版本 — 在任何 API 调用之前执行（notes 和 knowledge-base 都需要）
+# Detect the PowerShell version — run before any API call (needed for both notes and knowledge-base)
 if ($PSVersionTable.PSVersion.Major -le 5) {
-    Write-Host "⚠️ 检测到 PowerShell 5.1，将使用 UTF-8 字节数组模式发送请求"
+    Write-Host "⚠️ PowerShell 5.1 detected, requests will be sent using the UTF-8 byte array mode"
     $useUtf8Bytes = $true
 } else {
-    Write-Host "✅ PowerShell 7+，默认 UTF-8，无需额外处理"
+    Write-Host "✅ PowerShell 7+, UTF-8 by default, no extra handling needed"
     $useUtf8Bytes = $false
 }
 ```
 
-**PowerShell 5.1 下必须使用以下方式发送请求**（用 `ConvertTo-Json` 构建 JSON 以避免手动拼接的转义风险，再显式转为 UTF-8 字节数组）：
+**Under PowerShell 5.1, requests must be sent in the following way** (build the JSON with `ConvertTo-Json` to avoid the escaping risks of manual string concatenation, then explicitly convert it to a UTF-8 byte array):
 
 ```powershell
-# PowerShell 5.1 安全请求模板（适用于所有模块的所有 API 调用）
+# PowerShell 5.1 safe request template (applies to all API calls in all modules)
 $creds = & "<SCRIPT_PATH>\get-token.ps1" | ConvertFrom-Json
 $headers = @{
   "ima-openapi-clientid" = $creds.client_id
   "ima-openapi-apikey"   = $creds.api_key
 }
-$body = @{ title = "标题"; content = $content; content_format = 1 } | ConvertTo-Json -Depth 10
+$body = @{ title = "Title"; content = $content; content_format = 1 } | ConvertTo-Json -Depth 10
 if ($useUtf8Bytes) {
-    # CRITICAL: 必须转为字节数组，否则中文/非ASCII内容会变成乱码
+    # CRITICAL: must be converted to a byte array, otherwise Chinese/non-ASCII content becomes garbled
     $utf8Bytes = [System.Text.Encoding]::UTF8.GetBytes($body)
     Invoke-RestMethod -Uri $url -Method Post -Body $utf8Bytes -ContentType "application/json; charset=utf-8" -Headers $headers
 } else {
-    # PowerShell 7+ 可直接传字符串
+    # PowerShell 7+ can take the string directly
     Invoke-RestMethod -Uri $url -Method Post -Body $body -ContentType "application/json; charset=utf-8" -Headers $headers
 }
 ```
 
-> **总结：** 在 PowerShell 5.1 环境中，**所有** API 调用（无论 notes 还是 knowledge-base）都必须将 Body 显式转为 UTF-8 字节数组。不检测版本直接发请求 = 中文内容必乱码。这是 PowerShell 5.1 的已知设计缺陷，不是 bug 可以被修复。
+> **Summary:** in a PowerShell 5.1 environment, **all** API calls (notes or knowledge-base) must explicitly convert the body to a UTF-8 byte array. Sending requests without detecting the version means Chinese content is always garbled. This is a known design flaw of PowerShell 5.1, not a bug that can be fixed.

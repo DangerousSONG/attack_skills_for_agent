@@ -4,6 +4,10 @@ description: |
   TLS/SSL configuration audit. Tests protocol versions (SSLv2/3, TLS 1.0/1.1/1.2/1.3), cipher strength and ordering, certificate chain validation (intermediates, CT logs, OCSP stapling, pinning), known vulnerabilities (POODLE, BEAST, CRIME, Heartbleed, ROBOT, DROWN, Ticketbleed, GOLDENDOODLE), session management (ticket reuse, resumption, fixation), renegotiation attacks, TLS 1.3-specific issues (0-RTT replay, PSK modes, downgrade), HSTS deep analysis (preload, subdomains, bypass), and certificate revocation (CRL, OCSP responder, stapled response freshness).
 
   Compliance-mapped to PCI DSS 4.0 (full Section 4), NIST SP 800-52r2, and FedRAMP. Uses testssl.sh, sslscan, sslyze, openssl, nmap NSE scripts, and nuclei SSL templates. Multi-port scanning across 20+ TLS-bearing services.
+zh-signals: "全面审计 TLS/SSL 配置，涵盖协议版本、密码套件、证书链、已知漏洞、会话管理与 TLS 1.3 特有问题，并映射合规要求。信号:TLS审计,SSL配置,证书链,密码套件,合规映射"
+when-to-use: >-
+  Use when auditing a target's TLS/SSL configuration for weak protocols, ciphers, certificate
+  issues, session management flaws, TLS 1.3 issues, or compliance mapping.
 argument-hint: "<host:port> [depth=quick|standard|thorough]"
 user-invocable: true
 ---

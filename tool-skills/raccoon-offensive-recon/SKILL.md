@@ -2,40 +2,41 @@
 name: raccoon-offensive-recon
 description: "Raccoon: One-stop single-target reconnaissance. Signals: asset mapping, subdomains, one-stop reconnaissance, output directory, via Tor."
 zh-signals: "Raccoon: 单目标一站式摸底。信号:资产测绘,子域名,一站式侦察,输出目录,走 Tor。"
+when-to-use: "Use when you need one-stop reconnaissance of a single target covering subdomains, ports, and fingerprints in a structured output directory. Requires a target domain and optionally Tor routing."
 ---
 
 # Raccoon
 
-- 攻击大类:C01 资产测绘与指纹识别
-- 上游仓库:https://github.com/evyatarmeged/Raccoon
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C01 Asset Mapping and Fingerprinting
+- Upstream Repository: https://github.com/evyatarmeged/Raccoon
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install raccoon-scanner
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `raccoon target.com` | 一站式侦察 |
-| `-o out` | 输出目录 |
-| `--tor` | 走 Tor |
-| `-f` | 强制全部模块 |
-| `--dns` | 仅 DNS |
-| `--subdomains` | 仅子域 |
+| `raccoon target.com` | One-stop reconnaissance |
+| `-o out` | Output directory |
+| `--tor` | Route via Tor |
+| `-f` | Force all modules |
+| `--dns` | DNS only |
+| `--subdomains` | Subdomains only |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 单目标一站式摸底
+### One-Stop Reconnaissance of a Single Target
 
 ```bash
 raccoon corp.com -o raccoon_out
-# DNS/WHOIS/子域/端口/指纹/Nmap 一次跑完
+# DNS/WHOIS/subdomains/ports/fingerprints/Nmap all run in one pass
 ```
 
-## 注意事项
+## Notes
 
-聚合式侦察,输出目录结构清晰;Nmap 集成让它出报告即附端口结论。
+Aggregated reconnaissance with a clear output directory structure; the Nmap integration means the report already carries port conclusions.

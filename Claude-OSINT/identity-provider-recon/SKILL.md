@@ -2,7 +2,8 @@
 name: identity-provider-recon
 description: "Organization identity surface mapping: tenant/federation fingerprinting, GetCredentialType and Okta /api/v1/authn user enumeration oracle, login candidate synthesis, no credential submission. Signals: identity provider, user enumeration."
 zh-signals: "组织级身份面测绘:租户/联邦指纹、GetCredentialType 与 Okta /api/v1/authn 用户枚举 oracle、登录候选合成,只枚举不提交凭据。信号:身份提供方,用户枚举。"
-when-to-use: "Organization-grade identity-fabric mapping: tenant/federation fingerprinting and the pre-auth user-ENUMERATION oracle methodology — enumeration and fingerprint only, never credential submission. Cove
+when-to-use: >-
+  Organization-grade identity-fabric mapping: tenant/federation fingerprinting and the pre-auth user-ENUMERATION oracle methodology — enumeration and fingerprint only, never credential submission. Cove
 version: 1.0
 sources: asm_reference_impl, public_research
 triggers:
@@ -133,4 +134,4 @@ and §11 as two separate authorization tiers even within one engagement.
 
 ---
 
-> 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。
+> 📎 Detailed content (full examples / references / data tables) has been split into `reference.md` in the same directory; use Read to load the relevant section on demand.

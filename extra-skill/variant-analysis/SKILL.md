@@ -1,6 +1,11 @@
 ---
 name: variant-analysis
 description: Hunts for the other instances of a bug already found — the variants of one root cause across a codebase. Use immediately after a vulnerability, logic bug, or bad pattern turns up in a specific file and the question becomes where else it occurs, including the bare conversational form ("are there others like this?", "is this the same bug?"). Also for generalizing one known instance into a CodeQL or Semgrep query for its whole pattern family, and for triaging a set of look-alike candidates against a known root cause. Not for initial discovery with no bug in hand.
+zh-signals: "在已发现某个漏洞根因后，搜索其在代码库中的其他实例，并将单点问题泛化为 CodeQL/Semgrep 查询。信号:变体分析,根因追踪,CodeQL,Semgrep,漏洞家族"
+when-to-use: >-
+  Use immediately after a vulnerability or bad pattern is found in a specific file, to
+  locate other instances of the same root cause or generalize it into a CodeQL/Semgrep
+  query. Not for initial discovery.
 ---
 
 # Variant Analysis

@@ -2,6 +2,8 @@
 name: vpn-setup
 description: Configure WireGuard, OpenVPN, and cloud VPNs. Implement secure remote
   access and site-to-site connectivity. Use when setting up secure network tunnels.
+zh-signals: "配置 WireGuard、OpenVPN 与云 VPN，实现安全远程访问与站点到站点连接。信号:VPN配置,WireGuard,OpenVPN,站点到站点,远程访问"
+when-to-use: "Use when setting up secure remote access, site-to-site tunnels, or encrypted connectivity between data centers, regions, or mesh nodes."
 category: security
 risk: critical
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

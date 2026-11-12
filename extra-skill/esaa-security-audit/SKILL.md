@@ -1,6 +1,10 @@
 ---
 name: esaa-security-audit
 description: Execute deterministic, event-sourced security audits using ESAA-Security's LLM-based agent architecture with 95 checks across 16 security domains
+zh-signals: "基于 ESAA 事件溯源架构执行确定性安全审计，覆盖 16 个领域 95 项检查。信号:ESAA,安全审计,事件溯源,确定性,PARCER"
+when-to-use: >-
+  Use when you need a deterministic, event-sourced security audit of a codebase with
+  verifiable findings, or to run ESAA-Security checks and PARCER playbooks.
 triggers:
   - run a security audit using ESAA
   - audit this codebase with ESAA-Security

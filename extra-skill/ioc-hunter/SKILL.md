@@ -1,6 +1,10 @@
 ---
 name: ioc-hunter
 description: Threat-intel IOC workflow — feed curation (MISP/OpenCTI/vendor/ENISA/CISA), deduplication, confidence scoring (TLP, source reputation, age, sightings), enrichment pipeline to SIEM/EDR, retro-hunt over an N-day window, and lifecycle (expiry + retirement).
+zh-signals: "威胁情报 IOC 工作流，涵盖情报源筛选、去重、置信度评分、向 SIEM/EDR 富化投递、回溯狩猎与生命周期管理。信号:IOC,威胁情报,MISP,置信度评分,回溯狩猎"
+when-to-use: >-
+  Use when curating or scoring IOC feeds, enriching SIEM/EDR with threat intel,
+  running retro-hunts over an N-day window, or managing IOC lifecycle.
 ---
 
 # IOC Hunter

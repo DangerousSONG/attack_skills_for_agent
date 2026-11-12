@@ -2,6 +2,9 @@
 name: hunt-rag-vector
 description: Hunt vector-store / embedding-layer weaknesses in RAG pipelines (OWASP
   LLM08 Vector and Embedding Weaknesses)
+zh-signals: "猎取 RAG 向量库与嵌入层的跨租户、投毒与检索劫持风险。信号:RAG安全,向量库,跨租户IDOR,语料投毒,检索劫持。"
+when-to-use: >-
+  Use when a RAG pipeline exposes a vector database or document-upload and similarity-search feature, and you need to test cross-tenant retrieval, corpus poisoning, metadata leakage, or retrieval hijack within authorized scope.
 category: security
 risk: offensive
 source: https://github.com/elementalsouls/Claude-BugHunter

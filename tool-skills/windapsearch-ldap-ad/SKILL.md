@@ -2,40 +2,42 @@
 name: windapsearch-ldap-ad
 description: "windapsearch: Custom LDAP queries. Signals: internal network enumeration, network discovery, enumerate users, domain admins only, computers."
 zh-signals: "windapsearch: 自定义 LDAP 查询。信号:内网枚举,网络发现,枚举用户,仅域管,计算机。"
+when-to-use: >-
+  Use when enumerating an Active Directory domain over LDAP for users, domain admins, computers, gMSA accounts or custom attribute queries that may reveal credentials.
 ---
 
 # windapsearch
 
-- 攻击大类:C29 AD与LDAP枚举
-- 上游仓库:https://github.com/ropnop/windapsearch
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C29 AD and LDAP Enumeration
+- Upstream Repository: https://github.com/ropnop/windapsearch
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/ropnop/windapsearch && cd windapsearch && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python windapsearch.py -d corp.local -u svc -p pass --dc-ip 10.0.0.1 --users` | 枚举用户 |
-| `--da` | 仅域管 |
-| `--computers` | 计算机 |
+| `python windapsearch.py -d corp.local -u svc -p pass --dc-ip 10.0.0.1 --users` | Enumerate users |
+| `--da` | Domain Admins only |
+| `--computers` | Computers |
 | `--gmsa` | gMSA |
-| `--psobject` | 自定义 LDAP 查询 |
-| `--terms userdescription` | 搜属性关键词 |
+| `--psobject` | Custom LDAP query |
+| `--terms userdescription` | Search attribute keywords |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 自定义 LDAP 查询
+### Custom LDAP Queries
 
 ```bash
 python windapsearch.py -d corp.local -u svc -p pass --dc-ip 10.0.0.1 --psobject "(&(objectCategory=person)(description=*pass*))"
-# description 里常写初始密码
+# Initial passwords are often written in the description field
 ```
 
-## 注意事项
+## Notes
 
-ropnop 出品的 LDAP 查询瑞士刀,内置常见查询+支持任意过滤,Python2/3 均有版本。
+ropnop's Swiss Army knife for LDAP queries, with common queries built in plus support for arbitrary filters, available for both Python 2 and 3.

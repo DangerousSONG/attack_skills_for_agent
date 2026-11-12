@@ -1,62 +1,66 @@
 ---
 name: subdomain-deep
-description: "深度子域名挖掘，多源联合枚举。当需要最大化子域名发现覆盖率、常规 DNS 枚举结果不足、或目标使用了 CDN/通配符 DNS 时使用。联合 DNS 爆破、OSINT 引擎、爬虫三种方式交叉发现"
+description: "Deep subdomain mining with multi-source joint enumeration. Use when you need to maximize subdomain discovery coverage, regular DNS enumeration results are insufficient, or the target uses CDN/wildcard DNS. Combine DNS brute-forcing, OSINT engines, and crawlers for cross-source discovery"
+zh-signals: "联合 DNS 爆破、OSINT 与爬虫多源交叉挖掘子域名，最大化资产覆盖率。信号:子域名,深度枚举,dns,osint,爬虫,资产发现"
+when-to-use: >-
+  Use when regular DNS enumeration is insufficient, or when the target uses CDN/wildcard DNS
+  and you need maximum subdomain coverage across multiple independent sources.
 metadata:
-  tags: "recon,subdomain,dns,osint,crawl,子域名,枚举,爆破,DNS,资产发现,amass,subfinder"
+  tags: "recon,subdomain,dns,osint,crawl,subdomain-enumeration,bruteforce,DNS,asset-discovery,amass,subfinder"
   category: "recon"
 ---
 
-# 深度子域名挖掘方法论
+# Deep Subdomain Mining Methodology
 
-> **⛔ 深入参考**：subfinder/ksubdomain/amass 的完整参数、通配符过滤脚本、多工具联合流程见 `references/enumeration-tools.md`
+> **⛔ In-depth reference**: the full parameters of subfinder/ksubdomain/amass, wildcard filtering scripts, and the multi-tool combined workflow are in `references/enumeration-tools.md`
 
-单一来源的子域名枚举通常只能覆盖 30-50% 的实际资产。本方法论联合三种独立来源交叉验证，最大化覆盖率。
+Single-source subdomain enumeration usually covers only 30-50% of the actual assets. This methodology combines three independent sources for cross-validation and maximizes coverage.
 
-## Phase 1: DNS 枚举
-用 `subfinder` / `ksubdomain` 进行 DNS 子域名枚举（字典爆破 + 递归发现）。
+## Phase 1: DNS Enumeration
+Use `subfinder` / `ksubdomain` for DNS subdomain enumeration (wordlist brute-forcing + recursive discovery).
 
-**结果分析**：
-- 统计解析到不同 IP 段的子域（识别多机房/多云部署）
-- 识别 CNAME 记录 → CDN/云服务（CloudFront, Cloudflare, Fastly）
-- 识别通配符：如果 `random12345.example.com` 也解析，说明有通配符记录
-  - 通配符存在时，需要过滤掉通配符 IP 对应的结果
+**Result analysis**:
+- Count subdomains resolving to different IP ranges (identify multi-datacenter / multi-cloud deployments)
+- Identify CNAME records → CDN/cloud services (CloudFront, Cloudflare, Fastly)
+- Identify wildcards: if `random12345.example.com` also resolves, wildcard records exist
+  - When a wildcard exists, filter out results matching the wildcard IP
 
-## Phase 2: OSINT 引擎搜索
-通过 `http_request` 或 `curl` 查询 FOFA API 获取域名关联资产。OSINT 引擎能发现 DNS 枚举遗漏的资产（因为它基于实际网络扫描数据，而非 DNS 记录）。
+## Phase 2: OSINT Engine Searches
+Query the FOFA API through `http_request` or `curl` to find assets associated with the domain. OSINT engines can discover assets missed by DNS enumeration (because they are based on real network scan data rather than DNS records).
 
-**OSINT 能补充的发现**：
-- 使用非标准端口的 Web 服务（如 `dev.example.com:8443`）
-- DNS 记录已删除但服务仍在线的"幽灵"子域
-- IP 反查发现的同一服务器上的其他域名
+**What OSINT can add**:
+- Web services on non-standard ports (e.g. `dev.example.com:8443`)
+- "Ghost" subdomains whose DNS records were deleted but whose services are still online
+- Other domains on the same server, found by reverse IP lookup
 
-## Phase 3: 爬虫发现
-用 `katana` 爬取主站和已知子域，从页面内容中提取更多子域引用。
+## Phase 3: Crawler Discovery
+Use `katana` to crawl the main site and known subdomains, extracting additional subdomain references from page content.
 
-**爬虫能发现的来源**：
-- HTML 中的链接（href/src/action）
-- JavaScript 中硬编码的 API 地址
-- CSS 中引用的资源域名
-- 跨域请求头（CORS: Access-Control-Allow-Origin）
+**Sources the crawler can find**:
+- Links in HTML (href/src/action)
+- Hardcoded API addresses in JavaScript
+- Resource domains referenced in CSS
+- Cross-origin request headers (CORS: Access-Control-Allow-Origin)
 
-## Phase 4: 结果合并与分类
+## Phase 4: Result Merging and Classification
 
-将三个来源的子域名去重合并后，按用途分类：
+After deduplicating and merging the subdomains from the three sources, classify them by purpose:
 
-| 类型 | 特征 | 攻击价值 |
+| Type | Characteristics | Attack value |
 |------|------|----------|
-| Web 应用 | 80/443, HTTP 响应 | 高 — 主要攻击面 |
-| API 服务 | api.*/gateway.* | 高 — 常有认证缺陷 |
-| 管理后台 | admin.*/manage.*/cms.* | 极高 — 直接管理权限 |
-| 邮件系统 | mail.*/smtp.*/mx.* | 中 — 钓鱼和信息收集 |
-| 开发/测试 | dev.*/test.*/staging.* | 极高 — 安全措施最弱 |
-| 内部系统 | vpn.*/oa.*/git.*/jenkins.* | 极高 — 不应公网可达 |
-| CDN/静态 | cdn.*/static.*/img.* | 低 — 通常无动态内容 |
+| Web application | 80/443, HTTP response | High — primary attack surface |
+| API service | api.*/gateway.* | High — often has authentication flaws |
+| Admin panel | admin.*/manage.*/cms.* | Very high — direct administrative access |
+| Mail system | mail.*/smtp.*/mx.* | Medium — phishing and information gathering |
+| Development/testing | dev.*/test.*/staging.* | Very high — weakest security controls |
+| Internal system | vpn.*/oa.*/git.*/jenkins.* | Very high — should not be reachable from the public internet |
+| CDN/static | cdn.*/static.*/img.* | Low — usually no dynamic content |
 
-**优先深入探测**：管理后台 > 开发测试 > 内部系统 > API > Web 应用
+**Priority for deeper probing**: admin panels > development/testing > internal systems > API > web applications
 
-## 泛解析处理
-- 通配符 DNS 检测：字典枚举后需内容比对，HTTP 响应对比区分真假子域名
+## Wildcard Handling
+- Wildcard DNS detection: after wordlist enumeration, compare content — use HTTP response comparison to distinguish real subdomains from fakes
 
-## CNAME/CDN 识别
-- S3 bucket：`s3.amazonaws.com` CNAME 指向
-- 404/bucket 未声明时可能可以注册同名 bucket 接管
+## CNAME/CDN Identification
+- S3 bucket: points at `s3.amazonaws.com` via CNAME
+- When 404/bucket not declared, it may be possible to register a same-named bucket and take it over

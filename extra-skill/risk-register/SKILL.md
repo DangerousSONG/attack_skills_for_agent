@@ -1,6 +1,8 @@
 ---
 name: risk-register
 description: Risk-management workflow — risk identification, qualitative and quantitative analysis (likelihood × impact, FAIR basis), evaluation against risk appetite, treatment (avoid/mitigate/transfer/accept), heatmaps and trend, with ISO 31000 and ISO 27005 as the methodology base.
+zh-signals: "风险管理流程，涵盖风险识别、定性与定量分析、风险偏好评估与处置，基于 ISO 31000/27005。信号:风险登记册,风险评估,ISO 31000,风险处置,热力图"
+when-to-use: "Use when building or reviewing a risk register, scoring risks, evaluating against risk appetite, or selecting risk treatment."
 ---
 
 # Risk Register

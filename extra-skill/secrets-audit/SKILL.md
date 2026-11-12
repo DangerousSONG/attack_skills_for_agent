@@ -1,6 +1,10 @@
 ---
 name: secrets-audit
 description: "Find leaked secrets in source code, Git history, build artifacts, and infrastructure — and audit the secrets-management posture preventing future leaks. Use when the user mentions 'secrets audit,' 'secret scanning,' 'leaked credentials,' 'API key in code,' 'gitleaks,' 'trufflehog,' 'git history scan,' 'secrets management,' 'vault audit,' 'rotation policy,' 'AWS Secrets Manager,' 'HashiCorp Vault,' 'Doppler,' '1Password Secrets Automation,' 'sealed-secrets,' 'External Secrets Operator,' or needs to find or prevent credential exposure."
+zh-signals: "在源码、Git 历史、构建产物与基础设施中查找泄露密钥，并审计密钥管理态势以防止未来泄露。信号:密钥审计,密钥泄露,gitleaks,trufflehog,Vault,轮换策略"
+when-to-use: >-
+  Use when the user needs to find leaked secrets in source code, Git history, or build
+  artifacts, or to audit secrets-management practices such as vault usage and rotation policy.
 allowed-tools: Bash, Read, Write, Grep, Glob, WebSearch
 ---
 

@@ -1,6 +1,8 @@
 ---
 name: codebase-audit-pre-push
 description: "Deep audit before GitHub push: removes junk files, dead code, security holes, and optimization issues. Checks every file line-by-line for production readiness."
+zh-signals: "在推送到 GitHub 前对代码库做深度审计，逐行检查并清理垃圾文件、死代码、安全漏洞与优化问题。信号:代码审计,推送前检查,死代码,安全漏洞,生产就绪"
+when-to-use: "Use before the first push to GitHub, before making a repository public, or when the user asks to audit the codebase, review before push, or clean up and optimize the code."
 category: development
 risk: safe
 source: community

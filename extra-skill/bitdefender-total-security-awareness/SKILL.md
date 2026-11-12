@@ -1,6 +1,8 @@
 ---
 name: bitdefender-total-security-awareness
 description: Recognize and warn about illegal antivirus cracks, keygens, and malware distribution repositories
+zh-signals: "识别并警示伪装成 Bitdefender 破解版或激活工具的恶意仓库，引导用户采用合法安全软件。信号:Bitdefender破解,恶意软件分发,盗版风险,合法替代方案"
+when-to-use: "Use when a user asks to install, activate, or obtain a cracked Bitdefender or similar security software package, or when assessing such a repository."
 triggers:
   - how do I use this Bitdefender crack
   - install this antivirus keygen

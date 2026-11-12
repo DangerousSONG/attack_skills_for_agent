@@ -2,37 +2,40 @@
 name: sublert-subdomain-mon
 description: "Sublert monitors subdomain changes. Signals: subdomain, domain enumeration, subdomain monitoring, frequency"
 zh-signals: "Sublert: 子域变更监控。信号:子域名,域名枚举,子域监控,频率。"
+when-to-use: >-
+  Use when you need continuous monitoring of a domain for newly appearing
+  subdomains over time rather than a one-shot enumeration.
 ---
 
 # Sublert
 
-- 攻击大类:C02 域名与DNS侦察
-- 上游仓库:https://github.com/yassineaboukir/sublert
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C02 Domain and DNS Reconnaissance
+- Upstream Repository: https://github.com/yassineaboukir/sublert
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/yassineaboukir/sublert && cd sublert && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 sublert.py -u t.com -l` | 子域监控 |
-| `-u domain -l -f 24` | 频率 |
-| `-o out.txt` | 输出 |
+| `python3 sublert.py -u t.com -l` | Subdomain monitoring |
+| `-u domain -l -f 24` | Frequency |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 子域变更监控
+### Subdomain Change Monitoring
 
 ```bash
 python3 sublert.py -u corp.com -l
-# 新增子域即时通知,找影子 IT
+# Instant notification on new subdomains, to catch shadow IT
 ```
 
-## 注意事项
+## Notes
 
-子域添加监控工具,持续跟踪攻击面变化。
+A subdomain addition monitoring tool that continuously tracks attack surface changes.

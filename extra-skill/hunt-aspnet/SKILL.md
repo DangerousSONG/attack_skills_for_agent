@@ -1,6 +1,10 @@
 ---
 name: hunt-aspnet
 description: Hunt ASP.NET-specific surface — ViewState deserialization (signed-only vs encrypted), machineKey recovery, dual-parser MAC-bypass anti-pattern, request-validator bypass, trace.axd/elmah.axd disclosure, load-balanced ViewState cross-node failures, SafeControl enumeration via reflection, customErrors mode=Off stack-trace leaks, classic Webforms .aspx/.asmx/.svc surface. Built for ASP.NET Webforms + WCF + SharePoint farms.
+zh-signals: "狩猎 ASP.NET 攻击面，涵盖 ViewState 反序列化、machineKey 恢复、请求校验绕过与配置泄露。信号:ASP.NET,ViewState,反序列化,machineKey,SharePoint"
+when-to-use: >-
+  Use when targeting ASP.NET Webforms, WCF, or SharePoint farms and hunting ViewState deserialization,
+  machineKey leaks, request-validator bypasses, or disclosure-tier misconfigurations.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

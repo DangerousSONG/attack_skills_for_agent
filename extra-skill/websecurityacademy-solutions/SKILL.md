@@ -1,6 +1,8 @@
 ---
 name: websecurityacademy-solutions
 description: Solutions and walkthroughs for PortSwigger Web Security Academy labs covering SQLi, XSS, CSRF, SSRF, and 30+ vulnerability categories
+zh-signals: "PortSwigger Web Security Academy 实验的解题思路与漏洞利用速查，覆盖 SQLi、XSS、SSRF、CSRF 等类别。信号:Web安全学院,实验题解,SQL注入,XSS,PortSwigger"
+when-to-use: "Use when solving or studying PortSwigger Web Security Academy labs or practicing common web vulnerability exploitation in an authorized lab environment."
 triggers:
   - how do I solve Web Security Academy labs
   - show me PortSwigger lab solutions

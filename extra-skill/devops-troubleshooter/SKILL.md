@@ -1,6 +1,8 @@
 ---
 name: devops-troubleshooter
 description: Expert DevOps troubleshooter specializing in rapid incident response, advanced debugging, and modern observability.
+zh-signals: "面向 DevOps 的故障排查专家，擅长快速应急响应、深度调试与现代可观测性分析。信号:DevOps,故障排查,应急响应,可观测性,日志分析"
+when-to-use: "Use when investigating production incidents, debugging distributed systems, analyzing logs and traces, or improving observability and reliability."
 risk: critical
 source: community
 date_added: '2026-02-27'

@@ -1,6 +1,9 @@
 ---
 name: hunt-ssti
 description: "Hunt server-side template injection (SSTI) across Jinja2 (Flask/Django), Twig (Symfony), Freemarker (Java), ERB (Rails), Spring, Velocity, Mako, Thymeleaf, Smarty. Detection probes use double-curly and dollar-curly math expressions evaluated server-side. Once an engine is fingerprinted, escalate to RCE via the engine-specific class-walker, callback-registrar, or Execute-utility patterns documented in disclosed reports. Detection patterns: error messages reveal engine, blank or numeric eval reveals expression mode. Targets: email templates, PDF/report generators, CMS preview features, error pages with user input. Use when hunting RCE via template rendering, when content shows engine fingerprints, when finding endpoints that compose strings with user input before render."
+zh-signals: "猎取服务端模板注入漏洞，覆盖引擎指纹识别与多引擎 RCE 利用。信号:模板注入,SSTI,Jinja2,Twig,Freemarker,RCE。"
+when-to-use: >-
+  Use when user-controlled input is rendered through a server-side template engine, when error messages or math-expression probes reveal engine fingerprints, or when hunting RCE via email templates, PDF generators, CMS previews, or error pages.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

@@ -1,6 +1,8 @@
 ---
 name: hardware-hardspoof-spoofing-toolkit
 description: Hardware-level identity spoofing toolkit for network interfaces, browser fingerprints, and system identifiers
+zh-signals: "硬件级身份伪装工具包，用于伪造网卡 MAC、SMBIOS、DNS/SNI、ARP 与浏览器指纹以规避硬件追踪。信号:硬件伪装,MAC地址,浏览器指纹,指纹规避,匿名化"
+when-to-use: "Use when an authorized engagement requires masking hardware identifiers such as MAC address, SMBIOS data, or browser fingerprints to avoid device tracking."
 triggers:
   - spoof my hardware identity
   - randomize MAC address and device fingerprint

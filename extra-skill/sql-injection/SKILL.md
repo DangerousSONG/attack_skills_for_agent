@@ -2,6 +2,9 @@
 name: sql-injection
 description: >
   SQL injection occurs when untrusted user input is interpolated directly into database queries, allowing attackers to alter query logic. Detect via single-quote errors, boolean-based blind responses (AND 1=1 vs AND 1=2), time-delay payloads (SLEEP, WAITFOR), UNION column enumeration, and error messages from MySQL, Oracle, MSSQL, PostgreSQL. Tools: sqlmap, sqlbftools, Burp Suite, wfuzz with SQLi fuzz strings.
+zh-signals: "检测与利用 SQL 注入漏洞，覆盖布尔盲注、时间盲注、UNION 与报错注入。信号:SQL注入,布尔盲注,时间盲注,UNION注入,sqlmap。"
+when-to-use: >-
+  Use when user input reaches a database query and you need to confirm SQL injection through error, boolean, time-delay, UNION, or out-of-band techniques, and then extract or escalate.
 license: MIT
 compatibility: Designed for Claude Code. Requires curl, sqlmap (optional), Burp Suite or OWASP ZAP.
 metadata:

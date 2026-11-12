@@ -1,6 +1,8 @@
 ---
 name: password-spray-methodology
 description: End-to-end password spray playbook. User enumeration, lockout detection, password pattern generation, spray execution across all protocols, error code differentials, and engagement discipline. Unifies M365/Entra, Okta, Exchange, Kerberos, SharePoint, XMLRPC, OIDC, and AD SMB/WinRM spraying into one methodology.
+zh-signals: "端到端密码喷洒方法论，覆盖用户枚举、锁定检测、密码模式生成与多协议喷洒执行。信号:密码喷洒,用户枚举,锁定检测,M365,Kerberos"
+when-to-use: "Use at the start of any engagement with a user list but no credentials, or after domain/UPN format and account names are enumerated, to plan safe spraying."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

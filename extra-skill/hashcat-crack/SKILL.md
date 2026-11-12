@@ -1,129 +1,133 @@
 ---
 name: hashcat-crack
-description: "使用 hashcat 进行密码哈希离线破解。当获取到密码哈希（NTLM/NTLMv2/Kerberos TGS/AS-REP/SHA/MD5/bcrypt/NetNTLMv2）需要还原明文密码时使用。hashcat 是 GPU 加速的密码破解工具，比 john 快几十倍。覆盖哈希类型识别、字典攻击、规则攻击、掩码攻击、组合攻击。拿到 hashdump/secretsdump/Kerberoast/AS-REP 输出后必用此技能"
+description: "Offline password hash cracking with hashcat. Use when you have obtained password hashes (NTLM/NTLMv2/Kerberos TGS/AS-REP/SHA/MD5/bcrypt/NetNTLMv2) and need to recover the plaintext password. hashcat is a GPU-accelerated password cracking tool, tens of times faster than john. Covers hash type identification, dictionary attacks, rule attacks, mask attacks, and combination attacks. Must use this skill after obtaining hashdump/secretsdump/Kerberoast/AS-REP output"
+zh-signals: "使用 hashcat 对密码哈希进行 GPU 加速离线破解，覆盖类型识别、字典/规则/掩码攻击。信号:hashcat,哈希破解,GPU破解,NTLM,Kerberoast"
+when-to-use: >-
+  Use when you have captured password hashes such as NTLM, NetNTLMv2, Kerberos TGS/AS-REP,
+  or bcrypt and need to recover plaintext offline.
 metadata:
-  tags: "hashcat,crack,hash,password,ntlm,kerberos,tgs,md5,sha,密码,破解,GPU,john,哈希"
+  tags: "hashcat,crack,hash,password,ntlm,kerberos,tgs,md5,sha,password,cracking,GPU,john,hash"
   category: "tool"
 ---
 
-# hashcat 密码哈希离线破解
+# hashcat Offline Password Hash Cracking
 
-hashcat 利用 GPU 加速哈希破解，速度远超 CPU。核心工作流：**识别哈希类型 → 选择攻击模式 → 喂字典/规则/掩码**。
+hashcat uses GPU acceleration to crack hashes, far faster than a CPU. Core workflow: **identify the hash type → choose the attack mode → feed it wordlists/rules/masks**.
 
-## 哈希类型识别（-m 参数）
+## Hash Type Identification (-m parameter)
 
-| 哈希类型 | -m 值 | 来源 |
+| Hash Type | -m Value | Source |
 |----------|-------|------|
 | NTLM | 1000 | hashdump / secretsdump |
-| NetNTLMv1 | 5500 | Responder 抓包（旧系统/降级攻击） |
-| NetNTLMv2 | 5600 | Responder / ntlmrelayx 抓包 |
+| NetNTLMv1 | 5500 | Responder capture (legacy systems/downgrade attacks) |
+| NetNTLMv2 | 5600 | Responder / ntlmrelayx capture |
 | Kerberos TGS (Kerberoast) | 13100 | GetUserSPNs.py |
 | Kerberos AS-REP | 18200 | GetNPUsers.py |
-| MD5 | 0 | Web 数据库泄露 |
+| MD5 | 0 | Web database leak |
 | SHA-256 | 1400 | — |
-| Raw SHA-512 | 1700 | 128 字符十六进制摘要 |
+| Raw SHA-512 | 1700 | 128-character hexadecimal digest |
 | sha512crypt ($6$) | 1800 | Linux /etc/shadow |
-| bcrypt | 3200 | Web 应用 |
-| DCC2 (Domain Cached Credentials 2) | 2100 | secretsdump 域缓存凭据 |
-| WPA-PBKDF2 | 22000 | WiFi 握手包 |
+| bcrypt | 3200 | Web application |
+| DCC2 (Domain Cached Credentials 2) | 2100 | secretsdump domain cached credentials |
+| WPA-PBKDF2 | 22000 | WiFi handshake capture |
 
-## 攻击模式
+## Attack Modes
 
-### 字典攻击（最常用）
+### Dictionary Attack (Most Common)
 
 ```bash
-# 基本字典攻击
+# Basic dictionary attack
 hashcat -m 1000 hashes.txt /usr/share/wordlists/rockyou.txt
 
-# 加规则（变形字典，如 password → Password1!）
+# With rules (mutated wordlists, e.g. password → Password1!)
 hashcat -m 1000 hashes.txt /usr/share/wordlists/rockyou.txt -r /usr/share/hashcat/rules/best64.rule
 
-# 常用规则文件
-# best64.rule — 64 条高效规则，速度和效果平衡
-# rockyou-30000.rule — 大规则集，覆盖更多变形
-# OneRuleToRuleThemAll.rule — 社区最强规则集
+# Common rule files
+# best64.rule — 64 efficient rules, balanced for speed and effectiveness
+# rockyou-30000.rule — large rule set, covers more mutations
+# OneRuleToRuleThemAll.rule — the strongest community rule set
 ```
 
-### 掩码攻击（已知密码模式）
+### Mask Attack (Known Password Pattern)
 
 ```bash
-# 8 位纯数字
+# 8 digits only
 hashcat -m 1000 hashes.txt -a 3 ?d?d?d?d?d?d?d?d
 
-# 首字母大写 + 6 位小写 + 1 位数字（如 Password1）
+# Capitalized first letter + 6 lowercase letters + 1 digit (e.g. Password1)
 hashcat -m 1000 hashes.txt -a 3 ?u?l?l?l?l?l?l?d
 
-# 掩码字符集：?l=小写 ?u=大写 ?d=数字 ?s=特殊 ?a=全部
+# Mask character sets: ?l=lowercase ?u=uppercase ?d=digit ?s=special ?a=all
 ```
 
-### 组合攻击
+### Combination Attack
 
 ```bash
-# 两个字典组合（word1+word2）
+# Combine two wordlists (word1+word2)
 hashcat -m 1000 hashes.txt -a 1 dict1.txt dict2.txt
 ```
 
-## 实战场景
+## Practical Scenarios
 
-### Kerberoast 破解
+### Kerberoast Cracking
 
 ```bash
-# GetUserSPNs.py 输出 → hashcat
+# GetUserSPNs.py output → hashcat
 GetUserSPNs.py domain/user:pass -dc-ip DC_IP -request -outputfile tgs.txt
 hashcat -m 13100 tgs.txt /usr/share/wordlists/rockyou.txt -r /usr/share/hashcat/rules/best64.rule
 ```
 
-### AS-REP Roasting 破解
+### AS-REP Roasting Cracking
 
 ```bash
 GetNPUsers.py domain/ -usersfile users.txt -no-pass -dc-ip DC_IP -outputfile asrep.txt
 hashcat -m 18200 asrep.txt /usr/share/wordlists/rockyou.txt
 ```
 
-### NTLM 哈希破解（hashdump/secretsdump）
+### NTLM Hash Cracking (hashdump/secretsdump)
 
 ```bash
-# secretsdump 输出格式：user:RID:LM:NTLM:::
-# 提取 NTLM 部分
+# secretsdump output format: user:RID:LM:NTLM:::
+# Extract the NTLM portion
 cat secretsdump.txt | awk -F: '{print $4}' | sort -u > ntlm.txt
 hashcat -m 1000 ntlm.txt /usr/share/wordlists/rockyou.txt -r /usr/share/hashcat/rules/best64.rule
 ```
 
-### NetNTLMv2 破解（Responder 抓取）
+### NetNTLMv2 Cracking (captured by Responder)
 
 ```bash
 hashcat -m 5600 responder_hashes.txt /usr/share/wordlists/rockyou.txt
 ```
 
-## 实用参数
+## Useful Parameters
 
 ```bash
-# 查看已破解结果
+# Show already cracked results
 hashcat -m 1000 hashes.txt --show
 
-# 继续中断的任务
+# Resume an interrupted task
 hashcat -m 1000 hashes.txt --restore
 
-# 只跑 GPU（不用 CPU）
+# Run GPU only (no CPU)
 hashcat -m 1000 hashes.txt -D 2
 
-# 设置工作负载（1=低 2=默认 3=高 4=极限）
+# Set the workload (1=low 2=default 3=high 4=extreme)
 hashcat -m 1000 hashes.txt -w 3
 
-# 内核优化（截断密码长度换速度，多数场景够用）
+# Kernel optimization (truncate the password length for speed, enough for most scenarios)
 hashcat -m 1000 hashes.txt -O
 
-# 输出到文件
+# Output to file
 hashcat -m 1000 hashes.txt wordlist.txt -o cracked.txt
 ```
 
-## 决策树
+## Decision Tree
 
 ```
-拿到哈希后：
-├─ 知道哈希类型 → 直接 hashcat -m 值
-├─ 不确定类型 → hashcat --identify hashes.txt 或 hashid
-├─ 有 GPU → hashcat（首选）
-├─ 无 GPU / CPU 环境 → john the ripper
-└─ 在线查询 → hashes.org / crackstation.net（先试再跑）
+After obtaining the hashes:
+├─ Known hash type → use the hashcat -m value directly
+├─ Unsure of the type → hashcat --identify hashes.txt or hashid
+├─ GPU available → hashcat (preferred)
+├─ No GPU / CPU environment → john the ripper
+└─ Online lookup → hashes.org / crackstation.net (try before running)
 ```

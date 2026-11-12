@@ -2,6 +2,8 @@
 name: libfuzzer
 type: fuzzer
 description: "Sets up and runs libFuzzer, the coverage-guided fuzzer built into LLVM, on C/C++ code that compiles with Clang. Covers harness structure, -fsanitize=fuzzer builds, corpus and dictionary management, sanitizer integration, and campaign triage. Use when writing or debugging an LLVMFuzzerTestOneInput harness, starting fuzzing on a C/C++ library, choosing between libFuzzer and AFL++, or working out why a libFuzzer run finds nothing."
+zh-signals: "在 C/C++ 代码上搭建并运行 LLVM libFuzzer 覆盖率引导模糊测试。信号:libfuzzer,模糊测试,c++,覆盖率,harness"
+when-to-use: "Use when writing or debugging an LLVMFuzzerTestOneInput harness, starting fuzzing on C/C++ code compiled with Clang, or choosing between libFuzzer and AFL++."
 ---
 
 # libFuzzer

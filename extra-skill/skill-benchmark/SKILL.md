@@ -1,6 +1,11 @@
 ---
 name: skill-benchmark
 description: Scores any SKILL.md across 5 quality dimensions, runs a compatibility check against 50+ AI agents, and returns a ranked fix list. Trigger when the user asks to benchmark, score, or audit a skill, wants to check cross-agent compatibility (Cursor, Windsurf, Gemini, etc.), needs a ranked fix list before publishing a SKILL.md to the community repo, is comparing two skills before a pull request, or wants to audit a SKILL.md for compatibility before opening a PR.
+zh-signals: "对任意 SKILL.md 按五个质量维度评分，检查 50+ AI Agent 兼容性并输出排序修复清单。信号:技能评分,兼容性检查,质量审计,SKILL.md,发布前审查"
+when-to-use: >-
+  Use when asked to benchmark, score, or audit a SKILL.md, check cross-agent
+  compatibility, compare two skills before a pull request, or produce a ranked fix
+  list before publishing.
 ---
 
 # Skill Benchmark

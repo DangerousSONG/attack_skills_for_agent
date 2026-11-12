@@ -7,6 +7,8 @@ description: >
   "fetch path traversal", "XHR path injection", "fetch concatenation", "../ in fetch",
   "user input in fetch URL", "path component injection", fetch redirect chaining,
   CSPT to XSS, open redirect fetch, "JavaScript fetch user input", DOM fetch injection.
+zh-signals: "狩猎客户端路径遍历（CSPT）漏洞。信号:cspt,客户端路径遍历,fetch注入,xhr路径,开放重定向"
+when-to-use: "Use when hunting Client-Side Path Traversal where attacker-controlled input is concatenated into the path of a JavaScript fetch() or XHR request, potentially chaining to XSS or open redirect."
 license: MIT
 compatibility: Designed for Claude Code. Burp Suite recommended for active testing.
 metadata:

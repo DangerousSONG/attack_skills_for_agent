@@ -1,6 +1,8 @@
 ---
 name: agentic-security-scanner
 description: AI-powered security scanner for agentic workflows with plain-English findings, dollar-cost estimates, and auto-fix capabilities
+zh-signals: "面向 AI 工作流的自动化安全扫描器，输出通俗发现、成本估算与自动修复建议。信号:安全扫描,自动修复,依赖漏洞,密钥泄露,合规审计"
+when-to-use: "Use when scanning a codebase or AI-generated code for vulnerabilities, hardcoded secrets, dependency issues, or compliance posture with cost estimates and auto-fix guidance."
 triggers:
   - scan my code for security vulnerabilities
   - check for security issues in this project

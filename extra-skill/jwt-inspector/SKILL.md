@@ -6,6 +6,8 @@ description: >-
   HMAC secret crack against a wordlist to detect weak signing keys. Use when the
   user asks to "decode this JWT", "is this token secure?", "audit a JWT", or
   "check if this token uses a weak secret".
+zh-signals: "JWT 解码与安全审计，检查算法缺陷、过期声明并尝试弱密钥破解。信号:JWT,令牌审计,alg=none,弱密钥,认证安全"
+when-to-use: "Use when the user asks to decode, audit, or assess the security of a JSON Web Token, including checking for weak signing secrets."
 license: MIT
 ---
 

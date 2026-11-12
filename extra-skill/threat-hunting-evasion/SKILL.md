@@ -1,49 +1,51 @@
 ---
 name: threat-hunting-evasion
-description: "威胁猎杀原理与规避方法论。理解蓝队如何主动猎杀（Hypothesis-driven / IOC-driven / Analytics-driven），红队如何设计行为使自己不被猎杀到。当需要评估自身操作是否可被威胁猎杀发现时使用"
+description: "Threat hunting principles and evasion methodology. Understand how the blue team hunts proactively (hypothesis-driven / IOC-driven / analytics-driven), and how the red team designs behavior to stay undetected. Use when you need to assess whether your own operations could be discovered by threat hunting"
+zh-signals: "理解威胁猎杀原理并设计规避检测的行为。信号:威胁猎杀,检测规避,sigma,yara,edr"
+when-to-use: "Use when assessing whether your operations could be discovered by threat hunting, or when studying Sigma/YARA rules and EDR detection logic for evasion."
 metadata:
-  tags: "threat-hunting,detection,evasion,sigma,yara,hypothesis,威胁猎杀,规避,检测规则"
+  tags: "threat-hunting,detection,evasion,sigma,yara,hypothesis,detection-rules"
   category: "threat-intel"
   mitre_attack: "T1562,T1070,T1036,T1027,T1055"
 ---
 
-# 威胁猎杀原理与规避
+# Threat Hunting Principles and Evasion
 
-> **红队必须理解猎手的思维方式才能不被猎到**
+> **The red team must understand how hunters think in order to stay ahead of them**
 
-## 深入参考（按需加载）
+## Deep Reference (Load on Demand)
 
-以下 reference 体量较大，不要在只需要通用猎杀方法论时预读；只有任务明确涉及规则拆解、EDR 逻辑或规避验证时再打开对应文件。
+The references below are large. Do not pre-read them when you only need the general hunting methodology; open a specific file only when the task explicitly involves rule dissection, EDR logic, or evasion validation.
 
-- 需要分析 Sigma/YARA 规则、规则绕过或检测条件拆解 → [references/detection-rules-bypass.md](references/detection-rules-bypass.md)
-- 需要分析主流 EDR 检测逻辑、遥测来源或行为链路 → [references/edr-detection-logic.md](references/edr-detection-logic.md)
+- Need to analyze Sigma/YARA rules, rule bypasses, or detection condition decomposition -> [references/detection-rules-bypass.md](references/detection-rules-bypass.md)
+- Need to analyze mainstream EDR detection logic, telemetry sources, or behavior chains -> [references/edr-detection-logic.md](references/edr-detection-logic.md)
 
 ---
 
-## Part A: 威胁猎杀方法论（蓝队视角）
+## Part A: Threat Hunting Methodology (Blue Team Perspective)
 
-### 三种猎杀范式
-
-```
-1. 假设驱动（Hypothesis-driven）
-   "如果 APT29 入侵我们，他们会用 PowerShell 下载器"
-   → 搜索: EventID 4104 + "IEX" + "DownloadString"
-
-2. IOC 驱动（IOC-driven）
-   "威胁情报显示这个 IP 是 C2"
-   → 搜索: 所有连接到该 IP 的主机
-
-3. 分析驱动（Analytics-driven）
-   "正常用户不会在凌晨 3 点执行 whoami"
-   → 搜索: 异常时间 + 侦察命令组合
-```
-
-### 常见猎杀查询（你需要绕过的）
+### Three Hunting Paradigms
 
 ```
-# Sigma 规则示例
+1. Hypothesis-driven
+   "If APT29 breaches us, they will use a PowerShell downloader"
+   -> Search: EventID 4104 + "IEX" + "DownloadString"
 
-# 1. 可疑 PowerShell 下载
+2. IOC-driven
+   "Threat intelligence shows this IP is C2"
+   -> Search: all hosts connecting to that IP
+
+3. Analytics-driven
+   "A normal user does not run whoami at 3 AM"
+   -> Search: unusual time + reconnaissance command combination
+```
+
+### Common Hunting Queries (That You Need to Evade)
+
+```
+# Sigma rule examples
+
+# 1. Suspicious PowerShell download
 title: Suspicious PowerShell Download
 detection:
   selection:
@@ -54,7 +56,7 @@ detection:
       - 'DownloadString'
       - 'Net.WebClient'
 
-# 2. LSASS 访问
+# 2. LSASS access
 title: LSASS Memory Access
 detection:
   selection:
@@ -64,7 +66,7 @@ detection:
       - '0x1010'
       - '0x1410'
 
-# 3. 异常父子进程
+# 3. Abnormal parent-child process
 title: Suspicious Parent-Child
 detection:
   selection:
@@ -74,7 +76,7 @@ detection:
       - '\powershell.exe'
       - '\mshta.exe'
 
-# 4. 枚举命令组合（5分钟内执行3+侦察命令）
+# 4. Enumeration command combination (3+ recon commands within 5 minutes)
 title: Reconnaissance Commands
 detection:
   selection:
@@ -88,122 +90,122 @@ detection:
     condition: selection | count() >= 3
 ```
 
-### 猎杀数据源
+### Hunting Data Sources
 
-| 数据源 | 猎杀目标 |
+| Data Source | Hunting Target |
 |--------|---------|
-| Sysmon | 进程创建/注入/网络/文件 |
-| PowerShell Logging | 脚本执行内容 |
-| Windows Security | 认证/权限/策略 |
-| DNS Logs | C2 域名/DGA/隧道 |
-| Proxy/Firewall | 异常外连/大量传输 |
-| EDR Telemetry | 行为链 |
-| NetFlow | 流量模式异常 |
-| LDAP Logs | AD 枚举 |
+| Sysmon | Process creation/injection/network/file |
+| PowerShell Logging | Script execution content |
+| Windows Security | Authentication/permissions/policy |
+| DNS Logs | C2 domains/DGA/tunneling |
+| Proxy/Firewall | Anomalous outbound connections/large transfers |
+| EDR Telemetry | Behavior chains |
+| NetFlow | Traffic pattern anomalies |
+| LDAP Logs | AD enumeration |
 
 ---
 
-## Part B: 红队视角 — 规避威胁猎杀
+## Part B: Red Team Perspective — Evading Threat Hunting
 
-### 策略 1: 不匹配已知检测规则
+### Strategy 1: Do Not Match Known Detection Rules
 
 ```
-分析 Sigma 仓库公开规则 → 确保你的操作不命中
+Analyze public rules in Sigma repositories -> ensure your activity does not hit them
 
-常见规则绕过：
-├─ "IEX(DownloadString)" 检测
-│   绕过: 使用 .NET WebClient 直接调用，不走 PS
-│   或: certutil / bitsadmin / curl 替代
+Common rule bypasses:
+├─ "IEX(DownloadString)" detection
+│   Bypass: call .NET WebClient directly, stay out of PowerShell
+│   Or: use certutil / bitsadmin / curl instead
 │
-├─ "cmd.exe spawned by outlook.exe" 检测
-│   绕过: 使用 COM 对象执行，不创建子进程
-│   或: 用 VBA 调用 WMI → wmiprvse.exe 作父进程
+├─ "cmd.exe spawned by outlook.exe" detection
+│   Bypass: execute through COM objects, spawn no child process
+│   Or: call WMI via VBA -> wmiprvse.exe becomes the parent process
 │
-├─ "lsass.exe access" 检测
-│   绕过: Handle duplicate 方式（不直接 OpenProcess）
-│   或: 使用 NanoDump 的 MiniDumpWriteDump 替代方式
+├─ "lsass.exe access" detection
+│   Bypass: use handle duplication (no direct OpenProcess)
+│   Or: use NanoDump's MiniDumpWriteDump alternative
 │
-└─ "Reconnaissance command burst" 检测
-    绕过: 分散执行（每个命令间隔 10+ 分钟）
-    或: 通过 WMI/LDAP 查询代替命令行工具
+└─ "Reconnaissance command burst" detection
+    Bypass: spread execution out (10+ minutes between each command)
+    Or: use WMI/LDAP queries instead of command line tools
 ```
 
-### 策略 2: 行为模式正常化
+### Strategy 2: Normalize Behavior Patterns
 
 ```
-原则：让你的操作看起来像正常业务行为
+Principle: make your activity look like normal business activity
 
-网络行为正常化：
-├─ C2 通信在业务时间（9am-6pm）
-├─ 心跳间隔匹配正常 HTTP 刷新（不要太规律）
-├─ 流量大小匹配正常 API 调用
-├─ 使用目标已有的 SaaS 域名（Slack/Teams API 模仿）
-└─ 避免凌晨大量数据传输
+Network behavior normalization:
+├─ Conduct C2 traffic during business hours (9am-6pm)
+├─ Match heartbeat intervals to normal HTTP polling (not too regular)
+├─ Match traffic volume to normal API calls
+├─ Use the target's existing SaaS domains (mimic Slack/Teams API traffic)
+└─ Avoid bulk data transfers in the middle of the night
 
-主机行为正常化：
-├─ 不要短时间内执行多个侦察命令
-├─ 使用目标环境已有的工具（LOLBins）
-├─ 进程名/路径匹配合法程序
-├─ 不要创建明显异常的用户名（admin123/test）
-└─ 操作间隔模仿人类行为节奏
+Host behavior normalization:
+├─ Do not run multiple reconnaissance commands in a short window
+├─ Use tools already present in the target environment (LOLBins)
+├─ Make process names/paths match legitimate programs
+├─ Do not create obviously unusual usernames (admin123/test)
+└─ Mimic human pacing between operations
 ```
 
-### 策略 3: YARA 规则绕过
+### Strategy 3: YARA Rule Bypass
 
 ```
-YARA 匹配原理：字节序列 + 条件逻辑
+YARA matching principle: byte sequences + conditional logic
 
-绕过方式：
-├─ 字符串特征 → XOR/AES 加密关键字符串
-├─ 字节序列 → 使用不同编译器/编译选项
-├─ 文件结构 → 修改 PE header / Rich header
-├─ 入口点模式 → 改变 stub / 使用合法 packer
-└─ 行为签名 → 改变 API 调用顺序/方式
+Bypass approaches:
+├─ String signatures -> XOR/AES encrypt the key strings
+├─ Byte sequences -> use a different compiler / compilation options
+├─ File structure -> modify the PE header / Rich header
+├─ Entry point pattern -> change the stub / use a legitimate packer
+└─ Behavior signatures -> change the order/manner of API calls
 
-验证方式：
-yara -r sigma_rules/ my_payload.exe  # 扫描前先自测
+Verification:
+yara -r sigma_rules/ my_payload.exe  # self-test before deploying
 ```
 
-### 策略 4: EDR 行为检测规避
+### Strategy 4: EDR Behavior Detection Evasion
 
 ```
-现代 EDR 不只看签名，看行为链：
-├─ Process Chain: 邮件→CMD→PowerShell→网络连接 = 恶意
-├─ Memory Pattern: RWX + PE header + 远程线程 = 注入
-├─ File Pattern: 写入→执行→删除 = dropper
-└─ Network Pattern: DNS over HTTPS + 固定间隔 = C2
+Modern EDR looks beyond signatures, it looks at behavior chains:
+├─ Process Chain: email->CMD->PowerShell->network connection = malicious
+├─ Memory Pattern: RWX + PE header + remote thread = injection
+├─ File Pattern: write->execute->delete = dropper
+└─ Network Pattern: DNS over HTTPS + fixed interval = C2
 
-红队对策：
-├─ 断开行为链 → 不要在同一进程内完成所有操作
-├─ 时间分散 → 每步操作之间 Sleep 较长时间
-├─ 使用合法流程 → 通过 COM/WMI/计划任务执行
-├─ 避免 known-bad 组合 → 研究目标 EDR 的检测逻辑
-└─ 测试 → 在同类 EDR 环境中预演
+Red team countermeasures:
+├─ Break the behavior chain -> do not complete all steps in the same process
+├─ Space out timing -> Sleep for longer between each step
+├─ Use legitimate workflows -> execute through COM/WMI/scheduled tasks
+├─ Avoid known-bad combinations -> study the target EDR's detection logic
+└─ Test -> rehearse in a similar EDR environment
 ```
 
-### 策略 5: 猎杀者思维盲区利用
+### Strategy 5: Exploit the Hunter's Blind Spots
 
 ```
-猎杀者常见盲区（可利用）：
-├─ 周末/节假日 → 人员不足，响应慢
-├─ 正常业务流量 → 混入合法 API 调用难以区分
-├─ 非标准数据源 → 如果日志未采集就看不到
-├─ 加密流量 → TLS 内容不可见（除非有 TLS 解密）
-├─ Cloud 环境 → 日志碎片化，跨平台关联困难
-├─ 合法工具 → LOLBins 产生的日志与正常管理操作相同
-└─ 告警疲劳 → 大量低优先级告警中隐藏高风险操作
+Common hunter blind spots (exploitable):
+├─ Weekends/holidays -> thin staffing, slow response
+├─ Normal business traffic -> blending into legitimate API calls is hard to distinguish
+├─ Non-standard data sources -> invisible if the logs are not collected
+├─ Encrypted traffic -> TLS contents are invisible (unless TLS decryption is available)
+├─ Cloud environments -> fragmented logs, hard to correlate across platforms
+├─ Legitimate tools -> logs from LOLBins are identical to normal administrative actions
+└─ Alert fatigue -> high-risk activity hides among many low-priority alerts
 ```
 
-## 红队自检清单
+## Red Team Self-Check Checklist
 
 ```
-操作前自检：
-[ ] Sigma 公开规则是否命中我的 TTP？
-[ ] 我的 C2 通信是否能被 JA3/JARM 识别？
-[ ] 我的进程链是否有异常父子关系？
-[ ] 我的网络模式是否有固定间隔/大小？
-[ ] 我是否在短时间内执行了多个侦察命令？
-[ ] 我的工具是否在 VirusTotal 上已有检出？
-[ ] 目标是否部署了 Sysmon？配置了哪些规则？
-[ ] 目标 EDR 是什么？我是否在同类环境测试过？
+Pre-operation self-check:
+[ ] Do public Sigma rules hit my TTP?
+[ ] Can my C2 traffic be fingerprinted by JA3/JARM?
+[ ] Does my process chain contain abnormal parent-child relationships?
+[ ] Does my network pattern have fixed intervals/sizes?
+[ ] Did I run multiple reconnaissance commands within a short window?
+[ ] Is my tool already flagged on VirusTotal?
+[ ] Does the target deploy Sysmon? Which rules are configured?
+[ ] What is the target EDR? Have I tested in a similar environment?
 ```

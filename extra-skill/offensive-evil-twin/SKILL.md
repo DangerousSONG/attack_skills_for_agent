@@ -1,6 +1,8 @@
 ---
 name: offensive-evil-twin
 description: "Evil Twin / KARMA / Mana access point methodology — rogue AP construction with hostapd-mana / wifiphisher / airgeddon, KARMA universal probe response, Mana selective probe response, captive portal phishing, deauth-driven client coercion to attacker AP, MAC randomization defeat via PNL leak analysis, post-association MITM (DNS, ARP, transparent proxy), credential capture for portal/web/SMB, and detection-evasion tactics. Use to coerce client devices onto an attacker-controlled AP, intercept their traffic, harvest credentials, or deliver payloads via captive portal."
+zh-signals: "Evil Twin / KARMA / Mana 恶意 AP 方法，覆盖伪造热点、强制关联、门户钓鱼与中间人劫持。信号:Evil Twin,KARMA,Mana,钓鱼门户,无线攻击"
+when-to-use: "Use for authorized wireless engagements to coerce client devices onto an attacker-controlled AP, intercept traffic, harvest portal/web/SMB credentials, or deliver payloads via captive portal."
 ---
 
 # Evil Twin / KARMA / Mana

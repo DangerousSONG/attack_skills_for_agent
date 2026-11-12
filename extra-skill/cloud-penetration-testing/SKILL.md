@@ -1,6 +1,8 @@
 ---
 name: cloud-penetration-testing
 description: "Conduct comprehensive security assessments of cloud infrastructure across Microsoft Azure, Amazon Web Services (AWS), and Google Cloud Platform (GCP)."
+zh-signals: "对 Azure、AWS、GCP 云基础设施开展授权安全评估与渗透测试，覆盖身份、存储、计算与权限枚举。信号:云渗透,AWS,Azure,GCP,IAM,S3"
+when-to-use: "Use when assessing cloud infrastructure across AWS, Azure, or GCP, including IAM enumeration, storage misconfiguration, and credential abuse. Requires explicit written authorization and defined scope."
 risk: offensive
 source: community
 author: zebbern

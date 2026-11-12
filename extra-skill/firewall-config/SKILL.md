@@ -3,6 +3,10 @@ name: firewall-config
 description: Configure iptables, nftables, and cloud firewalls. Implement network
   segmentation and traffic filtering. Use when securing network perimeters or implementing
   security zones.
+zh-signals: "配置 iptables、nftables 与云防火墙，实现网络分段与流量过滤。信号:防火墙配置,iptables,nftables,网络分段,流量过滤"
+when-to-use: >-
+  Use when securing network perimeters or implementing security zones with
+  iptables, nftables, or cloud firewalls.
 category: security
 risk: critical
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

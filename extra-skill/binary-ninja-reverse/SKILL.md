@@ -1,6 +1,10 @@
 ---
 name: binary-ninja-reverse
 description: Use for authorized binary analysis in Binary Ninja, including HLIL/MLIL/LLIL inspection, strings/imports/exports, cross-references, types, patch review, Python API automation, and optional Binary Ninja MCP or localhost HTTP integration.
+zh-signals: "在 Binary Ninja 中进行授权二进制分析，覆盖 HLIL/MLIL/LLIL、交叉引用、类型、补丁审查与 Python API 自动化。信号:Binary Ninja,逆向分析,HLIL,交叉引用,Python API"
+when-to-use: >-
+  Use for authorized binary analysis in Binary Ninja — IL inspection, xrefs,
+  types, patch review, Python API automation, or MCP/HTTP integration.
 ---
 
 # Binary Ninja reverse engineering

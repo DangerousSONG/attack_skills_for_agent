@@ -1,6 +1,10 @@
 ---
 name: port-mass-scan
 description: Port scan /8-/24 with Masscan+RustScan and nmap banners.
+zh-signals: "使用 Masscan 与 RustScan 对 /8-/24 网段进行高速端口扫描，并用 nmap 识别服务横幅。信号:端口扫描,Masscan,RustScan,nmap,资产发现"
+when-to-use: >-
+  Use when performing authorized high-speed port scanning across single hosts or large IP
+  ranges, or before service enumeration with Nmap.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

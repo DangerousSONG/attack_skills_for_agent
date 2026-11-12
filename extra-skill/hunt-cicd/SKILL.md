@@ -1,6 +1,8 @@
 ---
 name: hunt-cicd
 description: Hunt CI/CD pipeline vulnerabilities
+zh-signals: "狩猎 CI/CD 流水线漏洞（Jenkins、GitHub Actions 等）。信号:cicd,jenkins,github actions,流水线,pwnrequest"
+when-to-use: "Use when assessing CI/CD pipelines for vulnerabilities such as Jenkins script console RCE, CVE-2024-23897, or GitHub Actions pull_request_target secret exposure under authorized scope."
 category: security
 risk: offensive
 source: https://github.com/elementalsouls/Claude-BugHunter

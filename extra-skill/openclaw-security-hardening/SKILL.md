@@ -1,6 +1,8 @@
 ---
 name: openclaw-security-hardening
 description: Deploy and manage security hardening for high-privilege autonomous AI agents (OpenClaw) using zero-trust architecture and automated defense matrices
+zh-signals: "OpenClaw 高权限 AI Agent 安全加固技能，基于零信任架构部署行为黑名单、权限收窄与夜间自动审计等防御矩阵。信号:OpenClaw安全,零信任,权限收窄,行为黑名单,自动审计"
+when-to-use: "Use when deploying or auditing security hardening for a high-privilege autonomous AI agent (OpenClaw), including zero-trust architecture, defense matrices, red/yellow line rules, and nightly security audits."
 triggers:
   - harden my OpenClaw agent
   - deploy OpenClaw security guide
@@ -55,8 +57,8 @@ docs/OpenClaw-Security-Practice-Guide.md
 docs/OpenClaw-Security-Practice-Guide-v2.8.md
 
 # Chinese versions also available
-docs/OpenClaw极简安全实践指南.md
-docs/OpenClaw极简安全实践指南v2.8.md
+docs/OpenClaw-Minimal-Security-Practice-Guide.md
+docs/OpenClaw-Minimal-Security-Practice-Guide-v2.8.md
 ```
 
 ## Key Components

@@ -1,6 +1,8 @@
 ---
 name: openosint-ai-osint-framework
 description: AI-powered OSINT agent with interactive REPL, MCP server, and CLI for email/username/domain/IP/phone investigation using 11 integrated tools
+zh-signals: "AI 驱动的开源情报框架，通过 REPL、MCP 与 CLI 对邮箱、用户名、域名、IP 与手机号开展调查。信号:OSINT,开源情报,邮箱调查,子域名枚举,Shodan"
+when-to-use: "Use when investigating an email, username, domain, IP, or phone number with OSINT tooling, including breach checks, subdomain enumeration, Shodan lookups, and structured reports."
 triggers:
   - investigate an email address for social accounts
   - search for username across social platforms

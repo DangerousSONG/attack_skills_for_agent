@@ -1,6 +1,8 @@
 ---
 name: ip-security-analyzer-cloudflare-worker
 description: Deploy and customize a Cloudflare Worker for IP intelligence, VPN/proxy detection, WebRTC leak testing, and security scoring with IPinfo and AbuseIPDB integration
+zh-signals: "部署与定制 Cloudflare Worker，用于 IP 情报、VPN/代理检测、WebRTC 泄露测试与安全评分。信号:IP情报,VPN检测,WebRTC泄露,IP信誉,Cloudflare Worker"
+when-to-use: "Use when building or customizing a Cloudflare Worker for IP intelligence, VPN or proxy detection, WebRTC leak testing, or abuse scoring."
 triggers:
   - analyze IP addresses with cloudflare worker
   - detect VPN or proxy using cloudflare

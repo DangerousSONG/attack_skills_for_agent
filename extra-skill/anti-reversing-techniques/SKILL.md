@@ -1,6 +1,10 @@
 ---
 name: anti-reversing-techniques
 description: "Analyze anti-debugging, obfuscation, and anti-tamper techniques during authorized binary analysis and reverse engineering."
+zh-signals: "分析二进制中的反调试、混淆与防篡改技术，服务于授权逆向。信号:反调试,混淆,防篡改,逆向工程,恶意样本分析"
+when-to-use: >-
+  Use during authorized malware analysis, CTF, or reverse engineering when a protected
+  binary employs anti-debugging, obfuscation, or anti-tamper mechanisms.
 risk: offensive
 source: community
 date_added: "2026-02-27"

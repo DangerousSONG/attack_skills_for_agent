@@ -1,59 +1,62 @@
 ---
 name: mapcidr-cidr
-description: "使用 mapcidr 进行 CIDR 网段处理。当需要展开 CIDR 为 IP 列表、聚合 IP 为 CIDR、切片网段、IP 数量统计、打乱 IP 顺序时使用。mapcidr 是 ProjectDiscovery 出品的 CIDR 处理工具，支持 IPv4/IPv6。任何涉及 CIDR 计算、IP 列表处理、网段切片的场景都应使用此技能"
+description: "Use mapcidr for CIDR range processing. Use when you need to expand a CIDR into an IP list, aggregate IPs into CIDRs, slice network segments, count IPs, or shuffle IP order. mapcidr is a CIDR processing tool from ProjectDiscovery with IPv4/IPv6 support. Any scenario involving CIDR computation, IP list processing, or network segment slicing should use this skill"
+zh-signals: "使用 mapcidr 进行 CIDR 展开、聚合、切片与 IP 数量统计。信号:mapcidr,CIDR处理,网段展开,IP聚合,网段切片。"
+when-to-use: >-
+  Use when expanding CIDR ranges into IP lists, aggregating IPs into CIDRs, slicing subnets, counting addresses, or shuffling IP order for IPv4/IPv6 scanning workflows.
 metadata:
-  tags: "mapcidr,cidr,ip,网段,展开,聚合,切片,IPv4,IPv6,projectdiscovery"
+  tags: "mapcidr,cidr,ip,network-segment,expansion,aggregation,slicing,IPv4,IPv6,projectdiscovery"
   category: "tool"
 ---
 
-# mapcidr CIDR 网段处理方法论
+# mapcidr CIDR Range Processing Methodology
 
-mapcidr 是 ProjectDiscovery 出品的 CIDR 处理工具。核心优势：**展开/聚合/切片/打乱** + **IPv4/IPv6 双栈** + **管道友好**。
+mapcidr is a CIDR processing tool from ProjectDiscovery. Core advantages: **expansion / aggregation / slicing / shuffling** + **dual-stack IPv4/IPv6** + **pipeline friendly**.
 
-项目地址：https://github.com/projectdiscovery/mapcidr
+Project URL: https://github.com/projectdiscovery/mapcidr
 
-## 基本操作
+## Basic Operations
 
 ```bash
-# CIDR 展开为 IP 列表
+# expand a CIDR into an IP list
 echo 192.168.1.0/24 | mapcidr
 
-# 统计 IP 数量
+# count the number of IPs
 echo 10.0.0.0/16 | mapcidr -count
 
-# IP 列表聚合为 CIDR
+# aggregate an IP list into CIDRs
 cat ips.txt | mapcidr -aggregate
 
-# 打乱 IP 顺序（避免顺序扫描触发告警）
+# shuffle IP order (avoid triggering alerts during sequential scanning)
 echo 192.168.1.0/24 | mapcidr -si
 
-# 跳过基址和广播地址
+# skip the network address and broadcast address
 echo 192.168.1.0/24 | mapcidr -skip-base -skip-broadcast
 ```
 
-## 网段切片
+## Network Segment Slicing
 
 ```bash
-# 按主机数切片（每片 256 个 IP）
+# slice by host count (256 IPs per slice)
 echo 10.0.0.0/16 | mapcidr -sbh 256
 
-# 按 CIDR 大小切片（切成 /24）
+# slice by CIDR size (split into /24)
 echo 10.0.0.0/16 | mapcidr -sbc 24
 
-# 切片后分发扫描
+# distribute scanning across slices
 echo 10.0.0.0/16 | mapcidr -sbc 24 | \
   while read cidr; do naabu -host "$cidr" -p 80,443 -silent; done
 ```
 
-## 管道集成
+## Pipeline Integration
 
 ```bash
-# CIDR 展开 → 端口扫描
+# CIDR expansion → port scanning
 echo 10.0.0.0/24 | mapcidr -si | naabu -p 80,443 -silent
 
-# IP 去重聚合
+# deduplicate and aggregate IPs
 cat scan_results.txt | mapcidr -aggregate
 
-# 过滤 IP 范围
+# filter IP ranges
 echo 10.0.0.0/8 | mapcidr -fi 10.0.1.0/24
 ```

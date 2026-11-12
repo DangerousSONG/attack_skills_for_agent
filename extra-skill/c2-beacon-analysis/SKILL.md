@@ -1,48 +1,50 @@
 ---
 name: c2-beacon-analysis
-description: "C2 Beacon 配置提取与分析。当捕获到 Cobalt Strike/Sliver/Havoc 等 C2 框架的 Beacon 样本、内存 dump、或网络流量时使用。提取 C2 地址、通信协议、Malleable Profile、Watermark 等关键情报。红队视角：了解蓝队如何从 Beacon 提取 IOC 以改进 C2 OPSEC"
+description: "C2 Beacon configuration extraction and analysis. Use when capturing Cobalt Strike/Sliver/Havoc C2 framework beacon samples, memory dumps, or network traffic. Extracts key intelligence such as C2 addresses, communication protocols, Malleable Profiles, and Watermarks. Red-team perspective: understand how blue teams extract IOCs from beacons to improve C2 OPSEC"
+zh-signals: "C2 Beacon 配置提取与分析。信号:C2,Beacon,Cobalt Strike,Sliver,配置提取,威胁狩猎"
+when-to-use: "Use when capturing Cobalt Strike, Sliver, or Havoc beacon samples, memory dumps, or network traffic and needing to extract C2 configuration and IOCs."
 metadata:
-  tags: "c2,beacon,cobalt strike,sliver,havoc,malleable,watermark,配置提取,C2分析,threat hunting"
+  tags: "c2,beacon,cobalt strike,sliver,havoc,malleable,watermark,configuration extraction,C2 analysis,threat hunting"
   category: "malware"
   mitre_attack: "T1071.001,T1573,T1095,T1572,T1090"
 ---
 
-# C2 Beacon 配置提取与分析
+# C2 Beacon Configuration Extraction and Analysis
 
-> **红队价值**：了解 Beacon 泄露哪些配置信息 → 定制 Malleable Profile → 加强 C2 OPSEC
+> **Red-team value**: understand what configuration a beacon leaks → customize the Malleable Profile → strengthen C2 OPSEC
 
-## ⛔ 深入参考
+## ⛔ Further Reading
 
-- CS Beacon 手动解密与 TLV 解析 → [references/cs-beacon-decrypt.md](references/cs-beacon-decrypt.md)
-- Sliver/Havoc/Mythic Implant 分析 → [references/modern-c2-analysis.md](references/modern-c2-analysis.md)
+- Manual CS Beacon decryption and TLV parsing → [references/cs-beacon-decrypt.md](references/cs-beacon-decrypt.md)
+- Sliver/Havoc/Mythic implant analysis → [references/modern-c2-analysis.md](references/modern-c2-analysis.md)
 
 ---
 
-## Phase 1: Beacon 类型识别
+## Phase 1: Beacon Type Identification
 
 ```
-捕获的样本类型？
-├─ PE/DLL 文件 → Phase 2（配置提取）
-├─ Shellcode → Phase 2（需先识别 stage）
-├─ 内存 dump → Phase 3（内存扫描）
-├─ PCAP 流量 → Phase 4（流量解码）
-└─ 进程 dump（MiniDump）→ Phase 3
+What type of sample was captured?
+├─ PE/DLL file → Phase 2 (configuration extraction)
+├─ Shellcode → Phase 2 (identify the stage first)
+├─ Memory dump → Phase 3 (memory scanning)
+├─ PCAP traffic → Phase 4 (traffic decoding)
+└─ Process dump (MiniDump) → Phase 3
 ```
 
-**快速识别 C2 框架：**
+**Quick C2 framework identification:**
 ```bash
-# YARA 扫描识别框架
+# YARA scan to identify the framework
 yara -r c2_rules.yar sample.bin
 
-# 字符串特征
+# String signatures
 strings sample.bin | grep -iE "(beacon|sleeptime|jitter|watermark|pipe)"   # CS
 strings sample.bin | grep -iE "(sliver|implant|mtls|wg)"                   # Sliver
 strings sample.bin | grep -iE "(havoc|demon|teamserver)"                   # Havoc
 ```
 
-## Phase 2: Cobalt Strike Beacon 配置提取
+## Phase 2: Cobalt Strike Beacon Configuration Extraction
 
-### 自动提取（首选）
+### Automated Extraction (preferred)
 
 ```python
 from dissect.cobaltstrike.beacon import BeaconConfig
@@ -51,7 +53,7 @@ import json
 configs = list(BeaconConfig.from_path("beacon.bin"))
 for cfg in configs:
     settings = cfg.as_dict()
-    # 关键字段
+    # Key fields
     print(f"C2 Server:   {settings.get('SETTING_DOMAINS')}")
     print(f"Port:        {settings.get('SETTING_PORT')}")
     print(f"Sleep:       {settings.get('SETTING_SLEEPTIME')}ms")
@@ -63,16 +65,16 @@ for cfg in configs:
     print(f"BeaconType:  {settings.get('SETTING_BEACONTYPE')}")  # 0=HTTP,1=HTTPS,8=DNS
 ```
 
-### 手动解密（自动工具失败时）
+### Manual Decryption (when the automated tool fails)
 
 ```python
 import struct
 
 def decrypt_cs_config(data):
-    """手动 XOR 解密 CS Beacon 配置"""
+    """Manually XOR-decrypt the CS Beacon configuration"""
     # CS4: XOR key 0x2e, CS3: XOR key 0x69
     for xor_key in [0x2e, 0x69]:
-        # 搜索加密后的 magic: 0x0001 0x0002 (BeaconType, Short)
+        # Search for the encrypted magic: 0x0001 0x0002 (BeaconType, Short)
         magic = bytes([0x00 ^ xor_key, 0x01 ^ xor_key,
                        0x00 ^ xor_key, 0x02 ^ xor_key])
         offset = data.find(magic)
@@ -82,7 +84,7 @@ def decrypt_cs_config(data):
     return None
 
 def parse_tlv(data):
-    """解析 TLV 格式配置"""
+    """Parse the TLV-formatted configuration"""
     FIELDS = {1:"BeaconType", 2:"Port", 3:"SleepTime", 5:"Jitter",
               8:"C2Server", 9:"UserAgent", 10:"PostURI", 26:"Watermark",
               36:"PipeName", 54:"SpawnTo_x64", 55:"SpawnTo_x86"}
@@ -105,31 +107,31 @@ def parse_tlv(data):
     return results
 ```
 
-## Phase 3: 内存扫描提取
+## Phase 3: Memory Scanning Extraction
 
 ```bash
-# Volatility3 扫描进程内存
+# Volatility3 scans the process memory
 vol3 -f memory.dmp windows.memmap --pid <PID> --dump
-# 对 dump 出的文件用 Phase 2 方法提取
+# Extract from the dumped files using the Phase 2 method
 
-# 1768.py (JPCERT) — 专门的 CS config 扫描
+# 1768.py (JPCERT) — dedicated CS config scanner
 python3 1768.py -f memory.dmp
 
-# CobaltStrikeParser 扫描内存
+# CobaltStrikeParser scans memory
 python3 parse_beacon_config.py memory.dmp
 ```
 
-## Phase 4: 网络流量分析
+## Phase 4: Network Traffic Analysis
 
 ```
-从 Beacon 配置推导网络签名：
-├─ HTTP(S) Beacon → URI 路径 + UA + Host Header + 心跳间隔
-├─ DNS Beacon → DNS 查询模式 + 子域名编码方式
-├─ SMB Beacon → Named Pipe 名称
-└─ TCP Beacon → 端口 + 协议特征
+Derive network signatures from the beacon configuration:
+├─ HTTP(S) Beacon → URI path + UA + Host header + heartbeat interval
+├─ DNS Beacon → DNS query pattern + subdomain encoding scheme
+├─ SMB Beacon → named pipe name
+└─ TCP Beacon → port + protocol fingerprint
 ```
 
-**生成检测签名示例：**
+**Example generated detection signature:**
 ```
 # Suricata
 alert http any any -> any any (msg:"CS Beacon URI";
@@ -139,27 +141,27 @@ alert http any any -> any any (msg:"CS Beacon URI";
   sid:1000001; rev:1;)
 ```
 
-## Phase 5: 红队 OPSEC 反思
+## Phase 5: Red-Team OPSEC Reflection
 
-分析结果 → 你的 C2 应该避免以下暴露：
+Analysis results → your C2 should avoid the following exposures:
 
-| 暴露点 | 对策 |
+| Exposure Point | Countermeasure |
 |--------|------|
-| 默认 Watermark | 用合法 license 或 patch 掉 |
-| 固定 User-Agent | Malleable Profile 随机化 |
-| 固定 URI 路径 | 模仿真实业务 API |
-| 默认 Named Pipe `\\.\pipe\msagent_*` | 自定义管道名 |
-| 默认 SpawnTo `rundll32.exe` | 改为 `svchost.exe` 或其他合法进程 |
-| 固定 Sleep+Jitter | 增加 Jitter 到 30%+ |
-| XOR key 已知(0x2e/0x69) | 使用 Sleep Mask + 堆加密 |
+| Default Watermark | Use a legitimate license or patch it out |
+| Fixed User-Agent | Randomize it in the Malleable Profile |
+| Fixed URI path | Mimic a real business API |
+| Default named pipe `\\.\pipe\msagent_*` | Customize the pipe name |
+| Default SpawnTo `rundll32.exe` | Change it to `svchost.exe` or another legitimate process |
+| Fixed Sleep+Jitter | Increase jitter to 30%+ |
+| Known XOR key (0x2e/0x69) | Use a sleep mask + heap encryption |
 
-## 工具速查
+## Tool Quick Reference
 
-| 工具 | 用途 |
+| Tool | Purpose |
 |------|------|
-| dissect.cobaltstrike | Python CS 配置解析 |
-| CobaltStrikeParser (S1) | CS Beacon 配置提取 |
-| 1768.py (JPCERT) | CS 扫描器 |
-| BeaconEye | 内存实时扫描 CS Beacon |
-| Volatility3 | 内存取证 |
-| YARA | 签名匹配 |
+| dissect.cobaltstrike | Python CS configuration parser |
+| CobaltStrikeParser (S1) | CS Beacon configuration extraction |
+| 1768.py (JPCERT) | CS scanner |
+| BeaconEye | Real-time memory scanning for CS beacons |
+| Volatility3 | Memory forensics |
+| YARA | Signature matching |

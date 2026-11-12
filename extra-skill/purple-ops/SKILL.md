@@ -1,6 +1,8 @@
 ---
 name: purple-ops
 description: Purple-team operations — structured detection validation against MITRE ATT&CK through planned emulation, measured coverage gaps, joint red+blue debrief, and tracked closure via D3FEND mapping. Bridge between the pentest bundle and the blue bundle.
+zh-signals: "紫队运营方法论，通过计划的 ATT&CK 模拟、覆盖度测量与联合复盘验证检测能力。信号:紫队运营,ATT&CK 覆盖,检测验证,红蓝复盘,D3FEND"
+when-to-use: "Use when planning a structured purple-team cycle to validate detection coverage against MITRE ATT&CK through controlled emulation and joint red-blue debrief."
 ---
 
 # Purple Team Ops

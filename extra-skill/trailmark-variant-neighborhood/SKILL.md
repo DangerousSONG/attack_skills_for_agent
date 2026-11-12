@@ -1,6 +1,9 @@
 ---
 name: trailmark-variant-neighborhood
 description: "Expands one confirmed or suspected vulnerability into a Trailmark graph neighborhood of variant candidates by finding sibling functions, shared callers and callees, common sensitive sinks, common entrypoint paths, interface implementations, override relationships, type/reference neighbors, and structurally similar nodes. Use after one issue is found to seed variant-analysis, semgrep-rule-creator, static-analysis, or manual review with graph-derived candidate locations."
+zh-signals: "从一个已确认漏洞扩展出图邻域内的变体候选位置。信号:变体分析,代码图,候选定位,静态分析,漏洞扩散"
+when-to-use: >-
+  Use after one issue is confirmed or suspected, to seed variant analysis with graph-derived sibling functions, shared callers, and similar sinks.
 allowed-tools:
   - Bash
   - Read

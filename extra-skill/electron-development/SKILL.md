@@ -1,6 +1,8 @@
 ---
 name: electron-development
 description: "Master Electron desktop app development with secure IPC, contextIsolation, preload scripts, multi-process architecture, electron-builder packaging, code signing, and auto-update."
+zh-signals: "Electron 桌面应用开发与安全架构指导。信号:Electron开发,IPC安全,上下文隔离,预加载脚本,打包签名。"
+when-to-use: "Use when building or securing an Electron desktop app, configuring contextIsolation, sandbox, CSP or nodeIntegration, setting up IPC between main, renderer and preload processes, packaging with electron-builder or electron-forge, or implementing auto-update with electron-updater."
 risk: safe
 source: community
 date_added: "2026-03-12"

@@ -1,6 +1,11 @@
 ---
 name: competition-ios-runtime
 description: Internal downstream skill for ctf-sandbox-orchestrator. CTF-sandbox workflow for IPA runtime analysis, Frida hooks, Objective-C or Swift method tracing, Keychain inspection, SSL pinning bypass, URL scheme handling, and iOS request-signing recovery. Use when the user asks to hook an IPA, trace Objective-C or Swift runtime behavior, inspect Keychain or plist state, bypass pinning, analyze deeplinks or universal links, or replay accepted iOS requests. Use only after `$ctf-sandbox-orchestrator` has already established sandbox assumptions and routed here.
+zh-signals: "面向 CTF 场景的 IPA 运行时分析，含 Frida Hook、Objective-C/Swift 追踪、Keychain 检查与 iOS 请求签名恢复。信号:CTF,iOS运行时,Frida Hook,Keychain,IPA"
+when-to-use: >-
+  Use only after ctf-sandbox-orchestrator has routed here, when hooking an IPA, tracing
+  Objective-C/Swift runtime behavior, inspecting Keychain or plist state, bypassing
+  pinning, or replaying accepted iOS requests.
 ---
 
 # Competition iOS Runtime

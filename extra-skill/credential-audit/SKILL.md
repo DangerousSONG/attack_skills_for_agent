@@ -4,6 +4,8 @@ description: |
   Authentication and credential security assessment. Tests password brute-force, credential stuffing, password spraying, default credential testing, credential harvesting, lockout analysis, MFA bypass, OAuth/OIDC abuse, session token entropy, Kerberos attacks, and intelligent wordlist generation.
 
   Uses hydra, john, ncrack, medusa, cewl, crunch, netexec, impacket, kerbrute, and nuclei default-login templates. Covers OWASP A07:2021 Identification and Authentication Failures.
+zh-signals: "对认证与凭据安全进行评估，涵盖暴力破解、撞库、密码喷洒、默认凭据、锁定策略、MFA 绕过与 Kerberos 攻击。信号:凭据审计,密码喷洒,暴力破解,MFA 绕过,Kerberos 攻击"
+when-to-use: "Use when assessing authentication and credential security for a target service, including brute-force, password spraying, default credentials, lockout analysis, MFA bypass, and credential harvesting."
 argument-hint: "<target> [service=ssh|ftp|http|smb|rdp|mysql|...] [depth=quick|standard|thorough] [userlist=path] [passlist=path]"
 user-invocable: true
 ---

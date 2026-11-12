@@ -2,6 +2,10 @@
 name: geo-technical
 description: Technical SEO audit with GEO-specific checks — crawlability, indexability,
   security, performance, SSR, and AI crawler access
+zh-signals: "面向 GEO 的技术 SEO 审计，覆盖可抓取性、可索引性、安全、性能与 AI 爬虫访问。信号:技术seo,geo审计,可抓取性,ai爬虫,性能优化"
+when-to-use: >-
+  Use when auditing a site's technical SEO for AI search citation readiness, including
+  crawlability, indexability, security, performance, and SSR.
 category: seo
 risk: safe
 source: https://github.com/zubair-trabzada/geo-seo-claude

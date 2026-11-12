@@ -1,6 +1,8 @@
 ---
 name: hunt-laravel
 description: Hunt Laravel specific vulnerabilities
+zh-signals: "狩猎 Laravel 框架特有的安全问题与已知漏洞利用路径。信号:Laravel,PHP框架,漏洞狩猎,框架安全,Web渗透"
+when-to-use: "Use when the target is a Laravel application and you need framework-specific vulnerability hunting, including known CVE exploitation paths."
 category: security
 risk: offensive
 source: https://github.com/elementalsouls/Claude-BugHunter

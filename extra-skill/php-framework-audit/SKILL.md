@@ -1,71 +1,73 @@
 ---
 name: php-framework-audit
 description: |
-  PHP 框架特定安全审计。当在 PHP 白盒审计中已识别目标使用特定框架、
-  需要检查框架特有安全机制和常见配置缺陷时触发。
-  覆盖 6 大框架: Laravel(Mass Assignment/Blade XSS/CSRF 例外)、
-  ThinkPHP(RCE 历史漏洞/路由注入/缓存写入)、WordPress(插件漏洞/权限钩子/nonce 验证)、
-  Symfony(Debug Bar/YAML 解析/安全投票器)、Yii2(RBAC/ActiveRecord 注入)、CodeIgniter(全局 XSS/CSRF Token)。
+  PHP framework-specific security audit. Triggered during PHP white-box audits once the target framework has been identified
+  and framework-specific security mechanisms and common configuration flaws need to be checked.
+  Covers 6 major frameworks: Laravel (mass assignment / Blade XSS / CSRF exceptions),
+  ThinkPHP (historical RCE / route injection / cache write), WordPress (plugin vulnerabilities / permission hooks / nonce validation),
+  Symfony (Debug Bar / YAML parsing / security voters), Yii2 (RBAC / ActiveRecord injection), CodeIgniter (global XSS / CSRF token).
+zh-signals: "PHP 框架特定安全审计，覆盖 Laravel、ThinkPHP、WordPress、Symfony、Yii2 与 CodeIgniter。信号:Laravel审计,ThinkPHP,WordPress插件,框架安全,配置缺陷"
+when-to-use: "Use during PHP white-box audits once a target framework is identified, to check framework-specific security mechanisms and common configuration flaws across Laravel, ThinkPHP, WordPress, Symfony, Yii2, or CodeIgniter."
 metadata:
-  tags: laravel, thinkphp, wordpress, symfony, yii, codeigniter, 框架审计, mass assignment, blade xss, wp plugin, think rce
+  tags: laravel, thinkphp, wordpress, symfony, yii, codeigniter, framework audit, mass assignment, blade xss, wp plugin, think rce
   category: code-audit
 ---
 
-# PHP 框架特定安全审计
-## 框架识别决策表
+# PHP Framework-Specific Security Audit
+## Framework Identification Decision Table
 
-| 识别特征 | 框架 | 深入参考 |
+| Identification Feature | Framework | Deep Reference |
 |---|---|---|
 | `composer.json` → `laravel/framework` | Laravel | [references/laravel-patterns.md](references/laravel-patterns.md) |
 | `composer.json` → `topthink/framework` | ThinkPHP | [references/thinkphp-patterns.md](references/thinkphp-patterns.md) |
-| 存在 `wp-content/` 目录或 `wp-config.php` | WordPress | [references/wordpress-patterns.md](references/wordpress-patterns.md) |
-| `composer.json` → `symfony/framework-bundle` | Symfony | 本文简要覆盖 |
-| `composer.json` → `yiisoft/yii2` | Yii2 | 本文简要覆盖 |
-| `composer.json` → `codeigniter4/framework` | CodeIgniter | 本文简要覆盖 |
+| Presence of a `wp-content/` directory or `wp-config.php` | WordPress | [references/wordpress-patterns.md](references/wordpress-patterns.md) |
+| `composer.json` → `symfony/framework-bundle` | Symfony | Briefly covered here |
+| `composer.json` → `yiisoft/yii2` | Yii2 | Briefly covered here |
+| `composer.json` → `codeigniter4/framework` | CodeIgniter | Briefly covered here |
 
-## Laravel 核心检查点
+## Laravel Core Checkpoints
 
-1. **Mass Assignment** -- `$fillable` / `$guarded` 是否正确配置，`Model::create($request->all())` 或 `update($request->all())` 是否存在未过滤字段
-2. **Blade XSS** -- 搜索 `{!! !!}` 未转义输出、`@php` 指令内直接 echo、自定义 Blade Directive 未调用 `e()`
-3. **CSRF 例外** -- `VerifyCsrfToken` 中间件 `$except` 数组是否包含敏感路由，API 路由组默认不含 CSRF 中间件
-4. **Gate / Policy** -- 控制器方法是否调用 `$this->authorize()` 或 `Gate::allows()`，Policy 定义是否覆盖所有 CRUD
-5. **Eloquent Raw** -- `whereRaw` / `havingRaw` / `orderByRaw` / `DB::raw` 中是否存在变量拼接
-6. **签名 URL / 调试** -- `APP_DEBUG=true` 残留、`.env` Web 可达、Telescope / Debugbar 路由暴露
+1. **Mass Assignment** -- are `$fillable` / `$guarded` configured correctly; do `Model::create($request->all())` or `update($request->all())` contain unfiltered fields
+2. **Blade XSS** -- search for unescaped output via `{!! !!}`, direct echo inside `@php` directives, and custom Blade Directives that do not call `e()`
+3. **CSRF Exceptions** -- does the `$except` array of the `VerifyCsrfToken` middleware contain sensitive routes; API route groups do not include the CSRF middleware by default
+4. **Gate / Policy** -- do controller methods call `$this->authorize()` or `Gate::allows()`; do Policy definitions cover all CRUD operations
+5. **Eloquent Raw** -- is there variable concatenation in `whereRaw` / `havingRaw` / `orderByRaw` / `DB::raw`
+6. **Signed URLs / Debugging** -- leftover `APP_DEBUG=true`, web-accessible `.env`, exposed Telescope / Debugbar routes
 
-## ThinkPHP 核心检查点
+## ThinkPHP Core Checkpoints
 
-1. **历史 RCE 路由** -- TP5.x `method()` 覆盖、`Request` 类 `__construct` 任意方法调用
-2. **缓存文件写入** -- 缓存文件路径可预测 + 内容可控 → 写入 WebShell
-3. **数据库 where 注入** -- `where` 数组条件中 `exp` / `like` / `between` 表达式注入、`Db::raw`
-4. **Session 反序列化** -- TP6 session 序列化驱动可能触发 POP 链
-5. **模板注入** -- `{php}` 标签、变量函数 `{:system()}`
+1. **Historical RCE Routes** -- TP5.x `method()` override, arbitrary method invocation via the `Request` class `__construct`
+2. **Cache File Write** -- predictable cache file path + controllable content → write a WebShell
+3. **Database where Injection** -- expression injection via `exp` / `like` / `between` in `where` array conditions, `Db::raw`
+4. **Session Deserialization** -- the TP6 session serialization driver may trigger a POP chain
+5. **Template Injection** -- `{php}` tags, variable function calls such as `{:system()}`
 
-## WordPress 核心检查点
+## WordPress Core Checkpoints
 
-1. **插件 action/filter** -- `wp_ajax_nopriv_*` 钩子暴露未认证操作、Shortcode 回调参数注入
-2. **$wpdb->prepare 缺失** -- 直接拼接 SQL 到 `$wpdb->query()`
-3. **nonce 验证** -- 表单处理 / AJAX handler 缺少 `wp_verify_nonce` / `check_admin_referer`
-4. **REST API** -- `register_rest_route` 的 `permission_callback` 是否为 `__return_true` 或缺失
-5. **文件上传** -- 插件自定义上传逻辑绕过 `wp_handle_upload` 的 MIME 检查
+1. **Plugin action/filter** -- `wp_ajax_nopriv_*` hooks exposing unauthenticated operations, Shortcode callback parameter injection
+2. **Missing $wpdb->prepare** -- direct SQL concatenation into `$wpdb->query()`
+3. **Nonce Validation** -- form handlers / AJAX handlers missing `wp_verify_nonce` / `check_admin_referer`
+4. **REST API** -- is the `permission_callback` of `register_rest_route` `__return_true` or missing
+5. **File Upload** -- plugin custom upload logic bypassing the MIME check of `wp_handle_upload`
 
-## Symfony 简要概述
+## Symfony Brief Overview
 
-- **Debug 模式** -- `APP_DEBUG=1` 泄露 Profiler / Web Debug Toolbar，暴露环境变量和 SQL
-- **YAML 反序列化** -- 低版本 `Yaml::parse` 支持 `!!php/object` 标签导致对象注入
-- **Security Voter** -- 自定义 Voter 逻辑缺陷或 `ACCESS_ABSTAIN` 误用导致越权
+- **Debug Mode** -- `APP_DEBUG=1` leaks the Profiler / Web Debug Toolbar, exposing environment variables and SQL
+- **YAML Deserialization** -- lower versions of `Yaml::parse` support the `!!php/object` tag, leading to object injection
+- **Security Voter** -- flaws in custom Voter logic or misuse of `ACCESS_ABSTAIN` leading to broken access control
 
-## Yii2 简要概述
+## Yii2 Brief Overview
 
-- **RBAC 配置** -- `DbManager` 权限项分配不当、`checkAccess` 调用缺失导致垂直越权
-- **ActiveRecord 注入** -- `findBySql` / `where` 条件字符串拼接、`orderBy` 未过滤
+- **RBAC Configuration** -- improper permission item assignment in `DbManager`, missing `checkAccess` calls leading to vertical privilege escalation
+- **ActiveRecord Injection** -- string concatenation in `findBySql` / `where` conditions, unfiltered `orderBy`
 
-## CodeIgniter 简要概述
+## CodeIgniter Brief Overview
 
-- **全局 XSS 过滤** -- CI3 `$config['global_xss_filtering']` 已弃用，CI4 需手动调用 `esc()`
-- **CSRF Token** -- 配置 `CSRFProtection` 但排除路由过多、Token 重生策略不当
+- **Global XSS Filtering** -- CI3 `$config['global_xss_filtering']` is deprecated, CI4 requires manual `esc()` calls
+- **CSRF Token** -- `CSRFProtection` is configured but too many routes are excluded, and the token regeneration policy is improper
 
-## 深入参考
+## Further Reading
 
-- [Laravel 审计模式](references/laravel-patterns.md)
-- [ThinkPHP 审计模式](references/thinkphp-patterns.md)
-- [WordPress 审计模式](references/wordpress-patterns.md)
+- [Laravel audit patterns](references/laravel-patterns.md)
+- [ThinkPHP audit patterns](references/thinkphp-patterns.md)
+- [WordPress audit patterns](references/wordpress-patterns.md)

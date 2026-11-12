@@ -1,6 +1,8 @@
 ---
 name: top-web-vulnerabilities
 description: "Provide a comprehensive, structured reference for the 100 most critical web application vulnerabilities organized by category. This skill enables systematic vulnerability identification, impact assessment, and remediation guidance across the full spectrum of web security threats."
+zh-signals: "提供按类别组织的 100 个关键 Web 应用漏洞参考与修复指导。信号:Web漏洞,TOP100,漏洞参考,影响评估,修复"
+when-to-use: "Use when you need a structured reference of the top web application vulnerabilities for identification, impact assessment, or remediation."
 risk: offensive
 source: community
 author: zebbern

@@ -2,38 +2,41 @@
 name: simplyemail-email-harvest
 description: "SimplyEmail: bulk email address harvesting. Signals: email collection, employee info, multi-source email collection, detailed, JSON output."
 zh-signals: "SimplyEmail: 邮箱地址批量收割。信号:邮箱收集,员工信息,邮箱收集(多源),详细,JSON 输出。"
+when-to-use: >-
+  Use when collecting employee email addresses from public sources for an authorized target
+  domain, to build username lists for later security testing.
 ---
 
 # SimplyEmail
 
-- 攻击大类:C03 OSINT情报收集
-- 上游仓库:https://github.com/killswitch-GUI/SimplyEmail
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C03 OSINT Intelligence Gathering
+- Upstream Repository: https://github.com/killswitch-GUI/SimplyEmail
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/killswitch-GUI/SimplyEmail && cd SimplyEmail && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python SimplyEmail.py -e target.com -l` | 邮箱收集(多源) |
-| `-s` | 起 HTTP 服务在线查看 |
-| `-v` | 详细 |
-| `--json email.json` | JSON 输出 |
+| `python SimplyEmail.py -e target.com -l` | Email collection (multi-source) |
+| `-s` | Start an HTTP service for live viewing |
+| `-v` | Verbose |
+| `--json email.json` | JSON output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 邮箱地址批量收割
+### Bulk Email Address Harvesting
 
 ```bash
 python SimplyEmail.py -e corp.com -l
-# 爬官网/公开源收集邮箱,拼用户名字典做喷洒
+# Crawl the official site and public sources to collect emails, then assemble username lists for spraying
 ```
 
-## 注意事项
+## Notes
 
-多源邮箱收割+在线报告服务,输出可直接喂 spraying 工具的用户名清单。
+Multi-source email harvesting plus an online report service, outputting username lists that can feed spraying tools directly.

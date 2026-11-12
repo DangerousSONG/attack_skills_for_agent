@@ -1,87 +1,88 @@
 ---
 name: php-logic-audit
-description: PHP Web 业务逻辑漏洞审计工具。识别认证/授权以外的逻辑缺陷：Mass Assignment、流程绕过、竞态条件、状态机缺陷、支付/权限时序漏洞等，输出证据链、分级、PoC 与修复建议（禁止省略）。
+description: "PHP web business logic vulnerability audit tool. Identifies logic flaws other than authentication/authorization issues: mass assignment, process bypass, race conditions, state machine defects, payment/permission timing flaws, and more. Outputs an evidence chain, severity rating, PoC, and remediation recommendations (omission is forbidden)."
+zh-signals: "PHP 业务逻辑漏洞审计技能，识别 Mass Assignment、流程绕过、竞态条件、状态机与支付时序等缺陷。信号:业务逻辑,逻辑漏洞,越权,MassAssignment,竞态条件"
+when-to-use: "Use when auditing PHP application source code for business logic flaws such as mass assignment, process bypass, race conditions, state machine defects, and payment or authorization timing issues."
 ---
 
-# PHP 业务逻辑漏洞审计（php-logic-audit）
+# PHP Business Logic Vulnerability Audit (php-logic-audit)
 
-分析 PHP 项目中“业务流程正确性”相关缺陷。重点覆盖：
-- Mass Assignment（批量赋值导致可越权字段被写入）
-- 流程绕过（前置状态缺失或校验可被跳过）
-- 状态机缺陷（状态更新不完整/可回滚/不一致）
-- 竞态条件（TOCTOU、并发导致多次发放、重复扣款等）
-- 越权的业务层校验缺失（与 IDOR 联动，但更关注业务归属一致性）
-- 付款/退款/异步任务顺序漏洞（异步回调可被伪造或重复处理）
+Analyze defects related to "business process correctness" in PHP projects. Focus coverage:
+- Mass Assignment (bulk assignment writes fields that should be privileged)
+- Process bypass (missing prerequisite state, or validation that can be skipped)
+- State machine defects (incomplete/revertible/inconsistent state updates)
+- Race conditions (TOCTOU, concurrency leading to multiple payouts, duplicate charges, etc.)
+- Missing business-layer authorization checks (linked to IDOR, but focused on business ownership consistency)
+- Payment/refund/async task ordering flaws (async callbacks can be forged or processed repeatedly)
 
-## 分级与编号
-- 详见：`shared/SEVERITY_RATING.md`
-- 漏洞编号：`{C/H/M/L}-LOGIC-{序号}`
+## Severity Rating and Numbering
+- See `shared/SEVERITY_RATING.md` for details
+- Vulnerability ID: `{C/H/M/L}-LOGIC-{sequence}`
 
-## 必检证据（强制）
-每条逻辑漏洞必须提供：
-1. 触发路由与方法（真实路由/HTTP 方法）
-2. 状态前置条件（攻击者需要满足哪些条件：登录态/角色/资源状态）
-3. 缺陷点位置（业务服务/控制器/回调 handler/队列消费逻辑）
-4. 状态变化链（从输入 -> 校验 -> 写库/调用外部服务 -> 状态更新）
-5. 与并发/时序相关证据（如果有：事务边界/锁/唯一约束/幂等处理）
+## Mandatory Evidence
+Every logic vulnerability must provide:
+1. Trigger route and method (real route/HTTP method)
+2. Prerequisite state (which conditions the attacker must satisfy: login state/role/resource state)
+3. Defect location (business service/controller/callback handler/queue consumer logic)
+4. State transition chain (input -> validation -> database write/external service call -> state update)
+5. Concurrency/timing related evidence (if any: transaction boundaries/locks/unique constraints/idempotency handling)
 
-## Mass Assignment 审计（必做）
-必须检测：
-- 是否存在把 `$_POST/Request->all()/request()->all()` 直接写入模型或数据库的行为
-- 是否存在允许更新敏感字段的白名单缺失（如 `role/is_admin/status/price/owner_id`
-- ORM/框架的填充保护是否启用（例如 Laravel `$fillable/$guarded`）
+## Mass Assignment Audit (Mandatory)
+Must detect:
+- Whether `$_POST/Request->all()/request()->all()` is written directly into models or the database
+- Whether allowlists that restrict sensitive field updates are missing (e.g. `role/is_admin/status/price/owner_id`
+- Whether ORM/framework mass assignment protection is enabled (for example Laravel `$fillable/$guarded`)
 
-## 竞态与幂等审计（必做）
-必须检测：
-- 同一操作是否在并发下被执行多次（扣款、发货、升级、领取）
-- 是否依赖“先查再写”（TOCTOU）且缺少事务/行锁
-- 是否有幂等键与去重（如 payment_id/nonce）
+## Race Condition and Idempotency Audit (Mandatory)
+Must detect:
+- Whether the same operation can be executed multiple times concurrently (charge, shipment, upgrade, claim)
+- Whether it relies on "read first, then write" (TOCTOU) without transactions/row locks
+- Whether an idempotency key and deduplication exist (e.g. payment_id/nonce)
 
-## 流程绕过审计（必做）
-必须检测：
-- 是否只在前置页面校验但后端缺少校验
-- 是否依赖前端隐藏字段/按钮来限制流程
-- 回调接口是否鉴权与签名可靠、是否可被重复调用
+## Process Bypass Audit (Mandatory)
+Must detect:
+- Whether validation only exists on prerequisite pages while the backend lacks it
+- Whether the flow is restricted only by hidden front-end fields/buttons
+- Whether callback endpoints have reliable authentication and signature validation, and whether they can be called repeatedly
 
-## 类型比较绕过与弱类型漏洞（必做）
-PHP 中的弱类型/宽松比较经常导致认证/授权/业务判断绕过，必须审计：
-- 是否存在使用 `==`/`!=`（非严格比较）进行鉴权判断、状态判断或权限校验
-- 是否存在 `in_array($x, $arr)` 未设置严格模式（第三参），导致类型转换绕过
-- 是否存在 `array_search`、`strpos` 等结果参与条件判断时未正确处理（例如 `strpos` 返回 0 被当成 false，或与字符串/数字混用）
-- 是否存在 `md5/sha1` 用于“认证校验”且直接用 `==` 比较摘要（必须识别是否使用 `hash_equals`）
-- 是否存在 token/JWT/验证码比较逻辑使用了可被时序推断或类型胶水绕过的方式（比较函数/条件表达式需证据化）
+## Type Comparison Bypass and Weak Typing Audit (Mandatory)
+Weak typing/loose comparisons in PHP frequently lead to authentication/authorization/business logic bypass and must be audited:
+- Whether `==`/`!=` (non-strict comparison) is used for authorization decisions, state checks, or permission validation
+- Whether `in_array($x, $arr)` is used without the strict mode flag (third parameter), allowing type coercion bypass
+- Whether results of `array_search`, `strpos`, etc. are mishandled in conditional checks (for example `strpos` returning 0 treated as false, or mixed with strings/numbers)
+- Whether `md5/sha1` is used for "authentication validation" with digests compared directly using `==` (must identify whether `hash_equals` is used)
+- Whether token/JWT/captcha comparison logic uses methods vulnerable to timing inference or type-juggling bypass (the comparison function/condition expression must be evidenced)
 
-每条弱类型漏洞必须给出：
-- 位置证据（比较表达式/条件语句/相关函数调用位置）
-- Source（用户输入如何进入该比较）
-- Sink（错误比较导致的分支结果：放行/绕过/错误状态）
-- PoC（请求序列或 payload，至少包含“对比值如何构造触发绕过”）
+Every weak typing vulnerability must provide:
+- Location evidence (comparison expression/conditional statement/relevant function call site)
+- Source (how user input reaches the comparison)
+- Sink (branch outcome caused by the faulty comparison: allow/bypass/error state)
+- PoC (request sequence or payload, at least covering "how the comparison value is crafted to trigger the bypass")
 
-## 认证/账户工作流逻辑（必做）
-必须审计与“状态迁移”相关的业务流程安全：
-- 密码重置 token 是否单次使用、是否有明确过期时间、是否与用户绑定
-- OTP/验证码是否存在重放（同一 token/nonce 是否能重复使用）
-- 登录失败次数/账户锁定/速率限制是否实现且发生在后端
-- 账户枚举：错误信息/响应码/耗时差异是否泄露是否存在用户
-- 支付/退款回调是否幂等（同一 transaction 是否重复入账/重复发放）
+## Authentication/Account Workflow Logic (Mandatory)
+Must audit business process security related to "state transitions":
+- Whether password reset tokens are single-use, have an explicit expiry, and are bound to the user
+- Whether OTP/captchas allow replay (whether the same token/nonce can be reused)
+- Whether login failure counts/account lockout/rate limiting are implemented and enforced on the backend
+- Account enumeration: whether error messages/response codes/timing differences leak whether a user exists
+- Whether payment/refund callbacks are idempotent (whether the same transaction is credited or fulfilled repeatedly)
 
-PoC 必须给出至少两步请求序列：先建立前置状态，再触发状态迁移动作，并标注观测点（数据库字段/响应码/重定向/回调执行次数）。
+The PoC must give at least a two-step request sequence: first establish the prerequisite state, then trigger the state transition action, and annotate the observation points (database field/response code/redirect/callback execution count).
 
-## PoC（强制）
-逻辑漏洞 PoC 必须给出“请求序列”：
-- 至少两步：触发前置条件 -> 触发漏洞动作（并标注真实路由）
-- 若是竞态漏洞：给出并发请求方式与观测点（例如两个 curl 同时发送的步骤）
+## PoC (Mandatory)
+Logic vulnerability PoCs must provide a "request sequence":
+- At least two steps: trigger prerequisite condition -> trigger the vulnerable action (annotate the real route)
+- For race condition flaws: provide the concurrency request method and observation points (for example the steps for sending two curl requests simultaneously)
 
-## 报告输出
+## Report Output
 ```
 {output_path}/vuln_audit/logic_{timestamp}.md
 ```
 
-## 条目模板（强制）
-- 位置证据
-- 缺陷描述（必须基于代码语义，不可只用一般性话术）
-- 状态变化链
-- 可利用前置条件
-- 请求序列 PoC
-- 修复建议（包括：白名单/事务/锁/幂等/后端二次校验）
-
+## Entry Template (Mandatory)
+- Location evidence
+- Defect description (must be based on code semantics, not generic wording alone)
+- State transition chain
+- Exploitable prerequisite conditions
+- Request sequence PoC
+- Remediation recommendations (including: allowlist/transactions/locks/idempotency/backend re-validation)

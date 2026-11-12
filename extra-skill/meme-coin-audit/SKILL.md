@@ -1,6 +1,8 @@
 ---
 name: meme-coin-audit
 description: Meme coin and token security audit
+zh-signals: "对 Meme 币与代币进行安全审计，识别代币合约中的常见风险。信号:Meme 币审计,代币安全,智能合约审计,代币风险,区块链安全"
+when-to-use: "Use when you need to audit a meme coin or token contract for security issues under explicit written authorization."
 category: security
 risk: offensive
 source: https://github.com/elementalsouls/Claude-BugHunter

@@ -2,38 +2,39 @@
 name: injectus-crlf-openredirect
 description: "Injectus probes combined open redirect and CRLF issues. Signals: web vulnerability, injection, batch, CRLF only, open redirect only."
 zh-signals: "Injectus: 开放重定向+CRLF 组合探测。信号:web漏洞,注入,批量,仅 CRLF,仅开放重定向。"
+when-to-use: "Use when probing URL parameters for open redirect and CRLF injection during bug bounty or web assessment, including batch runs. Requires target URLs and optionally selecting CRLF-only or redirect-only mode."
 ---
 
 # Injectus
 
-- 攻击大类:C09 Web利用(CRLF/重定向)
-- 上游仓库:https://github.com/BountyStrike/Injectus
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Exploitation (CRLF / Redirect)
+- Upstream Repository: https://github.com/BountyStrike/Injectus
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/BountyStrike/Injectus && cd Injectus && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 injectus.py -u 'https://t.com/?redir=x'` | 扫描 CRLF+开放重定向 |
-| `-f urls.txt` | 批量 |
-| `--crlf-only` | 仅 CRLF |
-| `--redirect-only` | 仅开放重定向 |
+| `python3 injectus.py -u 'https://t.com/?redir=x'` | Scan for CRLF plus open redirect |
+| `-f urls.txt` | Batch |
+| `--crlf-only` | CRLF only |
+| `--redirect-only` | Open redirect only |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 开放重定向+CRLF 组合探测
+### Combined open redirect and CRLF probing
 
 ```bash
 python3 injectus.py -u 'https://t.com/go?to=https://evil.com'
-# 命中 redir 参数 → 钓鱼/令牌窃取链
+# Hit the redir parameter → phishing/token theft chain
 ```
 
-## 注意事项
+## Notes
 
-CRLF 注入与开放重定向批量扫描,适合赏金猎人 workflow。
+Batch scanning for CRLF injection and open redirect, well suited to a bug bounty hunter's workflow.

@@ -1,6 +1,8 @@
 ---
 name: red-team-tactics
 description: "Red team tactics principles based on MITRE ATT&CK. Attack phases, detection evasion, reporting."
+zh-signals: "基于 MITRE ATT&CK 的红队战术原则，覆盖攻击阶段、检测规避与报告。信号:红队战术,MITRE ATT&CK,攻击阶段,规避,报告"
+when-to-use: "Use when planning or executing authorized adversary simulation aligned to MITRE ATT&CK phases, including evasion and reporting."
 risk: offensive
 source: community
 date_added: "2026-02-27"

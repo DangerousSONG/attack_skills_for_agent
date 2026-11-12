@@ -1,6 +1,8 @@
 ---
 name: recon
 description: "Perform structured reconnaissance and attack surface enumeration for authorized penetration tests, CTF challenges, and bug bounty programs. Use when the user mentions 'recon,' 'reconnaissance,' 'enumerate,' 'attack surface,' 'subdomain enumeration,' 'port scan,' 'fingerprint,' 'asset discovery,' or needs to map a target's external footprint."
+zh-signals: "对授权目标执行结构化侦察与攻击面枚举，覆盖被动信息收集、端口扫描与服务指纹识别。信号:侦察,攻击面,子域名枚举,端口扫描,资产发现"
+when-to-use: "Use when mapping an authorized target's external footprint, enumerating subdomains and services, or preparing an attack surface map before exploitation."
 allowed-tools: Bash, Read, Write, WebSearch, WebFetch
 ---
 

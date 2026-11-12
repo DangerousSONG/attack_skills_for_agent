@@ -2,37 +2,38 @@
 name: ducktoolkit-usb
 description: "DuckToolkit: USB Rubber Ducky payloads. Signals: phishing, social engineering, decode, keyboard layout."
 zh-signals: "DuckToolkit: USB Rubber Ducky 载荷。信号:钓鱼,社会工程,解码,键盘布局。"
+when-to-use: "Use when encoding DuckyScript payloads into inject.bin for USB Rubber Ducky delivery."
 ---
 
 # DuckToolkit
 
-- 攻击大类:C08 钓鱼与社会工程
-- 上游仓库:https://github.com/kevthehermit/DuckToolkit
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C08 Phishing and Social Engineering
+- Upstream Repository: https://github.com/kevthehermit/DuckToolkit
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install ducktoolkit
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 -m ducktoolkit -e payload.txt -l us` | DuckyScript 编码 |
-| `-d encoded.bin` | 解码 |
-| `-l us,gb` | 键盘布局 |
+| `python3 -m ducktoolkit -e payload.txt -l us` | DuckyScript encoding |
+| `-d encoded.bin` | Decoding |
+| `-l us,gb` | Keyboard layout |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### USB Rubber Ducky 载荷
+### USB Rubber Ducky payload
 
 ```bash
 python3 -m ducktoolkit -e reverse_shell.txt -l us
-# 生成 inject.bin
+# Generate inject.bin
 ```
 
-## 注意事项
+## Notes
 
-Hak5 Ducky 脚本编码器。
+A Hak5 Ducky script encoder.

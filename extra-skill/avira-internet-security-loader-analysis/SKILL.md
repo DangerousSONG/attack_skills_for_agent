@@ -1,6 +1,10 @@
 ---
 name: avira-internet-security-loader-analysis
 description: Analyze and understand the Avira Internet Security 2026 loader utility for Windows security suite deployment
+zh-signals: "分析伪装为 Avira Internet Security 的加载器项目，识别恶意分发风险。信号:avira,加载器分析,恶意软件,供应链风险,伪装软件"
+when-to-use: >-
+  Use when analyzing the Avira Internet Security 2026 loader repository or assessing
+  whether a security-suite installer is malicious.
 triggers:
   - analyze the avira loader project
   - how does this avira security loader work

@@ -7,6 +7,10 @@ description: >
   ProGuard disabled, R8 disabled, string encryption, integrity check, file tampering, repackaging,
   dynamic instrumentation, runtime hook, Magisk hide, Magisk, frida-server, objection bypass,
   signing verification, apk resign. Covers MASVS-RESILIENCE-1/2/3/4.
+zh-signals: "检测移动应用（Android/iOS）中薄弱的反逆向与防篡改保护，如 root/Frida 检测、反调试、完整性与混淆缺失。信号:移动安全,反调试,Frida检测,完整性校验,代码混淆"
+when-to-use: >-
+  Use when assessing Android/iOS apps for resilience against reverse engineering and tampering,
+  including root/jailbreak detection, anti-debugging, and integrity checks.
 license: MIT
 compatibility: Designed for Claude Code. Frida, objection, apktool, jadx, Magisk, jadx, apk-mitm recommended.
 metadata:

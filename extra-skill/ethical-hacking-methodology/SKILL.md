@@ -1,6 +1,8 @@
 ---
 name: ethical-hacking-methodology
 description: "Master the complete penetration testing lifecycle from reconnaissance through reporting. This skill covers the five stages of ethical hacking methodology, essential tools, attack techniques, and professional reporting for authorized security assessments."
+zh-signals: "覆盖从侦察到报告的五阶段渗透测试生命周期，提供授权安全评估的工具、技术与报告方法。信号:渗透测试方法,侦察,漏洞利用,权限提升,报告编写"
+when-to-use: "Use when conducting an authorized penetration test and you need a structured five-stage methodology from reconnaissance through reporting."
 risk: offensive
 source: community
 author: zebbern

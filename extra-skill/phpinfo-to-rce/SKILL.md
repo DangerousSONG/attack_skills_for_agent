@@ -1,6 +1,8 @@
 ---
 name: phpinfo-to-rce
 description: Chain phpinfo to RCE via exec check when info.php exposed.
+zh-signals: "检查暴露的 phpinfo 页面配置，评估禁用函数并串联文件上传路径实现 RCE。信号:phpinfo,disable_functions,RCE,webshell,文件上传"
+when-to-use: "Use when an exposed info.php or phpinfo.php is confirmed and you need to assess configuration leakage, exec function availability, and whether an upload vector can reach code execution."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

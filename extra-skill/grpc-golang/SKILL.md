@@ -1,6 +1,8 @@
 ---
 name: grpc-golang
 description: "Build production-ready gRPC services in Go with mTLS, streaming, and observability. Use when designing Protobuf contracts with Buf or implementing secure service-to-service transport."
+zh-signals: "用 Go 构建生产级 gRPC 服务（mTLS、流式、可观测性）。信号:grpc,golang,mTLS,protobuf,buf"
+when-to-use: "Use when designing Protobuf contracts with Buf or implementing secure service-to-service transport for gRPC services in Go."
 risk: safe
 source: self
 date_added: "2026-02-27"

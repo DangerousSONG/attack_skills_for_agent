@@ -2,6 +2,8 @@
 name: vendor-management
 description: Implement vendor risk management programs. Assess third-party security
   and maintain vendor inventory. Use when managing supplier security.
+zh-signals: "实施供应商风险管理计划（第三方评估与供应商清单维护）。信号:供应商管理,第三方风险,供应商评估,合规,soc2"
+when-to-use: "Use when implementing vendor risk management, assessing third-party security, or maintaining a vendor inventory for SOC 2, ISO 27001, or regulatory compliance."
 category: security
 risk: safe
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

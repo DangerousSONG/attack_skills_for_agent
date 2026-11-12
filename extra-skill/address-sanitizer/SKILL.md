@@ -2,6 +2,8 @@
 name: address-sanitizer
 type: technique
 description: "Builds and runs code under AddressSanitizer to catch buffer overflows, use-after-free, and other memory errors during fuzzing or tests. Covers -fsanitize=address builds, ASAN_OPTIONS, reading the crash report, LeakSanitizer, and the overhead and platform trade-offs. Use when fuzzing C/C++ or Rust that has unsafe blocks or FFI, when debugging a memory corruption crash, or when reading an ASan stack trace."
+zh-signals: "在 AddressSanitizer 下构建运行 C/C++/Rust 代码，检测缓冲区溢出、UAF 与内存泄漏并解析崩溃报告。信号:AddressSanitizer,内存错误,缓冲区溢出,UAF,模糊测试"
+when-to-use: "Use when fuzzing C/C++ or Rust with unsafe blocks or FFI, debugging memory-corruption crashes, or reading an ASan stack trace."
 ---
 
 # AddressSanitizer (ASan)

@@ -1,6 +1,10 @@
 ---
 name: error-diagnostics-error-analysis
 description: "You are an expert error analysis specialist with deep expertise in debugging distributed systems, analyzing production incidents, and implementing comprehensive observability solutions."
+zh-signals: "分布式系统错误诊断与生产事故分析专家，提供根因定位与可观测性改进方案。信号:错误诊断,根因分析,生产事故,可观测性,调试"
+when-to-use: >-
+  Use when investigating production incidents, recurring errors, or performing root-cause
+  analysis and observability improvements across services.
 risk: safe
 source: community
 date_added: "2026-02-27"

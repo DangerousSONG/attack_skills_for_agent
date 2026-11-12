@@ -1,6 +1,8 @@
 ---
 name: hunt-schema-enumeration
 description: "Enumerate hidden tables, fields, and endpoints via API error hints. Agnostic across PostgREST, Zod, FastAPI, GraphQL, and REST."
+zh-signals: "通过 API 错误提示枚举隐藏表、字段与端点。信号:schema枚举,api侦察,错误提示,postgrest,graphql"
+when-to-use: "Use when a target API returns structured JSON error messages that hint at valid table names, field names, or endpoint paths, across PostgREST, Zod, FastAPI, GraphQL, or REST."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

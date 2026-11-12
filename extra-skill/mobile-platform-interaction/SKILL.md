@@ -7,6 +7,8 @@ description: >
   intent:// scheme, file:// scheme, WKWebView, WKScriptMessageHandler, UIPasteboard, URL scheme hijacking,
   Universal Links, PendingIntent, FLAG_IMMUTABLE, overlay attack, tapjacking, screenshot prevention,
   FLAG_SECURE, Broadcast sniffing, IPC data exposure. Covers MASVS-PLATFORM-1/2/3.
+zh-signals: "移动应用平台交互安全检测，覆盖导出组件、Intent 注入、WebView 与深度链接劫持。信号:移动安全,Android,iOS,WebView,Intent注入"
+when-to-use: "Use when detecting insecure mobile platform interaction such as exported components, Intent injection, WebView bridges, or deep link hijacking (MASVS-PLATFORM-1/2/3)."
 license: MIT
 compatibility: Designed for Claude Code. drozer, adb, apktool, jadx, Frida, objection, Burp Suite recommended.
 metadata:

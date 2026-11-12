@@ -1,6 +1,8 @@
 ---
 name: avast-security-awareness
 description: Recognize and avoid malicious software distribution repositories disguised as legitimate security tools
+zh-signals: "安全意识技能，教导识别并规避伪装成合法安全工具的恶意软件分发仓库，如仿冒 Avast 的破解软件。信号:安全意识,仿冒Avast,破解软件,恶意分发,软件来源验证"
+when-to-use: "Use when a user asks how to identify fake antivirus repositories, spot malware distribution on GitHub, recognize cracked software scams, or verify legitimate security software sources."
 triggers:
   - how do I identify fake antivirus repositories
   - is this avast repository legitimate

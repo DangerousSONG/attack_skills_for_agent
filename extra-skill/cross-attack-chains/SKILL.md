@@ -1,6 +1,8 @@
 ---
 name: cross-attack-chains
 description: Use when two or more verified findings may combine into a higher-impact authorized attack path.
+zh-signals: "将多个已验证漏洞组合成更高影响的攻击链并进行验证与报告。信号:攻击链,漏洞组合,攻击路径,影响升级,验证"
+when-to-use: "Use when two or more verified findings may combine into a higher-impact authorized attack path, or a report must distinguish standalone from compound impact."
 version: 2.0.0
 license: MIT
 platforms: [any]

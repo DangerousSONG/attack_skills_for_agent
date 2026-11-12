@@ -1,6 +1,8 @@
 ---
 name: hunt-sharepoint
 description: Hunt Microsoft SharePoint Server (2013/2016/2019/Subscription Edition) on-prem farms — anonymous endpoint enumeration, version disclosure, legacy SOAP login bypass (Authentication.asmx), ToolShell precondition chain (CVE-2025-53770), SafeControl reflection enumeration via Picker.aspx, NTLM Type-2 AD topology disclosure, custom-branding module discovery, EoL farm permanent-CVE-window exploitation, FormDigest anonymous issuance, file-extension blocklist NOT-an-oracle pattern, custom-zone Forms auth bridging on-prem AD. Use when target has SharePoint headers (SPRequestGuid, X-MS-InvokeApp, X-SharePointHealthScore, MicrosoftSharePointTeamServices) or paths (/_layouts/15/, /_vti_bin/, /_api/, /_catalogs/).
+zh-signals: "本地部署 Microsoft SharePoint 农场的专项漏洞狩猎方法。信号:SharePoint,红队,CVE-2025-53770,SOAP绕过,NTLM泄露"
+when-to-use: "Use when a target shows SharePoint headers or paths (/_layouts/15/, /_vti_bin/, /_api/, /_catalogs/) and you need to enumerate and exploit on-prem SharePoint."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

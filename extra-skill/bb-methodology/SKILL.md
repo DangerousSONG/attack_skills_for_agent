@@ -1,6 +1,8 @@
 ---
 name: bb-methodology
 description: Use at the START of any bug bounty hunting session, when switching targets, or when feeling lost about what to do next. Master orchestrator that combines the 5-phase non-linear hunting workflow with the critical thinking framework (developer psychology, anomaly detection, What-If experiments). Routes to all other skills based on current hunting phase. Also use when asking "what should I do next" or "where am I in the process."
+zh-signals: "漏洞赏金狩猎总控方法论，结合五阶段非线性流程与批判性思维框架，并按当前阶段路由到其他技能。信号:漏洞赏金,狩猎流程,思维框架,阶段路由,BB方法论"
+when-to-use: "Use at the start of a bug bounty hunting session, when switching targets, when unsure what to do next, or when you need to route to other skills based on the current hunting phase."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

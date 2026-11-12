@@ -1,6 +1,11 @@
 ---
 name: security-threat-awareness
 description: Recognize and warn against malicious software distribution repositories masquerading as legitimate security tools
+zh-signals: "识别并警示伪装成正规安全工具的恶意软件分发仓库。信号:威胁意识,恶意仓库,盗版软件,供应链风险,钓鱼"
+when-to-use: >-
+  Use when evaluating whether a security-software download or repository is
+  legitimate, or when warning about pirated/cracked software that may
+  distribute malware.
 triggers:
   - how do I install Avast Premium Security from GitHub
   - need help with this Avast repository

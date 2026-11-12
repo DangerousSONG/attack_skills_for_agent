@@ -1,6 +1,8 @@
 ---
 name: subdomain-takeover-hunt
 description: Detect and verify subdomain takeover via dangling CNAME to unclaimed services.
+zh-signals: "检测并验证悬空 CNAME 导致的子域名接管，覆盖云服务未认领资源。信号:子域名接管,悬空CNAME,DNS,云服务,侦察"
+when-to-use: "Use during reconnaissance when you need to detect or verify subdomain takeover caused by dangling CNAME records pointing to unclaimed cloud services."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

@@ -1,6 +1,11 @@
 ---
 name: pr-github-ops
 description: Post Superagent PR security scan findings as inline GitHub pull request review comments using the authenticated gh CLI. Use whenever you need to comment on a PR scan finding, manage Superagent PR labels, complete a GitHub check run, or avoid posting findings as general PR thread comments. Trigger for any Superagent sandbox PR scan handoff that owns GitHub side effects via gh.
+zh-signals: "用已认证的 gh CLI 将 Superagent PR 扫描发现发布为 GitHub 行内评审评论并管理标签与检查运行。信号:PR扫描,行内评论,gh CLI,GitHub标签,检查运行"
+when-to-use: >-
+  Use for any Superagent sandbox PR scan handoff that owns GitHub side effects, when you
+  must post inline findings, manage labels, or complete a check run via the authenticated
+  gh CLI.
 ---
 
 # PR GitHub operations

@@ -2,38 +2,42 @@
 name: vulmap-vuln-scan
 description: "Vulmap: Local CVE one-click scan. Signals: vulnerability intelligence, CVE, local vulnerability scan, update vulnerability database, specified application."
 zh-signals: "Vulmap: 本地 CVE 一键扫。信号:漏洞情报,cve,本地漏洞扫描,更新漏洞库,指定应用。"
+when-to-use: >-
+  Use when you need to scan a local system and its middleware against a CVE
+  database; supports updating the vulnerability database and limiting scanning
+  to specified applications.
 ---
 
 # Vulmap
 
-- 攻击大类:C06 漏洞情报与漏洞库
-- 上游仓库:https://github.com/vulmon/Vulmap
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C06 Vulnerability Intelligence and Exploit Databases
+- Upstream Repository: https://github.com/vulmon/Vulmap
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/vulmon/Vulmap && cd Vulmap/Unix && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 vulmap.py` | 本地漏洞扫描 |
-| `-u` | 更新漏洞库 |
-| `-a apache,nginx` | 指定应用 |
-| `-o out.txt` | 输出 |
+| `python3 vulmap.py` | Local vulnerability scan |
+| `-u` | Update the vulnerability database |
+| `-a apache,nginx` | Specify applications |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 本地 CVE 一键扫
+### One-shot local CVE scan
 
 ```bash
 python3 vulmap.py
-# 系统+中间件 CVE 匹配
+# Matches system and middleware CVEs
 ```
 
-## 注意事项
+## Notes
 
-Vulmon 出品本地漏洞扫描器。
+Local vulnerability scanner from Vulmon.

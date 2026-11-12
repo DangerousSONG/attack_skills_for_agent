@@ -1,6 +1,10 @@
 ---
 name: shopify-review-triage
 description: "Turn public 1-3-star Shopify App Store review rows into a P0-P3 triage brief: incident risk, repeated friction, pricing confusion, feature requests, and an explicit needs-human-read bucket."
+zh-signals: "将 Shopify 应用商店低星评价整理为 P0-P3 分级简报。信号:shopify评价,评价分级,客户反馈,产品运营,问题分诊"
+when-to-use: >-
+  Use when triaging, prioritizing, or clustering public 1-3-star Shopify App Store
+  reviews from row data into an actionable brief.
 category: product
 risk: none
 source: community

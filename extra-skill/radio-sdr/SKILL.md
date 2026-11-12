@@ -1,6 +1,8 @@
 ---
 name: radio-sdr
 description: "Authorized RF/SDR security research: signal identification, replay-feasibility study in shielded labs, and wireless protocol analysis outside regulated bands."
+zh-signals: "在授权实验室环境中开展 RF/SDR 信号识别、重放可行性与无线协议分析。信号:RF,SDR,无线协议,信号识别,重放"
+when-to-use: "Use for authorized RF/SDR research such as signal identification or replay-feasibility studies in shielded, RF-isolated labs."
 risk: offensive
 source: "https://github.com/zhaoxuya520/reverse-skill"
 source_repo: "zhaoxuya520/reverse-skill"
@@ -30,44 +32,44 @@ license_source: "https://github.com/zhaoxuya520/reverse-skill/blob/main/LICENSE"
 - Feasibility checks for replay attacks in RF-isolated environments.
 
 
-## 适用场景
+## Applicable Scenarios
 
-- 无线遥控/传感器等非 Wi-Fi RF（授权）
-- ADS-B/遥控等协议研究（合法接收）
-- 与 wifi-wireless 分工：本 skill 偏 **SDR 通用 RF**；Wi-Fi 攻防走 R29
+- Non-Wi-Fi RF such as wireless remotes and sensors (authorized)
+- Protocol research on ADS-B / RC remotes (legal reception only)
+- Division of labor with wifi-wireless: this skill focuses on **general-purpose SDR RF**; Wi-Fi attack and defense goes to R29
 
-## 工作流
+## Workflow
 
 ```text
-□ 法规与许可确认
-□ 只收：识别中心频率与调制
-□ GNU Radio / URH 分析
-□ 重放仅屏蔽室且书面允许
-□ 结论侧重：是否可未授权控制 / 加固建议
+□ Confirm applicable regulations and permits
+□ Receive only: identify center frequency and modulation
+□ Analyze with GNU Radio / URH
+□ Replay only in a shielded room and with written permission
+□ Conclusions focus on: whether unauthorized control is possible / hardening recommendations
 ```
 
-## 工具链
+## Toolchain
 
-| 工具 | 用途 |
+| Tool | Purpose |
 |------|------|
-| RTL-SDR / HackRF（合规） | 收发硬件 |
-| URH / GNU Radio | 分析 |
-| Inspectrum | 信号 |
+| RTL-SDR / HackRF (compliant) | transmit/receive hardware |
+| URH / GNU Radio | analysis |
+| Inspectrum | signals |
 
-## 参考
+## References
 
 - `references/sdr-lab-rules.md`
 - `../wifi-wireless/` `../ot-ics/` `../hardware-security/`
 
-## 路由上下文
+## Routing Context
 
-**上游**: MASTER R38  
-**MUST NOT**: 干扰公共通信、未授权发射
+**Upstream**: MASTER R38  
+**MUST NOT**: interfering with public communications, unauthorized transmission
 
-## 任务完成自检
+## Task Completion Self-Check
 
-- [ ] 是否默认只收并记录法规边界？
-- [ ] Checklist？
+- [ ] Did you default to receive-only and record the regulatory boundary?
+- [ ] Checklist?
 
 ## Limitations
 

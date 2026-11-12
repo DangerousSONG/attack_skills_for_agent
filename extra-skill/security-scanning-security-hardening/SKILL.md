@@ -1,6 +1,8 @@
 ---
 name: security-scanning-security-hardening
 description: "Coordinate multi-layer security scanning and hardening across application, infrastructure, and compliance controls."
+zh-signals: "协调应用、基础设施与合规多层安全扫描与加固，落实纵深防御和持续监控。信号:安全加固,多层扫描,纵深防御,DevSecOps,合规"
+when-to-use: "Use when running a coordinated security hardening program that spans application, infrastructure, CI/CD, and compliance controls."
 risk: critical
 source: community
 date_added: "2026-02-27"

@@ -1,6 +1,8 @@
 ---
 name: hunt-dom
 description: Hunt client-side DOM vulnerabilities
+zh-signals: "狩猎客户端 DOM 漏洞，包括 DOM Clobbering、PostMessage、Service Worker 与 CSS 外带。信号:DOM漏洞,PostMessage,DOM Clobbering,ServiceWorker,CSS外带"
+when-to-use: "Use when hunting client-side DOM vulnerabilities such as DOM clobbering, postMessage flaws, malicious service workers, or CSS exfiltration in an authorized web target."
 category: security
 risk: offensive
 source: https://github.com/elementalsouls/Claude-BugHunter

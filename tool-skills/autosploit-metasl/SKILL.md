@@ -2,38 +2,39 @@
 name: autosploit-metasl
 description: "AutoSploit: batch auto-exploits CVEs in authorized labs. Signals: pwn, binary exploitation, local target list, default port set"
 zh-signals: "AutoSploit: 批量 CVE 自动打点(授权靶场)。信号:pwn,二进制利用,本地目标清单,默认端口集。"
+when-to-use: "Use AutoSploit only in authorized lab or drill environments to batch-select targets and automatically run Metasploit exploits against identified CVEs, e.g., from a local host list or a Shodan query."
 ---
 
 # AutoSploit
 
-- 攻击大类:C46 二进制漏洞利用与Pwn
-- 上游仓库:https://github.com/NullArray/AutoSploit
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C46 Binary Exploitation and Pwn
+- Upstream Repository: https://github.com/NullArray/AutoSploit
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/NullArray/AutoSploit && cd AutoSploit && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python autosploit.py -e -q apache -c` | Shodan 搜目标并自动喂 Metasploit |
-| `-f hosts.txt` | 本地目标清单 |
-| `-p default` | 默认端口集 |
-| `--exploit-only -f x.txt` | 只对清单跑 exploit |
+| `python autosploit.py -e -q apache -c` | Search Shodan for targets and feed them to Metasploit automatically |
+| `-f hosts.txt` | Local target list |
+| `-p default` | Default port set |
+| `--exploit-only -f x.txt` | Run exploits only against the list |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 批量 CVE 自动打点(授权靶场)
+### Batch CVE Auto-Exploitation (Authorized Labs)
 
 ```bash
 python autosploit.py -e -q 'Hikvision' -c -p default
-# 调 Shodan→选目标→逐台套 Metasploit 模块
+# Query Shodan → select targets → apply a Metasploit module host by host
 ```
 
-## 注意事项
+## Notes
 
-全自动但噪声大,误报/破坏风险高;仅限授权靶场/演练环境。
+Fully automatic but noisy, with a high risk of false positives and damage; restrict it to authorized labs and drill environments.

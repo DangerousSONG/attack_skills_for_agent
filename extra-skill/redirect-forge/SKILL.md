@@ -1,6 +1,8 @@
 ---
 name: redirect-forge
 description: Complete open redirect detection and exploitation methodology parameter discovery, 30+ bypass techniques, OAuth token theft, SSRF chaining, CSP abuse, phishing escalation, and report structure. Trigger when the user asks to test for open redirect or unvalidated redirect/forward, sees a parameter like ?next=/?url=/?redirect=/?return=/?goto= in a URL, wants to steal OAuth tokens via redirect_uri manipulation, needs to chain open redirect into SSRF/CSP bypass/account takeover, sees a 30x response with a controllable Location header, or wants to bypass a redirect allowlist.
+zh-signals: "检测并利用开放重定向，涵盖绕过技巧、OAuth 令牌窃取与 SSRF 链式利用。信号:开放重定向,redirect_uri,OAuth,SSRF,钓鱼,绕过"
+when-to-use: "Use when testing for open redirect or unvalidated redirect/forward parameters, or when chaining a controllable redirect into OAuth token theft, SSRF, or CSP bypass."
 license: MIT
 metadata:
   version: "1.0.0"

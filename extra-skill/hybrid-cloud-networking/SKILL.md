@@ -1,6 +1,8 @@
 ---
 name: hybrid-cloud-networking
 description: "Configure secure, high-performance connectivity between on-premises and cloud environments using VPN, Direct Connect, and ExpressRoute."
+zh-signals: "使用 VPN、Direct Connect 与 ExpressRoute 配置本地与云环境之间的安全高性能连接。信号:混合云,网络互联,VPN,Direct Connect,ExpressRoute"
+when-to-use: "Use when configuring secure, high-performance connectivity between on-premises and cloud environments via VPN, Direct Connect, or ExpressRoute."
 risk: safe
 source: community
 date_added: "2026-02-27"

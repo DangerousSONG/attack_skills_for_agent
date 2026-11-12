@@ -1,6 +1,8 @@
 ---
 name: superagent
 description: Set up Superagent Context Guardrails at coding-agent tool boundaries, configure and safely use the remote MCP server, and manage signed webhooks for findings, security reports, Contributor Trust, and Runtime Guardrails. Use when the user asks to enable context scanning before an agent consumes URLs, files, email, skills, or MCP repositories; integrate coding-agent hooks; or install, connect, configure, troubleshoot, or operate Superagent from Cursor, Claude Code, Codex CLI, or another MCP client.
+zh-signals: "配置 Superagent 上下文护栏、MCP 服务器与签名 Webhook。信号:Superagent,上下文护栏,MCP,Webhook,Agent安全"
+when-to-use: "Use when enabling context scanning before an agent consumes external content, integrating coding-agent hooks, or operating the Superagent MCP server."
 ---
 
 # Superagent

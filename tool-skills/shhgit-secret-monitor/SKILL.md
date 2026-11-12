@@ -2,38 +2,41 @@
 name: shhgit-secret-monitor
 description: "shhgit: real-time GitHub leak monitoring. Signals: attack surface, cloud assets, scan local repos, CSV output."
 zh-signals: "shhgit: Github 实时监控泄密。信号:攻击面,云资产,扫本地仓库,CSV 输出。"
+when-to-use: >-
+  Use when monitoring GitHub for secret leaks in real time or scanning a local
+  repository and history for exposed credentials, with CSV output for triage.
 ---
 
 # shhgit
 
-- 攻击大类:C05 外部攻击面与云资产暴露
-- 上游仓库:https://github.com/eth0izzle/shhgit
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C05 External Attack Surface and Cloud Asset Exposure
+- Upstream Repository: https://github.com/eth0izzle/shhgit
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/eth0izzle/shhgit@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `shhgit --local path/to/repo` | 扫本地仓库 |
-| `--live` | 实时监听 GitHub 事件流 |
-| `-config config.yaml` | 配置 |
-| `--csv-path out.csv` | CSV 输出 |
-| `--entropy-threshold 5.0` | 熵阈值 |
+| `shhgit --local path/to/repo` | Scan a local repository |
+| `--live` | Monitor the GitHub event stream in real time |
+| `-config config.yaml` | Configuration |
+| `--csv-path out.csv` | CSV output |
+| `--entropy-threshold 5.0` | Entropy threshold |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Github 实时监控泄密
+### Real-Time GitHub Secret Monitoring
 
 ```bash
-shhgit --live --csv-path leaks.csv  # 监听全 GitHub 事件流匹配 org 关键词/密钥模式
+shhgit --live --csv-path leaks.csv  # Watch the full GitHub event stream for org keywords and key patterns
 ```
 
-## 注意事项
+## Notes
 
-实时模式需 GitHub token;与 trufflehog(深度扫)互补做广度监控。
+Real-time mode requires a GitHub token; complements trufflehog (deep scanning) by providing broad monitoring.

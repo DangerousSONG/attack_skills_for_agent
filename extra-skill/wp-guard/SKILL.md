@@ -1,6 +1,10 @@
 ---
 name: "wp-guard"
 description: "Review generated or changed WordPress plugins, themes, and blocks for security, internationalization, performance, and API correctness."
+zh-signals: "审查新增或变更的 WordPress 插件、主题与区块，检查安全性、国际化、性能与 API 正确性。信号:WordPress安全,插件审查,主题审计,代码审查,国际化"
+when-to-use: >-
+  Use when reviewing generated or changed WordPress plugins, themes, or blocks for
+  security, internationalization, performance, and API correctness before they ship.
 risk: "offensive"
 source: "community"
 source_repo: "amElnagdy/guard-skills"

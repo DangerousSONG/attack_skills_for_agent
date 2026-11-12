@@ -1,6 +1,11 @@
 ---
 name: competition-request-normalization-smuggling
 description: Internal downstream skill for ctf-sandbox-orchestrator. CTF-sandbox workflow for parser differentials, HTTP normalization gaps, ambiguous headers, path decoding drift, transfer-framing mismatches, and request smuggling routes. Use when the user asks to trace proxy and backend parse differences, conflicting path normalization, Host or forwarded-header ambiguity, CL/TE issues, or routing outcomes that differ across hops. Use only after `$ctf-sandbox-orchestrator` has already established sandbox assumptions and routed here.
+zh-signals: "CTF 请求解析差异与 HTTP 规范化走私工作流，追踪代理与后端解析分歧。信号:请求走私,http解析差异,路径规范化,cl/te,ctf"
+when-to-use: >-
+  Use when tracing proxy and backend parse differences, path normalization drift,
+  header ambiguity, CL/TE issues, or request smuggling routes, after the CTF sandbox
+  orchestrator has routed here.
 ---
 
 # Competition Request Normalization Smuggling

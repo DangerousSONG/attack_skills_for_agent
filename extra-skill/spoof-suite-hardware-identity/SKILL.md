@@ -1,6 +1,8 @@
 ---
 name: spoof-suite-hardware-identity
 description: Hardware-level identity spoofing toolkit for network, device, and browser fingerprint masking with multi-layer obfuscation
+zh-signals: "在硬件、网络与浏览器多层伪装设备身份与指纹，用于匿名化与反追踪测试。信号:硬件伪装,指纹伪造,MAC地址,ARP,DNS,浏览器指纹"
+when-to-use: "Use when a task requires hardware-level identity spoofing, device/browser fingerprint randomization, or multi-layer network obfuscation (ARP, DNS, SNI). Supports Windows and Linux."
 triggers:
   - spoof my hardware identifiers
   - randomize device fingerprint

@@ -1,106 +1,107 @@
 ---
 name: php-laravel-audit
-description: Laravel 框架特效安全审计工具。针对 Laravel 常见鉴权/CSRF/Session/模型填充/Blade 渲染等框架特性进行白盒静态审计，并将风险映射到你现有通用漏洞类型体系（AUTH/CSRF/LOGIC/XSS/CFG 等）。
+description: "Laravel framework-specific security audit tool. Performs white-box static audits of common Laravel framework characteristics such as authentication/CSRF/Session/model mass assignment/Blade rendering, and maps the risks onto your existing generic vulnerability type system (AUTH/CSRF/LOGIC/XSS/CFG, etc.)."
+zh-signals: "对 Laravel 项目源码进行框架特性相关的白盒安全审计并映射到通用漏洞类型。信号:Laravel,框架审计,鉴权,CSRF,Blade,Eloquent"
+when-to-use: "Use when auditing a Laravel codebase for framework-specific security flaws such as auth bypass, CSRF gaps, session issues, mass assignment, or Blade template injection."
 ---
 
-# PHP Laravel 框架安全审计（php-laravel-audit）
+# PHP Laravel Framework Security Audit (php-laravel-audit)
 
-分析 Laravel 项目源码中的“框架特效安全机制”和“常见踩坑模式”，重点覆盖：
-- 鉴权与路由保护（middleware/auth/Policies/Gates）
-- CSRF 与 token 保护（VerifyCsrfToken、except 列表、API 与 Cookie 认证差异）
-- Session 与 Cookie 安全（session_regenerate_id、cookie flags、remember 机制的风险点）
-- Eloquent mass assignment 与 request-to-model 写入缺陷（Model::create/fill/update 与 `$request->all()` 链）
-- Blade 模板渲染中的 raw 输出与表达式执行风险（`{!! !!}`、`@php` 以及未转义输出）
-- Laravel signed URL 与路由签名校验是否闭环（Signed middleware 与生成位置）
+Analyze the "framework-specific security mechanisms" and "common pitfall patterns" in Laravel project source code, focusing on:
+- Authentication and route protection (middleware/auth/Policies/Gates)
+- CSRF and token protection (VerifyCsrfToken, except list, API vs. Cookie authentication differences)
+- Session and Cookie security (session_regenerate_id, cookie flags, risk points in the remember mechanism)
+- Eloquent mass assignment and request-to-model write flaws (Model::create/fill/update and the `$request->all()` chain)
+- Raw output and expression execution risks in Blade template rendering (`{!! !!}`, `@php`, and unescaped output)
+- Whether Laravel signed URLs and route signature validation form a closed loop (Signed middleware and generation sites)
 
-## 输入
-用户提供：
-- `source_path`：Laravel 项目源码根目录
-可选：
-- `output_path`：输出目录路径（默认 `{source_path}_audit`）
+## Input
+Provided by the user:
+- `source_path`: Laravel project source root directory
+Optional:
+- `output_path`: output directory path (default `{source_path}_audit`)
 
-## 输出目录
-输出到：
+## Output Directory
+Output to:
 ```
 {output_path}/framework_audit/
   laravel_{timestamp}.md
 ```
 
-## 框架识别（必做）
-必须给出你识别该项目为 Laravel 的证据点（不允许空口断言）：
-- `composer.json` 依赖
-- 典型目录：`app/`、`routes/`、`config/`
-- 核心入口：`public/index.php`、`bootstrap/app.php`
+## Framework Identification (Required)
+You must provide evidence points identifying the project as Laravel (bare assertions are not allowed):
+- `composer.json` dependencies
+- Typical directories: `app/`, `routes/`, `config/`
+- Core entry points: `public/index.php`, `bootstrap/app.php`
 
-## 风险类型映射（必做）
-每条发现都必须写明：
-- 适用的通用类型码：`AUTH` / `CSRF` / `LOGIC` / `XSS` / `CFG` / `SESS` / `FILE` 等（从你的 `shared/SEVERITY_RATING.md` 可用类型码中选）
-- 这条 Laravel 风险为什么落到该通用类型码（用一句话解释映射逻辑）
+## Risk Type Mapping (Required)
+Every finding must state:
+- Applicable generic type code: `AUTH` / `CSRF` / `LOGIC` / `XSS` / `CFG` / `SESS` / `FILE`, etc. (choose from the type codes available in your `shared/SEVERITY_RATING.md`)
+- Why this Laravel risk falls under that generic type code (explain the mapping logic in one sentence)
 
-## 必审清单（必做：逐项检查并输出结果）
+## Mandatory Audit Checklist (Required: check each item and output the result)
 
-### 1) 鉴权与权限保护（AUTH）
-必须定位并输出以下证据：
-- 受保护路由进入点：`routes/web.php` 与 `routes/api.php` 中的 `middleware('auth')` / `middleware('can')` / `Route::middleware([{value}])->group({value})`
-- 权限逻辑：`Gate::` / `Policy` / `authorize` / `can` / `->can({value})` 的位置证据
-- 风险判断：是否存在“已登录但无资源级归属校验”的模式（例如只判断 user 存在，不判断 owner）
-- 路由命名与资源绑定：是否存在 Route Model Binding 但未做归属校验
+### 1) Authentication and Access Control (AUTH)
+You must locate and output the following evidence:
+- Protected route entry points: `middleware('auth')` / `middleware('can')` / `Route::middleware([{value}])->group({value})` in `routes/web.php` and `routes/api.php`
+- Authorization logic: location evidence for `Gate::` / `Policy` / `authorize` / `can` / `->can({value})`
+- Risk judgement: whether there is a "logged in but no resource-level ownership validation" pattern (e.g. only checking that the user exists, not that they own the resource)
+- Route naming and resource binding: whether Route Model Binding exists without ownership validation
 
-输出要求：
-- 若发现缺失：必须给出“缺失位置 + 可能被绕过的请求类型（GET/POST/API）+ 修复建议”
-- 若未发现：也必须输出“未发现的判定依据”（例如 except/guard 为空、敏感路由均有 middleware 等）
+Output requirements:
+- If a gap is found: you must provide the "gap location + the request types that could bypass it (GET/POST/API) + a remediation recommendation"
+- If none is found: you must still output the "basis for the not-found conclusion" (e.g. except/guard is empty, all sensitive routes have middleware, etc.)
 
-### 2) CSRF 与 token 保护（CSRF）
-必须定位：
-- CSRF middleware：`VerifyCsrfToken` 或等价中间件
-- except 列表：哪些路由被排除
-- API 与 Cookie 认证差异：若项目对 API 使用 Cookie/session，需要确认 API 路由是否仍受 CSRF 保护
+### 2) CSRF and Token Protection (CSRF)
+You must locate:
+- CSRF middleware: `VerifyCsrfToken` or an equivalent middleware
+- except list: which routes are excluded
+- API vs. Cookie authentication differences: if the project uses Cookie/session for the API, confirm whether API routes are still protected by CSRF
 
-输出要求：
-- 必须覆盖“可能绕过分支”：例如仅部分方法不校验、仅某些 Content-Type 不校验、仅在 AJAX 时跳过等
+Output requirements:
+- Must cover "bypassable branches": for example only some methods are not validated, only certain Content-Types are not validated, only skipped for AJAX requests, etc.
 
-### 3) Session 与 Cookie 安全（SESS）
-必须定位：
-- 登录后会话固定防护：是否存在 `session_regenerate_id` 或 Laravel 对应机制证据
-- Cookie flags：`HttpOnly`/`Secure`/`SameSite` 的配置位置（`config/session.php` 或自定义中间件）
-- logout：退出是否清理 session
+### 3) Session and Cookie Security (SESS)
+You must locate:
+- Session fixation protection after login: whether `session_regenerate_id` or the Laravel equivalent exists
+- Cookie flags: the configuration location of `HttpOnly`/`Secure`/`SameSite` (`config/session.php` or custom middleware)
+- logout: whether the session is cleared on logout
 
-### 4) Eloquent mass assignment（LOGIC）
-必须定位并输出数据流链证据：
-- request 输入获取：`$request->all()`、`$request->input({value})`、`json_decode({value})`
-- 写入模型点：`Model::create({value})` / `Model::update({value})` / `$model->fill({value})` / `->save()`
-- 模型填充策略：`$fillable` / `$guarded` 的配置位置
+### 4) Eloquent Mass Assignment (LOGIC)
+You must locate and output the data-flow chain evidence:
+- Request input retrieval: `$request->all()`, `$request->input({value})`, `json_decode({value})`
+- Model write points: `Model::create({value})` / `Model::update({value})` / `$model->fill({value})` / `->save()`
+- Model fill policy: the configuration location of `$fillable` / `$guarded`
 
-判定规则：
-- `$request->all()` 或等价输入直接进入 `create/fill/update`，且模型缺少针对敏感字段的 denylist（或 `$fillable` 过宽），则输出风险
+Decision rules:
+- If `$request->all()` or equivalent input flows directly into `create/fill/update` and the model lacks a denylist for sensitive fields (or `$fillable` is too broad), report a risk
 
-### 5) Blade raw 输出（XSS）
-必须定位并输出：
-- raw 输出：`{!! {value} !!}`、`@php` 以及任何“跳过转义”的指令或回调
-- 用户输入来源：来自 `$request`、`request()`、数据库字段回填但未转义时的证据
+### 5) Blade Raw Output (XSS)
+Must locate and output:
+- Raw output: `{!! {value} !!}`, `@php`, and any "skip escaping" directives or callbacks
+- User input sources: evidence of values coming from `$request`, `request()`, or database fields written back without escaping
 
-判定规则：
-- 若 raw 输出内容存在用户可控字段，且未做 `e()` 或等价 escape，则输出风险映射到 `XSS` 或相关模板注入风险（若你项目用到模板表达式执行则映射到 `TPL`）
+Decision rules:
+- If raw output contains a user-controllable field and no `e()` or equivalent escaping is applied, report a risk mapped to `XSS` or a related template injection risk (map to `TPL` if your project uses template expression execution)
 
-### 6) Signed URLs 与签名校验闭环（AUTH 或 CFG）
-必须定位：
-- 签名 URL 生成：`URL::temporarySignedRoute` / `URL::signedRoute`
-- 验证中间件：`middleware('signed')` 或等价校验机制
+### 6) Signed URLs and Signature Validation Closure (AUTH or CFG)
+You must locate:
+- Signed URL generation: `URL::temporarySignedRoute` / `URL::signedRoute`
+- Validation middleware: `middleware('signed')` or an equivalent validation mechanism
 
-判定规则：
-- 若仅生成但无签名验证中间件，或验证逻辑可被绕过，输出风险映射到 `AUTH` 或 `CFG`
+Decision rules:
+- If only generation exists without signature validation middleware, or the validation logic can be bypassed, report a risk mapped to `AUTH` or `CFG`
 
-## 可观测 PoC（必做：框架特效可观测验证框架）
-至少给出以下两类其一并写清观察点：
-- 鉴权缺失/越权绕过：给出真实路由与 payload 目标（例如切换对象 id）
-- CSRF 缺失/绕过：给出真实路由与需要携带/不携带的 token 场景，并说明观察点
+## Observable PoC (Required: framework-specific observable verification harness)
+Provide at least one of the following two categories and clearly state the observation point:
+- Missing authentication / privilege bypass: give the real route and the payload target (for example switching the object id)
+- Missing CSRF / CSRF bypass: give the real route and the token scenario (with and without the token) and explain the observation point
 
-PoC 输出要求：
-- 必须包含真实路由（从 `routes/*.php` 真实可命中位置抽取）
-- 必须包含真实字段名（如 `csrf` 字段、或表单 action）
+PoC output requirements:
+- Must include a real route (extracted from an actually reachable location in `routes/*.php`)
+- Must include real field names (such as the `csrf` field, or the form action)
 
-## 输出完整性检查（强制）
-- [ ] 输出包含：Laravel 识别证据点
-- [ ] CSRF/Auth/Session/Mass Assignment/Blade raw/Signed URL 六大块均有“检查结果”
-- [ ] 每条风险都有：映射类型码 + 位置证据 + 可观测验证框架 + 修复建议
-
+## Output Completeness Check (Mandatory)
+- [ ] The output contains: Laravel identification evidence points
+- [ ] The six major areas (CSRF/Auth/Session/Mass Assignment/Blade raw/Signed URL) all have "check results"
+- [ ] Every risk has: a mapped type code + location evidence + an observable verification harness + a remediation recommendation

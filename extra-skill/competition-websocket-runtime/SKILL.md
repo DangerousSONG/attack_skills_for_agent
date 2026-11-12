@@ -1,6 +1,11 @@
 ---
 name: competition-websocket-runtime
 description: Internal downstream skill for ctf-sandbox-orchestrator. CTF-sandbox workflow for WebSocket and SSE handshakes, auth material, subscription state, realtime message schemas, reconnect behavior, and frame-driven runtime effects. Use when the user asks to inspect a WebSocket or SSE handshake, decode frames, trace subscriptions, follow reconnect logic, inspect auth material sent during realtime setup, or explain how live frames change rendered or persisted state. Use only after `$ctf-sandbox-orchestrator` has already established sandbox assumptions and routed here.
+zh-signals: "CTF 沙箱中 WebSocket/SSE 实时运行时分析，覆盖握手、认证材料、订阅状态、消息模式与重连行为。信号:WebSocket,SSE,握手分析,订阅状态,CTF沙箱"
+when-to-use: >-
+  Use only after $ctf-sandbox-orchestrator has established sandbox assumptions,
+  to inspect WebSocket/SSE handshakes, decode frames, trace subscriptions, or
+  explain realtime state effects.
 ---
 
 # Competition WebSocket Runtime

@@ -1,6 +1,10 @@
 ---
 name: siem-detection
 description: "Engineer and audit SIEM detection rules — log source coverage, Sigma / KQL / SPL / Elastic query authoring, MITRE ATT&CK mapping, false-positive tuning, and detection-as-code workflows. Use when the user mentions 'SIEM,' 'detection engineering,' 'detection rules,' 'Sigma,' 'KQL,' 'SPL,' 'Splunk,' 'Sentinel,' 'Elastic,' 'Wazuh,' 'Chronicle,' 'detection-as-code,' 'MITRE ATT&CK mapping,' 'log coverage,' 'alert tuning,' 'use case development,' or needs help building or improving security detections."
+zh-signals: "编写与审计 SIEM 检测规则，覆盖日志源、Sigma/KQL/SPL 查询、ATT&CK 映射与误报调优。信号:SIEM,检测工程,Sigma,KQL,ATT&CK映射"
+when-to-use: >-
+  Use when building, auditing, or tuning SIEM detection rules, assessing log source coverage,
+  or implementing detection-as-code workflows.
 allowed-tools: Read, Write, Bash, Grep, Glob, WebSearch
 ---
 

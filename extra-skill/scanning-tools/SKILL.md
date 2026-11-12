@@ -1,6 +1,8 @@
 ---
 name: scanning-tools
 description: "Master essential security scanning tools for network discovery, vulnerability assessment, web application testing, wireless security, and compliance validation. This skill covers tool selection, configuration, and practical usage across different scanning categories."
+zh-signals: "指导网络发现、漏洞评估、Web 与无线安全扫描及合规校验的工具选型与配置。信号:扫描工具,网络发现,漏洞评估,无线安全,合规"
+when-to-use: "Use when selecting or configuring security scanning tools for authorized network discovery, vulnerability assessment, web testing, or wireless security checks."
 risk: offensive
 source: community
 author: zebbern

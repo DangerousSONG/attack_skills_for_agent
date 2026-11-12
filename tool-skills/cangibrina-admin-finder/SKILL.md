@@ -2,37 +2,41 @@
 name: cangibrina-admin-finder
 description: "cangibrina: Discovers administrative panel URLs. Signals: web scanning, vulnerability scanning, admin panel scanning, dictionary, threads."
 zh-signals: "cangibrina: 后台地址发现。信号:web扫描,漏洞扫描,后台扫描,字典,线程。"
+when-to-use: >-
+  Use when assessing a web target and you need to discover hidden administrative
+  panel URLs by brute-forcing common paths with a wordlist and configurable
+  threads.
 ---
 
 # cangibrina
 
-- 攻击大类:C41 Web漏洞扫描与验证
-- 上游仓库:https://github.com/fnk0c/cangibrina
-- 上游 License:GPL-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C41 Web Vulnerability Scanning and Validation
+- Upstream Repository: https://github.com/fnk0c/cangibrina
+- Upstream License: GPL-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/fnk0c/cangibrina && cd cangibrina
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python cangibrina.py -u https://t.com` | 后台扫描 |
-| `-u url -w wordlist.txt` | 字典 |
-| `-t 20` | 线程 |
+| `python cangibrina.py -u https://t.com` | Admin panel scanning |
+| `-u url -w wordlist.txt` | Wordlist |
+| `-t 20` | Threads |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 后台地址发现
+### Admin Panel URL Discovery
 
 ```bash
 python cangibrina.py -u https://t.com -w /usr/share/wordlists/dirb/common.txt
-# 多引擎后台爆破
+# Multi-engine admin panel brute force
 ```
 
-## 注意事项
+## Notes
 
-多引擎后台发现工具。
+A multi-engine admin panel discovery tool.

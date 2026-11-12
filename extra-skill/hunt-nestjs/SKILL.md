@@ -1,6 +1,8 @@
 ---
 name: hunt-nestjs
 description: "Hunt NestJS-specific vulnerabilities: guard bypass, decorator gaps, and microservice auth drift."
+zh-signals: "NestJS 漏洞狩猎技能，聚焦守卫绕过、装饰器缺口与微服务认证漂移。信号:NestJS,守卫绕过,装饰器,微服务,GraphQL"
+when-to-use: "Use when an authorized target is built with NestJS and exposes GraphQL endpoints, microservice transports, Swagger docs, or predictable CRUD routes that may have guard or decorator gaps."
 category: redteam
 version: 1.1.0
 revision_date: 2026-07-25

@@ -1,6 +1,8 @@
 ---
 name: api-endpoint-builder
 description: "Builds production-ready REST API endpoints with validation, error handling, authentication, and documentation. Follows best practices for security and scalability."
+zh-signals: "构建含校验、鉴权、错误处理与文档的生产级 REST API 端点。信号:REST API,端点开发,输入校验,鉴权,文档"
+when-to-use: "Use when the user asks to create or extend REST API endpoints, routes, CRUD operations, or backend features."
 category: development
 risk: safe
 source: community

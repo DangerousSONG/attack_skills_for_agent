@@ -1,6 +1,10 @@
 ---
 name: entry-point-analyzer
 description: Analyzes smart contract codebases to identify state-changing entry points for security auditing. Detects externally callable functions that modify state, categorizes them by access level (public, admin, role-restricted, contract-only), and generates structured audit reports. Excludes view/pure/read-only functions. Use when auditing smart contracts (Solidity, Vyper, Solana/Rust, Move, TON, CosmWasm) or when asked to find entry points, audit flows, external functions, access control patterns, or privileged operations.
+zh-signals: "分析智能合约代码库，识别可改变状态的外部入口函数。信号:智能合约,Solidity,入口分析,访问控制,审计"
+when-to-use: >-
+  Use when starting a smart contract security audit (Solidity, Vyper, Solana/Rust, Move,
+  TON, CosmWasm) and needing a map of state-changing entry points and access levels.
 ---
 
 # Entry Point Analyzer

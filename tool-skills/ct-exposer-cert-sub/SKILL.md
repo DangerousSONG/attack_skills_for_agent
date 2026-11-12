@@ -2,36 +2,40 @@
 name: ct-exposer-cert-sub
 description: "ct-exposer: Extracts subdomains from Certificate Transparency logs. Signals: subdomains, domain enumeration, CT log subdomain discovery."
 zh-signals: "ct-exposer: CT 日志子域提取。信号:子域名,域名枚举,CT 日志子域发现。"
+when-to-use: >-
+  Use during domain reconnaissance when you want to passively harvest subdomains
+  for a target domain from Certificate Transparency logs without sending traffic
+  to the target.
 ---
 
 # ct-exposer
 
-- 攻击大类:C02 域名与DNS侦察
-- 上游仓库:https://github.com/chris408/ct-exposer
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C02 Domain and DNS Reconnaissance
+- Upstream Repository: https://github.com/chris408/ct-exposer
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/chris408/ct-exposer && cd ct-exposer
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python ct-exposer.py -d t.com` | CT 日志子域发现 |
-| `-d domain -o out.txt` | 输出 |
+| `python ct-exposer.py -d t.com` | CT log subdomain discovery |
+| `-d domain -o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### CT 日志子域提取
+### Subdomain Extraction from CT Logs
 
 ```bash
 python ct-exposer.py -d t.com
-# 证书透明度历史子域
+# Subdomains from certificate transparency history
 ```
 
-## 注意事项
+## Notes
 
-证书透明度子域发现工具。
+A certificate transparency subdomain discovery tool.

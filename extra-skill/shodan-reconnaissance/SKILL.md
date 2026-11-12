@@ -1,6 +1,8 @@
 ---
 name: shodan-reconnaissance
 description: "Provide systematic methodologies for leveraging Shodan as a reconnaissance tool during penetration testing engagements."
+zh-signals: "提供在渗透测试中使用 Shodan 进行系统性侦察的方法论。信号:Shodan,网络空间测绘,情报收集,资产发现,侦察"
+when-to-use: "Use when leveraging Shodan as a reconnaissance tool during authorized penetration testing to discover exposed hosts, services, and assets."
 risk: offensive
 source: community
 author: zebbern

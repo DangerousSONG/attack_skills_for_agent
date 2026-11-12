@@ -1,6 +1,11 @@
 ---
 name: vmware-vcenter-attack
 description: VMware vSphere / vCenter Server external attack matrix — version fingerprinting, the high-impact CVE chain (CVE-2021-21972 vRealize unauth file upload, CVE-2021-21985 vSAN plugin RCE, CVE-2022-22954 Workspace ONE SSTI, CVE-2023-20887 Aria RCE, CVE-2024-37085 ESXi AD bypass, CVE-2023-34048 vCenter DCERPC OOB write APT-exploited), default credentials, SSO configuration disclosure, vmdir LDAP enumeration, ESXi Open SLP RCE history. ONLY for vCenter / Workspace ONE / Aria instances exposed to the internet — internal-network vCenter is out of scope per the external-only boundary. Use when recon shows port 443 with vCenter banner, `/ui` redirect, `/websso/SAML2/Metadata`, or VMware product fingerprints.
+zh-signals: "针对暴露于互联网的 VMware vSphere/vCenter 外部攻击矩阵，含版本指纹与高危 CVE 链、默认凭据与 SSO 配置泄露。信号:vCenter攻击,VMware,CVE链,外部渗透,vSphere"
+when-to-use: >-
+  Use when external recon shows vCenter/Workspace ONE/Aria fingerprints such as
+  port 443 banners, /ui redirects, or /websso/SAML2/Metadata, and the instance
+  is internet-facing.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

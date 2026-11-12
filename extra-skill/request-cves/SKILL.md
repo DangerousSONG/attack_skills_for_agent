@@ -4,6 +4,8 @@ description: |
   Generates CVE request packages from pentest findings. Reads cve-candidates.json (auto-generated at pentest completion) or findings.json directly, then produces for each qualifying vulnerability: MITRE CVE form data, GitHub Security Advisory draft, full disclosure report, and vendor notification email.
 
   Invoke manually after a pentest engagement when you have true-positive findings that warrant CVE IDs.
+zh-signals: "将渗透测试确认的漏洞整理为 CVE 申请包，包括 MITRE 表单、GitHub 公告、披露报告与厂商通知邮件。信号:CVE申请,漏洞披露,安全公告,负责任披露,渗透测试"
+when-to-use: "Use after a pentest engagement when true-positive findings need CVE IDs and responsible disclosure artifacts. Requires the researcher email as input."
 argument-hint: "<email> [pgp-key-id] [path-to-cve-candidates.json]"
 user-invocable: true
 ---

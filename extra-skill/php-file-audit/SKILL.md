@@ -1,88 +1,90 @@
 ---
 name: php-file-audit
 description: |
-  PHP 源码文件操作类漏洞审计。当在 PHP 白盒审计中需要检测文件相关漏洞时触发。
-  覆盖 5 类文件风险: 任意文件上传(类型绕过/路径穿越/二次渲染)、任意文件读取(include/fread/路径穿越)、
-  任意文件写入(日志注入/配置覆盖)、文件系统竞争(TOCTOU/符号链接)、归档提取漏洞(Zip Slip)。
-  需要 php-audit-pipeline 提供的数据流证据。
+  Audit of PHP source code for file operation vulnerabilities. Triggered during PHP white-box audits when file-related vulnerabilities need to be detected.
+  Covers 5 categories of file risk: arbitrary file upload (type bypass/path traversal/secondary rendering), arbitrary file read (include/fread/path traversal),
+  arbitrary file write (log injection/config overwrite), file system race conditions (TOCTOU/symlink), and archive extraction vulnerabilities (Zip Slip).
+  Requires data-flow evidence provided by php-audit-pipeline.
+zh-signals: "审计 PHP 源码中的文件上传、读取、写入、竞争与归档提取类漏洞。信号:PHP审计,文件上传,任意读取,路径穿越,ZipSlip"
+when-to-use: "Use during PHP white-box audits when tracing file-operation sinks such as upload, include, write, TOCTOU, or archive extraction."
 metadata:
-  tags: file upload, file read, file write, path traversal, zip slip, lfi, rfi, include, 文件上传, 任意读取, 任意写入, toctou, symlink, 路径穿越
+  tags: file upload, file read, file write, path traversal, zip slip, lfi, rfi, include, arbitrary read, arbitrary write, toctou, symlink
   category: code-audit
 ---
 
-# PHP 文件操作类漏洞源码审计
-本 skill 聚焦源码层面判断"文件操作漏洞是否成立"，核心是验证路径可控性、内容可控性和执行可达性。构造上传绕过 payload、LFI 日志投毒等运行时利用技术属于对应黑盒 exploit skill 范畴。
+# PHP File Operation Vulnerability Source Code Audit
+This skill focuses on the source code level: determining whether a "file operation vulnerability actually holds". Its core is verifying path controllability, content controllability, and execution reachability. Runtime exploitation techniques such as crafting upload bypass payloads or LFI log poisoning belong to the corresponding black-box exploit skills.
 
-## 深入参考
+## Further Reading
 
-- 5 类文件漏洞的危险模式 / 安全模式代码对比 / EVID 证据示例 → [references/file-vuln-patterns.md](references/file-vuln-patterns.md)
+- Dangerous patterns of the 5 file vulnerability categories / secure vs. insecure code comparison / EVID evidence examples → [references/file-vuln-patterns.md](references/file-vuln-patterns.md)
 
 ---
 
-## Sink 分类决策树
+## Sink Classification Decision Tree
 
-根据遇到的 Sink 函数类型，进入不同审计分支:
+Depending on the type of sink function encountered, enter a different audit branch:
 
-| Sink 函数 | 分支 | 典型严重度 |
+| Sink function | Branch | Typical severity |
 |-----------|------|-----------|
-| `move_uploaded_file`, `copy($_FILES)` | 文件上传 | Critical-High |
-| `include`/`require`/`include_once`/`require_once` | 文件读取+执行 | Critical |
-| `file_get_contents`/`readfile`/`fread`/`highlight_file` | 文件读取 | High-Medium |
-| `file_put_contents`/`fwrite`/`fopen('w')` | 文件写入 | Critical-High |
-| `ZipArchive::extractTo`/`PharData::extractTo` | 归档提取 | High |
-| `file_exists`/`is_file` + 后续操作 | 竞争条件 | Medium-High |
+| `move_uploaded_file`, `copy($_FILES)` | File upload | Critical-High |
+| `include`/`require`/`include_once`/`require_once` | File read + execution | Critical |
+| `file_get_contents`/`readfile`/`fread`/`highlight_file` | File read | High-Medium |
+| `file_put_contents`/`fwrite`/`fopen('w')` | File write | Critical-High |
+| `ZipArchive::extractTo`/`PharData::extractTo` | Archive extraction | High |
+| `file_exists`/`is_file` + subsequent operation | Race condition | Medium-High |
 
-## 文件上传审计要点
+## File Upload Audit Points
 
-上传漏洞本质是三要素同时满足: 可执行扩展名 + Web 可达存储路径 + 未被重命名/内容清洗。
+The essence of an upload vulnerability is that three conditions hold simultaneously: an executable extension + a web-reachable storage path + no renaming/content sanitization.
 
-- **扩展名验证**: 黑名单容易遗漏 `.phtml`/`.pht`/`.php5`/`.phar`/`.shtml`，白名单更安全但要检查大小写处理逻辑
-- **MIME vs Magic bytes**: `$_FILES['type']` 来自客户端完全可伪造；`finfo_file()`/`getimagesize()` 验证文件头但图片马（GIF89a + PHP 代码）可绕过
-- **存储路径可控性**: 用户是否能通过文件名中的 `../` 控制存储位置，跳出预定上传目录
-- **Web 根可达性**: 文件存储在 Web 根外则即使上传了 PHP 也无法直接执行
-- **重命名策略**: `md5(time())` 等可预测命名可被猜解，`random_bytes()` 更安全
+- **Extension validation**: blacklists easily miss `.phtml`/`.pht`/`.php5`/`.phar`/`.shtml`; whitelists are safer but the case-handling logic must be checked
+- **MIME vs. magic bytes**: `$_FILES['type']` comes from the client and is fully forgeable; `finfo_file()`/`getimagesize()` validate the file header, but image webshells (GIF89a + PHP code) can bypass them
+- **Storage path controllability**: whether the user can control the storage location via `../` in the filename and escape the intended upload directory
+- **Web root reachability**: if the file is stored outside the web root, an uploaded PHP file cannot be executed directly even if the upload succeeds
+- **Renaming strategy**: predictable naming such as `md5(time())` can be guessed, while `random_bytes()` is safer
 
-## 文件读取/包含审计要点
+## File Read / Include Audit Points
 
-`include` 系列既读取又执行，危害远大于纯读取函数:
+The `include` family both reads and executes, so its impact is far greater than that of pure read functions:
 
-- **路径拼接模式**: `include($dir . '/' . $page . '.php')` — 检查 `$page` 是否用户可控，`../` 穿越是否被过滤
-- **%00 截断**: PHP < 5.3.4 可用 null 字节截断 `.php` 后缀；高版本已修复但审计遗留系统时仍需关注
-- **Wrapper 利用**: `php://filter/convert.base64-encode/resource=` 读取源码、`php://input` 注入代码、`data://` 执行 payload
-- **RFI 条件**: `allow_url_include=On` 时远程文件包含成立，检查 `php.ini` 配置
-- **纯读取函数**: `file_get_contents`/`readfile` 虽不执行但可泄露敏感配置（数据库密码、API Key）
+- **Path concatenation pattern**: `include($dir . '/' . $page . '.php')` — check whether `$page` is user-controllable and whether `../` traversal is filtered
+- **%00 truncation**: PHP < 5.3.4 allows null byte truncation of the `.php` suffix; fixed in newer versions, but still worth watching when auditing legacy systems
+- **Wrapper abuse**: `php://filter/convert.base64-encode/resource=` to read source code, `php://input` to inject code, `data://` to execute payloads
+- **RFI conditions**: remote file inclusion holds when `allow_url_include=On`; check the `php.ini` configuration
+- **Pure read functions**: `file_get_contents`/`readfile` do not execute, but they can leak sensitive configuration (database passwords, API keys)
 
-## 文件写入审计要点
+## File Write Audit Points
 
-写入漏洞需要三要素: 路径可控 + 内容可控 + 写入文件可被执行。
+Write vulnerabilities require three conditions: controllable path + controllable content + the written file is executable.
 
-- **直接写 shell**: `file_put_contents($path, $content)` 中两个参数都用户可控时，直接写入 Webshell
-- **日志注入链**: 日志记录用户输入 → 日志文件被 `include` 加载 → 间接代码执行。审查日志路径是否可预测、内容是否被过滤
-- **配置文件覆盖**: 写入 `.htaccess`（使 `.jpg` 被解析为 PHP）或 PHP 配置文件（注入代码到 `<?php return [...];`）
-- **Session 文件利用**: `session.save_path` 下的 session 文件内容部分用户可控，配合 LFI 实现 RCE
+- **Direct shell write**: when both arguments of `file_put_contents($path, $content)` are user-controllable, a webshell is written directly
+- **Log injection chain**: user input is logged → the log file is loaded via `include` → indirect code execution. Review whether the log path is predictable and whether the content is filtered
+- **Configuration file overwrite**: write `.htaccess` (making `.jpg` be parsed as PHP) or PHP configuration files (injecting code into `<?php return [...];`)
+- **Session file abuse**: session file content under `session.save_path` is partially user-controllable, and combined with LFI this yields RCE
 
-## 归档提取审计要点
+## Archive Extraction Audit Points
 
-- **Zip Slip**: `ZipArchive::extractTo()` 不验证条目名称中的 `../../`，恶意归档可向任意目录写文件
-- **PharData**: 与 ZipArchive 同理，`extractTo()` 存在路径穿越风险
-- **安全解压**: 解压前遍历条目名称，拒绝包含 `..` 的路径；或解压到临时目录后逐文件校验移动
+- **Zip Slip**: `ZipArchive::extractTo()` does not validate `../../` in entry names, so a malicious archive can write files to arbitrary directories
+- **PharData**: same as ZipArchive, `extractTo()` is vulnerable to path traversal
+- **Safe extraction**: iterate over entry names before extracting and reject paths containing `..`; or extract to a temporary directory and then verify and move each file
 
-## 竞争条件审计要点
+## Race Condition Audit Points
 
-- **TOCTOU**: `is_file($path)` 检查通过后、`unlink($path)` 执行前，攻击者替换文件为符号链接 → 删除任意文件
-- **上传竞争**: 文件先保存再校验删除，窗口期内发起大量并发请求访问已上传的 PHP 文件
-- **符号链接跟随**: `file_get_contents($userPath)` 若 `$userPath` 是符号链接则读取链接目标文件，绕过目录限制
-- **原子操作**: `rename()` 是原子操作可用于安全替换；先写临时文件再 `rename` 到目标位置可避免竞争
+- **TOCTOU**: after `is_file($path)` passes the check and before `unlink($path)` executes, the attacker replaces the file with a symlink → arbitrary file deletion
+- **Upload race**: the file is saved first and validated/deleted afterwards; within that window, send a large number of concurrent requests to access the uploaded PHP file
+- **Symlink following**: `file_get_contents($userPath)` reads the link target if `$userPath` is a symlink, bypassing directory restrictions
+- **Atomic operations**: `rename()` is atomic and can be used for safe replacement; writing to a temporary file and then `rename`ing it to the target location avoids the race
 
-## 检测清单
+## Detection Checklist
 
-- [ ] 所有文件类 EVID_* 证据点已逐一审查
-- [ ] 上传功能的扩展名验证方式已确认（白名单 vs 黑名单 vs 无验证）
-- [ ] 上传存储路径是否在 Web 根内、是否可直接访问已验证
-- [ ] include/require 的路径参数来源和过滤逻辑已追踪
-- [ ] php://filter 等 Wrapper 在当前配置下的可利用性已评估
-- [ ] file_put_contents/fwrite 的路径和内容来源已追踪
-- [ ] 归档解压函数的条目名称校验已检查
-- [ ] TOCTOU 模式（检查→操作间隔）已识别
-- [ ] 过滤不充分的点已给出绕过思路或标"待验证"
-- [ ] 严重度评分使用了统一公式，与 pipeline 一致
+- [ ] All file-related EVID_* evidence points have been reviewed one by one
+- [ ] The extension validation method of the upload feature has been confirmed (whitelist vs. blacklist vs. no validation)
+- [ ] Whether the upload storage path is inside the web root and directly reachable has been verified
+- [ ] The source of path parameters and the filtering logic of include/require have been traced
+- [ ] The exploitability of wrappers such as php://filter under the current configuration has been assessed
+- [ ] The path and content sources of file_put_contents/fwrite have been traced
+- [ ] Entry name validation of archive extraction functions has been checked
+- [ ] TOCTOU patterns (the interval between check and operation) have been identified
+- [ ] Insufficient filtering points have been given a bypass idea or marked "to be verified"
+- [ ] Severity scoring used the unified formula, consistent with the pipeline

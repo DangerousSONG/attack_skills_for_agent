@@ -1,6 +1,8 @@
 ---
 name: wp-plugin-rest-auth-bypass
 description: Scan WordPress REST API plugin endpoints for unauthenticated state-changing operations — discover write endpoints (POST/PUT/PATCH/DELETE) exposed without auth, enumerate all plugin routes, and test for unauthorized content publishing, settings modification, and data leakage.
+zh-signals: "扫描 WordPress 插件 REST API 端点，发现未授权可写接口并测试越权发布、配置修改与数据泄露。信号:WordPress,REST API,未授权访问,插件漏洞,接口枚举"
+when-to-use: "Use when targeting a WordPress site with exposed /wp-json routes and you suspect plugin endpoints lack permission callbacks."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

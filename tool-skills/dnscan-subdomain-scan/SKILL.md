@@ -2,38 +2,42 @@
 name: dnscan-subdomain-scan
 description: "dnscan: recursive subdomain brute-forcing. Signals: subdomain, domain enumeration, dictionary subdomain brute force, threads, recursive scan after discovered subdomains."
 zh-signals: "dnscan: 递归子域爆破。信号:子域名,域名枚举,字典爆破子域,线程,发现子域后递归扫。"
+when-to-use: >-
+  Use when brute-forcing subdomains from a dictionary and recursively scanning
+  newly discovered subdomains; set a wordlist and enable recursive mode for
+  deep subdomain coverage.
 ---
 
 # dnscan
 
-- 攻击大类:C02 域名与DNS侦察
-- 上游仓库:https://github.com/rbsec/dnscan
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C02 Domain and DNS Reconnaissance
+- Upstream Repository: https://github.com/rbsec/dnscan
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/rbsec/dnscan && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python dnscan.py -d target.com -w wordlist.txt` | 字典爆破子域 |
-| `-d domain -w subs.txt -t 30` | 线程 |
-| `-D` | 发现子域后递归扫 |
-| `-o out.txt` | 输出 |
-| `-x example.com` | 排除域名 |
+| `python dnscan.py -d target.com -w wordlist.txt` | Wordlist subdomain brute force |
+| `-d domain -w subs.txt -t 30` | Threads |
+| `-D` | Recursively scan subdomains once they are discovered |
+| `-o out.txt` | Output |
+| `-x example.com` | Exclude domain |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 递归子域爆破
+### Recursive subdomain brute force
 
 ```bash
 python dnscan.py -d corp.com -w subdomains-top1mil.txt -D -o found.txt
 ```
 
-## 注意事项
+## Notes
 
-递归模式(-D)对深度子域(如 dev.us.corp.com)有效;支持通配符检测。
+Recursive mode (-D) works well for deep subdomains such as dev.us.corp.com; wildcard detection is supported.

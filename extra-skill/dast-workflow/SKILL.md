@@ -1,6 +1,11 @@
 ---
 name: dast-workflow
 description: Dynamic Application Security Testing workflow — OWASP ZAP automation (baseline/full/API scans), Burp Suite Professional playbooks, Burp Collaborator for out-of-band detection, auth-state orchestration, and CI integration with scope-safe active scanning.
+zh-signals: "动态应用安全测试工作流，编排 OWASP ZAP 自动化扫描、Burp 协作与鉴权状态、CI 集成及安全范围内的主动扫描。信号:DAST,动态扫描,ZAP,Burp,CI集成"
+when-to-use: >-
+  Use when setting up or running DAST against a staging-style environment,
+  automating ZAP baseline/full/API scans, handling authenticated scans, or
+  integrating DAST in CI.
 ---
 
 # DAST Workflow

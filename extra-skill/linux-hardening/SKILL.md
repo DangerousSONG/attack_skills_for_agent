@@ -1,6 +1,8 @@
 ---
 name: linux-hardening
 description: Apply CIS benchmarks and secure Linux servers.
+zh-signals: "依据 CIS 基准加固 Linux 服务器，覆盖系统配置与安全最佳实践。信号:Linux加固,CIS基准,服务器安全,安全配置"
+when-to-use: "Use when applying CIS benchmarks or hardening security best practices to Linux servers in an authorized environment."
 category: security
 risk: critical
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

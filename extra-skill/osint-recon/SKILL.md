@@ -1,6 +1,8 @@
 ---
 name: osint-recon
 description: "Gather and correlate open source intelligence from public sources for authorized investigations, threat intelligence, and attack surface assessment. Use when the user mentions 'OSINT,' 'open source intelligence,' 'digital footprint,' 'public records,' 'threat intelligence,' 'investigate a domain,' or needs to research a target using publicly available data."
+zh-signals: "从公开来源收集并关联开源情报，用于授权调查、威胁情报与攻击面评估。信号:OSINT,开源情报,数字足迹,公开记录,威胁情报"
+when-to-use: "Use for authorized investigations, threat intelligence, or attack surface assessment that rely on publicly available data such as domains, organizations, leaked data, and historical artifacts."
 allowed-tools: Bash, WebSearch, WebFetch, Read, Write
 ---
 

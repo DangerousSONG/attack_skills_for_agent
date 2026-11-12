@@ -1,6 +1,8 @@
 ---
 name: mtls-configuration
 description: "Configure mutual TLS (mTLS) for zero-trust service-to-service communication. Use when implementing zero-trust networking, certificate management, or securing internal service communication."
+zh-signals: "配置面向零信任服务间通信的双向 TLS（mTLS）与证书管理。信号:mTLS,零信任,证书管理,服务网格,TLS"
+when-to-use: "Use when implementing zero-trust service-to-service communication, certificate rotation, or debugging mutual TLS handshakes."
 risk: critical
 source: community
 date_added: "2026-02-27"

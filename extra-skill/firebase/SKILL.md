@@ -3,6 +3,9 @@ name: firebase
 description: Firebase gives you a complete backend in minutes - auth, database,
   storage, functions, hosting. But the ease of setup hides real complexity.
   Security rules are your last line of defense, and they're often wrong.
+zh-signals: "覆盖 Firebase 认证、Firestore、实时数据库、云函数与存储的安全规则与数据建模。信号:Firebase,Firestore,安全规则,云函数,Firebase认证。"
+when-to-use: >-
+  Use when building or reviewing a Firebase application using Authentication, Firestore, Realtime Database, Cloud Functions, Cloud Storage, or Hosting, especially to validate security rules and data modeling.
 risk: critical
 source: vibeship-spawner-skills (Apache 2.0)
 date_added: 2026-02-27

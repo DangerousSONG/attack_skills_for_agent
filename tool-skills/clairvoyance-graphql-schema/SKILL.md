@@ -2,37 +2,40 @@
 name: clairvoyance-graphql-schema
 description: "clairvoyance: Collects information from introspection-disabled GraphQL. Signals: API attack, interface testing, authenticated requests, dictionary enhancement."
 zh-signals: "clairvoyance: 关闭内省的 GraphQL 信息收集。信号:api攻击,接口测试,带认证,字典增强。"
+when-to-use: >-
+  Use when a GraphQL endpoint has introspection disabled and you need to
+  reconstruct the schema via field guessing and error differences.
 ---
 
 # clairvoyance
 
-- 攻击大类:C10 API与业务逻辑攻击
-- 上游仓库:https://github.com/nikitastupin/clairvoyance
-- 上游 License:Apache-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C10 API and Business Logic Attacks
+- Upstream Repository: https://github.com/nikitastupin/clairvoyance
+- Upstream License: Apache-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install clairvoyance
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python -m clairvoyance https://t.com/graphql -o schema.json` | 关 introspection 时还原 schema |
-| `-H 'Authorization: Bearer x'` | 带认证 |
-| `-w wordlist.txt` | 字典增强 |
+| `python -m clairvoyance https://t.com/graphql -o schema.json` | Reconstruct schema when introspection is disabled |
+| `-H 'Authorization: Bearer x'` | With authentication |
+| `-w wordlist.txt` | Wordlist enhancement |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 关闭内省的 GraphQL 信息收集
+### Information gathering against GraphQL with introspection disabled
 
 ```bash
 python -m clairvoyance https://api.target.com/graphql -o schema.graphql
-# 通过字段猜测+错误信息差异重建完整 schema
+# Rebuild the full schema via field guessing and error message differences
 ```
 
-## 注意事项
+## Notes
 
-introspection 被禁时的 schema 重建;输出可直接导入 GraphQLmap/Burp。
+Schema reconstruction when introspection is blocked; the output can be imported directly into GraphQLmap/Burp.

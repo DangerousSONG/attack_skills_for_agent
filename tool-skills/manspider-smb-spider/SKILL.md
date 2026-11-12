@@ -2,38 +2,39 @@
 name: manspider-smb-spider
 description: "MANSPIDER: Internet-wide SMB sensitive file harvesting. Signals: internal network enumeration, network discovery, secret files, extensions."
 zh-signals: "MANSPIDER: 全网 SMB 敏感文件收割。信号:内网枚举,网络发现,secret'`,扩展名。"
+when-to-use: "Use MANSPIDER when you have SMB access to a network or domain and need to crawl shares at scale to locate sensitive files by content keywords or extensions, such as credentials in config files during internal enumeration."
 ---
 
 # MANSPIDER
 
-- 攻击大类:C29 内网发现与枚举
-- 上游仓库:https://github.com/blacklanternsecurity/MANSPIDER
-- 上游 License:AGPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C29 Internal Network Discovery and Enumeration
+- Upstream Repository: https://github.com/blacklanternsecurity/MANSPIDER
+- Upstream License: AGPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install man-spider
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `man-spider 10.0.0.0/24 -f 'password|secret'` | SMB 文件内容搜索 |
-| `-e txt,xml,config` | 扩展名 |
-| `-u admin -p pass -d corp.local` | 凭据 |
-| `-t 50` | 线程 |
+| `man-spider 10.0.0.0/24 -f 'password|secret'` | SMB file content search |
+| `-e txt,xml,config` | Extensions |
+| `-u admin -p pass -d corp.local` | Credentials |
+| `-t 50` | Threads |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 全网 SMB 敏感文件收割
+### Internet-wide SMB sensitive file harvesting
 
 ```bash
 man-spider 10.0.0.0/24 -f 'passw|secret|cred' -e txt,xml,ini,config
-# 域内共享搜密码,Black Lantern 出品
+# Search in-domain shares for passwords; by Black Lantern
 ```
 
-## 注意事项
+## Notes
 
-SMB 共享批量爬取+内容匹配,域内凭据发现神器。
+Batch crawling and content matching across SMB shares, a powerful tool for finding in-domain credentials.

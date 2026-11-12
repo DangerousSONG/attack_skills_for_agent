@@ -1,6 +1,10 @@
 ---
 name: idor-hunter
 description: Systematic IDOR/BOLA detection methodology recon, multi-account testing, bypass techniques, and report structure. Trigger when the user asks to test authorization controls or object-level access restrictions, wants to hunt for IDOR or BOLA on an API or web app, needs a structured methodology for multi-account access testing, is doing a bug bounty or pentest and wants to maximize IDOR coverage, or asks if they can access another user's data or whether authorization is enforced server-side.
+zh-signals: "系统化的 IDOR/BOLA 检测方法论，覆盖侦察、多账户测试、绕过技巧与报告结构。信号:IDOR,BOLA,越权访问,多账户测试,对象级授权"
+when-to-use: >-
+  Use when testing authorization controls or object-level access restrictions, hunting IDOR/BOLA
+  on an API or web app, or checking whether data access is enforced server-side.
 ---
 
 # IDOR / BOLA Detection Skill

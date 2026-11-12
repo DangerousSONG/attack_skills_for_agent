@@ -1,6 +1,8 @@
 ---
 name: hunt-springboot
 description: Hunt Spring Boot specific vulnerabilities
+zh-signals: "针对 Spring Boot 应用的专项漏洞狩猎方法。信号:Spring Boot,漏洞狩猎,Actuator,Java安全,渗透测试"
+when-to-use: "Use when hunting Spring Boot specific vulnerabilities on an authorized target, including Actuator exposure and known Spring advisories."
 category: security
 risk: offensive
 source: https://github.com/elementalsouls/Claude-BugHunter

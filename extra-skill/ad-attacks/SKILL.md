@@ -1,6 +1,8 @@
 ---
 name: ad-attacks
 description: Active Directory attack paths — BloodHound path analysis, Kerberos abuse (Kerberoasting/AS-REP roasting/silver/golden ticket classes), delegation flaws (unconstrained/constrained/RBCD), DCSync, ADCS ESC1-8 at pattern level, and Tier-0 hygiene as a defensive model.
+zh-signals: "梳理 Active Directory 攻击路径，涵盖 BloodHound 分析、Kerberos 滥用、委派缺陷、DCSync 与 ADCS 攻击模式。信号:Active Directory,BloodHound,Kerberos,委派,DCSync"
+when-to-use: "Use when internal AD is in scope and you hold a domain foothold, or when triaging BloodHound output, Kerberoasting, delegation flaws, ADCS attack paths, or Tier-0 design."
 ---
 
 # AD Attack Paths

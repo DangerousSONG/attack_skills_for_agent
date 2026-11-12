@@ -1,6 +1,8 @@
 ---
 name: hpp-hunter
 description: Complete HTTP Parameter Pollution methodology server behavior fingerprinting, server-side and client-side HPP, WAF bypass via parameter splitting, OAuth/payment/access-control abuse, header and JSON body pollution, and report structure. Trigger when the user wants to test for HTTP Parameter Pollution, is trying to bypass a WAF with a known-blocked payload, sees a payment/role/redirect parameter and wants to test override attacks, or is testing OAuth flows for redirect_uri manipulation.
+zh-signals: "HTTP 参数污染（HPP）完整方法论。信号:HPP,参数污染,WAF绕过,OAuth,访问控制"
+when-to-use: "Use when testing for HTTP parameter pollution, attempting WAF bypass via parameter splitting, or probing payment, role, or redirect parameters and OAuth redirect_uri overrides."
 metadata:
   version: "1.0.0"
   author: Rifteo

@@ -1,6 +1,10 @@
 ---
 name: hunt-subdomain
 description: Hunting skill for subdomain takeover vulnerabilities.
+zh-signals: "子域名接管漏洞狩猎，识别指向可被接管的第三方服务的 DNS 记录。信号:子域名接管,DNS,CNAME,悬空记录,资产测绘"
+when-to-use: >-
+  Use when hunting subdomain takeover on an authorized scope, especially for dangling
+  CNAME or NS records pointing to deprovisioned SaaS, CDN, or hosting services.
 category: security
 risk: offensive
 source: https://github.com/elementalsouls/Claude-BugHunter

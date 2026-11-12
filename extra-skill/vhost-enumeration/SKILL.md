@@ -1,6 +1,10 @@
 ---
 name: vhost-enumeration
 description: Discover hidden virtual hosts via Host header fuzzing and SSL certificate parsing.
+zh-signals: "通过 Host 头爆破与 SSL 证书解析发现隐藏虚拟主机，暴露同一 IP 上的内部服务与管理面板。信号:虚拟主机枚举,VHost,Host头爆破,SSL证书,信息收集"
+when-to-use: >-
+  Use when you have target IPs and need to discover hidden virtual hosts behind a
+  reverse proxy via Host header fuzzing or SSL certificate SAN parsing.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

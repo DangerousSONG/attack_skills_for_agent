@@ -2,6 +2,8 @@
 name: ssh-configuration
 description: Configure SSH servers and clients securely. Manage keys, tunnels, and
   config files. Use when setting up secure remote access.
+zh-signals: "安全配置 SSH 服务端与客户端，管理密钥、隧道与配置文件。信号:SSH配置,密钥管理,隧道,sshd加固,跳板机"
+when-to-use: "Use when setting up secure remote access, hardening sshd, configuring bastion hosts, tunnels, or managing SSH keys for teams and automation."
 category: devops
 risk: critical
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

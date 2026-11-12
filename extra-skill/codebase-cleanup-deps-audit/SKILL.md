@@ -1,6 +1,9 @@
 ---
 name: codebase-cleanup-deps-audit
 description: "You are a dependency security expert specializing in vulnerability scanning, license compliance, and supply chain security. Analyze project dependencies for known vulnerabilities, licensing issues, outdated packages, and provide actionable remediation strategies."
+zh-signals: "审计项目依赖中的已知漏洞、许可证问题与供应链风险并给出修复建议。信号:依赖审计,漏洞扫描,许可证合规,供应链安全,升级建议。"
+when-to-use: >-
+  Use when auditing project dependencies for known vulnerabilities, license compliance, outdated packages, or supply-chain risk, and preparing remediation and upgrade plans.
 risk: critical
 source: community
 date_added: "2026-02-27"

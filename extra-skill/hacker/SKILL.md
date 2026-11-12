@@ -2,6 +2,9 @@
 name: hacker
 description: >-
   Cursor-native offensive security engagement and exploitability autoresearch orchestrator inspired by offensive-claude. Use for an authorized offensive engagement, red-team or pentest workflow, Kill Chain style assessment, scoped web/network/cloud/mobile/AD/bug-bounty offensive plan, or exploitability validation of defensive findings. In validate-findings mode it runs a bounded, user-controlled autoresearch loop over deduplicated findings: several hypothesis passes / cycles of hypothesize, experiment, observe, refine. Use it whenever the user asks to run an autoresearch loop, an iterative or multi-pass hypothesis loop, or to loop or iterate over findings for a set number of cycles. Supports engagement mode and validate-findings mode. Instruction-only: ships no scanners, exploit runners, payload builders, or local scripts.
+zh-signals: "面向授权攻防演练的编排框架，支持 Kill Chain 评估与漏洞可利用性验证循环。信号:攻防演练,红队,渗透测试,Kill Chain,可利用性验证"
+when-to-use: >-
+  Use for an authorized offensive engagement, red-team or pentest workflow, or a bounded exploitability validation loop over deduplicated findings.
 ---
 
 # Hacker

@@ -1,6 +1,10 @@
 ---
 name: redteam-report-template
 description: Client-facing red-team deliverable format — codifies the Subject / Observations / Description / Impact / Recommendation / PoC structure used for external red-team engagements (not bug-bounty platform reports). Different audience, different tone, different cadence. Built from an authorized engagement deliverable where 14 findings were packaged into a 52KB MD + 2.2MB DOCX with 16 embedded screenshots. Use when the engagement is "external red team for an enterprise client" (not H1/Bugcrowd/Intigriti), when generating the final report, when the client has specified a custom report format, or when packaging findings into DOCX/PDF.
+zh-signals: "面向客户的红队交付报告格式，规范 Subject/Observations/Description/Impact/Recommendation/PoC 结构。信号:红队报告,渗透测试报告,报告模板,docx"
+when-to-use: >-
+  Use for client-deliverable red-team or pentest reports with a signed engagement,
+  when a custom report format is specified, or when packaging findings into DOCX/PDF.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

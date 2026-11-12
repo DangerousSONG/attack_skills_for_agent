@@ -1,6 +1,10 @@
 ---
 name: changelog-entry
 description: Generate a properly formatted CHANGELOG.md entry in Keep a Changelog format from a commit range or PR. Groups changes into Added/Changed/Deprecated/Removed/Fixed/Security categories and outputs a ready-to-paste block.
+zh-signals: "按 Keep a Changelog 格式从提交范围或 PR 生成规范化的 CHANGELOG.md 条目。信号:变更日志,CHANGELOG,发布说明,git,Keep a Changelog"
+when-to-use: >-
+  Use before a release or after merging a PR when the user asks to update the
+  changelog, write a changelog entry, or summarize what changed in a version.
 risk: safe
 source: self
 source_type: self

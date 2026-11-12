@@ -1,6 +1,8 @@
 ---
 name: secrets-scanner
 description: Detect and remediate leaked credentials in code and git-history — entropy/regex scanning with gitleaks/trufflehog/detect-secrets, rotate-first incident response, and pre-commit/CI gating to prevent reoccurrence.
+zh-signals: "检测并处置代码与 git 历史中的泄露凭据，含熵/正则扫描、轮换优先响应与预提交/CI 门禁。信号:凭据泄露,密钥扫描,gitleaks,git 历史,轮换"
+when-to-use: "Use when responding to a suspected leaked credential, scanning a repository or git history for secrets, or setting up pre-commit and CI secret gates."
 ---
 
 # Secrets Scanner

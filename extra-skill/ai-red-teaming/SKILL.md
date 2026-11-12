@@ -2,6 +2,8 @@
 name: ai-red-teaming
 description: Run structured AI red team exercises for jailbreak resistance, data exfiltration
   risk, harmful output controls, and agent tool abuse resilience.
+zh-signals: "开展结构化 AI 红队演练，评估越狱抵抗力、数据外泄风险、有害输出控制与 agent 工具滥用韧性。信号:AI红队,越狱,数据外泄,有害输出,工具滥用,LLM安全"
+when-to-use: "Use when running structured AI red-team exercises for jailbreak resistance, data exfiltration risk, harmful output controls, and agent tool-abuse resilience."
 category: security
 risk: offensive
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

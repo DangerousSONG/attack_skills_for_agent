@@ -1,6 +1,8 @@
 ---
 name: hunt-wordpress
 description: Use when an authorized target exposes WordPress core, plugin, theme, REST, or XML-RPC behavior.
+zh-signals: "WordPress 安全评估技能，测绘核心、REST、XML-RPC、插件与主题并定位认证边界后开展测试。信号:WordPress,REST,XML-RPC,插件漏洞,安全评估"
+when-to-use: "Use when an authorized target exposes WordPress core, plugin, theme, REST, or XML-RPC behavior, and you need to map the attack surface before selecting a vulnerability-specific test."
 version: 3.0.0
 license: MIT
 platforms: [linux, macos]

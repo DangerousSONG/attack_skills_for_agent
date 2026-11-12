@@ -1,6 +1,9 @@
 ---
 name: astro-security
 description: Astro security review — render-mode attack surface (SSG/SSR/hybrid), set:html and MDX content collections (XSS + author trust), API routes and middleware (auth, scope), adapter-specific runtime models (Cloudflare/Vercel/Netlify/Node), env-var hygiene (PUBLIC_ prefix), and Decap CMS pairing (OAuth backend, token storage, branch-based editorial workflow).
+zh-signals: "审查 Astro 应用在渲染模式、set:html、API 路由、适配器与 Decap CMS 方面的安全风险。信号:Astro安全,set:html,SSR/SSG,API路由,Decap CMS。"
+when-to-use: >-
+  Use when reviewing an Astro application's security posture across render modes, set:html and MDX content, API routes and middleware, adapter runtimes, env-var exposure, or Decap CMS integration.
 ---
 
 # Astro Security

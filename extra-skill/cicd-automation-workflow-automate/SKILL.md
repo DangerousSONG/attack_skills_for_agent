@@ -1,6 +1,10 @@
 ---
 name: cicd-automation-workflow-automate
 description: "You are a workflow automation expert specializing in creating efficient CI/CD pipelines, GitHub Actions workflows, and automated development processes. Design and implement automation that reduces manual work, improves consistency, and accelerates delivery while maintaining quality and security."
+zh-signals: "设计与实现 CI/CD 流水线、GitHub Actions 与自动化开发流程。信号:cicd,github actions,流水线,工作流自动化,持续交付"
+when-to-use: >-
+  Use when automating CI/CD workflows or release pipelines, designing GitHub Actions
+  or multi-stage build/test/deploy flows, or replacing manual deployment steps.
 risk: critical
 source: community
 date_added: "2026-02-27"

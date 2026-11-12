@@ -1,115 +1,119 @@
 ---
 name: k8s-sidecar-attack
-description: "Kubernetes Sidecar 容器流量劫持与敏感信息窃取。当目标 Pod 存在 Istio/Envoy/Linkerd sidecar、题目提到'隐形旁观者'或'共享网络'、或需要从 Pod 内部嗅探流量时使用。覆盖 tcpdump 抓包、sidecar 明文流量捕获、共享网络命名空间利用。只要在 K8s Pod 中发现有 sidecar 或多容器共存的迹象，就应使用此技能"
+description: "Kubernetes Sidecar container traffic hijacking and sensitive information theft. Use when the target pod contains an Istio/Envoy/Linkerd sidecar, the challenge mentions a 'hidden bystander' or a 'shared network', or you need to sniff traffic from inside the pod. Covers tcpdump packet capture, plaintext sidecar traffic capture, and shared network namespace abuse. Use this skill whenever you find signs of a sidecar or multiple co-located containers in a K8s pod"
+zh-signals: "在 Kubernetes Pod 内利用共享网络命名空间抓取 sidecar 明文流量并窃取敏感信息。信号:k8s,sidecar,istio,tcpdump,流量劫持,抓包"
+when-to-use: >-
+  Use when a pod contains an Istio/Envoy/Linkerd sidecar or multiple containers share a
+  network namespace, and you need to sniff internal traffic from inside the pod.
 metadata:
-  tags: "k8s,kubernetes,sidecar,istio,envoy,tcpdump,traffic,sniffing,流量劫持,抓包"
+  tags: "k8s,kubernetes,sidecar,istio,envoy,tcpdump,traffic,sniffing,traffic-hijacking,packet-capture"
   category: "cloud"
 ---
 
-# Kubernetes Sidecar 流量劫持
+# Kubernetes Sidecar Traffic Hijacking
 
-同一 Pod 内的所有容器共享网络命名空间——这是 K8s 的设计决定，也是攻击者的福音。Sidecar 容器（如 Istio Envoy）发送的流量可以被同 Pod 的任何容器通过 tcpdump 直接抓取，因为它们共享同一张网卡。
+All containers within the same pod share a network namespace — this is a K8s design decision and a blessing for attackers. Traffic sent by a sidecar container (such as Istio Envoy) can be captured directly with tcpdump by any container in the same pod, because they share the same network interface.
 
 ```
-Pod 网络命名空间（共享）
+Pod network namespace (shared)
 ┌──────────────────────────────────┐
-│  [你的容器]  ←── 同一网卡 ──→  [Sidecar]  │
+│  [your container]  ←── same NIC ──→  [Sidecar]  │
 │       ↓                        ↓       │
-│    tcpdump 能抓到 sidecar 的所有流量        │
+│    tcpdump captures all of the sidecar's traffic        │
 └──────────────────────────────────┘
 ```
 
 ---
 
-## Phase 1: 检测 Sidecar
+## Phase 1: Detect the Sidecar
 
 ```bash
-# 最可靠：看进程列表中有没有 envoy / pilot-agent / linkerd-proxy
+# Most reliable: look for envoy / pilot-agent / linkerd-proxy in the process list
 ps aux 2>/dev/null | grep -E 'envoy|pilot-agent|linkerd'
-# 看到 envoy 或 pilot-agent → 确认 Istio sidecar 存在
+# Seeing envoy or pilot-agent → confirms an Istio sidecar exists
 
-# 环境变量（Istio 注入后会设置这些）
+# Environment variables (set after Istio injection)
 env | grep -i istio
-# ISTIO_META_* 开头的变量 → 确认 Istio
+# Variables starting with ISTIO_META_* → confirm Istio
 
-# 网络接口（辅助判断，不能单独确认）
+# Network interfaces (supporting signal, cannot confirm on its own)
 ip addr
-# 看到 istio0 / lo 以外的多个接口 → 可能有 sidecar，需结合上面确认
+# Seeing multiple interfaces besides istio0 / lo → a sidecar may be present, confirm with the checks above
 
-# DNS 配置
-cat /etc/resolv.conf  # search 行包含 istio 相关条目
+# DNS configuration
+cat /etc/resolv.conf  # the search lines contain istio-related entries
 ```
 
 ---
 
-## Phase 2: 流量抓包
+## Phase 2: Traffic Capture
 
-Sidecar 内部通常使用 HTTP 明文通信（mTLS 在 Envoy 层终止后再转发），所以 tcpdump 能直接看到请求内容。
+Sidecars usually use plaintext HTTP internally (mTLS terminates at the Envoy layer and is then forwarded), so tcpdump can directly reveal request contents.
 
-### 基本抓包
+### Basic Capture
 
 ```bash
-# 全流量抓包（-A 显示 ASCII，能直接看到 HTTP 内容）
+# Capture all traffic (-A prints ASCII so you can see HTTP content directly)
 tcpdump -A -vvv
 
-# 只抓 HTTP 流量（减少噪音）
+# Capture only HTTP traffic (less noise)
 tcpdump -A -s 0 'tcp port 80 or tcp port 8080'
 
-# 直接过滤敏感关键词
+# Filter directly for sensitive keywords
 tcpdump -A -s 0 | grep -i -A5 'flag\|secret\|password\|token\|key'
 
-# 保存 pcap 后续用 Wireshark 分析
+# Save a pcap for later analysis with Wireshark
 tcpdump -w /tmp/capture.pcap -c 1000
 ```
 
-### 针对性抓包
+### Targeted Capture
 
 ```bash
-# 抓特定服务的流量
+# Capture traffic of a specific service
 tcpdump -A host <target-service-ip>
 
-# 抓 POST 请求体（通常 credential 在 POST body 里）
+# Capture POST request bodies (credentials usually live in the POST body)
 tcpdump -A -s 0 'tcp dst port 80' | grep -A 20 'POST'
 ```
 
 ---
 
-## Phase 3: 分析结果
+## Phase 3: Analyze the Results
 
-抓到的流量中寻找：
+Look for the following in the captured traffic:
 
-1. **HTTP 请求/响应体** — flag、token、credential
-2. **Authorization Header** — Bearer token、Basic auth
-3. **Cookie** — session ID
-4. **POST body** — 表单数据、JSON payload
-5. **Service 间通信** — 内部 API 调用暴露的敏感数据
+1. **HTTP request/response bodies** — flags, tokens, credentials
+2. **Authorization headers** — Bearer tokens, Basic auth
+3. **Cookies** — session IDs
+4. **POST bodies** — form data, JSON payloads
+5. **Service-to-service communication** — sensitive data exposed by internal API calls
 
 ---
 
-## 无 tcpdump 时的替代方案
+## Alternatives When tcpdump Is Unavailable
 
 ```bash
-# 查看当前活跃连接（推断有哪些服务在通信）
+# Inspect current active connections (infer which services are communicating)
 cat /proc/net/tcp
 cat /proc/net/tcp6
 ss -tlnp
 netstat -tlnp 2>/dev/null
 
-# 如果有 socat，可以做端口转发中间人抓取经过的流量
+# If socat is available, you can do port forwarding and intercept traffic as a man-in-the-middle
 socat -v TCP-LISTEN:8080,fork TCP:<target-svc>:80
-# -v 会在 stderr 打印双向流量内容
+# -v prints both directions of traffic to stderr
 ```
 
 ---
 
-## 注意事项
+## Notes
 
-- 流量可能是**周期性的**（cron job、定时上报），需要持续监听至少 **30-60 秒**
-- 关注 `reporting-service`、`metrics`、`webhook` 等命名的服务请求
-- 如果抓到的全是加密流量，说明 mTLS 没在 sidecar 层终止——换思路，尝试 `Skill(skill="k8s-istio-bypass")` 绕过策略
+- Traffic may be **periodic** (cron job, scheduled reporting), so keep listening for at least **30-60 seconds**
+- Pay attention to requests for services named `reporting-service`, `metrics`, `webhook`, and similar
+- If everything you capture is encrypted, mTLS is not being terminated at the sidecar layer — change approach and try `Skill(skill="k8s-istio-bypass")` to bypass the policy
 
-## 相关技能
+## Related Skills
 
-- 还没做服务发现？先 `Skill(skill="k8s-network-recon")` 确定有哪些服务
-- 发现 Istio AuthorizationPolicy 阻拦 → `Skill(skill="k8s-istio-bypass")`
-- 发现 NFS/EFS 挂载 → `Skill(skill="k8s-storage-exploit")`
+- Haven't done service discovery yet? Use `Skill(skill="k8s-network-recon")` first to determine which services exist
+- Found an Istio AuthorizationPolicy blocking you → `Skill(skill="k8s-istio-bypass")`
+- Found NFS/EFS mounts → `Skill(skill="k8s-storage-exploit")`

@@ -1,6 +1,8 @@
 ---
 name: odoo-security-rules
 description: "Expert in Odoo access control: ir.model.access.csv, record rules (ir.rule), groups, and multi-company security patterns."
+zh-signals: "编写与调试 Odoo 访问控制，包括 ir.model.access.csv、ir.rule 记录规则、用户组与多公司安全模式。信号:Odoo安全,访问控制,ir.rule,记录规则,多公司"
+when-to-use: "Use when configuring Odoo model-level access rights or record rules, debugging access-denied errors, or implementing multi-company visibility."
 risk: safe
 source: "self"
 date_added: "2026-09-04"

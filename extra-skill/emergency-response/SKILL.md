@@ -1,392 +1,397 @@
 ---
 name: emergency-response
-description: "应急响应方法论。当目标主机疑似被入侵、需要排查后门/木马/异常进程/异常账户、或需要进行安全事件溯源分析时使用。覆盖 Linux 和 Windows 双平台的账户审计、进程排查、网络连接分析、启动项/计划任务检查、日志分析、Rootkit 检测"
+description: "Incident response methodology. Use when a target host is suspected of being compromised, when you need to hunt for backdoors, trojans, anomalous processes or anomalous accounts, or when you need to trace a security incident. Covers account auditing, process triage, network connection analysis, startup item and scheduled task checks, log analysis, and rootkit detection on both Linux and Windows"
+zh-signals: "面向 Linux 与 Windows 主机的入侵排查与应急响应，覆盖账户、进程、网络与日志溯源。信号:应急响应,入侵排查,后门检测,日志分析,Rootkit"
+when-to-use: >-
+  Use when a host is suspected of compromise and you need incident triage, backdoor or
+  malware hunting, anomalous process or account review, and forensic analysis on Linux
+  or Windows.
 metadata:
-  tags: "emergency response,应急响应,incident response,IR,入侵排查,后门检测,rootkit,日志分析,进程排查,账户审计,linux,windows,蓝队,blue team"
+  tags: "emergency response,incident response,IR,host compromise triage,backdoor detection,rootkit,log analysis,process triage,account audit,linux,windows,blue team"
   category: "dfir"
 ---
 
-# 应急响应方法论
+# Incident Response Methodology
 
-> Linux + Windows 双平台入侵排查操作手册。按阶段推进，每步产出明确结论后再进入下一步。
+> Linux + Windows dual-platform intrusion triage playbook. Advance phase by phase, and only move to the next step after each step yields a clear conclusion.
 
 ---
 
-## Phase 1: 初始响应决策
+## Phase 1: Initial Response Decision
 
 ```
-主机疑似被入侵？
-├─ 1. 确认事件范围
-│   ├─ 单台主机 → 直接排查
-│   └─ 多台/不明 → 先网络隔离，再逐台排查
-├─ 2. 判断操作系统
+Host suspected of being compromised?
+├─ 1. Confirm the scope of the incident
+│   ├─ Single host → triage directly
+│   └─ Multiple/unknown hosts → isolate the network first, then triage host by host
+├─ 2. Determine the operating system
 │   ├─ Linux → Phase 2
 │   └─ Windows → Phase 3
-├─ 3. 确认当前权限
-│   ├─ root/Administrator → 可完整排查
-│   └─ 普通用户 → 先提权或协调管理员权限
-└─ 4. 保全证据（排查前）
-    ├─ 内存快照（如有条件）
-    ├─ 磁盘镜像（关键服务器）
-    └─ 记录当前时间戳，后续所有发现标注时间
+├─ 3. Confirm the current privileges
+│   ├─ root/Administrator → full triage is possible
+│   └─ Regular user → escalate privileges first or coordinate administrator access
+└─ 4. Preserve evidence (before triage)
+    ├─ Memory snapshot (if feasible)
+    ├─ Disk image (critical servers)
+    └─ Record the current timestamp and annotate the time on every later finding
 ```
 
-**关键原则**：
-- 先收集、后分析、最后清除——不要在排查过程中直接删除可疑文件
-- 每一步记录发现，形成时间线
-- 优先排查高威胁项：账户 → 进程/网络 → 持久化 → 文件 → 日志
+**Key principles**:
+- Collect first, analyze second, clean up last — never delete suspicious files during triage
+- Record findings at every step to build a timeline
+- Prioritize high-threat items: accounts → processes/network → persistence → files → logs
 
 ---
 
-## Phase 2: Linux 应急排查
+## Phase 2: Linux Incident Triage
 
-### 2.1 账户审计
+### 2.1 Account Audit
 
-**排查清单**：
+**Triage checklist**:
 
 ```bash
-# 1. 查找特权用户（uid=0 应该只有 root）
+# 1. Find privileged users (only root should have uid=0)
 awk -F: '$3==0{print $1}' /etc/passwd
 
-# 2. 查找可远程登录的账户（有密码 hash 的账户）
+# 2. Find accounts that can log in remotely (accounts with a password hash)
 awk '/\$1|\$6/{print $1}' /etc/shadow
 
-# 3. 检查 sudo 权限异常（非管理员不应有 ALL 权限）
+# 3. Check for abnormal sudo grants (non-admins should not have ALL)
 grep -v "^#\|^$" /etc/sudoers | grep "ALL=(ALL)"
 cat /etc/sudoers.d/*
 
-# 4. 检查 SSH 授权密钥（攻击者常植入公钥）
+# 4. Check SSH authorized keys (attackers often plant public keys)
 find / -name "authorized_keys" -exec ls -la {} \; -exec cat {} \;
 
-# 5. 查看最近登录记录
-lastlog           # 所有用户最后登录时间
-last              # 历史登录/注销记录
-lastb             # 失败登录记录（暴力破解痕迹）
+# 5. Review recent login records
+lastlog           # Last login time for all users
+last              # Historical login/logout records
+lastb             # Failed login records (brute-force traces)
 ```
 
-**判断标准**：
+**Triage criteria**:
 
-| 发现 | 风险等级 | 处置 |
+| Finding | Risk level | Action |
 |------|---------|------|
-| uid=0 的非 root 用户 | 高 | 立即禁用：`usermod -L <user>` |
-| 未知用户有 sudo ALL 权限 | 高 | 移除 sudoers 条目 |
-| 未知 SSH 公钥 | 高 | 记录公钥指纹后删除 |
-| 异常时段登录记录 | 中 | 关联 IP 溯源 |
+| Non-root user with uid=0 | High | Disable immediately: `usermod -L <user>` |
+| Unknown user holding sudo ALL | High | Remove the sudoers entry |
+| Unknown SSH public key | High | Record the key fingerprint, then delete it |
+| Logon records at unusual hours | Medium | Correlate the IP for attribution |
 
-### 2.2 进程与网络
+### 2.2 Processes and Network
 
 ```bash
-# 1. 检查异常网络连接（重点关注 ESTABLISHED 和 LISTEN）
+# 1. Check for anomalous network connections (focus on ESTABLISHED and LISTEN)
 netstat -antlp | grep -E "ESTABLISHED|LISTEN"
-# 或
+# or
 ss -antlp
 
-# 2. 根据可疑连接 PID 定位进程
-ls -la /proc/<PID>/exe        # 进程对应的可执行文件
-cat /proc/<PID>/cmdline       # 完整命令行
-ls -la /proc/<PID>/fd         # 打开的文件描述符
+# 2. Locate the process behind a suspicious connection by PID
+ls -la /proc/<PID>/exe        # Executable backing the process
+cat /proc/<PID>/cmdline       # Full command line
+ls -la /proc/<PID>/fd         # Open file descriptors
 
-# 3. 检查异常进程
-ps aux --sort=-%cpu | head -20    # CPU 占用排序（挖矿检测）
-ps aux --sort=-%mem | head -20    # 内存占用排序
+# 3. Check for anomalous processes
+ps aux --sort=-%cpu | head -20    # Sort by CPU usage (mining detection)
+ps aux --sort=-%mem | head -20    # Sort by memory usage
 
-# 4. 检查隐藏进程（进程名以 . 开头或伪装为内核线程）
+# 4. Check for hidden processes (names starting with . or masquerading as kernel threads)
 ps -ef | grep -E "^\S+\s+\d+.*\[.*\]" | grep -v "\[kworker"
 ```
 
-**判断标准**：
-- 外连到非业务 IP 的 ESTABLISHED 连接 → 高度可疑（C2 通信）
-- 进程可执行文件在 /tmp、/dev/shm、/var/tmp 下 → 高度可疑
-- 进程可执行文件已被删除（`/proc/PID/exe -> (deleted)`） → 恶意进程驻留内存
+**Triage criteria**:
+- ESTABLISHED connections to non-business IPs → highly suspicious (C2 traffic)
+- Process executable under /tmp, /dev/shm, /var/tmp → highly suspicious
+- Process executable deleted (`/proc/PID/exe -> (deleted)`) → malicious process resident in memory
 
-### 2.3 启动项与计划任务
+### 2.3 Startup Items and Scheduled Tasks
 
 ```bash
-# 1. 检查 crontab（所有用户）
+# 1. Check crontab (all users)
 for user in $(cut -f1 -d: /etc/passwd); do
   crontab -l -u $user 2>/dev/null && echo "=== $user ==="
 done
 cat /etc/crontab
 ls -la /etc/cron.d/ /etc/cron.daily/ /etc/cron.hourly/ /etc/cron.monthly/ /etc/cron.weekly/
 
-# 2. 检查 systemd 服务（关注非官方和最近修改的）
+# 2. Check systemd services (focus on unofficial and recently modified ones)
 systemctl list-unit-files --type=service | grep enabled
 find /etc/systemd/system/ /usr/lib/systemd/system/ -name "*.service" -mtime -7
 
-# 3. 检查 rc.local 和 init.d
+# 3. Check rc.local and init.d
 cat /etc/rc.local
 ls -la /etc/init.d/
 ls -la /etc/rc.d/rc*.d/ 2>/dev/null
 
-# 4. 检查 bashrc/profile 植入
+# 4. Check bashrc/profile tampering
 grep -r "curl\|wget\|python\|bash -i\|/dev/tcp" /etc/profile* /etc/bashrc /root/.bashrc /home/*/.bashrc 2>/dev/null
 ```
 
-**重点关注**：
-- 近期新增的 cron 任务（关联创建时间和入侵时间窗口）
-- 非标准路径下的服务文件（/tmp、用户主目录）
-- rc.local 中的可疑脚本
+**Focus on**:
+- Newly added cron jobs (correlate creation time against the intrusion time window)
+- Service files in non-standard paths (/tmp, user home directories)
+- Suspicious scripts inside rc.local
 
-### 2.4 文件系统排查
+### 2.4 File System Triage
 
 ```bash
-# 1. 查找最近修改的文件（以 3 天为例，根据事件时间调整）
+# 1. Find recently modified files (3 days as an example, adjust to the incident timeline)
 find / -mtime -3 -type f -not -path "/proc/*" -not -path "/sys/*" | head -100
 
-# 2. 查找 SUID/SGID 文件（提权后门常见手段）
+# 2. Find SUID/SGID files (a common privilege escalation backdoor)
 find / -perm -4000 -type f 2>/dev/null
 find / -perm -2000 -type f 2>/dev/null
 
-# 3. 检查 /tmp 及隐藏目录
+# 3. Check /tmp and hidden directories
 ls -la /tmp/ /var/tmp/ /dev/shm/
 find / -name ".. " -o -name "..." -o -name ".hidden" 2>/dev/null
 
-# 4. WebShell 检测（Web 服务器目录）
+# 4. Webshell detection (web server directories)
 find /var/www/ -name "*.php" -mtime -7
 grep -rl "eval\|system\|exec\|passthru\|shell_exec\|base64_decode" /var/www/ 2>/dev/null
 
-# 5. 检查文件时间戳篡改（mtime 与 ctime 不一致）
-stat <可疑文件>   # 对比 Modify 和 Change 时间
+# 5. Check for timestamp tampering (mtime inconsistent with ctime)
+stat <suspicious-file>   # Compare the Modify and Change times
 ```
 
-### 2.5 日志分析
+### 2.5 Log Analysis
 
-| 日志文件 | 用途 | 查看方式 |
+| Log file | Purpose | How to view |
 |----------|------|---------|
-| /var/log/auth.log 或 /var/log/secure | SSH 登录、sudo、su | `grep "Accepted\|Failed" /var/log/auth.log` |
-| /var/log/wtmp | 登录/注销记录 | `last -f /var/log/wtmp` |
-| /var/log/btmp | 失败登录 | `lastb -f /var/log/btmp` |
-| /var/log/cron | 定时任务执行记录 | `cat /var/log/cron` |
-| /var/log/messages 或 /var/log/syslog | 系统事件 | `grep -i "error\|warning\|fail" /var/log/messages` |
-| ~/.bash_history | 命令历史 | `cat /root/.bash_history` |
+| /var/log/auth.log or /var/log/secure | SSH logins, sudo, su | `grep "Accepted\|Failed" /var/log/auth.log` |
+| /var/log/wtmp | Login/logout records | `last -f /var/log/wtmp` |
+| /var/log/btmp | Failed logins | `lastb -f /var/log/btmp` |
+| /var/log/cron | Scheduled task execution records | `cat /var/log/cron` |
+| /var/log/messages or /var/log/syslog | System events | `grep -i "error\|warning\|fail" /var/log/messages` |
+| ~/.bash_history | Command history | `cat /root/.bash_history` |
 
 ```bash
-# 暴力破解检测：统计失败登录 IP
+# Brute-force detection: count failed login IPs
 grep "Failed password" /var/log/auth.log | awk '{print $(NF-3)}' | sort | uniq -c | sort -rn | head -20
 
-# 成功登录排查：关注非常规 IP 和时段
+# Successful logon triage: watch for unusual IPs and time slots
 grep "Accepted" /var/log/auth.log | awk '{print $1,$2,$3,$9,$11}'
 
-# 提权行为检测
+# Privilege escalation detection
 grep "sudo:" /var/log/auth.log | grep -v "session opened\|session closed"
 ```
 
-### 2.6 Rootkit 检测
+### 2.6 Rootkit Detection
 
 ```bash
-# 方法 1: chkrootkit
-apt install chkrootkit -y   # 或 yum install chkrootkit
+# Method 1: chkrootkit
+apt install chkrootkit -y   # or yum install chkrootkit
 chkrootkit
 
-# 方法 2: rkhunter
-apt install rkhunter -y     # 或 yum install rkhunter
+# Method 2: rkhunter
+apt install rkhunter -y     # or yum install rkhunter
 rkhunter --update
 rkhunter --check --sk
 
-# 方法 3: 手动检查（工具不可信时）
-# 比较系统命令 hash（与已知干净环境对比）
+# Method 3: manual checks (when the tooling cannot be trusted)
+# Compare system command hashes (against a known clean baseline)
 md5sum /usr/bin/ps /usr/bin/netstat /usr/bin/ls /usr/bin/find /usr/bin/top
-# 检查 LD_PRELOAD 劫持
+# Check for LD_PRELOAD hijacking
 echo $LD_PRELOAD
 cat /etc/ld.so.preload
-# 检查内核模块
+# Inspect kernel modules
 lsmod | grep -v "^Module"
 ```
 
 ---
 
-## Phase 3: Windows 应急排查
+## Phase 3: Windows Incident Triage
 
-### 3.1 账户审计
+### 3.1 Account Audit
 
 ```cmd
-:: 1. 查看当前登录会话
+:: 1. View the current logon sessions
 query user
 
-:: 2. 列出所有用户和管理员组成员
+:: 2. List all users and the members of the administrators group
 net user
 net localgroup administrators
 
-:: 3. 检查隐藏/克隆账户
-:: 隐藏账户名末尾带 $
+:: 3. Check for hidden/cloned accounts
+:: Hidden account names end with $
 wmic useraccount list full
-:: 对比注册表 SAM 与 net user 结果
-:: HKLM\SAM\SAM\Domains\Account\Users（需 SYSTEM 权限）
+:: Compare the registry SAM against the net user output
+:: HKLM\SAM\SAM\Domains\Account\Users (requires SYSTEM privileges)
 
-:: 4. 踢出可疑会话
+:: 4. Log off suspicious sessions
 logoff <SessionID>
 ```
 
-**辅助工具**：
-- D盾：检测隐藏账户和克隆账户
-- 查看 SID 历史：`wmic useraccount get name,sid` —— SID 末尾非 500/501 的管理员需核实
+**Supporting tools**:
+- D-Shield: detect hidden and cloned accounts
+- Review SID history: `wmic useraccount get name,sid` — administrators whose SID does not end in 500/501 must be verified
 
-### 3.2 进程与网络
+### 3.2 Processes and Network
 
 ```cmd
-:: 1. 查看所有网络连接及对应进程
+:: 1. List all network connections and the owning processes
 netstat -ano | findstr "ESTABLISHED LISTENING"
 
-:: 2. 根据 PID 查进程信息
+:: 2. Look up process information by PID
 tasklist /FI "PID eq <PID>" /V
 wmic process where processid=<PID> get name,executablepath,commandline
 
-:: 3. 检查可疑进程
+:: 3. Check for suspicious processes
 tasklist /V
 wmic process get name,processid,executablepath,commandline /format:list
 
-:: 4. 查看网络代理配置（是否被篡改）
+:: 4. Review the proxy configuration (check whether it was tampered with)
 REG QUERY "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings"
 
-:: 5. 查看路由表
-route print
+:: 5. View the routing table
+→route print
 ```
 
-**判断标准**：
-- 可执行文件路径在 %TEMP%、%APPDATA%、用户 Downloads 下 → 可疑
-- 进程名模仿系统进程（如 svchost.exe 但不在 C:\Windows\System32 下） → 高度可疑
-- 异常外连 IP 的 ESTABLISHED 连接 → 关联威胁情报
+**Triage criteria**:
+- Executable path under %TEMP%, %APPDATA%, or the user's Downloads folder → suspicious
+- Process name mimics a system process (e.g. svchost.exe outside C:\Windows\System32) → highly suspicious
+- ESTABLISHED connections to unusual outbound IPs → correlate with threat intelligence
 
-### 3.3 启动项与服务
+### 3.3 Startup Items and Services
 
 ```cmd
-:: 1. 检查注册表启动项
+:: 1. Check registry startup items
 REG QUERY "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run"
 REG QUERY "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run"
 REG QUERY "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce"
 REG QUERY "HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Run"
 
-:: 2. 检查计划任务
+:: 2. Check scheduled tasks
 schtasks /query /fo LIST /v
 
-:: 3. 检查启动文件夹
+:: 3. Check the Startup folders
 dir "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup"
 dir "%ProgramData%\Microsoft\Windows\Start Menu\Programs\Startup"
 
-:: 4. 检查服务（关注非标准服务和最近创建的服务）
+:: 4. Check services (focus on non-standard and recently created ones)
 wmic service list brief
 wmic service get name,displayname,pathname,startmode | findstr /i "auto"
 
-:: 5. 检查启动信息
+:: 5. Check startup entries
 wmic startup get command,caption
 ```
 
-**重点关注**：
-- Run/RunOnce 中指向临时目录或非标准路径的项
-- 计划任务中执行 PowerShell、cmd /c、mshta 等的项
-- 服务可执行路径包含空格且无引号（Unquoted Service Path）
+**Focus on**:
+- Run/RunOnce entries pointing at temporary directories or non-standard paths
+- Scheduled tasks that execute PowerShell, cmd /c, mshta, and similar
+- Service executable paths containing spaces without quotes (Unquoted Service Path)
 
-### 3.4 文件系统排查
+### 3.4 File System Triage
 
 ```cmd
-:: 1. 查看最近访问的文件
+:: 1. List recently accessed files
 dir %USERPROFILE%\Recent /a /o:-d
 
-:: 2. 检查临时目录
+:: 2. Check the temporary directories
 dir %TEMP% /a /o:-d
 dir %SYSTEMROOT%\Temp /a /o:-d
 
-:: 3. 检查浏览器下载目录
+:: 3. Check the browser download directories
 dir "%USERPROFILE%\Downloads" /a /o:-d
 
-:: 4. 查看回收站
+:: 4. Inspect the Recycle Bin
 dir C:\$Recycle.Bin /s /a
 
-:: 5. 检查 ADS（备用数据流，可隐藏恶意代码）
-dir /r <可疑目录>
+:: 5. Check for ADS (alternate data streams, which can hide malicious code)
+dir /r <suspicious-directory>
 ```
 
-**检查预取文件（Prefetch）**：
-- 路径：`C:\Windows\Prefetch\`
-- 可还原程序执行历史，即使可执行文件已被删除
+**Check prefetch files**:
+- Path: `C:\Windows\Prefetch\`
+- Recovers program execution history even after the executable has been deleted
 
-### 3.5 日志分析
+### 3.5 Log Analysis
 
-打开事件查看器：`eventvwr.msc`
+Open Event Viewer: `eventvwr.msc`
 
-**日志位置**：
+**Log locations**:
 
-| 日志类型 | 默认路径 | 关注内容 |
+| Log type | Default path | What to look for |
 |----------|---------|---------|
-| 安全日志 | `%SystemRoot%\System32\Winevt\Logs\Security.evtx` | 登录事件、账户管理、特权使用 |
-| 系统日志 | `%SystemRoot%\System32\Winevt\Logs\System.evtx` | 服务安装、驱动加载、系统错误 |
-| 应用程序日志 | `%SystemRoot%\System32\Winevt\Logs\Application.evtx` | 应用崩溃、程序错误 |
+| Security log | `%SystemRoot%\System32\Winevt\Logs\Security.evtx` | Logon events, account management, privileged use |
+| System log | `%SystemRoot%\System32\Winevt\Logs\System.evtx` | Service installs, driver loads, system errors |
+| Application log | `%SystemRoot%\System32\Winevt\Logs\Application.evtx` | Application crashes, program errors |
 
-**关键 Event ID**：
+**Key Event IDs**:
 
-| Event ID | 含义 | 排查价值 |
+| Event ID | Meaning | Triage value |
 |----------|------|---------|
-| 4624 | 登录成功 | 结合登录类型判断攻击方式 |
-| 4625 | 登录失败 | 暴力破解痕迹 |
-| 4634 | 注销 | 会话持续时间分析 |
-| 4672 | 特权登录 | 管理员登录事件 |
-| 4720 | 创建用户 | 后门账户检测 |
-| 7045 | 服务安装 | 持久化/横向移动痕迹 |
+| 4624 | Successful logon | Determine the attack method together with the logon type |
+| 4625 | Failed logon | Brute-force traces |
+| 4634 | Logoff | Session duration analysis |
+| 4672 | Special privileges assigned | Administrator logon events |
+| 4720 | User account created | Backdoor account detection |
+| 7045 | Service installed | Persistence/lateral movement traces |
 
-**登录类型参考**：
+**Logon type reference**:
 
-| 类型 | 描述 | 常见场景 |
+| Type | Description | Common scenario |
 |------|------|---------|
-| 2 | 交互登录 | 本地控制台登录 |
-| 3 | 网络登录 | 共享文件夹、PsExec |
-| 4 | 批处理 | 计划任务 |
-| 5 | 服务 | 服务启动 |
-| 7 | 解锁 | 屏保解锁 |
-| 10 | 远程交互 | RDP 远程桌面 |
+| 2 | Interactive | Local console logon |
+| 3 | Network | Shared folders, PsExec |
+| 4 | Batch | Scheduled task |
+| 5 | Service | Service start |
+| 7 | Unlock | Screen saver unlock |
+| 10 | RemoteInteractive | RDP remote desktop |
 
 ```powershell
-# PowerShell 查询安全日志（筛选登录失败）
+# PowerShell: query the security log (filter failed logons)
 Get-WinEvent -FilterHashtable @{LogName='Security';ID=4625} |
   Select-Object TimeCreated,@{N='IP';E={$_.Properties[19].Value}} |
   Group-Object IP | Sort-Object Count -Descending
 
-# 查询新建用户事件
+# Query newly created account events
 Get-WinEvent -FilterHashtable @{LogName='Security';ID=4720} |
   Format-List TimeCreated,Message
 ```
 
 ---
 
-## Phase 4: 溯源与加固
+## Phase 4: Attribution and Hardening
 
-### 4.1 时间线重建
+### 4.1 Timeline Reconstruction
 
 ```
-收集所有发现 → 按时间排序 → 构建攻击链：
-1. 初始入侵时间点（最早的异常记录）
-2. 攻击路径（如何从入口扩展）
-3. 持久化手段（留了哪些后门）
-4. 数据泄露（是否有大量数据外传）
+Collect all findings → sort by time → build the attack chain:
+1. Initial compromise time (the earliest anomaly)
+2. Attack path (how it spread from the entry point)
+3. Persistence mechanisms (which backdoors were left behind)
+4. Data exfiltration (whether large volumes of data left the host)
 ```
 
-### 4.2 IOC 提取
+### 4.2 IOC Extraction
 
-从排查中提取以下指标，用于威胁情报关联：
+Extract the following indicators during triage for threat intelligence correlation:
 
-| IOC 类型 | 来源 | 用途 |
+| IOC type | Source | Use |
 |----------|------|------|
-| 恶意 IP/域名 | 网络连接、日志 | 封禁 + 情报查询 |
-| 文件 Hash | 可疑文件 MD5/SHA256 | VirusTotal/微步查询 |
-| 攻击者账户 | 新增/异常账户 | 内网横向排查 |
-| 恶意文件路径 | 文件系统排查 | 全网扫描同类文件 |
+| Malicious IP/domain | Network connections, logs | Blocking + intelligence lookup |
+| File hash | MD5/SHA256 of suspicious files | VirusTotal/Venustech lookup |
+| Attacker account | Newly created or anomalous accounts | Lateral movement triage across the internal network |
+| Malicious file path | File system triage | Sweep the whole estate for identical files |
 
-### 4.3 加固建议
+### 4.3 Hardening Recommendations
 
-**立即措施**：
-- 修改所有受影响账户密码
-- 清除攻击者植入的持久化机制（计划任务、服务、启动项、SSH 密钥）
-- 封禁恶意 IP（防火墙/安全组）
-- 修补入侵利用的漏洞
+**Immediate actions**:
+- Change the password of every affected account
+- Remove the persistence mechanisms planted by the attacker (scheduled tasks, services, startup items, SSH keys)
+- Block malicious IPs (firewall/security group)
+- Patch the vulnerability exploited for the initial access
 
-**长期加固**：
-- 启用集中日志收集（防止本地日志被清除）
-- 部署 HIDS/EDR 监控
-- 实施最小权限原则
-- 定期审计账户和服务
+**Long-term hardening**:
+- Enable centralized log collection (prevents local logs from being wiped)
+- Deploy HIDS/EDR monitoring
+- Enforce the principle of least privilege
+- Audit accounts and services regularly
 
-## 注意事项
+## Notes
 
-- 排查过程中不要重启服务器——内存中的恶意进程和网络连接信息会丢失
-- 不要直接删除可疑文件——先备份取证再清除
-- 如果怀疑系统命令（ps/netstat/ls）被替换（Rootkit），使用静态编译的 busybox 或从可信源拷贝工具排查
-- 日志可能被攻击者清除或篡改——多源交叉验证（系统日志 + 网络设备日志 + 应用日志）
+- Never reboot the server during triage — in-memory malicious processes and network connection details will be lost
+- Never delete suspicious files outright — back them up for evidence, then clean them up
+- If system commands (ps/netstat/ls) are suspected of being replaced (rootkit), triage with a statically linked busybox or with tools copied from a trusted source
+- Logs may have been cleared or tampered with by the attacker — cross-validate across multiple sources (system logs + network device logs + application logs)

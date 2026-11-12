@@ -1,6 +1,8 @@
 ---
 name: hunt-saml
 description: "Hunt SAML / SSO attacks. Patterns: XML Signature Wrapping (XSW) — modify Assertion while keeping Signature valid by relocating signed element, comment injection in NameID (admin@target.com<!--evil-->@attacker.com → some parsers see admin@target.com), signature stripping (remove Signature element entirely, server should reject but doesn't), key confusion (signed by attacker's IdP, accepted by SP), audience-restriction not validated, replay attack (same Assertion accepted twice within validity window). Tools: SAML Raider Burp extension, samlmagic, manual XML manipulation. Detection: any /saml endpoint, /Shibboleth.sso, /sso/saml/, Microsoft ADFS endpoints. Validate: account takeover via altered NameID, admin role injection via altered AttributeStatement. Use when hunting SSO flows, when SAML AssertionConsumerService is reachable, when chaining IdP-trust to SP-impersonation."
+zh-signals: "狩猎 SAML/SSO 流程中的签名包装、签名剥离、重放与密钥混淆攻击。信号:SAML,SSO,XSW,签名绕过,重放,账户接管"
+when-to-use: "Use when hunting SSO flows with reachable SAML endpoints, testing XML signature wrapping, signature stripping, or assertion replay."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

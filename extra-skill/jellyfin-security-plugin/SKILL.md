@@ -1,6 +1,8 @@
 ---
 name: jellyfin-security-plugin
 description: Add native two-factor authentication, passkeys, SSO, brute-force protection, and audit logging to Jellyfin media servers via server-side plugin.
+zh-signals: "为 Jellyfin 媒体服务器通过服务端插件添加双因素认证、Passkey、SSO、防暴力破解与审计日志。信号:Jellyfin,双因素认证,SSO,暴力破解防护,审计日志"
+when-to-use: "Use when hardening a Jellyfin media server with MFA, passkeys, OIDC/SSO, brute-force IP banning, device pairing, or audit logging."
 triggers:
   - add two-factor authentication to jellyfin
   - set up jellyfin totp or passkeys

@@ -2,38 +2,39 @@
 name: cent-poc-engine
 description: "cent: Expands nuclei templates in one click. Signals: web vulnerability, injection, keyword template filtering, specified output directory, template exclusion."
 zh-signals: "cent: nuclei 模板一键扩容。信号:web漏洞,注入,按关键字筛选模板,指定输出目录,排除模板。"
+when-to-use: "Use when you need to expand the nuclei template set by pulling community templates before a vulnerability scan."
 ---
 
 # cent
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/xm1k3/cent
-- 上游 License:Apache-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/xm1k3/cent
+- Upstream License: Apache-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/xm1k3/cent@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `cent -p` | 拉取全部社区 nuclei 模板 |
-| `cent -p -k 'cve-2023'` | 按关键字筛选模板 |
-| `cent -p -o ~/nuclei-templates` | 指定输出目录 |
-| `-e id1,id2` | 排除模板 |
+| `cent -p` | Pull all community nuclei templates |
+| `cent -p -k 'cve-2023'` | Filter templates by keyword |
+| `cent -p -o ~/nuclei-templates` | Specify output directory |
+| `-e id1,id2` | Exclude templates |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### nuclei 模板一键扩容
+### One-Click Expansion of the nuclei Template Set
 
 ```bash
 cent -p && nuclei -u https://t.com -t ~/cent-nuclei-templates
-# 社区模板集大成,漏洞覆盖直接翻倍
+# Aggregates community templates and doubles vulnerability coverage
 ```
 
-## 注意事项
+## Notes
 
-nuclei 模板聚合引擎,自动从数十个社区仓库拉取模板,是 nuclei(现有) 的模板补充器。
+nuclei template aggregation engine that automatically pulls templates from dozens of community repositories, a template supplementer for existing nuclei.

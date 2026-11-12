@@ -5,6 +5,8 @@ description: >
   (authenticated=yes, debug=true, fromtrustIP=true), session ID prediction from linear/incremental
   cookies, SQL injection on login forms, PHP unserialize() boolean type juggling (b:1 payload),
   and credential transport over HTTP. Detectable with Burp Suite, OWASP ZAP, WebGoat.
+zh-signals: "绕过认证的常见手法，涵盖强制浏览、参数篡改、会话预测、登录 SQL 注入与 PHP 反序列化类型混淆。信号:认证绕过,强制浏览,参数篡改,会话预测,SQL 注入"
+when-to-use: "Use when testing login flows, access-control checks, session tokens, or client-side authentication flags for bypass opportunities."
 license: MIT
 compatibility: Designed for Claude Code. Requires Burp Suite or OWASP ZAP.
 metadata:

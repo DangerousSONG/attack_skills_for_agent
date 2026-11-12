@@ -1,6 +1,8 @@
 ---
 name: file-path-traversal
 description: "Identify and exploit file path traversal (directory traversal) vulnerabilities that allow attackers to read arbitrary files on the server, potentially including sensitive configuration files, credentials, and source code."
+zh-signals: "文件路径穿越漏洞测试技能，识别并利用目录穿越读取服务器任意文件，如配置、凭据与源码。信号:路径穿越,目录遍历,任意文件读取,敏感文件,漏洞利用"
+when-to-use: "Use when testing a web application for file path traversal or directory traversal vulnerabilities that may allow reading arbitrary files such as configuration, credentials, or source code."
 risk: offensive
 source: community
 author: zebbern

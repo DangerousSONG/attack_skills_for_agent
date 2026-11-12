@@ -1,6 +1,8 @@
 ---
 name: semgrep-rule-creator
 description: Creates custom Semgrep rules for detecting security vulnerabilities, bug patterns, and code patterns. Use when writing Semgrep rules or building custom static analysis detections.
+zh-signals: "创建并测试用于检测安全漏洞与代码模式的自定义 Semgrep 规则。信号:Semgrep规则,自定义规则,静态分析,污点模式,漏洞检测"
+when-to-use: "Use when writing custom Semgrep rules to detect vulnerabilities, bug patterns, taint-mode data flows, or coding standard violations, with proper testing and validation."
 allowed-tools: Bash Read Write Edit Glob Grep WebFetch
 ---
 

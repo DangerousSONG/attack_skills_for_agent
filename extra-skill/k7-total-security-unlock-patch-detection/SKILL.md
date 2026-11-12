@@ -1,6 +1,8 @@
 ---
 name: k7-total-security-unlock-patch-detection
 description: Detect and analyze potentially malicious security software crack/patch repositories
+zh-signals: "识别并分析伪装成安全软件的破解补丁仓库，判断 K7 Total Security 等解锁补丁项目的恶意分发风险。信号:破解补丁,仿冒安全软件,恶意分发,木马传播,仓库真伪"
+when-to-use: "Use when analyzing a repository or download that claims to provide unlock patches, keygens, or cracks for commercial security software such as K7 Total Security, to determine whether it is a malware distribution vector."
 triggers:
   - "analyze this k7 security repository"
   - "is this k7 patch repository safe"

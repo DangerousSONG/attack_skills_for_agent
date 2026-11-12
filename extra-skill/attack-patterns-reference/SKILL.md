@@ -1,6 +1,8 @@
 ---
 name: attack-patterns-reference
 description: Use when classifying a verified web or WordPress behavior and selecting a related validation skill.
+zh-signals: "Web 与 WordPress 验证行为的分类参考，用于选择对应的验证技能。信号:攻击模式,参考目录,WordPress,漏洞分类,技能选择"
+when-to-use: "Use when classifying a verified web or WordPress behavior and selecting a related validation skill."
 version: 1.2.0
 license: MIT
 platforms: [linux]

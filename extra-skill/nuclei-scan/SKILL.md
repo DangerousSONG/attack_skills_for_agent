@@ -1,171 +1,173 @@
 ---
 name: nuclei-scan
-description: "Nuclei 漏洞扫描工具使用方法论。当需要对目标进行已知漏洞扫描、CVE 验证、批量 PoC 检测时使用。Nuclei 拥有社区维护的 9000+ 模板，覆盖 CVE、默认口令、配置错误、信息泄露等。任何涉及 nuclei 扫描、CVE 批量验证、PoC 检测、漏洞模板搜索的场景都应使用此技能。也适用于需要从 nuclei 模板中提取 payload 用于手动利用的场景"
+description: "Nuclei vulnerability scanning methodology. Use when you need to scan a target for known vulnerabilities, validate CVEs, or run batch PoC detection. Nuclei ships 9000+ community-maintained templates covering CVEs, default credentials, misconfigurations, information disclosure, and more. Use this skill for any nuclei scanning, batch CVE validation, PoC detection, or vulnerability template lookup scenario. It also applies when you need to extract payloads from nuclei templates for manual exploitation."
+zh-signals: "使用 Nuclei 模板化扫描器进行已知漏洞、CVE 验证与批量 PoC 检测。信号:Nuclei,漏洞扫描,CVE验证,模板,PoC检测"
+when-to-use: "Use when scanning targets for known vulnerabilities, validating CVEs, or running template-based batch PoC checks with Nuclei."
 metadata:
-  tags: "nuclei,scan,cve,poc,vulnerability,漏洞扫描,模板,template,批量检测,projectdiscovery"
+  tags: "nuclei,scan,cve,poc,vulnerability,vulnerability-scan,template,batch-detection,projectdiscovery"
   category: "tool"
 ---
 
-# Nuclei 漏洞扫描方法论
+# Nuclei Vulnerability Scanning Methodology
 
-Nuclei 是 ProjectDiscovery 开源的基于模板的漏洞扫描器。它的核心价值：**社区维护的模板库**，每个模板都是经过验证的 PoC，比自己构造 payload 更可靠。
+Nuclei is ProjectDiscovery's open-source template-based vulnerability scanner. Its core value: **the community-maintained template library** — every template is a verified PoC, which is more reliable than hand-crafting payloads.
 
-## 扫描策略
+## Scanning Strategy
 
-Nuclei 有 9000+ 模板，不加限制的全量扫描（`nuclei -u target`）需要 10-30 分钟——在比赛中这是致命的时间浪费。通过 `-t`（指定模板目录）或 `-tags`（指定标签）缩小范围，通常几十秒内就能完成精准扫描。
+Nuclei has 9000+ templates, and an unrestricted full scan (`nuclei -u target`) takes 10-30 minutes — fatal wasted time in a competition. Narrow the scope with `-t` (specify a template directory) or `-tags` (specify tags), and a precise scan usually finishes within seconds.
 
-另外，Nuclei 的模板匹配并非 100% 准确，关键漏洞发现后应手动复现确认，避免在误报上浪费时间。
+Also, Nuclei's template matching is not 100% accurate. After a critical finding you should manually reproduce and confirm it, so you do not waste time on false positives.
 
-## Phase 1: 精准扫描（推荐）
+## Phase 1: Precise Scanning (Recommended)
 
-根据指纹识别结果选择对应模板，而非全量扫描：
+Select the matching templates based on fingerprinting results instead of scanning everything:
 
 ```bash
-# 1. 按模板 ID / CVE 编号精确扫描（最快，秒级）
+# 1. Scan precisely by template ID / CVE number (fastest, seconds)
 nuclei -u http://target -id CVE-2021-44228
 
-# 2. 按产品名过滤（几十秒）
+# 2. Filter by product name (tens of seconds)
 nuclei -u http://target -t cves/ -tags apache
 nuclei -u http://target -t cves/ -tags tomcat
 nuclei -u http://target -t cves/ -tags wordpress
 
-# 3. 只扫高危 CVE（1-3 分钟）
+# 3. Only scan high-severity CVEs (1-3 minutes)
 nuclei -u http://target -t cves/ -severity critical,high
 
-# 4. 按漏洞类型扫描
+# 4. Scan by vulnerability type
 nuclei -u http://target -t vulnerabilities/ -tags rce
 nuclei -u http://target -t vulnerabilities/ -tags sqli
 nuclei -u http://target -t vulnerabilities/ -tags lfi
 ```
 
-### 常用模板目录
+### Common Template Directories
 
-| 目录 | 内容 | 适用场景 |
+| Directory | Content | Applicable Scenario |
 |------|------|---------|
-| `cves/` | 已知 CVE PoC | Zone 2 CVE 验证 |
-| `vulnerabilities/` | 通用漏洞检测 | Web 深度测试 |
-| `misconfiguration/` | 配置错误 | 云安全、服务加固 |
-| `default-logins/` | 默认口令 | 中间件管理后台 |
-| `exposures/` | 敏感信息泄露 | 信息收集阶段 |
-| `takeovers/` | 子域名接管 | 域名资产攻击 |
+| `cves/` | Known CVE PoCs | Zone 2 CVE validation |
+| `vulnerabilities/` | Generic vulnerability detection | In-depth web testing |
+| `misconfiguration/` | Misconfigurations | Cloud security, service hardening |
+| `default-logins/` | Default credentials | Middleware admin consoles |
+| `exposures/` | Sensitive information disclosure | Information gathering phase |
+| `takeovers/` | Subdomain takeover | Domain asset attacks |
 
-## Phase 2: 模板搜索与提取 Payload
+## Phase 2: Template Search and Payload Extraction
 
-当需要手动利用（nuclei 直接扫不出来、需要定制 payload）时，从模板中提取关键信息：
+When manual exploitation is required (Nuclei cannot scan it directly and you need a custom payload), extract the key information from the template:
 
 ```bash
-# 搜索本地模板库
+# Search the local template library
 find ~/nuclei-templates/ -name "*CVE-2021-42013*" 2>/dev/null
 find ~/nuclei-templates/ -name "*apache*" -path "*/cves/*" 2>/dev/null
 find ~/nuclei-templates/ -name "*log4j*" 2>/dev/null
 
-# 按关键词在模板内容中搜索
+# Search template contents by keyword
 grep -rl "apache 2.4.49" ~/nuclei-templates/http/cves/ 2>/dev/null
 grep -rl "tomcat.*rce" ~/nuclei-templates/http/cves/ 2>/dev/null
 
-# 读取模板提取 payload
+# Read the template to extract the payload
 cat ~/nuclei-templates/http/cves/2021/CVE-2021-42013.yaml
 ```
 
-### 模板关键字段解读
+### Interpretation of Key Template Fields
 
 ```yaml
-# 模板结构示例
+# Example template structure
 id: CVE-2021-42013
 info:
   name: Apache HTTP Server Path Traversal
-  severity: critical           # ← 漏洞等级
-  description: ...             # ← 漏洞描述和利用条件
+  severity: critical           # ← severity level
+  description: ...             # ← vulnerability description and exploitation conditions
 
 http:
-  - raw:                       # ← 原始 HTTP 请求（可直接提取用于 curl）
+  - raw:                       # ← raw HTTP request (can be extracted directly for curl)
       - |
         GET /cgi-bin/.%2e/%2e%2e/%2e%2e/etc/passwd HTTP/1.1
         Host: {{Hostname}}
 
-    matchers:                  # ← 成功判定条件
+    matchers:                  # ← success criteria
       - type: regex
         regex:
           - "root:.*:0:0:"
 
-    extractors:                # ← 提取的数据（如版本号、密钥）
+    extractors:                # ← extracted data (e.g. version numbers, keys)
       - type: regex
         regex:
           - "root:.*"
 ```
 
-**从模板提取 payload 用于手动利用**：
+**Extract a payload from a template for manual exploitation**:
 ```bash
-# 从 raw 字段提取请求路径和方法
+# Extract the request path and method from the raw field
 cat template.yaml | grep -A5 "raw:" 
 
-# 转换为 curl 命令
+# Convert it to a curl command
 curl -s "http://target/cgi-bin/.%2e/%2e%2e/%2e%2e/etc/passwd"
 
-# 如果模板有 POST body
+# If the template has a POST body
 curl -s -X POST http://target/api -d '{"payload": "..."}'
 ```
 
-## Phase 3: 批量目标扫描
+## Phase 3: Batch Target Scanning
 
-当有多个目标时：
+When you have multiple targets:
 
 ```bash
-# 从文件读取目标列表
+# Read the target list from a file
 echo "http://target1" > targets.txt
 echo "http://target2" >> targets.txt
 nuclei -l targets.txt -t cves/ -severity critical,high
 
-# 配合 httpx 管道
+# Chain with the httpx pipeline
 cat urls.txt | httpx -silent | nuclei -t cves/ -severity critical,high
 ```
 
-## Phase 4: 结果分析与验证
+## Phase 4: Result Analysis and Validation
 
-Nuclei 输出格式：
+Nuclei output format:
 ```
 [CVE-2021-42013] [http] [critical] http://target/cgi-bin/.%2e/...
 [CVE-2022-26134] [http] [critical] http://target/wiki/%24%7B...%7D
 ```
 
-**必须手动验证关键发现**：
-1. 复现 nuclei 报告的请求，确认不是误报
-2. 检查利用条件是否满足（如 mod_cgi 是否启用）
-3. 尝试从信息泄露升级到 RCE
+**Critical findings must be manually verified**:
+1. Reproduce the request reported by Nuclei and confirm it is not a false positive
+2. Check whether the exploitation conditions are met (e.g. whether mod_cgi is enabled)
+3. Try to escalate information disclosure into RCE
 
-## 常用标签速查
+## Common Tag Quick Reference
 
-| 标签 | 说明 | 示例 |
+| Tag | Description | Example |
 |------|------|------|
-| `cve` | 所有 CVE | `-tags cve` |
-| `rce` | 远程代码执行 | `-tags rce` |
-| `sqli` | SQL 注入 | `-tags sqli` |
-| `lfi` | 本地文件包含 | `-tags lfi` |
+| `cve` | All CVEs | `-tags cve` |
+| `rce` | Remote code execution | `-tags rce` |
+| `sqli` | SQL injection | `-tags sqli` |
+| `lfi` | Local file inclusion | `-tags lfi` |
 | `ssrf` | SSRF | `-tags ssrf` |
 | `xss` | XSS | `-tags xss` |
-| `default-login` | 默认口令 | `-tags default-login` |
-| `exposure` | 信息泄露 | `-tags exposure` |
-| `apache` | Apache 相关 | `-tags apache` |
-| `tomcat` | Tomcat 相关 | `-tags tomcat` |
+| `default-login` | Default credentials | `-tags default-login` |
+| `exposure` | Information disclosure | `-tags exposure` |
+| `apache` | Apache related | `-tags apache` |
+| `tomcat` | Tomcat related | `-tags tomcat` |
 | `wordpress` | WordPress | `-tags wordpress` |
 | `jenkins` | Jenkins | `-tags jenkins` |
-| `spring` | Spring 框架 | `-tags spring` |
+| `spring` | Spring framework | `-tags spring` |
 
-## 性能优化参数
+## Performance Tuning Parameters
 
 ```bash
-# 控制并发（默认 25，目标少时可降低避免被 ban）
+# Control concurrency (default 25; lower it with few targets to avoid being banned)
 nuclei -u http://target -t cves/ -c 10
 
-# 限制速率
-nuclei -u http://target -t cves/ -rl 50  # 每秒 50 请求
+# Rate limit
+nuclei -u http://target -t cves/ -rl 50  # 50 requests per second
 
-# 超时设置
+# Timeout setting
 nuclei -u http://target -t cves/ -timeout 10
 
-# 只输出发现的漏洞（静默模式）
+# Output only the vulnerabilities found (quiet mode)
 nuclei -u http://target -t cves/ -silent
 
-# 输出到文件（JSON 格式便于分析）
+# Write the output to a file (JSON format for easy analysis)
 nuclei -u http://target -t cves/ -json -o results.json
 ```

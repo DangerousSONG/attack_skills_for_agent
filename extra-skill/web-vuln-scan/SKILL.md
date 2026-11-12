@@ -1,110 +1,114 @@
 ---
 name: web-vuln-scan
-description: "单目标 Web 深度漏洞扫描策略。当已知目标 URL、需要对一个 Web 应用进行深度漏洞测试时使用。与 recon-full（资产发现）不同——本技能假设目标已确定，聚焦漏洞层面的深度测试。覆盖指纹驱动的扫描策略选择、自动化+手动测试结合、漏洞优先级排序。优先发现 RCE、SQL注入等高危漏洞"
+description: "Single-target in-depth web vulnerability scanning strategy. Use when the target URL is already known and you need deep vulnerability testing on a single web application. Unlike recon-full (asset discovery), this skill assumes the target is already identified and focuses on depth-first vulnerability testing. Covers fingerprint-driven scan strategy selection, a combination of automated and manual testing, and vulnerability prioritization. Prioritize finding high-severity issues such as RCE and SQL injection"
+zh-signals: "针对已确定的单个 Web 目标进行指纹驱动、自动化结合手动的深度漏洞测试。信号:web漏洞扫描,指纹识别,nuclei,深度测试,单目标,优先级"
+when-to-use: >-
+  Use when the target URL is already known and you need depth-first vulnerability testing of a
+  single web application, prioritizing high-impact bugs such as RCE and SQL injection.
 metadata:
-  tags: "web,vuln,poc,scan,漏洞扫描,指纹识别,安全评估,nuclei,深度测试"
+  tags: "web,vuln,poc,scan,vulnerability-scan,fingerprinting,security-assessment,nuclei,deep-testing"
   category: "exploit"
 ---
 
-# 单目标 Web 深度漏洞扫描方法论
+# Single-Target In-Depth Web Vulnerability Scanning Methodology
 
-与 `recon-full`（广度优先、资产发现）不同，本技能是**深度优先**——对已确定的单个 Web 目标做全面漏洞测试。
+Unlike `recon-full` (breadth-first, asset discovery), this skill is **depth-first** — it performs comprehensive vulnerability testing against an already identified single web target.
 
-## Phase 1: 技术栈驱动的扫描策略
+## Phase 1: Technology-Stack-Driven Scan Strategy
 
-先做指纹识别，然后根据结果选择针对性扫描路线：
+Fingerprint first, then choose a targeted scanning route based on the results:
 
 ```bash
-# 指纹识别
+# Fingerprinting
 curl -sI http://target | grep -i "Server\|X-Powered-By\|X-AspNet"
 httpx -u http://target -tech-detect -silent
 ```
 
-| 技术栈 | 自动化扫描重点 | 手动测试重点 |
+| Technology Stack | Automated Scanning Focus | Manual Testing Focus |
 |--------|---------------|-------------|
-| PHP (WordPress/Laravel/ThinkPHP) | CMS 专用 POC、PHP 反序列化 | LFI/文件上传/`include()` 参数 |
-| Java (Spring/Struts/Tomcat) | Log4j/Spring4Shell/Struts2 | 反序列化入口、Actuator 泄露 |
-| Python (Flask/Django) | SSTI、Debug 模式 | Pickle 反序列化、Secret Key 泄露 |
-| Node.js (Express/Koa) | 原型链污染 | 依赖漏洞、`eval()` 注入 |
-| .NET (ASP.NET/IIS) | ViewState 反序列化 | web.config 泄露 |
+| PHP (WordPress/Laravel/ThinkPHP) | CMS-specific POCs, PHP deserialization | LFI / file upload / `include()` parameters |
+| Java (Spring/Struts/Tomcat) | Log4j/Spring4Shell/Struts2 | Deserialization entry points, Actuator exposure |
+| Python (Flask/Django) | SSTI, debug mode | Pickle deserialization, secret key exposure |
+| Node.js (Express/Koa) | Prototype pollution | Dependency vulnerabilities, `eval()` injection |
+| .NET (ASP.NET/IIS) | ViewState deserialization | web.config exposure |
 
-不同技术栈的漏洞分布差异巨大——盲目全扫浪费时间。
+The vulnerability distribution differs hugely across technology stacks — blind full scans waste time.
 
-## Phase 2: 自动化扫描
+## Phase 2: Automated Scanning
 
-### 2.1 已知漏洞扫描
+### 2.1 Known Vulnerability Scanning
 ```bash
-# Nuclei 扫描（按严重等级过滤，节省时间）
+# Nuclei scan (filtered by severity to save time)
 nuclei -u http://target -severity critical,high
 ```
-如果指纹明确，可以缩小范围：
+If the fingerprint is clear, narrow the scope:
 - WordPress → `nuclei -u http://target -tags wordpress`
-- 已知 CVE → `nuclei -u http://target -t cves/`
+- Known CVE → `nuclei -u http://target -t cves/`
 
-### 2.2 默认口令检测
+### 2.2 Default Credential Detection
 ```bash
 nuclei -u http://target -t default-logins/ -silent
 ```
-很多应用装完就忘改密码——这是最"便宜"的攻击路径。
+Many applications are installed and the password is never changed — this is the "cheapest" attack path.
 
-### 2.3 目录和敏感文件
+### 2.3 Directories and Sensitive Files
 ```bash
-# spray 目录爆破（推荐，智能过滤 + 高性能）
+# spray directory brute-forcing (recommended, smart filtering + high performance)
 spray -u http://target -d /pentest/AboutSecurity/Dic/Web/Directory/Fuzz_common.txt
-# 或用 ffuf
+# or use ffuf
 ffuf -u http://target/FUZZ -w /pentest/AboutSecurity/Dic/Web/Directory/Fuzz_common.txt -mc 200,301,302,403
 ```
-重点不是跑大字典，而是看结果中有没有：
-- **管理后台** (`/admin`, `/manager`, `/console`) → 直接尝试登录
-- **配置泄露** (`.env`, `config.php`, `web.config`) → 可能有数据库密码
-- **源码泄露** (`/.git`, `.svn`, `backup.zip`)
-- **调试端点** (`/actuator`, `/debug`, `/phpinfo.php`) → 大量内部信息
+The focus is not on running a large wordlist, but on checking whether the results contain:
+- **Admin panels** (`/admin`, `/manager`, `/console`) → try logging in directly
+- **Configuration exposure** (`.env`, `config.php`, `web.config`) → may contain database passwords
+- **Source code exposure** (`/.git`, `.svn`, `backup.zip`)
+- **Debug endpoints** (`/actuator`, `/debug`, `/phpinfo.php`) → a lot of internal information
 
-## Phase 3: 手动测试（自动化扫不到的）
+## Phase 3: Manual Testing (What Automated Scanning Cannot Reach)
 
-自动化工具覆盖不了逻辑漏洞和需要上下文理解的漏洞。对每个功能点做针对性测试：
+Automated tools cannot cover logic flaws or vulnerabilities that require contextual understanding. Test each functional area in a targeted way:
 
-### 3.1 输入点测试矩阵
-| 功能点 | 优先测试 | 参考技能 |
+### 3.1 Input Point Test Matrix
+| Functional Area | Test First | Reference Skill |
 |--------|----------|----------|
-| 搜索/查询 | SQL 注入 | `sql-injection-methodology` |
-| 登录表单 | 弱密码、SQL注入、暴力破解 | `default-cred-sweep` |
-| 文件上传 | 类型绕过、路径穿越 | `file-upload-methodology` |
-| 用户输入回显 | XSS、SSTI | `xss-methodology`, `ssti-methodology` |
-| 评论/留言 | 存储型 XSS | `xss-methodology` |
-| URL/文件路径参数 | LFI/SSRF | `lfi-rfi-methodology`, `ssrf-methodology` |
-| XML 输入/SOAP/文件上传 | XXE | `xxe-injection-methodology` |
-| API 端点 | IDOR、认证绕过 | `api-fuzz`, `idor-methodology` |
-| JWT Token | 算法绕过、密钥爆破 | `jwt-attack-methodology` |
+| Search / query | SQL injection | `sql-injection-methodology` |
+| Login form | Weak passwords, SQL injection, brute force | `default-cred-sweep` |
+| File upload | Type bypass, path traversal | `file-upload-methodology` |
+| User input reflection | XSS, SSTI | `xss-methodology`, `ssti-methodology` |
+| Comments / guestbook | Stored XSS | `xss-methodology` |
+| URL / file path parameters | LFI/SSRF | `lfi-rfi-methodology`, `ssrf-methodology` |
+| XML input/SOAP/file upload | XXE | `xxe-injection-methodology` |
+| API endpoints | IDOR, authentication bypass | `api-fuzz`, `idor-methodology` |
+| JWT token | Algorithm bypass, key brute force | `jwt-attack-methodology` |
 
-### 3.2 测试优先级
-1. **直接可 RCE 的** → 命令注入、反序列化、SSTI、文件上传
-2. **可读取敏感数据的** → SQL注入、LFI、IDOR
-3. **可获取凭据的** → 默认口令、信息泄露、弱加密
-4. **需要用户交互的** → XSS、CSRF（CTF 中通常不考）
+### 3.2 Testing Priority
+1. **Directly lead to RCE** → command injection, deserialization, SSTI, file upload
+2. **Can read sensitive data** → SQL injection, LFI, IDOR
+3. **Can yield credentials** → default credentials, information disclosure, weak encryption
+4. **Require user interaction** → XSS, CSRF (usually not tested in CTFs)
 
-## Phase 4: 结果分析与攻击路径规划
+## Phase 4: Result Analysis and Attack Path Planning
 
-扫描完成后，不是列一堆漏洞就完了——要评估**哪些漏洞能组合出攻击路径**：
+After the scan completes, listing a pile of vulnerabilities is not enough — you must assess **which vulnerabilities can be combined into an attack path**:
 
-**直接路径**（一步到位）：
-- RCE 漏洞 → 直接拿 shell
-- 管理后台弱密码 → 后台功能利用
+**Direct paths** (one step):
+- RCE vulnerability → get a shell directly
+- Admin panel weak password → exploit the backend features
 
-**组合路径**（多步链式）：
-- 信息泄露 → 获取凭据 → 登录后台 → 后台文件上传 → webshell
-- SQL 注入 → 读配置文件 → 获取密钥 → 伪造 JWT → 管理员权限
-- SSRF → 读取云元数据 → 云凭据
+**Combined paths** (multi-step chains):
+- Information disclosure → obtain credentials → log into the backend → file upload in the backend → webshell
+- SQL injection → read the config file → obtain the key → forge a JWT → administrator privileges
+- SSRF → read cloud metadata → cloud credentials
 
-## 注意事项
-- 自动化扫描是起点不是终点——真正的高危漏洞往往需要手动发现
-- 指纹识别准确度直接影响后续效率，花 1 轮做好指纹值得
-- 发现一个低危漏洞时，想想它能不能和其他发现组合出高危攻击链
+## Notes
+- Automated scanning is the starting point, not the endpoint — truly high-severity vulnerabilities usually require manual discovery
+- Fingerprinting accuracy directly affects downstream efficiency; spending one round on good fingerprinting is worth it
+- When you find a low-severity issue, consider whether it can be combined with other findings into a high-severity attack chain
 
-## 测试优先级
-- RCE 优先：命令执行漏洞可直接拿 flag
-- 默认凭据第二：后台权限可快速获取更多信息
+## Testing Priority
+- RCE first: command execution vulnerabilities directly yield the flag
+- Default credentials second: backend access quickly provides more information
 
-## 深入参考
+## Further Reading
 
-- Web 漏洞检查清单与 wfuzz 高级用法 → [references/scan-methodology.md](references/scan-methodology.md)
+- Web vulnerability checklist and advanced wfuzz usage → [references/scan-methodology.md](references/scan-methodology.md)

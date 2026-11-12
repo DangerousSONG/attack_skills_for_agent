@@ -1,6 +1,9 @@
 ---
 name: http2-header-impersonation
 description: Spoof HTTP/2 SETTINGS frames and pseudo-header order per browser profile.
+zh-signals: "伪造 HTTP/2 SETTINGS 帧与伪首部顺序以匹配浏览器指纹，绕过反爬与反机器人检测。信号:HTTP/2指纹,头部伪装,浏览器指纹,反爬绕过,JA4。"
+when-to-use: >-
+  Use when a target analyzes HTTP/2 connection setup, SETTINGS frames, or header ordering for anti-bot detection, and you need to impersonate Chrome, Firefox, Safari iOS, or OkHttp browser profiles.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

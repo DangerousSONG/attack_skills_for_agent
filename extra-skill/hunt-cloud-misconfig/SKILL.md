@@ -1,6 +1,8 @@
 ---
 name: hunt-cloud-misconfig
 description: "Hunt cloud / infrastructure misconfigurations. AWS: public S3 buckets (s3:GetObject anonymous), permissive bucket policies (PutObjectAcl public-write), exposed CloudFront origin, public Lambda function URL, public RDS snapshot, IAM credentials in JS bundles, AWS metadata accessible via SSRF. GCP: public GCS buckets, exposed Cloud Run services, leaked service account JSON. Azure: public blob containers, exposed Function App. (Kubernetes/Docker exposure is owned by hunt-k8s; CI/CD pipeline attacks by hunt-cicd; post-credential IAM escalation by cloud-iam-deep.) Detection: targeted dorking, certificate transparency, JS bundle secret extraction, port scan for known service ports. Validate: actual data read / write / RCE. Use when hunting cloud-native storage and compute misconfig (S3/GCS/Blob, IMDS-via-SSRF, serverless, public managed services)."
+zh-signals: "狩猎云与环境配置错误，包括公开 S3/GCS/Blob 存储、暴露的 serverless 服务与经 SSRF 访问的元数据。信号:云配置错误,S3,GCS,Blob,SSRF,云安全"
+when-to-use: "Use when hunting cloud-native storage and compute misconfigurations such as public buckets, exposed serverless endpoints, or IMDS reachable via SSRF."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

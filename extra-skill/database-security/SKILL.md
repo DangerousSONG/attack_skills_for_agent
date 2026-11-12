@@ -1,6 +1,11 @@
 ---
 name: database-security
 description: "Authorized database security assessment across PostgreSQL, MySQL, MSSQL, MongoDB, and Redis: exposure, authorization gaps, UDF/command execution paths, and misconfiguration review."
+zh-signals: "对 PostgreSQL、MySQL、MSSQL、MongoDB 与 Redis 开展授权数据库安全评估，检查暴露面、授权缺陷与命令执行路径。信号:数据库安全,PostgreSQL,MySQL,Redis,权限评估"
+when-to-use: >-
+  Use when assessing database hardening and exposure across PostgreSQL, MySQL, MSSQL,
+  MongoDB, or Redis — authorization gaps, UDF/command execution paths, and
+  misconfiguration.
 risk: offensive
 source: "https://github.com/zhaoxuya520/reverse-skill"
 source_repo: "zhaoxuya520/reverse-skill"
@@ -30,48 +35,48 @@ license_source: "https://github.com/zhaoxuya520/reverse-skill/blob/main/LICENSE"
 - Checking authz boundaries and risky server-side execution features.
 
 
-## 适用场景
+## Applicable Scenarios
 
-- 数据库未授权/弱口令/错误绑定 0.0.0.0
-- 权限过大、危险功能（xp_cmdshell、COPY PROGRAM、UDF）
-- 横向：从应用账号到 DBA
-- NoSQL 注入与 Redis 写文件等（授权环境）
+- Unauthenticated access / weak credentials / databases bound to 0.0.0.0
+- Overly broad privileges, dangerous features (xp_cmdshell, COPY PROGRAM, UDF)
+- Lateral movement: from an application account to DBA
+- NoSQL injection and Redis file write, etc. (authorized environments)
 
-## 工作流
+## Workflow
 
 ```text
-□ 网络暴露与 TLS
-□ 账号角色与 grantee
-□ 敏感表访问控制
-□ 危险配置：file_priv、xp_cmdshell、load_file
-□ 审计日志是否开启
-□ 备份与快照权限
+□ Network exposure and TLS
+□ Account roles and grantees
+□ Access control on sensitive tables
+□ Dangerous configurations: file_priv, xp_cmdshell, load_file
+□ Is audit logging enabled
+□ Backup and snapshot permissions
 ```
 
-## 工具链
+## Toolchain
 
-| 工具 | 用途 |
+| Tool | Purpose |
 |------|------|
-| 官方 CLI | 连接与枚举 |
-| sqlmap | 注入验证（授权） |
-| nuclei | 已知暴露模板 |
-| 云 RDS 控制台审计 | 配置 |
+| Official CLI | connection and enumeration |
+| sqlmap | injection verification (authorized) |
+| nuclei | known exposure templates |
+| Cloud RDS console audit | configuration |
 
-## 参考
+## References
 
 - `references/db-misconfig-checklist.md`
 - `../pentest-tools/` `../cloud-k8s/`
 
-## 路由上下文
+## Routing Context
 
-**上游**: MASTER R35  
-**下游**: 获 OS 命令 → attack-chain；云托管 → cloud-k8s
+**Upstream**: MASTER R35  
+**Downstream**: obtaining OS commands → attack-chain; cloud-hosted → cloud-k8s
 
-## 任务完成自检
+## Task Completion Self-Check
 
-- [ ] 是否避免未授权写删？
-- [ ] 是否区分配置问题与可利用链？
-- [ ] Checklist？
+- [ ] Was unauthorized writing/deleting avoided?
+- [ ] Were configuration issues distinguished from exploitable chains?
+- [ ] Checklist?
 
 ## Limitations
 

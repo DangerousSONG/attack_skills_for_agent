@@ -1,6 +1,11 @@
 ---
 name: privacy-engineering
 description: "Implement and audit privacy controls in product and infrastructure — GDPR, CCPA / CPRA, LGPD, PIPEDA. Covers data minimization, lawful basis, consent management, data subject access requests (DSARs — access, deletion, portability), data processing agreements, DPIA / TIA, breach notification timing, data classification, and the technical implementation of 'right to be forgotten' across backups, caches, analytics, and third parties. Use when the user mentions 'GDPR,' 'CCPA,' 'CPRA,' 'data privacy,' 'privacy engineering,' 'data subject access request,' 'DSAR,' 'right to deletion,' 'right to be forgotten,' 'data portability,' 'consent management,' 'cookie consent,' 'data minimization,' 'DPIA,' 'data protection impact assessment,' 'breach notification,' 'BAA,' 'DPA,' 'data processing agreement,' 'sub-processor,' 'cross-border data transfer,' 'SCCs,' or needs to implement or review privacy controls."
+zh-signals: "在产品与基础设施中实现和审计隐私控制，覆盖 GDPR/CCPA 数据主体权利与技术落地。信号:gdpr,ccpa,隐私工程,dsar,同意管理,数据最小化"
+when-to-use: >-
+  Use when implementing or reviewing privacy controls such as data minimization,
+  consent management, DSAR handling, DPIA, or breach notification under GDPR,
+  CCPA/CPRA, LGPD, or PIPEDA.
 allowed-tools: Read, Grep, Glob, Bash, Write, WebSearch
 ---
 

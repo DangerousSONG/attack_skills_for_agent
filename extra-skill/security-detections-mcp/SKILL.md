@@ -1,6 +1,8 @@
 ---
 name: security-detections-mcp
 description: Query unified Sigma, Splunk, Elastic, KQL, Sublime, and CrowdStrike security detection rules via MCP server with MITRE ATT&CK mapping and coverage analysis
+zh-signals: "通过 MCP 服务器查询 Sigma、Splunk、Elastic、KQL 等统一检测规则并分析 MITRE ATT&CK 覆盖。信号:检测规则,MCP,Sigma,Splunk,MITRE ATT&CK,覆盖分析"
+when-to-use: "Use when searching for security detections covering a technique, analyzing ATT&CK coverage or gaps, or comparing detection rules across platforms via the MCP server."
 triggers:
   - search for security detections covering technique
   - analyze MITRE ATT&CK coverage for ransomware

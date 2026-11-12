@@ -1,6 +1,8 @@
 ---
 name: js-secrets-extraction
 description: "Analyze JS bundles and source maps for hardcoded secrets, API keys, JWTs, and internal endpoints"
+zh-signals: "分析 JS 打包文件与 source map，提取硬编码密钥、API Key、JWT 与内部端点。信号:JS分析,source map,密钥提取,API Key,内部端点"
+when-to-use: "Use after initial web enumeration or when targets use SPA frameworks, Firebase, Supabase, or Auth0, to extract hardcoded secrets and internal endpoints from JS bundles and source maps."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

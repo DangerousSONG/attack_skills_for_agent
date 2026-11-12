@@ -1,6 +1,8 @@
 ---
 name: wifi-wireless
 description: "Authorized wireless security assessment: Wi-Fi capture, WPA handshake analysis, rogue AP detection research, and lab-only deauthentication testing."
+zh-signals: "授权无线安全评估技能，涵盖 Wi-Fi 抓包、WPA 握手分析、仿冒 AP 检测研究与实验环境去认证测试。信号:无线安全,WiFi,WPA握手,仿冒AP,去认证"
+when-to-use: "Use for authorized wireless security assessments on networks you own or are cleared to test, including Wi-Fi capture, WPA handshake analysis, rogue AP detection, and lab-only deauthentication testing."
 risk: offensive
 source: "https://github.com/zhaoxuya520/reverse-skill"
 source_repo: "zhaoxuya520/reverse-skill"
@@ -30,47 +32,47 @@ license_source: "https://github.com/zhaoxuya520/reverse-skill/blob/main/LICENSE"
 - Studying handshake material captured on your own lab network.
 
 
-## 适用场景
+## Applicable Scenarios
 
-- 授权 Wi-Fi 安全评估
-- WPA/WPA2 握手采集与离线评估
-- 流氓 AP / 钓鱼热点检测研究
-- 企业无线隔离与门户安全
+- Authorized Wi-Fi security assessment
+- WPA/WPA2 handshake collection and offline assessment
+- Rogue AP / evil-twin hotspot detection research
+- Enterprise wireless isolation and captive portal security
 
-## 工作流
+## Workflow
 
 ```text
-□ iwconfig / airmon-ng 进入 monitor（合法环境）
-□ airodump-ng 锁定目标 BSSID 频道
-□ 握手或 PMKID 采集（仅目标）
-□ hashcat/aircrack 离线评估口令策略
-□ 报告：加密类型、隔离、门户绕过、建议
+□ iwconfig / airmon-ng switch to monitor mode (legitimate environment)
+□ airodump-ng lock onto the target BSSID channel
+□ Handshake or PMKID capture (target only)
+□ hashcat/aircrack offline assessment of password policy
+□ Report: encryption type, isolation, portal bypass, recommendations
 ```
 
-## 工具链
+## Toolchain
 
-| 工具 | 用途 |
+| Tool | Purpose |
 |------|------|
-| aircrack-ng suite | 采集/评估 |
+| aircrack-ng suite | capture/assessment |
 | hcxdumptool / hcxtools | PMKID |
-| hashcat | 口令评估 |
-| Wireshark | 管理帧分析 |
+| hashcat | password assessment |
+| Wireshark | management frame analysis |
 
-## 参考
+## References
 
 - `references/wireless-lab-rules.md`
-- `../pentest-tools/` `../attack-chain/`（近源章节）
+- `../pentest-tools/` `../attack-chain/` (closely related chapters)
 
-## 路由上下文
+## Routing Context
 
-**上游**: MASTER R29  
-**MUST NOT**: 未授权 deauth、对非目标客户网络操作
+**Upstream**: MASTER R29  
+**MUST NOT**: unauthorized deauth, operating on non-target customer networks
 
-## 任务完成自检
+## Task Completion Self-Check
 
-- [ ] 是否严格锁定目标 BSSID？
-- [ ] 是否在报告中给出加固建议？
-- [ ] Checklist？
+- [ ] Did you strictly lock onto the target BSSID?
+- [ ] Did you provide hardening recommendations in the report?
+- [ ] Checklist?
 
 ## Limitations
 

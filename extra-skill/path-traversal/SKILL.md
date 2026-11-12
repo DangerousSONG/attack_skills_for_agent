@@ -5,6 +5,8 @@ description: >
   and hidden fields using ../ sequences, URL encoding (%2e%2e%2f), double encoding (%252e%252e%255c),
   Unicode bypasses (..%c0%af), and Windows UNC paths. PHP include/require with $_GET/$_POST/$_COOKIE
   pattern. Target /etc/passwd, boot.ini, web.config. Tools: DotDotPwn, WFuzz, Burp Suite, ZAP.
+zh-signals: "利用路径遍历与本地/远程文件包含漏洞读取文件或实现代码执行。信号:路径遍历,LFI,RFI,文件包含,编码绕过,RCE"
+when-to-use: "Use when a file or path parameter, cookie, or include point accepts user input and path traversal or LFI/RFI exploitation needs to be tested."
 license: MIT
 compatibility: Designed for Claude Code. Requires Burp Suite, DotDotPwn, or WFuzz.
 metadata:

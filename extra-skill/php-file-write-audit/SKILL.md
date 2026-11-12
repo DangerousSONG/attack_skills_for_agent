@@ -1,149 +1,153 @@
 ---
 name: php-file-write-audit
-description: PHP Web 源码任意文件写入审计工具。识别用户可控数据进入写入 Sink 的链路，追踪任意落点写入/路径穿越到 write，并评估写入后的可执行性（禁止省略）。
+description: "PHP web source code arbitrary file write auditing tool. Identifies chains where user-controllable data reaches a write sink, traces arbitrary destination writes / path traversal to write, and assesses post-write executability (must not be omitted)."
+zh-signals: "审计 PHP 源码中的任意文件写入漏洞，追踪用户可控数据到写入 Sink、路径穿越落点及写入后可执行性。信号:文件写入,路径穿越,写入Sink,代码审计,RCE"
+when-to-use: >-
+  Use when auditing PHP source code for arbitrary file write vulnerabilities, tracing
+  user-controlled data to write sinks, or assessing post-write executability.
 ---
 
-# PHP 任意文件写入审计（php-file-write-audit）
+# PHP Arbitrary File Write Audit (php-file-write-audit)
 
-分析 PHP 项目源码中“将数据写入磁盘文件”的实现逻辑，重点覆盖：
+Analyze the implementation logic that "writes data to files on disk" in PHP project source code, focusing on:
 
-- 任意落点写入：写入目标路径可被攻击者控制（含路径穿越到落点）
-- 写入内容可控：写入的文件内容来源于用户输入（为后续 RCE/覆写创造条件）
-- 覆盖/截断模式：是否以 `w/x` 等覆盖方式写入，或会产生可利用的同名冲突覆盖
+- Arbitrary destination writes: the write target path can be controlled by the attacker (including path traversal to the destination)
+- Controllable write content: the written file content originates from user input (creating the conditions for subsequent RCE / overwrite)
+- Overwrite/truncate mode: whether the write uses an overwrite mode such as `w/x`, or whether an exploitable same-name conflict overwrite can occur
 
-## 分级与编号
-- 详见：`shared/SEVERITY_RATING.md`
-- 漏洞编号：`{C/H/M/L}-WRITE-{序号}`
+## Severity Rating and Numbering
+- See `shared/SEVERITY_RATING.md` for details
+- Vulnerability ID: `{C/H/M/L}-WRITE-{index}`
 
-## WRITE Sink（必做）
-识别并追踪以下写入/落点变更相关函数/语句（按项目实际出现情况选取）：
+## WRITE Sinks (Mandatory)
+Identify and trace the following write/destination-changing functions/statements (select according to what actually appears in the project):
 
-- 直接写入：
+- Direct writes:
   - `file_put_contents({path}, {data})`
-  - `fwrite($handle, {data})`（通常配合 `fopen($path, 'w'|'ab'|'x'|...)`）
+  - `fwrite($handle, {data})` (usually combined with `fopen($path, 'w'|'ab'|'x'|...)`)
   - `stream_write($stream, {data})` / `fputs($handle, {data})`
-- 打开并写入（覆盖/截断）：
+- Open and write (overwrite/truncate):
   - `fopen($path, 'w'|'x'|'a'|'ab'|'wb'|...)`
-  - `ftruncate($handle, {size})`（若路径由用户控制或与路径拼接链路相关）
-- 重命名/复制导致的落点变更（可形成“写入落点”）：
+  - `ftruncate($handle, {size})` (if the path is user-controlled or related to a path concatenation chain)
+- Destination changes caused by rename/copy (can form a "write destination"):
   - `rename($src, $dest)`
   - `copy($src, $dest)`
-  - `move_uploaded_file($tmp, $dest)`（若不是纯 UPLOAD 场景，且核心风险是落点/路径可控）
-- 日志落点写入（可选，但按你项目风险选择启用）：
-  - `error_log($message, 3, $destination)`（message_type=3 时 destination 为文件）
+  - `move_uploaded_file($tmp, $dest)` (if it is not a pure UPLOAD scenario and the core risk is a controllable destination/path)
+- Log destination writes (optional, but enable them according to your project's risk):
+  - `error_log($message, 3, $destination)` (with message_type=3 the destination is a file)
 
-## 路径穿越到写入落点检测（必做）
-必须分析并给出证据化判断（不能只写“可能”）：
+## Path Traversal to Write Destination Detection (Mandatory)
+You must analyze and give an evidence-based determination (you cannot simply write "possibly"):
 
-1. 路径拼接与归一化链路
-- base 目录（如 `$baseDir` / `$uploadDir` / `$dataDir`）如何与用户输入 join（`$base.$user` / `sprintf` / `join` / 数组路径字段拼接）
-- 是否进行目录净化/拒绝穿越片段（`../`、`..\\`、混合分隔符、Windows 盘符、绝对路径、尾部空白等）
-- 是否使用 `realpath/canonicalize` 以及“最终 resolved 是否仍在 base 前缀下”的前缀校验
+1. Path concatenation and normalization chain
+- How the base directory (e.g. `$baseDir` / `$uploadDir` / `$dataDir`) is joined with user input (`$base.$user` / `sprintf` / `join` / array path field concatenation)
+- Whether there is directory sanitization / rejection of traversal fragments (`../`, `..\\`, mixed separators, Windows drive letters, absolute paths, trailing whitespace, etc.)
+- Whether `realpath/canonicalize` is used together with a prefix check that "the final resolved path is still under the base prefix"
 
-2. 写入落点最终解析结果
-- 写入前的目标路径字符串是否会因为 wrapper/符号链接/realpath 解析而改变最终落点
-- 最终 `resolved target` 是否逃逸 base 约束（逃逸则倾向落点可控）
+2. Final resolved write destination
+- Whether the target path string before the write changes the final destination through wrapper/symlink/realpath resolution
+- Whether the final `resolved target` escapes the base constraint (an escape suggests a controllable destination)
 
-## 写入内容可控性与覆盖策略（必做）
-必须追踪并输出（链路逐步写出）：
+## Write Content Controllability and Overwrite Strategy (Mandatory)
+You must trace and output the following (write the chain step by step):
 
-1. 写入内容来源
-- `{data}/{content}` 参数是否来自用户可控输入（GET/POST/JSON/COOKIE/上传字段等）
-- 是否存在 decode/拼接/模板化/编码步骤后仍可控
+1. Source of the write content
+- Whether the `{data}/{content}` argument comes from user-controllable input (GET/POST/JSON/COOKIE/upload fields, etc.)
+- Whether it remains controllable after decode/concatenation/templating/encoding steps
 
-2. 覆盖/截断模式
-- 写入模式是否为覆盖（`fopen(...,'w'|'x')` 等）或明确允许覆盖同名文件
-- 是否存在基于模式的条件分支（某些分支才覆盖、某些分支只追加等）
+2. Overwrite/truncate mode
+- Whether the write mode is an overwrite (`fopen(...,'w'|'x')`, etc.) or explicitly allows overwriting a file with the same name
+- Whether there are mode-based conditional branches (some branches overwrite, some only append, etc.)
 
-## 写入后的可执行性/可触达性评估（必做）
-由于文件写入常直接导致 RCE，本 skill 必须输出“写完之后能不能被执行/访问”的可证据判断（禁止省略）：
+## Post-Write Executability/Reachability Assessment (Mandatory)
+Because file writes often directly lead to RCE, this skill must output an evidence-based determination of "can the file be executed/accessed after being written" (must not be omitted):
 
-- 若写入的是 PHP/可执行脚本：检查扩展名/解析路径（如最终落点以 `.php` 结尾，或写入的内容被包含/解析）
-- 若落点位于 Web 根目录或应用可包含目录：输出静态映射证据（例如 dest 指向 `public/`、`www/` 或框架模板/配置目录）
-- 若存在“执行禁用策略”（例如目录不执行 PHP、或服务端配置禁止执行）：输出对应证据与缺失提示
+- If a PHP/executable script is written: check the extension/parsing path (e.g. the final destination ends with `.php`, or the written content gets included/parsed)
+- If the destination lies in the web root or an application-includable directory: output static mapping evidence (e.g. dest points to `public/`, `www/`, or a framework template/configuration directory)
+- If an "execution disable policy" exists (e.g. the directory does not execute PHP, or the server configuration forbids execution): output the corresponding evidence and note what is missing
 
-## tracer 证据引用（强制：来自 php-route-tracer）
-每条 WRITE 疑似漏洞必须逐项引用 trace 输出中 `## 9) Sink Evidence Type Checklist` 的 **WRITE 行**对应证据要点（允许状态为待验证，但证据引用必须存在）：
+## tracer Evidence Citation (Mandatory: from php-route-tracer)
+Every suspected WRITE vulnerability must cite item by item the corresponding evidence points of the **WRITE row** in the `## 9) Sink Evidence Type Checklist` of the trace output (a pending-verification status is allowed, but the evidence citation must exist):
 
-1. `EVID_WRITE_WRITE_CALLSITE`：写入/落点变更的调用点位置证据（file_put_contents/fwrite/fopen('w')/rename/copy 等）
-2. `EVID_WRITE_DESTPATH_JOIN_AND_NORMALIZATION`：目的路径拼接与归一化证据（base join、净化/拒绝穿越片段、realpath 前缀校验等）
-3. `EVID_WRITE_DESTPATH_RESOLVED_TARGET`：最终解析落点（resolved target）证据（是否逃逸 base）
-4. `EVID_WRITE_CONTENT_SOURCE_INTO_WRITE`：写入内容参数与用户可控输入的映射证据
-5. `EVID_WRITE_TRUNCATE_OR_OVERWRITE_MODE`：覆盖/截断/追加模式证据（写入模式或覆盖策略）
-6. `EVID_WRITE_EXECUTION_ACCESSIBILITY_PROOF`：写完后的可执行性/可触达性证据（web 根/可包含目录/执行禁用策略等）
+1. `EVID_WRITE_WRITE_CALLSITE`: call site evidence for the write/destination change (file_put_contents/fwrite/fopen('w')/rename/copy, etc.)
+2. `EVID_WRITE_DESTPATH_JOIN_AND_NORMALIZATION`: destination path concatenation and normalization evidence (base join, sanitization/traversal rejection fragments, realpath prefix validation, etc.)
+3. `EVID_WRITE_DESTPATH_RESOLVED_TARGET`: evidence of the final resolved destination (resolved target) (whether it escapes the base)
+4. `EVID_WRITE_CONTENT_SOURCE_INTO_WRITE`: mapping evidence between the write content argument and user-controllable input
+5. `EVID_WRITE_TRUNCATE_OR_OVERWRITE_MODE`: overwrite/truncate/append mode evidence (write mode or overwrite strategy)
+6. `EVID_WRITE_EXECUTION_ACCESSIBILITY_PROOF`: post-write executability/reachability evidence (web root / includable directory / execution disable policy, etc.)
 
-## tracer 证据缺失处理（强制）
-- 若 trace 的 `## 9) Sink Evidence Type Checklist`（WRITE 行）中任一关键证据要点缺失或无法对应到本条漏洞：该条漏洞状态只能标记为 `⚠️待验证`（不得直接给出 `✅已确认可利用`）。
+## Handling Missing tracer Evidence (Mandatory)
+- If any key evidence point in the `## 9) Sink Evidence Type Checklist` (WRITE row) of the trace is missing or cannot be mapped to this vulnerability: the status of that vulnerability may only be marked `⚠️ Unverified` (it must not be marked `✅ Confirmed Exploitable` directly).
 
-## tracer 触发条件（必做）
-至少满足其一，且必须依赖 trace 验证 sink 存在：
+## tracer Trigger Conditions (Required)
+At least one of the following must hold, and the sink must be verified through the trace:
 
-- 写入目标路径经过多层函数/对象属性/JSON 字段传递后到达写入函数
-- 写入内容（data/content）经过 decode/拼接后仍可控
-- 存在分支逻辑导致仅部分情况下会覆盖/截断/落到可写可控目录
+- The write target path reaches the write function after passing through multiple layers of functions/object properties/JSON fields
+- The write content (data/content) remains controllable after decode/concatenation
+- Branching logic exists such that an overwrite/truncate/landing in a writable controllable directory only happens in some cases
 
-## 报告输出
-输出到：
+## Report Output
+Output to:
 ```
 {output_path}/vuln_audit/write_{timestamp}.md
 ```
 
-## 漏洞条目模板（强制）
-每条漏洞必须遵循以下结构（不得省略）：
+## Vulnerability Entry Template (Mandatory)
+Every vulnerability must follow the following structure (must not be omitted):
 
 ```markdown
-### [{等级前缀}-WRITE-{序号}] 任意文件写入（路径穿越到落点/写入链）风险
+### [{severity prefix}-WRITE-{index}] Arbitrary File Write (path traversal to destination / write chain) risk
 
-| 项目 | 信息 |
+| Item | Information |
 |------|------|
-| 严重等级 | {🔴/🟠/🟡/🔵} (CVSS {score}) |
-| 可达性 (R) | {0-3} - {理由} |
-| 影响范围 (I) | {0-3} - {理由} |
-| 利用复杂度 (C) | {0-3} - {理由} |
-| 可利用性 | ✅ 已确认 / ⚠️ 待验证 / ❌ 不可利用 / 🔍 环境依赖 |
-| 位置 | {file}:{line} ({Function/Class}) |
+| Severity Level | {🔴/🟠/🟡/🔵} (CVSS {score}) |
+| Reachability (R) | {0-3} - {rationale} |
+| Impact Scope (I) | {0-3} - {rationale} |
+| Exploitation Complexity (C) | {0-3} - {rationale} |
+| Exploitability | ✅ Confirmed / ⚠️ Unverified / ❌ Not Exploitable / 🔍 Environment-Dependent |
+| Location | {file}:{line} ({Function/Class}) |
 
-#### 数据流链（Source -> Path Transform -> Content Transform -> Sink）
-（逐行写出：用户输入进入 destination/path 的链路、归一化/净化/realpath 约束检查 -> 最终 resolved target -> 用户输入进入写入内容 data 的链路 -> 进入写入函数参数位置 -> 是否覆盖/截断 -> 写入调用点）
+#### Data Flow Chain (Source -> Path Transform -> Content Transform -> Sink)
+(Write it line by line: the chain by which user input enters destination/path, the normalization/sanitization/realpath constraint check -> the final resolved target -> the chain by which user input enters the write content data -> the argument position inside the write function -> whether it overwrites/truncates -> the write call site)
 
-#### 可利用前置条件
-- 鉴权要求：{无需/需登录/需特定权限}
-- 输入可控性：{完全可控/条件可控/不可控}
-- 触发条件：{分支/异常路径/需要特定服务器文件权限/需要落到可执行目录}
+#### Exploitability Preconditions
+- Authentication Requirement: {none / login required / specific privilege required}
+- Input Controllability: {fully controllable / conditionally controllable / not controllable}
+- Trigger conditions: {branch / exceptional path / specific server file permissions required / must land in an executable directory}
 
-#### 证据引用（强制：来自 php-route-tracer）
-必须逐项引用：
-- `EVID_WRITE_WRITE_CALLSITE`：{证据点简述（包括 file:line）}
-- `EVID_WRITE_DESTPATH_JOIN_AND_NORMALIZATION`：{证据点简述}
-- `EVID_WRITE_DESTPATH_RESOLVED_TARGET`：{证据点简述}
-- `EVID_WRITE_CONTENT_SOURCE_INTO_WRITE`：{证据点简述}
-- `EVID_WRITE_TRUNCATE_OR_OVERWRITE_MODE`：{证据点简述}
-- `EVID_WRITE_EXECUTION_ACCESSIBILITY_PROOF`：{证据点简述}
+#### Evidence Citation (Mandatory: from php-route-tracer)
+You must cite item by item:
+- `EVID_WRITE_WRITE_CALLSITE`: {brief evidence description (including file:line)}
+- `EVID_WRITE_DESTPATH_JOIN_AND_NORMALIZATION`: {brief evidence description}
+- `EVID_WRITE_DESTPATH_RESOLVED_TARGET`: {brief evidence description}
+- `EVID_WRITE_CONTENT_SOURCE_INTO_WRITE`: {brief evidence description}
+- `EVID_WRITE_TRUNCATE_OR_OVERWRITE_MODE`: {brief evidence description}
+- `EVID_WRITE_EXECUTION_ACCESSIBILITY_PROOF`: {brief evidence description}
 
-#### 验证 PoC（强制：可执行或可观测验证框架）
+#### Verification PoC (Mandatory: executable or observable verification framework)
 ```http
-{HTTP Method} {真实路由与完整参数} HTTP/1.1
+{HTTP Method} {real route with full parameters} HTTP/1.1
 Host: {host}
-{必要 Header/Session/JWT/Cookie}
+{required Header/Session/JWT/Cookie}
 
 {Payload}
 ```
 
-PoC 输出/观察点（必须写清楚）：
-- 写入目标文件是否在 Web 可访问位置出现（或是否可通过后续业务逻辑包含/读取到）
-- 若写入的是 PHP：观察是否可触发代码执行（或至少观察文件内容回显/下载成功）
+PoC output/observation points (must be spelled out):
+- Whether the written target file appears in a web-accessible location (or whether it can be included/read by subsequent business logic)
+- If a PHP file was written: observe whether code execution can be triggered (or at least observe the file content echo / successful download)
 
-#### 建议修复
-- 以“最终 resolved target 是否在允许 base 目录内”为准，强制 `realpath + 前缀校验`
-- 严格限制可写目录（allowlist），并避免把用户输入直接拼到文件路径
-- 对写入内容做类型约束：禁止写入可执行脚本到可执行目录；对内容进行不可执行化（如仅允许序列化数据格式）
-- 覆盖策略上避免以 `'w'/'x'` 直接覆盖敏感文件；对同名冲突做安全拒绝
-- 给出代码搜索语句（`rg`）：定位所有写入 API 与路径 join 点
+#### Recommended Fix
+- Use "whether the final resolved target is inside the allowed base directory" as the criterion, and enforce `realpath + prefix validation`
+- Strictly restrict writable directories (allowlist) and avoid concatenating user input directly into file paths
+- Apply type constraints to the written content: forbid writing executable scripts into executable directories; make the content non-executable (e.g. only allow serialized data formats)
+- Avoid directly overwriting sensitive files with `'w'/'x'` as an overwrite strategy; safely reject same-name conflicts
+- Provide code search commands (`rg`): locate all write APIs and path join points
 ```
 
-## PoC/修复建议搜索语句（强制提供参考）
-- 写入 API：
+## PoC/Remediation Search Commands (Mandatory Reference)
+- Write APIs:
   - `rg -n "file_put_contents\\(|fwrite\\(|fopen\\(|stream_write\\(|rename\\(|copy\\(|ftruncate\\(|error_log\\(" .`
-- 路径拼接/归一化（常见变量名仅作提示，最终以项目为准）：
+- Path concatenation/normalization (common variable names are only hints; the project is authoritative):
   - `rg -n "realpath\\(|canonicalize\\(|\\.\\.\\/|\\.\\.\\\\|allowlist|baseDir|dest(path)?|target(path)?|mkdir\\(" .`
 

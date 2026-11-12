@@ -1,6 +1,10 @@
 ---
 name: browser-extension-reverse
 description: "Authorized reverse engineering of Chrome/Firefox extensions: manifest analysis, background workers, content scripts, and extension-based credential or data-exposure research."
+zh-signals: "对 Chrome/Firefox 浏览器扩展进行授权逆向分析，梳理 manifest、后台工作线程与内容脚本。信号:浏览器扩展,逆向分析,Chrome扩展,Firefox,manifest"
+when-to-use: >-
+  Use for authorized reverse engineering of Chrome/Firefox extensions when analyzing
+  manifests, background workers, content scripts, or credential and data-exposure risks.
 risk: offensive
 source: "https://github.com/zhaoxuya520/reverse-skill"
 source_repo: "zhaoxuya520/reverse-skill"
@@ -30,66 +34,66 @@ license_source: "https://github.com/zhaoxuya520/reverse-skill/blob/main/LICENSE"
 - Investigating how an extension handles credentials or sensitive page data.
 
 
-## 适用场景
+## Applicable Scenarios
 
-- Chrome/Edge MV2/MV3 扩展分析
-- Firefox 扩展
-- 恶意扩展 IOC、供应链扩展投毒调查
-- 扩展实现的签名/加密/代理逻辑还原
+- Chrome/Edge MV2/MV3 extension analysis
+- Firefox extensions
+- Malicious extension IOCs and supply chain extension poisoning investigation
+- Reconstructing the signature/encryption/proxy logic implemented by an extension
 
-## 工作流
+## Workflow
 
-### 1. 包体
-
-```text
-□ crx 解压 / 从 profile 取扩展目录
-□ manifest.json：permissions、host_permissions、background、content_scripts
-□ 评估过度权限（<all_urls>、webRequest、debugger）
-```
-
-### 2. 逻辑
+### 1. Package
 
 ```text
-□ service_worker / background 入口
-□ content_script 注入点与世界（isolated）
-□ chrome.storage / IndexedDB 密钥
-□ 与 `js-reverse` 相同：Observe 网络与消息传递（runtime.sendMessage）
+□ Unpack the crx / take the extension directory from the profile
+□ manifest.json: permissions, host_permissions, background, content_scripts
+□ Assess excessive permissions (<all_urls>, webRequest, debugger)
 ```
 
-### 3. 动态
+### 2. Logic
 
 ```text
-□ 开发者模式加载解压目录
-□ chrome://extensions 检查错误
-□ DevTools 附加 service worker
-□ 必要时 Frida/浏览器 CDP（jshookmcp）
+□ service_worker / background entry point
+□ content_script injection points and its world (isolated)
+□ chrome.storage / IndexedDB keys
+□ Same as `js-reverse`: Observe network traffic and message passing (runtime.sendMessage)
 ```
 
-## 工具链
+### 3. Dynamic Analysis
 
-| 工具 | 用途 |
+```text
+□ Load the unpacked directory in developer mode
+□ Check chrome://extensions for errors
+□ Attach DevTools to the service worker
+□ Use Frida / browser CDP (jshookmcp) when necessary
+```
+
+## Toolchain
+
+| Tool | Purpose |
 |------|------|
-| 解压/jq | manifest |
-| Chrome DevTools | worker 调试 |
-| js-reverse 工具链 | 深度 JS |
-| YARA | 恶意扩展规则 |
+| unzip/jq | manifest |
+| Chrome DevTools | worker debugging |
+| js-reverse toolchain | deep JS |
+| YARA | malicious extension rules |
 
-## 参考
+## References
 
 - `references/extension-analysis.md`
-- field-journal 扩展恢复相关条目
+- field-journal entries related to extension recovery
 - `../js-reverse/` `../malware-analysis/`
 
-## 路由上下文
+## Routing Context
 
-**上游**: MASTER R30  
-**下游**: 复杂混淆 JS → `js-reverse`；投毒调查 → supply-chain / malware
+**Upstream**: MASTER R30  
+**Downstream**: heavily obfuscated JS → `js-reverse`; poisoning investigation → supply-chain / malware
 
-## 任务完成自检
+## Task Completion Self-Check
 
-- [ ] 是否列出权限面与入口脚本？
-- [ ] 是否还原关键数据流？
-- [ ] Checklist？
+- [ ] Did I enumerate the permission surface and the entry scripts?
+- [ ] Did I reconstruct the key data flows?
+- [ ] Checklist?
 
 ## Limitations
 

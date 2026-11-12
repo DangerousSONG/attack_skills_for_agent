@@ -1,6 +1,8 @@
 ---
 name: pci-audit
 description: "Audit applications and infrastructure handling payment card data against PCI DSS v4.0. Heavy emphasis on scope determination (the single most-leveraged variable) plus the engineering-relevant requirements — Req 3 (storage of CHD), Req 4 (transmission), Req 6 (secure SDLC), Req 7-8 (access), Req 10 (logging), Req 11 (testing), Req 12 (program). Use when the user mentions 'PCI,' 'PCI DSS,' 'PCI DSS 4.0,' 'payment card,' 'cardholder data,' 'CHD,' 'PAN,' 'PCI scope,' 'PCI compliance,' 'SAQ,' 'AoC,' 'attestation of compliance,' 'tokenization,' 'P2PE,' 'network segmentation for PCI,' or audits any system that stores, processes, or transmits payment card data."
+zh-signals: "依据 PCI DSS v4.0 审计处理支付卡数据的应用与基础设施，重点覆盖范围判定与技术要求。信号:PCI DSS,支付卡,合规审计,CHD,范围判定"
+when-to-use: "Use when auditing any system that stores, processes, or transmits payment card data against PCI DSS v4.0, especially when scope determination or compliance questions are involved."
 allowed-tools: Read, Grep, Glob, Bash, Write, WebSearch
 ---
 

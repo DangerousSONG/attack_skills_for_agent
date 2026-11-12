@@ -2,39 +2,42 @@
 name: ldeep-ldap-query
 description: "ldeep performs lightweight LDAP queries as a BloodHound alternative. Signals: internal enumeration, network discovery, list domain users, detailed information, gMSA enumeration."
 zh-signals: "ldeep: 轻量 LDAP 查询替代 bloodhound。信号:内网枚举,网络发现,列域用户,详细信息,gMSA 账户枚举。"
+when-to-use: >-
+  Use when enumerating an Active Directory domain over LDAP and you need fast user, trust, or
+  gMSA listings without deploying BloodHound.
 ---
 
 # ldeep
 
-- 攻击大类:C29 AD与LDAP枚举
-- 上游仓库:https://github.com/franc-pentest/ldeep
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C29 AD and LDAP Enumeration
+- Upstream Repository: https://github.com/franc-pentest/ldeep
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install git+https://github.com/franc-pentest/ldeep
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `ldeep ldap -u svc -p pass -d corp.local -s ldap://10.0.0.1 users` | 列域用户 |
-| `ldeep ... users -v` | 详细信息 |
-| `ldeep ... enum_gmsa` | gMSA 账户枚举 |
-| `ldeep ... trusts` | 域信任查询 |
-| `ldeep krb5 -u svc -k svc.ccache users` | Kerberos 认证查询 |
+| `ldeep ldap -u svc -p pass -d corp.local -s ldap://10.0.0.1 users` | List domain users |
+| `ldeep ... users -v` | Detailed information |
+| `ldeep ... enum_gmsa` | gMSA account enumeration |
+| `ldeep ... trusts` | Domain trust queries |
+| `ldeep krb5 -u svc -k svc.ccache users` | Kerberos authenticated queries |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 轻量 LDAP 查询替代 bloodhound
+### Lightweight LDAP Queries as a BloodHound Alternative
 
 ```bash
 ldeep ldap -u svc -p pass -d corp.local -s 10.0.0.1 users -v | tee users.txt
-# 快速出域用户清单,比起 BH 快得多
+# Produce a domain user list fast, much quicker than BH
 ```
 
-## 注意事项
+## Notes
 
-轻量 LDAP 枚举工具,信息输出格式友好,支持 Kerberos 票据认证。
+A lightweight LDAP enumeration tool with friendly output formatting that supports Kerberos ticket authentication.

@@ -1,6 +1,8 @@
 ---
 name: forensics-assist
 description: Digital-forensics assistant for IR context — memory analysis via Volatility 3, disk-imaging hygiene (write-blocker, hash validation), timeline reconstruction via plaso/log2timeline, file-system artifacts per OS. Audit-grade evidence; courtroom-grade chain of custody requires additional specialized forensics work.
+zh-signals: "数字取证助手，覆盖内存分析、磁盘镜像规范与时间线重建。信号:数字取证,内存分析,Volatility,时间线,证据保全"
+when-to-use: "Use during incident response when performing memory analysis, disk-imaging hygiene checks, or timeline reconstruction."
 ---
 
 # Forensics Assist

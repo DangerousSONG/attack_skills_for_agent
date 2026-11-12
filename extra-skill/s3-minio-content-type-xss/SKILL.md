@@ -1,6 +1,8 @@
 ---
 name: s3-minio-content-type-xss
 description: Exploit public bucket Content-Type override for stored XSS on target origin.
+zh-signals: "通过篡改公共 S3/MinIO 存储桶的 Content-Type 响应头，把用户上传文件转化为同源存储型 XSS。信号:S3,MinIO,Content-Type,存储型XSS,存储桶"
+when-to-use: "Use when a target serves user-uploaded files from a public S3/MinIO bucket on its own origin and the bucket responds to ?response-content-type= overrides; test whether stored HTML/JS can execute same-origin."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

@@ -1,6 +1,8 @@
 ---
 name: breach-patterns
 description: "Learn from public breach disclosures — extract the audit question each one implies and check your own stack. Capital One IMDS abuse, LastPass vault exfiltration, Okta Lapsus$, Snowflake credential reuse, MOVEit, SolarWinds, Equifax, Target POS, Codecov, Uber, Twilio — what would you check now if your boss said 'could that happen to us?' Use when the user mentions 'breach analysis,' 'lessons learned,' 'security postmortem,' 'breach patterns,' 'breach lessons,' 'has this happened to us,' 'apply breach lessons,' 'preempt breaches,' 'security retrospective,' 'real-world security incidents,' or wants to harden against known attacker playbooks."
+zh-signals: "从公开泄露事件中提炼审计问题，对照自身技术栈排查同类风险并加固。信号:泄露案例,经验教训,安全复盘,攻击者手法,加固"
+when-to-use: "Use when the user asks what lessons a public breach implies for their own stack, or wants to preempt known attacker playbooks."
 allowed-tools: Read, Grep, Glob, Bash, WebSearch, WebFetch
 ---
 

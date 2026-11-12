@@ -1,6 +1,9 @@
 ---
 name: incident-triage
 description: "Guide rapid triage and initial response to security incidents following NIST SP 800-61 methodology. Use when the user mentions 'incident response,' 'security incident,' 'triage,' 'we've been hacked,' 'breach,' 'compromised,' 'malware detected,' 'suspicious activity,' 'IOC,' 'indicators of compromise,' or needs help handling a security event."
+zh-signals: "按 NIST SP 800-61 对安全事件进行快速分类、遏制、证据保全与 IOC 提取。信号:事件响应,安全事件分级,证据保全,IOC提取,应急处置。"
+when-to-use: >-
+  Use when a security incident, breach, malware detection, or suspicious activity needs rapid triage, initial containment, evidence preservation, and IOC extraction following NIST SP 800-61.
 allowed-tools: Bash, Read, Write, Grep, Glob, WebSearch
 ---
 

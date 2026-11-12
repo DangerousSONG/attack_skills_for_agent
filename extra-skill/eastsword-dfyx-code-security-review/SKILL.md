@@ -1,6 +1,8 @@
 ---
 name: eastsword-dfyx-code-security-review
 description: Expert-level code security audit skill using deep data flow analysis, taint tracking, and business logic understanding across 9 languages
+zh-signals: "使用 dfyx 方法对多语言代码库进行深度数据流与污点追踪的白盒代码安全审计。信号:代码审计,白盒,污点追踪,数据流,多语言,漏洞挖掘"
+when-to-use: "Use when performing a white-box security review of a source code project across Java, Python, Go, PHP, JavaScript, C/C++, .NET, Ruby, or Rust."
 triggers:
   - audit this code for security vulnerabilities
   - perform a security code review
@@ -16,7 +18,7 @@ triggers:
 
 > Skill by [ara.so](https://ara.so) — Security Skills collection.
 
-Expert-level code security audit skill developed by the EastSword (东方隐侠) team. Performs comprehensive white-box static analysis using a five-phase standardized audit protocol with deep data flow analysis, taint tracking, and business logic understanding.
+Expert-level code security audit skill developed by the EastSword team. Performs comprehensive white-box static analysis using a five-phase standardized audit protocol with deep data flow analysis, taint tracking, and business logic understanding.
 
 ## Overview
 

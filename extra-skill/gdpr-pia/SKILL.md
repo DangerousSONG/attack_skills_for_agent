@@ -1,6 +1,8 @@
 ---
 name: gdpr-pia
 description: Data Protection Impact Assessment (DPIA / GEB) workflow against AVG Art 35 — trigger check (AP criteria and WP 248), systematic description, necessity, risk analysis from the data subject's perspective, measures and residual risk, prior consultation with the Autoriteit Persoonsgegevens.
+zh-signals: "按 AVG 第 35 条执行数据保护影响评估（DPIA/GEB），涵盖触发判断、必要性、风险分析与事前咨询。信号:GDPR评估,DPIA,隐私影响评估,风险分析,合规咨询"
+when-to-use: "Use when assessing whether a processing operation requires a DPIA under GDPR Article 35 or drafting and consulting on a DPIA."
 ---
 
 # AVG / GDPR Data Protection Impact Assessment

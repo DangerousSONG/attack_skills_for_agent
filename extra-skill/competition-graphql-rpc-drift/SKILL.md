@@ -1,6 +1,11 @@
 ---
 name: competition-graphql-rpc-drift
 description: Internal downstream skill for ctf-sandbox-orchestrator. CTF-sandbox workflow for GraphQL schemas, persisted queries, RPC manifests, generated clients, OpenAPI drift, hidden operations, and contract-to-handler mismatches. Use when the user asks to inspect GraphQL or RPC requests, compare client contracts to live handlers, recover hidden operations, trace generated clients, or explain how schema or contract drift produces the decisive behavior. Use only after `$ctf-sandbox-orchestrator` has already established sandbox assumptions and routed here.
+zh-signals: "ctf-sandbox-orchestrator 下游专项技能，用于比对 GraphQL schema、持久化查询、RPC 清单与生成客户端，发现隐藏操作与契约漂移。信号:GraphQL,RPC,契约漂移,ctf-sandbox,隐藏操作"
+when-to-use: >-
+  Use only after ctf-sandbox-orchestrator has established sandbox assumptions
+  and routed here, when inspecting GraphQL/RPC requests, recovering hidden
+  operations, or comparing client contracts to live handlers.
 ---
 
 # Competition Graphql Rpc Drift

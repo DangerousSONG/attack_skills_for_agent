@@ -2,37 +2,41 @@
 name: email2phonenumber
 description: "email2phonenumber: reverse lookup phone number from email. Signals: email collection, employee information, email to phone number, deep mode."
 zh-signals: "email2phonenumber: 邮箱反查手机号。信号:邮箱收集,员工信息,邮箱→手机号,深度模式。"
+when-to-use: >-
+  Use when performing OSINT to reverse-lookup a phone number from an email
+  address; run in normal or deep mode and save the result for social
+  engineering or account recovery research.
 ---
 
 # email2phonenumber
 
-- 攻击大类:C03 邮箱与人员OSINT
-- 上游仓库:https://github.com/martinvigo/email2phonenumber
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C03 Email and Personnel OSINT
+- Upstream Repository: https://github.com/martinvigo/email2phonenumber
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/martinvigo/email2phonenumber && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python email2phonenumber.py -e victim@gmail.com` | 邮箱→手机号 |
-| `-e email -s` | 深度模式 |
-| `-o out.txt` | 输出 |
+| `python email2phonenumber.py -e victim@gmail.com` | Email → phone number |
+| `-e email -s` | Deep mode |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 邮箱反查手机号
+### Reverse-Lookup Phone Number from Email
 
 ```bash
 python email2phonenumber.py -e target@mail.com
-# 社工程突破口
+# A breakthrough point for social engineering
 ```
 
-## 注意事项
+## Notes
 
-OSINT 工具,通过泄露数据反查手机号。
+An OSINT tool that reverse-looks-up phone numbers from leaked data.

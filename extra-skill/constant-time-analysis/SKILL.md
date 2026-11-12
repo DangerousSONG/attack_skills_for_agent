@@ -1,6 +1,8 @@
 ---
 name: constant-time-analysis
 description: "Analyze cryptographic code to detect operations that leak secret data through execution timing variations."
+zh-signals: "分析密码学代码，检测会通过执行时序差异泄露秘密数据的操作，用于防御时序侧信道攻击。信号:常量时间,时序攻击,侧信道,密码学,密钥泄露"
+when-to-use: "Use when analyzing cryptographic code to detect operations that leak secret data through execution timing variations, or when assessing susceptibility to timing attacks."
 risk: critical
 source: community
 date_added: "2026-09-04"

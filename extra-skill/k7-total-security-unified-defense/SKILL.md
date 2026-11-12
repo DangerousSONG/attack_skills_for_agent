@@ -1,6 +1,8 @@
 ---
 name: k7-total-security-unified-defense
 description: Deploy and configure K7 Total Security 16.0.1195 multi-layered endpoint protection with AI-powered threat detection
+zh-signals: "部署并配置 K7 Total Security 多层端点防护，启用基于 AI 的威胁检测与跨平台防护策略。信号:K7 Total Security,端点防护,威胁检测,安全策略,多平台部署"
+when-to-use: "Use when deploying or configuring K7 Total Security endpoint protection profiles, defense policies, and AI-powered threat detection across platforms."
 triggers:
   - configure K7 Total Security protection profiles
   - set up K7 endpoint defense policies

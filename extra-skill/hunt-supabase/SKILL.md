@@ -1,6 +1,10 @@
 ---
 name: hunt-supabase
 description: "Hunt Supabase exploitation — Supabase anon key discovery in JS bundles, REST API table enumeration with anon key, Row Level Security (RLS) bypass via missing organization_id check, RPC function abuse returning cross-organization data, Storage bucket listing, Auth signUp/signIn with anon key, multi-tenant enumeration via WHOIS, bucket file upload/download without auth. Built from field observation of Lovable.dev + Supabase stack on rapidly-built platforms where RLS policies are consistently misconfigured. Use when a JS bundle, .env, or APK reveals a Supabase URL (project.supabase.co) and anon key (eyJ...)."
+zh-signals: "Supabase 漏洞狩猎，利用 anon key 枚举数据并绕过 RLS。信号:Supabase,RLS绕过,anonkey,RESTAPI,多租户"
+when-to-use: >-
+  Use when a JS bundle, .env, or APK exposes a Supabase project URL (project.supabase.co)
+  and anon key (eyJ...), and you need to test RLS, RPC, Storage, and Auth exposure.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

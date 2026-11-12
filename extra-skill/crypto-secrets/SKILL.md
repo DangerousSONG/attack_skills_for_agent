@@ -15,6 +15,8 @@ description: >-
   private keys. Not for Terraform/Kubernetes-only audits (use infra-security),
   package install-hook risk (use supply-chain-security), or vetting an agent
   skill before install (use skill-security).
+zh-signals: "审计源码与配置中的硬编码密钥、弱加密、不安全随机与 TLS 校验问题。信号:密码学审计,硬编码密钥,弱加密,密钥管理,TLS"
+when-to-use: "Use when reviewing application code that handles secrets, tokens, certificates, or cryptography, or when asked to scan for hardcoded secrets and weak crypto."
 ---
 
 # Cryptography and Secrets Hygiene

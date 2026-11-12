@@ -1,67 +1,69 @@
 ---
 name: uncover-search
-description: "使用 uncover 聚合查询网络空间搜索引擎。当需要从 Shodan/Censys/FOFA/Hunter/Quake/ZoomEye 等引擎快速发现暴露资产时使用。uncover 统一了多个搜索引擎的查询接口，一条命令查询多个引擎。任何涉及资产发现、互联网测绘、暴露面排查的场景都应使用此技能"
+description: "Use uncover to aggregate queries against internet search engines. Use when you need to rapidly discover exposed assets from engines such as Shodan/Censys/FOFA/Hunter/Quake/ZoomEye. uncover unifies the query interface of multiple search engines, so one command queries several engines. Any scenario involving asset discovery, internet-wide mapping, or exposure surface assessment should use this skill"
+zh-signals: "使用 uncover 聚合 Shodan、Censys、FOFA、Hunter、Quake、ZoomEye 等引擎进行资产发现。信号:uncover,资产发现,互联网测绘,Shodan,FOFA,OSINT"
+when-to-use: "Use when performing authorized asset discovery or internet-wide exposure mapping through multiple search engines via uncover."
 metadata:
-  tags: "uncover,search,shodan,censys,fofa,hunter,quake,zoomeye,资产发现,互联网测绘,OSINT"
+  tags: "uncover,search,shodan,censys,fofa,hunter,quake,zoomeye,asset-discovery,internet-mapping,OSINT"
   category: "tool"
 ---
 
-# uncover 网络空间搜索引擎聚合方法论
+# uncover Internet Search Engine Aggregation Methodology
 
-uncover 是 ProjectDiscovery 出品的搜索引擎聚合工具。核心优势：**多引擎统一接口**（Shodan/Censys/FOFA/Hunter/Quake/ZoomEye/Netlas）+ **一条命令查多源** + **管道友好**。
+uncover is a search engine aggregation tool from ProjectDiscovery. Core advantages: **unified multi-engine interface** (Shodan/Censys/FOFA/Hunter/Quake/ZoomEye/Netlas) + **one command, multiple sources** + **pipeline friendly**.
 
-项目地址：https://github.com/projectdiscovery/uncover
+Project URL: https://github.com/projectdiscovery/uncover
 
-API Key 配置：编辑 `~/.config/uncover/provider-config.yaml` 添加各引擎 API Key。
+API key configuration: edit `~/.config/uncover/provider-config.yaml` to add the API key for each engine.
 
-## Phase 1: 基本搜索
+## Phase 1: Basic Search
 
 ```bash
-# Shodan 搜索
+# Shodan search
 uncover -q "org:target.com" -e shodan
 
-# FOFA 搜索
+# FOFA search
 uncover -q 'domain="target.com"' -e fofa
 
-# Censys 搜索
+# Censys search
 uncover -q "target.com" -e censys
 
-# 多引擎同时查询
+# query multiple engines at once
 uncover -q "target.com" -e shodan,censys,fofa
 ```
 
-## Phase 2: 高级搜索
+## Phase 2: Advanced Search
 
 ```bash
-# 限制结果数量
+# limit the number of results
 uncover -q "apache" -e shodan -l 200
 
-# JSON 输出
+# JSON output
 uncover -q "org:target.com" -e shodan -json -o results.json
 
-# 静默输出（只显示 IP:Port）
+# silent output (only shows IP:Port)
 uncover -q "org:target.com" -e shodan -silent
 
-# 从文件读取查询
+# read queries from a file
 uncover -ql queries.txt -e shodan
 ```
 
-## Phase 3: 管道集成
+## Phase 3: Pipeline Integration
 
 ```bash
-# 资产发现 → HTTP 探活
+# asset discovery → HTTP liveness check
 uncover -q "org:target.com" -e shodan -silent | httpx -silent
 
-# 资产发现 → 端口扫描
+# asset discovery → port scanning
 uncover -q "org:target.com" -e shodan -silent | naabu -silent
 
-# 资产发现 → 漏洞扫描
+# asset discovery → vulnerability scanning
 uncover -q 'domain="target.com"' -e fofa -silent | httpx -silent | nuclei
 ```
 
-## 各引擎查询语法
+## Query Syntax per Engine
 
-| 引擎 | 域名查询 | 组织查询 |
+| Engine | Domain Query | Organization Query |
 |------|---------|---------|
 | Shodan | `hostname:target.com` | `org:"Target Inc"` |
 | Censys | `target.com` | `autonomous_system.name:"Target"` |

@@ -1,6 +1,10 @@
 ---
 name: ai-security-trainer-2026
 description: Browser-based cybersecurity education platform with guided lessons, quizzes, gamified progression, and adaptive learning scenarios for information security practice.
+zh-signals: "搭建并定制基于浏览器的网络安全教育平台，含引导课程、测验、游戏化进阶与自适应学习场景。信号:安全教育平台,安全培训,测验,游戏化,学习系统"
+when-to-use: >-
+  Use when setting up or customizing a cybersecurity education platform with
+  lessons, quizzes, gamified progression, or progress tracking.
 triggers:
   - set up ai security trainer platform
   - configure cybersecurity learning environment

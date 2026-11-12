@@ -8,6 +8,10 @@ description: >
   3 or more failure entries. Outputs the amendment as a diff the user can review before
   applying. Records the amendment rationale in observations/<skill-name>/runs.md after
   user confirmation.
+zh-signals: "审阅技能 SKILL.md 与运行日志，定位反复失败模式并给出针对性修订建议。信号:技能修订,失败分析,运行日志,meta,反馈闭环"
+when-to-use: >-
+  Use when a skill keeps failing on specific targets, or the user asks to improve, fix,
+  or update an existing skill based on accumulated run outcomes.
 license: MIT
 compatibility: Designed for Claude Code. No external tools required.
 metadata:

@@ -1,6 +1,8 @@
 ---
 name: frontend-mobile-security-xss-scan
 description: "Inspect frontend code for XSS injection points, unsafe DOM manipulation, and missing sanitization."
+zh-signals: "检查前端代码中的 XSS 注入点、不安全 DOM 操作与缺失的输入净化。信号:XSS扫描,前端安全,DOM操作,输入净化,React/Vue"
+when-to-use: "Use when inspecting React, Vue, Angular, or vanilla JavaScript frontend code for XSS injection points and unsafe DOM manipulation."
 risk: critical
 source: community
 date_added: "2026-02-27"

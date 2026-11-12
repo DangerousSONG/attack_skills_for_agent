@@ -8,6 +8,8 @@ description: >
   script", "postinstall script", "package.json scripts CI", "npm ci ignore-scripts false",
   "actions/checkout ref pull request head sha", privileged workflow running PR code,
   "Gato-X", supply chain via PR lifecycle scripts.
+zh-signals: "识别 pull_request_target 工作流检出并执行攻击者 PR 代码、导致仓库机密泄露的 Pwn Request 漏洞。信号:pull_request_target,pwn request,CI/CD,供应链,secrets,缓存投毒"
+when-to-use: "Use when hunting Pwn Request vulnerabilities where pull_request_target workflows checkout attacker-controlled PR code and execute it in a privileged context with access to repository secrets."
 license: MIT
 compatibility: Designed for Claude Code. Requires access to target .github/workflows/.
 metadata:

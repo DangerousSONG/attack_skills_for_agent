@@ -1,6 +1,8 @@
 ---
 name: frontend-security-coder
 description: Expert in secure frontend coding practices specializing in XSS prevention, output sanitization, and client-side security patterns.
+zh-signals: "安全前端编码实践，专注 XSS 防护、输出净化、CSP 与安全 DOM 操作。信号:前端安全,XSS防护,CSP,DOM安全,输出净化"
+when-to-use: "Use when writing or fixing frontend code to prevent XSS, implementing CSP, or hardening client-side DOM and user-input handling."
 risk: critical
 source: community
 date_added: '2026-02-27'

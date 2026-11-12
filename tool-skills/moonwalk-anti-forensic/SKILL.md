@@ -2,40 +2,45 @@
 name: moonwalk-anti-forensic
 description: "moonwalk: Linux trace timeline erasure. Signals: trace cleanup, anti-forensics, start timestamp baseline recording, active period, in-memory execution mode."
 zh-signals: "moonwalk: Linux 痕迹时间线抹除。信号:痕迹清理,反取证,开始记录时间戳基线,活动期,内存执行模式。"
+when-to-use: >-
+  Use when you need to erase Linux forensic timeline evidence after operations by
+  recording a timestamp baseline with `moonwalk start` and restoring all
+  mtime/atime with `moonwalk finish`; supports in-memory mode and directory
+  scoping.
 ---
 
 # moonwalk
 
-- 攻击大类:C20 反取证与痕迹清理
-- 上游仓库:https://github.com/mufeedvh/moonwalk
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C20 Anti-Forensics and Trace Cleanup
+- Upstream Repository: https://github.com/mufeedvh/moonwalk
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
-cargo install moonwalk 或 release 二进制
+cargo install moonwalk or take the release binary
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `moonwalk start` | 开始记录时间戳基线 |
-| `执行操作...` | 活动期 |
-| `moonwalk finish` | 恢复全部 mtime/atime |
-| `-m` | 内存执行模式 |
-| `-d dir` | 限定目录 |
+| `moonwalk start` | Start recording the timestamp baseline |
+| `perform operations...` | Active period |
+| `moonwalk finish` | Restore all mtime/atime |
+| `-m` | In-memory execution mode |
+| `-d dir` | Limit to a directory |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Linux 痕迹时间线抹除
+### Erase the Linux trace timeline
 
 ```bash
 moonwalk start
-# 执行渗透操作(文件访问/修改)
-moonwalk finish  # 所有时间戳恢复基线,审计时间线断裂
+# Perform the intrusion operations (file access/modification)
+moonwalk finish  # all timestamps are restored to the baseline, breaking the audit timeline
 ```
 
-## 注意事项
+## Notes
 
-Rust 写的反取证,恢复文件时间线;配合 mat2 清元数据形成完整清理链。
+Anti-forensics written in Rust that restores the file timeline; pair it with mat2 to clear metadata and form a complete cleanup chain.

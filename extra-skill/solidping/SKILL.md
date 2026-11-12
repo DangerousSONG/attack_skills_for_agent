@@ -1,6 +1,8 @@
 ---
 name: solidping
 description: "Run SolidPing uptime monitoring through its hosted MCP server: list and diagnose checks, read results and incidents, create checks across 40+ types, and manage status pages."
+zh-signals: "通过托管 MCP 服务器运行 SolidPing 可用性监控，管理检查项、事件与状态页。信号:SolidPing,可用性监控,MCP,事件,状态页"
+when-to-use: "Use when the user asks whether a service is down, why a check is failing, or wants to create or modify uptime monitoring and status pages via the SolidPing MCP server."
 category: devops
 risk: critical
 source: "https://github.com/fclairamb/solidping-plugin/tree/main/skills/solidping-monitoring"

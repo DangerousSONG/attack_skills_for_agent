@@ -2,6 +2,10 @@
 name: sast-scanning
 description: Perform static application security testing with tools like Semgrep,
   CodeQL, and SonarQube.
+zh-signals: "使用 Semgrep、CodeQL、SonarQube 等工具进行静态应用安全测试并接入 CI/CD 安全门禁。信号:sast,静态分析,semgrep,codeql,sonarqube,ci/cd"
+when-to-use: >-
+  Use when you need to scan source code for vulnerabilities before deployment,
+  add a security gate to CI/CD, or automate code security reviews.
 category: security
 risk: safe
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

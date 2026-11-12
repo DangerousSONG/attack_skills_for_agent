@@ -1,6 +1,9 @@
 ---
 name: wordpress-plugin-hunt
 description: Hunt WP plugins via REST, exploit CVEs when version known.
+zh-signals: "通过 REST、readme 与源码发现 WordPress 插件并利用已知 CVE。信号:WordPress,插件枚举,CVE利用,REST探测,版本识别"
+when-to-use: >-
+  Use when WordPress is confirmed on the target and you need to enumerate installed plugins, detect versions, and exploit matching CVEs.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

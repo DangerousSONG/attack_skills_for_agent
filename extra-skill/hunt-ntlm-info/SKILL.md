@@ -1,6 +1,8 @@
 ---
 name: hunt-ntlm-info
 description: "Hunt NTLM/Negotiate information disclosure on internet-reachable IIS/SharePoint/Exchange. Anonymous NTLM Type-2 challenge capture leaks NetBIOS domain, internal DNS forest, computer name, AD timestamp via AV_PAIRS structure. Default Windows-installer hostnames (WIN-XXXXXXXXXXX pattern) signal lazy provisioning. Use when target advertises `WWW-Authenticate: NTLM` or `Negotiate` headers anonymously."
+zh-signals: "狩猎互联网可达 IIS/SharePoint/Exchange 上的 NTLM 信息泄露。信号:ntlm,信息泄露,negotiate,iis,侦察"
+when-to-use: "Use when a target advertises WWW-Authenticate NTLM or Negotiate headers anonymously and you want to harvest leaked NetBIOS domain, internal DNS, computer name, and AD timestamps."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

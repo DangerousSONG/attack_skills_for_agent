@@ -2,6 +2,11 @@
 name: graphql-idor-via-introspection-leak
 description: Covers object-level authorization bypass in GraphQL APIs where introspection reveals hidden fields or mutations that accept arbitrary user/resource IDs without ownership checks. Trigger on keywords like "GraphQL", "query", "mutation", "introspection", "resolver", "node ID", "relay", "object type", "schema", "batching", or "alias". Applies to dual-stack REST+GraphQL apps, Relay-style global IDs, and unauthenticated resolvers.
 license: MIT
+zh-signals: "利用 GraphQL introspection 泄露的 schema 发现并验证缺少所有权校验的对象级授权绕过（IDOR）。信号:GraphQL,IDOR,introspection,越权,对象级授权"
+when-to-use: >-
+  Use when testing GraphQL APIs for object-level authorization bypass,
+  especially when introspection is enabled, Relay global IDs are used, or a
+  REST+GraphQL dual-stack app may lack resolver-level ownership checks.
 compatibility: Designed for Claude Code. Burp Suite, Insomnia, or GraphQL Voyager recommended.
 metadata:
   category: api

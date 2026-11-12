@@ -1,6 +1,8 @@
 ---
 name: windows-mitigations-bypass
 description: Use when bypassing a Windows exploit/platform mitigation — ASLR/DEP/CFG/XFG/CET, ACG/CIG, WDAC/App Control, ASR/AMSI/ETW, PPL/LSA Protection, BYOVD/VBS/HVCI
+zh-signals: "绕过 Windows 漏洞利用与平台缓解措施，覆盖 ASLR、CFG、AMSI、ETW、PPL 与 BYOVD。信号:Windows缓解绕过,ASLR,CFG,AMSI,BYOVD"
+when-to-use: "Use when bypassing Windows exploit or platform mitigations such as ASLR/DEP/CFG/CET, ACG/CIG, WDAC/App Control, AMSI/ETW, PPL/LSA Protection, or HVCI during exploitation."
 metadata:
   type: offensive
   phase: exploitation

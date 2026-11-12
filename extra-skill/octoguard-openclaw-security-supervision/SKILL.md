@@ -1,6 +1,8 @@
 ---
 name: octoguard-openclaw-security-supervision
 description: Security governance and audit system for OpenClaw AI agents with real-time policy enforcement, token monitoring, and alert notifications
+zh-signals: "为 OpenClaw AI Agent 提供安全治理与审计，含实时策略拦截、Token 监控与告警。信号:OpenClaw,AI Agent 安全,策略拦截,审计日志,Token 监控"
+when-to-use: "Use when securing an OpenClaw deployment, configuring OctoGuard policies, or auditing and monitoring AI agent tool calls."
 triggers:
   - how do I secure my OpenClaw deployment
   - set up security policies for AI agent actions
@@ -16,7 +18,7 @@ triggers:
 
 > Skill by [ara.so](https://ara.so) — Security Skills collection.
 
-OctoGuard (章鱼卫士) is a security governance and audit system designed specifically for OpenClaw AI agents. It provides real-time detection, policy control, and alert notifications for user dialogue commands, tool calls, and execution results. The system acts as a security gateway that intercepts dangerous operations before they execute, monitors token consumption, and maintains comprehensive audit logs.
+OctoGuard (Octopus Guard) is a security governance and audit system designed specifically for OpenClaw AI agents. It provides real-time detection, policy control, and alert notifications for user dialogue commands, tool calls, and execution results. The system acts as a security gateway that intercepts dangerous operations before they execute, monitors token consumption, and maintains comprehensive audit logs.
 
 ## What OctoGuard Does
 

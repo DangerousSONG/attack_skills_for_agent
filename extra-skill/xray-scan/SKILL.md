@@ -1,123 +1,125 @@
 ---
 name: xray-scan
-description: "使用 xray 进行 Web 漏洞自动化扫描。当需要对 Web 应用进行全面漏洞扫描（XSS/SQLi/命令注入/SSRF/XXE/路径穿越/文件上传/弱口令等）时使用。xray 是长亭科技出品的综合性 Web 安全评估工具，支持主动扫描、被动代理扫描、基础爬虫扫描三种模式，内置丰富的检测插件和社区 POC。任何涉及 xray 漏洞扫描、Web 安全评估、被动代理扫描的场景都应使用此技能"
+description: "Automated web vulnerability scanning with xray. Use when a comprehensive vulnerability scan of a web application is required (XSS/SQLi/command injection/SSRF/XXE/path traversal/file upload/weak credentials, etc.). xray is a comprehensive web security assessment tool by Chaitin Tech that supports active scanning, passive proxy scanning, and basic crawler scanning, with rich built-in detection plugins and community POCs. Any scenario involving xray vulnerability scanning, web security assessment, or passive proxy scanning should use this skill"
+zh-signals: "使用 xray 对 Web 应用进行主动、爬虫或被动代理漏洞扫描。信号:xray,漏洞扫描,Web安全,被动代理,POC,长亭"
+when-to-use: "Use when performing automated web vulnerability scanning (XSS/SQLi/SSRF/XXE/etc.) with xray, including passive proxy and crawler modes."
 metadata:
-  tags: "xray,scan,web,vuln,漏洞扫描,安全评估,被动扫描,代理扫描,长亭,chaitin,poc"
+  tags: "xray,scan,web,vuln,vulnerability-scan,security-assessment,passive-scan,proxy-scan,chaitin,poc"
   category: "tool"
 ---
 
-# xray Web 漏洞扫描方法论
+# xray Web Vulnerability Scanning Methodology
 
-xray 是长亭科技出品的综合性 Web 安全评估工具，核心优势：**检测精度高**（语义分析引擎）+ **误报率低** + **社区 POC 丰富**。支持主动扫描、被动代理扫描、爬虫扫描三种模式。
+xray is a comprehensive web security assessment tool by Chaitin Tech. Its core strengths: **high detection accuracy** (semantic analysis engine) + **low false positive rate** + **rich community POC library**. It supports active scanning, passive proxy scanning, and crawler scanning.
 
-项目地址：https://github.com/chaitin/xray
+Project URL: https://github.com/chaitin/xray
 
-## Phase 1: 单 URL 扫描（最常用）
+## Phase 1: Single URL Scan (Most Common)
 
 ```bash
-# 扫描单个 URL（全插件）
+# Scan a single URL (all plugins)
 xray webscan --url http://target/?id=1 --html-output result.html
 
-# 指定检测插件（节省时间）
+# Specify detection plugins (saves time)
 xray webscan --url http://target/?id=1 --plugins sqldet,cmd-injection --html-output result.html
 
-# JSON 输出（便于解析）
+# JSON output (easy to parse)
 xray webscan --url http://target/?id=1 --json-output result.json
 ```
 
-## Phase 2: 爬虫扫描（自动发现页面）
+## Phase 2: Crawler Scan (Automatic Page Discovery)
 
 ```bash
-# 基础爬虫 + 漏洞扫描
+# Basic crawler + vulnerability scan
 xray webscan --basic-crawler http://target --html-output crawl-result.html
 
-# 指定爬虫深度和插件
+# Specify crawler depth and plugins
 xray webscan --basic-crawler http://target --plugins xss,sqldet,cmd-injection --html-output result.html
 ```
 
-## Phase 3: 被动代理扫描
+## Phase 3: Passive Proxy Scan
 
-适合配合浏览器手动测试，xray 自动分析经过代理的流量：
+Suits manual testing with a browser; xray automatically analyzes traffic that passes through the proxy:
 
 ```bash
-# 启动代理监听
+# Start the proxy listener
 xray webscan --listen 127.0.0.1:7777 --html-output proxy-result.html
 
-# 然后设置浏览器/工具代理为 127.0.0.1:7777
-# 所有经过代理的请求都会被自动扫描
+# Then set the browser/tool proxy to 127.0.0.1:7777
+# All requests passing through the proxy are scanned automatically
 ```
 
-## Phase 4: 检测插件速查
+## Phase 4: Detection Plugin Quick Reference
 
-| 插件 Key | 检测内容 | 说明 |
+| Plugin key | What it detects | Notes |
 |----------|---------|------|
-| `xss` | XSS 漏洞 | 语义分析引擎 |
-| `sqldet` | SQL 注入 | 报错/布尔/时间盲注 |
-| `cmd-injection` | 命令注入/代码执行/SSTI | 多种 payload |
-| `dirscan` | 目录枚举 | 备份文件、配置文件、debug 页面 |
-| `path-traversal` | 路径穿越 | 多平台多编码 |
-| `xxe` | XML 实体注入 | 有回显 + 反连检测 |
-| `upload` | 文件上传 | 常见后端语言 |
-| `brute-force` | 弱口令 | HTTP 基础认证 + 表单 |
-| `jsonp` | JSONP 劫持 | 敏感信息跨域读取 |
-| `ssrf` | SSRF | 常见绕过 + 反连检测 |
-| `baseline` | 基线检查 | SSL 版本、HTTP 头检测 |
-| `redirect` | 任意跳转 | meta/30x 跳转 |
-| `crlf-injection` | CRLF 注入 | HTTP 头注入 |
-| `struts` | Struts2 漏洞 | s2-016/032/045/059/061（高级版）|
-| `shiro` | Shiro 反序列化 | 密钥检测（高级版）|
-| `fastjson` | Fastjson 漏洞 | 系列检测（高级版）|
-| `thinkphp` | ThinkPHP 漏洞 | 系列检测（高级版）|
+| `xss` | XSS vulnerabilities | semantic analysis engine |
+| `sqldet` | SQL injection | error-based/boolean-based/time-based blind injection |
+| `cmd-injection` | command injection/code execution/SSTI | multiple payloads |
+| `dirscan` | directory enumeration | backup files, config files, debug pages |
+| `path-traversal` | path traversal | multi-platform, multi-encoding |
+| `xxe` | XML entity injection | out-of-band + callback detection |
+| `upload` | file upload | common backend languages |
+| `brute-force` | weak credentials | HTTP basic auth + form based |
+| `jsonp` | JSONP hijacking | cross-domain read of sensitive information |
+| `ssrf` | SSRF | common bypasses + callback detection |
+| `baseline` | baseline checks | SSL version, HTTP header checks |
+| `redirect` | open redirect | meta/30x redirects |
+| `crlf-injection` | CRLF injection | HTTP header injection |
+| `struts` | Struts2 vulnerabilities | s2-016/032/045/059/061 (pro version)|
+| `shiro` | Shiro deserialization | key detection (pro version)|
+| `fastjson` | Fastjson vulnerabilities | series detection (pro version)|
+| `thinkphp` | ThinkPHP vulnerabilities | series detection (pro version)|
 
-### 按场景选择插件组合
+### Plugin Combinations by Scenario
 
 ```bash
-# 快速扫描（高危优先，1-2 分钟）
+# Quick scan (high severity first, 1-2 minutes)
 xray webscan --url URL --plugins sqldet,cmd-injection,xxe,ssrf
 
-# 全面扫描（所有插件，默认行为）
+# Full scan (all plugins, default behavior)
 xray webscan --url URL
 
-# Web 应用测试（聚焦 Web 漏洞）
+# Web application testing (focused on web vulnerabilities)
 xray webscan --url URL --plugins xss,sqldet,cmd-injection,upload,path-traversal
 
-# Java 应用（针对性）
+# Java applications (targeted)
 xray webscan --url URL --plugins struts,shiro,fastjson,sqldet
 ```
 
-## Phase 5: POC 扫描
+## Phase 5: POC Scanning
 
-xray 内置 POC 引擎 (phantasm)，支持社区贡献的 POC：
+xray has a built-in POC engine (phantasm) that supports community-contributed POCs:
 
 ```bash
-# 使用内置 POC 扫描
+# Scan with built-in POCs
 xray webscan --plugins phantasm --url http://target
 
-# 指定自定义 POC 目录
+# Specify a custom POC directory
 xray webscan --plugins phantasm --poc /path/to/pocs/ --url http://target
 ```
 
-社区 POC 仓库：https://github.com/chaitin/xray-plugins
+Community POC repository: https://github.com/chaitin/xray-plugins
 
-## 配置优化
+## Configuration Tuning
 
 ```bash
-# 生成默认配置文件
-xray genca    # 生成 CA 证书（HTTPS 代理需要）
+# Generate a default configuration file
+xray genca    # generate a CA certificate (required for the HTTPS proxy)
 
-# 配置文件位置：~/.xray/config.yaml
-# 常用配置项：
-# - http.proxy: 设置上游代理
-# - http.headers: 自定义请求头
-# - plugins.xxx.enabled: 启用/禁用插件
+# Configuration file location: ~/.xray/config.yaml
+# Common configuration items:
+# - http.proxy: set an upstream proxy
+# - http.headers: custom request headers
+# - plugins.xxx.enabled: enable/disable a plugin
 ```
 
-## 与 nuclei 对比决策
+## Decision Table: xray vs nuclei
 
-| 场景 | 推荐工具 | 原因 |
+| Scenario | Recommended tool | Rationale |
 |------|---------|------|
-| 已知 CVE 验证 | **nuclei** | 模板库更全 (9000+) |
-| 通用 Web 漏洞扫描 | **xray** | 语义分析，误报率更低 |
-| 被动代理扫描 | **xray** | 原生支持代理模式 |
-| 批量目标 PoC 检测 | **nuclei** | 批量性能更好 |
-| SQL 注入深度检测 | **xray** | sqldet 引擎更精准 |
+| Known CVE verification | **nuclei** | more complete template library (9000+) |
+| General web vulnerability scanning | **xray** | semantic analysis, lower false positive rate |
+| Passive proxy scanning | **xray** | native proxy mode support |
+| Bulk target PoC detection | **nuclei** | better bulk performance |
+| Deep SQL injection detection | **xray** | the sqldet engine is more accurate |

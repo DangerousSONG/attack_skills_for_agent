@@ -1,6 +1,8 @@
 ---
 name: foundry-security-spec
 description: Implement Cisco's Foundry specification for agentic AI security evaluation systems with multi-agent architecture
+zh-signals: "按 Cisco Foundry 规范搭建多智能体 AI 安全评估与漏洞发现系统。信号:Foundry,智能体,安全评估,多智能体,Cisco"
+when-to-use: "Use when implementing Cisco's Foundry specification to build a multi-agent AI security evaluation or vulnerability discovery system."
 triggers:
   - implement foundry security evaluation
   - set up agentic security testing

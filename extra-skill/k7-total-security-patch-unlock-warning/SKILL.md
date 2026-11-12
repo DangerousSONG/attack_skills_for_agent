@@ -1,6 +1,11 @@
 ---
 name: k7-total-security-patch-unlock-warning
 description: Detect and warn about repositories offering unauthorized security software patches, cracks, or license bypasses
+zh-signals: "识别并提醒用户警惕声称提供商业安全软件破解、补丁或授权绕过的可疑仓库。信号:恶意仓库识别,软件破解,授权绕过,供应链风险,安全警告"
+when-to-use: >-
+  Use when analyzing a repository that claims to offer security-software patches,
+  cracks, or license bypasses, to warn the user about likely malware or piracy
+  distribution.
 triggers:
   - "analyze this security software repository"
   - "is this antivirus patch legitimate"

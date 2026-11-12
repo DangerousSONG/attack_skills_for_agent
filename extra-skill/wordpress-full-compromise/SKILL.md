@@ -1,6 +1,8 @@
 ---
 name: wordpress-full-compromise
 description: Use when verified WordPress findings may combine into an authorized path to administrative or server control.
+zh-signals: "在已确认的 WordPress 漏洞之间验证是否可串成经授权的管理员或服务器控制路径，强调逐项前提与技术验证。信号:wordpress,攻击链,权限提升,插件漏洞,验证"
+when-to-use: "Use when verified WordPress findings may compose into an authorized path to administrative or server control, requiring each prerequisite to be independently confirmed before escalation."
 version: 2.0.0
 license: MIT
 platforms: [linux, macos]

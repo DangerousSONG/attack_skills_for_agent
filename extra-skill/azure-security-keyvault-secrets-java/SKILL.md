@@ -1,6 +1,10 @@
 ---
 name: azure-security-keyvault-secrets-java
 description: "Azure Key Vault Secrets Java SDK for secret management. Use when storing, retrieving, or managing passwords, API keys, connection strings, or other sensitive configuration data."
+zh-signals: "使用 Azure Key Vault Secrets Java SDK 管理密码、API 密钥与连接字符串等敏感配置。信号:azure key vault,java sdk,密钥管理,密码存储,连接字符串"
+when-to-use: >-
+  Use when storing, retrieving, or managing secrets such as passwords, API keys, or
+  connection strings with the Azure Key Vault Secrets Java SDK.
 risk: critical
 source: community
 date_added: "2026-02-27"

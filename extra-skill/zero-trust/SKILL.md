@@ -3,6 +3,10 @@ name: zero-trust
 description: Implement zero-trust network architecture. Configure identity-based access,
   micro-segmentation, and continuous verification. Use when implementing modern security
   architectures.
+zh-signals: "落地零信任网络架构，配置基于身份的访问、微分段与持续验证。信号:零信任,微分段,持续验证,身份访问,BeyondCorp"
+when-to-use: >-
+  Use when replacing perimeter VPN access, implementing BeyondCorp-style internal access,
+  securing multi-cloud or hybrid environments, or enforcing identity-based least-privilege verification.
 category: security
 risk: critical
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

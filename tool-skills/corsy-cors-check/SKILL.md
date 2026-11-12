@@ -2,38 +2,41 @@
 name: corsy-cors-check
 description: "Corsy: Quickly checks CORS configurations. Signals: web vulnerability, injection, CORS scanning, batch, delay."
 zh-signals: "Corsy: CORS 配置快速体检。信号:web漏洞,注入,CORS 扫描,批量,延迟。"
+when-to-use: >-
+  Use when quickly assessing CORS misconfigurations across one or many authorized web hosts
+  and prioritizing findings by risk level.
 ---
 
 # Corsy
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/s0md3v/Corsy
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/s0md3v/Corsy
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/s0md3v/Corsy && cd Corsy && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 corsy.py -u https://t.com` | CORS 扫描 |
-| `-i urls.txt` | 批量 |
-| `-d 2` | 延迟 |
-| `-v` | 详细 |
+| `python3 corsy.py -u https://t.com` | CORS scanning |
+| `-i urls.txt` | Batch |
+| `-d 2` | Delay |
+| `-v` | Verbose |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### CORS 配置快速体检
+### Quick CORS Configuration Health Check
 
 ```bash
 python3 corsy.py -i alive_hosts.txt
-# 12 种 CORS 攻击面检测,输出风险等级
+# detects 12 CORS attack surface issues and outputs a risk rating
 ```
 
-## 注意事项
+## Notes
 
-s0md3v 出品的轻量 CORS 扫描,检测 12 种 CORS 配置问题,速度优于同类。
+A lightweight CORS scanner by s0md3v; detects 12 CORS configuration problems and is faster than its peers.

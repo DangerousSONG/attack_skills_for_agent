@@ -1,170 +1,172 @@
 ---
 name: aws-iam-policy-analysis
-description: "AWS IAM / Resource Policy 分析方法论。当目标涉及 AWS 云服务且提供了 IAM Policy、Resource Policy、Lambda 代码、CloudFormation 模板等策略文件时使用。覆盖 IAM Policy 危险模式识别、Resource Policy Principal 分析、Condition 键绕过模式、服务信任关系图推导。发现 AWS 策略文件（json/yaml）、*.amazonaws.com 端点、IAM ARN 时应使用此技能"
+description: "AWS IAM / resource policy analysis methodology. Use when the target involves AWS cloud services and provides IAM policies, resource policies, Lambda code, CloudFormation templates, or other policy files. Covers IAM policy dangerous pattern identification, resource policy Principal analysis, Condition key bypass patterns, and service trust relationship derivation. Use this skill when you find AWS policy files (json/yaml), *.amazonaws.com endpoints, or IAM ARNs"
+zh-signals: "分析 AWS IAM 与资源策略文件，识别危险权限模式、Principal 暴露与 Condition 绕过以推导攻击面。信号:AWS策略分析,IAM权限,资源策略,Principal检查,条件绕过"
+when-to-use: "Use when AWS IAM policies, resource policies, Lambda code, or CloudFormation templates are provided and you need to derive attack surface from the policy definitions."
 metadata:
-  tags: "aws,iam,policy,cloud,resource-policy,principal,condition,trust,策略分析,权限分析"
+  tags: "aws,iam,policy,cloud,resource-policy,principal,condition,trust,policy analysis,permission analysis"
   category: "cloud"
 ---
 
-# AWS IAM / Resource Policy 分析方法论
+# AWS IAM / Resource Policy Analysis Methodology
 
-拿到 AWS 策略文件（IAM Policy、Resource Policy、Lambda 代码等）后的系统化分析方法。核心目标：**从策略中推导攻击面，而非盲目枚举**。
+A systematic approach to analyzing AWS policy files (IAM policies, resource policies, Lambda code, etc.) once you have them. Core goal: **derive the attack surface from the policies instead of blindly enumerating**.
 
-## ⛔ 深入参考（必读）
+## ⛔ Further Reading (Must Read)
 
-- S3 策略分析 + 常见漏洞模式 → [references/s3-attack-techniques.md](references/s3-attack-techniques.md)
-- Lambda/API Gateway/SNS 资源策略漏洞模式 → [references/aws-resource-policy-exploits.md](references/aws-resource-policy-exploits.md)
-
----
-
-## 核心原则
-
-1. **策略文件优先** — 拿到 IAM Policy / 源代码 / CloudFormation 模板时，**第一时间分析**，不要先盲目枚举
-2. **从策略推导攻击面** — 策略告诉你"允许什么"，攻击面就在"允许范围的边界"
-3. **Principal 是入口** — `"Principal": "*"` 意味着跨账户/匿名访问，是最高优先级检查项
-4. **Condition 可能被绕过** — `StringLike` 通配符在不同协议/上下文中含义不同
-5. **信任关系 > 单个权限** — 关注服务之间的信任链（谁能调用谁、谁能传递角色给谁）
+- S3 policy analysis + common vulnerability patterns → [references/s3-attack-techniques.md](references/s3-attack-techniques.md)
+- Lambda/API Gateway/SNS resource policy vulnerability patterns → [references/aws-resource-policy-exploits.md](references/aws-resource-policy-exploits.md)
 
 ---
 
-## Step 1: 策略文件快速分类
+## Core Principles
 
-拿到附件/下载的文件后，先分类：
+1. **Policy files first** — when you get IAM policies / source code / CloudFormation templates, **analyze them first**, do not blindly enumerate
+2. **Derive the attack surface from the policies** — policies tell you "what is allowed", and the attack surface lies at "the boundary of what is allowed"
+3. **Principal is the entry point** — `"Principal": "*"` means cross-account/anonymous access and is the highest-priority check
+4. **Conditions can be bypassed** — `StringLike` wildcards mean different things in different protocols/contexts
+5. **Trust relationships > individual permissions** — focus on the trust chains between services (who can call whom, who can pass roles to whom)
 
-| 文件类型 | 识别方式 | 关注点 |
+---
+
+## Step 1: Quick Classification of Policy Files
+
+After obtaining attached or downloaded files, classify them first:
+
+| File type | How to recognize | Focus |
 |---------|---------|--------|
-| IAM Policy | `"Version": "2012-10-17"`, `"Statement"` | Action/Resource 范围 |
-| Resource Policy | 同上，但有 `Principal` 字段 | 谁能访问、条件限制 |
-| Lambda 代码 | `.py`/`.js` 文件，`handler(event, context)` | 输入处理、路径拼接、注入点 |
-| CloudFormation | `AWSTemplateFormatVersion`, `Resources` | 完整架构、角色绑定 |
-| Trust Policy | `"Action": "sts:AssumeRole"` | 角色可被谁 assume |
+| IAM Policy | `"Version": "2012-10-17"`, `"Statement"` | Action/Resource scope |
+| Resource Policy | same as above, but with a `Principal` field | Who can access, condition restrictions |
+| Lambda code | `.py`/`.js` files, `handler(event, context)` | Input handling, path concatenation, injection points |
+| CloudFormation | `AWSTemplateFormatVersion`, `Resources` | Full architecture, role bindings |
+| Trust Policy | `"Action": "sts:AssumeRole"` | Who can assume the role |
 
 ---
 
-## Step 2: IAM Policy 危险模式识别
+## Step 2: IAM Policy Dangerous Pattern Identification
 
-### 2.1 检查 Principal
+### 2.1 Check the Principal
 
 ```
-🔴 "Principal": "*"              → 任何 AWS 身份（含匿名）可访问
-🔴 "Principal": {"AWS": "*"}     → 同上
-🟡 "Principal": {"Service": "lambda.amazonaws.com"}  → 特定服务可调用
-🟢 "Principal": {"AWS": "arn:aws:iam::123456:root"}  → 限定账户
+🔴 "Principal": "*"              → any AWS identity (including anonymous) can access
+🔴 "Principal": {"AWS": "*"}     → same as above
+🟡 "Principal": {"Service": "lambda.amazonaws.com"}  → a specific service can invoke it
+🟢 "Principal": {"AWS": "arn:aws:iam::123456:root"}  → restricted to one account
 ```
 
-### 2.2 检查 Action 范围
+### 2.2 Check the Action Scope
 
-| Action 模式 | 风险 |
+| Action pattern | Risk |
 |------------|------|
-| `"Action": "*"` | 🔴 完全控制 |
-| `"Action": "s3:*"` | 🔴 S3 完全控制 |
-| `"Action": ["s3:GetObject", "s3:PutObject"]` | 🟡 可读可写 |
-| `"Action": "s3:GetObject"` on `"Resource": "*"` | 🟡 可读所有 Bucket |
-| `"Action": "sts:AssumeRole"` | 🟡 可切换角色（权限提升入口） |
-| `"Action": "iam:PassRole"` | 🟡 可传递角色（间接提权） |
-| `"Action": "lambda:InvokeFunction"` with `Principal:*` | 🔴 任何人可调用 Lambda |
+| `"Action": "*"` | 🔴 Full control |
+| `"Action": "s3:*"` | 🔴 Full control of S3 |
+| `"Action": ["s3:GetObject", "s3:PutObject"]` | 🟡 Readable and writable |
+| `"Action": "s3:GetObject"` on `"Resource": "*"` | 🟡 Readable for every bucket |
+| `"Action": "sts:AssumeRole"` | 🟡 Can switch roles (privilege escalation entry point) |
+| `"Action": "iam:PassRole"` | 🟡 Can pass roles (indirect privilege escalation) |
+| `"Action": "lambda:InvokeFunction"` with `Principal:*` | 🔴 Anyone can invoke the Lambda |
 
-### 2.3 检查 Resource 范围
+### 2.3 Check the Resource Scope
 
 ```
-🔴 "Resource": "*"                          → 所有资源
-🟡 "Resource": "arn:aws:s3:::bucket/*"      → bucket 内所有对象
-🟢 "Resource": "arn:aws:s3:::bucket/public/*" → 仅 public 前缀
+🔴 "Resource": "*"                          → all resources
+🟡 "Resource": "arn:aws:s3:::bucket/*"      → all objects in the bucket
+🟢 "Resource": "arn:aws:s3:::bucket/public/*" → only the public prefix
 ```
 
-### 2.4 检查 Condition 绕过
+### 2.4 Check for Condition Bypasses
 
 ```json
-// StringLike 通配符 — 不同上下文含义不同
+// StringLike wildcard — means different things in different contexts
 "Condition": {"StringLike": {"sns:Endpoint": "*@company.com"}}
-// email 协议: Endpoint = 邮箱 → 必须是 xxx@company.com
-// https 协议: Endpoint = URL → URL 中包含 @company.com 即可绕过
+// email protocol: Endpoint = mailbox → must be xxx@company.com
+// https protocol: Endpoint = URL → any URL containing @company.com bypasses it
 
-// IpAddress 条件 — 可能有 VPN/代理绕过
+// IpAddress condition — may be bypassed via VPN/proxy
 "Condition": {"IpAddress": {"aws:SourceIp": "10.0.0.0/8"}}
 
-// StringEquals vs StringLike — 前者精确匹配，后者支持通配符
+// StringEquals vs StringLike — the former matches exactly, the latter supports wildcards
 ```
 
 ---
 
-## Step 3: 服务信任关系图推导
+## Step 3: Deriving the Service Trust Relationship Graph
 
-从策略文件中画出"谁信任谁"的调用关系：
+Draw the "who trusts whom" call relationships from the policy files:
 
 ```
-读取所有策略文件
+Read all policy files
     ↓
-识别所有 Principal（谁是调用者）
+Identify all Principals (who the callers are)
     ↓
-识别所有 Resource（谁被访问）
+Identify all Resources (what is accessed)
     ↓
-连线: Principal → Action → Resource
+Connect the lines: Principal → Action → Resource
     ↓
-找到最弱一环（Principal:* 或过宽权限的边）
+Find the weakest link (Principal:* or an edge with overly broad permissions)
 ```
 
-常见服务关系：
-- API Gateway → Lambda（API GW 触发 Lambda）
-- Lambda → S3/DynamoDB/SNS（Lambda 执行角色权限）
-- SNS → Lambda/SQS/HTTP（消息推送目标）
-- IAM User → AssumeRole → 高权限角色
+Common service relationships:
+- API Gateway → Lambda (the API GW triggers the Lambda)
+- Lambda → S3/DynamoDB/SNS (Lambda execution role permissions)
+- SNS → Lambda/SQS/HTTP (message push targets)
+- IAM User → AssumeRole → high-privilege role
 
-**关键**: 分析 Lambda Execution Role 的权限 — 这决定了 Lambda 能访问什么资源。
+**Key**: analyze the permissions of the Lambda execution role — it determines what resources the Lambda can access.
 
 ---
 
-## Step 4: Lambda / 应用代码审计
+## Step 4: Lambda / Application Code Audit
 
-拿到 Lambda 代码（handler.py/index.js）后重点检查：
+After obtaining the Lambda code (handler.py/index.js), focus on:
 
-| 漏洞类型 | 代码模式 | 利用方式 |
+| Vulnerability type | Code pattern | Exploitation |
 |---------|---------|---------|
-| 路径穿越 | `os.path.join(prefix, user_input)` | 绝对路径绕过：`/flag` |
-| 命令注入 | `os.system(f"cmd {user_input}")` | `; cat /flag` |
+| Path traversal | `os.path.join(prefix, user_input)` | Absolute path bypass: `/flag` |
+| Command injection | `os.system(f"cmd {user_input}")` | `; cat /flag` |
 | SSRF | `requests.get(user_input)` | `http://169.254.169.254/...` |
-| 环境变量泄露 | `os.environ['SECRET']` | 错误信息/Stack Trace |
-| SQL 注入 | 字符串拼接 SQL | `' OR 1=1 --` |
-| 反序列化 | `pickle.loads()`/`yaml.load()` | 构造恶意对象 |
+| Environment variable leak | `os.environ['SECRET']` | Error message/stack trace |
+| SQL injection | string-concatenated SQL | `' OR 1=1 --` |
+| Deserialization | `pickle.loads()`/`yaml.load()` | Craft a malicious object |
 
 ---
 
-## Step 5: AWS 服务端点发现
+## Step 5: AWS Service Endpoint Discovery
 
 ```bash
-# 从目标页面提取 AWS 相关 URL
+# Extract AWS related URLs from the target page
 curl -s TARGET_URL | grep -oE 'https?://[a-z0-9.-]+\.amazonaws\.com[^"]*'
 curl -s TARGET_URL | grep -oE 'https?://[a-z0-9]+\.execute-api\.[a-z0-9-]+\.amazonaws\.com[^"]*'
 
-# 从 JS/HTML 中提取 S3 Bucket、API GW URL
+# Extract S3 bucket and API GW URLs from JS/HTML
 curl -s TARGET_URL | grep -oE 's3\.amazonaws\.com/[^"]*'
 
-# Presigned URL 信息泄露
-# X-Amz-Credential 包含 AccessKeyId 和 Region
+# Presigned URL information leak
+# X-Amz-Credential contains the AccessKeyId and the Region
 ```
 
 ---
 
-## Step 6: 常用辅助工具
+## Step 6: Common Helper Tools
 
 ```bash
-# webhook.site — 接收 AWS 服务回调（SNS、S3 Event 等）
-# 当需要外部 Endpoint 接收 AWS 推送时使用
+# webhook.site — receive AWS service callbacks (SNS, S3 Events, etc.)
+# Use it when you need an external endpoint to receive AWS pushes
 
-# AWS CLI 策略检查
+# AWS CLI policy inspection
 aws iam get-policy-version --policy-arn ARN --version-id v1
 aws s3api get-bucket-policy --bucket BUCKET
 aws lambda get-policy --function-name FUNC
 
-# ScoutSuite — AWS 安全配置审计
-# Prowler — AWS 安全基线检查
+# ScoutSuite — AWS security configuration audit
+# Prowler — AWS security baseline checks
 ```
 
 ---
 
-## ⚠️ 避免的错误
+## ⚠️ Mistakes to Avoid
 
-1. **不要盲目枚举** — 连续 3 次 AccessDenied/404 后应停下来重新分析策略
-2. **不要忽略附件** — 附件中的策略文件包含了解题所需的全部信息
-3. **不要假设固定攻击链** — 每个场景的服务组合和漏洞点不同，从策略分析出发而非套模板
-4. **不要忽略 Condition 字段** — 很多看似安全的策略，其 Condition 可被绕过
+1. **Do not blindly enumerate** — after 3 consecutive AccessDenied/404 responses, stop and re-analyze the policies
+2. **Do not ignore attachments** — the policy files in the attachments contain all the information needed to solve the task
+3. **Do not assume a fixed attack chain** — every scenario has a different combination of services and vulnerability points, so start from the policy analysis instead of applying a template
+4. **Do not ignore the Condition field** — many seemingly safe policies have a Condition that can be bypassed

@@ -1,6 +1,8 @@
 ---
 name: security-and-hardening
 description: Hardens code against vulnerabilities. Use when handling user input, authentication, data storage, or external integrations. Use when building any feature that accepts untrusted data, manages user sessions, or interacts with third-party services.
+zh-signals: "面向 Web 应用的安全优先开发实践，加固用户输入、认证授权、数据存储与外部集成。信号:安全加固,输入校验,认证授权,数据保护,威胁建模"
+when-to-use: "Use when building features that accept untrusted input, handle authentication or sessions, store sensitive data, or integrate with third-party services, to harden them against vulnerabilities."
 risk: critical
 source: https://github.com/addyosmani/agent-skills/tree/main/skills/security-and-hardening
 source_repo: addyosmani/agent-skills

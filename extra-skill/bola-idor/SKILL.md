@@ -7,6 +7,8 @@ description: >
   UUID IDs in URLs or request bodies, user-scoped resources, horizontal privilege
   escalation, "change the ID in the request", second-order IDOR, blind IDOR,
   indirect reference, encoded ID, deprecated API version, JSON globbing.
+zh-signals: "检测并利用 API/Web 应用中的对象级授权缺失（BOLA/IDOR），实现横向越权访问。信号:BOLA,IDOR,越权访问,对象引用,水平提权"
+when-to-use: "Use when hunting Broken Object Level Authorization or IDOR in APIs or web applications where object identifiers can be swapped to access other users' resources."
 license: MIT
 compatibility: Designed for Claude Code. Burp Suite (Autorize extension) or curl recommended.
 metadata:

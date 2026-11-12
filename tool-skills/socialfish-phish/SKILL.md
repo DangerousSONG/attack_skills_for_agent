@@ -2,37 +2,38 @@
 name: socialfish-phish
 description: "SocialFish: multi-platform phishing sites. Signals: phishing, social engineering, phishing platform, template."
 zh-signals: "SocialFish: 多平台钓鱼站点。信号:钓鱼,社会工程,钓鱼平台,模板。"
+when-to-use: "Use when building a phishing site for social engineering engagements and you need ready-made templates for multiple platforms managed from the SocialFish web panel."
 ---
 
 # SocialFish
 
-- 攻击大类:C08 钓鱼与社会工程
-- 上游仓库:https://github.com/UndeadSec/SocialFish
-- 上游 License:BSD-3-Clause(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C08 Phishing and Social Engineering
+- Upstream Repository: https://github.com/UndeadSec/SocialFish
+- Upstream License: BSD-3-Clause (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/UndeadSec/SocialFish && cd SocialFish && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 SocialFish.py -u admin -p pass` | 钓鱼平台 |
-| `-u u -p p -t` | 模板 |
-| `-o out.txt` | 输出 |
+| `python3 SocialFish.py -u admin -p pass` | Phishing platform |
+| `-u u -p p -t` | Templates |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 多平台钓鱼站点
+### Multi-Platform Phishing Sites
 
 ```bash
 python3 SocialFish.py
-# 60+ 站点模板
+# 60+ site templates
 ```
 
-## 注意事项
+## Notes
 
-UndeadSec 出品,多平台钓鱼框架。
+By UndeadSec, a multi-platform phishing framework.

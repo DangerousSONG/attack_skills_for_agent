@@ -2,6 +2,8 @@
 name: multi-tenant-llm-hosting
 description: Design secure, multi-tenant LLM hosting platforms with tenant isolation,
   quotas, billing attribution, noisy-neighbor protection, and per-tenant policy controls.
+zh-signals: "设计安全的多租户 LLM 托管平台，涵盖租户隔离、配额与策略控制。信号:多租户,LLM托管,租户隔离,配额,计费,噪声隔离"
+when-to-use: "Use when designing or hardening a shared inference platform that hosts multiple tenants and needs isolation, quotas, and per-tenant policy controls."
 category: devops
 risk: critical
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

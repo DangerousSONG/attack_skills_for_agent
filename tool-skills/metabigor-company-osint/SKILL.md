@@ -2,38 +2,42 @@
 name: metabigor-company-osint
 description: "metabigor: Company/domain internet-wide assets. Signals: email collection, employee information, certificate transparency related domains, IP information aggregation."
 zh-signals: "metabigor: 公司名/域名全网资产。信号:邮箱收集,员工信息,证书透明度查关联域名,IP 信息聚合。"
+when-to-use: >-
+  Use when performing passive corporate OSINT on a company name or domain to
+  discover related domains, employees, and IP assets; chain the cert, net, and
+  ip subcommands without touching the target.
 ---
 
 # metabigor
 
-- 攻击大类:C03 OSINT情报收集
-- 上游仓库:https://github.com/j3ssie/metabigor
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C03 OSINT Intelligence Gathering
+- Upstream Repository: https://github.com/j3ssie/metabigor
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/j3ssie/metabigor@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `metabigor cert -t corp.com` | 证书透明度查关联域名 |
-| `metabigor net -t 'org:Target' -s shodan` | Shodan 按组织查 IP |
-| `metabigor ip -t 1.2.3.4` | IP 信息聚合 |
-| `-o out.txt` | 输出 |
+| `metabigor cert -t corp.com` | Use certificate transparency to find related domains |
+| `metabigor net -t 'org:Target' -s shodan` | Look up IPs by organization on Shodan |
+| `metabigor ip -t 1.2.3.4` | IP information aggregation |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 公司名/域名全网资产
+### Internet-wide assets for a company name or domain
 
 ```bash
 metabigor cert -t corp.com | metabigor net -s shodan
-# j3ssie 出品,与 Osmedeus 同源,被动信息收集链
+# From j3ssie, sharing its lineage with Osmedeus; a passive information gathering chain
 ```
 
-## 注意事项
+## Notes
 
-j3ssie 出品的 OSINT 聚合器: 证书透明度/Shodan/IP 反查,被动收集企业攻击面。
+An OSINT aggregator from j3ssie: certificate transparency/Shodan/IP reverse lookups that passively collect the corporate attack surface.

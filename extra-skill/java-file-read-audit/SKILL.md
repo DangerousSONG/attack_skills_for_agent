@@ -1,249 +1,253 @@
 ---
 name: java-file-read-audit
-description: Java Web 源码任意文件读取漏洞审计工具。从源码中识别所有文件读取操作并检测路径遍历漏洞。适用于：(1) 识别文件读取框架和实现方式，(2) 发现任意文件读取漏洞，(3) 检测路径遍历漏洞，(4) 审计文件路径参数校验逻辑。支持 BufferedReader、Scanner、Files.lines/readAllLines/readAllBytes 等方法。**支持反编译 .class/.jar 文件提取文件操作逻辑**。结合 java-route-mapper 使用可实现完整的路由+文件读取审计。
+description: "Java web source code auditing tool for arbitrary file read vulnerabilities. Identifies all file read operations in the source code and detects path traversal vulnerabilities. Suitable for (1) identifying file read frameworks and implementation patterns, (2) discovering arbitrary file read vulnerabilities, (3) detecting path traversal vulnerabilities, (4) auditing file path parameter validation logic. Supports BufferedReader, Scanner, Files.lines/readAllLines/readAllBytes and similar methods. **Supports decompiling .class/.jar files to extract file operation logic**. Combined with java-route-mapper it delivers a complete route + file read audit."
+zh-signals: "审计 Java Web 源码中的文件读取操作，识别任意文件读取与路径遍历漏洞，并支持反编译 .class/.jar。信号:Java审计,任意文件读取,路径遍历,源码审计,反编译"
+when-to-use: >-
+  Use when auditing Java Web source or decompiled jars for arbitrary file read
+  and path traversal vulnerabilities across all file read entry points.
 ---
 
-# Java 文件读取漏洞审计工具
+# Java File Read Vulnerability Audit Tool
 
-检查 Java Web 项目源码，识别文件读取操作实现，检测任意文件读取和路径遍历漏洞。
+Inspect Java web project source code, identify file read implementations, and detect arbitrary file read and path traversal vulnerabilities.
 
-## 核心要求
+## Core Requirements
 
-**此技能必须完整分析所有文件读取相关代码，不允许省略。**
+**This skill must fully analyze all file read related code; no omissions are allowed.**
 
-- ✅ 识别所有文件读取入口点（BufferedReader/Scanner/Files）
-- ✅ 分析每个文件操作的路径来源
-- ✅ 检测所有潜在的路径遍历模式
-- ✅ 为每个漏洞点提供验证 PoC
-- ❌ 禁止省略任何文件读取操作
-- ❌ 禁止跳过反编译步骤
+- ✅ Identify all file read entry points (BufferedReader/Scanner/Files)
+- ✅ Analyze the path source of every file operation
+- ✅ Detect all potential path traversal patterns
+- ✅ Provide a verification PoC for each vulnerability point
+- ❌ Never omit any file read operation
+- ❌ Never skip the decompilation step
 
 ---
 
-## 漏洞分级标准
+## Vulnerability Severity Rating Standard
 
-**详见 [SEVERITY_RATING.md](../shared/SEVERITY_RATING.md)**
+**See [SEVERITY_RATING.md](../shared/SEVERITY_RATING.md) for details**
 
-- 漏洞编号格式: `{C/H/M/L}-FILE-{序号}`
-- 严重等级 = f(可达性 R, 影响范围 I, 利用复杂度 C)
-- Score = R × 0.40 + I × 0.35 + C × 0.25，映射 CVSS 3.1
+- Vulnerability ID format: `{C/H/M/L}-FILE-{sequence}`
+- Severity Level = f(Reachability R, Impact Scope I, Exploitation Complexity C)
+- Score = R × 0.40 + I × 0.35 + C × 0.25, mapped to CVSS 3.1
 
-| 前缀 | CVSS 3.1 | 含义 |
+| Prefix | CVSS 3.1 | Meaning |
 |------|----------|------|
-| 🔴 **C** | 9.0-10.0 | 可直接导致系统沦陷 |
-| 🟠 **H** | 7.0-8.9 | 可造成重大损害 |
-| 🟡 **M** | 4.0-6.9 | 可造成一定损害 |
-| 🔵 **L** | 0.1-3.9 | 安全加固建议 |
+| 🔴 **C** | 9.0-10.0 | Can directly lead to full system compromise |
+| 🟠 **H** | 7.0-8.9 | Can cause major damage |
+| 🟡 **M** | 4.0-6.9 | Can cause moderate damage |
+| 🔵 **L** | 0.1-3.9 | Hardening recommendation |
 
 ---
 
-## 技能协作流程（CRITICAL）
+## Skill Collaboration Workflow (CRITICAL)
 
-**java-file-read-audit 应在 java-route-mapper 之后执行，基于已梳理的路由信息进行审计。**
+**java-file-read-audit should run after java-route-mapper and audit based on the mapped route information.**
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    完整审计流程                                  │
+│                    Complete Audit Flow                          │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
-│  [步骤1] java-route-mapper                                      │
+│  [Step 1] java-route-mapper                                     │
 │     │                                                           │
-│     │ 输出：                                                    │
-│     │ ├─ 所有 HTTP 路由列表                                     │
-│     │ ├─ 每个路由的参数定义                                     │
-│     │ │   ├─ 参数名、类型                                       │
-│     │ │   └─ JSON 内部字段                                      │
-│     │ └─ Burp Suite 请求模板                                    │
+│     │ Output:                                                   │
+│     │ ├─ List of all HTTP routes                                │
+│     │ ├─ Parameter definition of each route                     │
+│     │ │   ├─ Parameter name, type                                │
+│     │ │   └─ Inner JSON fields                                   │
+│     │ └─ Burp Suite request templates                           │
 │     │                                                           │
 │     ↓                                                           │
-│  [步骤2] java-file-read-audit（本技能）                         │
+│  [Step 2] java-file-read-audit (this skill)                     │
 │     │                                                           │
-│     │ 输入：java-route-mapper 的输出                            │
+│     │ Input: the output of java-route-mapper                    │
 │     │                                                           │
-│     │ 执行：                                                    │
-│     │ ├─ 快速扫描文件操作                                       │
-│     │ ├─ 参数-文件路径映射分析                                  │
-│     │ ├─ 检查每个 String 参数是否用作文件路径                   │
-│     │ └─ 执行条件分析                                           │
+│     │ Execution:                                                 │
+│     │ ├─ Quick scan of file operations                          │
+│     │ ├─ Parameter-to-file-path mapping analysis                │
+│     │ ├─ Check whether each String parameter is used as a path  │
+│     │ └─ Execution condition analysis                           │
 │     │                                                           │
-│     ├─── 需要深入追踪 ───→ java-route-tracer                    │
+│     ├─── Need deep tracing ───→ java-route-tracer               │
 │     │                           │                               │
-│     │    ←── 返回调用链信息 ────┘                               │
+│     │    ←── Call chain info returned ──┘                       │
 │     │                                                           │
 │     ↓                                                           │
-│  [步骤3] 输出综合审计报告                                       │
+│  [Step 3] Output the consolidated audit report                  │
 │                                                                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### 输入依赖（来自 java-route-mapper）
+### Input Dependencies (from java-route-mapper)
 
-**在开始审计前，必须先检查是否已有 java-route-mapper 的输出文件：**
+**Before starting the audit, you must first check whether a java-route-mapper output file already exists:**
 
 ```
 {project_name}_audit/
 ├── route_mapper/
-│   ├── {project_name}_route_mapper_{timestamp}.md    ← 主索引（先读此文件定位模块详情）
+│   ├── {project_name}_route_mapper_{timestamp}.md    ← main index (read this file first to locate module details)
 │   ├── {module_name}/
-│   │   └── {project_name}_module_{module_name}_{timestamp}.md  ← 模块详情
+│   │   └── {project_name}_module_{module_name}_{timestamp}.md  ← module details
 │   └── webservice/
 │       └── {project_name}_ws_{service_name}_{timestamp}.md
 └── file_read_audit/
-    └── {project_name}_file_read_audit_{timestamp}.md  ← 本技能输出
+    └── {project_name}_file_read_audit_{timestamp}.md  ← output of this skill
 ```
 
-**如果 route_mapper 输出不存在，必须先运行：**
+**If the route_mapper output does not exist, you must first run:**
 ```python
 Skill(skill="java-route-mapper", args="--project {project_path}")
 ```
 
-### 从 route_mapper 获取的关键信息
+### Key Information Obtained from route_mapper
 
-| 信息 | 用途 |
+| Information | Purpose |
 |:-----|:-----|
-| 路由路径 | 定位 Controller/Action 入口 |
-| 参数名 + 类型 | 识别 String 类型高危参数 |
-| JSON 内部字段 | 识别嵌套参数（如 `fileInfo.path`） |
-| 参数用途描述 | 判断是否用于文件路径 |
+| Route path | Locate Controller/Action entry points |
+| Parameter name + type | Identify high-risk String parameters |
+| Inner JSON fields | Identify nested parameters (e.g. `fileInfo.path`) |
+| Parameter purpose description | Determine whether it is used as a file path |
 
 ---
 
-## 工作流程（三阶段）
+## Workflow (Three Phases)
 
-### 阶段1: 快速扫描（优先执行）
+### Stage 1: Quick Scan (execute first)
 
-**目标：快速定位文件读取相关代码，不遗漏关键点。**
+**Goal: quickly locate file read related code without missing any key point.**
 
 ```bash
-# 1.1 搜索文件读取方法
+# 1.1 Search for file read methods
 grep -ri "BufferedReader\|FileReader\|FileInputStream" --include="*.java"
 grep -ri "Scanner.*File\|Scanner.*Path" --include="*.java"
 grep -ri "Files.lines\|Files.readAllLines\|Files.readAllBytes" --include="*.java"
 
-# 1.2 搜索文件下载/读取接口
+# 1.2 Search for file download/read interfaces
 grep -ri "download\|readFile\|getFile\|viewFile" --include="*.java"
 grep -ri "@RequestMapping.*download\|@GetMapping.*download" --include="*.java"
 
-# 1.3 搜索路径拼接模式
+# 1.3 Search for path concatenation patterns
 grep -ri "new File.*\+" --include="*.java"
 grep -ri "Paths.get.*\+" --include="*.java"
 grep -ri "File.separator" --include="*.java"
 
-# 1.4 搜索路径参数
+# 1.4 Search for path parameters
 grep -ri "filePath\|fileName\|file\|path" --include="*.java" | grep "@RequestParam\|@PathVariable"
 ```
 
-**输出：高危文件清单（按优先级排序）**
+**Output: list of high-risk files (sorted by priority)**
 
-| 优先级 | 文件类型 | 审计重点 |
+| Priority | File Type | Audit Focus |
 |:-------|:---------|:---------|
-| P0 | `*Controller.java` 中包含 download/readFile 的方法 | filePath, fileName 参数 |
-| P1 | `*Service.java`, `*ServiceImpl.java` | 文件路径处理逻辑 |
-| P2 | `*Util.java`, `*Helper.java` | 通用文件读取方法 |
-| P3 | `*Dao.java`, `*Repository.java` | 配置文件读取 |
+| P0 | Methods containing download/readFile in `*Controller.java` | filePath, fileName parameters |
+| P1 | `*Service.java`, `*ServiceImpl.java` | File path handling logic |
+| P2 | `*Util.java`, `*Helper.java` | Generic file read methods |
+| P3 | `*Dao.java`, `*Repository.java` | Configuration file reads |
 
-### 阶段2: 参数-文件路径映射检查
+### Stage 2: Parameter-to-File-Path Mapping Check
 
-**基于 java-route-mapper 的输出，检查每个参数是否用作文件路径。**
+**Based on the java-route-mapper output, check whether each parameter is used as a file path.**
 
-#### 2.1 高危参数识别
+#### 2.1 High-Risk Parameter Identification
 
-从 route_mapper 输出中提取所有 String 类型参数：
+Extract all String type parameters from the route_mapper output:
 
-| 参数来源 | 参数名 | 类型 | 文件读取漏洞可能性 |
+| Parameter Source | Parameter Name | Type | File Read Vulnerability Likelihood |
 |:---------|:-------|:-----|:-------------|
-| @RequestParam | `filePath` | String | **高危** - 直接用作路径 |
-| @RequestParam | `fileName` | String | **高危** - 文件名拼接 |
-| @RequestParam | `file` | String | **高危** - 文件路径 |
-| @PathVariable | `path` | String | **高危** - URL 路径参数 |
-| JSON | `fileInfo.path` | String | **高危** - JSON 内部字段 |
+| @RequestParam | `filePath` | String | **High risk** - used directly as a path |
+| @RequestParam | `fileName` | String | **High risk** - concatenated into a file name |
+| @RequestParam | `file` | String | **High risk** - file path |
+| @PathVariable | `path` | String | **High risk** - URL path parameter |
+| JSON | `fileInfo.path` | String | **High risk** - inner JSON field |
 
-#### 2.2 参数追踪
+#### 2.2 Parameter Tracing
 
-对每个高危参数，追踪其在代码中的使用：
+For each high-risk parameter, trace its usage in the code:
 
 ```
-HTTP 参数: filePath (String)
-    ↓ 传递
+HTTP parameter: filePath (String)
+    ↓ passed to
 Controller.download(filePath)
-    ↓ 传递
+    ↓ passed to
 Service.readFile(filePath)
-    ↓ 拼接
+    ↓ concatenated
 basePath + File.separator + filePath
-    ↓ 使用
-new FileInputStream(fullPath)  ← 文件读取点
+    ↓ used in
+new FileInputStream(fullPath)  ← file read point
 ```
 
-#### 2.3 文件读取点检查
+#### 2.3 File Read Point Check
 
-对阶段1发现的每个文件读取点，检查：
+For every file read point found in Stage 1, check:
 
-1. **文件路径是否可控？**
-   - 完全来自用户输入 → 高危
-   - 基础路径固定 + 用户输入文件名 → 中危
-   - 完全硬编码 → 安全
+1. **Is the file path controllable?**
+   - Comes entirely from user input → high risk
+   - Fixed base path + user supplied file name → medium risk
+   - Fully hardcoded → safe
 
-2. **是否有路径校验？**
-   - 白名单目录限制 → 安全
-   - 文件扩展名校验 → 可能绕过
-   - 无校验 → 高危
+2. **Is there path validation?**
+   - Whitelisted directory restriction → safe
+   - File extension validation → may be bypassable
+   - No validation → high risk
 
-3. **是否过滤路径遍历字符？**
-   - 过滤 `../`, `..\\` → 可能安全（需测试绕过）
-   - 无过滤 → 高危
+3. **Are path traversal characters filtered?**
+   - Filters `../`, `..\\` → may be safe (bypasses must be tested)
+   - No filtering → high risk
 
-### 阶段3: 深入检查与报告
+### Stage 3: In-Depth Check and Report
 
-#### 3.1 触发 java-route-tracer
+#### 3.1 Triggering java-route-tracer
 
-当发现以下情况时，调用 java-route-tracer 获取完整调用链：
+When any of the following is found, call java-route-tracer to obtain the complete call chain:
 
-| 触发条件 | 调用方式 |
+| Trigger Condition | Invocation Method |
 |:---------|:---------|
-| 参数经过多层传递 | `Skill(skill="java-route-tracer", args="--route {route}")` |
-| 路径拼接逻辑复杂 | `Skill(skill="java-route-tracer", args="--route {route}")` |
-| 校验逻辑不明确 | `Skill(skill="java-route-tracer", args="--route {route}")` |
+| The parameter passes through multiple layers | `Skill(skill="java-route-tracer", args="--route {route}")` |
+| The path concatenation logic is complex | `Skill(skill="java-route-tracer", args="--route {route}")` |
+| The validation logic is unclear | `Skill(skill="java-route-tracer", args="--route {route}")` |
 
-#### 3.2 执行条件检查
+#### 3.2 Execution Condition Check
 
-发现文件读取后，必须检查执行条件（详见后续章节）。
+After a file read is found, the execution conditions must be checked (see the following sections for details).
 
-#### 3.3 生成报告
+#### 3.3 Generate the Report
 
-整合所有分析结果，生成综合审计报告。
+Consolidate all analysis results and generate a comprehensive audit report.
 
 ---
 
-## 文件读取方法识别
+## File Read Method Identification
 
-详细规则参见 [FILE_READ_METHODS.md](references/FILE_READ_METHODS.md)
+See [FILE_READ_METHODS.md](references/FILE_READ_METHODS.md) for detailed rules
 
-| 方法类别 | 识别特征 | 风险点 |
+| Method Category | Identification Feature | Risk Point |
 |---------|----------|--------|
-| BufferedReader | `new BufferedReader(new FileReader(path))` | path 参数来源 |
-| Scanner | `new Scanner(new FileReader(path))` | path 参数来源 |
-| Files.lines | `Files.lines(Path.of(path))` | path 参数来源 |
-| Files.readAllLines | `Files.readAllLines(Path.of(path))` | path 参数来源 |
-| Files.readAllBytes | `Files.readAllBytes(Path.of(path))` | path 参数来源 |
-| FileInputStream | `new FileInputStream(path)` | path 参数来源 |
+| BufferedReader | `new BufferedReader(new FileReader(path))` | Source of the path parameter |
+| Scanner | `new Scanner(new FileReader(path))` | Source of the path parameter |
+| Files.lines | `Files.lines(Path.of(path))` | Source of the path parameter |
+| Files.readAllLines | `Files.readAllLines(Path.of(path))` | Source of the path parameter |
+| Files.readAllBytes | `Files.readAllBytes(Path.of(path))` | Source of the path parameter |
+| FileInputStream | `new FileInputStream(path)` | Source of the path parameter |
 
-### 反编译阶段（CRITICAL）
+### Decompilation Phase (CRITICAL)
 
-**当源码不可用时，必须使用 MCP Java Decompiler 反编译文件操作相关类。**
+**When source code is unavailable, the MCP Java Decompiler must be used to decompile the file operation related classes.**
 
-详细策略参见 [DECOMPILE_STRATEGY.md](references/DECOMPILE_STRATEGY.md)
+See [DECOMPILE_STRATEGY.md](references/DECOMPILE_STRATEGY.md) for the detailed strategy
 
-#### 反编译工具调用
+#### Decompiler Tool Invocation
 
 ```python
-# 反编译单个 Controller/Service 类
+# Decompile a single Controller/Service class
 mcp__java-decompile-mcp__decompile_file(
     file_path="/path/to/FileController.class",
     output_dir="/path/to/decompiled",
     save_to_file=True
 )
 
-# 反编译文件操作相关目录
+# Decompile a directory containing file operations
 mcp__java-decompile-mcp__decompile_directory(
     directory_path="/path/to/WEB-INF/classes/com/example/controller",
     output_dir="/path/to/decompiled",
@@ -252,7 +256,7 @@ mcp__java-decompile-mcp__decompile_directory(
     max_workers=4
 )
 
-# 反编译多个指定文件
+# Decompile multiple specified files
 mcp__java-decompile-mcp__decompile_files(
     file_paths=[
         "/path/to/FileController.class",
@@ -264,83 +268,83 @@ mcp__java-decompile-mcp__decompile_files(
 )
 ```
 
-**输出文件命名规范：**
-- 反编译后的文件保存在 `{output_dir}` 目录
-- 文件名格式：`{ClassName}.java`
-- 保持原始包结构：`com/example/controller/FileController.java`
+**Output file naming convention:**
+- Decompiled files are saved in the `{output_dir}` directory
+- File name format: `{ClassName}.java`
+- Preserve the original package structure: `com/example/controller/FileController.java`
 
-#### 必须反编译的类
+#### Classes That Must Be Decompiled
 
-| 类型 | 匹配模式 | 目的 |
+| Type | Match Pattern | Purpose |
 |------|----------|------|
-| Controller | `*Controller.class` | 提取路由和参数定义 |
-| Service | `*Service.class`, `*ServiceImpl.class` | 追踪文件操作调用链 |
-| 工具类 | `*FileUtil*.class`, `*FileHelper*.class` | 提取通用文件读取方法 |
-| DAO | `*Dao.class`, `*Repository.class` | 配置文件读取逻辑 |
+| Controller | `*Controller.class` | Extract route and parameter definitions |
+| Service | `*Service.class`, `*ServiceImpl.class` | Trace the file operation call chain |
+| Utility class | `*FileUtil*.class`, `*FileHelper*.class` | Extract generic file read methods |
+| DAO | `*Dao.class`, `*Repository.class` | Configuration file read logic |
 
 ---
 
-## 执行条件检查（CRITICAL - 避免误报）
+## Execution Condition Check (CRITICAL - Avoiding False Positives)
 
-**发现文件读取代码后，必须检查该代码是否真的会被执行！**
+**After finding file read code, you must check whether that code will actually be executed!**
 
-### 1. 路径校验检查
+### 1. Path Validation Check
 
-在发现文件读取后，必须检查是否存在路径校验：
+After finding a file read, you must check whether path validation exists:
 
-| 检查模式 | 代码特征 | 处理方式 |
+| Check Pattern | Code Feature | Handling |
 |----------|----------|----------|
-| 白名单目录 | `path.startsWith("/upload/")` | 标注为受限路径 |
-| 扩展名校验 | `fileName.endsWith(".txt")` | 检查是否可绕过 |
-| 路径规范化 | `new File(path).getCanonicalPath()` | 检查是否完整 |
-| 无校验 | 直接使用用户输入 | 标注为高危 |
+| Whitelisted directory | `path.startsWith("/upload/")` | Mark as a restricted path |
+| Extension validation | `fileName.endsWith(".txt")` | Check whether it can be bypassed |
+| Path canonicalization | `new File(path).getCanonicalPath()` | Check whether it is complete |
+| No validation | Direct use of user input | Mark as high risk |
 
-### 2. 代码路径可达性分析
+### 2. Code Path Reachability Analysis
 
-追踪从入口到文件读取的完整路径，检查：
+Trace the complete path from the entry point to the file read and check:
 
-| 检查项 | 说明 | 影响 |
+| Check Item | Description | Impact |
 |--------|------|------|
-| 提前 return | `if (!validate()) return;` | 可能阻止执行 |
-| 异常抛出 | `throw new SecurityException()` | 代码不执行 |
-| 条件不满足 | `if (false)` 等死代码 | 代码不执行 |
-| 权限限制 | 仅管理员可访问 | 需确认权限 |
+| Early return | `if (!validate()) return;` | May prevent execution |
+| Exception thrown | `throw new SecurityException()` | Code does not execute |
+| Unsatisfied condition | Dead code such as `if (false)` | Code does not execute |
+| Permission restriction | Administrator-only access | Permissions must be confirmed |
 
-### 3. 结论分级（必须标注）
+### 3. Conclusion Rating (must be annotated)
 
-| 状态 | 含义 | 后续操作 |
+| Status | Meaning | Follow-up Action |
 |------|------|----------|
-| ⚠️ **待验证** | 代码存在文件读取，但执行条件未确认 | 需确认目标环境 |
-| ✅ **已确认可利用** | 已验证代码路径会执行且无有效校验 | 进行漏洞利用测试 |
-| ❌ **不可利用** | 存在有效的安全校验 | 标注原因，降低优先级 |
-| 🔍 **环境依赖** | 漏洞存在但仅在特定条件下可利用 | 标注环境条件 |
+| ⚠️ **To be verified** | File read code exists but execution conditions are unconfirmed | Confirm the target environment |
+| ✅ **Confirmed exploitable** | The code path was verified to execute with no effective validation | Proceed with exploitation testing |
+| ❌ **Not exploitable** | Effective security validation is present | Annotate the reason and lower the priority |
+| 🔍 **Environment dependent** | The vulnerability exists but is only exploitable under specific conditions | Annotate the environment conditions |
 
 ---
 
-## 路径遍历检测规则速查
+## Path Traversal Detection Rules Quick Reference
 
-### ⚠️ 高危模式检测（CRITICAL）
+### ⚠️ High-Risk Pattern Detection (CRITICAL)
 
-| 危险模式 | 代码示例 | 风险说明 |
+| Dangerous Pattern | Code Example | Risk Description |
 |:---------|:---------|:---------|
-| 直接拼接 | `basePath + fileName` | 未过滤 `../` |
-| File.separator 拼接 | `basePath + File.separator + fileName` | 可路径遍历 |
-| 字符串格式化 | `String.format("%s/%s", base, file)` | 未过滤 `../` |
-| Path.of 拼接 | `Path.of(basePath, fileName)` | 可能路径遍历 |
-| Paths.get 拼接 | `Paths.get(basePath).resolve(fileName)` | 需检查规范化 |
+| Direct concatenation | `basePath + fileName` | `../` is not filtered |
+| File.separator concatenation | `basePath + File.separator + fileName` | Path traversal is possible |
+| String formatting | `String.format("%s/%s", base, file)` | `../` is not filtered |
+| Path.of concatenation | `Path.of(basePath, fileName)` | Path traversal is possible |
+| Paths.get concatenation | `Paths.get(basePath).resolve(fileName)` | Canonicalization must be checked |
 
-### ⚠️ 安全 vs 危险模式
+### ⚠️ Safe vs Dangerous Patterns
 
-| 类型 | 危险模式 | 安全模式 |
+| Type | Dangerous Pattern | Safe Pattern |
 |------|----------|----------|
-| 路径拼接 | `basePath + fileName` | 白名单校验 + 规范化 |
-| 文件读取 | `new FileInputStream(userInput)` | `getCanonicalPath()` 校验 |
-| 路径遍历 | 无过滤 `../` | `path.contains("..")` 拦截 |
-| 扩展名 | 不校验 | 白名单扩展名 |
+| Path concatenation | `basePath + fileName` | Whitelist validation + canonicalization |
+| File read | `new FileInputStream(userInput)` | `getCanonicalPath()` validation |
+| Path traversal | No filtering of `../` | `path.contains("..")` interception |
+| Extension | Not validated | Whitelisted extensions |
 
-**安全模式示例：**
+**Example of a safe pattern:**
 ```java
-// 安全: 路径规范化 + 白名单目录校验
+// Safe: path canonicalization + whitelisted directory validation
 String basePath = "/var/uploads";
 File file = new File(basePath, fileName);
 String canonicalPath = file.getCanonicalPath();
@@ -351,97 +355,97 @@ if (!canonicalPath.startsWith(basePath)) {
 
 ---
 
-## 审计检查清单（防遗漏）
+## Audit Checklist (to prevent omissions)
 
-### 必须搜索的危险模式
+### Dangerous Patterns That Must Be Searched
 
-**在审计开始时，必须执行以下搜索：**
+**The following searches must be executed at the start of the audit:**
 
 ```bash
-# 文件读取方法检测
+# File read method detection
 grep -r "FileInputStream\|FileReader\|BufferedReader" --include="*.java"
 grep -r "Files.readAllBytes\|Files.readAllLines\|Files.lines" --include="*.java"
 
-# 路径拼接检测
+# Path concatenation detection
 grep -r "new File.*\+" --include="*.java"
 grep -r "File.separator" --include="*.java"
 
-# 下载接口检测
+# Download interface detection
 grep -r "download\|readFile\|getFile" --include="*.java"
 ```
 
 ---
 
-## 数据流追踪（需要时加载 java-route-tracer）
+## Data Flow Tracing (load java-route-tracer when needed)
 
-### 何时需要参数追踪
+### When Parameter Tracing Is Needed
 
-当发现以下情况时，**必须加载 java-route-tracer 技能进行深度追踪**：
+When any of the following is found, **the java-route-tracer skill must be loaded for deep tracing**:
 
-| 场景 | 说明 | 操作 |
+| Scenario | Description | Operation |
 |------|------|------|
-| 参数经过多层传递 | HTTP 参数经 Controller → Service → Util 多层传递后用作文件路径 | 加载 java-route-tracer |
-| 路径拼接复杂 | 多处路径拼接和转换 | 加载 java-route-tracer |
-| 校验逻辑分散 | 校验逻辑在不同类/方法中 | 加载 java-route-tracer |
+| The parameter passes through multiple layers | An HTTP parameter passes through Controller → Service → Util layers and is then used as a file path | Load java-route-tracer |
+| Path concatenation is complex | Multiple path concatenations and transformations | Load java-route-tracer |
+| Validation logic is scattered | Validation logic is spread across different classes/methods | Load java-route-tracer |
 
 ---
 
-## 报告生成
+## Report Generation
 
-**输出单个综合审计报告文件：**
+**Output a single comprehensive audit report file:**
 
 ```
 {project_name}_audit/file_read_audit/
 └── {route_name}/
-    └── {project_name}_file_read_audit_{timestamp}.md      # 综合审计报告
+    └── {project_name}_file_read_audit_{timestamp}.md      # comprehensive audit report
 ```
 
-**路由名说明：**
-- 路由名从路由路径提取，去掉前缀斜杠和特殊字符
-- 例如：`/api/file/download` → `api_file_download`
-- 例如：`/download.action` → `download`
+**Route Name Notes:**
+- Route names are extracted from the route path, stripping leading slashes and special characters
+- Example: `/api/file/download` → `api_file_download`
+- Example: `/download.action` → `download`
 
 ---
 
-## 输出格式
+## Output Format
 
-**严格按照 [references/OUTPUT_TEMPLATE.md](references/OUTPUT_TEMPLATE.md) 中的填充式模板生成输出文件。**
+**Generate the output file strictly following the fill-in template in [references/OUTPUT_TEMPLATE.md](references/OUTPUT_TEMPLATE.md).**
 
-- 文件名格式: `{project_name}_file_read_audit_{YYYYMMDD_HHMMSS}.md`
-- 不得修改模板结构、不得增删章节、不得调整顺序
-- 所有【填写】占位符必须替换为实际内容
-- 通用规范参考: [shared/OUTPUT_STANDARD.md](../shared/OUTPUT_STANDARD.md)
-
----
-
-## 验证检查清单
-
-**在标记审计完成前，必须执行以下检查：**
-
-### 代码分析检查
-- [ ] 所有 Controller 类已分析
-- [ ] 所有 Service/Util 类已分析
-- [ ] 每个文件操作都有路径来源标注
-
-### 执行条件检查（CRITICAL）
-- [ ] 检查了路径校验逻辑
-- [ ] 检查了代码路径可达性
-- [ ] 标注了每个漏洞的可利用性状态
-
-### 漏洞检测检查
-- [ ] 所有文件读取方法已检测
-- [ ] 所有路径拼接模式已检测
-- [ ] 所有参数来源已追踪
-
-### 报告完整性检查
-- [ ] **综合审计报告已生成，且通过 OUTPUT_TEMPLATE.md 末尾的自检清单**
-- [ ] **反编译输出文件路径已标注**
+- File name format: `{project_name}_file_read_audit_{YYYYMMDD_HHMMSS}.md`
+- Do not modify the template structure, add or remove sections, or change their order
+- All [FILL IN] placeholders must be replaced with actual content
+- Common specification reference: [shared/OUTPUT_STANDARD.md](../shared/OUTPUT_STANDARD.md)
 
 ---
 
-## 参考资料
+## Verification Checklist
 
-- [OUTPUT_TEMPLATE.md](references/OUTPUT_TEMPLATE.md) - 输出报告填充式模板
-- [FILE_READ_METHODS.md](references/FILE_READ_METHODS.md) - Java 文件读取方法详解
-- [PATH_TRAVERSAL.md](references/PATH_TRAVERSAL.md) - 路径遍历攻击详解
-- [DECOMPILE_STRATEGY.md](references/DECOMPILE_STRATEGY.md) - 反编译策略指南
+**Before marking the audit as complete, the following checks must be performed:**
+
+### Code Analysis Check
+- [ ] All Controller classes analyzed
+- [ ] All Service/Util classes analyzed
+- [ ] Every file operation annotated with its path source
+
+### Execution Condition Check (CRITICAL)
+- [ ] Path validation logic checked
+- [ ] Code path reachability checked
+- [ ] Exploitability status annotated for each vulnerability
+
+### Vulnerability Detection Check
+- [ ] All file read methods detected
+- [ ] All path concatenation patterns detected
+- [ ] All parameter sources traced
+
+### Report Completeness Check
+- [ ] **The comprehensive audit report has been generated and passes the self-check checklist at the end of OUTPUT_TEMPLATE.md**
+- [ ] **Decompiled output file paths annotated**
+
+---
+
+## References
+
+- [OUTPUT_TEMPLATE.md](references/OUTPUT_TEMPLATE.md) - Fill-in template for the output report
+- [FILE_READ_METHODS.md](references/FILE_READ_METHODS.md) - Detailed guide to Java file read methods
+- [PATH_TRAVERSAL.md](references/PATH_TRAVERSAL.md) - Detailed guide to path traversal attacks
+- [DECOMPILE_STRATEGY.md](references/DECOMPILE_STRATEGY.md) - Decompilation strategy guide

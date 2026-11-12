@@ -7,6 +7,8 @@ description: >
   weak cipher suites, certificate pinning absent, Network Security Configuration, onReceivedSslError,
   SSLSocket, OkHttp, NSURL, URLSession, certificate transparency, HSTS, MITM.
   Covers MASVS-NETWORK-1 (TLS required) and MASVS-NETWORK-2 (certificate validation).
+zh-signals: "检测移动应用（Android/iOS）的不安全网络通信，包括明文 HTTP、TLS 配置错误与证书固定绕过。信号:移动安全,明文HTTP,TLS,证书固定,MITM"
+when-to-use: "Use when reviewing Android/iOS apps for insecure network communication — cleartext traffic, TLS misconfiguration, disabled hostname verification, or missing certificate pinning."
 license: MIT
 compatibility: Designed for Claude Code. Burp Suite, mitmproxy, Frida, objection, apktool, jadx, Proxyman recommended.
 metadata:

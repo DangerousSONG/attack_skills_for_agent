@@ -1,6 +1,10 @@
 ---
 name: aws-iam-best-practices
 description: "IAM policy review, hardening, and least privilege implementation"
+zh-signals: "审查与加固 AWS IAM 策略，落实最小权限与访问控制最佳实践。信号:AWS IAM,最小权限,策略审查,访问控制,加固"
+when-to-use: >-
+  Use when reviewing IAM policies, implementing least privilege access, or hardening IAM
+  security in AWS.
 category: security
 risk: safe
 source: community

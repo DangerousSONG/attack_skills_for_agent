@@ -1,6 +1,11 @@
 ---
 name: competition-crypto-mobile
 description: Internal downstream skill for ctf-sandbox-orchestrator. CTF-sandbox workflow for crypto, encoding, steganography, APK, IPA, and mobile trust-boundary challenges. Use when the user asks to decode a blob, recover a transform chain or key, inspect hidden media payloads, hook an APK or IPA signer, inspect app storage, or replay mobile request-signing logic. Use only after `$ctf-sandbox-orchestrator` has already established sandbox assumptions and routed here.
+zh-signals: "面向 CTF 场景处理密码学、编码、隐写、APK/IPA 与移动端信任边界挑战，按证据恢复变换链与签名路径。信号:CTF,密码学,隐写,移动端逆向,APK,签名"
+when-to-use: >-
+  Use only after ctf-sandbox-orchestrator has established sandbox assumptions and routed
+  here, when the challenge involves decoding blobs, recovering transform chains or keys,
+  hidden media payloads, mobile signer hooks, app storage, or request-signing replay.
 ---
 
 # Competition Crypto Mobile

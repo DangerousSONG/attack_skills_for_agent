@@ -1,6 +1,8 @@
 ---
 name: api-security-best-practices
 description: "Implement secure API design patterns including authentication, authorization, input validation, rate limiting, and protection against common API vulnerabilities"
+zh-signals: "实现安全的 API 设计模式，覆盖认证、授权、输入校验、限流与常见 API 漏洞防护。信号:API安全,认证,授权,输入校验,限流"
+when-to-use: "Use when adding a protected endpoint, reviewing object access, replacing permissive request parsing, or investigating an API abuse path."
 risk: critical
 source: community
 date_added: "2026-02-27"

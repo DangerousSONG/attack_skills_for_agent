@@ -1,6 +1,10 @@
 ---
 name: ssti-hunter
 description: An SSTI detection, fingerprinting, and exploitation engine. Triggered by suspected server-side evaluation (e.g., {{7*7}} = 49) or stack traces referencing a template engine (Jinja2, Twig, FreeMarker, etc.). Facilitates blind detection, sandbox escapes, and escalation to RCE. Includes report structuring (severity, CWE, remediation).
+zh-signals: "SSTI 检测、指纹识别与利用引擎，含盲检测、沙箱逃逸、升级至 RCE 与报告结构。信号:SSTI,模板注入,RCE,沙箱逃逸,盲检测"
+when-to-use: >-
+  Use when server-side template evaluation is suspected (e.g., {{7*7}}=49) or
+  stack traces reference a template engine such as Jinja2, Twig, or FreeMarker.
 license: MIT
 metadata:
   version: "1.0.0"

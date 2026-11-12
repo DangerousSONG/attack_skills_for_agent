@@ -1,6 +1,8 @@
 ---
 name: observability-cloud-planning
 description: 'Build a cloud, SLO, and incident-readiness register after intake. Use when an SME needs monitoring scope, alert ownership, cost limits, or service planning.'
+zh-signals: "为中小企业规划云服务、SLO 与告警值守的最小可观测性方案。信号:可观测性,SLO,监控告警,云成本,事件响应,运行手册"
+when-to-use: "Use when an SME needs a minimal monitoring plan, alert ownership, cost ceiling, or service/SLO planning after intake."
 category: engineering
 risk: safe
 source: self

@@ -7,6 +7,9 @@ description: >
   "github.head_ref", "github.event.pull_request.title", "github.event.issue.body",
   pull_request_target workflows, run: steps interpolating GitHub context variables,
   CI/CD script injection, GitHub Actions security audit.
+zh-signals: "审计 GitHub Actions 工作流中由不可信上下文表达式导致的脚本注入漏洞。信号:GitHub Actions注入,工作流注入,pull_request_target,head_ref,CI/CD安全。"
+when-to-use: >-
+  Use when auditing GitHub Actions workflows for script injection through unsanitized context expressions such as github.head_ref or pull_request title/body interpolated into run steps.
 license: MIT
 compatibility: Designed for Claude Code. Requires access to target repository's .github/workflows/.
 metadata:

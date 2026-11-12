@@ -1,6 +1,11 @@
 ---
 name: competition-kerberos-delegation
 description: Internal downstream skill for ctf-sandbox-orchestrator. CTF-sandbox workflow for Kerberos delegation, SPN trust edges, S4U abuse, RBCD, constrained or unconstrained delegation, and service-ticket acceptance. Use when the user asks about constrained delegation, unconstrained delegation, RBCD, S4U, SPNs, ticket acceptance, or how a Kerberos trust edge turns into effective privilege under sandbox assumptions. Use only after `$ctf-sandbox-orchestrator` has already established sandbox assumptions and routed here.
+zh-signals: "作为 ctf-sandbox-orchestrator 的下游技能，分析 Kerberos 委派链、SPN 信任边、S4U、RBCD 与票据接受关系以还原实际提权路径。信号:Kerberos,委派,RBCD,S4U,SPN"
+when-to-use: >-
+  Use only after $ctf-sandbox-orchestrator is active and has established sandbox
+  assumptions, when the hard question is which delegation edge exists, which ticket
+  is minted, and which service actually accepts it.
 ---
 
 # Competition Kerberos Delegation

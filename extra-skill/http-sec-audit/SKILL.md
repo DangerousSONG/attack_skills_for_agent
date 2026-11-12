@@ -6,6 +6,10 @@ description: >-
   COOP/COEP, version-leaking banners, and Secure/HttpOnly/SameSite cookies. Use
   when the user asks to "check my site's security headers", "audit HTTP headers",
   "is my CSP/HSTS configured right", or "scan a URL for header misconfigs".
+zh-signals: "HTTP 安全响应头与 Cookie 标志审计，检查 CSP、HSTS、XFO 及版本泄露。信号:安全响应头,CSP,HSTS,Cookie,配置审计"
+when-to-use: >-
+  Use when asked to audit a site's HTTP security headers or cookie flags, verify
+  CSP/HSTS configuration, or scan a URL for header misconfigurations.
 license: MIT
 ---
 

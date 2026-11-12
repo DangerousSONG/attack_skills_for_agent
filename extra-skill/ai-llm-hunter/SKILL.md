@@ -1,6 +1,9 @@
 ---
 name: ai-llm-hunter
 description: Systematic LLM/AI security testing methodology — prompt injection (direct & indirect), system prompt leakage, exfiltration, agentic trust-boundary abuse, and cross-tenant IDOR in AI-backed systems. Use when testing any product powered by an LLM, AI agent, or agentic framework.
+zh-signals: "系统化测试 LLM/AI 安全，覆盖提示注入、系统提示泄露、数据外带与智能体越权。信号:LLM安全,提示注入,系统提示泄露,智能体,跨租户IDOR。"
+when-to-use: >-
+  Use when testing a product powered by an LLM, AI agent, or agentic framework for prompt injection, data exfiltration, tool misuse, or cross-tenant IDOR.
 license: MIT
 metadata:
   version: "1.0.0"

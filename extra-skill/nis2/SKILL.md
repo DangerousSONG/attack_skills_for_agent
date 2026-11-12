@@ -1,6 +1,8 @@
 ---
 name: nis2
 description: EU NIS2 Directive (2022/2555) gap analysis — scope determination (essential vs important entities across 18 sectors), governance obligations (Art 20), 10 baseline risk-management measures (Art 21), incident reporting timelines (Art 23), and Dutch implementation via the Cyberbeveiligingswet.
+zh-signals: "EU NIS2 指令差距分析，涵盖范围判定、治理义务、10 项基线措施与事件报告时限。信号:NIS2,合规,差距分析,事件报告,EU 指令"
+when-to-use: "Use when determining whether an organization is in scope of the NIS2 directive, performing a gap analysis against its obligations, or clarifying incident-reporting duties."
 ---
 
 # NIS2 Gap Analysis

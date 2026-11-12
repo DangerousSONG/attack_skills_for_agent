@@ -3,6 +3,10 @@ name: hunt-oauth
 description: Hunting skill for oauth vulnerabilities. Built from 19 public bug bounty
   reports. Use when hunting oauth on any target.
 category: security
+zh-signals: "基于公开漏洞报告梳理 OAuth 漏洞狩猎方法，覆盖各类 OAuth 流程缺陷与利用路径。信号:OAuth,漏洞狩猎,授权绕过,账户接管,bug bounty"
+when-to-use: >-
+  Use when hunting OAuth vulnerabilities on any authorized target, including
+  redirect_uri flaws, token leakage, and account-linking issues.
 risk: offensive
 source: https://github.com/elementalsouls/Claude-BugHunter
 source_repo: elementalsouls/Claude-BugHunter

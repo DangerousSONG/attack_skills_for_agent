@@ -1,6 +1,8 @@
 ---
 name: k7-total-security-deployment-framework
 description: Deploy and configure K7 Total Security 16.0.1195 multi-platform endpoint protection with AI-powered threat analysis
+zh-signals: "部署与配置 K7 Total Security 多平台终端防护，涵盖策略管理与威胁分析集成。信号:K7,终端防护,部署,策略配置,威胁分析"
+when-to-use: "Use when deploying or configuring K7 Total Security endpoint protection across platforms, setting up policies, or integrating its threat analysis."
 triggers:
   - "configure K7 Total Security deployment"
   - "set up K7 endpoint protection policies"

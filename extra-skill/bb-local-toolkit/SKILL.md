@@ -1,6 +1,9 @@
 ---
 name: bb-local-toolkit
 description: Complete bug bounty workflow — recon (subdomain enumeration, asset discovery, fingerprinting, HackerOne scope, source code audit), pre-hunt learning, vuln hunting (30+ classes), A-to-B chaining, AI/LLM testing, bypass tables, language-specific grep, reporting. Use for ANY bug bounty task.
+zh-signals: "覆盖完整漏洞赏金工作流，从侦察、漏洞狩猎、链路构造到报告撰写。信号:漏洞赏金,侦察,漏洞狩猎,链路利用,赏金报告。"
+when-to-use: >-
+  Use for any bug bounty task, including recon, asset discovery, vulnerability hunting, A-to-B chaining, validation, and report writing.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

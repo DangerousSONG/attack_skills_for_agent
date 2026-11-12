@@ -1,6 +1,8 @@
 ---
 name: competition-ssrf-metadata-pivot
 description: Internal downstream skill for ctf-sandbox-orchestrator. CTF-sandbox workflow for SSRF reachability, internal route probing, metadata-service access, credential pivoting, and token-to-accepted-privilege chains. Use when the user asks to trace SSRF sources, internal hosts, metadata endpoints, link-local tokens, service-account credentials, or explain how a server-side fetch edge turns into accepted access. Use only after `$ctf-sandbox-orchestrator` has already established sandbox assumptions and routed here.
+zh-signals: "CTF 沙箱中 SSRF 可达性、内网路由探测与元数据凭据横向利用的下游技能。信号:SSRF,云元数据,内网探测,凭据横向,CTF"
+when-to-use: "Use only after ctf-sandbox-orchestrator has established sandbox assumptions, when tracing SSRF sources, internal hosts, metadata endpoints, or credential pivoting."
 ---
 
 # Competition SSRF Metadata Pivot

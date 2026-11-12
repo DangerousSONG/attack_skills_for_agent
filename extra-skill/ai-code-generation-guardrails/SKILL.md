@@ -1,6 +1,8 @@
 ---
 name: ai-code-generation-guardrails
 description: 'Use when reviewing AI-generated code before merge or execution: plan AST/security checks, isolated behavior tests and evidence, with language-specific coverage limits.'
+zh-signals: "审查 AI 生成代码的 AST/安全检查、隔离行为测试与语言覆盖边界。信号:AI代码审查,guardrails,AST检查,行为测试,DevSecOps"
+when-to-use: "Use when reviewing AI-generated code before merge or execution and you need AST/security checks, isolated behavior tests, and language-specific coverage limits."
 category: engineering
 risk: safe
 source: self

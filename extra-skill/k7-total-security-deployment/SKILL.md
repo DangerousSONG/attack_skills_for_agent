@@ -1,6 +1,10 @@
 ---
 name: k7-total-security-deployment
 description: Deploy and configure K7 Total Security 16.0.1195 unified defense framework with AI-powered threat detection
+zh-signals: "部署与配置 K7 Total Security 统一防护框架及 AI 威胁检测。信号:K7,终端防护,安全部署,策略配置,威胁检测"
+when-to-use: >-
+  Use when deploying, configuring, integrating, or troubleshooting K7 Total Security
+  endpoint protection across Windows, macOS, and Linux environments.
 triggers:
   - "configure K7 Total Security profile"
   - "deploy K7 endpoint protection"

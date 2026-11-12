@@ -1,6 +1,8 @@
 ---
 name: hunt-idor
 description: Hunting skill for idor vulnerabilities. Built from 26 public bug bounty reports. Use when hunting idor on any target.
+zh-signals: "基于公开漏洞报告构建的 IDOR 越权漏洞狩猎方法。信号:IDOR,越权漏洞,Bug Bounty,访问控制,红队"
+when-to-use: "Use when hunting IDOR on a target with endpoints that reference user-owned resources by ID, such as APIs, GraphQL, or multi-tenant SaaS features."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

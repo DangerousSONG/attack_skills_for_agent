@@ -1,6 +1,8 @@
 ---
 name: security-comms
 description: "Translate technical security work into the language of non-security audiences — board, executives, engineering, customer success, customers, legal, procurement, sales. Covers incident communication, post-mortem narrative, audit-findings-for-stakeholders, risk justification, security spend justification, and customer-facing breach disclosure. Use when the user mentions 'security comms,' 'communicate this finding,' 'explain to my boss,' 'board update,' 'executive summary,' 'incident communication,' 'breach notification,' 'customer disclosure,' 'security memo,' 'post-mortem narrative,' 'risk justification,' 'why this matters to the business,' 'translate this finding,' 'stakeholder update,' or has technical security work that needs to land with a non-security audience."
+zh-signals: "将技术安全内容转化为面向董事会、高管、客户等非安全受众的沟通材料。信号:安全沟通,事件通报,高管摘要,漏洞披露,风险说明"
+when-to-use: "Use when technical security work must be communicated to non-security audiences such as the board, executives, engineering, customers, legal, or procurement, including incident communication, breach disclosure, and risk justification."
 allowed-tools: Read, Write, WebSearch
 ---
 

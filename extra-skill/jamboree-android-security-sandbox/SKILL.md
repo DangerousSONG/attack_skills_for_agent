@@ -1,6 +1,8 @@
 ---
 name: jamboree-android-security-sandbox
 description: Configure and orchestrate Android security testing environments with Magisk, Burp Suite, Objection, and rooted emulators for penetration testing.
+zh-signals: "配置 Android 安全测试环境，集成 Magisk、Burp Suite、Objection 与模拟器。信号:Android安全,Magisk,Burp,Objection,证书固定绕过"
+when-to-use: "Use when setting up a rooted Android emulator with Burp Suite and Objection for authorized mobile application penetration testing."
 triggers:
   - set up android security testing environment
   - configure burp suite with android emulator

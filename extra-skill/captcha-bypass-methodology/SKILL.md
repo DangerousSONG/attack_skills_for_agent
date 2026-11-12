@@ -1,51 +1,53 @@
 ---
 name: captcha-bypass-methodology
-description: "图片验证码/点击式验证码（click captcha）绕过与识别方法论。当目标登录、注册、密码重置、短信发送等接口存在图片验证码、点击验证码、滑块验证码需要绕过或识别时使用。覆盖验证码类型识别、OCR/打码平台识别、点击坐标验证码模拟、验证码逻辑绕过（复用/回显/空值）、频率限制绕过与授权边界"
+description: "Methodology for bypassing and solving image captchas / click captchas. Use when a target's login, registration, password reset, or SMS sending endpoints are protected by image captchas, click captchas, or slider captchas that need to be recognized or bypassed. Covers captcha type identification, OCR / captcha-solving platform recognition, click coordinate captcha simulation, captcha logic bypass (reuse/reflection/empty value), rate limit bypass, and authorization boundaries"
+zh-signals: "图片与点击式验证码绕过与识别方法论，涵盖类型识别、OCR/打码平台与逻辑绕过。信号:验证码,绕过,点击验证码,OCR,打码,滑块"
+when-to-use: "Use when a target's login, registration, password-reset, or SMS endpoint is protected by image, click, or slider captchas that need to be recognized or bypassed."
 metadata:
-  tags: "验证码,图片验证码,点击验证码,click,captcha,绕过,识别,ocr,打码,滑块,登录,爆破,绕过验证码,unlock,assessment"
+  tags: "captcha,image captcha,click captcha,click,captcha,bypass,recognition,ocr,captcha solving,slider,login,brute force,captcha bypass,unlock,assessment"
   category: "exploit"
 ---
 
-# 图片/点击验证码绕过与识别
+# Image / Click Captcha Bypass and Recognition
 
-## 适用场景
+## Applicable Scenarios
 
-登录、注册、密码重置、短信发送等接口有验证码拦截时使用。
+Use when login, registration, password reset, SMS sending, and similar endpoints are gated by a captcha.
 
-## Phase 1: 验证码类型识别
+## Phase 1: Captcha Type Identification
 
-| 类型 | 特征 | 绕过思路 |
+| Type | Characteristics | Bypass Approach |
 |------|------|---------|
-| 图片数字/字母 | 4-6 位字符图 | OCR/打码平台/逻辑绕过 |
-| 点击式（click captcha） | 按提示点击图中文字/图形 | 坐标解析+模拟点击 |
-| 滑块 | 拖拽拼图 | 轨迹模拟/缺口识别 |
-| 算术/中文 | 直接可读 | 正则提取直接回答 |
+| Image digit/letter | 4-6 character image | OCR / captcha-solving platform / logic bypass |
+| Click-based (click captcha) | Click the requested text/graphic in the image | Coordinate parsing + simulated click |
+| Slider | Drag the puzzle piece | Trajectory simulation / gap detection |
+| Arithmetic/Chinese text | Directly readable | Regex extraction and direct answer |
 
-## Phase 2: 识别与自动化解法
+## Phase 2: Recognition and Automated Solving
 
-1. **OCR 识别**：tesseract 或打码平台识别图片验证码
-2. **点击式验证码**：解析提示文字坐标，按坐标点击（selenium/requests 模拟）
-3. **滑块**：识别缺口位置生成拖拽轨迹，绕过前端轨迹校验
+1. **OCR recognition**: use tesseract or a captcha-solving platform to recognize image captchas
+2. **Click captcha**: parse the coordinates of the prompt text and click by coordinate (simulate with selenium/requests)
+3. **Slider**: detect the gap position, generate a drag trajectory, and bypass frontend trajectory validation
 
-## Phase 3: 逻辑绕过（优先尝试）
+## Phase 3: Logic Bypass (Try This First)
 
-1. **验证码复用**：同一 code 多次使用
-2. **验证码回显**：响应/JS 中直接返回
-3. **空值/删除参数**：code 置空、删除 captcha 参数
-4. **万能验证码**：固定值（如 0000、8888）
-5. **并发绕过**：验证码校验后未失效，并发重放
-6. **前端校验**：只在 JS 校验，直接调用后端接口绕过
+1. **Captcha reuse**: the same code works multiple times
+2. **Captcha reflection**: the code is returned directly in the response/JS
+3. **Empty value/parameter removal**: set code to empty, remove the captcha parameter
+4. **Universal captcha**: a fixed value (e.g. 0000, 8888)
+5. **Concurrency bypass**: the captcha is not invalidated after validation, replay it concurrently
+6. **Frontend-only validation**: validated only in JS, call the backend API directly to bypass it
 
-## Phase 4: 频率限制绕过
+## Phase 4: Rate Limit Bypass
 
-- 验证码发送/校验接口限频：IP 轮换、参数污染、并发
-- 爆破验证码时注意触发锁定/封禁
+- The captcha sending/validation endpoint is rate limited: rotate IPs, pollute parameters, use concurrency
+- When brute-forcing a captcha, watch out for account lockouts or IP bans
 
-## 授权边界
+## Authorization Boundary
 
-- 仅限授权渗透测试
-- 爆破需控制速率，避免影响业务
+- Authorized penetration testing only
+- Control the rate when brute-forcing to avoid impacting the business
 
-## 关联
+## Related Skills
 
-- 密码重置/短信验证码逻辑 → password-reset-methodology
+- Password reset / SMS verification code logic → password-reset-methodology

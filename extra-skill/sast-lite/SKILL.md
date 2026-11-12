@@ -7,6 +7,8 @@ description: >-
   CWE. Use when the user asks to "audit this code for vulnerabilities", "run a
   SAST scan", "security review this Python file", or before merging untrusted
   code.
+zh-signals: "基于 AST 的 Python 静态安全分析，检测命令注入、反序列化、弱加密等问题。信号:SAST,Python静态分析,AST,代码审计,漏洞扫描"
+when-to-use: "Use when asked to audit Python code, run a SAST scan, security-review a file, or gate a PR before merging untrusted code."
 license: MIT
 ---
 

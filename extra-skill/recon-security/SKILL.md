@@ -1,6 +1,11 @@
 ---
 name: recon-security
 description: Guide authorized external penetration testing from recon through validation and scoped exploitation using free and open-source tools. Use for domain/IP attack surface mapping, subdomain discovery, nmap/httpx/nuclei/ffuf workflows, web app testing, SIP/NAS checks, Burp/ZAP validation, PoC documentation, and pentest reporting without commercial APIs.
+zh-signals: "指导从侦查到验证与受限利用的授权外部渗透测试，使用免费开源工具完成攻击面测绘、子域发现、nmap/httpx/nuclei/ffuf 工作流与渗透报告。信号:授权渗透,攻击面测绘,子域发现,nmap,nuclei,渗透报告"
+when-to-use: >-
+  Use for authorized external penetration testing that needs attack surface mapping,
+  subdomain discovery, nmap/httpx/nuclei/ffuf workflows, web app validation, and
+  pentest reporting using only free and open-source tools.
 ---
 
 # Recon Security

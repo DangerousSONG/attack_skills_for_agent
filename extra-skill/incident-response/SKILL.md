@@ -1,6 +1,8 @@
 ---
 name: incident-response
 description: Handle security incidents with IR playbooks and procedures.
+zh-signals: "使用事件响应手册与流程处置安全事件，涵盖取证、证据保全、沟通与恢复。信号:事件响应,IR,取证,证据保全,应急响应"
+when-to-use: "Use when a security incident occurs or is suspected and you need structured IR playbooks for triage, containment, evidence preservation, eradication, and recovery."
 category: security
 risk: critical
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

@@ -7,6 +7,8 @@ description: >-
   when the user asks to "review my Dockerfile", "is this container image
   secure", "lint my Dockerfile for security", or "why does my image run as
   root".
+zh-signals: "扫描 Dockerfile 中 root 运行、基础镜像未锁定、远程执行与硬编码密钥等不安全模式。信号:Dockerfile,容器安全,镜像扫描,供应链,root运行"
+when-to-use: "Use when the user asks to review or lint a Dockerfile for security issues such as root users, unpinned images, or embedded secrets."
 license: MIT
 ---
 

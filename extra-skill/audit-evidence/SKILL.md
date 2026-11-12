@@ -1,6 +1,8 @@
 ---
 name: audit-evidence
 description: Evidence collection and packaging for security audits — evidence types (inspection/observation/inquiry/re-performance/automated), cadence per control, chain of custody, period tagging, WORM storage and retention, auditor delivery. Usable for SOC 2, ISO 27001, NIS2, DORA, and internal audits.
+zh-signals: "为安全审计收集与打包证据，涵盖证据类型、保管链、周期标记、WORM 存储与审计交付。信号:审计证据,证据收集,SOC2,ISO27001,保管链"
+when-to-use: "Use when preparing evidence for SOC 2, ISO 27001, NIS2, DORA, or internal audits, including collection cadence, chain of custody, retention, and auditor delivery."
 ---
 
 # Audit Evidence Collector

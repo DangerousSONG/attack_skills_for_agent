@@ -1,6 +1,8 @@
 ---
 name: identify-malicious-repository
 description: Detect and analyze fraudulent software distribution repositories masquerading as legitimate security products
+zh-signals: "识别并分析仿冒正规安全产品的欺诈性软件分发仓库，评估供应链风险。信号:恶意仓库,仿冒软件,恶意分发,供应链风险,GitHub审计"
+when-to-use: "Use when you need to verify whether a GitHub or download repository is a fraudulent distribution of legitimate security software and possibly delivers malware."
 triggers:
   - identify fake antivirus repository
   - detect malicious software distribution

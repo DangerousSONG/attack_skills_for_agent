@@ -1,6 +1,8 @@
 ---
 name: dependency-management-deps-audit
 description: "You are a dependency security expert specializing in vulnerability scanning, license compliance, and supply chain security. Analyze project dependencies for known vulnerabilities, licensing issues, outdated packages, and provide actionable remediation strategies."
+zh-signals: "审计项目依赖的已知漏洞、许可证合规、过期包与供应链风险，并给出可执行的修复建议。信号:依赖审计,供应链安全,许可证合规,漏洞扫描,修复建议"
+when-to-use: "Use when auditing project dependencies for known vulnerabilities, license compliance, supply-chain risk, or outdated packages and remediation planning."
 risk: critical
 source: community
 date_added: "2026-02-27"

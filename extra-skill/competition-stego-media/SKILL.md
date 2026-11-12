@@ -1,6 +1,8 @@
 ---
 name: competition-stego-media
 description: Internal downstream skill for ctf-sandbox-orchestrator. CTF-sandbox workflow for image, audio, video, document, and container steganography. Use when the user asks to inspect metadata, alpha or palette channels, LSBs, thumbnails, appended trailers, QR fragments, transcoding artifacts, or recover a hidden payload from media without blind brute force. Use only after `$ctf-sandbox-orchestrator` has already established sandbox assumptions and routed here.
+zh-signals: "CTF 沙箱下行的媒体隐写分析，覆盖图像、音频、视频与文档容器。信号:隐写分析,CTF,媒体取证,LSB,元数据"
+when-to-use: "Use only after ctf-sandbox-orchestrator is active, when a CTF challenge hides a payload in media containers through steganography."
 ---
 
 # Competition Stego Media

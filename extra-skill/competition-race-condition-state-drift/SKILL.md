@@ -1,6 +1,10 @@
 ---
 name: competition-race-condition-state-drift
 description: Internal downstream skill for ctf-sandbox-orchestrator. CTF-sandbox workflow for race windows, ordering bugs, idempotency failures, lock gaps, concurrent worker drift, and state inconsistencies that produce decisive effects. Use when the user asks to reproduce timing-sensitive bugs, concurrent state corruption, duplicate actions, stale reads, or privilege or balance drift caused by request ordering. Use only after `$ctf-sandbox-orchestrator` has already established sandbox assumptions and routed here.
+zh-signals: "CTF 竞赛中复现竞态窗口、顺序缺陷与状态漂移。信号:竞态条件,CTF,并发,状态漂移,幂等"
+when-to-use: >-
+  Use only after $ctf-sandbox-orchestrator has established sandbox assumptions, when reproducing
+  timing-sensitive races, duplicate actions, stale reads, or lock and idempotency gaps.
 ---
 
 # Competition Race Condition State Drift

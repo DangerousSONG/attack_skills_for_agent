@@ -1,6 +1,9 @@
 ---
 name: seo-forensic-incident-response
 description: "Investigate sudden drops in organic traffic or rankings and run a structured forensic SEO incident response with triage, root-cause analysis and recovery plan."
+zh-signals: "调查自然流量或排名骤降并执行结构化取证式 SEO 应急响应。信号:SEO应急,流量下降,排名暴跌,根因分析,恢复计划"
+when-to-use: >-
+  Use when investigating a sudden significant drop in organic traffic or rankings, suspected penalty, or major technical SEO regression.
 risk: safe
 source: original
 date_added: "2026-02-27"

@@ -1,6 +1,8 @@
 ---
 name: deployment-validation-config-validate
 description: "Validate application configurations with schemas, configuration tests, and checks for security and environment consistency."
+zh-signals: "使用 schema 与配置测试校验应用配置的安全性与环境一致性。信号:配置校验,schema,配置测试,安全一致性,环境校验"
+when-to-use: "Use when validating application configurations against schemas, writing configuration tests, or checking security and environment consistency across deployments."
 risk: critical
 source: community
 date_added: "2026-02-27"

@@ -1,6 +1,8 @@
 ---
 name: hunt-cors
 description: "Hunt CORS Misconfiguration — origin-reflection with credentials, null-origin trust, subdomain-regex bypass (unanchored vs unescaped-dot vs prefix-only), pre-flight (OPTIONS) gating bypass, postMessage origin checks. High only when an attacker-controlled origin can perform a CREDENTIALED cross-origin read of sensitive data and you have proven it in a browser. Use when testing API endpoints, SPAs, or any app emitting Access-Control-* headers."
+zh-signals: "排查 CORS 错误配置，包括源反射带凭据、null 源信任、子域正则绕过与预检绕过。信号:CORS,跨域,源反射,null源,凭据读取"
+when-to-use: "Use when testing API endpoints, SPAs, or any app emitting Access-Control-* headers, to find credential-exploitable CORS misconfigurations and build a browser PoC."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

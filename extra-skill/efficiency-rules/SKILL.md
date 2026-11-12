@@ -1,54 +1,56 @@
 ---
 name: efficiency-rules
-description: "渗透测试效率规则。防止盲目枚举、工具阻塞等低效行为，确保在有限时间内最大化漏洞发现数量。当开始渗透测试、发现扫描工具运行时间过长、陷入盲目爆破循环、或需要决策下一步攻击方向时使用。每轮渗透开始前建议阅读"
+description: "Penetration testing efficiency rules. Prevent inefficient behavior such as blind enumeration and blocking tools, so that the number of vulnerabilities found is maximized within limited time. Use when starting a penetration test, when a scanning tool takes too long to run, when you fall into a blind brute-force loop, or when you need to decide the next attack direction. Recommended reading before each pentest round"
+zh-signals: "渗透测试效率规则，避免盲目枚举与工具阻塞，在有限时间内最大化漏洞发现。信号:效率,枚举,超时,优化,渗透测试"
+when-to-use: "Use at the start of a penetration test or when enumeration loops, long-running tools, or unclear next steps threaten to waste engagement time."
 metadata:
-  tags: "efficiency,enumeration,timeout,optimization,渗透效率,枚举,超时"
+  tags: "efficiency,enumeration,timeout,optimization,pentest efficiency,enumeration,timeout"
   category: "general"
 ---
 
-# 渗透测试效率规则
+# Penetration Testing Efficiency Rules
 
-## ⛔ 规则 1: 禁止盲目手动枚举
+## ⛔ Rule 1: No Blind Manual Enumeration
 
-**触发场景**: 用 curl 逐个测试路径（如 /upload, /admin/upload, /bank/upload ...）
+**Trigger scenario**: testing paths one by one with curl (e.g. /upload, /admin/upload, /bank/upload ...)
 
-**规则**:
-- 对同一类型路径（如文件上传端点），手动 curl 最多尝试 **3 个最可能的路径**
-- 3 次 404 后 **立即停止手动枚举**，改用工具：
+**Rule**:
+- For paths of the same type (e.g. file upload endpoints), try at most the **3 most likely paths manually with curl**
+- After 3 x 404 responses, **stop manual enumeration immediately** and switch to a tool:
   ```bash
-  # ✅ 用 gobuster/dirsearch 一次扫完
+  # ✅ Sweep them all at once with gobuster/dirsearch
   gobuster dir -u http://target -w /usr/share/wordlists/dirb/common.txt -q -t 20 --timeout 10s 2>&1 | head -50
   ```
-- ⛔ **绝不**逐个 HEAD 请求 20+ 个猜测路径 — 这是浪费时间
+- ⛔ **Never** issue 20+ HEAD requests one by one for guessed paths — that wastes time
 
-## ⛔ 规则 2: 长时间工具必须加 timeout
+## ⛔ Rule 2: Long-Running Tools Must Have a Timeout
 
-**触发场景**: 运行 sqlmap、nikto、dirsearch 等扫描工具
+**Trigger scenario**: running scanners such as sqlmap, nikto, dirsearch
 
-**规则**:
-- 所有扫描工具必须用 `timeout` 包裹，最长 **8 分钟**
-- 必须用 `tee` 保留输出，超时后检查已有结果
+**Rule**:
+- All scanning tools must be wrapped in `timeout`, at most **8 minutes**
+- Always keep the output with `tee` so partial results can be inspected after a timeout
   ```bash
-  # ✅ 正确
+  # ✅ Correct
   timeout 480 sqlmap -u 'http://target/page?id=1' --batch --level 2 --risk 2 2>&1 | tee /tmp/sqlmap.log
-  # 超时后
+  # After the timeout
   tail -80 /tmp/sqlmap.log
   ```
-- ⛔ **禁止** `sleep N && tail` 轮询等待 — 浪费轮次时间
+- ⛔ **Forbidden**: `sleep N && tail` polling waits — they waste round-trip time
 
-## ⛔ 规则 3: 无果时快速切换方向
+## ⛔ Rule 3: Switch Direction Quickly When There Are No Results
 
-**触发场景**: 连续多次尝试同一类漏洞未果
+**Trigger scenario**: multiple consecutive attempts at the same vulnerability class yield nothing
 
-**规则**:
-- 同一端点 + 同一漏洞类型，**5 个不同 payload 无果后切换方向**
-- 切换前用 `evidence_save` 记录已测试内容（避免下一轮重复）
-- 优先切换到未测试的漏洞类型，而非同一类型的更多变体
+**Rule**:
+- Same endpoint + same vulnerability type: **switch direction after 5 different payloads yield nothing**
+- Before switching, record what has been tested with `evidence_save` (to avoid repeating it next round)
+- Prefer switching to an untested vulnerability type over trying more variants of the same type
 
-## 效率优先级
+## Efficiency Priorities
 
-| 行为 | 效率 | 说明 |
+| Behavior | Efficiency | Description |
 |------|------|------|
-| 用工具批量扫描 | ⭐⭐⭐ | gobuster/sqlmap/nikto 一次覆盖大量路径 |
-| 针对性手动测试 | ⭐⭐ | 基于分析结果精确测试 3-5 个高概率点 |
-| 盲目手动枚举 | ⛔ | 逐个 curl 猜测路径，效率极低 |
+| Batch scanning with tools | ⭐⭐⭐ | gobuster/sqlmap/nikto cover many paths in one run |
+| Targeted manual testing | ⭐⭐ | Precisely test 3-5 high-probability points based on analysis results |
+| Blind manual enumeration | ⛔ | Guessing paths with curl one by one, extremely inefficient |

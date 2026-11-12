@@ -1,6 +1,11 @@
 ---
 name: experimentersoftroll422-windows-filesystem-security
 description: Windows filesystem security monitoring, access control, and encryption workflows using EaseFilter SDK with Rust bindings
+zh-signals: "基于 Rust 与 EaseFilter SDK 的 Windows 文件系统安全实践，涵盖文件活动监控、访问控制策略与加密工作流。信号:Windows文件系统,文件监控,EaseFilter,访问控制,文件加密"
+when-to-use: >-
+  Use when building or configuring Windows filesystem security with EaseFilter SDK
+  and Rust — real-time file activity monitoring, access-control policies, encryption
+  workflows, or compliance enforcement.
 triggers:
   - how do I monitor file activity on Windows
   - set up filesystem access control policies

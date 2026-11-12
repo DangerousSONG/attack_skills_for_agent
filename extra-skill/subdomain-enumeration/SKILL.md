@@ -1,6 +1,10 @@
 ---
 name: subdomain-enumeration
 description: Map subdomains via crt.sh and subfinder at recon kickoff.
+zh-signals: "在侦察启动阶段通过 crt.sh 与 subfinder 枚举子域名并映射资产面。信号:子域枚举,资产发现,crt.sh,subfinder,DNS"
+when-to-use: >-
+  Use at recon kickoff when you need to map subdomains via certificate transparency logs
+  and passive sources before deeper probing.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

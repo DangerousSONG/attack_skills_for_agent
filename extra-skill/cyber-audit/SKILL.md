@@ -1,6 +1,8 @@
 ---
 name: cyber-audit
 description: "Run read-only exposure checks for security advisories and write a structured local audit report."
+zh-signals: "针对安全公告和漏洞通告执行只读的本地暴露检查，并输出结构化的审计报告。信号:安全审计,CVE,只读检查,漏洞公告,审计报告"
+when-to-use: "Use when the user asks whether their machine or projects are affected by a CVE, breach, or package advisory and a read-only local security exposure report is appropriate."
 category: security
 risk: safe
 source: community

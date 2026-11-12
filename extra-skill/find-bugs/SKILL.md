@@ -1,6 +1,8 @@
 ---
 name: find-bugs
 description: Find bugs, security vulnerabilities, and code quality issues in local branch changes. Use when asked to review changes, find bugs, security review, or audit code on the current branch.
+zh-signals: "审查当前分支变更中的缺陷、安全漏洞与代码质量问题。信号:代码审查,缺陷发现,安全漏洞,分支差异,质量审计"
+when-to-use: "Use when asked to review branch changes for bugs, security vulnerabilities, or code-quality risks rather than implement new behavior."
 risk: critical
 source: community
 date_added: "2026-09-04"

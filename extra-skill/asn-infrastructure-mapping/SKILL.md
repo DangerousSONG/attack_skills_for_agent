@@ -1,6 +1,8 @@
 ---
 name: asn-infrastructure-mapping
 description: Map organization IP infrastructure via ASN, CIDR, TLD expansion, and reverse DNS.
+zh-signals: "通过 ASN、CIDR、TLD 扩展与反向 DNS 测绘组织 IP 基础设施。信号:asn,cidr,反向dns,ip段,资产测绘"
+when-to-use: "Use when you have a target domain and want to discover every IP owned by the organization across ASN/CIDR ranges, sibling TLDs, and reverse DNS."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

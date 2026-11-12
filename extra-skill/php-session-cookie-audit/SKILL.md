@@ -1,53 +1,56 @@
 ---
 name: php-session-cookie-audit
-description: PHP Web 源码会话与 Cookie 安全审计工具。识别 session 固定、Cookie flags 不安全、JWT 验证缺陷与记住登录风险，输出分级、PoC 与修复建议（禁止省略）。
+description: "PHP Web source code session and cookie security audit tool. Identifies session fixation, insecure cookie flags, JWT verification flaws and remember-me risks, and outputs severity grading, PoC and remediation recommendations (must not be omitted)."
+zh-signals: "审计 PHP 源码中的会话固定、Cookie flags、JWT 校验与持久登录风险。信号:php审计,会话固定,cookie flags,jwt,session"
+when-to-use: >-
+  Use when auditing PHP source code for session fixation, missing cookie flags, JWT
+  verification flaws, or weak remember-me authentication.
 ---
 
-# PHP 会话与 Cookie 安全审计（php-session-cookie-audit）
+# PHP Session and Cookie Security Audit (php-session-cookie-audit)
 
-分析 PHP 项目源码中认证会话相关的安全设置与实现逻辑，重点检测：
+Analyze the security settings and implementation logic of authentication sessions in PHP project source code, focusing on detecting:
 - session fixation
-- cookie flags 缺失（HttpOnly/Secure/SameSite）
-- JWT 校验缺陷（签名算法混淆、未校验 exp/iss/aud、弱密钥）
-- remember-me/持久登录弱点（若存在）
+- missing cookie flags (HttpOnly/Secure/SameSite)
+- JWT verification flaws (algorithm confusion, unverified exp/iss/aud, weak keys)
+- remember-me / persistent login weaknesses (if present)
 
-## 分级与编号
-- 详见：`shared/SEVERITY_RATING.md`
-- 漏洞编号：`{C/H/M/L}-SESS-{序号}`
+## Severity Rating and Numbering
+- See `shared/SEVERITY_RATING.md` for details
+- Vulnerability ID: `{C/H/M/L}-SESS-{sequence}`
 
-## 必检内容（强制）
-1. Session 初始化：
-   - 是否在登录后 `session_regenerate_id`
-   - 是否设置合理的超时、cookie 参数
-2. Cookie flags：
-   - `HttpOnly`、`Secure`、`SameSite` 是否明确设置
-3. JWT：
-   - decode/verify 使用的算法是否固定
-   - 是否验证 `exp`/`nbf`/`iss`/`aud`
-   - secret/公钥是否硬编码或读取不安全
-4. 退出/失效：
-   - logout 是否真正清除 session 与 token
+## Mandatory Checks (Required)
+1. Session initialization:
+   - whether `session_regenerate_id` is called after login
+   - whether reasonable timeouts and cookie parameters are set
+2. Cookie flags:
+   - whether `HttpOnly`, `Secure` and `SameSite` are explicitly set
+3. JWT:
+   - whether the algorithm used for decode/verify is fixed
+   - whether `exp`/`nbf`/`iss`/`aud` are validated
+   - whether the secret / public key is hardcoded or read insecurely
+4. Logout / invalidation:
+   - whether logout truly clears the session and the token
 
-## PoC 要求（强制）
-- 对 session fixation：给出请求序列（登录前固定 session id -> 登录后验证会话变化）
-- 对 cookie flags：说明浏览器侧可见差异与危害（并给出示例 HTTP 响应头）
-- 对 JWT：给出“签名算法/claim 校验缺失”的请求 PoC 框架（必须说明 payload 如何构造）
+## PoC Requirements (Mandatory)
+- For session fixation: provide the request sequence (fix the session id before login -> verify the session changes after login)
+- For cookie flags: explain the browser-observable difference and the impact (and provide sample HTTP response headers)
+- For JWT: provide a request PoC skeleton for "missing signature algorithm / claim validation" (must explain how the payload is crafted)
 
-## 证据引用（强制：来自 php-route-tracer）
-每条会话与 Cookie 安全疑似风险必须逐项引用 trace 输出中 `## 9) Sink Evidence Type Checklist` 的 **SESS 行**对应证据要点（允许状态为待验证，但证据引用必须存在）：
-1. `EVID_SESS_SESSION_INIT_REGEN`：登录后是否 `session_regenerate_id` 等会话固定防护证据
-2. `EVID_SESS_COOKIE_FLAGS`：Cookie flags（HttpOnly/Secure/SameSite）设置证据
-3. `EVID_SESS_JWT_VERIFY_CLAIMS`：JWT 签名算法固定与 exp/nbf/iss/aud 等 claim 校验证据
-4. `EVID_SESS_LOGOUT_CLEAR`：logout 是否真正清除 session 与 token 的证据
+## Evidence Citation (Mandatory: from php-route-tracer)
+Every suspected session or cookie security risk must cite the matching evidence points of the **SESS row** in the `## 9) Sink Evidence Type Checklist` section of the trace output item by item (the status may be pending verification, but the evidence citations must exist):
+1. `EVID_SESS_SESSION_INIT_REGEN`: evidence of session fixation defenses such as `session_regenerate_id` after login
+2. `EVID_SESS_COOKIE_FLAGS`: evidence that the cookie flags (HttpOnly/Secure/SameSite) are set
+3. `EVID_SESS_JWT_VERIFY_CLAIMS`: evidence of the JWT signature algorithm being fixed and of claim validation such as exp/nbf/iss/aud
+4. `EVID_SESS_LOGOUT_CLEAR`: evidence that logout truly clears the session and the token
 
-## tracer 证据缺失处理（强制）
-- 若 trace 契约校验失败或缺失上述 1~4 任一关键证据点：该风险只能标记为 `⚠️待验证`，不得给出“已确认可利用”的断言。
+## Handling Missing tracer Evidence (Mandatory)
+- If the trace contract validation fails or any of the key evidence points 1~4 above is missing, the risk can only be marked as `⚠️pending verification`; no "confirmed exploitable" assertion may be made.
 
-## 报告输出
+## Report Output
 ```
 {output_path}/vuln_audit/sess_{timestamp}.md
 ```
 
-## 条目模板（强制）
-必须包含：位置证据 + 数据流链（token/session -> 校验 -> 授权）+ 可利用前置条件 + PoC + 修复建议 + `rg` 搜索语句。
-
+## Entry Template (Mandatory)
+Must include: location evidence + data flow chain (token/session -> verification -> authorization) + exploitability preconditions + PoC + remediation recommendations + `rg` search statements.

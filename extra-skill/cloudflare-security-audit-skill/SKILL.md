@@ -1,6 +1,8 @@
 ---
 name: cloudflare-security-audit-skill
 description: Multi-phase AI security audit orchestration that finds exploitable vulnerabilities through parallel agents, adversarial validation, and machine-readable findings
+zh-signals: "多阶段 AI 安全审计编排，通过并行代理与对抗验证发现可利用漏洞。信号:安全审计,多阶段扫描,并行代理,漏洞发现,代码审计"
+when-to-use: "Use when running a structured, multi-phase security audit of a codebase and needing machine-readable, validated findings."
 triggers:
   - run a security audit on this codebase
   - find security vulnerabilities in this project

@@ -1,6 +1,8 @@
 ---
 name: cicd-hardening
 description: CI/CD pipeline hardening for GitHub Actions and GitLab CI — trust-model (pull_request_target vs pull_request), action pinning to SHA, OIDC-based cloud access, permissions minimization, runner isolation, and supply-chain gates (SLSA provenance, signing).
+zh-signals: "加固 GitHub Actions 与 GitLab CI 流水线，涵盖信任模型、Action SHA 固定、OIDC 云访问、权限最小化与供应链门禁。信号:CI/CD 加固,GitHub Actions,流水线安全,OIDC,供应链"
+when-to-use: "Use when reviewing or hardening CI/CD workflows, auditing pull_request_target usage, pinning Actions, configuring OIDC, or adding supply-chain gates."
 ---
 
 # CI/CD Hardening

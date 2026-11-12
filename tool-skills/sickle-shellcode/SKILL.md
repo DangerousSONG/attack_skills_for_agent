@@ -2,37 +2,40 @@
 name: sickle-shellcode
 description: "Sickle: shellcode analysis. Signals: reverse engineering, disassembly, bad characters, comparison."
 zh-signals: "Sickle: shellcode 分析。信号:逆向,反汇编,坏字符,对比。"
+when-to-use: >-
+  Use when analyzing shellcode during reverse engineering: disassemble it,
+  identify bad characters, and diff variants.
 ---
 
 # Sickle
 
-- 攻击大类:C47 逆向工程
-- 上游仓库:https://github.com/wetw0rk/Sickle
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C47 Reverse Engineering
+- Upstream Repository: https://github.com/wetw0rk/Sickle
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/wetw0rk/Sickle && cd Sickle && pip install .
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `sickle -f shellcode.bin -m disassemble` | shellcode 反汇编 |
-| `-f bin -f badchars '\x00'` | 坏字符 |
-| `-m diff` | 对比 |
+| `sickle -f shellcode.bin -m disassemble` | Shellcode disassembly |
+| `-f bin -f badchars '\x00'` | Bad characters |
+| `-m diff` | Comparison |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### shellcode 分析
+### Shellcode analysis
 
 ```bash
 sickle -f payload.bin -m disassemble
-# 反汇编+坏字符检测
+# Disassembly + bad character detection
 ```
 
-## 注意事项
+## Notes
 
-shellcode 分析工具,反汇编+提取。
+A shellcode analysis tool for disassembly and extraction.

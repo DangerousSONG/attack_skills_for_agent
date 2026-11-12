@@ -2,37 +2,38 @@
 name: dnswatch-dns-mon
 description: "DNSWatch: DNS request monitoring and hijacking. Signals: man-in-the-middle, MITM, DNS monitoring plus spoofing, spoofing modes, targeted."
 zh-signals: "DNSWatch: DNS 请求监控+劫持。信号:中间人,mitm,DNS 监控+伪造,伪造模式,定向。"
+when-to-use: "Use on a LAN to monitor DNS requests and spoof responses for phishing redirection or traffic analysis."
 ---
 
 # DNSWatch
 
-- 攻击大类:C40 嗅探与中间人攻击
-- 上游仓库:https://github.com/HalilDeniz/DNSWatch
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C40 Sniffing and Man-in-the-Middle Attacks
+- Upstream Repository: https://github.com/HalilDeniz/DNSWatch
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/HalilDeniz/DNSWatch && cd DNSWatch && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 dnswatch.py -i eth0` | DNS 监控+伪造 |
-| `-i eth0 -f` | 伪造模式 |
-| `-i eth0 -d example.com/10.0.0.5` | 定向 |
+| `python3 dnswatch.py -i eth0` | DNS monitoring and spoofing |
+| `-i eth0 -f` | Spoofing mode |
+| `-i eth0 -d example.com/10.0.0.5` | Targeted |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### DNS 请求监控+劫持
+### DNS request monitoring and hijacking
 
 ```bash
 python3 dnswatch.py -i eth0
-# 内网 DNS 分析+钓鱼重定向
+# Internal DNS analysis and phishing redirection
 ```
 
-## 注意事项
+## Notes
 
-DNS 监控+伪造一体化。
+All-in-one DNS monitoring and spoofing.

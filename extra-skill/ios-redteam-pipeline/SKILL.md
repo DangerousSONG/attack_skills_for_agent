@@ -1,6 +1,8 @@
 ---
 name: ios-redteam-pipeline
 description: End-to-end iOS red-team pipeline
+zh-signals: "端到端 iOS 红队测试流水线，覆盖 IPA 分析、运行时插桩与后端接口挖掘。信号:iOS红队,IPA,Frida,TestFlight,Mobile安全"
+when-to-use: "Use when an iOS app is in scope and recon surfaces an Apple Developer page, TestFlight link, or enterprise/ad-hoc IPA."
 category: security
 risk: offensive
 source: https://github.com/elementalsouls/Claude-BugHunter

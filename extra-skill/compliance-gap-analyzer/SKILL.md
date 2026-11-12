@@ -1,6 +1,11 @@
 ---
 name: compliance-gap-analyzer
 description: Aggregates audit findings mapped to framework controls, classifies each control, identifies blind spots, prioritizes gaps by severity, and produces a complete gap report supports ISO 27001, NIST CSF, PCI-DSS, and OWASP. Trigger when the user provides audit findings tagged to framework controls and asks for a gap report, asks what controls are failing or what their biggest compliance gaps are, needs to identify blind spots or untested controls, wants to compare current compliance posture against a previous audit, or shares pentest/audit results wanting them mapped to a compliance framework.
+zh-signals: "将审计发现映射到合规框架控制项，分类控制状态、识别盲点、按严重度排序差距并生成完整差距报告，支持 ISO 27001、NIST CSF、PCI-DSS 与 OWASP。信号:合规差距,审计发现,ISO27001,NIST CSF,PCI-DSS"
+when-to-use: >-
+  Use when the user provides audit findings tagged to framework controls and
+  asks for a gap report, biggest compliance gaps, blind spots, or a comparison
+  against a previous audit.
 license: MIT
 metadata:
   version: "0.0.1"

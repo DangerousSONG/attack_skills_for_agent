@@ -1,6 +1,11 @@
 ---
 name: port-service-discovery
 description: Nmap scan for MySQL, Redis, FTP, SSH, internal API services.
+zh-signals: "使用限定范围的 Nmap/Masscan 扫描做端口与服务发现，识别 MySQL、Redis、FTP、SSH 及内部 API 等相邻服务。信号:端口扫描,Nmap,服务识别,Redis,内部API"
+when-to-use: >-
+  Use during deep-invade phase 6, after web surface recon finds no exploitable bug,
+  or when a staging subdomain is discovered and you need an infrastructure port and
+  service inventory adjacent to the web application.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

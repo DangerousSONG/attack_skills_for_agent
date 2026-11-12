@@ -2,6 +2,11 @@
 name: coverage-analysis
 type: technique
 description: "Measures and interprets what a fuzzing campaign actually reaches, using llvm-cov, lcov, or a fuzzer's own coverage output. Covers baselining a new campaign, reading coverage reports, and turning uncovered regions into harness, seed, or dictionary work. Use when a fuzzer plateaus, when judging whether a harness is effective, after changing a harness, or when asking why some code is never reached."
+zh-signals: "用 llvm-cov、lcov 或 fuzzer 自身输出衡量并解读模糊测试实际覆盖的代码，指导 harness、种子与字典改进。信号:覆盖率分析,模糊测试,llvm-cov,lcov,harness"
+when-to-use: >-
+  Use when a fuzzer plateaus, judging harness effectiveness, verifying coverage
+  after harness changes, or investigating why certain code paths are never
+  reached.
 ---
 
 # Coverage Analysis

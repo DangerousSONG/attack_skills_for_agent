@@ -2,39 +2,42 @@
 name: rustscan-speed
 description: "RustScan: Fast full-port scanning on a single host. Signals: port scanning, nmap, batch file, pass parameters to nmap, batch rate."
 zh-signals: "RustScan: 单机全端口秒扫。信号:端口扫描,nmap,批量文件,透传参数给 nmap,batch 速率。"
+when-to-use: >-
+  Use when you need to scan all ports on a single host very quickly and then
+  pass the results to nmap for service detection.
 ---
 
 # RustScan
 
-- 攻击大类:C42 网络扫描与枚举
-- 上游仓库:https://github.com/bee-san/RustScan
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C42 Network Scanning and Enumeration
+- Upstream Repository: https://github.com/bee-san/RustScan
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 docker run -it --rm --name rustscan rustscan/rustscan:latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `rustscan -a 10.0.0.5` | 单 IP 全端口 3 秒级 |
-| `-a ips.txt` | 批量文件 |
-| `-- -sV` | 透传参数给 nmap |
-| `-b 2500` | batch 速率 |
-| `-t 1500` | 超时 ms |
+| `rustscan -a 10.0.0.5` | All ports on a single IP in about 3 seconds |
+| `-a ips.txt` | Batch file |
+| `-- -sV` | Pass parameters through to nmap |
+| `-b 2500` | Batch rate |
+| `-t 1500` | Timeout in ms |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 单机全端口秒扫
+### All-Ports Scan of a Single Host in Seconds
 
 ```bash
 rustscan -a 10.0.0.5 -- -sV -sC -oN deep.txt
-# RustScan 先出开放端口,再自动带 nmap 指纹
+# RustScan lists the open ports first, then automatically runs nmap fingerprinting
 ```
 
-## 注意事项
+## Notes
 
-自适应 batch 扫描绕开 IDS 单 IP 阈值告警;Windows 下用 WSL 跑。
+Adaptive batch scanning avoids IDS single-IP threshold alerts; run it under WSL on Windows.

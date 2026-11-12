@@ -1,6 +1,8 @@
 ---
 name: secrets-management
 description: "Secure secrets management practices for CI/CD pipelines using Vault, AWS Secrets Manager, and other tools."
+zh-signals: "面向 CI/CD 的安全密钥管理实践，使用 Vault、AWS Secrets Manager 等实现安全检索与轮换。信号:密钥管理,Vault,CI/CD,凭据轮换,机密存储"
+when-to-use: "Use when designing or repairing secret retrieval, CI credentials, workload identity, access policies, or rotation for an authorized system."
 risk: critical
 source: community
 date_added: "2026-02-27"

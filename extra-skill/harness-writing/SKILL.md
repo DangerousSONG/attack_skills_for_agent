@@ -2,6 +2,8 @@
 name: harness-writing
 type: technique
 description: "Designs and improves fuzzing harnesses for C/C++ and Rust. Covers mapping raw bytes onto a target API, generating structured inputs, avoiding non-determinism and false crashes, and deciding what to fuzz together. Use when writing a first LLVMFuzzerTestOneInput or fuzz_target! harness, when a campaign finds nothing or reports crashes that will not reproduce, or when the target API needs structured rather than raw input."
+zh-signals: "设计与改进 C/C++ 和 Rust 的模糊测试 harness，覆盖字节映射、结构化输入与确定性保障。信号:模糊测试,harness,libFuzzer,Rust,输入建模"
+when-to-use: "Use when writing a first LLVMFuzzerTestOneInput or fuzz_target! harness, or when a fuzzing campaign finds nothing or produces non-reproducible crashes."
 ---
 
 # Writing Fuzzing Harnesses

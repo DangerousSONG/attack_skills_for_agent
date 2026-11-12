@@ -1,6 +1,8 @@
 ---
 name: firebase-supabase-attack
 description: Exploit Firebase/Supabase for data via JS config leak probe.
+zh-signals: "利用 JavaScript 配置泄露探测 Firebase/Supabase 后端并提取数据。信号:Firebase,Supabase,RLS缺失,配置泄露,数据泄露"
+when-to-use: "Use when Firebase config or Supabase URL and anon key leak in JavaScript bundles or source leaks, or when assessing a BaaS-backed SPA with missing Row Level Security."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

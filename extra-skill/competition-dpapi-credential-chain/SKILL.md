@@ -1,6 +1,11 @@
 ---
 name: competition-dpapi-credential-chain
 description: Internal downstream skill for ctf-sandbox-orchestrator. CTF-sandbox workflow for DPAPI masterkeys, vault blobs, browser credential stores, protected secrets, domain backup keys, and secret-to-acceptance replay chains. Use when the user asks to inspect DPAPI blobs or masterkeys, recover browser or vault credentials, trace DPAPI context or backup-key use, or explain how protected Windows secrets become accepted access or privilege. Use only after `$ctf-sandbox-orchestrator` has already established sandbox assumptions and routed here.
+zh-signals: "作为 ctf-sandbox-orchestrator 的下游技能，追踪 DPAPI 主密钥、凭据库与浏览器密钥的解密上下文及最终凭据回放链。信号:DPAPI,主密钥,凭据恢复,Windows,回放链"
+when-to-use: >-
+  Use only after $ctf-sandbox-orchestrator is active and has established sandbox
+  assumptions, when the decisive Windows secret is DPAPI-protected and you must prove
+  which context unwraps it and where the plaintext is accepted.
 ---
 
 # Competition Dpapi Credential Chain

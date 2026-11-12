@@ -10,9 +10,12 @@ description: |
   assessment reports, DFD diagrams, threat inventories, attack path validation, mitigation
   plans, and pentest plans.
 
-  Trigger on: 威胁建模, 安全评估, 渗透测试, 安全分析, 安全审计, 安全检查, 风险评估.
+  Trigger on: threat modeling, security assessment, penetration testing, security analysis, security audit, security review, risk assessment.
   NOT for: fixing one specific bug, adding one security feature (rate limiting, CORS),
   writing tests, CI/CD setup, or debugging errors.
+zh-signals: "对代码库进行 STRIDE 威胁建模与整体安全风险评估并产出报告。信号:威胁建模,安全评估,STRIDE,风险评估,攻击面分析"
+when-to-use: >-
+  Use when the user wants holistic security analysis of a codebase, application, or project, including threat inventories, DFDs, and mitigation plans.
 ---
 
 <!-- Threat Modeling Skill | Version 3.1.0 (20260313a) | https://github.com/fr33d3m0n/threat-modeling | License: BSD-3-Clause -->
@@ -399,7 +402,7 @@ Output language follows context language unless `--lang=xx` specified.
 
 | Context | File Names | Content |
 |---------|------------|---------|
-| Chinese | P1-项目理解.md | 中文 |
+| Chinese | P1-PROJECT-UNDERSTANDING.md | Chinese |
 | English | P1-PROJECT-UNDERSTANDING.md | English |
 
 Supported: en, zh, ja, ko, es, fr, de, pt, ru

@@ -1,6 +1,10 @@
 ---
 name: analyze-cve
 description: Analyzes CVE vulnerabilities in project dependencies with code path tracing and PoC generation for Burp Suite. Traces vulnerable code from user input to sink, assesses exploitability, and generates HTTP requests for testing.
+zh-signals: "分析项目依赖中的 CVE，追踪源码路径、评估可利用性并生成用于 Burp Suite 的 PoC 请求。信号:CVE分析,依赖漏洞,代码路径,可利用性,PoC生成"
+when-to-use: >-
+  Use when analyzing whether a CVE affecting a project dependency is exploitable, tracing
+  vulnerable code paths, or generating PoC requests for Burp Suite.
 argument-hint: "[dependency] [version] [cve-link]"
 user-invocable: true
 ---

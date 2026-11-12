@@ -1,6 +1,8 @@
 ---
 name: pypi-security-best-practices
 description: Guide for implementing security best practices when using Python packages from PyPI with uv and pip
+zh-signals: "PyPI 依赖安全实践指南，覆盖供应链防护、哈希校验与安全配置。信号:PyPI安全,供应链,依赖校验,pip,uv"
+when-to-use: "Use when securing Python package installations from PyPI with pip or uv, including dependency cooldown, hash verification, and supply-chain hardening."
 triggers:
   - how do I secure my Python package installations
   - show me PyPI security best practices

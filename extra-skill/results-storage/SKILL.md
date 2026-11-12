@@ -1,6 +1,9 @@
 ---
 name: results-storage
 description: SQLite-based persistent storage and reporting system for penetration testing results. Use this skill when user needs to store scan results, query vulnerabilities, generate reports, or manage pentest data across sessions.
+zh-signals: "基于 SQLite 的渗透测试结果持久化存储与报告生成系统。信号:结果存储,SQLite,报告生成,漏洞查询,跨会话"
+when-to-use: >-
+  Use when you need to persist scan results, query vulnerabilities, or generate reports across pentest sessions.
 ---
 
 # Pentest Results Storage & Reporting

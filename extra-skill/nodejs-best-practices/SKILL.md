@@ -1,6 +1,8 @@
 ---
 name: nodejs-best-practices
 description: "Node.js development principles and decision-making. Framework selection, async patterns, security, and architecture. Teaches thinking, not copying."
+zh-signals: "Node.js 开发决策原则，覆盖框架选型、异步模式、安全与架构。信号:Node.js,框架选型,异步模式,安全实践,架构设计"
+when-to-use: "Use when making Node.js architecture decisions, choosing frameworks, designing async patterns, or applying security and deployment best practices."
 risk: critical
 source: community
 date_added: "2026-02-27"

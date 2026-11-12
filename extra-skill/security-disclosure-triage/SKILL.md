@@ -1,6 +1,9 @@
 ---
 name: security-disclosure-triage
 description: "Verify whether an incoming security advisory is a real, disclosable vulnerability in a target repository checkout, and assign an honest severity. Use when triaging an advisory, GHSA, scanner finding, or draft report from the researcher/reporter side to decide if it is worth disclosing. Optimizes against false confirmations and inflated severity."
+zh-signals: "从报告者视角验证安全公告是否构成可披露漏洞并给出诚实严重等级。信号:安全公告,漏洞定级,漏洞披露,误报排除,GHSA。"
+when-to-use: >-
+  Use when triaging an advisory, GHSA, scanner finding, or draft report from the reporter side to decide whether it is a real, disclosable vulnerability and at what severity.
 ---
 
 # Security Disclosure Triage

@@ -1,6 +1,8 @@
 ---
 name: security-webshells
 description: "Web shell samples for detection and analysis: PHP, ASP, ASPX, JSP, Python, Perl shells. Use for security research and detection system testing."
+zh-signals: "提供多种语言的 WebShell 样本用于检测与分析研究。信号:WebShell样本,PHP shell,ASP,检测规则,恶意分析。"
+when-to-use: "Use when testing web shell detection rules, validating IDS or IPS signatures for PHP, ASP, ASPX, JSP, Python or Perl shells, or performing malware analysis and forensics research on SecLists web shell samples."
 ---
 
 # SecLists Web-Shells

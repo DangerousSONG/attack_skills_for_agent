@@ -1,6 +1,8 @@
 ---
 name: azure-keyvault-py
 description: Azure Key Vault SDK for Python. Use for secrets, keys, and certificates management with secure storage.
+zh-signals: "使用 Azure Key Vault Python SDK 管理密钥、机密与证书。信号:Azure Key Vault,Python SDK,机密管理,密钥,证书"
+when-to-use: "Use when managing secrets, cryptographic keys, or certificates in Azure Key Vault from Python code."
 risk: critical
 source: community
 date_added: '2026-02-27'

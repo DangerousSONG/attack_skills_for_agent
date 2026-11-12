@@ -1,6 +1,8 @@
 ---
 name: deep-invade
 description: "Deep pentest WP: SSRF, plugin CVE, JS mine, port scan chain."
+zh-signals: "针对高价值 WordPress 目标进行深度渗透，串联 SSRF、插件 CVE、JS 挖掘与端口扫描。信号:WordPress,深度渗透,SSRF,插件CVE,JS挖掘"
+when-to-use: "Use after wp-mass-recon scores a WordPress target high enough (e.g., >= 6), or when assigned a single high-value target requiring a deeper exploit chain toward RCE or data breach."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

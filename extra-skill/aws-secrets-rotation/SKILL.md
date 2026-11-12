@@ -1,6 +1,8 @@
 ---
 name: aws-secrets-rotation
 description: "Automate AWS secrets rotation for RDS, API keys, and credentials"
+zh-signals: "自动化 AWS Secrets Manager 密钥轮换，覆盖 RDS、DocumentDB、Redshift、ElastiCache 及第三方 API 密钥。信号:AWS密钥轮换,Secrets Manager,Lambda,RDS凭据,自动化"
+when-to-use: "Use when implementing automated secrets rotation for AWS services or third-party credentials, managing credentials securely, or meeting compliance policies that require periodic key rotation."
 category: security
 risk: safe
 source: community

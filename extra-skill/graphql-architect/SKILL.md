@@ -1,6 +1,10 @@
 ---
 name: graphql-architect
 description: Master modern GraphQL with federation, performance optimization, and enterprise security. Build scalable schemas, implement advanced caching, and design real-time systems.
+zh-signals: "面向企业级场景的 GraphQL 架构设计，涵盖联邦、性能优化、缓存与实时系统安全。信号:GraphQL,架构设计,Apollo联邦,性能优化,API安全"
+when-to-use: >-
+  Use when designing or reviewing enterprise-scale GraphQL systems — federation, schema
+  design, caching, performance optimization, or real-time architecture.
 risk: critical
 source: community
 date_added: '2026-02-27'

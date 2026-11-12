@@ -11,6 +11,8 @@ description: >-
   for vulnerabilities, run a security audit with Semgrep, find bugs, or perform
   static analysis. For the same scan without the approval gate, use the
   /static-analysis:semgrep-scan workflow.
+zh-signals: "在代码库上运行 Semgrep 安全扫描并合并为 SARIF 输出。信号:Semgrep,SAST,规则扫描,静态分析,SARIF"
+when-to-use: "Use when asked to scan code for vulnerabilities with Semgrep, run a security audit, or perform static analysis with ruleset approval."
 allowed-tools: Bash Read Glob AskUserQuestion TaskCreate TaskList TaskUpdate
 ---
 

@@ -1,6 +1,8 @@
 ---
 name: agy-auto
 description: "Configure agy-auto PreToolUse security gate to run Antigravity CLI (agy) unattended with layered policy controls instead of --dangerously-skip-permissions."
+zh-signals: "配置 agy-auto 的 PreToolUse 安全网关，以分层策略控制无人值守运行 Antigravity CLI，替代危险的全权限跳过。信号:agy-auto,Antigravity,安全网关,权限策略,无人值守"
+when-to-use: "Use when running Antigravity CLI (agy) unattended or in background agent loops and you need automated tool permissions without --dangerously-skip-permissions."
 category: security
 risk: critical
 source: community

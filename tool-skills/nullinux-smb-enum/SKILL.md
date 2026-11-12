@@ -2,37 +2,41 @@
 name: nullinux-smb-enum
 description: "All-in-one SMB enumeration on Linux. Signals: asset mapping, subdomains, SMB/RPC enumeration, share enumeration, user enumeration."
 zh-signals: "Nullinux: Linux 上 SMB 枚举一把梭。信号:资产测绘,子域名,SMB/RPC 全枚举,共享枚举,用户枚举。"
+when-to-use: >-
+  Use when enumerating SMB/RPC on Linux against a host or network range to gather
+  shares, users, groups, and RID information; supports quick, shares, and users
+  modes.
 ---
 
 # Nullinux
 
-- 攻击大类:C01 资产测绘与指纹识别
-- 上游仓库:https://github.com/m8r0wn/nullinux
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C01 Asset Mapping and Fingerprinting
+- Upstream Repository: https://github.com/m8r0wn/nullinux
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/m8r0wn/nullinux && cd nullinux && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python nullinux.py 10.0.0.5` | SMB/RPC 全枚举 |
-| `-shares` | 共享枚举 |
-| `-users` | 用户枚举 |
-| `-quick` | 快速模式 |
+| `python nullinux.py 10.0.0.5` | Full SMB/RPC enumeration |
+| `-shares` | Share enumeration |
+| `-users` | User enumeration |
+| `-quick` | Quick mode |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Linux 上 SMB 枚举一把梭
+### All-in-one SMB enumeration on Linux
 
 ```bash
-python nullinux.py 10.0.0.0/24 -users -shares  # 域用户/共享/组/RID 全出
+python nullinux.py 10.0.0.0/24 -users -shares  # Domain users/shares/groups/RIDs all in one
 ```
 
-## 注意事项
+## Notes
 
-enum4linux 的现代化 Python 版;输出规整适合脚本消费。
+A modern Python rewrite of enum4linux; the output is tidy and easy for scripts to consume.

@@ -1,6 +1,10 @@
 ---
 name: offensive-iot
 description: "IoT and embedded device security testing methodology. Covers hardware reconnaissance (UART, JTAG, SWD, SPI flash, I2C EEPROM, eMMC chip-off), firmware acquisition (vendor portals, OTA capture, flash dump, binwalk extraction), firmware analysis (filesystem mounting, binary triage, hardcoded secrets, default credential discovery), bootloader attacks (U-Boot console, secure-boot bypass, fault injection), runtime attacks on embedded Linux/RTOS (busybox CVEs, MTD writes, /dev/mem), wireless protocol attacks (Zigbee, BLE, Z-Wave, LoRaWAN, Thread/Matter, sub-GHz), MQTT/CoAP/Modbus/BACnet/OPC-UA exploitation, mobile companion app analysis, cloud-IoT API abuse, and side-channel/glitching basics. Use for IoT pentest, smart-home assessment, ICS/OT testing, or embedded vulnerability research."
+zh-signals: "IoT 与嵌入式设备攻击测试，覆盖硬件侦察、固件提取、无线协议与云 API。信号:IoT安全,固件提取,UART,无线协议,嵌入式"
+when-to-use: >-
+  Use for authorized IoT, embedded, smart-home, or ICS/OT assessments covering hardware
+  interfaces, firmware analysis, runtime access, wireless protocols, and companion cloud APIs.
 ---
 
 # IoT & Embedded — Offensive Testing Methodology

@@ -2,47 +2,48 @@
 name: dnsx-dns-toolkit
 description: "dnsx: subdomain liveness, record enumeration, and SPF/DMARC email spoof surface assessment. Signals: subdomain, domain enumeration, bulk resolution, show responsive only, retry count."
 zh-signals: "dnsx: 子域存活+记录枚举、SPF/DMARC 邮件 spoof 面评估。信号:子域名,域名枚举,批量解析,只显示有响应的,重试次数。"
+when-to-use: "Use during DNS reconnaissance for bulk subdomain resolution, record enumeration, and SPF/DMARC email spoofing surface assessment. Requires a host list and works best piped from subfinder or naabu."
 ---
 
 # dnsx
 
-- 攻击大类:C02 域名与DNS侦察
-- 上游仓库:https://github.com/projectdiscovery/dnsx
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C02 Domain and DNS Reconnaissance
+- Upstream Repository: https://github.com/projectdiscovery/dnsx
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/projectdiscovery/dnsx/cmd/dnsx@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `-l subdomains.txt` | 批量解析 |
-| `-resp` | 只显示有响应的 |
-| `-a -aaaa -cname` | 拉 A/AAAA/CNAME 记录 |
-| `-txt` | 拉 TXT(SPF/验证 token 泄露) |
-| `-retry 3` | 重试次数 |
-| `-rcode noerror,servfail` | 按响应码过滤 |
-| `-mx -ns` | MX/NS 记录 |
+| `-l subdomains.txt` | Bulk resolution |
+| `-resp` | Only show responsive hosts |
+| `-a -aaaa -cname` | Pull A/AAAA/CNAME records |
+| `-txt` | Pull TXT records (SPF/verification token leaks) |
+| `-retry 3` | Number of retries |
+| `-rcode noerror,servfail` | Filter by response code |
+| `-mx -ns` | MX/NS records |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 子域存活+记录枚举
+### Subdomain liveness and record enumeration
 
 ```bash
 subfinder -d target.com | dnsx -a -aaaa -cname -txt -resp -o resolved.txt
 ```
 
-### SPF/DMARC 邮件 spoof 面评估
+### SPF/DMARC email spoof surface assessment
 
 ```bash
 dnsx -d target.com -txt -resp | grep -i spf
 dig _dmarc.target.com txt +short
 ```
 
-## 注意事项
+## Notes
 
-projectdiscovery 生态,管道接 subfinder/naabu 最顺;-resp 过滤 NXDOMAIN 噪音。
+Part of the projectdiscovery ecosystem and pipes most smoothly from subfinder/naabu; -resp filters out NXDOMAIN noise.

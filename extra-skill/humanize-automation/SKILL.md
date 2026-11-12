@@ -1,6 +1,10 @@
 ---
 name: humanize-automation
 description: Human-like mouse, keyboard and scroll behavior for behavioral bot bypass.
+zh-signals: "为自动化注入类人鼠标、键盘与滚动行为，绕过行为型反爬机器人检测。信号:拟人化,行为绕过,反爬,鼠标轨迹,Playwright"
+when-to-use: >-
+  Use when a target uses behavioral bot detection such as mouse-trajectory or typing-speed profiling,
+  or low reCAPTCHA v3 scores appear despite a correct browser fingerprint.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

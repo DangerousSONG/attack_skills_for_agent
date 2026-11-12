@@ -1,6 +1,8 @@
 ---
 name: expo-examples
 description: "Expo's official example projects — the expo/examples repo of ~70 `with-*` integrations (Stripe, Clerk, Supabase, OpenAI, maps, Reanimated, SQLite, Skia, NativeWind, and more)."
+zh-signals: "Expo 官方示例项目集合，提供约 70 个 with-* 第三方库与服务集成范例。信号:Expo,示例项目,集成,React Native,SDK"
+when-to-use: "Use when integrating a third-party library or service into an existing Expo app and you want the canonical maintained example pattern to adapt."
 risk: critical
 source: https://github.com/expo/skills/tree/main/plugins/expo/skills/expo-examples
 source_repo: expo/skills

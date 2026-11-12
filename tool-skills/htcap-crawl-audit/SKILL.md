@@ -2,38 +2,42 @@
 name: htcap-crawl-audit
 description: "htcap fully crawls Ajax sites. Signals: web vulnerability, injection, crawl and store SQLite, vulnerability assessment, crawl depth."
 zh-signals: "htcap: Ajax 站点全量爬取。信号:web漏洞,注入,爬取+存 SQLite,漏洞评估,爬深。"
+when-to-use: >-
+  Use when auditing modern Ajax-heavy web applications that client-side crawling
+  misses; crawl the site, store results in SQLite, then run vulnerability
+  assessment on the captured data.
 ---
 
 # htcap
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/segment-srl/htcap
-- 上游 License:GPL-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/segment-srl/htcap
+- Upstream License: GPL-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/segment-srl/htcap && cd htcap
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python htcap.py -w urls.txt -o db.sqlite https://t.com` | 爬取+存 SQLite |
-| `python htcap.py --assess db.sqlite` | 漏洞评估 |
-| `-x 3` | 爬深 |
-| `-p 20` | 并发 |
+| `python htcap.py -w urls.txt -o db.sqlite https://t.com` | Crawl + store in SQLite |
+| `python htcap.py --assess db.sqlite` | Vulnerability assessment |
+| `-x 3` | Crawl depth |
+| `-p 20` | Concurrency |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Ajax 站点全量爬取
+### Full Crawl of Ajax Sites
 
 ```bash
 python htcap.py https://t.com -o t.sqlite
-# 无头浏览器爬 SPA,产出漏洞评估数据库
+# Headless browser crawls the SPA and produces a vulnerability assessment database
 ```
 
-## 注意事项
+## Notes
 
-segment 出品的爬虫,专门处理 Ajax/JS 重度站点,输出结构化可查询。
+Crawler from segment, purpose-built for Ajax/JS-heavy sites, outputting structured queryable data.

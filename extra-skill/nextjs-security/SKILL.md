@@ -1,6 +1,8 @@
 ---
 name: nextjs-security
 description: Next.js security review — middleware auth-bypass patterns (CVE-2025-29927), Server Actions auth/CSRF, Server/Client Component boundary and SSR data leaks, auth.js (NextAuth) config, route handlers as API, Image Optimization SSRF, security headers via middleware.
+zh-signals: "审查 Next.js 应用安全，涵盖中间件认证绕过、Server Actions、SSR 数据泄露、auth.js 配置与图片优化 SSRF。信号:Next.js安全,中间件绕过,Server Actions,SSR泄露,CVE-2025-29927"
+when-to-use: "Use when reviewing a Next.js application, middleware, Server Actions, auth.js configuration, or version bumps for security issues."
 ---
 
 # Next.js Security

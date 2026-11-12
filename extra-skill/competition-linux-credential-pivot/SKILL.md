@@ -1,6 +1,11 @@
 ---
 name: competition-linux-credential-pivot
 description: Internal downstream skill for ctf-sandbox-orchestrator. CTF-sandbox workflow for Linux credential artifacts, service tokens, SSH material, cloud and container secrets, socket-level trust, and host-to-host pivot chains. Use when the user asks to trace Linux auth artifacts, accepted token or key replay, socket or service-account trust edges, sudo or capability abuse, or explain lateral movement across Linux challenge nodes. Use only after `$ctf-sandbox-orchestrator` has already established sandbox assumptions and routed here.
+zh-signals: "作为 ctf-sandbox-orchestrator 的下游技能，处理 Linux 凭据工件、服务令牌、SSH 材料、云与容器密钥、套接字信任及主机间横向移动链。信号:CTF,Linux凭据,横向移动,SSH,令牌复用,权限提升"
+when-to-use: >-
+  Use only after ctf-sandbox-orchestrator has established sandbox assumptions and routed
+  here, when tracing Linux auth artifacts, token or key replay, socket/service-account
+  trust edges, or lateral movement across Linux challenge nodes.
 ---
 
 # Competition Linux Credential Pivot

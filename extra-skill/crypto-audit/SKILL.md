@@ -1,6 +1,11 @@
 ---
 name: crypto-audit
 description: "Audit cryptography implementation — algorithm choice, key sizes, KDF parameters, IV/nonce handling, signature verification, randomness, TLS configuration, and key rotation. Deeper than owasp-audit A02. Use when the user mentions 'crypto review,' 'cryptography audit,' 'encryption review,' 'KDF,' 'PBKDF2,' 'Argon2,' 'bcrypt cost,' 'IV reuse,' 'nonce reuse,' 'AES mode,' 'AES-GCM,' 'AES-ECB,' 'signature verification,' 'TLS configuration,' 'cipher suites,' 'key rotation,' 'libsodium,' 'BoringSSL,' or 'is this crypto right.'"
+zh-signals: "审计应用密码学实现，检查算法选择、密钥长度、KDF 参数、IV/Nonce 处理、签名校验、随机数与 TLS 配置。信号:密码学审计,加密算法,KDF参数,AES模式,签名校验,TLS配置"
+when-to-use: >-
+  Use when reviewing how cryptography is implemented in an application — algorithm
+  and mode choices, key derivation parameters, IV/nonce handling, signature
+  verification, randomness, or TLS configuration.
 allowed-tools: Read, Grep, Glob, Bash, WebSearch
 ---
 
