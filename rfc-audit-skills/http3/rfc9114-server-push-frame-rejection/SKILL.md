@@ -1,61 +1,62 @@
 ---
 name: rfc9114-server-push-frame-rejection
-description: 审计 HTTP/3 客户端/服务端是否严格拒绝服务端推送遗留帧——PUSH_PROMISE 与 MAX_PUSH_ID 收到必须按 H3_FRAME_UNEXPECTED 终止连接（RFC 9114 §7.2.5/§7.2.7），静默吞掉即协议错误义务缺失（实证：quic-go#5686，v0.60.0 同函数内不一致处理）
+description: Audit whether HTTP/3 clients/servers strictly reject server-push legacy frames — PUSH_PROMISE and MAX_PUSH_ID receipt must terminate the connection with H3_FRAME_UNEXPECTED (RFC 9114 §7.2.5/§7.2.7); silently swallowing them means a missing protocol-error obligation (evidence: quic-go#5686, inconsistent handling within the same function in v0.60.0)
+zh-signals: 审计 HTTP/3 客户端/服务端是否严格拒绝服务端推送遗留帧——PUSH_PROMISE 与 MAX_PUSH_ID 收到必须按 H3_FRAME_UNEXPECTED 终止连接（RFC 9114 §7.2.5/§7.2.7），静默吞掉即协议错误义务缺失（实证：quic-go#5686，v0.60.0 同函数内不一致处理）
 rfc: RFC 9114 §7.2.5（PUSH_PROMISE）/ §7.2.7（MAX_PUSH_ID）/ §4.6（Server Push）
 license: Apache-2.0
 ---
 
-# RFC 9114 §7.2.5/§7.2.7 服务端推送遗留帧拒绝义务审计
+# RFC 9114 §7.2.5/§7.2.7 Server-Push Legacy Frame Rejection Obligations Audit
 
-## 1. 约束条款（原文出处）
+## 1. Normative Clauses (Original Sources)
 
-RFC 9114 §7.2.5（原文）：
+RFC 9114 §7.2.5 (original text):
 > A server MUST NOT send a PUSH_PROMISE frame. A client MUST treat the receipt of a PUSH_PROMISE frame as a connection error of type H3_FRAME_UNEXPECTED.
 > If a PUSH_PROMISE frame is received on the control stream, the client MUST respond with a connection error of type H3_FRAME_UNEXPECTED.
 > A client MUST NOT send a PUSH_PROMISE frame. A server MUST treat the receipt of a PUSH_PROMISE frame as a connection error of type H3_FRAME_UNEXPECTED.
 
-RFC 9114 §7.2.7（原文）：
+RFC 9114 §7.2.7 (original text):
 > A server MUST NOT send a MAX_PUSH_ID frame. A client MUST treat the receipt of a MAX_PUSH_ID frame as a connection error of type H3_FRAME_UNEXPECTED.
 > Receipt of a MAX_PUSH_ID frame on any other stream [than the control stream] MUST be treated as a connection error of type H3_FRAME_UNEXPECTED.
 
-RFC 9114 §4.6：HTTP/3 移除了服务端推送机制，§7.2 中 HTTP/2 遗留帧位（PRIORITY 0x2 / PING 0x6 / WINDOW_UPDATE 0x8 / CONTINUATION 0x9）收到即 H3_FRAME_UNEXPECTED（§7.2.8）。
+RFC 9114 §4.6: HTTP/3 removed server push; the HTTP/2 legacy frame slots in §7.2 (PRIORITY 0x2 / PING 0x6 / WINDOW_UPDATE 0x8 / CONTINUATION 0x9) must receive H3_FRAME_UNEXPECTED on receipt (§7.2.8).
 
-核心模式一句话：**H3 把 H2 的推送和流控帧整体废弃，但保留了它们的类型码——这些类型码收到时必须炸连接，静默跳过等于给"已废弃语义"留了一条暗道，而暗道尽头是实现各自的理解。**
+Core pattern in one sentence: **H3 abandoned H2's push and flow-control frames wholesale but kept their type codes — these type codes must kill the connection on receipt; silently skipping them leaves a backdoor for "deprecated semantics", and at the end of that backdoor lies whatever each implementation happens to think.**
 
-## 2. 违规判定条件
+## 2. Violation Criteria
 
-| 编号 | 探测 | 判定 |
+| ID | Probe | Verdict |
 |---|---|---|
-| SP-1 | 服务端向客户端连接发送 PUSH_PROMISE 帧（载荷构造合法的 push ID + 压缩的请求头区块） | 客户端未以 H3_FRAME_UNEXPECTED 终止连接 → 违规（quic-go#5686 已实证该漏洞存在于 v0.60.0：静默丢弃） |
-| SP-2 | 服务端向客户端连接发送 MAX_PUSH_ID 帧 | 客户端未终止 → 违规（与 SP-1 同根因，quic-go#5686 一并报告） |
-| SP-3 | 客户端向服务端发送 PUSH_PROMISE 帧 | 服务端未以 H3_FRAME_UNEXPECTED 终止 → 违规 |
-| SP-4 | 在 control stream 上收到 PUSH_PROMISE / 在非 control stream 上收到 MAX_PUSH_ID | 未按 H3_FRAME_UNEXPECTED 终止 → 违规 |
-| SP-5 | 发送 H2 遗留保留帧（0x2 PRIORITY / 0x6 PING / 0x8 WINDOW_UPDATE / 0x9 CONTINUATION） | 未按 §7.2.8 以 H3_FRAME_UNEXPECTED 终止 → 违规（与已知正确的保留帧处理路径对照） |
+| SP-1 | Server sends a PUSH_PROMISE frame to a client connection (payload: valid push ID + compressed request header block) | Client fails to terminate with H3_FRAME_UNEXPECTED → violation (quic-go#5686 confirmed this bug exists in v0.60.0: silently discarded) |
+| SP-2 | Server sends a MAX_PUSH_ID frame to a client connection | Client fails to terminate → violation (same root cause as SP-1, reported together in quic-go#5686) |
+| SP-3 | Client sends a PUSH_PROMISE frame to a server | Server fails to terminate with H3_FRAME_UNEXPECTED → violation |
+| SP-4 | PUSH_PROMISE received on the control stream / MAX_PUSH_ID received on a non-control stream | Not terminated with H3_FRAME_UNEXPECTED → violation |
+| SP-5 | Send H2 legacy reserved frames (0x2 PRIORITY / 0x6 PING / 0x8 WINDOW_UPDATE / 0x9 CONTINUATION) | Not terminated with H3_FRAME_UNEXPECTED per §7.2.8 → violation (compare against the known-correct reserved-frame handling path) |
 
-判定方法：h3i 逐帧注入；对照实现：rama proxy 文档显示 H2 保留帧路径已正确区分，quic-go 同文件 0x2/0x6/0x8/0x9 正确 closeConn 而 0x5/0xd 漏判——同库内对照即可定位。
+Method: h3i frame-by-frame injection; comparison implementations: rama proxy docs show the H2 reserved-frame path is correctly distinguished; within quic-go's same file, 0x2/0x6/0x8/0x9 correctly closeConn while 0x5/0xd are missed — an intra-library comparison pinpoints it.
 
-## 3. 攻击面猜想
+## 3. Attack-Surface Hypotheses
 
-- **已废弃语义的暗道复活**：SP-1 ——推送帧被静默吞掉看似无害，但若实现内部仍残留 push 处理代码路径（从 H2 移植），静默跳过 + 后续正常帧可能激活残留状态机
-- **协议错误义务的系统性缺失**：SP-1~SP-5 全部落在"未知/不支持帧静默跳过"的兜底分支——该兜底分支被复用到多少其他 MUST 条款，是审计放大点
-- **解析混淆垫脚石**：废弃帧载荷常被实现按未知帧"长度跳过"处理，长度字段解析错误即越界读/断言面
+- **Deprecated-semantics backdoor revival**: SP-1 — a silently swallowed push frame looks harmless, but if residual push-handling code paths survive inside the implementation (ported from H2), silent skipping + subsequent normal frames may activate the residual state machine
+- **Systematic absence of protocol-error obligations**: SP-1~SP-5 all land in the "unknown/unsupported frame silently skipped" fallback branch — auditing how many other MUST clauses that fallback branch is reused for is the amplification point
+- **Parsing-confusion stepping stone**: deprecated-frame payloads are often handled by "length skip" like unknown frames; a length-field parsing error becomes an out-of-bounds read/assertion surface
 
-## 4. 关联历史 CVE / 实证
+## 4. Related Historical CVEs / Evidence
 
-| 证据 | 实现 | 根因 |
+| Evidence | Implementation | Root cause |
 |---|---|---|
-| **quic-go issue #5686**（2026-06，确认于 v0.60.0，可能全版本） | quic-go http3/frames.go | PUSH_PROMISE(0x5) 与 MAX_PUSH_ID(0xd) 落入 payload-skip 兜底块被静默丢弃，而同为保留帧的 0x2/0x6/0x8/0x9 正确 closeConn——同一函数内的不一致处理是本条款审计的最佳入口证据 |
-| erlang_quic 1.0.0 changelog | erlang_quic | "Server push lifecycle correctness (PUSH_PROMISE pairing, duplicate detection, MAX_PUSH_ID enforcement)" ——实现曾花整轮修复推送生命周期 |
-| 暂无独立 CVE | — | 影响定级低-中（quic-go#5686 自评），但义务密集且集中暴露于同一兜底分支，按盲区条款处理 |
+| **quic-go issue #5686** (2026-06, confirmed in v0.60.0, possibly all versions) | quic-go http3/frames.go | PUSH_PROMISE (0x5) and MAX_PUSH_ID (0xd) fall into the payload-skip fallback block and are silently discarded, while fellow reserved frames 0x2/0x6/0x8/0x9 correctly closeConn — the intra-function inconsistency is the best entry-point evidence for auditing this clause |
+| erlang_quic 1.0.0 changelog | erlang_quic | "Server push lifecycle correctness (PUSH_PROMISE pairing, duplicate detection, MAX_PUSH_ID enforcement)" — the implementation once spent a whole release fixing the push lifecycle |
+| No standalone CVE yet | — | Low-mid impact self-assessed (quic-go#5686), but obligations are dense and concentrated in the same fallback branch; treat as a blind-spot clause |
 
-## 5. 差分验证方法
+## 5. Differential Verification
 
-对照组：quic-go ≥ 修复版、nghttp3、erlang_quic ≥ 1.0.0。
-对比字段：SP-1~SP-5 各自的终止行为；特别对照同一解析器内"正确处理的保留帧"与"漏判的推送帧"的代码路径差异。
-误报排除：实现完全不编译推送相关代码且对 0x5/0xd 走统一 H2 保留帧错误路径属合规；只标记"静默跳过"。
+Control group: quic-go ≥ fixed version, nghttp3, erlang_quic ≥ 1.0.0.
+Comparison fields: termination behavior for SP-1~SP-5 individually; specifically compare the code-path difference between "reserved frames correctly handled" and "missed push frames" within the same parser.
+False-positive exclusion: an implementation that does not compile any push-related code and routes 0x5/0xd through a unified H2-reserved-frame error path is compliant; flag only "silently skipped".
 
-## 6. 对接的攻击 Skill
+## 6. Downstream Attack Skills
 
-- 技能层（怎么打）：`fuzzowski-network-fuzz`（废弃帧 + 后续正常帧组合序列）、`grammarinator-gen-fuzz`（帧类型语法生成）
-- 工具层（用什么打）：h3i、aioquic
-- 命中后动作：确认静默吞掉 → 探测残留 push 代码路径是否可被激活 → 评估与 CANCEL_PUSH/GOAWAY 交互的叠加面
+- Skill layer (how to attack): `fuzzowski-network-fuzz` (deprecated frame + subsequent normal-frame combination sequences), `grammarinator-gen-fuzz` (frame-type grammar generation)
+- Tool layer (with what): h3i, aioquic
+- Post-hit actions: confirm silent swallowing → probe whether residual push code paths can be activated → assess the combined surface interacting with CANCEL_PUSH/GOAWAY

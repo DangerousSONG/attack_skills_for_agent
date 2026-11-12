@@ -1,61 +1,62 @@
 ---
 name: rfc9114-pseudo-header-field-validation
-description: 审计 HTTP/3 目标对畸形伪头/字段的处理是否严格按 RFC 9114 §4.1.2/§4.2/§4.3 判 malformed——宽容处理即存在解析分裂与 H3→H1 走私攻击面（关联 nginx#1043 未修复；H2 历史模式复刻）
+description: Audit whether HTTP/3 targets handle malformed pseudo-headers/fields strictly per RFC 9114 §4.1.2/§4.2/§4.3 malformed judgments — lenient handling implies a parsing-split and H3→H1 smuggling attack surface (related nginx#1043 unfixed; H2 historical pattern replicated)
+zh-signals: 审计 HTTP/3 目标对畸形伪头/字段的处理是否严格按 RFC 9114 §4.1.2/§4.2/§4.3 判 malformed——宽容处理即存在解析分裂与 H3→H1 走私攻击面（关联 nginx#1043 未修复；H2 历史模式复刻）
 rfc: RFC 9114 §4.1.2 / §4.2 / §4.3 / §10.3
 license: Apache-2.0
 ---
 
-# RFC 9114 伪头与字段校验严格性审计（malformed 判定完备性）
+# RFC 9114 Pseudo-Header & Field Validation Strictness Audit (malformed-judgment completeness)
 
-## 1. 约束条款（原文出处）
+## 1. Normative Clauses (Original Sources)
 
-RFC 9114 §4.1.2，malformed 情形清单（非穷尽）：
+RFC 9114 §4.1.2, non-exhaustive malformed case list:
 
 > the presence of prohibited fields or pseudo-header fields / the absence of mandatory pseudo-header fields / invalid values for pseudo-header fields / pseudo-header fields after fields / an invalid sequence of HTTP messages / the inclusion of uppercase field names / the inclusion of invalid characters in field names or values
 
-> 任何被检测到的 malformed 请求或响应 MUST be treated as a stream error of type H3_MESSAGE_ERROR。中介者 MUST NOT 转发。
+> Any malformed request or response detected MUST be treated as a stream error of type H3_MESSAGE_ERROR. Intermediaries MUST NOT forward.
 
-§4.3：伪头字段必须出现在常规字段之前（否则 malformed）；请求伪头不得出现在响应中，反之；**伪头不得出现在 trailer 区块**；未定义/无效伪头必须判 malformed。
+§4.3: pseudo-header fields must appear before regular fields (otherwise malformed); request pseudo-headers must not appear in responses and vice versa; **pseudo-headers must not appear in trailer sections**; undefined/invalid pseudo-headers must be judged malformed.
 
-§4.2：字段名必须小写，含大写必须判 malformed；**HTTP/3 消息不得包含 connection-specific 字段**（如 Connection、Transfer-Encoding 语义），出现即 malformed。
+§4.2: field names must be lowercase; uppercase implies malformed; **HTTP/3 messages must not contain connection-specific fields** (e.g. Connection, Transfer-Encoding semantics) — presence is malformed.
 
-§10.3：H3 的字段编码可表达 H1 语法无效的字段名；含无效字段名的消息必须判 malformed，因此中介者**无法**将其转换为 H1 消息——试图转换即引入解析歧义。
+§10.3: H3 field encoding can express field names invalid in H1 syntax; messages with invalid field names must be judged malformed, so intermediaries **cannot** convert them to H1 messages — attempting conversion introduces parsing ambiguity.
 
-RFC 原文强调这些要求"deliberately strict because being permissive can expose implementations to these vulnerabilities"。
+The RFC emphasizes these requirements are "deliberately strict because being permissive can expose implementations to these vulnerabilities".
 
-## 2. 违规判定条件
+## 2. Violation Criteria
 
-| 编号 | 探测 | 判定 |
+| ID | Probe | Verdict |
 |---|---|---|
-| PH-1 | 缺 :method / :scheme / :path；或伪头置于常规字段之后 | 未以 H3_MESSAGE_ERROR 关闭流 → 违规 |
-| PH-2 | 字段名含大写（如 `X-Custom: v` → `X-CuStOm`）、非法字符 | 同上 |
-| PH-3 | 请求携带 connection-specific 字段（connection、keep-alive、TE 非 trailers、upgrade 等） | 同上 |
-| PH-4 | trailer 区块中出现伪头字段 | 同上 |
-| PH-5 | 经 H3 代理转换为 H1 后，H1 后端收到的请求是否"忠实"（大写被规范化了吗？非法字段被剥离了吗？） | 转换引入语义变化 → 解析分裂面 |
-| PH-6 | 未知伪头（如 :foo） | 必须判 malformed |
+| PH-1 | Missing :method / :scheme / :path; or pseudo-headers placed after regular fields | Stream not closed with H3_MESSAGE_ERROR → violation |
+| PH-2 | Field names containing uppercase (e.g. `X-Custom: v` → `X-CuStOm`), illegal characters | Same as above |
+| PH-3 | Request carrying connection-specific fields (connection, keep-alive, TE other than trailers, upgrade, etc.) | Same as above |
+| PH-4 | Pseudo-header fields in the trailer section | Same as above |
+| PH-5 | Through an H3 proxy converting to H1: is the request received by the H1 backend "faithful" (was uppercase normalized? were illegal fields stripped?) | Conversion introduces semantic change → parsing-split surface |
+| PH-6 | Unknown pseudo-headers (e.g. :foo) | Must be judged malformed |
 
-判定方法：h3i 逐字段构造；对照 `RESET_STREAM` 错误码。
+Method: h3i field-by-field construction; compare `RESET_STREAM` error codes.
 
-## 3. 攻击面猜想
+## 3. Attack-Surface Hypotheses
 
-每类宽容都是一个 H3 前端与 H1 后端之间的**解析分歧点**，组合起来即 H3→H1 请求走私/缓存投毒的原语库。PH-3（connection-specific 字段）在 H1 侧会激活 hop-by-hop 语义（如 TE: chunked），是转换型代理最危险的宽容面。NGINX 的公开未修复行为（见下）说明实现普遍不完整。
+Every leniency is a **parsing divergence point** between the H3 frontend and the H1 backend; combined, they form the primitive library for H3→H1 request smuggling / cache poisoning. PH-3 (connection-specific fields) activates hop-by-hop semantics on the H1 side (e.g. TE: chunked), making it the most dangerous leniency surface for converting proxies. NGINX's publicly unfixed behavior (below) shows implementations are generally incomplete.
 
-## 4. 关联历史 CVE / 公开案例
+## 4. Related Historical CVEs / Public Cases
 
-| 案例 | 实现 | 说明 |
+| Case | Implementation | Note |
 |---|---|---|
-| nginx/nginx#1043（issue，未修复） | NGINX | 违反 §4.1.2：畸形伪头请求未以 H3_MESSAGE_ERROR 关闭流——说明头部实现的 malformed 判定普遍不全 |
-| CVE-2026-33555 的同类根因 | HAProxy | FIN 路径绕过 body 校验，属"malformed 判定覆盖不全"的变体（详见 rfc9114-content-length-data-mismatch） |
-| 历史模式（H2 侧） | 多家 | RFC 7540 时代"伪头/字段校验不严格 → 走私"（如 CVE-2019-* 系列 H2 实现差异），H3 实现复刻了同样的错误 |
+| nginx/nginx#1043 (issue, unfixed) | NGINX | Violates §4.1.2: requests with malformed pseudo-headers are not closed with H3_MESSAGE_ERROR — shows malformed judgment in header implementations is generally incomplete |
+| Same-root-cause family as CVE-2026-33555 | HAProxy | FIN path bypasses body-length check — a variant of "incomplete malformed-judgment coverage" (see rfc9114-content-length-data-mismatch) |
+| Historical pattern (H2 side) | Multiple vendors | "Loose pseudo-header/field validation → smuggling" in the RFC 7540 era (e.g. the CVE-2019-* series of H2 implementation discrepancies); H3 implementations are replicating the same mistakes |
 
-## 5. 差分验证方法
+## 5. Differential Verification
 
-对照组：quic-go（malformed 判定完备）、h3i 自带的预期行为。
-对比字段：PH-1~PH-6 逐项打勾矩阵；代理目标额外记录 H1 后端实际收到的字节级请求。
-误报排除：服务端发送 HTTP 错误响应后再关流是 §4.1.2 允许的（MAY），不算违规。
+Control group: quic-go (complete malformed judgment), h3i's expected behaviors.
+Comparison fields: per-item checkoff matrix for PH-1~PH-6; for proxy targets additionally record the byte-level request actually received by the H1 backend.
+False-positive exclusion: a server sending an HTTP error response before closing the stream is allowed by §4.1.2 (MAY), not a violation.
 
-## 6. 对接的攻击 Skill
+## 6. Downstream Attack Skills
 
-- 技能层（怎么打）：`smuggler-desync`、`http2smugl-desync`（走私原语组合利用；均在 tool-skills/）
-- 工具层（用什么打）：h3i（逐字段构造主力）、aioquic
-- 命中后动作：把每项违规标记为走私原语，组合 PH-x 分歧做端到端走私验证
+- Skill layer (how to attack): `smuggler-desync`, `http2smugl-desync` (smuggling-primitive composition and exploitation; both in tool-skills/)
+- Tool layer (with what): h3i (main tool for field-by-field construction), aioquic
+- Post-hit actions: mark each violation as a smuggling primitive; combine PH-x divergences into end-to-end smuggling verification

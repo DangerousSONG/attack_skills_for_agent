@@ -1,65 +1,66 @@
 ---
 name: rfc9114-grease-reserved-frames
-description: 审计 HTTP/3 实现对 GREASE/保留帧类型、保留 SETTINGS 标识、未知单向流类型的容忍义务是否按 RFC 9114 §9/§7.2.8——未知帧必须按长度跳过不得拒绝，H2 保留帧 0x02/0x06/0x08/0x09 必须炸连接不得当 GREASE 跳过；拒绝 GREASE 即前向兼容断点（关联实证：aioquic <1.6 流尾 GREASE 帧导致流数据丢失；保留帧与 H2 走私帧边界混淆即走私暗道面）
+description: Audit whether HTTP/3 implementations meet the tolerance obligations for GREASE/reserved frame types, reserved SETTINGS identifiers, and unknown unidirectional stream types per RFC 9114 §9/§7.2.8 — unknown frames must be length-skipped, never rejected; H2 reserved frames 0x02/0x06/0x08/0x09 must kill the connection, never be GREASE-skipped; rejecting GREASE is a forward-compatibility break (evidence: aioquic <1.6 stream-tail GREASE frame caused stream-data loss; confusing reserved frames with H2 smuggling frames opens a smuggling backdoor)
+zh-signals: 审计 HTTP/3 实现对 GREASE/保留帧类型、保留 SETTINGS 标识、未知单向流类型的容忍义务是否按 RFC 9114 §9/§7.2.8——未知帧必须按长度跳过不得拒绝，H2 保留帧 0x02/0x06/0x08/0x09 必须炸连接不得当 GREASE 跳过；拒绝 GREASE 即前向兼容断点（关联实证：aioquic <1.6 流尾 GREASE 帧导致流数据丢失；保留帧与 H2 走私帧边界混淆即走私暗道面）
 rfc: RFC 9114 §9（Extensions/未知帧容忍）/ §7.2.8（保留帧类型 0x1f·N+0x21 与 H2 保留帧）/ §7.2.4.1（SETTINGS 未知标识容忍）/ §6.2（未知单向流类型）/ RFC 8701（QUIC 传输层 GREASE，对照：QUIC 层无可忽略帧类型 RFC 9000 §12.4）
 license: Apache-2.0
 ---
 
-# RFC 9114 §9/§7.2.8 GREASE 与保留帧容忍义务审计
+# RFC 9114 §9/§7.2.8 GREASE & Reserved-Frame Tolerance Obligations Audit
 
-## 1. 约束条款（原文出处）
+## 1. Normative Clauses (Original Sources)
 
-RFC 9114 §9 / §7.2.8（要点，两处互证）：
-> Unknown frame types (including reserved GREASE types 0x1f * N + 0x21) MUST be ignored by length skipping——reserved frame types exist precisely to catch implementations that do not.
+RFC 9114 §9 / §7.2.8 (key points, cross-corroborated):
+> Unknown frame types (including reserved GREASE types 0x1f * N + 0x21) MUST be ignored by length skipping — reserved frame types exist precisely to catch implementations that do not.
 
-RFC 9114 §7.2.8（H2 保留帧边界，原文要点）：
-> 帧类型 0x02（PRIORITY）、0x06（PING）、0x08（WINDOW_UPDATE）、0x09（CONTINUATION）在 H3 被永久保留，收到 MUST 视为连接错误 H3_FRAME_UNEXPECTED——**它们是"已知被禁止"而非"未知"，把它们当 GREASE 跳过 = 让走私上 H3 的 H2 帧被静默吞掉**。
+RFC 9114 §7.2.8 (H2 reserved-frame boundary, original text, key points):
+> Frame types 0x02 (PRIORITY), 0x06 (PING), 0x08 (WINDOW_UPDATE), 0x09 (CONTINUATION) are permanently reserved in H3; receipt MUST be treated as connection error H3_FRAME_UNEXPECTED — **they are "known-forbidden", not "unknown"; skipping them as GREASE = silently swallowing H2 frames smuggled onto H3**.
 
-RFC 9114 §7.2.4.1（SETTINGS 容忍，要点）：
-> 未知 / 保留 SETTINGS 标识 MUST 被忽略（grease tolerance），不得触发 SETTINGS_ERROR。
+RFC 9114 §7.2.4.1 (SETTINGS tolerance, key points):
+> Unknown / reserved SETTINGS identifiers MUST be ignored (grease tolerance), never triggering SETTINGS_ERROR.
 
-RFC 9114 §6.2（未知单向流类型，要点）：
-> 未识别的单向流类型 MUST 被忽略（读取并丢弃），不得关闭连接。
+RFC 9114 §6.2 (unknown unidirectional stream types, key points):
+> Unrecognized unidirectional stream types MUST be ignored (read and discarded), never closing the connection.
 
-RFC 9000 §12.4（对照基准）：
-> QUIC 传输层不保留任何"可忽略帧类型"——传输层收到未知帧是协议错误；忽略义务是 H3 层的。审计时不得把两层的容忍语义混为一谈。
+RFC 9000 §12.4 (comparison baseline):
+> The QUIC transport layer reserves no "ignorable frame types" — an unknown frame at the transport layer is a protocol error; the ignore obligation is an H3-layer one. Do not conflate the two layers' tolerance semantics during the audit.
 
-核心模式一句话：**GREASE 是协议给自己埋的探雷器——对 GREASE 报错就是对未来扩展断路的预告；而把 H2 保留帧当未知帧容忍，则是在"未知"和"已知禁止"的边界上给走私留暗道。容忍义务的双向精确性是这个条款的考点。**
+Core pattern in one sentence: **GREASE is a landmine the protocol buries for itself — erroring on GREASE is an advance notice of breaking future extensions; tolerating H2 reserved frames as unknown opens a smuggling backdoor at the "unknown vs known-forbidden" boundary. Bidirectional precision of the tolerance obligation is what this clause tests.**
 
-## 2. 违规判定条件
+## 2. Violation Criteria
 
-| 编号 | 探测 | 判定 |
+| ID | Probe | Verdict |
 |---|---|---|
-| GR-1 | 在请求流/控制流上发送保留 GREASE 帧（0x21、0x40、0x1f·N+0x21 族）+ 合法长度 | 连接被关闭/报错 → 违反 §9（前向兼容断点）；静默跳过 → 合规 |
-| GR-2 | 发送 H2 保留帧 0x02/0x06/0x08/0x09 于任何流 | 被当作未知帧跳过 → 违反 §7.2.8（走私暗道面）；正确炸 H3_FRAME_UNEXPECTED → 合规 |
-| GR-3 | SETTINGS 帧携带保留/未知标识（如 0x1f·N+0x21 族标识） | 触发 SETTINGS_ERROR/连接关闭 → 违反 §7.2.4.1 |
-| GR-4 | 打开未知类型的单向流并发送数据 | 连接被关闭 → 违反 §6.2；数据被丢弃继续运行 → 合规 |
-| GR-5 | 流尾 GREASE 变体：让被忽略帧成为流的最后一个帧（aioquic <1.6 实证场景） | 流尾数据丢失/对端超时 → 实现级 bug（跳过逻辑吞掉流结束边界） |
+| GR-1 | Send reserved GREASE frames (0x21, 0x40, 0x1f·N+0x21 family) with valid lengths on a request/control stream | Connection closed/error → violates §9 (forward-compatibility break); silently skipped → compliant |
+| GR-2 | Send H2 reserved frames 0x02/0x06/0x08/0x09 on any stream | Skipped as unknown → violates §7.2.8 (smuggling backdoor surface); correctly killed with H3_FRAME_UNEXPECTED → compliant |
+| GR-3 | SETTINGS frame carrying reserved/unknown identifiers (e.g. 0x1f·N+0x21 family identifiers) | Triggers SETTINGS_ERROR/connection close → violates §7.2.4.1 |
+| GR-4 | Open a unidirectional stream of unknown type and send data | Connection closed → violates §6.2; data discarded while operation continues → compliant |
+| GR-5 | Stream-tail GREASE variant: make the ignored frame the last frame of the stream (aioquic <1.6 evidenced scenario) | Stream-tail data loss / peer timeout → implementation-level bug (skip logic swallowed the stream-end boundary) |
 
-判定方法：aioquic 帧级构造（类型/长度/位置三变体）；每类探测独立端口，避免端点级配置互相污染。
+Method: aioquic frame-level construction (type/length/position variants); each probe class on an independent port to avoid endpoint-level config cross-contamination.
 
-## 3. 攻击面猜想
+## 3. Attack-Surface Hypotheses
 
-- **H2→H3 走私暗道**：GR-2 ——经代理把 H2 帧注入 H3 连接，容忍型实现静默吞帧，前后端解析分裂（与 smuggler-desync 同族的 H3 变体）
-- **前向兼容断路 / 指纹面**：GR-1/GR-3 ——拒绝 GREASE 的实现既暴露自身栈版本，又在真实扩展落地时成为故障点
-- **解析分裂**：GR-5 ——跳过实现对流尾边界的处理差异可被用于请求/响应截断混淆
+- **H2→H3 smuggling backdoor**: GR-2 — inject H2 frames into an H3 connection through a proxy; tolerant implementations silently swallow frames, splitting frontend/backend parsing (an H3 variant of the smuggler-desync family)
+- **Forward-compatibility break / fingerprinting surface**: GR-1/GR-3 — implementations rejecting GREASE both expose their stack version and become failure points when real extensions land
+- **Parsing split**: GR-5 — skip implementations' differing handling of the stream-tail boundary can be used for request/response truncation confusion
 
-## 4. 关联历史 CVE
+## 4. Related Historical CVEs
 
-| CVE / 实证 | 实现 | 根因 |
+| CVE / Evidence | Implementation | Root cause |
 |---|---|---|
-| **aioquic < 1.6 流尾丢失实证**（pqcrypta-proxy 一致性套件披露） | aioquic（波及 dnspython DoH 等下游） | 流上最后一个帧是被忽略类型时丢失流的结束边界，客户端收齐响应仍等超时——GREASE 容忍实现细节 bug 的实证锚点 |
-| 分享会方法论同源 | QUIC-FUZZ / interop runner 族 | 保留帧/未知类型路径是扩展性测试的核心区，interop 历史上多次发现实现对该义务的过度或不足响应 |
-| H2 保留帧边界混淆（本 Skill 盲区声明） | 待测实现 | 0x02/0x06/0x08/0x09 无独立 CVE 属高 variance 盲区条款——一旦与代理转换层组合（H2 入 H3 出），即升级为走私级漏洞，标记为定向审计信号 |
+| **aioquic < 1.6 stream-tail loss evidence** (disclosed via the pqcrypta-proxy conformance suite) | aioquic (affected downstreams incl. dnspython DoH) | When the last frame on a stream is of an ignored type, the stream's end boundary is lost and the client waits until timeout even after receiving the full response — an evidenced anchor for GREASE-tolerance implementation-detail bugs |
+| Same methodology family as the sharing session | QUIC-FUZZ / interop-runner family | Reserved-frame/unknown-type paths are the core area of extensibility testing; interop history repeatedly found implementations over- or under-responding to this obligation |
+| H2 reserved-frame boundary confusion (blind-spot declaration of this Skill) | Implementations under test | No standalone CVE for 0x02/0x06/0x08/0x09 — a high-variance blind-spot clause; once combined with a proxy conversion layer (H2 in, H3 out), it escalates to a smuggling-grade vulnerability; marked as a directed-audit signal |
 
-## 5. 差分验证方法
+## 5. Differential Verification
 
-对照组：严格两分的实现（GREASE 跳 / H2 保留帧炸）——参考 irontraffic 设计文档与 RFC 9114 §7.2.8 判词；quiche/quic-go 最新版。
-对比字段：GR-1/GR-3/GR-4 容忍度、GR-2 错误码正确性（必须是 H3_FRAME_UNEXPECTED 而非 H3_FRAME_ERROR）、GR-5 流完整性。
-误报排除：QUIC 层未知帧报错（对照 RFC 9000 §12.4）属正确行为，不记入违规；H2 保留帧在 H2 连接上出现属正常（审计对象为 H3/QUIC 端点）。
+Control group: strictly two-sided implementations (GREASE skip / H2 reserved-frame kill) — reference the irontraffic design doc and the RFC 9114 §7.2.8 judgment; latest quiche/quic-go.
+Comparison fields: GR-1/GR-3/GR-4 tolerance, GR-2 error-code correctness (must be H3_FRAME_UNEXPECTED, not H3_FRAME_ERROR), GR-5 stream integrity.
+False-positive exclusion: transport-layer unknown frames erroring (per RFC 9000 §12.4) is correct behavior, not a violation; H2 reserved frames on an H2 connection are normal (audit target is the H3/QUIC endpoint).
 
-## 6. 对接的攻击 Skill
+## 6. Downstream Attack Skills
 
-- 技能层（怎么打）：`fuzzowski-network-fuzz`（GREASE/保留帧位置与长度 fuzz）、`dharma-grammar-fuzz`（帧序列变体生成）
-- 工具层（用什么打）：aioquic（帧级构造与注入）、h3-conformance 类一致性套件（GR-1~GR-5 全项）、代理转换链路（GR-2 走私复现需 H2→H3 代理）
-- 命中后动作：GR-2 命中 → 立即沿"代理解析分裂"路线验证走私可行性（对接 `smuggler-desync`）→ GR-5 提取最小流序列上报实现侧
+- Skill layer (how to attack): `fuzzowski-network-fuzz` (GREASE/reserved-frame position and length fuzz), `dharma-grammar-fuzz` (frame-sequence variant generation)
+- Tool layer (with what): aioquic (frame-level construction and injection), h3-conformance-style test suites (full GR-1~GR-5 item set), proxy conversion chains (GR-2 smuggling reproduction requires an H2→H3 proxy)
+- Post-hit actions: GR-2 hit → immediately verify smuggling feasibility along the "proxy parsing split" route (hand off to `smuggler-desync`) → extract a minimal stream sequence for GR-5 and report to the implementation side
