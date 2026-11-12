@@ -1,55 +1,56 @@
 ---
 name: rfc9000-path-validation-amplification
-description: 审计 QUIC 实现对路径验证与反放大限制的强制执行是否按 RFC 9000 §8.1/§8.2.1/§9——PATH_CHALLENGE/PATH_RESPONSE 义务缺失或反放大限制未强制即未认证 DoS 放大原语（关联 CVE-2023-49295 quic-go，HIGH）
+description: Audit QUIC implementations' enforcement of path validation and anti-amplification limits per RFC 9000 §8.1/§8.2.1/§9 — missing PATH_CHALLENGE/PATH_RESPONSE obligations or unenforced anti-amplification limits become an unauthenticated DoS amplification primitive (related CVE-2023-49295 quic-go, HIGH)
+zh-signals: 审计 QUIC 实现对路径验证与反放大限制的强制执行是否按 RFC 9000 §8.1/§8.2.1/§9——PATH_CHALLENGE/PATH_RESPONSE 义务缺失或反放大限制未强制即未认证 DoS 放大原语（关联 CVE-2023-49295 quic-go，HIGH）
 rfc: RFC 9000 §8.1（地址验证与反放大）/ §8.2.1（PATH_CHALLENGE/PATH_RESPONSE）/ §9（NAT 重绑定）
 license: Apache-2.0
 ---
 
-# RFC 9000 §8 路径验证与反放大限制审计
+# RFC 9000 §8 Path Validation and Anti-Amplification Limit Audit
 
-## 1. 约束条款（原文出处）
+## 1. Normative Clauses (Original Sources)
 
-RFC 9000 §8.1：服务端在**完成地址验证之前**，发送的字节数不得超过其从该地址接收字节数的 **3 倍**（anti-amplification limit）。任何实现不得以"预计响应对端"为由突破该上限。
+RFC 9000 §8.1: before **completing address validation**, a server must not send more bytes than **3 times** the bytes received from that address (anti-amplification limit). No implementation may break this ceiling on the grounds of "expecting to respond".
 
-RFC 9000 §8.2.1：端点在新路径上发送流量前**必须**发送 PATH_CHALLENGE 并等待对应的 PATH_RESPONSE 才能将该路径视为已验证；PATH_RESPONSE 载荷必须逐字节回显对应 PATH_CHALLENGE 的数据。
+RFC 9000 §8.2.1: an endpoint **must** send a PATH_CHALLENGE on a new path and wait for the corresponding PATH_RESPONSE before treating the path as validated; the PATH_RESPONSE payload must echo the corresponding PATH_CHALLENGE data byte for byte.
 
-RFC 9000 §9：NAT 重绑定（对端地址端口突变）触发路径验证流程；验证未完成期间不得在新路径上无限制发送。
+RFC 9000 §9: NAT rebinding (abrupt peer address-port change) triggers the path-validation flow; unlimited sending on the new path is forbidden until validation completes.
 
-核心模式一句话：**反放大限制与路径验证是 QUIC 抵抗"以小博大"DoS 的两道强制闸门——闸门本身是协议义务而非可选优化，实现漏掉任何一道，攻击者就能用极少上行流量撬动对端的下行带宽与内存。**
+Core pattern in one sentence: **the anti-amplification limit and path validation are the two mandatory gates QUIC raises against "small-beats-big" DoS — the gates themselves are protocol obligations, not optional optimizations; any implementation missing either lets an attacker pry open the peer's downstream bandwidth and memory with minimal uplink traffic.**
 
-## 2. 违规判定条件
+## 2. Violation Criteria
 
-| 编号 | 探测 | 判定 |
+| ID | Probe | Criterion |
 |---|---|---|
-| PV-1 | 作为未验证地址的客户端，观察服务端在地址验证完成前的累计发送字节数是否严格 ≤ 3× 已接收字节数 | 超限发送 → 反放大违规（可被用作 UDP 放大器） |
-| PV-2 | 洪泛 PATH_CHALLENGE（伪造源地址、高并发），观察对端是否为每个 challenge 维护待响应状态 | 状态无上限累积 → 内存耗尽面（CVE-2023-49295 模式） |
-| PV-3 | 发送 PATH_RESPONSE 但压制/丢弃对端的 PATH_CHALLENGE（或反之），观察对端路径验证状态机是否死等或误判验证成功 | 义务不对称 → 可用性破坏 |
-| PV-4 | 模拟 NAT 重绑定时序：新地址突变后立即开始大流量发送，观察对端是否在验证完成前接受 | 未验证即接受 → 源地址信任劫持面 |
-| PV-5 | PATH_RESPONSE 载荷篡改（不回显原 challenge 数据） | 被接受 → 验证形同虚设 |
+| PV-1 | As a client from an unvalidated address, observe whether the server's cumulative bytes sent before completing address validation stay strictly ≤ 3× bytes received | Sending beyond the limit → anti-amplification violation (usable as a UDP amplifier) |
+| PV-2 | Flood PATH_CHALLENGEs (spoofed source addresses, high concurrency); observe whether the peer maintains pending-response state per challenge | State accumulates without a cap → memory-exhaustion surface (CVE-2023-49295 pattern) |
+| PV-3 | Send PATH_RESPONSEs while suppressing/dropping the peer's PATH_CHALLENGEs (or vice versa); observe whether the peer's path-validation state machine waits forever or misjudges validation success | Obligation asymmetry → availability destruction |
+| PV-4 | Simulate NAT-rebinding timing: start sending high-volume traffic immediately after the new-address突变; observe whether the peer accepts it before validation completes | Accepted without validation → source-address trust-hijacking surface |
+| PV-5 | Tamper with the PATH_RESPONSE payload (not echoing the original challenge data) | Accepted → validation is a formality |
 
-判定方法：aioquic 伪造源地址场景脚本；quic-go 调试计数器观测 anti-amplification 窗口；多并发连接压测观察挑战状态表增长。
+Method: aioquic spoofed-source-address scenario scripts; quic-go debug counters to observe the anti-amplification window; multi-connection stress to watch the challenge state-table growth.
 
-## 3. 攻击面猜想
+## 3. Attack-Surface Hypotheses
 
-- **UDP 反射放大**：PV-1 ——把支持 QUIC 的服务端变成反射放大器（3 倍是协议硬上限，实现突破上限即成放大器）
-- **未认证内存耗尽**：PV-2 ——单攻击者以极小流量迫使对端为海量伪造 challenge 建状态，1:N 资源不对称
-- **连接可用性定向破坏**：PV-3/PV-4 ——压制验证响应使合法连接永远卡在验证态，或劫持重绑定窗口接管连接路由
+- **UDP reflection amplification**: PV-1 — turning a QUIC-supporting server into a reflection amplifier (3x is the protocol's hard ceiling; an implementation breaking it becomes an amplifier)
+- **Unauthenticated memory exhaustion**: PV-2 — a single attacker forces the peer to build state for massive numbers of forged challenges with minimal traffic; 1:N resource asymmetry
+- **Targeted connection-availability destruction**: PV-3/PV-4 — suppressing validation responses keeps legitimate connections stuck in the validating state forever, or hijacks the rebinding window to take over connection routing
 
-## 4. 关联历史 CVE
+## 4. Related Historical CVEs
 
-| CVE | 实现 | 根因 |
+| CVE | Implementation | Root Cause |
 |---|---|---|
-| **CVE-2023-49295**（HIGH） | quic-go < 0.37.7 / 0.38.2 / 0.39.4 | 攻击者洪泛 PATH_CHALLENGE 的同时压制拥塞窗口使 PATH_RESPONSE 发送失败，quic-go 持续为每个 challenge 分配状态直至内存耗尽——正是 PV-2 + PV-3 义务不对称的实例 |
-| **CVE-2024-22189**（旁证模式） | QUIC 生态多家 | NEW_CONNECTION_ID 洪泛 + RETIRE 压制，与 PV-2 同构的"请求义务/响应义务不对称"模式 |
+| **CVE-2023-49295** (HIGH) | quic-go < 0.37.7 / 0.38.2 / 0.39.4 | The attacker floods PATH_CHALLENGEs while suppressing the congestion window so PATH_RESPONSE sends fail; quic-go keeps allocating state per challenge until memory exhaustion — a live instance of the PV-2 + PV-3 obligation asymmetry |
+| **CVE-2024-22189** (corroborating pattern) | Multiple QUIC-ecosystem implementations | NEW_CONNECTION_ID flooding + RETIRE suppression — the same "request-obligation/response-obligation asymmetry" structure as PV-2 |
 
-## 5. 差分验证方法
+## 5. Differential Verification
 
-对照组：quic-go ≥ 0.39.4（已修复）、msquic、ngtcp2。
-对比字段：PV-1 的字节计数硬上限、PV-2 挑战状态表的上限与淘汰策略、PV-3 死等超时、PV-5 的回显校验。
-误报排除：实现选择"未完成验证前一律按 3× 硬限 + 状态表定长"属合规；只标记"超限发送""状态无上限""非回显响应被接受"。
+Control group: quic-go ≥ 0.39.4 (patched), msquic, ngtcp2.
+Comparison fields: PV-1 byte-count hard ceiling, PV-2 challenge state-table cap and eviction policy, PV-3 wait-timeout, PV-5 echo validation.
+False-positive exclusion: an implementation choosing "strict 3x hard limit + fixed-length state table until validation completes" is compliant; only flag "sending beyond limit", "unbounded state", and "non-echo responses accepted".
 
-## 6. 对接的攻击 Skill
+## 6. Downstream Attack Skills
 
-- 技能层（怎么打）：`slowhttptest-dos`（慢速义务压制模式：压制 PATH_RESPONSE）、`fuzzowski-network-fuzz`（路径验证帧时序 fuzz）
-- 工具层（用什么打）：aioquic（伪造地址 + 帧级时序）、多源并发压测脚本
-- 命中后动作：测量放大比（上行:下行、攻击流量:目标内存）→ 确认为反射放大器或内存耗尽原语 → 评估与 CDN/QUIC 前端结合的暴露面
+- Skill layer (how to attack): `slowhttptest-dos` (slow obligation-suppression mode: suppressing PATH_RESPONSEs), `fuzzowski-network-fuzz` (path-validation frame-timing fuzzing)
+- Tool layer (what to attack with): aioquic (spoofed addresses + frame-level timing), multi-source concurrent stress scripts
+- Post-hit actions: measure the amplification ratio (uplink:downlink, attack traffic:target memory) → confirm as a reflection amplifier or memory-exhaustion primitive → assess the exposure surface in combination with CDN/QUIC front ends
