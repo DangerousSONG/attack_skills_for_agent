@@ -2,13 +2,8 @@
 name: performing-supply-chain-attack-simulation
 description: "Simulates supply chain attacks. Signals: supply chain, CI/CD, pipeline attacks."
 zh-signals: "Performing Supply Chain Attack Simulation 信号:供应链,cicd,流水线攻击。"
-when-to-use: Performing Supply Chain Attack Simulation
-  Simulates and detects software supply chain attacks: typosquatting
-  detection via Levenshtein distance against popular PyPI package names,
-  dependency confusion testing against private registries, SHA-256 package
-  hash verification, and known-CVE scanning with pip-audit. Use when auditing
-  a project's dependencies for malicious or confused packages, or when
-  assessing package-registry supply-chain risk.
+when-to-use: >-
+  Performing Supply Chain Attack Simulation Simulates and detects software supply chain attacks: typosquatting detection via Levenshtein distance against popular PyPI package names, dependency confusion testing against private registries, SHA-256 package hash verification, and known-CVE scanning with pip-audit. Use when auditing a project's dependencies for malicious or confused packages, or when assessing package-registry supply-chain risk.
 domain: cybersecurity
 subdomain: application-security
 tags:

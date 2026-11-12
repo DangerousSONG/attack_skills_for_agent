@@ -2,37 +2,40 @@
 name: asnmap-network-recon
 description: "asnmap: maps all enterprise network ranges for a target ASN. Signals: network topology, internet mapping, asnmap"
 zh-signals: "asnmap: 目标企业网段全量测绘。信号:网络拓扑,互联网测绘,asnmap`。"
+when-to-use: >-
+  Use at the start of external recon when you need to map a target
+  organization's full ASN and CIDR ranges before feeding them into scanners.
 ---
 
 # asnmap
 
-- 攻击大类:C04 网络拓扑测绘
-- 上游仓库:https://github.com/projectdiscovery/asnmap
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C04 Network Topology Mapping
+- Upstream Repository: https://github.com/projectdiscovery/asnmap
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/projectdiscovery/asnmap/cmd/asnmap@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `echo corp.com | asnmap` | 域名→ASN/CIDR |
-| `asnmap -a AS15169 -silent` | 按 ASN 出 CIDR 列表 |
-| `cat ips.txt | asnmap -json` | 批量 IP→ASN 归属 |
+| `echo corp.com | asnmap` | Domain → ASN/CIDR |
+| `asnmap -a AS15169 -silent` | Output a CIDR list for an ASN |
+| `cat ips.txt | asnmap -json` | Bulk IP → ASN attribution |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 目标企业网段全量测绘
+### Full Enumeration of the Target Enterprise's Network Ranges
 
 ```bash
 echo corp.com | asnmap -silent | tee cidrs.txt
-# 出该企业全部 ASN+CIDR,喂 amass/nmap 全量扫描
+# Output all ASN+CIDR for the organization, then feed them to amass/nmap for full scanning
 ```
 
-## 注意事项
+## Notes
 
-ProjectDiscovery 出品,IP→ASN/CIDR 映射,摸清企业网段资产边界。
+By ProjectDiscovery, maps IP to ASN/CIDR to establish the asset boundary of the enterprise network.

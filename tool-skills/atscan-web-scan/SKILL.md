@@ -2,38 +2,42 @@
 name: atscan-web-scan
 description: "ATSCAN: combines dork and vulnerability scanning engines. Signals: port scan, nmap, dork scan, XSS/SQLi scan, threads"
 zh-signals: "ATSCAN: dork+漏洞双引擎。信号:端口扫描,nmap,dork 扫描,XSS/SQLi 扫描,线程。"
+when-to-use: >-
+  Use when you need a combined dork and vulnerability scanning engine for a
+  target, covering dork search, XSS/SQLi checks, and port scanning. Supports
+  thread control and output files.
 ---
 
 # ATSCAN
 
-- 攻击大类:C42 网络扫描与枚举
-- 上游仓库:https://github.com/AlisamTechnology/ATSCAN-V3.1
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C42 Network Scanning and Enumeration
+- Upstream Repository: https://github.com/AlisamTechnology/ATSCAN-V3.1
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/AlisamTechnology/ATSCAN-V3.1
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `perl atscan.pl -d 'dork' -l 10` | dork 扫描 |
-| `--target t.com -s` | XSS/SQLi 扫描 |
-| `-t 10` | 线程 |
-| `-o out.txt` | 输出 |
+| `perl atscan.pl -d 'dork' -l 10` | Dork scan |
+| `--target t.com -s` | XSS/SQLi scan |
+| `-t 10` | Threads |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### dork+漏洞双引擎
+### Dork + Vulnerability Dual Engine
 
 ```bash
 perl atscan.pl -d 'inurl:php?id=' -l 20
-# 搜索引擎+漏洞扫描一体
+# Search engine + vulnerability scanning in one
 ```
 
-## 注意事项
+## Notes
 
-Perl 多引擎扫描器,dork/端口/XSS/SQLi 一体。
+A Perl multi-engine scanner combining dork/port/XSS/SQLi.

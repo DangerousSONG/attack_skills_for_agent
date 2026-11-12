@@ -2,41 +2,45 @@
 name: microburst-azure
 description: "MicroBurst: Azure credential harvesting and privilege escalation. Signals: cloud privilege escalation, IAM privilege escalation, credential collection, execute commands on VM, tenant information enumeration."
 zh-signals: "MicroBurst: Azure 凭据收割+权限提升。信号:云提权,iam提权,凭据收集,VM 上执行命令,租户信息枚举。"
+when-to-use: >-
+  Use during Azure cloud penetration testing when you have credentials or a
+  foothold and need to harvest secrets from KeyVault or Automation Accounts,
+  enumerate tenant information, or run commands on VMs.
 ---
 
 # MicroBurst
 
-- 攻击大类:C18 云与容器提权
-- 上游仓库:https://github.com/NetSPI/MicroBurst
-- 上游 License:BSD-3-Clause(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C18 Cloud and Container Privilege Escalation
+- Upstream Repository: https://github.com/NetSPI/MicroBurst
+- Upstream License: BSD-3-Clause (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/NetSPI/MicroBurst && Import-Module ./MicroBurst.psm1
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `Invoke-AzCredentialHarvest` | 凭据收集 |
-| `Get-AzPasswords` | 导出 KeyVault/Automation 凭据 |
-| `Invoke-AzVMCommand` | VM 上执行命令 |
-| `Get-AzDomainInfo` | 租户信息枚举 |
-| `Invoke-EnumerateAzureSubDomains` | 子域枚举 |
-| `Import-Module ./MicroBurst.psm1 -Verbose` | 见上游文档 |
+| `Invoke-AzCredentialHarvest` | Credential collection |
+| `Get-AzPasswords` | Export KeyVault/Automation credentials |
+| `Invoke-AzVMCommand` | Run commands on a VM |
+| `Get-AzDomainInfo` | Tenant information enumeration |
+| `Invoke-EnumerateAzureSubDomains` | Subdomain enumeration |
+| `Import-Module ./MicroBurst.psm1 -Verbose` | See the upstream documentation |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Azure 凭据收割+权限提升
+### Azure credential harvesting and privilege escalation
 
 ```bash
 Import-Module ./MicroBurst.psm1
-Get-AzPasswords  # 拉 Automation Account/KeyVault 全部 secrets
-Invoke-AzVMCommand -Script 'whoami'  # 用 Runbook 权限在 VM 执行
+Get-AzPasswords  # pull all secrets from Automation Accounts/KeyVault
+Invoke-AzVMCommand -Script 'whoami'  # execute on the VM using Runbook permissions
 ```
 
-## 注意事项
+## Notes
 
-NetSPI 出品的 Azure 渗透 PowerShell 集;凭据收割(Runbook/KeyVault)是核心价值。
+An Azure penetration PowerShell collection from NetSPI; credential harvesting (Runbook/KeyVault) is its core value.

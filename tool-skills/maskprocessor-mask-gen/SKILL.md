@@ -2,37 +2,38 @@
 name: maskprocessor-mask-gen
 description: "maskprocessor: Targeted mask generation. Signals: password cracking, hash cracking, range."
 zh-signals: "maskprocessor: 定向掩码生成。信号:密码破解,哈希破解,范围。"
+when-to-use: "Use maskprocessor when you need to generate targeted hashcat mask files from known password naming conventions or character-set constraints, e.g., before running a hashcat mask attack for password or hash cracking on an authorized target."
 ---
 
 # maskprocessor
 
-- 攻击大类:C25 哈希与密码破解
-- 上游仓库:https://github.com/hashcat/maskprocessor
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C25 Hash and Password Cracking
+- Upstream Repository: https://github.com/hashcat/maskprocessor
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 apt install maskprocessor
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `maskprocessor -1 ?l?d ?1?1?1?1?1?1 -o masks.txt` | 掩码生成 |
-| `-1 ?l?d?u --start abc --end bcd` | 范围 |
-| `-o out.txt` | 输出 |
+| `maskprocessor -1 ?l?d ?1?1?1?1?1?1 -o masks.txt` | Mask generation |
+| `-1 ?l?d?u --start abc --end bcd` | Range |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 定向掩码生成
+### Targeted Mask Generation
 
 ```bash
 maskprocessor -1 ?l?u?d ?1?1?1?1?1?1?1?1 | head -1000000 > masks.txt
-# 公司命名规则转 hashcat 掩码
+# Convert corporate naming rules into hashcat masks
 ```
 
-## 注意事项
+## Notes
 
-hashcat 官方掩码生成器,规则转掩码。
+The official hashcat mask generator, turning rules into masks.

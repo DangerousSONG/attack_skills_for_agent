@@ -2,37 +2,40 @@
 name: wildpwn-wildcard
 description: "wildpwn: tar/chmod wildcard privilege escalation. Signals: linux privilege escalation, SUID, wildcard injection."
 zh-signals: "wildpwn: tar/chmod 通配符提权。信号:linux提权,suid,通配符注入。"
+when-to-use: >-
+  Use during Linux privilege escalation when root-run tar or chmod commands
+  process wildcard characters in a writable directory.
 ---
 
 # wildpwn
 
-- 攻击大类:C16 Linux本地提权
-- 上游仓库:https://github.com/localh0t/wildpwn
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C16 Linux Local Privilege Escalation
+- Upstream Repository: https://github.com/localh0t/wildpwn
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/localh0t/wildpwn
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python wildpwn.py combined /var/www` | 通配符注入 |
-| `--file file` | 指定 |
-| `-o out.txt` | 输出 |
+| `python wildpwn.py combined /var/www` | Wildcard injection |
+| `--file file` | Specify |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### tar/chmod 通配符提权
+### tar/chmod Wildcard Privilege Escalation
 
 ```bash
 python wildpwn.py tar /backup
-# checkpoint 提权
+# Escalate via checkpoint
 ```
 
-## 注意事项
+## Notes
 
-通配符注入提权工具。
+A wildcard injection privilege escalation tool.

@@ -2,37 +2,41 @@
 name: extractbitlockerkeys-dpapi
 description: "extractbitlockerkeys: domain BitLocker key harvesting. Signals: AD attack, domain penetration, show hosts with keys only, CSV output."
 zh-signals: "extractbitlockerkeys: 域内 BitLocker 密钥收割。信号:ad攻击,域渗透,只显示有密钥的主机,CSV 输出。"
+when-to-use: >-
+  Use during Active Directory penetration testing when you have domain
+  credentials and want to harvest all BitLocker recovery keys backed up to AD;
+  supports filtering hosts with keys and CSV output.
 ---
 
 # extractbitlockerkeys
 
-- 攻击大类:C30 AD与横向移动
-- 上游仓库:https://github.com/p0dalirius/extractbitlockerkeys
-- 上游 License:GPL-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C30 AD and Lateral Movement
+- Upstream Repository: https://github.com/p0dalirius/extractbitlockerkeys
+- Upstream License: GPL-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/p0dalirius/extractbitlockerkeys && cd extractbitlockerkeys && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 extractbitlockerkeys.py -u svc -p pass -d corp.local -dc-ip 10.0.0.1` | 域内 BitLocker 恢复密钥收割 |
-| `-q` | 只显示有密钥的主机 |
-| `-csv` | CSV 输出 |
+| `python3 extractbitlockerkeys.py -u svc -p pass -d corp.local -dc-ip 10.0.0.1` | Harvest BitLocker recovery keys across the domain |
+| `-q` | Show only hosts that have keys |
+| `-csv` | CSV output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 域内 BitLocker 密钥收割
+### Domain-wide BitLocker key harvest
 
 ```bash
 python3 extractbitlockerkeys.py -u svc -p pass -d corp.local -dc-ip 10.0.0.1
-# 所有备份到 AD 的 BitLocker 恢复密钥一锅端
+# Sweeps up every BitLocker recovery key backed up to AD
 ```
 
-## 注意事项
+## Notes
 
-p0dalirius 出品,从 AD 批量提取各主机备份的 BitLocker 恢复密钥,解密任何被 BitLocker 保护的卷。
+From p0dalirius; extracts the BitLocker recovery keys backed up to AD from every host in bulk, letting you decrypt any BitLocker-protected volume.

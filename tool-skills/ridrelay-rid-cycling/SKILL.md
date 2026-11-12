@@ -2,38 +2,41 @@
 name: ridrelay-rid-cycling
 description: "ridrelay: Enumerates users via anonymous/empty sessions. Signals: internal enumeration, network discovery, RID cycling for domain users, specified RID range, attempt SAM enumeration."
 zh-signals: "ridrelay: 匿名/空会话用户枚举。信号:内网枚举,网络发现,RID 循环枚举域用户,指定 RID 范围,尝试 SAM 枚举。"
+when-to-use: >-
+  Use during internal AD enumeration when you have little or no credentials and
+  want to enumerate domain users via SMB null sessions and RID cycling.
 ---
 
 # ridrelay
 
-- 攻击大类:C29 AD与LDAP枚举
-- 上游仓库:https://github.com/skorov/ridrelay
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C29 AD and LDAP Enumeration
+- Upstream Repository: https://github.com/skorov/ridrelay
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/skorov/ridrelay && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python ridrelay.py -t 10.0.0.5` | RID 循环枚举域用户 |
-| `-t 10.0.0.5 -r 1000-2000` | 指定 RID 范围 |
-| `--sam` | 尝试 SAM 枚举 |
-| `-o users.txt` | 输出 |
+| `python ridrelay.py -t 10.0.0.5` | RID cycling to enumerate domain users |
+| `-t 10.0.0.5 -r 1000-2000` | Specify the RID range |
+| `--sam` | Attempt SAM enumeration |
+| `-o users.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 匿名/空会话用户枚举
+### Anonymous/empty session user enumeration
 
 ```bash
 python ridrelay.py -t 10.0.0.5
-# 利用空会话拿域用户清单,配合 asreproast
+# Use null sessions to grab the domain user list, then pair with asreproast
 ```
 
-## 注意事项
+## Notes
 
-利用 SMB 空会话做 RID cycling,无凭据枚举域用户(旧 trick 自动化)。
+Uses SMB null sessions for RID cycling to enumerate domain users without credentials (automates an old trick).

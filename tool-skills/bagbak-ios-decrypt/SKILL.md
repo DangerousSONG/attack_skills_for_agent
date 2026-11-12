@@ -2,38 +2,41 @@
 name: bagbak-ios-decrypt
 description: "bagbak: extracts and unpacks App Store apps. Signals: mobile, android attack, export and decrypt specified app, list device apps, overwrite installed packages"
 zh-signals: "bagbak: App Store 应用脱壳提取。信号:移动端,android攻击,导出并解密指定 App,列出设备 App,覆盖已安装包。"
+when-to-use: >-
+  Use on a jailbroken iOS device when you need to list installed apps and
+  export or decrypt App Store IPAs for reverse engineering.
 ---
 
 # bagbak
 
-- 攻击大类:C43 移动平台攻击
-- 上游仓库:https://github.com/ChiChou/bagbak
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C43 Mobile Platform Attacks
+- Upstream Repository: https://github.com/ChiChou/bagbak
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 npm install -g bagbak
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `bagbak com.tencent.xin` | 导出并解密指定 App |
-| `bagbak -l` | 列出设备 App |
-| `bagbak -f com.app` | 覆盖已安装包 |
-| `-o out/` | 输出目录 |
+| `bagbak com.tencent.xin` | Export and decrypt a specified app |
+| `bagbak -l` | List device apps |
+| `bagbak -f com.app` | Overwrite the installed package |
+| `-o out/` | Output directory |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### App Store 应用脱壳提取
+### App Store app decryption and extraction
 
 ```bash
-bagbak -l  # 找 bundle id
-bagbak com.corp.app  # 解密 IPA 落盘
+bagbak -l  # Find the bundle id
+bagbak com.corp.app  # Decrypt the IPA and write it to disk
 ```
 
-## 注意事项
+## Notes
 
-越狱 iOS 一键导出解密 IPA(FairPlay DRM 脱壳),逆向分析 App 的第一步。
+One-click export and decryption of IPAs on jailbroken iOS (FairPlay DRM unpacking), the first step of reverse engineering an app.

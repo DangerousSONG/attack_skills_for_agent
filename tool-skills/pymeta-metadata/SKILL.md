@@ -2,38 +2,39 @@
 name: pymeta-metadata
 description: "pymeta: Harvests document metadata. Signals: email collection, employee information, document metadata extraction, file type."
 zh-signals: "pymeta: 文档元数据收割。信号:邮箱收集,员工信息,文档元数据提取,类型。"
+when-to-use: "Use pymeta when harvesting document metadata from a target domain to extract authors, software, and internal paths for email and people OSINT."
 ---
 
 # pymeta
 
-- 攻击大类:C03 邮箱与人员OSINT
-- 上游仓库:https://github.com/m8sec/pymeta
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C03 Email and Personnel OSINT
+- Upstream Repository: https://github.com/m8sec/pymeta
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install pymeta3
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `pymeta -d corp.com` | 文档元数据提取 |
-| `-d domain -f pdf,docx` | 类型 |
-| `-o out.txt` | 输出 |
-| `-e 50` | 上限 |
+| `pymeta -d corp.com` | Document metadata extraction |
+| `-d domain -f pdf,docx` | File types |
+| `-o out.txt` | Output |
+| `-e 50` | Limit |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 文档元数据收割
+### Document metadata harvesting
 
 ```bash
 pymeta -d corp.com
-# 作者/软件/路径泄露内网信息
+# Authors, software and paths leak internal network information
 ```
 
-## 注意事项
+## Notes
 
-搜索引擎+元数据提取,文件 OSINT 工具。
+Search engine plus metadata extraction, a file-based OSINT tool.

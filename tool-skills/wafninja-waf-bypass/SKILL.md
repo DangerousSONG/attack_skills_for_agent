@@ -2,39 +2,40 @@
 name: wafninja-waf-bypass
 description: "WAFNinja: WAF fingerprinting plus bypass retries. Signals: web vulnerabilities, injection, SQLi payload, identify WAF vendor, custom payload."
 zh-signals: "WAFNinja: WAF 指纹+绕过重试。信号:web漏洞,注入,SQLi payload,识别 WAF 厂商,自定义 payload。"
+when-to-use: "Use when a web endpoint is protected by a WAF and you need to fingerprint the WAF vendor and retry XSS or SQLi payloads to find a bypass."
 ---
 
 # WAFNinja
 
-- 攻击大类:C09 Web利用(WAF绕过)
-- 上游仓库:https://github.com/khalilbijjou/WAFNinja
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Exploitation (WAF Bypass)
+- Upstream Repository: https://github.com/khalilbijjou/WAFNinja
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/khalilbijjou/WAFNinja && cd WAFNinja && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python wafninja.py -u 'https://t.com/?id=1' -t xss` | XSS payload 批量测 |
+| `python wafninja.py -u 'https://t.com/?id=1' -t xss` | Batch XSS payload testing |
 | `-t sqli` | SQLi payload |
-| `--fingerprint` | 识别 WAF 厂商 |
-| `-p 'payload'` | 自定义 payload |
+| `--fingerprint` | Identify the WAF vendor |
+| `-p 'payload'` | Custom payload |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### WAF 指纹+绕过重试
+### WAF fingerprinting + bypass retries
 
 ```bash
 python wafninja.py -u 'https://t.com/?q=x' --fingerprint
 python wafninja.py -u 'https://t.com/?q=x' -t sqli
-# 观察哪条 payload 不再被 403
+# Observe which payload is no longer answered with 403
 ```
 
-## 注意事项
+## Notes
 
-payload 库+WAF 指纹识别,被拦时快速定位 WAF 类型并尝试变形绕过。
+A payload library plus WAF fingerprinting; when requests get blocked it quickly identifies the WAF type and tries obfuscated bypasses.

@@ -2,39 +2,43 @@
 name: waybackpack-archive
 description: "waybackpack: Historical snapshot forensics. Signals: asset mapping, subdomains, list archived URLs, list only no download, from 2015."
 zh-signals: "waybackpack: 历史快照取证。信号:资产测绘,子域名,列归档 URL,只列不下载,从 2015 年。"
+when-to-use: >-
+  Use when mapping historical versions of a target domain and you want to list
+  or download Wayback Machine snapshots to find retired endpoints, comments, or
+  hardcoded secrets.
 ---
 
 # waybackpack
 
-- 攻击大类:C01 资产测绘与指纹识别
-- 上游仓库:https://github.com/jsvine/waybackpack
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C01 Asset Mapping and Fingerprinting
+- Upstream Repository: https://github.com/jsvine/waybackpack
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install waybackpack
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `waybackpack target.com` | 列归档 URL |
-| `--list` | 只列不下载 |
-| `-d 2015` | 从 2015 年 |
-| `--uniques-only` | 去重 |
-| `-o dir` | 下载快照 |
+| `waybackpack target.com` | List archived URLs |
+| `--list` | List only, do not download |
+| `-d 2015` | From 2015 onwards |
+| `--uniques-only` | Deduplicate |
+| `-o dir` | Download snapshots |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 历史快照取证
+### Historical Snapshot Forensics
 
 ```bash
 waybackpack corp.com -d 2018 --uniques-only -o snapshots/
-# 翻旧版页面找已下线的接口/注释里的密钥/硬编码地址
+# Browse old pages for retired endpoints, keys in comments, and hardcoded addresses
 ```
 
-## 注意事项
+## Notes
 
-把 Wayback 快照整体拉到本地比对历史变更;找'曾经暴露过的秘密'专用。
+Pull whole Wayback snapshots locally to diff historical changes; purpose-built for finding 'secrets that were once exposed'.

@@ -2,37 +2,38 @@
 name: hyperfox-mitm
 description: "Hyperfox performs MITM analysis of HTTP traffic. Signals: MITM, mitm, transparent proxy, traffic capture to disk."
 zh-signals: "Hyperfox: HTTP 流量中间人分析。信号:中间人,mitm,透明代理,流量落盘。"
+when-to-use: "Use when you need to intercept, record, and tamper HTTP/HTTPS traffic on a network as a transparent MITM proxy."
 ---
 
 # Hyperfox
 
-- 攻击大类:C40 嗅探与中间人攻击
-- 上游仓库:https://github.com/xiam/hyperfox
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C40 Sniffing and Man-in-the-Middle Attacks
+- Upstream Repository: https://github.com/xiam/hyperfox
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/xiam/hyperfox@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `hyperfox -p 8080 -c cert.pem -k key.pem` | HTTP/HTTPS 中间人 |
-| `-p port -s` | 透明代理 |
-| `-o out/` | 流量落盘 |
+| `hyperfox -p 8080 -c cert.pem -k key.pem` | HTTP/HTTPS man-in-the-middle |
+| `-p port -s` | Transparent proxy |
+| `-o out/` | Write traffic to disk |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### HTTP 流量中间人分析
+### HTTP traffic man-in-the-middle analysis
 
 ```bash
 hyperfox -p 8080 -c fake.crt -k fake.key
-# 记录+篡改 HTTP 请求
+# Log and tamper with HTTP requests
 ```
 
-## 注意事项
+## Notes
 
-Go 中间人代理,流量记录+实时篡改。
+Go man-in-the-middle proxy with traffic recording and real-time tampering.

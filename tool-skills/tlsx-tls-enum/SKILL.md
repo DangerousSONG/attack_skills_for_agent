@@ -2,39 +2,42 @@
 name: tlsx-tls-enum
 description: "tlsx mines subdomains from certificate SANs. Signals: data collection, packaging, tlsx -cn -j, detailed enumeration, detect TLS misconfiguration"
 zh-signals: "tlsx: 证书 SAN 挖子域。信号:数据收集,打包,tlsx -cn -j`,详细枚举,检测 TLS 配置错误。"
+when-to-use: >-
+  Use when gathering TLS and certificate intelligence, including extracting SAN/CN
+  subdomains from IP ranges and detecting TLS misconfigurations.
 ---
 
 # tlsx
 
-- 攻击大类:C33 URL与内容发现
-- 上游仓库:https://github.com/projectdiscovery/tlsx
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C33 URL and Content Discovery
+- Upstream Repository: https://github.com/projectdiscovery/tlsx
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/projectdiscovery/tlsx/cmd/tlsx@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `tlsx -u t.com:443` | TLS 版本/密码套件/证书详情 |
-| `cat ips.txt | tlsx -cn -j` | 批量从 IP 提证书 CN/SAN |
-| `-san` | 输出 SAN 域名(子域发现) |
-| `-ve` | 详细枚举 |
-| `-misconf` | 检测 TLS 配置错误 |
+| `tlsx -u t.com:443` | TLS version/cipher suites/certificate details |
+| `cat ips.txt | tlsx -cn -j` | Batch extract certificate CN/SAN from IPs |
+| `-san` | Output SAN domains (subdomain discovery) |
+| `-ve` | Detailed enumeration |
+| `-misconf` | Detect TLS misconfigurations |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 证书 SAN 挖子域
+### Mining Subdomains from Certificate SANs
 
 ```bash
 cat cidrs.txt | tlsx -san -j | jq -r '.san[]?' | sort -u
-# 从段内所有 TLS 服务证书提取关联域名
+# Extract associated domains from certificates of every TLS service in the range
 ```
 
-## 注意事项
+## Notes
 
-ProjectDiscovery 出品,TLS 指纹+证书信息批量提取,是 amass/subfinder 的补充数据源。
+By ProjectDiscovery, bulk extraction of TLS fingerprints + certificate data; a supplementary data source alongside amass/subfinder.

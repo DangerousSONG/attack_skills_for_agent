@@ -2,37 +2,41 @@
 name: grammarinator-gen-fuzz
 description: "grammarinator performs ANTLR grammar-driven fuzzing. Signals: pwn, binary exploitation, test sample generation, mutation of parsed samples."
 zh-signals: "grammarinator: ANTLR 语法驱动 fuzz。信号:pwn,二进制利用,生成测试样本,解析已有样本变异。"
+when-to-use: >-
+  Use when generating grammar-aware fuzz test cases from an ANTLR grammar;
+  process the grammar and generate samples, or parse and mutate existing
+  inputs.
 ---
 
 # grammarinator
 
-- 攻击大类:C46 模糊测试与漏洞挖掘
-- 上游仓库:https://github.com/renatahodovan/grammarinator
-- 上游 License:BSD-3-Clause(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C46 Fuzzing and Vulnerability Discovery
+- Upstream Repository: https://github.com/renatahodovan/grammarinator
+- Upstream License: BSD-3-Clause (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install grammarinator
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `grammarinator-process grammar.g4 -o out/` | 从 ANTLR 语法生成生成器 |
-| `grammarinator-generate -l out/Generator.py -r out/unparser.py -o tests/ -n 100` | 生成测试样本 |
-| `grammarinator-parse ...` | 解析已有样本变异 |
+| `grammarinator-process grammar.g4 -o out/` | Generate a generator from an ANTLR grammar |
+| `grammarinator-generate -l out/Generator.py -r out/unparser.py -o tests/ -n 100` | Generate test samples |
+| `grammarinator-parse ...` | Parse and mutate existing samples |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### ANTLR 语法驱动 fuzz
+### ANTLR grammar-driven fuzzing
 
 ```bash
 grammarinator-process JavaScript.g4 -o gen/ && grammarinator-generate -l gen/ -o cases/ -n 500
-# 任意 ANTLR 语法转成 fuzz 生成器
+# Turns any ANTLR grammar into a fuzzing generator
 ```
 
-## 注意事项
+## Notes
 
-ANTLR 语法自动生成 fuzz 样本,无需手写生成器,覆盖面高于随机变异。
+Automatically generates fuzz samples from ANTLR grammars with no hand-written generator; coverage is higher than with random mutation.

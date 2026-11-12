@@ -2,38 +2,39 @@
 name: powershdll-nopowershell
 description: "Windows local privilege escalation scenario. Signals: Windows privilege escalation, UAC bypass, single command, registry mode."
 zh-signals: "PowerShdll: Windows本地提权场景。信号:windows提权,uac绕过,单条命令,注册表模式。"
+when-to-use: "Use when powershell.exe is blocked or PowerShell is locked in Constrained Language Mode on a Windows host and you need to run PowerShell scripts or cmdlets through rundll32 or regsvr32 for privilege escalation and AppLocker bypass."
 ---
 
 # PowerShdll
 
-- 攻击大类:C17 Windows本地提权
-- 上游仓库:https://github.com/p3nt4/PowerShdll
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C17 Windows Local Privilege Escalation
+- Upstream Repository: https://github.com/p3nt4/PowerShdll
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
-git clone https://github.com/p3nt4/PowerShdll && cd dll 目录用 rundll32 直接调
+git clone https://github.com/p3nt4/PowerShdll && cd into the dll directory and call it directly with rundll32
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `rundll32 PowerShdll.dll,main -s <script.ps1>` | 无 powershell.exe 执行脚本 |
-| `rundll32 PowerShdll.dll,main -c <cmdlet>` | 单条命令 |
-| `regsvr32 /s PowerShdll.dll` | 注册表模式 |
-| `InstallUtil 模式绕过 AppLocker` | 说明 |
+| `rundll32 PowerShdll.dll,main -s <script.ps1>` | Run scripts without powershell.exe |
+| `rundll32 PowerShdll.dll,main -c <cmdlet>` | Single command |
+| `regsvr32 /s PowerShdll.dll` | Registry mode |
+| `InstallUtil mode bypasses AppLocker` | Description |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Constrained Language 模式绕过
+### Constrained Language Mode Bypass
 
 ```bash
 rundll32 PowerShdll.dll,main -s enum.ps1
-# powershell.exe 被禁/CLM 锁定时经 rundll32 跑 PowerShell
+# Run PowerShell through rundll32 when powershell.exe is blocked or CLM is locked down
 ```
 
-## 注意事项
+## Notes
 
-通过 rundll32/regsvr32 宿主跑 PowerShell,绕过 powershell.exe 禁用、AppLocker、CLM 限制。
+Runs PowerShell through the rundll32/regsvr32 hosts, bypassing disabled powershell.exe, AppLocker and CLM restrictions.

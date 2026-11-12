@@ -2,37 +2,41 @@
 name: pcredz-smb-creds
 description: "SMB/HTTP credential sniffing. Signals: MITM, mitm, traffic credential extraction, PCAP analysis, detailed."
 zh-signals: "PCredz: SMB/HTTP 凭据嗅探。信号:中间人,mitm,流量凭据提取,PCAP 分析,详细。"
+when-to-use: >-
+  Use when extracting credentials from live traffic or PCAP files, including
+  NTLM hashes, HTTP Basic credentials, and Kerberos data; capture on an
+  interface or analyze an existing capture.
 ---
 
 # PCredz
 
-- 攻击大类:C40 嗅探与中间人攻击
-- 上游仓库:https://github.com/lgandx/PCredz
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C40 Sniffing and Man-in-the-Middle Attacks
+- Upstream Repository: https://github.com/lgandx/PCredz
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/lgandx/PCredz && cd PCredz
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3Pcredz -i eth0` | 流量凭据提取 |
-| `-f capture.pcap` | PCAP 分析 |
-| `-v` | 详细 |
+| `python3Pcredz -i eth0` | Traffic credential extraction |
+| `-f capture.pcap` | PCAP analysis |
+| `-v` | Verbose |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### SMB/HTTP 凭据嗅探
+### SMB/HTTP Credential Sniffing
 
 ```bash
 python3 Pcredz -i eth0
-# NTLM 哈希/HTTP Basic/Kerberos 全收
+# Catches NTLM hashes / HTTP Basic / Kerberos alike
 ```
 
-## 注意事项
+## Notes
 
-lgandx 出品(Responder 作者),流量凭据提取。
+By lgandx (the author of Responder), traffic credential extraction.

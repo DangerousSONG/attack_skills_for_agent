@@ -2,37 +2,39 @@
 name: rmiscout-rmi-scan
 description: "rmiscout: Finds unsafe Java RMI methods. Signals: lateral movement, psexec, RMI method brute forcing, fuzzing."
 zh-signals: "rmiscout: Java RMI 不安全方法。信号:横向移动,psexec,RMI 方法爆破,fuzz。"
+when-to-use: >-
+  Use when enumerating exposed Java RMI registries to brute force method names and identify unsafe methods that can be abused for remote code execution or lateral movement.
 ---
 
 # rmiscout
 
-- 攻击大类:C31 远程服务横向移动
-- 上游仓库:https://github.com/BishopFox/rmiscout
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C31 Remote Service Lateral Movement
+- Upstream Repository: https://github.com/BishopFox/rmiscout
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/BishopFox/rmiscout && cd rmiscout && ./gradlew build
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `java -jar rmiscout.jar -i 10.0.0.5 -p 1099 wordlist.txt` | RMI 方法爆破 |
+| `java -jar rmiscout.jar -i 10.0.0.5 -p 1099 wordlist.txt` | RMI method brute force |
 | `-f` | fuzz |
-| `-e` | 枚举 |
+| `-e` | Enumerate |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Java RMI 不安全方法
+### Unsafe Java RMI Methods
 
 ```bash
 java -jar rmiscout.jar -i 10.0.0.5 -p 1099 /usr/share/wordlists/methods.txt
-# 找可滥用方法
+# Find abusable methods
 ```
 
-## 注意事项
+## Notes
 
-BishopFox 出品,RMI 方法枚举攻击。
+By BishopFox, an RMI method enumeration attack.

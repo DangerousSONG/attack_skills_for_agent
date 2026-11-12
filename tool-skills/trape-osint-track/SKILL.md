@@ -2,37 +2,39 @@
 name: trape-osint-track
 description: "trape tracks target visit behavior. Signals: email collection, employee information, visitor tracking for target sites, local demo mode, custom injected page"
 zh-signals: "trape: 目标访问行为追踪。信号:邮箱收集,员工信息,对目标站点做访问者追踪,本地演示模式,自定义注入页面。"
+when-to-use: >-
+  Use when tracking a target's visit behavior through a crafted link to collect IP, user agent, geolocation and session details for OSINT profiling.
 ---
 
 # trape
 
-- 攻击大类:C03 邮箱与人员OSINT
-- 上游仓库:https://github.com/jofpin/trape
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C03 Email and Personnel OSINT
+- Upstream Repository: https://github.com/jofpin/trape
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/jofpin/trape && cd trape && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python trape.py -u https://target.com -p 8080` | 对目标站点做访问者追踪 |
-| `-l` | 本地演示模式 |
-| `--custom` | 自定义注入页面 |
+| `python trape.py -u https://target.com -p 8080` | Visitor tracking against the target site |
+| `-l` | Local demo mode |
+| `--custom` | Custom injected page |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 目标访问行为追踪
+### Target visit behavior tracking
 
 ```bash
 python trape.py -u https://news.site -p 8080
-# 目标点开你构造的链接后: IP/UA/地理位置/在线时长回传控制面板
+# After the target opens your crafted link: IP/UA/geolocation/session duration are sent back to the control panel
 ```
 
-## 注意事项
+## Notes
 
-项目较老(2018-2020),新式浏览器 SameSite Cookie 策略下能力受限;轻量场景可用。
+The project is somewhat old (2018-2020) and is limited by modern browsers' SameSite cookie policy; useful for lightweight scenarios.

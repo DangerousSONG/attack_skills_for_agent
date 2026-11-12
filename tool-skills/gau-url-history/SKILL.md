@@ -2,46 +2,50 @@
 name: gau-url-history
 description: "gau collects historical endpoints for vulnerability scanning and JS secret mining. Signals: asset mapping, subdomains, include subdomains, concurrency."
 zh-signals: "gau (Get All URLs): 历史端点收集→喂给漏洞扫描、JS 文件敏感信息挖掘。信号:资产测绘,子域名,包含子域名,并发数。"
+when-to-use: >-
+  Use when you need historical endpoint URLs for a target domain, including
+  subdomains, to feed vulnerability scanning or JS secret mining. It pulls
+  passively from multiple archive sources without touching the target.
 ---
 
 # gau (Get All URLs)
 
-- 攻击大类:C01 资产测绘与指纹识别
-- 上游仓库:https://github.com/lc/gau
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C01 Asset Mapping and Fingerprinting
+- Upstream Repository: https://github.com/lc/gau
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/lc/gau/v2/cmd/gau@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `gau example.com` | OTX+Wayback+CommonCrawl+URLScan 全源拉取 |
-| `--subs` | 包含子域名 |
-| `--threads 5` | 并发数 |
-| `--blacklist png,jpg` | 过滤静态资源 |
-| `--fc 404` | 过滤状态码(需 --json 先存) |
+| `gau example.com` | Full-source pull from OTX+Wayback+CommonCrawl+URLScan |
+| `--subs` | Include subdomains |
+| `--threads 5` | Concurrency |
+| `--blacklist png,jpg` | Filter out static resources |
+| `--fc 404` | Filter by status code (requires saving with --json first) |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 历史端点收集→喂给漏洞扫描
+### Historical Endpoint Collection → Feed to Vulnerability Scanning
 
 ```bash
 gau --subs target.com | grep -E '\.(php|asp|aspx|jsp)' | sort -u > endpoints.txt
 nuclei -l endpoints.txt -t exposures/
 ```
 
-### JS 文件敏感信息挖掘
+### Sensitive Information Mining in JS Files
 
 ```bash
 gau target.com | grep '\.js$' | httpx -silent | tee js.txt
 while read u; do curl -s $u | grep -Eo '(api[_-]?key|token|secret)[^,]{0,80}'; done < js.txt
 ```
 
-## 注意事项
+## Notes
 
-被动历史数据源,不触目标,适合授权边界内先做情报面收敛。
+Passive historical data source that never touches the target, ideal for narrowing the intelligence surface within authorized boundaries.

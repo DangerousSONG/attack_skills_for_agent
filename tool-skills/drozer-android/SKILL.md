@@ -2,41 +2,44 @@
 name: drozer-android
 description: "Drozer: Android component exposure audit. Signals: mobile, Android attack, connect agent, list packages, attack surface analysis."
 zh-signals: "Drozer: Android 组件暴露审计。信号:移动端,android攻击,连接 agent,列包,攻击面分析。"
+when-to-use: >-
+  Use when auditing an authorized Android application for exposed activities, services,
+  broadcast receivers and content providers through a connected drozer agent.
 ---
 
 # Drozer
 
-- 攻击大类:C43 移动端攻击
-- 上游仓库:https://github.com/FSecureLABS/drozer
-- 上游 License:NOASSERTION(需人工)(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C43 Mobile Attacks
+- Upstream Repository: https://github.com/FSecureLABS/drozer
+- Upstream License: NOASSERTION (manual review required) (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
-pip install drozer 或 release .deb
+pip install drozer or take the .deb from the release page
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `drozer console connect` | 连接 agent |
-| `run app.package.list -f target` | 列包 |
-| `run app.package.attacksurface com.target` | 攻击面分析 |
-| `run app.activity.info -a pkg` | 导出 Activity |
-| `run app.provider.query uri` | 读 ContentProvider |
-| `run shell.start` | 设备 shell |
+| `drozer console connect` | Connect to the agent |
+| `run app.package.list -f target` | List packages |
+| `run app.package.attacksurface com.target` | Attack surface analysis |
+| `run app.activity.info -a pkg` | Export activities |
+| `run app.provider.query uri` | Read the ContentProvider |
+| `run shell.start` | Device shell |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Android 组件暴露审计
+### Android component exposure audit
 
 ```bash
 run app.package.attacksurface com.target.app
-run app.activity.start --component pkg com.pkg.DebugActivity  # 直接拉起隐藏调试界面
-run scanner.provider.injection -a pkg  # SQL 注入检测
+run app.activity.start --component pkg com.pkg.DebugActivity  # directly launch the hidden debug interface
+run scanner.provider.injection -a pkg  # SQL injection detection
 ```
 
-## 注意事项
+## Notes
 
-Android 安全测试标杆;需目标 app 装 agent 或 USB 调试授权环境。
+The benchmark for Android security testing; requires the target app to have the agent installed, or an environment with USB debugging authorized.

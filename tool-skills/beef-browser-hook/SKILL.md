@@ -2,39 +2,43 @@
 name: beef-browser-hook
 description: "BeEF: botnets browsers. Signals: web vulnerability, injection, phishing popups/fake login pages, scan target internal network, confirmation dialog persistence"
 zh-signals: "BeEF: 浏览器僵尸化。信号:web漏洞,注入,钓鱼弹窗/假登录页,扫描目标内网,确认框驻留。"
+when-to-use: >-
+  Use when exploiting an XSS foothold to control victim browsers; inject
+  hook.js and use social engineering, network scanning, and persistence
+  modules from the BeEF console.
 ---
 
 # BeEF
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/beefproject/beef
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/beefproject/beef
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/beefproject/beef && cd beef && ./install
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `./beef` | 启动控制面板(:3000) |
-| `hook.js 投递` | XSS payload 指向 http://attacker:3000/hook.js |
-| `社会工程模块` | 钓鱼弹窗/假登录页 |
-| `网络模块` | 扫描目标内网 |
-| `持久化模块` | 确认框驻留 |
+| `./beef` | Start the control panel (:3000) |
+| `hook.js delivery` | XSS payload pointing to http://attacker:3000/hook.js |
+| `Social Engineering module` | Phishing popup/fake login page |
+| `Network module` | Scan the target internal network |
+| `Persistence module` | Confirmation dialog persistence |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 浏览器僵尸化
+### Browser Botnet Hooking
 
 ```bash
-./beef  # 投递 hook.js 到目标
-# UI 里 modules → 选 Social Engineering 模块收集凭据/挂 fake login
+./beef  # Deliver hook.js to the target
+# In the UI go to modules, pick a Social Engineering module to collect credentials or serve a fake login page
 ```
 
-## 注意事项
+## Notes
 
-浏览器端利用框架:hook 后 300+ 模块(社工/内网探测/持久化);配 XSS 打点闭环。
+A client-side exploitation framework: 300+ modules after hooking (social engineering/internal network probing/persistence); pairs with an XSS foothold to close the loop.

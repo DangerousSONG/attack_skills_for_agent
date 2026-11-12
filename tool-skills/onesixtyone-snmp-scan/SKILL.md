@@ -2,38 +2,42 @@
 name: onesixtyone-snmp-scan
 description: "Network-wide scan for default SNMP community strings. Signals: port scanning, nmap, direct CIDR scanning, timeout."
 zh-signals: "onesixtyone: 默认团体串全网扫描。信号:端口扫描,nmap,CIDR 直接扫,超时。"
+when-to-use: >-
+  Use when scanning large network ranges for SNMP-enabled devices using default
+  community strings such as public, private, and manager; supports CIDR targets
+  and custom dictionaries.
 ---
 
 # onesixtyone
 
-- 攻击大类:C42 网络服务枚举
-- 上游仓库:https://github.com/trailofbits/onesixtyone
-- 上游 License:LGPL-2.1(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C42 Network Service Enumeration
+- Upstream Repository: https://github.com/trailofbits/onesixtyone
+- Upstream License: LGPL-2.1 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 apt install onesixtyone
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `onesixtyone -c community.txt -i targets.txt` | SNMP 扫描(自定义团体串列表) |
-| `-c dict.txt 10.0.0.0/24` | CIDR 直接扫 |
-| `-o out.log` | 输出 |
-| `-w 100` | 超时 |
+| `onesixtyone -c community.txt -i targets.txt` | SNMP scan (custom community string list) |
+| `-c dict.txt 10.0.0.0/24` | Direct CIDR scan |
+| `-o out.log` | Output |
+| `-w 100` | Timeout |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 默认团体串全网扫描
+### Network-wide scan for default community strings
 
 ```bash
 echo -e 'public\nprivate\nmanager' > c.txt && onesixtyone -c c.txt -i ips.txt
-# 老设备/打印机/交换机默认团体串一锅端
+# Sweeps default community strings off legacy devices/printers/switches
 ```
 
-## 注意事项
+## Notes
 
-Trail of Bits 维护版,SNMP 团体串扫描经典工具,超轻量适合大网段。
+The Trail of Bits maintained version, a classic SNMP community string scanner, extremely lightweight and suitable for large network segments.

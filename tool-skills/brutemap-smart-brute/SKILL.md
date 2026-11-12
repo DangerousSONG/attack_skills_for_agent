@@ -2,37 +2,41 @@
 name: brutemap-smart-brute
 description: "brutemap: Brute-forces web login forms. Signals: web vulnerability, injection, login brute force, automatic form recognition, threads."
 zh-signals: "brutemap: Web 登录表单口令爆破。信号:web漏洞,注入,登录爆破,自动识别表单,线程。"
+when-to-use: >-
+  Use when brute-forcing a web login form with user and password lists,
+  optionally auto-detecting form fields and response differences. Supports
+  thread control.
 ---
 
 # brutemap
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/brutemap-dev/brutemap
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/brutemap-dev/brutemap
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/brutemap-dev/brutemap && cd brutemap && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python brutemap.py -u https://t.com/login -U users.txt -P pass.txt` | 登录爆破 |
-| `-u url --auto` | 自动识别表单 |
-| `-t 10` | 线程 |
+| `python brutemap.py -u https://t.com/login -U users.txt -P pass.txt` | Login brute force |
+| `-u url --auto` | Automatic form recognition |
+| `-t 10` | Threads |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Web 登录表单口令爆破
+### Web Login Form Credential Brute Force
 
 ```bash
 python brutemap.py -u https://t.com/admin/login -U admin.txt -P top100.txt
-# 自动定位表单字段+错误判定
+# Automatically locate form fields + determine failure from the response
 ```
 
-## 注意事项
+## Notes
 
-Web 认证爆破,自动识别登录表单与响应差异。
+Web authentication brute forcing that auto-detects login forms and response differences.

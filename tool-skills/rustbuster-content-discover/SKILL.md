@@ -2,40 +2,44 @@
 name: rustbuster-content-discover
 description: "rustbuster: Multi-mode content discovery. Signals: web scanning, vulnerability scanning, directory brute forcing, subdomain brute forcing, virtual host brute forcing."
 zh-signals: "rustbuster: 多模式内容发现。信号:web扫描,漏洞扫描,目录爆破,子域爆破,虚拟主机爆破。"
+when-to-use: >-
+  Use when you need fast multi-mode content discovery covering directory, DNS,
+  virtual host, and parameter fuzzing with one binary. Supports threads and
+  extension lists.
 ---
 
 # rustbuster
 
-- 攻击大类:C41 Web漏洞扫描与验证
-- 上游仓库:https://github.com/phra/rustbuster
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C41 Web Vulnerability Scanning and Validation
+- Upstream Repository: https://github.com/phra/rustbuster
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 cargo install rustbuster
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `rustbuster dir -u https://t.com -w wordlist.txt` | 目录爆破 |
-| `rustbuster dns -d t.com -w subs.txt` | 子域爆破 |
-| `rustbuster vhost -u https://t.com -w vhosts.txt` | 虚拟主机爆破 |
-| `rustbuster fuzz -u https://t.com/FUZZ -w params.txt` | 参数 fuzz |
-| `-t 40` | 线程 |
-| `-x php,txt,bak` | 扩展名 |
+| `rustbuster dir -u https://t.com -w wordlist.txt` | Directory brute force |
+| `rustbuster dns -d t.com -w subs.txt` | Subdomain brute force |
+| `rustbuster vhost -u https://t.com -w vhosts.txt` | Virtual host brute force |
+| `rustbuster fuzz -u https://t.com/FUZZ -w params.txt` | Parameter fuzzing |
+| `-t 40` | Threads |
+| `-x php,txt,bak` | Extensions |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 多模式内容发现
+### Multi-Mode Content Discovery
 
 ```bash
 rustbuster dir -u https://t.com -w /usr/share/seclists/Discovery/Web-Content/raft-medium-words.txt -t 50
-# 一个二进制覆盖 dir/dns/vhost/fuzz 四种模式
+# One binary covers the dir/dns/vhost/fuzz modes
 ```
 
-## 注意事项
+## Notes
 
-Rust 编写,单文件多模式内容发现,速度极快,适合大规模资产。
+Written in Rust, a single binary for multi-mode content discovery, extremely fast and suitable for large-scale assets.

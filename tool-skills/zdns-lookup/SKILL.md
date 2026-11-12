@@ -2,38 +2,42 @@
 name: zdns-lookup
 description: "ZDNS: Million-scale DNS queries. Signals: asset mapping, subdomain, zdns A records, MX records, NS records."
 zh-signals: "ZDNS: 百万级 DNS 查询。信号:资产测绘,子域名,zdns A`,MX 记录,NS 记录。"
+when-to-use: >-
+  Use when resolving millions of DNS records quickly for asset mapping; pipe
+  names into A, MX, or NS lookups and write JSONL output for large-scale
+  enumeration.
 ---
 
 # ZDNS
 
-- 攻击大类:C01 资产测绘与指纹识别
-- 上游仓库:https://github.com/zmap/zdns
-- 上游 License:Apache-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C01 Asset Mapping and Fingerprinting
+- Upstream Repository: https://github.com/zmap/zdns
+- Upstream License: Apache-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/zmap/zdns@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `echo corp.com | zdns A` | 批量 A 记录解析 |
-| `zdns MX --name-servers 8.8.8.8` | MX 记录 |
-| `zdns NS` | NS 记录 |
-| `zdns A --output-file out.json` | JSON 输出 |
+| `echo corp.com | zdns A` | Bulk A record resolution |
+| `zdns MX --name-servers 8.8.8.8` | MX records |
+| `zdns NS` | NS records |
+| `zdns A --output-file out.json` | JSON output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 百万级 DNS 查询
+### Million-scale DNS queries
 
 ```bash
 cat subs.txt | zdns A --threads 1000 -o resolved.jsonl
 jq -r '.data.answers[]? | select(.type=="A") | .answer' resolved.jsonl
 ```
 
-## 注意事项
+## Notes
 
-ZMap 团队的 DNS 引擎;百万级查询分钟级完成,比 dnsx 更极限。
+The DNS engine from the ZMap team; a million queries complete in minutes, pushing further than dnsx.

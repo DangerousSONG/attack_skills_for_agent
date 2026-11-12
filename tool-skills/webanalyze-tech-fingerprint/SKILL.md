@@ -2,39 +2,42 @@
 name: webanalyze-tech-fingerprint
 description: "webanalyze: Technology stack fingerprinting for CVE selection. Signals: asset mapping, subdomains, batch technology stack identification, single target, crawl page count."
 zh-signals: "webanalyze: 技术栈指纹识别(挑 CVE 用)。信号:资产测绘,子域名,批量技术栈识别,单目标,爬取页数。"
+when-to-use: >-
+  Use during asset mapping to fingerprint technology stacks in batch and map
+  identified components to known CVEs.
 ---
 
 # webanalyze
 
-- 攻击大类:C01 资产测绘与指纹识别
-- 上游仓库:https://github.com/rverton/webanalyze
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C01 Asset Mapping and Fingerprinting
+- Upstream Repository: https://github.com/rverton/webanalyze
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/rverton/webanalyze@latest && webanalyze -update
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `webanalyze -hosts hosts.txt` | 批量技术栈识别 |
-| `-host https://x.com` | 单目标 |
-| `-crawl 3` | 爬取页数 |
-| `-apps apps.json` | 自定义指纹库 |
-| `-output csv` | CSV 输出 |
+| `webanalyze -hosts hosts.txt` | Batch technology stack identification |
+| `-host https://x.com` | Single target |
+| `-crawl 3` | Crawl page count |
+| `-apps apps.json` | Custom fingerprint database |
+| `-output csv` | CSV output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 技术栈指纹识别(挑 CVE 用)
+### Technology Stack Fingerprinting (for Picking CVEs)
 
 ```bash
 httpx -l subs.txt -silent | webanalyze -hosts - -output csv
-# 按指纹过滤: grep -i 'wordpress\|jenkins\|shiro' tech.csv
+# Filter by fingerprint: grep -i 'wordpress\|jenkins\|shiro' tech.csv
 ```
 
-## 注意事项
+## Notes
 
-Wappalyzer 的 Go 移植版,适合大规模指纹批扫;识别出的组件直接映射漏洞库。
+A Go port of Wappalyzer, suitable for large-scale batch fingerprinting; identified components map directly to vulnerability databases.

@@ -2,38 +2,41 @@
 name: crlfuzz-crlf-injection
 description: "CRLFuzz: Tests response splitting via CRLF injection. Signals: web vulnerability, injection, single-target CRLF injection, batch."
 zh-signals: "CRLFuzz: 响应拆分测试。信号:web漏洞,注入,单目标 CRLF 注入,批量。"
+when-to-use: >-
+  Use when testing a URL's parameters for CRLF injection and HTTP response
+  splitting. Supports single targets, batch lists, and silent output.
 ---
 
 # CRLFuzz
 
-- 攻击大类:C09 Web利用(CRLF/HTTP头注入)
-- 上游仓库:https://github.com/dwisiswant0/crlfuzz
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Exploitation (CRLF / HTTP Header Injection)
+- Upstream Repository: https://github.com/dwisiswant0/crlfuzz
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/dwisiswant0/crlfuzz/cmd/crlfuzz@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `crlfuzz -u 'https://t.com/?url=x'` | 单目标 CRLF 注入 |
-| `-l urls.txt` | 批量 |
-| `-o out.txt` | 输出 |
-| `-s` | 静默模式 |
+| `crlfuzz -u 'https://t.com/?url=x'` | Single-target CRLF injection |
+| `-l urls.txt` | Batch |
+| `-o out.txt` | Output |
+| `-s` | Quiet mode |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 响应拆分测试
+### Response Splitting Test
 
 ```bash
 crlfuzz -u 'https://t.com/redirect?next=https://a.com'
-# 命中后注入 Set-Cookie / 302 Location 头
+# On a hit, inject a Set-Cookie / 302 Location header
 ```
 
-## 注意事项
+## Notes
 
-Go 编写,快,对 URL 每个参数注入 CRLF(%0d%0a)并检测响应头回显。
+Written in Go, fast; injects CRLF (%0d%0a) into every URL parameter and detects response header reflection.

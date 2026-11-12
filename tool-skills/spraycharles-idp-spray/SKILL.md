@@ -2,38 +2,41 @@
 name: spraycharles-idp-spray
 description: "spraycharles: multi-platform IdP spraying. Signals: brute force, password spraying, multi-IdP spray, ADFS, Okta."
 zh-signals: "spraycharles: 多平台 IdP 喷洒。信号:暴力破解,口令喷射,多 IdP 喷洒,ADFS,Okta。"
+when-to-use: >-
+  Use when conducting authorized password spraying against a known identity provider such as
+  ADFS, Okta, or OWA, staying under account lockout thresholds.
 ---
 
 # spraycharles
 
-- 攻击大类:C28 暴力破解与口令喷射
-- 上游仓库:https://github.com/Tw1sm/spraycharles
-- 上游 License:BSD-3-Clause(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C28 Brute Force and Password Spraying
+- Upstream Repository: https://github.com/Tw1sm/spraycharles
+- Upstream License: BSD-3-Clause (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install spraycharles
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `spraycharles -u users.txt -p pass.txt -a owa -t https://mail.t.com` | 多 IdP 喷洒 |
+| `spraycharles -u users.txt -p pass.txt -a owa -t https://mail.t.com` | Multi-IdP spraying |
 | `-a adfs` | ADFS |
 | `-a okta` | Okta |
-| `-t 5` | 线程 |
+| `-t 5` | Threads |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 多平台 IdP 喷洒
+### Multi-Platform IdP Spraying
 
 ```bash
 spraycharles -u users.txt -p pass.txt -a adfs -t https://adfs.corp.com
-# 13 种 IdP 模板
+# 13 IdP templates
 ```
 
-## 注意事项
+## Notes
 
-Tw1sm 出品,支持 13 种身份平台喷洒。
+From Tw1sm; supports spraying against 13 identity platforms.

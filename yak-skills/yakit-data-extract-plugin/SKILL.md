@@ -2,54 +2,50 @@
 name: yakit-data-extract-plugin
 description: "This skill addresses a specific pain point: a pile of traffic for one domain is stacked in History. Signals: history, domain traffic."
 zh-signals: "本 skill 针对一个具体痛点——“在 History 里堆了一堆某域名的流量，"
-when-to-use: 0. 相关路由
-  解决一个高频实战痛点：在 Yakit History 里积累了某站点大量流量后，如何一键按域名捞取所有唯一
-  路径、拿到登录 Cookie，并把这些路径沉淀成可复用的 Payload 字典，再带着登录态逐路径发包扫描/Fuzz。
-  覆盖 db.QueryHTTPFlowsByKeyword 捞 History、URI 去重、Cookie 提取、db.SavePayload/YieldPayload
-  字典管理、poc.HTTP 登录态发包。当用户想"从历史流量提取数据驱动后续扫描"时使用。
+when-to-use: >-
+  0. Related Routes
+  Solves a high-frequency practical pain point: after a lot of traffic for one site has piled up in Yakit History, how do you pull all unique paths for a domain in one click, obtain the login Cookie, turn those paths into a reusable Payload wordlist, and then scan/fuzz path by path with the authenticated session. Covers pulling History with db.QueryHTTPFlowsByKeyword, URI deduplication, Cookie extraction, wordlist management with db.SavePayload/YieldPayload, and authenticated request sending with poc.HTTP. Use it when the user wants to "extract data from historical traffic to drive subsequent scanning".
 ---
 
-# SKILL: Yakit 历史数据提取与字典驱动扫描
+# SKILL: Yakit Historical Data Extraction and Wordlist-Driven Scanning
 
-> AI LOAD INSTRUCTION: 本 skill 针对一个具体痛点——“在 History 里堆了一堆某域名的流量，
-> 想把唯一路径全捞出来、拿到登录 Cookie，然后接着扫/Fuzz”。给出两个端到端可运行示例：
-> 按域名捞流量并去重提 Cookie、把去重路径接入 Payload 字典并带登录态真实发包扫描。
-> 两个示例都 `yak <file>` 自测通过，其中扫描示例会起本地真实靶站发真实 HTTP 请求作为证据。
+> AI LOAD INSTRUCTION: This skill addresses a specific pain point — "a pile of traffic for one domain has piled up in History, and you want to pull out all the unique paths, grab the login Cookie, and then continue scanning/fuzzing". Two end-to-end runnable examples are given: pulling traffic by domain with URI deduplication and Cookie extraction, and wiring the deduplicated paths into a Payload wordlist and sending real authenticated requests to scan them.
+> Both examples pass the `yak <file>` self-test, and the scanning example spins up a local real target server and sends real HTTP requests as evidence.
 
-## 0. 相关路由
+## 0. Related Routes
 
-- 总入口：yak
-- 数据库 API（KV / Payload / 查询）：yaklang-database
-- 想在 MITM 阶段直接采集而非事后捞库：[mitm-hotpatch](../mitm-hotpatch/SKILL.md)
-- 训练材料交叉引用：`yaklang-ai-training-materials/library-usage/db/db-practice.yak`
+- Master entry point: yak
+- Database APIs (KV / Payload / queries): yaklang-database
+- To collect traffic during the MITM stage instead of querying the database afterwards: [mitm-hotpatch](../mitm-hotpatch/SKILL.md)
+- Cross-reference in the training material: `yaklang-ai-training-materials/library-usage/db/db-practice.yak`
 
-## 1. 痛点拆解
+## 1. Breaking Down the Pain Point
 
-一个常见的工作流被卡在“数据搬运”上：
+A common workflow gets stuck on "moving data around":
 
 ```mermaid
 flowchart LR
-    H[History 大量流量] --> Q[按 domain 捞取]
-    Q --> D[URI 去重]
-    Q --> C[提取登录 Cookie]
-    D --> P[沉淀 Payload 字典]
-    P --> S[带 Cookie 逐路径发包扫描]
+    H[A large amount of History traffic] --> Q[Pull by domain]
+    Q --> D[URI deduplication]
+    Q --> C[Extract the login Cookie]
+    D --> P[Store as a Payload wordlist]
+    P --> S[Send requests path by path with the Cookie]
     C --> S
 ```
 
-手工做这件事很痛：路径重复、query 干扰去重、Cookie 散落在不同请求里、扫描时忘了带登录态。
-本 skill 用 `db` + `poc` 把每一步都脚本化。
+Doing this by hand is painful: paths repeat, query strings get in the way of deduplication, Cookies are scattered across different requests, and you forget the authenticated session while scanning.
+This skill scripts every step with `db` + `poc`.
 
-## 2. 按 domain 捞 History + URI 去重 + 提取 Cookie
+## 2. Pull History by domain + URI Deduplication + Cookie Extraction
 
-核心数据形态（先核实，勿臆测）：
+Core data shapes (verify first, do not guess):
 
-| 来源 | 形态 |
+| Source | Shape |
 | --- | --- |
-| `db.QueryHTTPFlowsByKeyword(domain)` | 返回 `*HTTPFlow` 迭代器（channel） |
-| `flow.Url` | 完整 URL 字符串 |
-| `flow.Request` | `codec.StrconvQuote` 后的字符串，需 `codec.StrconvUnquote` 取原始字节 |
-| 登录 Cookie | `poc.GetHTTPPacketHeader(req, "Cookie")` |
+| `db.QueryHTTPFlowsByKeyword(domain)` | Returns a `*HTTPFlow` iterator (channel) |
+| `flow.Url` | Full URL string |
+| `flow.Request` | The string after `codec.StrconvQuote`, needs `codec.StrconvUnquote` to get the original bytes |
+| Login Cookie | `poc.GetHTTPPacketHeader(req, "Cookie")` |
 
 ```yak
 collectFromHistory = func(domain) {
@@ -58,44 +54,42 @@ collectFromHistory = func(domain) {
         req = codec.StrconvUnquote(flow.Request)~
         pairs = append(pairs, {"url": flow.Url, "req": []byte(req)})
     }
-    return analyzePairs(pairs)   // 归一化去重 + 收集 cookie
+    return analyzePairs(pairs)   // normalize + deduplicate + collect cookies
 }
 ```
 
-去重 key 用“去掉 scheme 与 query 后的 host+path”，避免 `?page=1` / `?page=2` 被当成两条。
+Use "host+path with the scheme and query stripped" as the deduplication key, so that `?page=1` / `?page=2` are not treated as two different entries.
 
-完整示例：[examples/collect-domain-urls.yak](examples/collect-domain-urls.yak)
+Full example: [examples/collect-domain-urls.yak](examples/collect-domain-urls.yak)
 
-## 3. 去重路径接 Payload 字典 + 带登录态发包扫描
+## 3. Wiring Deduplicated Paths into a Payload Wordlist + Authenticated Scanning
 
-把路径沉淀成 Yakit Payload 字典（持久化、可在 Web Fuzzer / 扫描器里复用），再带 Cookie 逐条发包，
-用状态码区分存活/不存在：
+Store the paths as a Yakit Payload wordlist (persistent, reusable in the Web Fuzzer / scanners), then send requests one by one with the Cookie and distinguish live from non-existent by the status code:
 
 ```yak
-db.SavePayload(group, dedupPaths(paths))~        // 去重后入库
-for path in db.YieldPayload(group) {             // 迭代字典逐条扫描
+db.SavePayload(group, dedupPaths(paths))~        // Store after deduplication
+for path in db.YieldPayload(group) {             // Iterate the wordlist and scan each entry
     raw = sprintf("GET %s HTTP/1.1\r\nHost: %s\r\nCookie: %s\r\nConnection: close\r\n\r\n", path, hostport, cookie)
     rsp, _ = poc.HTTP(raw, poc.timeout(5), poc.save(false))~
-    code = poc.GetStatusCodeFromResponse(rsp)    // 200 存活 / 404 不存在
+    code = poc.GetStatusCodeFromResponse(rsp)    // 200 live / 404 not found
 }
 ```
 
-完整示例：[examples/path-scan-with-payload.yak](examples/path-scan-with-payload.yak)
-（自测会在本地随机端口起真实靶站，真正发出 HTTP 请求并校验状态码与 Cookie 透传）
+Full example: [examples/path-scan-with-payload.yak](examples/path-scan-with-payload.yak)
+(The self-test starts a real target server on a random local port, actually sends HTTP requests, and verifies the status code and Cookie pass-through)
 
-## 4. 坑（先核实再写）
+## 4. Pitfalls (Verify Before Writing Code)
 
-- `flow.Request` / `flow.Response` 是 strconv-quote 之后的字符串，直接当原文用会带转义；务必
-  `codec.StrconvUnquote(...)~`。
-- `db.YieldPayload(group)` 直接产出 payload 内容字符串，不是带 `.Content` 字段的对象，直接用 `p`。
-- `db.SavePayload` 写的是 profile 持久库；脚本里用唯一前缀的 group 并 `defer db.DeletePayloadByGroup(group)` 清理，避免污染。
-- 去重一定要先剥掉 query，否则同一接口的不同分页会被当成不同 URI。
-- 发包扫描务必 `poc.timeout(...)` + `poc.save(false)`（自测/批量时不写库），避免卡死与污染 History。
+- `flow.Request` / `flow.Response` are strings after strconv-quoting, so using them directly as raw text brings in escape sequences; always use `codec.StrconvUnquote(...)~`.
+- `db.YieldPayload(group)` yields the payload content string directly, not an object with a `.Content` field; use `p` directly.
+- `db.SavePayload` writes to the persistent profile store; in scripts use a group with a unique prefix and clean up with `defer db.DeletePayloadByGroup(group)` to avoid pollution.
+- Deduplication must strip the query first, otherwise different pages of the same endpoint are treated as different URIs.
+- Request-sending scans must use `poc.timeout(...)` + `poc.save(false)` (do not write to the database during self-tests or batch runs), to avoid hanging and polluting History.
 
-## 5. 如何验证你写的提取/扫描脚本
+## 5. How to Verify the Extraction/Scanning Script You Wrote
 
-- 直接 `yak your-script.yak`，让 `YAK_MAIN` 自测块用合成数据 + 本地靶站跑通逻辑。
-- 想验证真实 History 捞取，可先用 [mitm-hotpatch](../mitm-hotpatch/SKILL.md) 采集几条流量再跑。
-- 工具链与命令行验证方式见 yaklang-toolchain。
+- Run `yak your-script.yak` directly and let the `YAK_MAIN` self-test block exercise the logic with synthetic data + a local target server.
+- To verify real History retrieval, first collect a few flows with [mitm-hotpatch](../mitm-hotpatch/SKILL.md) and then run it.
+- See yaklang-toolchain for the toolchain and command-line verification methods.
 
-> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`SKILL.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。
+> 📎 **Reference Document Notice**: this skill is adapted from an upstream open-source repository; the following reference document is **not distributed with this library**: `SKILL.md`. The key points of the related topics are retained in the corresponding descriptions in this document; if you need the expanded content, grep the library using keywords from the body text or search on your own.

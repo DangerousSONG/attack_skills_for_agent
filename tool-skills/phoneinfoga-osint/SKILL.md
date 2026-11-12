@@ -2,38 +2,41 @@
 name: phoneinfoga-osint
 description: "Phone number attribution and public footprint. Signals: email collection, employee info, phone OSINT scan, specified scanners, launch Web UI."
 zh-signals: "PhoneInfoga: 手机号归属/公开足迹。信号:邮箱收集,员工信息,号码 OSINT 扫描,指定扫描器,起 Web UI。"
+when-to-use: >-
+  Use when you have a target phone number and need attribution or public footprint
+  (carrier, region, linked accounts) from open sources during people OSINT.
 ---
 
 # PhoneInfoga
 
-- 攻击大类:C03 邮箱与人员OSINT
-- 上游仓库:https://github.com/sundowndev/PhoneInfoga
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C03 Email and Personnel OSINT
+- Upstream Repository: https://github.com/sundowndev/PhoneInfoga
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
-docker run --rm -it sundowndev/phoneinfoga scan -n +8613800000000 或 release 二进制
+docker run --rm -it sundowndev/phoneinfoga scan -n +8613800000000 or use the release binary
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `scan -n +86...` | 号码 OSINT 扫描 |
-| `-n 号码 -s twint` | 指定扫描器 |
-| `serve -p 8080` | 起 Web UI |
-| `-o json` | 输出 |
+| `scan -n +86...` | Phone number OSINT scan |
+| `-n number -s twint` | Specify the scanner |
+| `serve -p 8080` | Start the Web UI |
+| `-o json` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 手机号归属/公开足迹
+### Phone Number Attribution / Public Footprint
 
 ```bash
 ./phoneinfoga scan -n '+86 138 0000 0000' -o json | jq
-# 输出 carrier/地域/是否注册 Google/Twitter 等
+# Outputs carrier/region/whether Google/Twitter accounts are registered, etc.
 ```
 
-## 注意事项
+## Notes
 
-不发短信不打电话,纯公开源聚合;国内号码覆盖有限。
+Sends no SMS and places no calls, purely public-source aggregation; coverage of mainland China numbers is limited.

