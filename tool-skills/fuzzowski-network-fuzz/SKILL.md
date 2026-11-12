@@ -2,38 +2,42 @@
 name: fuzzowski-network-fuzz
 description: "fuzzowski provides introductory private protocol fuzzing. Signals: pwn, binary exploitation, FTP protocol fuzzing, HTTP fuzzing, custom request scripts."
 zh-signals: "fuzzowski: 私有协议 fuzz 入门。信号:pwn,二进制利用,FTP 协议 fuzz,HTTP fuzz,自定义请求脚本。"
+when-to-use: >-
+  Use when fuzzing network protocols such as FTP or HTTP, or a private protocol
+  via a custom request script, to discover crashes and vulnerabilities; includes
+  built-in protocol templates and response monitoring.
 ---
 
 # fuzzowski
 
-- 攻击大类:C46 模糊测试与漏洞挖掘
-- 上游仓库:https://github.com/nccgroup/fuzzowski
-- 上游 License:GPL-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C46 Fuzzing and Vulnerability Discovery
+- Upstream Repository: https://github.com/nccgroup/fuzzowski
+- Upstream License: GPL-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install fuzzowski
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `fuzzowski -f ftp -t 10.0.0.1` | FTP 协议 fuzz |
-| `-f http -t url` | HTTP fuzz |
-| `-f fuzzowski/requests/http_request.py -t target` | 自定义请求脚本 |
-| `-n 10` | 迭代次数 |
+| `fuzzowski -f ftp -t 10.0.0.1` | FTP protocol fuzzing |
+| `-f http -t url` | HTTP fuzzing |
+| `-f fuzzowski/requests/http_request.py -t target` | Custom request script |
+| `-n 10` | Number of iterations |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 私有协议 fuzz 入门
+### Getting started with private protocol fuzzing
 
 ```bash
 fuzzowski -f ftp -t 10.0.0.1 -x
-# Sulley 继任者,响应监控+崩溃自动记录,二进制协议测试
+# A spiritual successor to Sulley, with response monitoring and automatic crash logging for binary protocol testing
 ```
 
-## 注意事项
+## Notes
 
-NCC 出品,Sulley 精神续作,网络协议 fuzz 框架,内置 FTP/HTTP 等协议模板。
+From NCC; the spiritual successor to Sulley and a network protocol fuzzing framework with built-in FTP/HTTP protocol templates.

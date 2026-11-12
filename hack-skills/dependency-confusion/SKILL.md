@@ -2,8 +2,8 @@
 name: dependency-confusion
 description: "Expert dependency-confusion methodology. Signals: supply chain, CI/CD, pipeline attacks."
 zh-signals: "Expert dependency-confusion methodology 信号:供应链,cicd,流水线攻击。"
-when-to-use: 0. QUICK START
-  Supply-chain testing via package-manager dependency confusion: when internal package names resolve to attacker-controlled public registries, leading to malicious install and script execution. Use for npm/pip/gem/Maven/Composer/Docker manifest review and authorized red-team supply-chain exercises.
+when-to-use: >-
+  0. QUICK START Supply-chain testing via package-manager dependency confusion: when internal package names resolve to attacker-controlled public registries, leading to malicious install and script execution. Use for npm/pip/gem/Maven/Composer/Docker manifest review and authorized red-team supply-chain exercises.
 ---
 
 # SKILL: Dependency Confusion — Supply Chain Attack Playbook
@@ -179,4 +179,4 @@ Do manifests reference package names that could be non-unique globally?
 
 - **From `recon-for-sec`**: When doing **supply-chain reconnaissance**, cross-link leaked manifests and internal package identifiers with the checks in **Section 3** and the decision tree in **Section 7** before proposing any publish/PoC steps.
 
-> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`requirements.txt`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。
+> 📎 **Reference Document Notice**: this skill is adapted from an upstream open-source repository; the following reference document is **not distributed with this library**: `requirements.txt`. The key points of the related topics are retained in the corresponding descriptions in this document; if you need the expanded content, grep the library using keywords from the body text or search on your own.

@@ -2,37 +2,38 @@
 name: hakrevdns-reverse
 description: "hakrevdns reverse-resolves IP ranges to domains. Signals: network topology, internet mapping, dictionaries."
 zh-signals: "hakrevdns: IP 段反查域名。信号:网络拓扑,互联网测绘,字典。"
+when-to-use: "Use during network topology mapping to reverse-resolve IP ranges into domains for asset discovery. Requires an IP range or host list and optionally a wordlist."
 ---
 
 # hakrevdns
 
-- 攻击大类:C04 网络拓扑与互联网测绘
-- 上游仓库:https://github.com/hakluke/hakrevdns
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C04 Network Topology and Internet Mapping
+- Upstream Repository: https://github.com/hakluke/hakrevdns
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/hakluke/hakrevdns@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `echo 10.0.0.5 | hakrevdns -d corp.local` | PTR 反查 |
-| `-d domain -w wordlist` | 字典 |
-| `-o out.txt` | 输出 |
+| `echo 10.0.0.5 | hakrevdns -d corp.local` | PTR reverse lookup |
+| `-d domain -w wordlist` | Wordlist |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### IP 段反查域名
+### Reverse-Resolve IP Ranges to Domains
 
 ```bash
 echo {1..254} | sed 's/^/10.0.0./' | hakrevdns
-# 内网/公网 PTR 枚举
+# Enumerate internal/public PTR records
 ```
 
-## 注意事项
+## Notes
 
-hakluke 出品,反向 DNS 枚举。
+By hakluke, a reverse DNS enumeration tool.

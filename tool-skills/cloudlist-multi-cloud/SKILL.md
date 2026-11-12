@@ -2,39 +2,42 @@
 name: cloudlist-multi-cloud
 description: "cloudlist: Enumerates attack surfaces across multiple clouds. Signals: cloud privilege escalation, IAM privilege escalation, AWS asset enumeration, JSON."
 zh-signals: "cloudlist: 多云攻击面枚举。信号:云提权,iam提权,枚举 AWS 资产,JSON。"
+when-to-use: >-
+  Use when enumerating assets across authorized AWS, GCP, Azure or other cloud providers
+  with configured credentials to build an external attack surface inventory.
 ---
 
 # cloudlist
 
-- 攻击大类:C18 云与容器提权
-- 上游仓库:https://github.com/projectdiscovery/cloudlist
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C18 Cloud and Container Privilege Escalation
+- Upstream Repository: https://github.com/projectdiscovery/cloudlist
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/projectdiscovery/cloudlist/cmd/cloudlist@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `cloudlist -provider aws -id test` | 枚举 AWS 资产 |
-| `-p gcp,azure,digitalocean` | 多云 |
-| `-o out.txt` | 输出 |
+| `cloudlist -provider aws -id test` | Enumerate AWS assets |
+| `-p gcp,azure,digitalocean` | Multi-cloud |
+| `-o out.txt` | Output |
 | `-j` | JSON |
-| `-ep aws_ec2,aws_s3` | 只选服务类型 |
+| `-ep aws_ec2,aws_s3` | Select only specific service types |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 多云攻击面枚举
+### Multi-Cloud Attack Surface Enumeration
 
 ```bash
 cloudlist -p aws,gcp,azure -o assets.txt
-# 输出所有实例/IP/桶/DB 端点,直接并入扫描清单
+# Output all instances, IPs, buckets and DB endpoints, then merge them into the scanning list
 ```
 
-## 注意事项
+## Notes
 
-pd 生态多云枚举;凭据配 ~/.config/cloudlist/provider-config.yaml。
+Part of the pd ecosystem for multi-cloud enumeration; configure credentials in ~/.config/cloudlist/provider-config.yaml.

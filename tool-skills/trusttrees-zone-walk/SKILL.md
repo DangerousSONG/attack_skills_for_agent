@@ -2,38 +2,42 @@
 name: trusttrees-zone-walk
 description: "TrustTrees finds DNS delegation-chain takeover vulnerabilities. Signals: AD attack, domain penetration, DNS trust-boundary visualization, Graphviz output, Gandi integration"
 zh-signals: "TrustTrees: DNS 委托链漏洞找接管。信号:ad攻击,域渗透,DNS 信任边界可视化,Graphviz 输出,Gandi 集成。"
+when-to-use: >-
+  Use when assessing DNS delegation chains for dangling NS records that enable
+  subdomain takeover. Produces Graphviz output and can integrate with Gandi
+  and Route53.
 ---
 
 # TrustTrees
 
-- 攻击大类:C30 AD与横向移动
-- 上游仓库:https://github.com/mandatoryprogrammer/TrustTrees
-- 上游 License:Apache-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C30 AD and Lateral Movement
+- Upstream Repository: https://github.com/mandatoryprogrammer/TrustTrees
+- Upstream License: Apache-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/mandatoryprogrammer/TrustTrees && cd TrustTrees && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 trusttrees.py --domain example.com` | DNS 信任边界可视化 |
-| `-o report.dot` | Graphviz 输出 |
-| `--gandi-apikey X` | Gandi 集成 |
-| `--aws-access-key X` | Route53 集成 |
+| `python3 trusttrees.py --domain example.com` | DNS trust boundary visualization |
+| `-o report.dot` | Graphviz output |
+| `--gandi-apikey X` | Gandi integration |
+| `--aws-access-key X` | Route53 integration |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### DNS 委托链漏洞找接管
+### Find takeover vectors in DNS delegation chains
 
 ```bash
 python3 trusttrees.py --domain target.com
-# 发现 dangling NS 委托(子域可注册接管)→ 挂恶意站点钓鱼/偷 Cookie
+# Discover dangling NS delegations (the subdomain can be registered and taken over) → host a malicious site for phishing/cookie theft
 ```
 
-## 注意事项
+## Notes
 
-枚举 DNS 委托链并可视化,专找 dangling delegation 导致的子域接管面。
+Enumerates and visualizes DNS delegation chains, focusing on the subdomain takeover surface caused by dangling delegations.

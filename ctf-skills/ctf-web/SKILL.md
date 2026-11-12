@@ -45,7 +45,7 @@ go install github.com/ffuf/ffuf/v2@latest
   # manual fallback:
   git clone --depth 1 https://github.com/swisskyrepo/PayloadsAllTheThings.git ctf-web/payloads/PayloadsAllTheThings
   ```
-  > PAT is optional and on-demand — not required at load time. The skill works without it (graceful degrade): `pat-reference.md`（未随库分发） provides an offline index with exemplar payloads; bulk wordlists require the clone above.
+  > PAT is optional and on-demand — not required at load time. The skill works without it (graceful degrade): `pat-reference.md` (not distributed with this library) provides an offline index with exemplar payloads; bulk wordlists require the clone above.
 
 **MCP servers (optional):** Playwright MCP ([microsoft/playwright-mcp](https://github.com/microsoft/playwright-mcp)) for browser-dependent challenges (DOM XSS, admin bot, SPA client secrets) and Burp Suite MCP ([PortSwigger/mcp-server](https://github.com/PortSwigger/mcp-server)) for wire-level work (header-level HTTP/1.1+HTTP/2 control, smuggling, blind SSRF/XXE via Collaborator, proxy-history regex mining) — see tools-mcp.md. Two things to do before relying on Burp MCP: start Burp *before* the agent, and turn off the two approval gates in Burp's MCP tab or the first tool call blocks on a modal dialog.
 
@@ -72,8 +72,8 @@ go install github.com/ffuf/ffuf/v2@latest
 - cves.md - CVE-driven techniques you can match against challenge banners, headers, dependency leaks, or version strings
 - field-notes.md - Long-form exploit notes: quick references for SQLi, XSS, LFI, JWT, SSTI, SSRF, command injection, XXE, deserialization, race conditions, auth bypass, and multi-stage chains
 - tools-mcp.md - MCP server integration for web: Playwright MCP (admin-bot DOM XSS reproduction, live DOM/console/network inspection, `browser_network_requests` lists endpoints but only `browser_network_request part="response-body"` returns payloads) and Burp Suite official MCP (27 tools, approval gates that block the agent on a modal dialog, target triple decoupling socket from `Host:` header, `normalizeHttpContent` rewriting CR/LF in the request prelude, map-based HTTP/2 that cannot express duplicate headers, `send_to_intruder` stages only, proxy history truncating items at 5000 chars, Collaborator `payloadId`/`customData` Pro-only); when to use each vs curl and ffuf
-- python-requests.md - Python requests toolkit: session scaffold, Burp-Intruder-like fuzzer (sync + ThreadPoolExecutor + httpx async), payload deploy from pat-reference.md（未随库分发） wordlists, header/param spray, cookie/JWT, proxy
-- pat-reference.md（未随库分发） — PayloadsAllTheThings index: bulk payloads for XSS/SQLi/SSRF/SSTI/LFI/Command Injection/Upload (requires PAT clone, see Prerequisites)
+- python-requests.md - Python requests toolkit: session scaffold, Burp-Intruder-like fuzzer (sync + ThreadPoolExecutor + httpx async), payload deploy from pat-reference.md (not distributed with this library) wordlists, header/param spray, cookie/JWT, proxy
+- pat-reference.md (not distributed with this library) — PayloadsAllTheThings index: bulk payloads for XSS/SQLi/SSRF/SSTI/LFI/Command Injection/Upload (requires PAT clone, see Prerequisites)
 
 ## When to Pivot
 
@@ -93,7 +93,7 @@ go install github.com/ffuf/ffuf/v2@latest
 
 ### Bulk payloads (PayloadsAllTheThings — on-demand)
 
-This skill works without PAT at load time (graceful degrade): `pat-reference.md`（未随库分发） and inline exemplars are available offline; bulk payloads require a PAT clone. After mapping the trust boundary (First-Pass Workflow), check pat-reference.md（未随库分发） for the PAT directory that matches your bug class, then search bulk payloads:
+This skill works without PAT at load time (graceful degrade): `pat-reference.md` (not distributed with this library) and inline exemplars are available offline; bulk payloads require a PAT clone. After mapping the trust boundary (First-Pass Workflow), check pat-reference.md (not distributed with this library) for the PAT directory that matches your bug class, then search bulk payloads:
 
 ```bash
 # PAT payload search (requires PAT clone — see Prerequisites; gracefully skipped if missing)
@@ -189,4 +189,4 @@ Use field-notes.md once you have confirmed the challenge is truly web-heavy and 
 - HTTP: custom headers, archived responses, hidden routes, admin exports
 - Browser: hidden DOM nodes, `data-*` attributes, inline state objects, source maps
 
-> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`auth-and-access-2.md`、`auth-and-access.md`、`auth-infra.md`、`auth-jwt.md`、`client-side-advanced.md`、`client-side.md`、`cves.md`、`field-notes.md`、`flag.txt`、`node-and-prototype.md`、`pat-reference.md`、`python-requests.md`、`robots.txt`、`server-side-2.md`、`server-side-advanced-2.md`、`server-side-advanced-3.md`、`server-side-advanced-4.md`、`server-side-advanced.md`、`server-side-deser.md`、`server-side-exec-2.md`、`server-side-exec.md`、`server-side.md`、`sql-injection.md`、`tools-mcp.md`、`web3.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。
+> 📎 **Reference Document Notice**: this skill is adapted from an upstream open-source repository; the following reference documents are **not distributed with this library**: `auth-and-access-2.md`, `auth-and-access.md`, `auth-infra.md`, `auth-jwt.md`, `client-side-advanced.md`, `client-side.md`, `cves.md`, `field-notes.md`, `flag.txt`, `node-and-prototype.md`, `pat-reference.md`, `python-requests.md`, `robots.txt`, `server-side-2.md`, `server-side-advanced-2.md`, `server-side-advanced-3.md`, `server-side-advanced-4.md`, `server-side-advanced.md`, `server-side-deser.md`, `server-side-exec-2.md`, `server-side-exec.md`, `server-side.md`, `sql-injection.md`, `tools-mcp.md`, `web3.md`. The key points of the related topics are retained in the corresponding descriptions in this document; if you need the expanded content, grep the library using keywords from the body text or search on your own.

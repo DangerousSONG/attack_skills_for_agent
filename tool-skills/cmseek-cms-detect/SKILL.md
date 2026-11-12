@@ -2,39 +2,42 @@
 name: cmseek-cms-detect
 description: "CMSeeK: Identifies CMS fingerprints and detects deep links. Signals: web vulnerability, injection, CMS identification plus vulnerability detection, follow redirects, rescan."
 zh-signals: "CMSeeK: CMS 指纹识别+深链检测。信号:web漏洞,注入,CMS 识别+漏洞检测,跟踪重定向,重扫。"
+when-to-use: >-
+  Use when fingerprinting a web target's CMS and automatically running its
+  built-in vulnerability checks; supports redirect following and batch rescans.
 ---
 
 # CMSeeK
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/Tuhinshubhra/CMSeeK
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/Tuhinshubhra/CMSeeK
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/Tuhinshubhra/CMSeeK && cd CMSeeK && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python cmseek.py -u https://t.com` | CMS 识别+漏洞检测 |
-| `--follow-redirect` | 跟踪重定向 |
-| `-r` | 重扫 |
-| `--batch` | 批量模式 |
-| `--user-agent Mozilla/5.0` | 自定义 UA |
+| `python cmseek.py -u https://t.com` | CMS identification + vulnerability detection |
+| `--follow-redirect` | Follow redirects |
+| `-r` | Rescan |
+| `--batch` | Batch mode |
+| `--user-agent Mozilla/5.0` | Custom user agent |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### CMS 指纹识别+深链检测
+### CMS Fingerprinting + Deep Link Detection
 
 ```bash
 python cmseek.py -u https://t.com
-# 识别 170+ 种 CMS,自动跑对应漏洞检测模块
+# Identifies 170+ CMS types and automatically runs the matching vulnerability detection modules
 ```
 
-## 注意事项
+## Notes
 
-CMS 检测+深度扫描一体,检测到 WordPress/Joomla 等自动转入对应检测流程。
+CMS detection and deep scanning in one tool; when WordPress/Joomla or similar is detected it automatically switches to the matching detection flow.

@@ -2,38 +2,40 @@
 name: mylg-network-cli
 description: "mylg: Swiss-army-knife network diagnostics. Signals: port scanning, nmap, comprehensive network scan, traceroute, DNS query."
 zh-signals: "mylg: 瑞士军刀式网络诊断。信号:端口扫描,nmap,综合网络扫描,路由跟踪,DNS 查询。"
+when-to-use: >-
+  Use when performing quick network diagnostics or discovery, combining ping, traceroute, DNS, WHOIS and port scanning in a single Swiss-army-knife CLI.
 ---
 
 # mylg
 
-- 攻击大类:C42 网络扫描与枚举
-- 上游仓库:https://github.com/mehrdadrad/mylg
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C42 Network Scanning and Enumeration
+- Upstream Repository: https://github.com/mehrdadrad/mylg
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/mehrdadrad/mylg@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `mylg scan 10.0.0.0/24` | 综合网络扫描 |
-| `mylg trace 8.8.8.8` | 路由跟踪 |
-| `mylg dns t.com` | DNS 查询 |
+| `mylg scan 10.0.0.0/24` | Comprehensive network scan |
+| `mylg trace 8.8.8.8` | Traceroute |
+| `mylg dns t.com` | DNS query |
 | `mylg whois t.com` | WHOIS |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 瑞士军刀式网络诊断
+### Swiss-army-knife network diagnostics
 
 ```bash
 mylg scan 10.0.0.0/24 --ping
-# 扫描+ping 一体化
+# All-in-one scan and ping
 ```
 
-## 注意事项
+## Notes
 
-网络工程师工具集: ping/trace/dns/scan/whois 一体。
+Network engineer toolkit combining ping, trace, dns, scan and whois.

@@ -2,39 +2,40 @@
 name: twint-twitter
 description: "twint archives target accounts comprehensively. Signals: email collection, employee information, pull all user tweets, keyword search, time window"
 zh-signals: "twint: 目标账号全量考古。信号:邮箱收集,员工信息,拉取用户全部推文,关键词搜索,时间窗。"
+when-to-use: "Use when conducting Twitter/X OSINT against a target handle or keyword to harvest tweets, emails, phone numbers, and follower relationships for employee and contact discovery. Requires the twint CLI and a valid target handle or search term."
 ---
 
 # twint
 
-- 攻击大类:C03 邮箱与人员OSINT
-- 上游仓库:https://github.com/twintproject/twint
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C03 Email and Personnel OSINT
+- Upstream Repository: https://github.com/twintproject/twint
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip3 install --user --upgrade git+https://github.com/twintproject/twint.git@origin/master#egg=twint
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `twint -u username -o out.csv --csv` | 拉取用户全部推文 |
-| `-s 'keyword'` | 关键词搜索 |
-| `--since 2023-01-01 --until 2023-06-01` | 时间窗 |
-| `-u user --followers` | 粉丝列表 |
-| `--email --phone` | 筛留联系方式的推文 |
+| `twint -u username -o out.csv --csv` | Pull all tweets from a user |
+| `-s 'keyword'` | Keyword search |
+| `--since 2023-01-01 --until 2023-06-01` | Time window |
+| `-u user --followers` | Follower list |
+| `--email --phone` | Filter tweets that leak contact details |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 目标账号全量考古
+### Full Archival of a Target Account
 
 ```bash
 twint -u victim -o tweets.csv --csv
-# 配合 grep -iE 'password|vpn|internal|@corp' 挖敏感自曝信息
+# Pair with grep -iE 'password|vpn|internal|@corp' to mine sensitive self-disclosures
 ```
 
-## 注意事项
+## Notes
 
-无 API key 抓取,接口失效时换 --retweets 或自建 cookie;快照型工具,可用性随 X 平台策略变化。
+Scrapes without an API key; when the interface breaks switch to --retweets or your own cookies; a snapshot-style tool whose availability changes with X platform policy.

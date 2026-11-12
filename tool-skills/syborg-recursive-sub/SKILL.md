@@ -2,35 +2,38 @@
 name: syborg-recursive-sub
 description: "Syborg brute-forces recursively while avoiding wildcards. Signals: asset mapping, subdomain, recursive subdomain enumeration, resolver"
 zh-signals: "Syborg: 递归+通配符规避爆破。信号:资产测绘,子域名,递归子域枚举,resolver。"
+when-to-use: >-
+  Use during subdomain enumeration when you need recursive brute-forcing that
+  avoids wildcard false positives, with custom resolvers.
 ---
 
 # Syborg
 
-- 攻击大类:C01 资产测绘与指纹识别
-- 上游仓库:https://github.com/MustafaTanguner/Syborg
-- 上游 License:NOASSERTION(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C01 Asset Mapping and Fingerprinting
+- Upstream Repository: https://github.com/MustafaTanguner/Syborg
+- Upstream License: NOASSERTION (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/MustafaTanguner/Syborg
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python syborg.py corp.com -w wordlist.txt` | 递归子域枚举 |
+| `python syborg.py corp.com -w wordlist.txt` | Recursive subdomain enumeration |
 | `-r resolvers.txt` | resolver |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 递归+通配符规避爆破
+### Recursive Brute-Force with Wildcard Evasion
 
 ```bash
-python syborg.py corp.com -w all.txt  # 递归爆破 dev.x.corp.com 深层子域
+python syborg.py corp.com -w all.txt  # recursive brute-force of deep subdomains such as dev.x.corp.com
 ```
 
-## 注意事项
+## Notes
 
-递归枚举模式 + Sublist3r 式多源融合。
+Recursive enumeration mode plus Sublist3r-style multi-source aggregation.

@@ -2,37 +2,40 @@
 name: s3enum-bucket-scan
 description: "s3enum: Discovers misconfigured public S3 buckets. Signals: attack surface, cloud assets, S3 bucket enumeration, common suffixes, concurrency."
 zh-signals: "s3enum: S3 桶发现(错配公开)。信号:攻击面,云资产,S3 bucket 枚举,常用后缀,并发。"
+when-to-use: >-
+  Use when hunting for misconfigured public S3 buckets by enumerating bucket names
+  from wordlists and common suffixes for a target organization.
 ---
 
 # s3enum
 
-- 攻击大类:C05 云资产发现
-- 上游仓库:https://github.com/koenrh/s3enum
-- 上游 License:ISC(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C05 Cloud Asset Discovery
+- Upstream Repository: https://github.com/koenrh/s3enum
+- Upstream License: ISC (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/koenrh/s3enum@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `s3enum -wordlist ~/wordlists/buckets.txt -suffixes '' corp` | S3 bucket 枚举 |
-| `-suffixes '-dev,-backup,-logs'` | 常用后缀 |
-| `-threads 10` | 并发 |
+| `s3enum -wordlist ~/wordlists/buckets.txt -suffixes '' corp` | S3 bucket enumeration |
+| `-suffixes '-dev,-backup,-logs'` | Common suffixes |
+| `-threads 10` | Concurrency |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### S3 桶发现(错配公开)
+### S3 Bucket Discovery (Misconfigured Public Access)
 
 ```bash
 s3enum -wordlist buckets.txt corp
-# 命中后 aws s3 ls s3://bucket 看是否有公开数据
+# On a hit, run aws s3 ls s3://bucket to check for public data
 ```
 
-## 注意事项
+## Notes
 
-DNS 排列组合枚举 S3 桶名,找到疑似目标后手动验证公开访问/写权限。
+Enumerates S3 bucket names through DNS permutations, then manually verify public access or write permissions on suspected targets.

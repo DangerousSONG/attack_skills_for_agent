@@ -2,37 +2,40 @@
 name: appmon-ios-android
 description: "appmon: monitors mobile app behavior. Signals: mobile, android attack, hook script directory, packet capture/data output, string monitoring"
 zh-signals: "appmon: 移动 App 行为监控。信号:移动端,android攻击,hook 脚本目录,抓包/数据输出,字符串监控。"
+when-to-use: >-
+  Use when you need runtime introspection of an Android or iOS app to monitor
+  sensitive behavior such as SQLite, Keychain, files and network traffic.
 ---
 
 # appmon
 
-- 攻击大类:C43 移动平台攻击
-- 上游仓库:https://github.com/dpnishant/appmon
-- 上游 License:Apache-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C43 Mobile Platform Attacks
+- Upstream Repository: https://github.com/dpnishant/appmon
+- Upstream License: Apache-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/dpnishant/appmon && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python appmon.py -p android -a com.corp.app` | 附加 Android App 监控 |
-| `-s scripts/` | hook 脚本目录 |
-| `-o out/` | 抓包/数据输出 |
-| `--string` | 字符串监控 |
+| `python appmon.py -p android -a com.corp.app` | Attach to an Android app for monitoring |
+| `-s scripts/` | Hook script directory |
+| `-o out/` | Packet capture/data output |
+| `--string` | String monitoring |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 移动 App 行为监控
+### Mobile app behavior monitoring
 
 ```bash
-python appmon.py -p ios -a com.corp.app  # 抓 SQLite/NSUserDefaults/Keychain/网络
+python appmon.py -p ios -a com.corp.app  # Capture SQLite/NSUserDefaults/Keychain/network
 ```
 
-## 注意事项
+## Notes
 
-运行时监控 App 的敏感行为(数据库/文件/网络/密钥),输出结构化报告。
+Monitors sensitive app behavior at runtime (database/files/network/keys) and outputs a structured report.

@@ -2,38 +2,41 @@
 name: dislocker-bitlocker
 description: "dislocker: offline BitLocker decryption. Signals: password cracking, hash cracking, recovery password volume decryption, user password decryption, BEK key file decryption."
 zh-signals: "dislocker: 离线 BitLocker 解密。信号:密码破解,哈希破解,恢复密码解密卷,用户密码解密,BEK 密钥文件解密。"
+when-to-use: >-
+  Use when performing offline forensics on a BitLocker-encrypted volume and you have a recovery
+  password, user password, BEK file, or clear key to mount it.
 ---
 
 # dislocker
 
-- 攻击大类:C25 口令与哈希破解
-- 上游仓库:https://github.com/Aorimn/dislocker
-- 上游 License:GPL-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C25 Password and Hash Cracking
+- Upstream Repository: https://github.com/Aorimn/dislocker
+- Upstream License: GPL-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
-apt install dislocker 或 cmake 编译
+apt install dislocker or build with cmake
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `dislocker -V /dev/sda3 -p123456-789012-... -- /mnt/bitlocker` | 恢复密码解密卷 |
-| `dislocker -V /dev/sda3 -u -- /mnt/bitlocker` | 用户密码解密 |
-| `dislocker -V /dev/sda3 -k bekfile -- /mnt/bitlocker` | BEK 密钥文件解密 |
-| `-f /mnt/img/dislocker-file` | 输出解密后镜像文件 |
+| `dislocker -V /dev/sda3 -p123456-789012-... -- /mnt/bitlocker` | Decrypt the volume with a recovery password |
+| `dislocker -V /dev/sda3 -u -- /mnt/bitlocker` | Decrypt with a user password |
+| `dislocker -V /dev/sda3 -k bekfile -- /mnt/bitlocker` | Decrypt with a BEK key file |
+| `-f /mnt/img/dislocker-file` | Output the decrypted image file |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 离线 BitLocker 解密
+### Offline BitLocker Decryption
 
 ```bash
 dislocker -V /dev/sdb1 -p048401-529119-389719 -- /mnt/bl && ls /mnt/bl
-# 取证场景: 拿到密码或 bek 文件后挂载明文 NTFS
+# Forensics scenario: mount the plaintext NTFS once you have the password or BEK file
 ```
 
-## 注意事项
+## Notes
 
-Linux 下解密 BitLocker 卷,支持恢复密码/用户密码/BEK/清晰密钥四种解锁方式。
+Decrypts BitLocker volumes on Linux, supporting four unlocking methods: recovery password, user password, BEK and clear key.

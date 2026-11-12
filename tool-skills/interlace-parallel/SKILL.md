@@ -2,37 +2,40 @@
 name: interlace-parallel
 description: "Interlace parallelizes penetration testing commands. Signals: red team, methodology, parallel command execution, placeholders, port list."
 zh-signals: "Interlace: 渗透命令并行化。信号:红队,方法论,并行命令执行,占位符,端口列表。"
+when-to-use: >-
+  Use when you need to parallelize an existing command across many targets or ports, turning
+  single-threaded recon or scanning steps into concurrent jobs.
 ---
 
 # Interlace
 
-- 攻击大类:C50 红队方法论与自动化
-- 上游仓库:https://github.com/codingo/Interlace
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C50 Red Team Methodology and Automation
+- Upstream Repository: https://github.com/codingo/Interlace
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install interlace
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `interlace -tL targets.txt -threads 5 -c 'nmap {{target}}'` | 并行命令执行 |
-| `-c 'cmd _target_ _port_'` | 占位符 |
-| `-pL ports.txt` | 端口列表 |
+| `interlace -tL targets.txt -threads 5 -c 'nmap {{target}}'` | Parallel command execution |
+| `-c 'cmd _target_ _port_'` | Placeholders |
+| `-pL ports.txt` | Port list |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 渗透命令并行化
+### Parallelizing pentest commands
 
 ```bash
 interlace -tL ips.txt -threads 20 -c 'nmap -sV {{target}} -oN scans/_target_.nmap'
-# 单命令变并行任务
+# Turn a single command into parallel jobs
 ```
 
-## 注意事项
+## Notes
 
-渗透命令并行调度器,codingo 出品。
+Parallel command scheduler for pentesting, by codingo.

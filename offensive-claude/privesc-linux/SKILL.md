@@ -18,11 +18,11 @@ feeds_into: [red-team-ops, advanced-redteam]
 inputs: [shell_access, os_fingerprint]
 outputs: [elevated_access, finding_record]
 references:
-  - references/enumeration-tooling.md（未随库分发）
-  - references/suid-sudo-capabilities.md（未随库分发）
-  - references/kernel-exploits.md（未随库分发）
-  - references/service-misconfig-lpe.md（未随库分发）
-  - references/container-namespace-escape.md（未随库分发）
+  - references/enumeration-tooling.md (not distributed with this library)
+  - references/suid-sudo-capabilities.md (not distributed with this library)
+  - references/kernel-exploits.md (not distributed with this library)
+  - references/service-misconfig-lpe.md (not distributed with this library)
+  - references/container-namespace-escape.md (not distributed with this library)
 scripts:
   - scripts/linpriv_enum.py
   - scripts/cap_suid_hunter.sh
@@ -45,18 +45,18 @@ scripts:
 
 | Technique | ATT&CK | CWE | Reference | Script |
 |-----------|--------|-----|-----------|--------|
-| Automated + manual enumeration (LinPEAS/pspy/LES2) | T1082, T1057 | CWE-200 | references/enumeration-tooling.md（未随库分发） | scripts/linpriv_enum.py |
-| Detection-aware / low-noise enumeration | T1082 | CWE-200 | references/enumeration-tooling.md（未随库分发） | scripts/linpriv_enum.py |
-| SUID/SGID binary abuse (GTFOBins) | T1548.001 | CWE-269 | references/suid-sudo-capabilities.md（未随库分发） | scripts/cap_suid_hunter.sh |
-| sudo misconfig + GTFOBins escape | T1548.003 | CWE-269 | references/suid-sudo-capabilities.md（未随库分发） | scripts/cap_suid_hunter.sh |
-| sudo host option LPE (CVE-2025-32462) | T1548.003 | CWE-863 | references/suid-sudo-capabilities.md（未随库分发） | scripts/sudo_cve_2025_check.sh |
-| sudo chroot/NSS LPE (CVE-2025-32463) | T1548.003 | CWE-829 | references/suid-sudo-capabilities.md（未随库分发） | scripts/sudo_cve_2025_check.sh |
-| Linux capabilities abuse (setuid/dac_read/sys_admin) | T1548 | CWE-250 | references/suid-sudo-capabilities.md（未随库分发） | scripts/cap_suid_hunter.sh |
-| LD_PRELOAD / LD_LIBRARY_PATH sudo hijack | T1574.006 | CWE-426 | references/suid-sudo-capabilities.md（未随库分发） | scripts/cap_suid_hunter.sh |
-| nf_tables double-free LPE (CVE-2024-1086) | T1068 | CWE-416 | references/kernel-exploits.md（未随库分发） | scripts/kernel_exploit_suggester.py |
-| io_uring memory-sharing LPE (CVE-2024-0582/2025-21836) | T1068 | CWE-416 | references/kernel-exploits.md（未随库分发） | scripts/kernel_exploit_suggester.py |
-| Dirty Pipe page-cache overwrite (CVE-2022-0847) | T1068 | CWE-787 | references/kernel-exploits.md（未随库分发） | scripts/kernel_exploit_suggester.py |
-| GameOver(lay) OverlayFS (CVE-2023-2640/32629) | T1068 | CWE-269 | references/kernel-exploits.md（未随库分发） | scripts/kernel_exploit_suggester.py |
+| Automated + manual enumeration (LinPEAS/pspy/LES2) | T1082, T1057 | CWE-200 | references/enumeration-tooling.md (not distributed with this library) | scripts/linpriv_enum.py |
+| Detection-aware / low-noise enumeration | T1082 | CWE-200 | references/enumeration-tooling.md (not distributed with this library) | scripts/linpriv_enum.py |
+| SUID/SGID binary abuse (GTFOBins) | T1548.001 | CWE-269 | references/suid-sudo-capabilities.md (not distributed with this library) | scripts/cap_suid_hunter.sh |
+| sudo misconfig + GTFOBins escape | T1548.003 | CWE-269 | references/suid-sudo-capabilities.md (not distributed with this library) | scripts/cap_suid_hunter.sh |
+| sudo host option LPE (CVE-2025-32462) | T1548.003 | CWE-863 | references/suid-sudo-capabilities.md (not distributed with this library) | scripts/sudo_cve_2025_check.sh |
+| sudo chroot/NSS LPE (CVE-2025-32463) | T1548.003 | CWE-829 | references/suid-sudo-capabilities.md (not distributed with this library) | scripts/sudo_cve_2025_check.sh |
+| Linux capabilities abuse (setuid/dac_read/sys_admin) | T1548 | CWE-250 | references/suid-sudo-capabilities.md (not distributed with this library) | scripts/cap_suid_hunter.sh |
+| LD_PRELOAD / LD_LIBRARY_PATH sudo hijack | T1574.006 | CWE-426 | references/suid-sudo-capabilities.md (not distributed with this library) | scripts/cap_suid_hunter.sh |
+| nf_tables double-free LPE (CVE-2024-1086) | T1068 | CWE-416 | references/kernel-exploits.md (not distributed with this library) | scripts/kernel_exploit_suggester.py |
+| io_uring memory-sharing LPE (CVE-2024-0582/2025-21836) | T1068 | CWE-416 | references/kernel-exploits.md (not distributed with this library) | scripts/kernel_exploit_suggester.py |
+| Dirty Pipe page-cache overwrite (CVE-2022-0847) | T1068 | CWE-787 | references/kernel-exploits.md (not distributed with this library) | scripts/kernel_exploit_suggester.py |
+| GameOver(lay) OverlayFS (CVE-2023-2640/32629) | T1068 | CWE-269 | references/kernel-exploits.md (not distributed with this library) | scripts/kernel_exploit_suggester.py |
 | udisks/libblockdev loop-mount LPE (CVE-2025-6019) | T1068 | CWE-250 | references/service-misconfig-lpe.md | scripts/linpriv_enum.py |
 | PAM allow_active bypass (CVE-2025-6018) | T1068 | CWE-863 | references/service-misconfig-lpe.md | scripts/linpriv_enum.py |
 | glibc ld.so Looney Tunables (CVE-2023-4911) | T1068 | CWE-787 | references/service-misconfig-lpe.md | scripts/kernel_exploit_suggester.py |
@@ -115,10 +115,10 @@ Detailed Sigma rules, auditd rule snippets and IOC lists live inside each refere
 
 ## Deep Dives
 
-- `enumeration-tooling.md`（未随库分发） — LinPEAS/pspy/LES2/unix-privesc-check, the `linpriv_enum.py` methodology, quick-win checklists, and low-noise enumeration for EDR-monitored hosts.
-- `suid-sudo-capabilities.md`（未随库分发） — SUID/SGID + GTFOBins, sudo misconfig escapes, sudo CVE-2025-32462 (host) and CVE-2025-32463 (chroot/NSS), Linux capabilities (`cap_setuid`/`cap_dac_read_search`/`cap_sys_admin`), and LD_PRELOAD/LD_LIBRARY_PATH sudo hijacking.
-- `kernel-exploits.md`（未随库分发） — nf_tables CVE-2024-1086 (and 2026 nftables UAFs), io_uring CVE-2024-0582 / CVE-2025-21836, Dirty Pipe CVE-2022-0847, GameOver(lay) CVE-2023-2640, plus a kernel-CVE selection methodology and ROP/`commit_creds` primer.
-- `service-misconfig-lpe.md`（未随库分发） — udisks/libblockdev CVE-2025-6018/6019 chain, Looney Tunables CVE-2023-4911, PwnKit CVE-2021-4034, polkit/D-Bus abuse, cron/systemd/PATH hijacking, writable `/etc/passwd`, and NFS `no_root_squash`.
-- `container-namespace-escape.md`（未随库分发） — runc Leaky Vessels CVE-2024-21626, Docker socket / privileged-container / `--pid=host` / `CAP_SYS_PTRACE` escapes, cgroup-v1 `release_agent`, user namespaces, and Kubernetes service-account-token → pod escape.
+- `enumeration-tooling.md` (not distributed with this library) — LinPEAS/pspy/LES2/unix-privesc-check, the `linpriv_enum.py` methodology, quick-win checklists, and low-noise enumeration for EDR-monitored hosts.
+- `suid-sudo-capabilities.md` (not distributed with this library) — SUID/SGID + GTFOBins, sudo misconfig escapes, sudo CVE-2025-32462 (host) and CVE-2025-32463 (chroot/NSS), Linux capabilities (`cap_setuid`/`cap_dac_read_search`/`cap_sys_admin`), and LD_PRELOAD/LD_LIBRARY_PATH sudo hijacking.
+- `kernel-exploits.md` (not distributed with this library) — nf_tables CVE-2024-1086 (and 2026 nftables UAFs), io_uring CVE-2024-0582 / CVE-2025-21836, Dirty Pipe CVE-2022-0847, GameOver(lay) CVE-2023-2640, plus a kernel-CVE selection methodology and ROP/`commit_creds` primer.
+- `service-misconfig-lpe.md` (not distributed with this library) — udisks/libblockdev CVE-2025-6018/6019 chain, Looney Tunables CVE-2023-4911, PwnKit CVE-2021-4034, polkit/D-Bus abuse, cron/systemd/PATH hijacking, writable `/etc/passwd`, and NFS `no_root_squash`.
+- `container-namespace-escape.md` (not distributed with this library) — runc Leaky Vessels CVE-2024-21626, Docker socket / privileged-container / `--pid=host` / `CAP_SYS_PTRACE` escapes, cgroup-v1 `release_agent`, user namespaces, and Kubernetes service-account-token → pod escape.
 
-> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`container-namespace-escape.md`、`enumeration-tooling.md`、`kernel-exploits.md`、`service-misconfig-lpe.md`、`suid-sudo-capabilities.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。
+> 📎 **Reference Document Notice**: this skill is adapted from an upstream open-source repository; the following reference documents are **not distributed with this library**: `container-namespace-escape.md`, `enumeration-tooling.md`, `kernel-exploits.md`, `service-misconfig-lpe.md`, `suid-sudo-capabilities.md`. The key points of the related topics are retained in the corresponding descriptions in this document; if you need the expanded content, grep the library using keywords from the body text or search on your own.

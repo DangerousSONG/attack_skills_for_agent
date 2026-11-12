@@ -2,37 +2,40 @@
 name: second-order-subdomain-takeover
 description: "Second-order: batch subdomain takeover scanning. Signals: web vulnerability, injection, subdomain takeover detection, specified cloud service."
 zh-signals: "second-order: 子域接管批量扫描。信号:web漏洞,注入,子域接管检测,指定云服务。"
+when-to-use: >-
+  Use when checking a list of subdomains for dangling DNS records and subdomain
+  takeover across supported cloud providers.
 ---
 
 # second-order
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/mhmdiaa/second-order
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/mhmdiaa/second-order
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/mhmdiaa/second-order@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `second-order -t https://t.com -w wordlist.txt` | 子域接管检测 |
-| `-t url -c amazon,azure` | 指定云服务 |
-| `-o out.txt` | 输出 |
+| `second-order -t https://t.com -w wordlist.txt` | Subdomain takeover detection |
+| `-t url -c amazon,azure` | Specified cloud services |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 子域接管批量扫描
+### Batch Subdomain Takeover Scanning
 
 ```bash
 second-order -t subs.txt -w providers.txt
-#  dangling CNAME 检测 20+ 云服务商
+#  Dangling CNAME detection across 20+ cloud providers
 ```
 
-## 注意事项
+## Notes
 
-子域接管(subdomain takeover)扫描,检测悬空的 DNS 记录。
+Scans for subdomain takeover, detecting dangling DNS records.

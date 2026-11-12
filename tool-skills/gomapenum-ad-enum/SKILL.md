@@ -2,38 +2,39 @@
 name: gomapenum-ad-enum
 description: "GoMapEnum enumerates Active Directory across all protocols. Signals: AD attack, domain penetration, LDAP enumeration, ticket attacks, O365 enumeration."
 zh-signals: "GoMapEnum: AD 全协议枚举。信号:ad攻击,域渗透,LDAP 枚举,票据攻击,O365 枚举。"
+when-to-use: "Use during Active Directory penetration testing to enumerate users and services across multiple protocols including LDAP, ticket attacks, and O365. Requires target domain credentials or a user list."
 ---
 
 # GoMapEnum
 
-- 攻击大类:C30 AD域渗透与域控攻击
-- 上游仓库:https://github.com/nodauf/GoMapEnum
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C30 AD Domain Penetration and Domain Controller Attacks
+- Upstream Repository: https://github.com/nodauf/GoMapEnum
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/nodauf/GoMapEnum@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `goMapEnum ldap -u svc -p pass -d corp.local -t 10.0.0.1` | LDAP 枚举 |
-| `kerberos -u u.txt -p p.txt -d corp.local` | 票据攻击 |
-| `oauth -t user@corp.com -p pass` | O365 枚举 |
-| `-o out.txt` | 输出 |
+| `goMapEnum ldap -u svc -p pass -d corp.local -t 10.0.0.1` | LDAP enumeration |
+| `kerberos -u u.txt -p p.txt -d corp.local` | Ticket attacks |
+| `oauth -t user@corp.com -p pass` | O365 enumeration |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### AD 全协议枚举
+### AD enumeration across all protocols
 
 ```bash
 goMapEnum ldap -u svc -p pass -d corp.local
-# LDAP/Kerberos/OAuth 三合一
+# LDAP, Kerberos and OAuth in one tool
 ```
 
-## 注意事项
+## Notes
 
-Go AD 枚举框架,多协议。
+Go AD enumeration framework, multi-protocol.

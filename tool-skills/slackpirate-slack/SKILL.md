@@ -2,38 +2,39 @@
 name: slackpirate-slack
 description: "SlackPirate: Slack workspace pentesting. Signals: email collection, employee info, Slack data harvesting, cookie mode, full export."
 zh-signals: "SlackPirate: Slack 工作区渗透。信号:邮箱收集,员工信息,Slack 数据收割,Cookie 模式,全导出。"
+when-to-use: "Use when performing Slack workspace reconnaissance to harvest messages, files, tokens, and sensitive data, including full export. Requires a workspace cookie or token."
 ---
 
 # SlackPirate
 
-- 攻击大类:C03 邮箱与人员OSINT
-- 上游仓库:https://github.com/emtunc/SlackPirate
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C03 Email and Personnel OSINT
+- Upstream Repository: https://github.com/emtunc/SlackPirate
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/emtunc/SlackPirate && cd SlackPirate && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 SlackPirate.py --token xoxb-xxx` | Slack 数据收割 |
-| `--cookie 'd=xxx'` | Cookie 模式 |
-| `--dump` | 全导出 |
-| `-o out/` | 输出 |
+| `python3 SlackPirate.py --token xoxb-xxx` | Slack data harvesting |
+| `--cookie 'd=xxx'` | Cookie mode |
+| `--dump` | Full export |
+| `-o out/` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Slack 工作区渗透
+### Slack workspace pentest
 
 ```bash
 python3 SlackPirate.py --token xoxb-leaked
-# 搜密钥/文件/用户/频道
+# Search for keys, files, users and channels
 ```
 
-## 注意事项
+## Notes
 
-Slack 信息收集: 消息/文件/令牌/敏感数据搜索。
+Slack information gathering: search messages, files, tokens and sensitive data.

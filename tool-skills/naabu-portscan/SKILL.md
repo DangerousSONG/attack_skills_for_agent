@@ -2,40 +2,41 @@
 name: naabu-portscan
 description: "naabu: Attack surface pipeline integrated with nmap. Signals: port scanning, nmap, single target, batch, top 100 ports."
 zh-signals: "naabu: 与 nmap 联动的攻击面流水线。信号:端口扫描,nmap,单目标,批量,top 100 端口。"
+when-to-use: "Use when performing fast port scanning of single or multiple targets as part of an attack surface pipeline, typically chained into nmap. Requires target hosts and a port range or top-port selection."
 ---
 
 # naabu
 
-- 攻击大类:C42 网络扫描与枚举
-- 上游仓库:https://github.com/projectdiscovery/naabu
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C42 Network Scanning and Enumeration
+- Upstream Repository: https://github.com/projectdiscovery/naabu
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/projectdiscovery/naabu/v2/cmd/naabu@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `-host target.com` | 单目标 |
-| `-list hosts.txt` | 批量 |
-| `-top-ports 100` | top 100 端口 |
-| `-p -` | 全端口 |
-| `-rate 3000` | 速率 |
-| `-nmap-cli 'nmap -sV -oX nmap-output.xml'` | 发现端口后自动联动 nmap |
+| `-host target.com` | Single target |
+| `-list hosts.txt` | Batch |
+| `-top-ports 100` | Top 100 ports |
+| `-p -` | All ports |
+| `-rate 3000` | Rate |
+| `-nmap-cli 'nmap -sV -oX nmap-output.xml'` | Automatically hand off to nmap once ports are found |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 与 nmap 联动的攻击面流水线
+### Attack Surface Pipeline Integrated with nmap
 
 ```bash
 naabu -list subdomains.txt -top-ports 1000 -rate 5000 -nmap-cli 'nmap -sV -sC -oX nmap.xml'
-# naabu 快速筛存活端口,nmap 接管服务指纹与脚本扫描
+# naabu quickly filters live ports, nmap takes over service fingerprinting and script scanning
 ```
 
-## 注意事项
+## Notes
 
-pd 生态标准件;-nmap-cli 是灵魂,把快扫和深扫串成一条命令。
+A standard component of the ProjectDiscovery ecosystem; -nmap-cli is the key feature that chains fast scanning and deep scanning into a single command.

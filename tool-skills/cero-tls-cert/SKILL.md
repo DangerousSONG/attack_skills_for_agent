@@ -2,37 +2,39 @@
 name: cero-tls-cert
 description: "cero: Extracts subdomains from certificates in bulk. Signals: cryptographic attack, encryption cracking, bulk TLS certificate fetching, field selection."
 zh-signals: "cero: 证书批量提取子域。信号:密码学攻击,加密破解,批量 TLS 证书抓取,字段选择。"
+when-to-use: >-
+  Use when you need to extract subdomains or certificate metadata in bulk by fetching TLS certificates across an IP range or CIDR for asset discovery.
 ---
 
 # cero
 
-- 攻击大类:C49 密码学攻击
-- 上游仓库:https://github.com/glebarez/cero
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C49 Cryptographic Attacks
+- Upstream Repository: https://github.com/glebarez/cero
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/glebarez/cero@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `cero 10.0.0.0/24 443` | 批量 TLS 证书抓取 |
-| `-o out.txt` | 输出 |
-| `-s CN,SAN` | 字段选择 |
+| `cero 10.0.0.0/24 443` | Bulk TLS certificate fetching |
+| `-o out.txt` | Output |
+| `-s CN,SAN` | Field selection |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 证书批量提取子域
+### Bulk Subdomain Extraction from Certificates
 
 ```bash
 cero 10.0.0.0/8 443 | tee certs.txt
-# 全 TLS 端点证书 CN/SAN 提取
+# Extract CN/SAN from certificates across all TLS endpoints
 ```
 
-## 注意事项
+## Notes
 
-Rust TLS 证书批量抓取,段内子域发现。
+A Rust tool for bulk fetching TLS certificates and discovering subdomains within a range.

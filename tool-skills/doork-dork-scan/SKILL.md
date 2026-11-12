@@ -2,37 +2,41 @@
 name: doork-dork-scan
 description: "doork: automated target dorking. Signals: web vulnerability, injection, custom dork."
 zh-signals: "doork: 目标 dork 自动化。信号:web漏洞,注入,自定义 dork。"
+when-to-use: >-
+  Use when you need to automate Google dorking against a target domain to
+  surface leaked files, admin panels, and exposed configurations. Accepts
+  custom dork expressions and writes results to an output file.
 ---
 
 # doork
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/AeonDave/doork
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/AeonDave/doork
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/AeonDave/doork && cd doork
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python doork.py -t corp.com` | Google dork 目标扫描 |
-| `-t target -g 'ext:sql'` | 自定义 dork |
-| `-o out.txt` | 输出 |
+| `python doork.py -t corp.com` | Google dork target scan |
+| `-t target -g 'ext:sql'` | Custom dork |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 目标 dork 自动化
+### Automated Target Dorking
 
 ```bash
 python doork.py -t corp.com
-# 泄露文件/后台/配置自动 dork
+# Automatically dork for leaked files/admin panels/configurations
 ```
 
-## 注意事项
+## Notes
 
-Google dork 自动化,预置敏感文件类型查询。
+Google dork automation with preset queries for sensitive file types.

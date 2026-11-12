@@ -2,36 +2,37 @@
 name: ppmap-proto-pollution
 description: "Prototype pollution verification. Signals: web vulnerability, injection, prototype pollution detection, OOB callback."
 zh-signals: "ppmap: 原型链污染验证。信号:web漏洞,注入,原型链污染检测,带 OOB 回调。"
+when-to-use: "Use to detect and verify client-side prototype pollution, optionally with an OOB callback to confirm exploitability."
 ---
 
 # ppmap
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/kleiton0x00/ppmap
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/kleiton0x00/ppmap
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/kleiton0x00/ppmap && cd ppmap && go build
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `./ppmap 'https://t.com/?__proto__[test]=test'` | 原型链污染检测 |
-| `-c 'http://10.0.0.5:4444'` | 带 OOB 回调 |
+| `./ppmap 'https://t.com/?__proto__[test]=test'` | Prototype pollution detection |
+| `-c 'http://10.0.0.5:4444'` | With OOB callback |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 原型链污染验证
+### Prototype Pollution Verification
 
 ```bash
 ./ppmap 'https://t.com/search?q=x'
-# 自动遍历常见 gadget
+# Automatically traverses common gadgets
 ```
 
-## 注意事项
+## Notes
 
-Go 编写的原型链污染扫描,检测 gadget 自动验证。
+A prototype pollution scanner written in Go; detects gadgets and verifies them automatically.

@@ -2,37 +2,40 @@
 name: mitmap-ap-mitm
 description: "mitmAP: Malicious hotspot phishing. Signals: man-in-the-middle, MITM, phishing hotspot+MITM, SSLStrip."
 zh-signals: "mitmAP: 恶意热点钓鱼。信号:中间人,mitm,钓鱼热点+中间人,SSLStrip。"
+when-to-use: >-
+  Use when performing an authorized wireless MITM by standing up a rogue hotspot
+  with a captive portal to harvest credentials.
 ---
 
 # mitmAP
 
-- 攻击大类:C40 嗅探与中间人攻击
-- 上游仓库:https://github.com/xdavidhu/mitmAP
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C40 Sniffing and Man-in-the-Middle Attacks
+- Upstream Repository: https://github.com/xdavidhu/mitmAP
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/xdavidhu/mitmAP && cd mitmAP
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 mitmAP.py -i wlan0 -t eth0` | 钓鱼热点+中间人 |
+| `python3 mitmAP.py -i wlan0 -t eth0` | Phishing hotspot + MITM |
 | `-i in -t out -p` | SSLStrip |
 | `-s` | SSLStrip2 |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 恶意热点钓鱼
+### Malicious Hotspot Phishing
 
 ```bash
 python3 mitmAP.py -i wlan0 -t eth0
-# 强制门户+凭据收割
+# forced captive portal + credential harvesting
 ```
 
-## 注意事项
+## Notes
 
-恶意 WiFi 热点中间人工具(需无线网卡)。
+Malicious WiFi hotspot man-in-the-middle tool (requires a wireless adapter).

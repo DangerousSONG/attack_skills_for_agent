@@ -2,37 +2,38 @@
 name: hetty-mitm-http-toolkit
 description: "hetty intercepts and modifies HTTPS traffic for testing. Signals: MITM, mitm, upstream proxy chaining, domain filtering, noise reduction."
 zh-signals: "hetty: HTTPS 流量拦截改包测试。信号:中间人,mitm,链上游代理,限定拦截域名避免噪音。"
+when-to-use: "Use when you need a lightweight Burp Suite alternative to intercept, inspect, replay, and modify HTTPS traffic during manual web testing. Requires installing the hetty CA certificate on the client and configuring proxy scope to limit noise."
 ---
 
 # hetty
 
-- 攻击大类:C40 嗅探与中间人攻击
-- 上游仓库:https://github.com/dstotijn/hetty
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C40 Sniffing and Man-in-the-Middle Attacks
+- Upstream Repository: https://github.com/dstotijn/hetty
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
-go install github.com/dstotijn/hetty/cmd/hetty@latest 或下 release 二进制
+go install github.com/dstotijn/hetty/cmd/hetty@latest or download the release binary
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `hetty --cert-store ./certs` | 启动 MITM 代理(:8080 + 管理界面:31337) |
-| `--proxy http://upstream:3128` | 链上游代理 |
-| `scope 配置` | 限定拦截域名避免噪音 |
+| `hetty --cert-store ./certs` | Start the MITM proxy (:8080 + admin UI :31337) |
+| `--proxy http://upstream:3128` | Chain an upstream proxy |
+| `scope configuration` | Restrict intercepted domains to reduce noise |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### HTTPS 流量拦截改包测试
+### HTTPS traffic interception and modification for testing
 
 ```bash
 hetty --cert-store ./certs
-# 浏览器/手机装 hetty CA 证书后代理到 :8080,在 Web 界面拦截重放改包
+# Install the hetty CA certificate on the browser/phone, proxy to :8080, then intercept, replay and modify in the web UI
 ```
 
-## 注意事项
+## Notes
 
-Go 版 Burp 替代品,资源占用低,适合长期挂代理;证书存 ./certs 可复用。
+Go-based Burp alternative with low resource usage, suitable for running a long-lived proxy; certificates stored in ./certs can be reused.

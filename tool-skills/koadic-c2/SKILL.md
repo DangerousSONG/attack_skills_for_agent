@@ -2,38 +2,39 @@
 name: koadic-c2
 description: "Koadic provides a JScript/VBScript C2 framework. Signals: C2, command and control, C2 console, payload selection, listener."
 zh-signals: "Koadic: JScript/VBScript C2。信号:c2,命令控制,C2 控制台,载荷选择,监听。"
+when-to-use: "Use Koadic when conducting an authorized Windows post-exploitation engagement that requires a JScript/VBScript fileless C2 framework with staged implants and listeners."
 ---
 
 # Koadic
 
-- 攻击大类:C35 C2框架与远控
-- 上游仓库:https://github.com/zerosum0x0/koadic
-- 上游 License:Apache-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C35 C2 Frameworks and Remote Control
+- Upstream Repository: https://github.com/zerosum0x0/koadic
+- Upstream License: Apache-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/zerosum0x0/koadic && cd koadic && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 koadic` | C2 控制台 |
-| `use stager/js/implant` | 载荷选择 |
-| `set SRVHOST 10.0.0.5` | 监听 |
-| `run` | 执行 |
+| `python3 koadic` | C2 console |
+| `use stager/js/implant` | Payload selection |
+| `set SRVHOST 10.0.0.5` | Listener |
+| `run` | Execute |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
 ### JScript/VBScript C2
 
 ```bash
 python3 koadic && use stager/js/wmic
-# COM 无文件攻击
+# COM-based fileless attack
 ```
 
-## 注意事项
+## Notes
 
-zerosum0x0 出品,Windows 无文件 C2。
+By zerosum0x0, a Windows fileless C2.

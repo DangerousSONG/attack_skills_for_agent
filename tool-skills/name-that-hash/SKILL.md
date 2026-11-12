@@ -2,38 +2,41 @@
 name: name-that-hash
 description: "name-that-hash: Identify unknown hash types. Signals: password cracking, hash cracking, identify hash, batch files, silent."
 zh-signals: "name-that-hash: 未知哈希类型识别。信号:密码破解,哈希破解,识别哈希,批量文件,静默。"
+when-to-use: >-
+  Use when you have unknown or dumped password hashes and need to identify their algorithm
+  before selecting the correct hashcat or John mode.
 ---
 
 # name-that-hash
 
-- 攻击大类:C25 哈希与密码破解
-- 上游仓库:https://github.com/HashPals/Name-That-Hash
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C25 Hash and Password Cracking
+- Upstream Repository: https://github.com/HashPals/Name-That-Hash
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install name-that-hash
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `nth -t '5f4dcc3b5aa765d61d8327deb882cf99'` | 识别哈希 |
-| `-f hashes.txt` | 批量文件 |
-| `--no-banner` | 静默 |
-| `-j` | JSON 输出 |
+| `nth -t '5f4dcc3b5aa765d61d8327deb882cf99'` | Identify hash |
+| `-f hashes.txt` | Batch file |
+| `--no-banner` | Quiet |
+| `-j` | JSON output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 未知哈希类型识别
+### Unknown hash type identification
 
 ```bash
 nth -f dumped_hashes.txt -j | jq '.[].hashcat'
-# 输出 300+ 算法匹配与对应 hashcat -m 编号,直接送破解
+# Output 300+ algorithm matches with the corresponding hashcat -m numbers, ready for cracking
 ```
 
-## 注意事项
+## Notes
 
-识别 300+ 哈希格式并给出 hashcat/John 参数;跟 hashid 互补双跑。
+Identifies 300+ hash formats and provides hashcat/John arguments; complements hashid, run both.

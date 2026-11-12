@@ -2,37 +2,41 @@
 name: ntlmrecon-web-ntlm
 description: "Discover NTLM authentication endpoints network-wide. Signals: AD attack, domain penetration, NTLM endpoint enumeration, subnet."
 zh-signals: "ntlmrecon: NTLM 认证端点全网发现。信号:ad攻击,域渗透,NTLM 端点枚举,网段。"
+when-to-use: >-
+  Use during AD or web reconnaissance when you need to discover
+  NTLM-authenticated endpoints such as Exchange, OWA, and Autodiscover and
+  extract domain information across a subnet.
 ---
 
 # ntlmrecon
 
-- 攻击大类:C30 AD域渗透与域控攻击
-- 上游仓库:https://github.com/sachinkamath/ntlmrecon
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C30 AD Domain Penetration and Domain Controller Attacks
+- Upstream Repository: https://github.com/sachinkamath/ntlmrecon
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install ntlmrecon
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `ntlmrecon -d t.com -i urls.txt` | NTLM 端点枚举 |
-| `-d domain -t 10.0.0.0/24` | 网段 |
-| `-o out.txt` | 输出 |
+| `ntlmrecon -d t.com -i urls.txt` | NTLM endpoint enumeration |
+| `-d domain -t 10.0.0.0/24` | Network segment |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### NTLM 认证端点全网发现
+### Network-Wide Discovery of NTLM Authentication Endpoints
 
 ```bash
 ntlmrecon -d t.com -i webpaths.txt
-# Exchange/OWA/Autodiscover NTLM 枚举
+# Exchange/OWA/Autodiscover NTLM enumeration
 ```
 
-## 注意事项
+## Notes
 
-Web NTLM 端点枚举+信息提取。
+Web NTLM endpoint enumeration plus information extraction.

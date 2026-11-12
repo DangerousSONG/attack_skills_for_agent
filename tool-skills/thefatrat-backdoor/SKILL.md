@@ -2,37 +2,38 @@
 name: thefatrat-backdoor
 description: "TheFatRat bundles evasion trojans into normal APK/EXE programs. Signals: payload development, weaponization, select number to generate"
 zh-signals: "TheFatRat: 免杀木马捆绑正常程序(APK/EXE)。信号:载荷开发,武器化,选取编号生成。"
+when-to-use: "Use when weaponizing payloads by bundling a trojan into a normal APK or EXE for social engineering delivery. Requires an interactive menu selection and a target platform."
 ---
 
 # TheFatRat
 
-- 攻击大类:C07 载荷开发与武器化
-- 上游仓库:https://github.com/Screetsec/TheFatRat
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C07 Payload Development and Weaponization
+- Upstream Repository: https://github.com/Screetsec/TheFatRat
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/Screetsec/TheFatRat && cd TheFatRat && chmod +x setup.sh && ./setup.sh
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `./fatrat` | 菜单式选择 payload 类型 |
-| `backdooring apk` | 把 payload 植入正常 APK |
-| ` Powershell 免杀生成` | 选取编号生成 |
-| `fudwin` | Windows FUD 选项 |
+| `./fatrat` | Menu-driven payload type selection |
+| `backdooring apk` | Implant the payload into a normal APK |
+| ` Powershell AV-evasion generation` | Select the number to generate |
+| `fudwin` | Windows FUD option |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 免杀木马捆绑正常程序(APK/EXE)
+### Bundle an AV-evading trojan into a normal program (APK/EXE)
 
 ```bash
-./fatrat # 选 Android → backdoor 原 APK → 生成带 meterpreter 的合法应用
+./fatrat # choose Android → backdoor the original APK → generate a legitimate-looking app with meterpreter
 ```
 
-## 注意事项
+## Notes
 
-集成 msfvenom + 自研免杀;生成物仍会被主流 AV/PlayProtect 查,生产环境需二次加工。
+Integrates msfvenom with custom AV evasion; the output is still detected by mainstream AV/PlayProtect, so production use needs further refinement.

@@ -2,38 +2,42 @@
 name: cmsscan-multi-cms
 description: "CMSScan: Performs unified detection across multiple CMSs. Signals: web vulnerability, injection, CMS detection plus scanning, specified CMS, report output."
 zh-signals: "CMSScan: 多 CMS 统一检测。信号:web漏洞,注入,CMS 检测+扫描,指定 CMS,输出报告。"
+when-to-use: >-
+  Use when you want a single scan across WordPress, Joomla, and Drupal targets
+  to detect the CMS and its vulnerabilities. Supports specifying a CMS, deep
+  scanning, and report output.
 ---
 
 # CMSScan
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/ajinabraham/CMSScan
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/ajinabraham/CMSScan
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/ajinabraham/CMSScan && cd CMSScan && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python cms.py -u https://t.com` | CMS 检测+扫描 |
-| `-u url -c wordpress` | 指定 CMS |
-| `-o report` | 输出报告 |
-| `-d` | 深扫 |
+| `python cms.py -u https://t.com` | CMS detection plus scanning |
+| `-u url -c wordpress` | Specify the CMS |
+| `-o report` | Output report |
+| `-d` | Deep scan |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 多 CMS 统一检测
+### Unified multi-CMS detection
 
 ```bash
 python cms.py -u https://t.com -d
-# WP/Joomla/Drupal 一套搞定
+# Handles WP/Joomla/Drupal in one pass
 ```
 
-## 注意事项
+## Notes
 
-ajinabraham 出品(MobSF 作者),多 CMS 扫描统一入口。
+By ajinabraham (author of MobSF), a unified entry point for multi-CMS scanning.

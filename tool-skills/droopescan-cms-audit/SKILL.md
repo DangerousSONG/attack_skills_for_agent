@@ -2,39 +2,42 @@
 name: droopescan-cms-audit
 description: "droopescan: CMS vulnerability surface audit. Signals: web scanning, vulnerability scanning, Drupal scanning, WordPress scanning, threads."
 zh-signals: "droopescan: CMS 漏洞面审计。信号:web扫描,漏洞扫描,Drupal 扫描,WordPress 扫描,线程。"
+when-to-use: >-
+  Use during web audits of Drupal, WordPress, or SilverStripe sites to
+  fingerprint versions, themes, and plugins and map them to known CVEs.
 ---
 
 # droopescan
 
-- 攻击大类:C41 Web漏洞扫描与验证
-- 上游仓库:https://github.com/droope/droopescan
-- 上游 License:AGPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C41 Web Vulnerability Scanning and Validation
+- Upstream Repository: https://github.com/droope/droopescan
+- Upstream License: AGPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install droopescan
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `droopescan scan drupal -u https://t.com` | Drupal 扫描 |
-| `droopescan scan silverstripe -u url` | SilverStripe 扫描 |
-| `droopescan scan wordpress -u url` | WordPress 扫描 |
-| `-t 8` | 线程 |
-| `-e p` | 仅插件枚举 |
+| `droopescan scan drupal -u https://t.com` | Drupal scan |
+| `droopescan scan silverstripe -u url` | SilverStripe scan |
+| `droopescan scan wordpress -u url` | WordPress scan |
+| `-t 8` | Threads |
+| `-e p` | Plugins only enumeration |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### CMS 漏洞面审计
+### CMS Vulnerability Surface Audit
 
 ```bash
 droopescan scan drupal -u https://t.com -t 20
-# 版本/主题/插件识别→比对 CVE,插件漏洞常一打一中
+# Identify version/theme/plugin → compare against CVEs; plugin flaws often hit on the first try
 ```
 
-## 注意事项
+## Notes
 
-插件架构扫描 Drupal/SilverStripe/WordPress,速度优于 WPScan 的场景。
+Plugin-architecture scanner for Drupal/SilverStripe/WordPress, faster than WPScan in many scenarios.

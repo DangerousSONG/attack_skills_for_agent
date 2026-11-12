@@ -2,39 +2,43 @@
 name: evillimiter-mitm-limit
 description: "evillimiter: internal ARP interception. Signals: man-in-the-middle, MITM, scan hosts, throttle targets, disconnect all."
 zh-signals: "evillimiter: 内网 ARP 拦截。信号:中间人,mitm,扫描主机,限速目标,断网全部。"
+when-to-use: >-
+  Use on a local network segment when you need to perform ARP-based MITM,
+  throttle or block specific hosts' bandwidth, or force reconnections during
+  internal testing.
 ---
 
 # evillimiter
 
-- 攻击大类:C40 嗅探与中间人攻击
-- 上游仓库:https://github.com/bitbrute/evillimiter
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C40 Sniffing and Man-in-the-Middle Attacks
+- Upstream Repository: https://github.com/bitbrute/evillimiter
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/bitbrute/evillimiter && cd evillimiter && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `evillimiter -i eth0` | 局域网 ARP 毒化+限速 |
-| `scan` | 扫描主机 |
-| `limit 192.168.1.5` | 限速目标 |
-| `block all` | 断网全部 |
-| `free 192.168.1.5` | 解除 |
+| `evillimiter -i eth0` | LAN ARP poisoning + bandwidth throttling |
+| `scan` | Scan hosts |
+| `limit 192.168.1.5` | Throttling target |
+| `block all` | Disconnect everyone |
+| `free 192.168.1.5` | Release |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 内网 ARP 拦截
+### Internal Network ARP Interception
 
 ```bash
 evillimiter -i eth0 && scan && block 192.168.1.10
-# 断网迫使目标重连,配合钓鱼热点
+# Cut the network to force the target to reconnect, in combination with a rogue hotspot
 ```
 
-## 注意事项
+## Notes
 
-局域网 ARP 中间人+带宽控制,内网渗透辅助。
+LAN ARP man-in-the-middle plus bandwidth control, a helper for internal network penetration testing.

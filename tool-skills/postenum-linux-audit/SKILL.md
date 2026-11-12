@@ -2,38 +2,41 @@
 name: postenum-linux-audit
 description: "Quick Linux foothold assessment. Signals: red team, methodology, basic system info, container/virtualization detection, network info."
 zh-signals: "postenum: Linux 立足点快速摸底。信号:红队,方法论,基础系统信息,容器/虚拟化检测,网络信息。"
+when-to-use: >-
+  Use on a freshly gained Linux foothold to quickly enumerate system, container,
+  and network details and locate privilege-escalation paths.
 ---
 
 # postenum
 
-- 攻击大类:C50 痕迹清理与反取证
-- 上游仓库:https://github.com/mbahadou/postenum
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C50 Trace Cleanup and Anti-Forensics
+- Upstream Repository: https://github.com/mbahadou/postenum
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/mbahadou/postenum
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `bash postenum.sh -s` | 基础系统信息 |
-| `bash postenum.sh -c` | 容器/虚拟化检测 |
-| `bash postenum.sh -n` | 网络信息 |
-| `bash postenum.sh -a` | 全量 |
+| `bash postenum.sh -s` | Basic system information |
+| `bash postenum.sh -c` | Container/virtualization detection |
+| `bash postenum.sh -n` | Network information |
+| `bash postenum.sh -a` | Full run |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Linux 立足点快速摸底
+### Quick Linux Foothold Assessment
 
 ```bash
 bash postenum.sh -a | tee enum.txt
-# 内核版本/ Suid/cron/docker/云元数据一把梭,找提权路径
+# Kernel version / SUID / cron / docker / cloud metadata all in one pass, to find privilege escalation paths
 ```
 
-## 注意事项
+## Notes
 
-Linux 提权枚举脚本,输出按 MITRE ATT&CK 分类,比 LinPEAS 更轻量。
+Linux privilege escalation enumeration script, with output categorized by MITRE ATT&CK, lighter than LinPEAS.

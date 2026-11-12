@@ -2,38 +2,41 @@
 name: dcrawl-fast-crawl
 description: "dcrawl: Performs lightweight batch URL crawling. Signals: asset mapping, subdomains, fast batch crawling, depth."
 zh-signals: "dcrawl: 批量 URL 轻爬。信号:资产测绘,子域名,批量快速爬取,深度。"
+when-to-use: >-
+  Use for fast, lightweight batch URL crawling that extracts only links without
+  fetching content, suited to large asset lists.
 ---
 
 # dcrawl
 
-- 攻击大类:C01 资产测绘与指纹识别
-- 上游仓库:https://github.com/kgretzky/dcrawl
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C01 Asset Mapping and Fingerprinting
+- Upstream Repository: https://github.com/kgretzky/dcrawl
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/kgretzky/dcrawl@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `dcrawl -list urls.txt` | 批量快速爬取 |
-| `-depth 2` | 深度 |
-| `-out out.txt` | 输出 |
-| `-timeout 5` | 超时 |
+| `dcrawl -list urls.txt` | Fast batch crawling |
+| `-depth 2` | Depth |
+| `-out out.txt` | Output |
+| `-timeout 5` | Timeout |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 批量 URL 轻爬
+### Lightweight batch URL crawling
 
 ```bash
 dcrawl -list alive.txt -depth 2
-# 只提链接不去内容,超快
+# Extracts links only without fetching content, extremely fast
 ```
 
-## 注意事项
+## Notes
 
-kgretzky 出品,纯链接提取爬虫,速度优于 htcap。
+By kgretzky, a pure link-extraction crawler that is faster than htcap.

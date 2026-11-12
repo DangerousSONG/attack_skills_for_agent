@@ -2,37 +2,41 @@
 name: angrop-rop-gen
 description: "angrop: automatically constructs ROP chains. Signals: pwn, binary exploitation, ROP chain generation, automatic chain, memory write"
 zh-signals: "angrop: 自动 ROP 链构造。信号:pwn,二进制利用,ROP 链生成,自动链,内存写。"
+when-to-use: >-
+  Use when automatically constructing ROP chains for a binary during pwn
+  exploitation; load the binary, find gadgets, and generate chains such as
+  execve or memory write.
 ---
 
 # angrop
 
-- 攻击大类:C46 二进制漏洞利用与Pwn
-- 上游仓库:https://github.com/angr/angrop
-- 上游 License:BSD-2-Clause(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C46 Binary Exploitation and Pwn
+- Upstream Repository: https://github.com/angr/angrop
+- Upstream License: BSD-2-Clause (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install angrop
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python -c 'import angrop; rop = angrop.ROP(binary); rop.find_gadgets()'` | ROP 链生成 |
-| `rop.execve('/bin/sh')` | 自动链 |
-| `rop.write_to_mem(addr, data)` | 内存写 |
+| `python -c 'import angrop; rop = angrop.ROP(binary); rop.find_gadgets()'` | ROP chain generation |
+| `rop.execve('/bin/sh')` | Automatic chain |
+| `rop.write_to_mem(addr, data)` | Memory write |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 自动 ROP 链构造
+### Automatic ROP chain construction
 
 ```bash
 python3 -c "import angrop; p=angrop.ROP('./chall'); p.find_gadgets(); chain=p.execve('/bin/sh'); print(chain.dump())"
-# angr 生态
+# Part of the angr ecosystem
 ```
 
-## 注意事项
+## Notes
 
-angr 的 ROP 自动生成器。
+The automatic ROP chain generator for angr.

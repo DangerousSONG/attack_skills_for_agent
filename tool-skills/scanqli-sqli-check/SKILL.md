@@ -2,37 +2,41 @@
 name: scanqli-sqli-check
 description: "ScanQLi: Quickly validates SQL injection. Signals: web vulnerabilities, injection, SQLi scanning, database enumeration, threads."
 zh-signals: "ScanQLi: SQLi 快速验证。信号:web漏洞,注入,SQLi 扫描,库枚举,线程。"
+when-to-use: >-
+  Use when you need to quickly validate SQL injection on a suspected parameter;
+  provide the target URL and optionally enumerate databases or set the thread
+  count.
 ---
 
 # ScanQLi
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/bambish/ScanQLi
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/bambish/ScanQLi
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/bambish/ScanQLi && cd ScanQLi
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 scanqli.py -u 'https://t.com/?id=1'` | SQLi 扫描 |
-| `-u url --dbs` | 库枚举 |
-| `-t 10` | 线程 |
+| `python3 scanqli.py -u 'https://t.com/?id=1'` | SQLi scan |
+| `-u url --dbs` | Database enumeration |
+| `-t 10` | Threads |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### SQLi 快速验证
+### Fast SQLi Validation
 
 ```bash
 python3 scanqli.py -u 'https://t.com/item?id=5'
-# 错误/时间盲注双模式
+# Dual mode: error-based / time-based blind injection
 ```
 
-## 注意事项
+## Notes
 
-轻量 SQLi 扫描器,支持批量 URL。
+A lightweight SQLi scanner that supports batch URLs.

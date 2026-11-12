@@ -7,7 +7,7 @@
 ## 核心价值
 
 - **两层部署，根治 token 爆炸**：996 个 skill 全量注册时每个 step 携带约 20K tokens 索引，实测 prompt cache 命中率 84.9% → 14.8%，成本放大 3.9 倍。改为「3 注册 + 993 文件库」后常驻索引 <2K tokens/step（详见下文部署模型）。
-- **检索质量可量化**：107 条中文渗透任务查询 × 人工金标 slug 的 Recall 评测，当前 **Recall@5 = 84.1% / Recall@20 = 100.0%**，description 历经 3 轮数据驱动迭代（详见下文质量评测）。
+- **检索质量可量化**：107 条中文渗透任务查询 × 人工金标 slug 的 Recall 评测，当前 **Recall@5 = 82.2% / Recall@20 = 100.0%**（description 全英文 + `zh-signals` 中文检索信号口径），description 历经 3 轮数据驱动迭代（详见下文质量评测）。
 - **口径干净**：攻击侧 only（剔除无线/硬件、纯防御、纯逆向）；跨 10 个源零重名；License 全部可二创（Apache-2.0 / MIT / CC BY 4.0），工具改写类逐条标注上游 License。
 - **56% 自研资产**：561 个工具改写 skill（一个真实工具一个 playbook）+ 路由表 + gadget 决策表，独立知识产权，二创版权最干净。
 
@@ -26,7 +26,7 @@
 | `engagement-discipline/` | 注册层：纪律元技能（scope 边界/授权约束） | 1 |
 | `java-deserialization-gadget-selector/` | 注册层：Java 反序列化 gadget 决策表 | 1 |
 | `scripts/` | 治理/部署/评测脚本（见下） | — |
-| `INDEX.md` / `MERGES.md` / `攻击侧Skills清单.csv` | 全量清单 / 合并裁决记录 / 结构化导出 | — |
+| `INDEX.md` / `攻击侧Skills清单.csv` / `attack-skill-router/MERGES.md` | 全量清单 / 结构化导出 / 重名合并裁决记录 | — |
 
 ### scripts/ 速查
 
@@ -35,7 +35,7 @@
 | `deploy.py` | 两层部署：`--dry-run` 预演、`--clean` 清空重布、路径可用 `--skills-dir`/`--library-dir` 覆盖 |
 | `govern_skills.py` | 质量门禁：frontmatter 校验、断链扫描（含"未随库分发"豁免）、路径存在性检查 |
 | `eval_recall.py` | 检索质量评测：BEFORE=git HEAD / AFTER=工作区，输出 Recall@5/@20 对比 |
-| `attack-skill-router/gen_router.py` / `regenerate_index.py` / `export_csv.py` | 路由表两层生成（主表+reference）/ INDEX.md 再生成 / CSV 清单导出；`sync_readme.py` 已失效留档勿跑 |
+| `attack-skill-router/gen_router.py` / `regenerate_index.py` / `export_csv.py` | 路由表两层生成（主表+reference）/ INDEX.md 再生成 / CSV 清单导出 |
 
 ## 部署（两层模型 · v2.0）
 
@@ -58,8 +58,8 @@ python scripts/deploy.py [--dry-run] [--clean] [--skills-dir 注册层目录] [-
 评测回答一个问题：**一条渗透任务描述丢进来，该用的 skill 能不能被检索到前 N 名**。
 
 - 评测集：107 条中文渗透任务查询，每条人工标注金标 slug（如「SQL 注入验证并拖库」→ `exploiting-sql-injection-with-sqlmap` 等 3 个标准答案），50 个攻击大类全覆盖
-- 方法：TF-IDF（词 1-2 gram + 字 3-5 gram）对 `name×3 + description` 排序；Recall@N = 金标至少 1 个进前 N 的查询占比
-- 当前：**Recall@5 84.1% / Recall@20 100.0%**；边界：只测"找不找得到"，不测"用得好不好"
+- 方法：TF-IDF（词 1-2 gram + 字 3-5 gram）对 `name×3 + description + zh-signals` 排序；Recall@N = 金标至少 1 个进前 N 的查询占比
+- 当前：**Recall@5 82.2% / Recall@20 100.0%**（v2.2 英文化后口径）；边界：只测"找不找得到"，不测"用得好不好"
 
 ```bash
 python scripts/eval_recall.py   # 约 1-2 分钟，输出 BEFORE(HEAD) vs AFTER(工作区)
@@ -158,9 +158,27 @@ Top 12：C09 Web应用漏洞利用 171 · C01 资产测绘与指纹识别 62 · 
 - v1.9：口径定稿（blockint 移出；MERGES 20 团裁决 13 并 7 不并）→ 989
 - v2.0：补 nuclei/gobuster/ffuf/hydra/frp/chisel/john 七工具 → 996；两层部署（router 15KB 主表 + reference 展开层 + deploy.py）；description 三轮迭代 + Recall 评测 @20 100%；评测集扩至 107 条（零覆盖大类补齐）@5 84.1% / @20 100%
 - v2.1：治理修复 —— 路由表数据源由外部旧 CSV 改为「INDEX.md + 仓库直扫」重生成（7 新工具全收录、数字口径 996 全同步）；CSV 清单重导出（599 → 996）；4 处 frontmatter name 与目录名对齐；死金标清理；gen_router 修复多强制项互相挤占 bug
+- v2.2：997 个 SKILL.md description 全英文统一（when-to-use / 检索一致性），中文检索信号改存 `zh-signals` 字段（仅检索用、不进展示）；评测口径同步为 `name×3 + description + zh-signals`，Recall @5 82.2% / @20 100%（英文版 R@20 守住 100%）
 
 ## 署名与许可
 
 - 各目录内 LICENSE 文件为对应上游仓库原始许可，二次分发请遵守
 - elementalsouls/Claude-OSINT 的 SKILL.md 内容以 CC BY 4.0 授权，二次使用须署名 **Sachin Sharma / Claude-OSINT** 并链接原仓库
 - 其余上游均以 Apache-2.0 / MIT 授权，可自由二创；本仓库改写内容以 Apache-2.0 发布
+
+
+
+
+
+
+## TODO
+### 1. main分支更新路由表
+### 2. skill格式统一
+### 3. SKILL.md description 全英文统一（when-to-use / 检索一致性）
+### 4. 所有的skills（包括攻击skills、rfc skills）所涉及到的cve漏洞编号，都要写到对应skill的描述中 -- 这个我记下来，最后一起改？
+
+
+
+
+
+

