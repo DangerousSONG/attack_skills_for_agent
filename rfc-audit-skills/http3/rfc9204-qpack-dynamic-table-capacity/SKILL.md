@@ -1,55 +1,56 @@
 ---
 name: rfc9204-qpack-dynamic-table-capacity
-description: 审计 QPACK 动态表容量协商与尺寸更新顺序是否严格按 RFC 9204 §3.2——超容量插入、乱序尺寸更新即编码器/解码器流错误，与 CVE-2025-64702 家族同源的压缩层状态机攻击面
+description: Audit whether QPACK dynamic-table capacity negotiation and size-update ordering strictly follow RFC 9204 §3.2 — over-capacity insertion and out-of-order size updates are encoder/decoder stream errors, a compression-layer state-machine attack surface of the same family as CVE-2025-64702
+zh-signals: 审计 QPACK 动态表容量协商与尺寸更新顺序是否严格按 RFC 9204 §3.2——超容量插入、乱序尺寸更新即编码器/解码器流错误，与 CVE-2025-64702 家族同源的压缩层状态机攻击面
 rfc: RFC 9204 §3.2（动态表容量）/ §4（编码器指令）/ §5（解码器指令）
 license: Apache-2.0
 ---
 
-# RFC 9204 §3.2 QPACK 动态表容量与更新顺序审计
+# RFC 9204 §3.2 QPACK Dynamic-Table Capacity & Update-Order Audit
 
-## 1. 约束条款（原文出处）
+## 1. Normative Clauses (Original Sources)
 
-RFC 9204 §3.2（原文要点）：
-> 动态表容量由 SETTINGS_QPACK_MAX_TABLE_CAPACITY 协商确定，编码器**不得**使动态表占用超过协商容量；编码器**不得**插入将超出当前容量的条目。
-> 动态表尺寸更新（Set Dynamic Table Capacity 指令）**必须**出现在编码器流上、且在任何引用动态表的编码之前；解码器发现乱序或超容量的尺寸更新必须按编码器流错误（QPACK_ENCODER_STREAM_ERROR）处理。
+RFC 9204 §3.2 (original text, key points):
+> Dynamic-table capacity is negotiated via SETTINGS_QPACK_MAX_TABLE_CAPACITY; the encoder MUST NOT let the dynamic table exceed the negotiated capacity; the encoder MUST NOT insert entries that would exceed the current capacity.
+> A dynamic-table size update (Set Dynamic Table Capacity instruction) MUST appear on the encoder stream and before any encoding that references the dynamic table; a decoder detecting an out-of-order or over-capacity size update must treat it as an encoder-stream error (QPACK_ENCODER_STREAM_ERROR).
 
-RFC 9204 §4/§5：编码器指令与解码器指令各有独立单向流；任何一侧的指令解析错误必须按对应流错误处理，**不得**扩散为整个连接的非受控状态。
+RFC 9204 §4/§5: encoder instructions and decoder instructions each have their own unidirectional stream; instruction-parsing errors on either side must be treated as the corresponding stream error and MUST NOT escalate into uncontrolled whole-connection state.
 
-核心模式一句话：**QPACK 动态表是一个"协商容量 + 增量更新 + 双端镜像"的分布式状态机——容量协商值、尺寸更新顺序、条目插入时机三个不变量任何一条松掉，双端镜像即出现幽灵条目或幽灵引用。**
+Core pattern in one sentence: **the QPACK dynamic table is a distributed state machine of "negotiated capacity + incremental updates + dual-end mirroring" — loosen any of the three invariants (negotiated capacity value, size-update ordering, entry-insertion timing) and the dual-end mirror develops ghost entries or ghost references.**
 
-## 2. 违规判定条件
+## 2. Violation Criteria
 
-| 编号 | 探测 | 判定 |
+| ID | Probe | Verdict |
 |---|---|---|
-| QC-1 | SETTINGS_QPACK_MAX_TABLE_CAPACITY 协商为 0（或小额）后，编码器流上插入超出容量的动态表条目 | 对端未按 QPACK_ENCODER_STREAM_ERROR 终止 → 违规 |
-| QC-2 | 在 Set Dynamic Table Capacity 更新之前先发送引用动态表的编码指令（乱序） | 对端未按编码器流错误处理 → 违规 |
-| QC-3 | 发送声明容量大于 SETTINGS 协商值的 Set Dynamic Table Capacity | 对端接受生效 → 协商劫持面；未终止 → 违规 |
-| QC-4 | 动态表条目插入/驱逐时序与绝对索引引用交错，检测两端对同一绝对索引的条目映射是否一致 | 映射分裂 → 幽灵引用，类型混淆级风险 |
-| QC-5 | 编码器流中途截断（FIN 落在指令中间）后观察解码端状态 | 残留半解析状态且连接存活 → 违规 |
+| QC-1 | After negotiating SETTINGS_QPACK_MAX_TABLE_CAPACITY to 0 (or a small value), insert dynamic-table entries beyond capacity on the encoder stream | Peer not terminated with QPACK_ENCODER_STREAM_ERROR → violation |
+| QC-2 | Send an encoding instruction referencing the dynamic table before the Set Dynamic Table Capacity update (out of order) | Peer not treated as an encoder-stream error → violation |
+| QC-3 | Send Set Dynamic Table Capacity declaring a capacity larger than the SETTINGS-negotiated value | Peer accepts and applies → negotiation-hijack surface; not terminated → violation |
+| QC-4 | Interleave entry insertion/eviction timing with absolute-index references; check whether both ends map the same absolute index to the same entry | Mapping split → ghost references, type-confusion-grade risk |
+| QC-5 | Truncate the encoder stream mid-instruction (FIN lands in the middle of an instruction) and observe decoder-side state | Residual half-parsed state with connection alive → violation |
 
-判定方法：aioquic 自写编码器/解码器双端；h3i 的 QPACK 场景；逐条指令注入对照解码端内部表状态。
+Method: aioquic with hand-written encoder/decoder dual ends; h3i QPACK scenarios; instruction-by-instruction injection against the decoder's internal table state.
 
-## 3. 攻击面猜想
+## 3. Attack-Surface Hypotheses
 
-- **解码器内存占用失控**：QC-1 ——超容量插入迫使解码端为未协商的表空间分配内存（DoS 原语，与 CVE-2025-64702 同族）
-- **头部字段类型混淆**：QC-4 ——幽灵引用使解码出的头部名/值来自攻击者控制的错位条目，等价于伪造 :path / :authority
-- **解码器状态机崩溃**：QC-5 ——半解析指令 + 后续正常指令叠加，触发实现特有的断言路径
+- **Decoder memory runaway**: QC-1 — over-capacity insertion forces the decoder to allocate memory for un-negotiated table space (DoS primitive, same family as CVE-2025-64702)
+- **Header-field type confusion**: QC-4 — ghost references make decoded header names/values come from attacker-controlled misplaced entries, equivalent to forging :path / :authority
+- **Decoder state-machine crash**: QC-5 — half-parsed instruction + subsequent normal instructions compound into implementation-specific assertion paths
 
-## 4. 关联历史 CVE
+## 4. Related Historical CVEs
 
-| CVE | 实现 | 根因 |
+| CVE | Implementation | Root cause |
 |---|---|---|
-| **CVE-2025-64702**（HIGH） | quic-go | QPACK 解码路径未强制处理特定状态约束，可被远程触发；与本 Skill 同源——压缩层状态机的"约束未强制即漏洞"。本 Skill 的 QC-1~QC-5 是该 CVE 家族的系统化审计展开 |
-| **CVE-2024-22189**（旁证模式） | QUIC 生态多家 | 同样是"协议义务（此处为响应/记账义务）未被强制"的对称模式，见 `rfc9000-flow-control-accounting` |
+| **CVE-2025-64702** (HIGH) | quic-go | QPACK decoding path failed to enforce a specific state constraint and could be triggered remotely; same origin as this Skill — "an unenforced constraint in the compression-layer state machine is a vulnerability". QC-1~QC-5 of this Skill are the systematic audit expansion of that CVE family |
+| **CVE-2024-22189** (corroborating pattern) | Multiple QUIC-ecosystem vendors | The symmetric pattern of "a protocol obligation (here response/accounting) not enforced"; see `rfc9000-flow-control-accounting` |
 
-## 5. 差分验证方法
+## 5. Differential Verification
 
-对照组：quic-go ≥ 修复版本、nghttp3、Cloudflare quiche（三套独立 QPACK 实现）。
-对比字段：QC-1~QC-5 各自的错误码（QPACK_ENCODER_STREAM_ERROR vs 静默）、终止层级（流错误 vs 连接错误）。
-误报排除：实现选择"接受但按协商值截断容量"且行为可证明等价于拒绝的属合规；只标记"超容量生效""乱序被接受""索引映射分裂"。
+Control group: quic-go ≥ fixed version, nghttp3, Cloudflare quiche (three independent QPACK implementations).
+Comparison fields: error codes for QC-1~QC-5 individually (QPACK_ENCODER_STREAM_ERROR vs silent), termination level (stream error vs connection error).
+False-positive exclusion: an implementation that "accepts but truncates capacity to the negotiated value" with provably rejection-equivalent behavior is compliant; flag only "over-capacity takes effect", "out-of-order accepted", "index mapping split".
 
-## 6. 对接的攻击 Skill
+## 6. Downstream Attack Skills
 
-- 技能层（怎么打）：`fuzzowski-network-fuzz`（QPACK 指令流 fuzz）、`grammarinator-gen-fuzz`（QPACK 指令语法生成）、`dharma-grammar-fuzz`（双端状态机差分语法）
-- 工具层（用什么打）：aioquic（编码器/解码器指令逐字节控制）、h3i
-- 命中后动作：确认幽灵引用 → 验证是否可注入伪造头部 → 评估走私/鉴权绕过链；确认超容量生效 → 评估内存放大比
+- Skill layer (how to attack): `fuzzowski-network-fuzz` (QPACK instruction-stream fuzz), `grammarinator-gen-fuzz` (QPACK instruction grammar generation), `dharma-grammar-fuzz` (dual-end state-machine differential grammar)
+- Tool layer (with what): aioquic (byte-level encoder/decoder instruction control), h3i
+- Post-hit actions: confirm ghost references → verify whether forged headers can be injected → assess smuggling/auth-bypass chains; confirm over-capacity effect → assess memory amplification ratio

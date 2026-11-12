@@ -1,57 +1,58 @@
 ---
 name: rfc9114-trailers-frame-sequence
-description: 审计 HTTP/3 实现对 trailer 与多 HEADERS 帧序列的处理是否按 RFC 9114 §4.1/§4.2——trailing HEADERS 后的 DATA 即连接错误、trailer 与 Content-Length 一致性、重复响应头区块缺失校验即 H3 层消息走私面（盲区条款；nginx#1043 同生态；H2 trailer/CL 历史走私模式复刻）
+description: Audit whether HTTP/3 implementations handle trailer and multi-HEADERS frame sequences per RFC 9114 §4.1/§4.2 — DATA after trailing HEADERS is a connection error, trailer vs Content-Length consistency, missing validation of duplicate response header sections is an H3-layer message-smuggling surface (blind-spot clause; nginx#1043 same ecosystem; H2 trailer/CL historical smuggling pattern replicated)
+zh-signals: 审计 HTTP/3 实现对 trailer 与多 HEADERS 帧序列的处理是否按 RFC 9114 §4.1/§4.2——trailing HEADERS 后的 DATA 即连接错误、trailer 与 Content-Length 一致性、重复响应头区块缺失校验即 H3 层消息走私面（盲区条款；nginx#1043 同生态；H2 trailer/CL 历史走私模式复刻）
 rfc: RFC 9114 §4.1（HTTP 消息分帧）/ §4.2（请求/响应语义）/ RFC 9110 §8.6（Content-Length 与 trailer 一致性）
 license: Apache-2.0
 ---
 
-# RFC 9114 §4.1 Trailer 与帧序列合法性审计
+# RFC 9114 §4.1 Trailer & Frame-Sequence Legality Audit
 
-## 1. 约束条款（原文出处）
+## 1. Normative Clauses (Original Sources)
 
-RFC 9114 §4.1（原文要点）：
+RFC 9114 §4.1 (original text, key points):
 > Receipt of an invalid sequence of frames MUST be treated as a connection error of type H3_FRAME_UNEXPECTED. In particular, a DATA frame before any HEADERS frame, or a HEADERS or DATA frame after the trailing HEADERS frame, is considered invalid.
 
-即 H3 消息的三个区块（初始 HEADERS → DATA → trailing HEADERS）各至多一次、顺序固定：trailing HEADERS 之后再出现任何 HEADERS/DATA 即连接错误。
+That is, the three sections of an H3 message (initial HEADERS → DATA → trailing HEADERS) each appear at most once, in fixed order: any HEADERS/DATA after the trailing HEADERS is a connection error.
 
-RFC 9114 §4.1.2（字段区块约束）：trailing HEADERS 不得包含被禁止的伪头与连接级字段；RFC 9110 §8.6：trailer 的存在要求 Content-Length 与完整载荷一致（trailer 不得改变 CL 语义）。
+RFC 9114 §4.1.2 (field-section constraints): trailing HEADERS must not contain forbidden pseudo-headers and connection-level fields; RFC 9110 §8.6: the presence of a trailer requires Content-Length to match the complete payload (a trailer must not change CL semantics).
 
-核心模式一句话：**H3 用"帧序列"表达"消息的三个区块"——区块边界就是帧类型的合法顺序，第三个区块之后的任何帧都是消息边界外的字节，而消息边界外的字节就是走私的定义。**
+Core pattern in one sentence: **H3 expresses "the three sections of a message" as a frame sequence — section boundaries are the legal order of frame types, and any frame beyond the third section is bytes outside the message boundary; bytes outside the message boundary are the definition of smuggling.**
 
-## 2. 违规判定条件
+## 2. Violation Criteria
 
-| 编号 | 探测 | 判定 |
+| ID | Probe | Verdict |
 |---|---|---|
-| TS-1 | 响应 trailing HEADERS 之后再发送 DATA 帧 | 未按 H3_FRAME_UNEXPECTED 终止 → 违规 |
-| TS-2 | 响应出现第三个 HEADERS 帧（trailing 之后再 HEADERS） | 未终止 → 违规 |
-| TS-3 | DATA 出现在任何 HEADERS 之前（请求与响应双向测试） | 未终止 → 违规 |
-| TS-4 | trailing HEADERS 携带伪头字段（:status、:path 等）/ 连接级字段（connection、keep-alive） | 未按 malformed 处理 → 违规 |
-| TS-5 | 携带 trailer 的响应 + 与 DATA 总和不一致的 Content-Length（CL 小于实际 / 大于实际各一组） | 未按 malformed 处理或中介转发 → 与 `rfc9114-content-length-data-mismatch` 叠加的走私面 |
+| TS-1 | Send a DATA frame after the response's trailing HEADERS | Not terminated with H3_FRAME_UNEXPECTED → violation |
+| TS-2 | Send a third HEADERS frame on a response (HEADERS after trailer) | Not terminated → violation |
+| TS-3 | DATA before any HEADERS (test both request and response directions) | Not terminated → violation |
+| TS-4 | trailing HEADERS carrying pseudo-header fields (:status, :path, etc.) / connection-level fields (connection, keep-alive) | Not treated as malformed → violation |
+| TS-5 | Response with trailer + Content-Length inconsistent with the DATA sum (CL smaller / larger than actual, one group each) | Not treated as malformed, or forwarded by an intermediary → smuggling surface compounding with `rfc9114-content-length-data-mismatch` |
 
-判定方法：h3i 构造多区块帧序列（主力）；aioquic 自写响应流；对照前后端解析差异（H3 终端 vs H1 回源）。
+Method: h3i constructing multi-section frame sequences (main tool); aioquic custom response streams; compare frontend/backend parsing differences (H3 endpoint vs H1 origin).
 
-## 3. 攻击面猜想
+## 3. Attack-Surface Hypotheses
 
-- **H3→H1 消息边界走私**：TS-1/TS-5 ——H3 端宽容接受 trailer 后 DATA，H1 回源按 CL 截断，边界分裂与第 1 批 CL 审计同构
-- **解析分裂原语**：TS-3 ——无前导 HEADERS 的 DATA 若被某些实现解释为"隐含空头部区块"，与严格实现的差异即分歧点
-- **trailer 语义注入**：TS-4 ——伪头进入 trailer 区块若被回源层重新解释，可伪造 :authority / :method 语义
+- **H3→H1 message-boundary smuggling**: TS-1/TS-5 — the H3 end tolerates DATA after trailer while the H1 origin truncates by CL; boundary split is isomorphic to the batch-1 CL audit
+- **Parsing-split primitive**: TS-3 — DATA without leading HEADERS interpreted by some implementations as an "implicit empty header section"; the difference from strict implementations is a divergence point
+- **Trailer semantic injection**: TS-4 — pseudo-headers entering the trailer section, if reinterpreted by the origin layer, can forge :authority / :method semantics
 
-## 4. 关联历史 CVE / 实证
+## 4. Related Historical CVEs / Evidence
 
-| 证据 | 实现 | 根因 |
+| Evidence | Implementation | Root cause |
 |---|---|---|
-| nginx#1043（同生态，未修复） | nginx-quic | H3 字段区块 malformed 判定不完备——trailer 区块的字段约束与第 1 批伪头审计共享同一宽容解析面 |
-| H2 历史模式（RFC 7540 §8.1.2 教训） | 多实现 | HTTP/2 时代 trailer/CONTINUATION 边界处理差异曾产生多起走私案例（如 CL 与 trailer 交互），H3 继承同一语义但换了一套帧机制——历史模式复刻面 |
-| 暂无独立 CVE | — | 三个区块的顺序约束实现较直白，但 trailer 与 CL 一致性、trailer 伪头禁止属分散条款，组合测试覆盖少——盲区条款 |
+| nginx#1043 (same ecosystem, unfixed) | nginx-quic | Incomplete malformed judgment of H3 field sections — trailer-section field constraints share the same lenient parsing surface as the batch-1 pseudo-header audit |
+| H2 historical pattern (RFC 7540 §8.1.2 lesson) | Multiple implementations | Boundary-handling differences around trailers/CONTINUATION produced multiple smuggling cases in the HTTP/2 era (e.g. CL × trailer interactions); H3 inherits the same semantics with a new framing mechanism — historical-pattern replication surface |
+| No standalone CVE yet | — | The three-section ordering constraint is straightforward to implement, but trailer-vs-CL consistency and trailer pseudo-header prohibition are scattered clauses with little combined test coverage — blind-spot clause |
 
-## 5. 差分验证方法
+## 5. Differential Verification
 
-对照组：quic-go ≥ 0.60、nghttp3、nginx-quic。
-对比字段：TS-1~TS-5 各自终止行为；重点对照"trailing HEADERS 后"与"任何区块后"的错误处理是否统一走 H3_FRAME_UNEXPECTED。
-误报排除：实现选择拒绝所有 trailer（不显式支持第三个区块）属合规；只标记"接受 trailer 后数据"与"trailer 伪头被解析"。
+Control group: quic-go ≥ 0.60, nghttp3, nginx-quic.
+Comparison fields: termination behavior for TS-1~TS-5 individually; focus on whether error handling after "trailing HEADERS" vs "after any section" uniformly goes through H3_FRAME_UNEXPECTED.
+False-positive exclusion: an implementation rejecting all trailers (no explicit third-section support) is compliant; flag only "data accepted after trailer" and "trailer pseudo-headers parsed".
 
-## 6. 对接的攻击 Skill
+## 6. Downstream Attack Skills
 
-- 技能层（怎么打）：`smuggler-desync`（边界分裂利用）、`http2smugl-desync`（H2/H3 降级链）、`fuzzowski-network-fuzz`（帧序列 fuzz）
-- 工具层（用什么打）：h3i（区块序列构造主力）、aioquic
-- 命中后动作：TS-1/TS-5 分裂确认 → 构造端到端走私探针 → 评估缓存投毒/请求劫持链
+- Skill layer (how to attack): `smuggler-desync` (boundary-split exploitation), `http2smugl-desync` (H2/H3 downgrade chains), `fuzzowski-network-fuzz` (frame-sequence fuzz)
+- Tool layer (with what): h3i (main tool for section-sequence construction), aioquic
+- Post-hit actions: TS-1/TS-5 split confirmed → construct end-to-end smuggling probe → assess cache-poisoning/request-hijacking chains

@@ -1,51 +1,52 @@
 ---
 name: rfc9114-settings-frame-order
-description: 审计 HTTP/3 实现对 SETTINGS 帧严格性是否按 RFC 9114 §7.2.1——SETTINGS 必须是每个 control stream 的第一帧，重复 SETTINGS 必须按 H3_FRAME_UNEXPECTED 连接错误处理（盲区条款，暂无公开 CVE）
+description: Audit whether HTTP/3 implementations enforce SETTINGS-frame strictness per RFC 9114 §7.2.1 — SETTINGS must be the first frame on each control stream, and a duplicate SETTINGS must be treated as an H3_FRAME_UNEXPECTED connection error (blind-spot clause, no public CVE yet)
+zh-signals: 审计 HTTP/3 实现对 SETTINGS 帧严格性是否按 RFC 9114 §7.2.1——SETTINGS 必须是每个 control stream 的第一帧，重复 SETTINGS 必须按 H3_FRAME_UNEXPECTED 连接错误处理（盲区条款，暂无公开 CVE）
 rfc: RFC 9114 §7.2.1（SETTINGS 帧）
 license: Apache-2.0
 ---
 
-# RFC 9114 §7.2.1 SETTINGS 帧顺序与唯一性审计
+# RFC 9114 §7.2.1 SETTINGS Frame Order & Uniqueness Audit
 
-## 1. 约束条款（原文出处）
+## 1. Normative Clauses (Original Sources)
 
-RFC 9114 §7.2.1（原文要点）：
-> SETTINGS 帧**必须**是每个 control stream 上发送的第一个帧（The SETTINGS frame MUST be the first frame on the control stream）。
-> 端点**不得**（MUST NOT）在 SETTINGS 之后再次发送 SETTINGS 帧；违反 MUST 的端点必须按 H3_FRAME_UNEXPECTED 类型的**连接错误**处理。
-> 在收到 SETTINGS 帧之前，端点不得发送需要 SETTINGS 生效才可解释的请求/响应流量。
+RFC 9114 §7.2.1 (original text, key points):
+> The SETTINGS frame MUST be the first frame on the control stream.
+> An endpoint MUST NOT send a SETTINGS frame after the first SETTINGS frame; an endpoint that receives such a frame MUST treat it as a connection error of type H3_FRAME_UNEXPECTED.
+> Before the SETTINGS frame is received, an endpoint must not send request/response traffic that requires SETTINGS to take effect before it can be interpreted.
 
-核心模式一句话：**SETTINGS 是 HTTP/3 控制流的"协议版本与能力协商锚点"，它的位置（第一帧）与唯一性（只出现一次）是所有后续语义解析的前置不变量——锚点松掉，后续一切解析都是未定义行为。**
+Core pattern in one sentence: **SETTINGS is the "protocol version & capability negotiation anchor" of the HTTP/3 control stream; its position (first frame) and uniqueness (exactly once) are the preconditions for all subsequent semantic parsing — loosen the anchor and everything parsed afterwards is undefined behavior.**
 
-## 2. 违规判定条件
+## 2. Violation Criteria
 
-| 编号 | 探测 | 判定 |
+| ID | Probe | Verdict |
 |---|---|---|
-| SO-1 | 在 control stream 第一帧位置发送非 SETTINGS 帧（如 DATA/HEADERS/GREASE），观察对端 | 未按 H3_MISSING_SETTINGS 或 H3_FRAME_UNEXPECTED 终止连接 → 违规 |
-| SO-2 | 正常 SETTINGS 之后再发送第二个 SETTINGS 帧（合法值或与合法值冲突的值各测一组） | 未按 H3_FRAME_UNEXPECTED 终止连接 → 违规；若接受第二个值 → 协商劫持面 |
-| SO-3 | 发送空 SETTINGS（QPACK 动态表容量等关键项全缺省），观察对端是否按协商后的缺省值正确处理 | 缺省值处理与 RFC 不符 → 违规 |
-| SO-4 | 在收到对方 SETTINGS 之前就发送依赖协商结果的帧（如大动态表编码的 HEADERS），观察是否被正确拒绝 | 未拒绝/未缓冲保护 → 违规 |
-| SO-5 | 构造 control stream 上不完整的 SETTINGS（帧头声明长度 > 实际载荷，即流在 SETTINGS 中途结束） | 未按 H3_FRAME_ERROR 处理且存活 → 违规 |
+| SO-1 | Send a non-SETTINGS frame (e.g. DATA/HEADERS/GREASE) as the first frame on the control stream and observe the peer | Connection not terminated with H3_MISSING_SETTINGS or H3_FRAME_UNEXPECTED → violation |
+| SO-2 | After a normal SETTINGS, send a second SETTINGS frame (one with valid values, one with conflicting values) | Connection not terminated with H3_FRAME_UNEXPECTED → violation; if the second value is accepted → negotiation-hijack surface |
+| SO-3 | Send an empty SETTINGS (all key items such as QPACK dynamic-table capacity at defaults) and observe whether the peer handles the negotiated defaults correctly per RFC | Default handling inconsistent with RFC → violation |
+| SO-4 | Before receiving the peer's SETTINGS, send frames that depend on negotiation results (e.g. HEADERS encoded with a large dynamic table) and observe whether they are correctly rejected | Not rejected / no buffering protection → violation |
+| SO-5 | Craft an incomplete SETTINGS on the control stream (frame header declares a length > actual payload, i.e. the stream ends mid-SETTINGS) | Not treated as H3_FRAME_ERROR and survives → violation |
 
-判定方法：aioquic / quic-go 自写对端逐帧控制 control stream 内容；h3i 的 `send_frames_before_settings` 类场景。
+Method: aioquic / quic-go custom peer with frame-level control of the control-stream content; h3i `send_frames_before_settings`-style scenarios.
 
-## 3. 攻击面猜想
+## 3. Attack-Surface Hypotheses
 
-- **能力协商劫持**：SO-2 ——若实现接受第二个 SETTINGS，攻击者可覆盖 QPACK 动态表容量、H3_DATAGRAM 协商结果等能力位，导致后续解析全部错位
-- **解析前置条件绕过**：SO-1/SO-4 ——在锚点建立前注入的帧可能被按"未初始化状态"解析，产生类型混淆或空指针路径
-- **半开连接资源占用**：SO-5 ——不完整 SETTINGS 使对端无限等待 control stream 建立，配合多连接放大为资源耗尽
+- **Capability-negotiation hijacking**: SO-2 — if the implementation accepts a second SETTINGS, an attacker can override QPACK dynamic-table capacity, H3_DATAGRAM negotiation results and other capability bits, misaligning all subsequent parsing
+- **Parsing-precondition bypass**: SO-1/SO-4 — frames injected before the anchor is established may be parsed in an "uninitialized state", producing type confusion or null-pointer paths
+- **Half-open connection resource consumption**: SO-5 — an incomplete SETTINGS leaves the peer waiting indefinitely for the control stream to establish; multiplied across connections, this becomes resource exhaustion
 
-## 4. 关联历史 CVE
+## 4. Related Historical CVEs
 
-本条款**暂无公开 CVE**——属于典型的"有约束、无披露"盲区条款：RFC 明确要求、各实现也都声称支持，但"重复 SETTINGS 是否严格拒绝""非 SETTINGS 首帧是否严格终止"这两点在主流实现的测试覆盖中长期缺位。按本层方法论，这正是定向审计的高价值信号。
+This clause has **no public CVE yet** — a typical "constraint without disclosure" blind-spot clause: the RFC is explicit, every implementation claims support, but "is duplicate SETTINGS strictly rejected" and "is a non-SETTINGS first frame strictly terminated" have long been missing from mainstream test coverage. Per this layer's methodology, this is exactly a high-value directed-audit signal.
 
-## 5. 差分验证方法
+## 5. Differential Verification
 
-对照组：quic-go、nghttp3 / nghttp2 的 H3 端、Cloudflare quiche。
-对比字段：SO-1~SO-5 各自的错误码与终止行为；特别关注"连接错误 vs 流错误"的层级是否一致。
-误报排除：实现选择在收到非法 SETTINGS 序列后"记录并继续"但功能等价于终止的属合规；只标记"接受第二个 SETTINGS 生效"与"前置帧被解析"。
+Control group: quic-go, nghttp3 / nghttp2's H3 side, Cloudflare quiche.
+Comparison fields: error codes and termination behavior for SO-1~SO-5 individually; pay special attention to consistency of the "connection error vs stream error" level.
+False-positive exclusion: an implementation that "logs and continues" after an illegal SETTINGS sequence with behavior provably equivalent to termination is compliant; flag only "second SETTINGS takes effect" and "pre-anchor frames are parsed".
 
-## 6. 对接的攻击 Skill
+## 6. Downstream Attack Skills
 
-- 技能层（怎么打）：`fuzzowski-network-fuzz`（control stream 帧序列 fuzz）、`h2csmuggler-http2`（同族前置条件混淆思路的 H3 适配）
-- 工具层（用什么打）：aioquic、h3i
-- 命中后动作：确认第二个 SETTINGS 是否生效 → 若生效则评估协商劫持链；若只是未终止则记录为合规缺口
+- Skill layer (how to attack): `fuzzowski-network-fuzz` (control-stream frame-sequence fuzz), `h2csmuggler-http2` (H3 adaptation of the same-family precondition-confusion approach)
+- Tool layer (with what): aioquic, h3i
+- Post-hit actions: confirm whether the second SETTINGS takes effect → if yes, assess the negotiation-hijack chain; if it merely fails to terminate, record as a compliance gap
