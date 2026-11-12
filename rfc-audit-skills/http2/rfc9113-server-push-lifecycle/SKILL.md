@@ -1,55 +1,56 @@
 ---
 name: rfc9113-server-push-lifecycle
-description: 审计 HTTP/2 服务端推送（PUSH_PROMISE/reserved 流）生命周期实现——推送开启即攻击面放大器：Cache-Digest 头触发推送时崩溃（CVE-2020-9490 Apache httpd 2.4.20-2.4.43，CVSS 7.5，H2Push off 缓解）；推送方法访问控制失效（CVE-2023-30631 Apache Traffic Server push_method_enabled 配置失效，CVSS 7.5）；http4s Ember 推送帧 DoS（CVE-2026-69203，缓解靠代理剥离 PUSH_PROMISE）；RFC 9113 §6.6/§8.4 要求客户端可拒绝推送、服务端可宣告 ENABLE_PUSH=0，但 reserved 流状态机的实现义务分散且历史上反复出事
+description: Audit HTTP/2 server-push (PUSH_PROMISE / reserved-stream) lifecycle implementations — enabling push is an attack-surface amplifier: Cache-Digest header triggering a crash on push (CVE-2020-9490 Apache httpd 2.4.20-2.4.43, CVSS 7.5, mitigated by H2Push off); push-method access-control failure (CVE-2023-30631 Apache Traffic Server push_method_enabled config ineffective, CVSS 7.5); http4s Ember push-frame DoS (CVE-2026-69203, mitigated by proxy stripping PUSH_PROMISE); RFC 9113 §6.6/§8.4 require that clients can reject push and servers can advertise ENABLE_PUSH=0, but reserved-stream state-machine obligations are scattered and have repeatedly failed in history
+zh-signals: 审计 HTTP/2 服务端推送（PUSH_PROMISE/reserved 流）生命周期实现——推送开启即攻击面放大器：Cache-Digest 头触发推送时崩溃（CVE-2020-9490 Apache httpd 2.4.20-2.4.43，CVSS 7.5，H2Push off 缓解）；推送方法访问控制失效（CVE-2023-30631 Apache Traffic Server push_method_enabled 配置失效，CVSS 7.5）；http4s Ember 推送帧 DoS（CVE-2026-69203，缓解靠代理剥离 PUSH_PROMISE）；RFC 9113 §6.6/§8.4 要求客户端可拒绝推送、服务端可宣告 ENABLE_PUSH=0，但 reserved 流状态机的实现义务分散且历史上反复出事
 rfc: RFC 9113 §6.6（PUSH_PROMISE）/ §8.4（Server Push）/ §5.1（reserved 流状态）
 license: Apache-2.0
 ---
 
-# RFC 9113 §6.6/§8.4 服务端推送生命周期审计
+# RFC 9113 §6.6/§8.4 Server-Push Lifecycle Audit
 
-## 1. 约束条款（原文出处）
+## 1. Normative Clauses (Original Sources)
 
-RFC 9113 §8.4（要点）：
-> 服务端**不得**推送任何客户端未请求过的资源；客户端可通过 `SETTINGS_ENABLE_PUSH=0` 宣告不接受推送并**必须**将其作为连接错误处理违规推送；PUSH_PROMISE 承诺的流进入 reserved 状态，后续只能经 HEADERS/RST_STREAM 收敛。
+RFC 9113 §8.4 (key points):
+> A server **must not** push any resource the client has not requested; the client can advertise `SETTINGS_ENABLE_PUSH=0` to decline push and **must** treat violating pushes as a connection error; the stream promised by a PUSH_PROMISE enters the reserved state and can only converge via HEADERS or RST_STREAM afterwards.
 
-核心模式一句话：**推送是把"服务端主动建流"这个特权交给应用配置的开关——历史上它反复成为崩溃源（Cache-Digest）、访问控制失效源（推送方法鉴权缺失）和 DoS 源（承诺流不收敛）。RFC 给了客户端拒绝机制（ENABLE_PUSH=0 + 违规即连接错误），审计先看"你默认开没开"，再看"开了之后 reserved 流状态机和推送载荷校验有没有跟上"。**
+Core pattern in one sentence: **push hands the privilege of "server-initiated streams" to an application-configuration switch — historically it has repeatedly become a crash source (Cache-Digest), an access-control failure source (missing push-method authorization), and a DoS source (promised streams that never converge). The RFC provides the client-side rejection mechanism (ENABLE_PUSH=0 + violations are connection errors); the audit first checks "is it on by default", then "if on, did the reserved-stream state machine and push-payload validation keep up."**
 
-## 2. 违规判定条件
+## 2. Violation Criteria
 
-| 编号 | 探测 | 判定 |
+| ID | Probe | Criterion |
 |---|---|---|
-| SP-1 | 客户端发 `SETTINGS_ENABLE_PUSH=0` 后仍收到 PUSH_PROMISE | 未按连接错误（PROTOCOL_ERROR）断开 → §8.4 拒绝机制失效 |
-| SP-2 | 构造畸形 Cache-Digest 值（gzip 无效负载/超大声明）后诱导服务端推送 | 服务端在推送路径崩溃 → CVE-2020-9490 同款 |
-| SP-3 | PUSH_PROMISE 出现在客户端宣告禁推的连接上 | 未拒绝/未断开 → 与 SP-1 互补的服务端义务缺失 |
-| SP-4 | PUSH_PROMISE 的 promised stream ID 为偶数（客户端发起方向）或已被占用 | 未按连接错误处理 → §6.6 流 ID 校验缺失 |
-| SP-5 | reserved 流长期不收敛（不发 HEADERS 也不 RST） | 无超时清理 → 承诺流驻留占用流表（与 H3 侧 skill 同模式） |
-| SP-6 | 通过 PUSH 方法（RFC 8297 前身的扩展语义）请求 + 推送方法访问控制 | 推送路径绕过常规方法鉴权 → CVE-2023-30631 同类 |
+| SP-1 | After the client sends `SETTINGS_ENABLE_PUSH=0`, a PUSH_PROMISE is still received | Not disconnected as a connection error (PROTOCOL_ERROR) → §8.4 rejection mechanism ineffective |
+| SP-2 | Craft a malformed Cache-Digest value (invalid gzip payload / oversized claim) and induce the server to push | Server crashes on the push path → same class as CVE-2020-9490 |
+| SP-3 | PUSH_PROMISE appears on a connection where the client advertised push disabled | Not rejected / no disconnect → server-side obligation missing, complementary to SP-1 |
+| SP-4 | PUSH_PROMISE with an even promised-stream ID (client-initiated direction) or an already-occupied ID | Not handled as a connection error → §6.6 stream-ID validation missing |
+| SP-5 | Reserved streams that never converge (neither HEADERS nor RST sent) | No timeout cleanup → promised-stream residency occupies the stream table (same pattern as the H3-side skill) |
+| SP-6 | Request via the PUSH method (extension semantics predating RFC 8297) + push-method access control | Push path bypasses regular method authorization → same class as CVE-2023-30631 |
 
-判定方法：h2 客户端宣告 ENABLE_PUSH=0 后观测推送行为；构造 Cache-Digest 变体诱导推送；统计 reserved 流驻留时长。
+Method: h2 client advertising ENABLE_PUSH=0 and observing push behavior; craft Cache-Digest variants to induce pushes; measure reserved-stream residency duration.
 
-## 3. 攻击面猜想
+## 3. Attack-Surface Hypotheses
 
-- **远程崩溃 DoS**：SP-2 ——推送路径是覆盖率低的历史崩溃高发区（Cache-Digest 解析、gzip 处理）
-- **访问控制绕过**：SP-6 ——推送方法若绕过常规 HTTP 方法鉴权矩阵，等价于隐藏的攻击入口
-- **流表驻留**：SP-5 ——不收敛的 reserved 流与并发流上限计数交互，可冻结并发配额
+- **Remote-crash DoS**: SP-2 — the push path is a historically crash-prone, low-coverage area (Cache-Digest parsing, gzip handling)
+- **Access-control bypass**: SP-6 — if the push method bypasses the regular HTTP-method authorization matrix, it is equivalent to a hidden attack entry
+- **Stream-table residency**: SP-5 — non-converging reserved streams interact with the concurrent-stream cap and can freeze the concurrency quota
 
-## 4. 关联历史 CVE
+## 4. Related Historical CVEs
 
-| CVE | 实现 | 根因 |
+| CVE | Implementation | Root Cause |
 |---|---|---|
-| **CVE-2020-9490** | Apache httpd 2.4.20–2.4.43（mod_http2） | 特制 Cache-Digest 头值 → 服务端执行 HTTP/2 PUSH 时崩溃；`H2Push off` 可缓解；CVSS 7.5 |
-| **CVE-2023-30631** | Apache Traffic Server 8.0.0–9.2.0 | `proxy.config.http.push_method_enabled` 配置不生效（输入校验缺陷），推送方法访问控制失效；CVSS 7.5 |
-| **CVE-2026-69203** | http4s Ember Server | 推送帧相关 DoS；官方缓解为代理层剥离 PUSH_PROMISE 帧；修复 0.23.35 |
-| 交叉引用 | H3 侧 `rfc9114-server-push-frame-rejection` | 同一攻击模式在 QUIC 栈的平行审计（服务端必须接受客户端对推送的拒绝） |
+| **CVE-2020-9490** | Apache httpd 2.4.20–2.4.43 (mod_http2) | Specially crafted Cache-Digest header value → server crashes when performing HTTP/2 PUSH; mitigated by `H2Push off`; CVSS 7.5 |
+| **CVE-2023-30631** | Apache Traffic Server 8.0.0–9.2.0 | `proxy.config.http.push_method_enabled` config ineffective (input-validation defect), push-method access control fails; CVSS 7.5 |
+| **CVE-2026-69203** | http4s Ember Server | Push-frame-related DoS; official mitigation is proxy-layer stripping of PUSH_PROMISE frames; fixed in 0.23.35 |
+| Cross-reference | H3-side `rfc9114-server-push-frame-rejection` | The same attack pattern audited in parallel on QUIC stacks (the server must accept client rejection of push) |
 
-## 5. 差分验证方法
+## 5. Differential Verification
 
-对照组：ENABLE_PUSH=0 后绝无任何 PUSH_PROMISE 的 nginx/Envoy 现代版本。
-对比字段：SP-1/SP-3 错误处置、SP-2 推送路径健壮性、SP-5 reserved 流超时。
-误报排除：中间代理解释并终结推送（转发为常规 200 响应）→ 判定通过；推送关闭但实现保留了预留代码路径未被触发 → 仅记录暴露面不记违规。
+Control group: modern nginx/Envoy versions that never send any PUSH_PROMISE after ENABLE_PUSH=0.
+Comparison fields: SP-1/SP-3 error disposition, SP-2 push-path robustness, SP-5 reserved-stream timeout.
+False-positive exclusion: an intermediary interprets and terminates push (forwarding as a regular 200 response) → passes; push disabled but the implementation retains reserved code paths that are never triggered → record as exposure surface, not a violation.
 
-## 6. 对接的攻击 Skill
+## 6. Downstream Attack Skills
 
-- 技能层（怎么打）：`fuzzowski-network-fuzz`（PUSH_PROMISE/Cache-Digest 变异）、`dharma-grammar-fuzz`（推送帧序列生成）
-- 工具层（用什么打）：Python h2（ENABLE_PUSH=0 宣告 + 推送观测）、内存/崩溃采样
-- 命中后动作：SP-1 确认 → 验证推送内容是否绕过认证资源 → 输出"禁推宣告失效"证据链；SP-2 确认 → 最小崩溃负载归档
+- Skill layer (how to attack): `fuzzowski-network-fuzz` (PUSH_PROMISE/Cache-Digest mutation), `dharma-grammar-fuzz` (push-frame sequence generation)
+- Tool layer (what to attack with): Python h2 (ENABLE_PUSH=0 advertisement + push observation), memory/crash sampling
+- Post-hit actions: SP-1 confirmed → verify whether pushed content bypasses authenticated resources → output the "push-disable advertisement ignored" evidence chain; SP-2 confirmed → archive the minimal crashing payload

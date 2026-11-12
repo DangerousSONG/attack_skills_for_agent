@@ -1,53 +1,54 @@
 ---
 name: rfc9113-ping-empty-frame-flood
-description: 审计 HTTP/2 实现对强制应答帧（PING）与空载帧（DATA/HEADERS/CONTINUATION/PUSH_PROMISE）的处理代价是否有界——PING 强制逐帧 ACK 应答（CVE-2019-9512 Ping Flood：持续 PING 造成应答队列膨胀 CPU/内存耗尽）；空载帧不吃流控、单帧处理成本不对称（CVE-2019-9518 Empty Frame Flood，Envoy 安全团队致谢披露）；0 长度头字段内存驻留（CVE-2019-9516 Header Leak）；RFC 9113 §6.7/§6.1 给了语义没给成本护栏
+description: Audit whether HTTP/2 implementations bound the processing cost of mandatory-response frames (PING) and empty frames (DATA/HEADERS/CONTINUATION/PUSH_PROMISE) — PING forces a per-frame ACK (CVE-2019-9512 Ping Flood: sustained PING inflates the response queue, exhausting CPU/memory); empty frames bypass flow control with asymmetric per-frame cost (CVE-2019-9518 Empty Frame Flood, disclosed with Envoy security-team acknowledgment); zero-length header memory residency (CVE-2019-9516 Header Leak); RFC 9113 §6.7/§6.1 give the semantics but no cost guardrails
+zh-signals: 审计 HTTP/2 实现对强制应答帧（PING）与空载帧（DATA/HEADERS/CONTINUATION/PUSH_PROMISE）的处理代价是否有界——PING 强制逐帧 ACK 应答（CVE-2019-9512 Ping Flood：持续 PING 造成应答队列膨胀 CPU/内存耗尽）；空载帧不吃流控、单帧处理成本不对称（CVE-2019-9518 Empty Frame Flood，Envoy 安全团队致谢披露）；0 长度头字段内存驻留（CVE-2019-9516 Header Leak）；RFC 9113 §6.7/§6.1 给了语义没给成本护栏
 rfc: RFC 9113 §6.7（PING）/ §6.1（DATA）/ §6.2（HEADERS）/ §6.6（PUSH_PROMISE）
 license: Apache-2.0
 ---
 
-# RFC 9113 §6.7/§6.1 PING 与空载帧成本不对称审计
+# RFC 9113 §6.7/§6.1 PING and Empty-Frame Cost-Asymmetry Audit
 
-## 1. 约束条款（原文出处）
+## 1. Normative Clauses (Original Sources)
 
-RFC 9113 §6.7（要点）：
-> 收到 PING 帧**必须**回一个 ACK 标志置位的 PING 应答（负载逐字节复制）；PING 不计入流控。
+RFC 9113 §6.7 (key points):
+> On receiving a PING frame, an endpoint **must** return a PING response with the ACK flag set (payload copied byte for byte); PING is not flow-controlled.
 
-核心模式一句话：**PING 和空载帧的共同点是"线上几乎免费、线下强制工作"——PING 逐帧强制 ACK，空载 DATA/HEADERS 不计流控、却走完整帧解析管线。RFC 的应答义务是刚性的，护栏（每连接帧率上限、最小负载、节流）是实现的义务。审计对象是"强制工作量的斜率是否被夹住"。**
+Core pattern in one sentence: **PING and empty frames share one property — "nearly free on the wire, mandatory work off it": PING forces a per-frame ACK, and empty DATA/HEADERS frames bypass flow control yet traverse the full frame-parsing pipeline. The RFC's response obligation is rigid; the guardrails (per-connection frame-rate caps, minimum payload, throttling) are the implementation's obligation. The audit target is "is the slope of the mandatory work clamped."**
 
-## 2. 违规判定条件
+## 2. Violation Criteria
 
-| 编号 | 探测 | 判定 |
+| ID | Probe | Criterion |
 |---|---|---|
-| PF-1 | 单连接持续发送 PING（无 ACK 等待，背压打满） | 服务端无每连接 PING 频率上限，ACK 应答队列无界增长 → CVE-2019-9512 同款 |
-| PF-2 | PING 出现在流 ID 非 0 的流上 | 未按连接错误处理 → §6.7 流定向校验缺失（指纹点） |
-| PF-3 | 空载 DATA 帧洪水（len=0，无 END_STREAM） | 单帧处理成本 / 攻击带宽比 > 100x 且无帧率熔断 → CVE-2019-9518 同款 |
-| PF-4 | 空载 HEADERS/CONTINUATION 帧洪水（len=0 无 END_HEADERS） | 同上 → 2019-9518 明确列出帧类 |
-| PF-5 | 0 长度头名 + 0 长度头值（可选 Huffman 编码成 1 字节）持续发送 | 每次分配驻留至会话结束 → CVE-2019-9516 Header Leak 同款 |
+| PF-1 | Sustain PING on a single connection (no ACK waiting, backpressure saturated) | No per-connection PING rate limit; ACK response queue grows unbounded → same class as CVE-2019-9512 |
+| PF-2 | PING on a stream with non-zero stream ID | Not handled as a connection error → §6.7 stream-orientation validation missing (fingerprint point) |
+| PF-3 | Empty DATA frame flood (len=0, no END_STREAM) | Per-frame processing cost / attack bandwidth ratio > 100x with no frame-rate circuit breaker → same class as CVE-2019-9518 |
+| PF-4 | Empty HEADERS/CONTINUATION frame flood (len=0, no END_HEADERS) | Same as above → explicitly listed frame class in CVE-2019-9518 |
+| PF-5 | Sustained zero-length header name + zero-length header value (optionally Huffman-encoded to 1 byte) | Allocated on every occurrence and resident until session end → same class as CVE-2019-9516 Header Leak |
 
-判定方法：帧级客户端压测 PING 与空载帧各 baseline；观测 CPU、内存驻留、正常请求 P99；对照组为 idle 连接基线。
+Method: frame-level client stress-testing PING and empty frames against baselines; observe CPU, memory residency, and normal-request P99; control group is the idle-connection baseline.
 
-## 3. 攻击面猜想
+## 3. Attack-Surface Hypotheses
 
-- **CPU/内存耗尽 DoS**：PF-1/PF-3/PF-4 ——三类均为"攻击带宽 KB 级、处理成本 MB 级"的不对称消耗
-- **连接保活滥用**：PF-1 ——PING 风暴让 idle 连接永远无法被回收（配合慢速连接占满连接表）
-- **内存驻留泄漏**：PF-5 ——0 长度头触发分配但永不释放（会话生命周期内），多流并发放大
+- **CPU/memory-exhaustion DoS**: PF-1/PF-3/PF-4 — all three are asymmetric drains with "KB-level attack bandwidth, MB-level processing cost"
+- **Connection keepalive abuse**: PF-1 — a PING storm keeps idle connections from ever being reclaimed (combine with slow connections to fill the connection table)
+- **Memory-residency leak**: PF-5 — zero-length headers trigger allocations that are never released (for the session lifetime), amplified across many streams
 
-## 4. 关联历史 CVE
+## 4. Related Historical CVEs
 
-| CVE | 实现 | 根因 |
+| CVE | Implementation | Root Cause |
 |---|---|---|
-| **CVE-2019-9512** | 多实现全栈（RHSA-2019:2692/2745 系列批量修复） | Ping Flood：强制逐帧 ACK 义务 + 无频率上限 → 应答队列膨胀；Cloudflare 后续以 GOAWAY+ENHANCE_YOUR_CALM 缓解（Hyper adaptive window 误伤事件亦源于此） |
-| **CVE-2019-9518** | 多实现（RHSA-2019:2925/2939/2955/3892；netty 4.1.13 全系列受影响） | 空帧洪水：DATA/HEADERS/CONTINUATION/PUSH_PROMISE 空载帧处理成本远超带宽占比；Envoy 安全团队致谢披露 |
-| **CVE-2019-9516** | nginx（修复 commit 6dfbc8b1c211）、Node.js、IBM 系产品 | 0-Length Headers Leak：0 长度头名/值分配驻留至会话死；CVSS 7.5/6.5 |
+| **CVE-2019-9512** | Full stack, multiple implementations (batch fixes RHSA-2019:2692/2745 series) | Ping Flood: mandatory per-frame ACK obligation + no rate limit → response-queue inflation; Cloudflare later mitigated with GOAWAY+ENHANCE_YOUR_CALM (the Hyper adaptive-window false-positive incident also traces to this) |
+| **CVE-2019-9518** | Multiple implementations (RHSA-2019:2925/2939/2955/3892; netty 4.1.13 entire series affected) | Empty-frame flood: per-frame processing cost of empty DATA/HEADERS/CONTINUATION/PUSH_PROMISE far exceeds their bandwidth share; disclosed with Envoy security-team acknowledgment |
+| **CVE-2019-9516** | nginx (fix commit 6dfbc8b1c211), Node.js, IBM products | 0-Length Headers Leak: zero-length header name/value allocations remain resident until session death; CVSS 7.5/6.5 |
 
-## 5. 差分验证方法
+## 5. Differential Verification
 
-对照组：修复版 nginx（1.17.x 2019-08 批次）；Cloudflare 边缘行为（高频 PING → GOAWAY ENHANCE_YOUR_CALM）作为"缓解标杆"。
-对比字段：PF-1 熔断阈值（帧/秒）、PF-3/4 单帧处理成本比、PF-5 内存驻留斜率。
-误报排除：实现有每连接帧率总上限且 PING/空载帧共享配额 → 判定通过；实现仅延迟 ACK 但队列有界 → 判定通过。
+Control group: patched nginx (1.17.x 2019-08 batch); Cloudflare edge behavior (high-rate PING → GOAWAY ENHANCE_YOUR_CALM) as the "mitigation benchmark".
+Comparison fields: PF-1 circuit-breaker threshold (frames/second), PF-3/4 per-frame cost ratio, PF-5 memory-residency slope.
+False-positive exclusion: an implementation with a per-connection total frame-rate cap shared by PING and empty frames → passes; an implementation that merely delays ACKs but keeps the queue bounded → passes.
 
-## 6. 对接的攻击 Skill
+## 6. Downstream Attack Skills
 
-- 技能层（怎么打）：`slowhttptest-dos`（PING/空载帧慢速流）、`fuzzowski-network-fuzz`（帧类型/负载组合变异）
-- 工具层（用什么打）：Python h2 帧级构造、CPU/内存采样
-- 命中后动作：PF-1 确认 → 测单连接打满 ACK 产的阈值帧率 → 对照 Cloudflare ENHANCE_YOUR_CALM 阈值做缓解基线；PF-5 确认 → 测单会话驻留上限与多流放大系数
+- Skill layer (how to attack): `slowhttptest-dos` (slow PING/empty-frame streams), `fuzzowski-network-fuzz` (frame-type/payload combination mutation)
+- Tool layer (what to attack with): Python h2 frame-level construction, CPU/memory sampling
+- Post-hit actions: PF-1 confirmed → measure the threshold frame rate that saturates ACK production per connection → baseline against Cloudflare's ENHANCE_YOUR_CALM threshold; PF-5 confirmed → measure per-session residency ceiling and multi-stream amplification factor

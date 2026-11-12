@@ -1,52 +1,53 @@
 ---
 name: rfc9113-priority-tree-abuse
-description: 审计 HTTP/2 优先级树实现是否抗资源循环——多流持续打乱优先级造成树结构搅动即可 CPU 耗尽（CVE-2019-9513 Resource Loop：nghttp2/nginx/netty/undertow 全栈波及，CVSS 7.5，nghttp2 修复版 1.39.2）；RFC 9113 §5.3 允许实现放弃优先级处理（留白条款），但"保留实现就必须抗搅动"，审计对象是优先级状态机的有界性
+description: Audit whether HTTP/2 priority-tree implementations resist resource exhaustion via cycles — continuously reshuffling priorities across many streams churns the tree structure and exhausts CPU (CVE-2019-9513 Resource Loop: nghttp2/nginx/netty/undertow full-stack impact, CVSS 7.5, fixed in nghttp2 1.39.2); RFC 9113 §5.3 permits implementations to deprioritize processing (blank-clause escape), but "if you keep it, it must resist churn" — the audit target is the boundedness of the priority state machine
+zh-signals: 审计 HTTP/2 优先级树实现是否抗资源循环——多流持续打乱优先级造成树结构搅动即可 CPU 耗尽（CVE-2019-9513 Resource Loop：nghttp2/nginx/netty/undertow 全栈波及，CVSS 7.5，nghttp2 修复版 1.39.2）；RFC 9113 §5.3 允许实现放弃优先级处理（留白条款），但"保留实现就必须抗搅动"，审计对象是优先级状态机的有界性
 rfc: RFC 9113 §5.3（流优先级）/ §5.3.1（依赖）/ RFC 7540 §5.3
 license: Apache-2.0
 ---
 
-# RFC 9113 §5.3 优先级树资源循环审计
+# RFC 9113 §5.3 Priority-Tree Resource-Loop Audit
 
-## 1. 约束条款（原文出处）
+## 1. Normative Clauses (Original Sources)
 
-RFC 9113 §5.3（要点）：
-> 端点可以**放弃对优先级帧的处理**（MUST only be processed in certain ways）；优先级树的维护是实现的优化选择，但若实现维护树结构，则依赖关系更新必须受环路检测保护。
+RFC 9113 §5.3 (key points):
+> Endpoints may **decline to process priority frames**; maintaining the priority tree is an implementation optimization, but if an implementation maintains the tree, dependency updates must be protected by cycle detection.
 
-核心模式一句话：**PRIORITY 帧是低成本的"树重排指令"——攻击者用多流持续洗牌制造树结构搅动，实现若全量维护一棵树且每次重排代价 O(n)，CPU 就被低带宽打满。RFC 明确允许不做优先级（这是合法的逃生门），所以审计先问"你做了没有"，做了才查"你做的东西是否有界"。**
+Core pattern in one sentence: **PRIORITY frames are low-cost "tree-reordering instructions" — an attacker shuffles dependencies across many streams to churn the tree, and if the implementation maintains a full tree with O(n) cost per reorder, low bandwidth saturates the CPU. The RFC explicitly allows not doing priorities at all (a legal escape hatch), so the audit first asks "did you implement it", and only if yes checks "is what you built bounded."**
 
-## 2. 违规判定条件
+## 2. Violation Criteria
 
-| 编号 | 探测 | 判定 |
+| ID | Probe | Criterion |
 |---|---|---|
-| PT-1 | 开 N 条流（N=100+），循环发送 PRIORITY 帧互换依赖关系（洗牌模式） | CPU 随帧率线性爬升、无节流/合并 → CVE-2019-9513 同款 Resource Loop |
-| PT-2 | 构造依赖环（A→B→A）再持续加重排 | 未做环路检测或检测失败卡死 → §5.3.1 依赖正确性缺失 |
-| PT-3 | 向 idle/closed 流发送 PRIORITY（流不存在或为服务端发起流） | 未按规范忽略或错误处理 → §5.3 PRIORITY 可针对任意流状态的容忍义务 |
-| PT-4 | PRIORITY 帧洪水 + 正常请求混合 | 正常请求延迟劣化超过基线 2x → 调度公平性失守（DoS 已成立，无需打满） |
-| PT-5 | 单帧声明依赖自身（stream 依赖自己） | 未拒绝/未断连 → 树一致性校验缺失 |
+| PT-1 | Open N streams (N=100+), cyclically send PRIORITY frames swapping dependency relationships (shuffle pattern) | CPU climbs linearly with frame rate, no throttling/coalescing → same class as CVE-2019-9513 Resource Loop |
+| PT-2 | Build a dependency cycle (A→B→A) then keep adding reorders | No cycle detection, or detection fails and hangs → §5.3.1 dependency correctness missing |
+| PT-3 | Send PRIORITY to an idle/closed stream (nonexistent stream or server-initiated stream) | Not ignored or mis-handled per spec → §5.3 tolerance obligation for PRIORITY targeting any stream state |
+| PT-4 | PRIORITY frame flood mixed with normal requests | Normal-request latency degrades more than 2x over baseline → scheduling fairness lost (DoS already holds, no need to saturate) |
+| PT-5 | A single frame declaring a dependency on itself (a stream depending on itself) | Not rejected / no disconnect → tree-consistency validation missing |
 
-判定方法：h2 客户端多流并发 + PRIORITY 洗牌循环；观测服务端 CPU 与正常请求 P99 延迟；对照组为无 PRIORITY 基线。
+Method: h2 client with multi-stream concurrency + PRIORITY shuffle loops; observe server CPU and normal-request P99 latency; control group is the no-PRIORITY baseline.
 
-## 3. 攻击面猜想
+## 3. Attack-Surface Hypotheses
 
-- **CPU 耗尽 DoS**：PT-1 ——单连接低带宽打满事件循环（2019 年 Netflix/CERT 披露全栈受影响）
-- **调度操纵**：PT-4 ——不需耗尽资源，只要劣化优先级调度即可让目标流量饿死（L7 层面接近 QoS 攻击）
-- **指纹**：PT-3/PT-5 的错误处置差异可区分实现栈版本
+- **CPU-exhaustion DoS**: PT-1 — a single low-bandwidth connection saturates the event loop (full-stack impact in the 2019 Netflix/CERT disclosure)
+- **Scheduling manipulation**: PT-4 — no need to exhaust resources; merely degrading priority scheduling starves the target traffic (an L7 QoS-attack equivalent)
+- **Fingerprint**: PT-3/PT-5 error-handling differences can distinguish implementation stacks and versions
 
-## 4. 关联历史 CVE
+## 4. Related Historical CVEs
 
-| CVE | 实现 | 根因 |
+| CVE | Implementation | Root Cause |
 |---|---|---|
-| **CVE-2019-9513** | nghttp2（修复 1.39.2）、nginx、netty、undertow、Node.js | 优先级树搅动 CPU 耗尽；nginx 修复 commit 5ae726912654；Red Hat RHSA-2019:2745 系列批量修复；CVSS 7.5 / CWE-400 |
-| 盲区声明 | 同族待发现 | RFC 允许放弃优先级——部分实现选择"不维护树"即免疫；凡维护树的实现均需证明重排代价有界，本 Skill 标记为**存量栈必查项** |
+| **CVE-2019-9513** | nghttp2 (fixed 1.39.2), nginx, netty, undertow, Node.js | Priority-tree churn exhausts CPU; nginx fix commit 5ae726912654; Red Hat RHSA-2019:2745 batch fixes; CVSS 7.5 / CWE-400 |
+| Blind-spot declaration | Same family, TBD | The RFC allows dropping priorities — some implementations choose "no tree" and are immune; every implementation that maintains a tree must prove bounded reorder cost. This skill is flagged as a **must-check on legacy stacks** |
 
-## 5. 差分验证方法
+## 5. Differential Verification
 
-对照组：nghttp2 ≥1.39.2（修复版对优先级搅动有节流/合并）；nginx ≥1.17.3（2019-08 修复批次）。
-对比字段：PT-1 CPU 曲线斜率、PT-2 环检测、PT-4 正常请求 P99 劣化倍数。
-误报排除：实现声明"不处理优先级"但收到 PRIORITY 帧后行为正确（忽略或仅记账）→ 判定通过；实现有树但重排为惰性/合并处理 → 判定通过。
+Control group: nghttp2 ≥1.39.2 (throttling/coalescing against priority churn); nginx ≥1.17.3 (2019-08 patch batch).
+Comparison fields: PT-1 CPU-curve slope, PT-2 cycle detection, PT-4 normal-request P99 degradation factor.
+False-positive exclusion: an implementation declaring "no priority processing" whose behavior on receiving PRIORITY frames is correct (ignored or only tallied) → passes; an implementation with a tree but lazy/merged reordering → passes.
 
-## 6. 对接的攻击 Skill
+## 6. Downstream Attack Skills
 
-- 技能层（怎么打）：`slowhttptest-dos`（慢速 PRIORITY 流模式）、`fuzzowski-network-fuzz`（PRIORITY 字段变异）
-- 工具层（用什么打）：Python h2（多流 + 帧级 PRIORITY 构造）、CPU/延迟采样脚本
-- 命中后动作：PT-1 确认 → 测"单连接打满阈值帧率" → 评估多连接放大与 2019 披露栈版本存量（nginx 1.17.3 以下全量中招）
+- Skill layer (how to attack): `slowhttptest-dos` (slow PRIORITY stream mode), `fuzzowski-network-fuzz` (PRIORITY field mutation)
+- Tool layer (what to attack with): Python h2 (multi-stream + frame-level PRIORITY construction), CPU/latency sampling scripts
+- Post-hit actions: PT-1 confirmed → measure the "single-connection saturation threshold frame rate" → assess multi-connection amplification and the stock of pre-2019 disclosed stack versions (nginx below 1.17.3 is fully vulnerable at scale)

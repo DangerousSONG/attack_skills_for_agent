@@ -1,57 +1,58 @@
 ---
 name: rfc9113-h2c-upgrade-pseudoheader
-description: 审计 h2c 升级协商与伪头校验——反向代理透传 Upgrade: h2c + HTTP2-Settings 即打开绕过认证/WAF 的原始字节隧道（CVE-2026-88008 Traefik GHSA-w4v4-9rw7-5326 CVSS 9.1 CWE-444+863，修复 PR #13797 剥离 h2c token；CVE-2026-88011 v2 同族；CVE-2026-73548 Envoy 通用升级走私）；HTTP2-Settings 不得随请求转发（RFC 9113 §3.2）、伪头字段规则（§8.3）是判定锚点；BishopFox h2csmuggler 2020 年已实证 HAProxy/Traefik/Nuster 默认透传
+description: Audit h2c upgrade negotiation and pseudo-header validation — a reverse proxy forwarding Upgrade: h2c + HTTP2-Settings opens a raw-byte tunnel that bypasses authentication/WAF (CVE-2026-88008 Traefik GHSA-w4v4-9rw7-5326 CVSS 9.1 CWE-444+863, fixed in PR #13797 stripping the h2c token; CVE-2026-88011 v2 sibling; CVE-2026-73548 Envoy generic-upgrade smuggling); HTTP2-Settings must not be forwarded with requests (RFC 9113 §3.2), and pseudo-header rules (§8.3) are the audit anchors; BishopFox h2csmuggler demonstrated default forwarding in HAProxy/Traefik/Nuster as early as 2020
+zh-signals: 审计 h2c 升级协商与伪头校验——反向代理透传 Upgrade: h2c + HTTP2-Settings 即打开绕过认证/WAF 的原始字节隧道（CVE-2026-88008 Traefik GHSA-w4v4-9rw7-5326 CVSS 9.1 CWE-444+863，修复 PR #13797 剥离 h2c token；CVE-2026-88011 v2 同族；CVE-2026-73548 Envoy 通用升级走私）；HTTP2-Settings 不得随请求转发（RFC 9113 §3.2）、伪头字段规则（§8.3）是判定锚点；BishopFox h2csmuggler 2020 年已实证 HAProxy/Traefik/Nuster 默认透传
 rfc: RFC 9113 §3.2（Starting HTTP/2 with Prior Knowledge / h2c Upgrade）/ §8.1.2.1（伪头字段规则）+ RFC 7540 §3.2
 license: Apache-2.0
 ---
 
-# RFC 9113 §3.2 h2c 升级协商与伪头校验审计
+# RFC 9113 §3.2 h2c Upgrade Negotiation and Pseudo-Header Validation Audit
 
-## 1. 约束条款（原文出处）
+## 1. Normative Clauses (Original Sources)
 
-RFC 9113 §3.2（要点）：
-> `HTTP2-Settings` 是**连接专用**头字段（hop-by-hop），不得由中介转发；h2c 升级仅允许发生在明文连接上。
+RFC 9113 §3.2 (key points):
+> `HTTP2-Settings` is a **connection-specific** header field (hop-by-hop) and must not be forwarded by intermediaries; h2c upgrade is only allowed on cleartext connections.
 
-RFC 9113 §8.1.2.1（要点）：
-> 伪头字段（:method/:path/:authority/:scheme）必须出现在所有常规字段**之前**、且不得重复；常规字段不得使用":"前缀。
+RFC 9113 §8.1.2.1 (key points):
+> Pseudo-header fields (:method/:path/:authority/:scheme) must appear before all regular fields **and must not be duplicated**; regular fields must not use the ":" prefix.
 
-核心模式一句话：**h2c 升级的本质是"代理和服务器对协议状态的理解分叉"——代理以为自己在转发 HTTP/1.1，后端回了 101 之后整条连接变成代理看不见的原始隧道。RFC 给的两道闸（HTTP2-Settings 不转发、升级仅限明文）在 2026 年的 Traefik/Envoy 上仍然失守，说明这是持续复活的漏洞类，不是历史 CVE。**
+Core pattern in one sentence: **the essence of the h2c upgrade is "the proxy and the server diverge in their understanding of protocol state" — the proxy thinks it is forwarding HTTP/1.1, the backend returns 101 and the entire connection becomes a raw tunnel invisible to the proxy. The two gates the RFC provides (don't forward HTTP2-Settings; upgrade only on cleartext) still fell on Traefik/Envoy in 2026, showing this is a vulnerability class that keeps resurrecting, not a historical CVE.**
 
-## 2. 违规判定条件
+## 2. Violation Criteria
 
-| 编号 | 探测 | 判定 |
+| ID | Probe | Criterion |
 |---|---|---|
-| HU-1 | 对目标发 HTTP/1.1 `Upgrade: h2c` + `HTTP2-Settings` + `Connection: Upgrade, HTTP2-Settings`（h2csmuggler 标准负载） | 代理/网关透传升级头至后端 → CVE-2026-88008 同款；收到 101 后连接变隧道 → 认证/WAF 全绕过 |
-| HU-2 | 在 TLS 连接上发起 h2c 升级（规范禁止，多数客户端拒绝） | 代理仍转发 → BishopFox h2-over-TLS 走私通道成立 |
-| HU-3 | H2 帧中含重复/乱序/常规字段冒号前缀伪头（`:path` 两次、`:x-foo: bar`） | 未按流错误/连接错误拒绝 → §8.1.2.1 伪头校验缺失（H2→H1 降级走私入口） |
-| HU-4 | 升级请求本身带 body 且连接为 keep-alive | 升级前 body 未消耗即进入隧道 → 字节残留走私（CVE-2026-73548 Envoy 同类根因：升级载荷未等 101 确认即转发） |
-| HU-5 | `HTTP2-Settings` 值非法（非合法 base64url / 解码后非法 SETTINGS 负载） | 后端仍回 101 → §3.2 升级载荷校验缺失（指纹+利用面） |
+| HU-1 | Send HTTP/1.1 `Upgrade: h2c` + `HTTP2-Settings` + `Connection: Upgrade, HTTP2-Settings` to the target (h2csmuggler standard payload) | Proxy/gateway forwards the upgrade headers to the backend → same class as CVE-2026-88008; connection becomes a tunnel after the 101 → authentication/WAF fully bypassed |
+| HU-2 | Initiate an h2c upgrade on a TLS connection (spec-forbidden, most clients refuse) | Proxy still forwards it → BishopFox h2-over-TLS smuggling channel holds |
+| HU-3 | H2 frames containing duplicate/out-of-order pseudo-headers or colon-prefixed regular fields (`:path` twice, `:x-foo: bar`) | Not rejected as a stream/connection error → §8.1.2.1 pseudo-header validation missing (H2→H1 downgrade smuggling entry) |
+| HU-4 | The upgrade request itself carries a body on a keep-alive connection | Body not consumed before entering the tunnel → byte-residue smuggling (same root cause as CVE-2026-73548 Envoy: upgrade payload forwarded before the 101 confirmation) |
+| HU-5 | Illegal `HTTP2-Settings` value (invalid base64url / decoded payload is not a valid SETTINGS block) | Backend still returns 101 → §3.2 upgrade-payload validation missing (fingerprint + exploitation surface) |
 
-判定方法：h2csmuggler（BishopFox/Assetnote 双版本）扫描 + 手工构造升级请求；验证隧道建立后访问受保护路径是否 200。
+Method: h2csmuggler scan (BishopFox/Assetnote dual versions) + handcrafted upgrade requests; verify whether protected paths return 200 after the tunnel is established.
 
-## 3. 攻击面猜想
+## 3. Attack-Surface Hypotheses
 
-- **认证/WAF 全绕过**：HU-1/HU-2 ——101 之后代理退化为 TCP 隧道，所有中间件（BasicAuth/IPAllowList/RateLimit）失效
-- **请求走私/租户串扰**：HU-4 ——共享 keep-alive 连接池中的字节残留可让下游租户收到他人响应（CVE-2026-73548 机制）
-- **H2→H1 降级走私**：HU-3 ——伪头校验缺失在 H2 前端 + H1 后端架构中恢复 HTTP/1.1 语义分歧（与 `rfc9113-content-length-data-mismatch` 互补）
+- **Full authentication/WAF bypass**: HU-1/HU-2 — after the 101, the proxy degrades to a TCP tunnel; all middleware (BasicAuth/IPAllowList/RateLimit) is out of play
+- **Request smuggling / tenant cross-talk**: HU-4 — byte residue in shared keep-alive connection pools can deliver other tenants' responses downstream (CVE-2026-73548 mechanism)
+- **H2→H1 downgrade smuggling**: HU-3 — missing pseudo-header validation restores HTTP/1.1 semantic divergence in H2-front/H1-back architectures (complementary to `rfc9113-content-length-data-mismatch`)
 
-## 4. 关联历史 CVE
+## 4. Related Historical CVEs
 
-| CVE | 实现 | 根因 |
+| CVE | Implementation | Root Cause |
 |---|---|---|
-| **CVE-2026-88008** | Traefik v2.11.26–2.11.56 / v3.4.2–3.7.12（修复 3.7.13，GHSA-w4v4-9rw7-5326） | forwardedheaders 中间件原样透传 Upgrade token + HTTP2-Settings；101 后 net/http ReverseProxy 切隧道模式 → 中间件链全跳过。CVSS 9.1，CWE-444 + CWE-863 |
-| **CVE-2026-88011** | Traefik v2 系（GHSA 同族） | 同上机制 v2 分支独立编号 |
-| **CVE-2026-73548** | Envoy 通用升级路径 | 升级载荷在收到上游 101 确认前即被转发，上游视为 keep-alive 管线第二个请求 → 响应投毒；根因 pausedForGenericUpgrade 状态缺失 |
-| BishopFox h2csmuggler 研究（2020） | HAProxy / Traefik / Nuster 默认透传；AWS ALB / NGINX / Apache / Squid / Envoy 可配置失误 | 首次系统性实证 h2c 走私类；工具与 Docker demo 公开 |
+| **CVE-2026-88008** | Traefik v2.11.26–2.11.56 / v3.4.2–3.7.12 (fixed 3.7.13, GHSA-w4v4-9rw7-5326) | forwardedheaders middleware passes the Upgrade token + HTTP2-Settings verbatim; after the 101, net/http ReverseProxy switches to tunnel mode → the entire middleware chain is skipped. CVSS 9.1, CWE-444 + CWE-863 |
+| **CVE-2026-88011** | Traefik v2 family (GHSA sibling) | Same mechanism, independently numbered on the v2 branch |
+| **CVE-2026-73548** | Envoy generic upgrade path | Upgrade payload forwarded before receiving the upstream 101 confirmation; upstream treats it as a second pipelined request on keep-alive → response poisoning; root cause: missing pausedForGenericUpgrade state |
+| BishopFox h2csmuggler research (2020) | HAProxy / Traefik / Nuster forward by default; AWS ALB / NGINX / Apache / Squid / Envoy via misconfiguration | First systematic demonstration of the h2c smuggling class; tool and Docker demo public |
 
-## 5. 差分验证方法
+## 5. Differential Verification
 
-对照组：修复版 Traefik 3.7.13（剥离 h2c token + 删除 HTTP2-Settings）；AWS ALB/NGINX 默认配置（不透传）作为"正确默认标杆"。
-对比字段：HU-1 是否透传、HU-2 TLS 上升级是否被代理自身终结、HU-3 伪头违规的错误码正确性。
-误报排除：代理自身支持 h2c 并终结升级（返回自己的 101）→ 非透传，判定通过；后端不回 101 即升级链不成立 → 记"依赖后端配置"不记代理违规。
+Control group: patched Traefik 3.7.13 (strips the h2c token + removes HTTP2-Settings); AWS ALB/NGINX default configuration (no forwarding) as the "secure-by-default benchmark".
+Comparison fields: HU-1 forwarding or not, HU-2 whether TLS upgrades are terminated by the proxy itself, HU-3 pseudo-header-violation error-code correctness.
+False-positive exclusion: the proxy supports h2c itself and terminates the upgrade (returns its own 101) → not forwarding, passes; if the backend never returns 101 the upgrade chain does not hold → record as "depends on backend configuration", not a proxy violation.
 
-## 6. 对接的攻击 Skill
+## 6. Downstream Attack Skills
 
-- 技能层（怎么打）：`h2csmuggler-http2`（h2c 升级自动化）、`smuggler-desync` / `http2smugl-desync`（升级载荷与降级走私组合）
-- 工具层（用什么打）：h2csmuggler（BishopFox/Assetnote）、hyper-2 自定义客户端（TLS 上 h2c）
-- 命中后动作：HU-1 确认 → 枚举隧道可达的受保护路径清单 → 验证 WAF 规则是否在隧道流量上生效 → 输出绕过证据链
+- Skill layer (how to attack): `h2csmuggler-http2` (h2c upgrade automation), `smuggler-desync` / `http2smugl-desync` (upgrade-payload and downgrade-smuggling combinations)
+- Tool layer (what to attack with): h2csmuggler (BishopFox/Assetnote), hyper-2 custom client (h2c over TLS)
+- Post-hit actions: HU-1 confirmed → enumerate the protected paths reachable through the tunnel → verify whether WAF rules apply to tunnel traffic → output the bypass evidence chain

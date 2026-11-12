@@ -1,59 +1,60 @@
 ---
 name: rfc9113-rapid-reset-concurrency
-description: 审计 HTTP/2 实现并发上限的记账口径与强制关闭义务是否按 RFC 9113 §5.1.2/§6.4——只有 open/half-closed 计入并发（closed 立即释放槽位）、RST_STREAM 免确认即关闭即"开了又取消"不占用并发槽；无连接级工作预算即 CVE-2023-44487 Rapid Reset 原版漏洞面（Google/AWS/Cloudflare 全量受影响，2023-10 史上最大 L7 DDoS 之一；变体：批量延迟取消、超限开流依赖逐条拒绝）
+description: Audit HTTP/2 implementations' concurrency-limit accounting and forced-close obligations per RFC 9113 §5.1.2/§6.4 — only open/half-closed streams count toward concurrency (closed releases the slot immediately), RST_STREAM closes without acknowledgment so "open then cancel" consumes no concurrency slot; without a connection-level work budget this is the original CVE-2023-44487 Rapid Reset vulnerability surface (Google/AWS/Cloudflare all affected, one of the largest L7 DDoS events in history, 2023-10; variants: batched delayed cancel, over-limit stream opens relying on per-stream rejection)
+zh-signals: 审计 HTTP/2 实现并发上限的记账口径与强制关闭义务是否按 RFC 9113 §5.1.2/§6.4——只有 open/half-closed 计入并发（closed 立即释放槽位）、RST_STREAM 免确认即关闭即"开了又取消"不占用并发槽；无连接级工作预算即 CVE-2023-44487 Rapid Reset 原版漏洞面（Google/AWS/Cloudflare 全量受影响，2023-10 史上最大 L7 DDoS 之一；变体：批量延迟取消、超限开流依赖逐条拒绝）
 rfc: RFC 9113 §5.1.2（并发上限记账口径）/ §6.4（RST_STREAM）/ §6.8（GOAWAY）
 license: Apache-2.0
 ---
 
-# RFC 9113 §5.1.2 并发上限记账与 Rapid Reset 审计（H2 原版）
+# RFC 9113 §5.1.2 Concurrency-Limit Accounting and Rapid Reset Audit (H2 Original)
 
-## 1. 约束条款（原文出处）
+## 1. Normative Clauses (Original Sources)
 
-RFC 9113 §5.1.2（要点）：
-> SETTINGS_MAX_CONCURRENT_STREAMS 限制**open 与 half-closed 状态**的流——idle/reserved/closed 不计入。
+RFC 9113 §5.1.2 (key points):
+> SETTINGS_MAX_CONCURRENT_STREAMS limits streams in the **open and half-closed states** — idle/reserved/closed do not count.
 
-RFC 9113 §6.4（要点）：
-> RST_STREAM 允许发送方**立即终止**流，无需等对端确认；接收方收到后停止处理并释放该流资源。
+RFC 9113 §6.4 (key points):
+> RST_STREAM lets the sender **terminate a stream immediately** without waiting for peer acknowledgment; the receiver stops processing and releases that stream's resources on receipt.
 
-RFC 9113 §6.8（要点）：
-> GOAWAY 用于发起连接关闭；触发缓解后应**强制立即**关闭连接而非优雅 drain。
+RFC 9113 §6.8 (key points):
+> GOAWAY initiates connection shutdown; after triggering mitigation, a server should **force-close the connection immediately** rather than drain gracefully.
 
-核心模式一句话：**并发上限管的是"某一瞬间有多少活流"，而 RST_STREAM 让攻击者把流的寿命压缩到一次发送——瞬间快照永远达标，请求吞吐量却可以无限跑。设计防住了并发数，没防住并发 churn 率；该条款的审计点是：你的实现把限额建在快照上还是速率上。**
+Core pattern in one sentence: **the concurrency cap governs "how many live streams exist at one instant", and RST_STREAM lets the attacker compress a stream's lifetime into a single send — the instantaneous snapshot always complies while request throughput runs unbounded. The design guarded the concurrency count but not the concurrency churn rate; the audit question is: did your implementation build the limit on a snapshot or on a rate.**
 
-## 2. 违规判定条件
+## 2. Violation Criteria
 
-| 编号 | 探测 | 判定 |
+| ID | Probe | Criterion |
 |---|---|---|
-| RR-1 | canonical：开流 → 发 HEADERS → 立即 RST_STREAM，循环（单连接请求速率不再受 RTT 限制） | 服务端总工作量随取消率线性增长且无连接级熔断 → CVE-2023-44487 同款 |
-| RR-2 | 变体一：批量开流 → 短暂延迟 → 批量取消（绕过"重置频率"阈值型缓解） | 仅数 RST 频率的实现被绕过 → 缓解口径缺陷 |
-| RR-3 | 变体二：持续开流超过并发上限（依赖服务端逐条拒绝且不断连） | 服务端容忍超限开流不强制关闭 → RFC 建议的宽容路径被武器化 |
-| RR-4 | 触发任一可疑模式后观测服务端响应 | 未发 GOAWAY 强制关闭（优雅 drain 给攻击者续命时间） → §6.8 缓解义务缺失 |
-| RR-5 | 并发记账口径核查：RST 后 closed 流是否立即释放槽位、释放时点是否过早 | 记账与状态机不一致 → 上限形同虚设的实现级证据 |
+| RR-1 | Canonical: open stream → send HEADERS → immediately RST_STREAM, in a loop (single-connection request rate no longer RTT-bound) | Total server work grows linearly with cancel rate and no connection-level circuit breaker → same class as CVE-2023-44487 |
+| RR-2 | Variant 1: batch-open streams → brief delay → batch cancel (bypasses "reset-rate" threshold mitigations) | Implementations that only count RST frequency are bypassed → mitigation-coverage defect |
+| RR-3 | Variant 2: continuously open streams beyond the concurrency cap (relying on per-stream rejection without disconnect) | Server tolerates over-limit opens without forcing closure → the RFC-suggested lenient path weaponized |
+| RR-4 | After triggering any suspicious pattern, observe server response | No GOAWAY forced close (graceful drain gives the attacker extra lifetime) → §6.8 mitigation obligation missing |
+| RR-5 | Concurrency-accounting audit: whether closed streams release their slot immediately after RST, and whether release timing is too early | Accounting inconsistent with the state machine → implementation-level evidence that the cap is toothless |
 
-判定方法：单连接压测（nghttp 变体/custom client）；指标=服务端 CPU/分配随请求-取消率的斜率，**不看单请求行为**。
+Method: single-connection stress test (nghttp variants / custom client); the metric is the slope of server CPU/allocation versus the request-cancel rate — **do not judge single-request behavior**.
 
-## 3. 攻击面猜想
+## 3. Attack-Surface Hypotheses
 
-- **L7 DDoS（已实战验证）**：RR-1 ——2023-10 Google 披露：峰值请求速率远超史上任何攻击；AWS/Cloudflare 同步确认
-- **缓解绕过**：RR-2/RR-3 ——频率阈值与逐条拒绝两类"便宜缓解"均被证明可绕
-- **后端放大**：边缘放行后后端处理被取消请求的成本（HEADERS 解析/QPACK 解码/路由）
+- **L7 DDoS (combat-verified)**: RR-1 — disclosed by Google 2023-10: peak request rate exceeded any attack in history; AWS/Cloudflare confirmed simultaneously
+- **Mitigation bypass**: RR-2/RR-3 — both "cheap mitigations" (frequency thresholds and per-stream rejection) were proven bypassable
+- **Backend amplification**: post-edge cost of processing canceled requests at the backend (HEADERS parsing / HPACK decoding / routing)
 
-## 4. 关联历史 CVE
+## 4. Related Historical CVEs
 
-| CVE | 实现 | 根因 |
+| CVE | Implementation | Root Cause |
 |---|---|---|
-| **CVE-2023-44487** | HTTP/2 全生态：nghttp2 <1.57、Netty <4.1.100、Envoy、Go x/net、Jetty、Caddy <2.7.5、F5 等 | Rapid Reset：RST_STREAM 立即释放并发槽，服务端为每个被取消请求付出解析/调度成本；修复=连接级工作预算 + 触发即强制 GOAWAY 关闭 |
-| **变体实证（Google 披露）** | 缓解不当的实现 | 批量延迟取消绕过频率阈值；超限开流利用宽容逐条拒绝——两类变体迫使缓解设计转向"连接行为整体判定" |
-| 教训迁移 | H3 栈 | 官方结论：H3 无直接证据但建议主动缓解——对应本库 H3 侧 `rfc9000-stream-reset-cancel`，两 Skill 互为对照 |
+| **CVE-2023-44487** | Entire HTTP/2 ecosystem: nghttp2 <1.57, Netty <4.1.100, Envoy, Go x/net, Jetty, Caddy <2.7.5, F5, etc. | Rapid Reset: RST_STREAM releases the concurrency slot instantly while the server pays parsing/scheduling cost per canceled request; fix = connection-level work budget + forced GOAWAY close on trigger |
+| **Variant empirics (Google disclosure)** | Implementations with improper mitigations | Batched delayed cancel bypasses frequency thresholds; over-limit opens exploit lenient per-stream rejection — the two variants forced mitigation design toward "connection-behavior holistic judgment" |
+| Lesson migration | H3 stacks | Official conclusion: no direct evidence for H3 but proactive mitigation recommended — maps to the H3-side `rfc9000-stream-reset-cancel` in this library; the two skills cross-reference each other |
 
-## 5. 差分验证方法
+## 5. Differential Verification
 
-对照组：nghttp2 ≥1.57（工作预算 + 强制关闭）。
-对比字段：RR-1 单连接注入速率上限、RR-2/RR-3 变体下的关闭行为、RR-4 GOAWAY 时延（触发后应立即）。
-误报排除：浏览器导航取消是合法的 open-then-reset——**判定必须基于连接级模式**（频率+总量+工作量的联合阈值），单帧行为不构成违规；这正是该 CVE 教给全行业的教训，审计时不得倒退。
+Control group: nghttp2 ≥1.57 (work budget + forced close).
+Comparison fields: RR-1 single-connection injection-rate ceiling, RR-2/RR-3 close behavior under variants, RR-4 GOAWAY latency (must be immediate after trigger).
+False-positive exclusion: browser navigation cancellation is legitimate open-then-reset — **judgment must be based on connection-level patterns** (joint thresholds on frequency + total + work), and single-frame behavior is not a violation; this is the lesson the CVE taught the whole industry, and the audit must not regress on it.
 
-## 6. 对接的攻击 Skill
+## 6. Downstream Attack Skills
 
-- 技能层（怎么打）：`slowhttptest-dos`（请求-取消风暴时序）、`fuzzowski-network-fuzz`（RST/HEADERS 交错 fuzz）
-- 工具层（用什么打）：nghttp（-m 并发变体）、custom h2 client（帧级时序）、服务端 CPU/分配采样
-- 命中后动作：量化单连接工作注入速率 → 变体 1/2 复测缓解 → 输出"连接级预算缺失"证据并与 H3 侧 skill 合并成 Rapid Reset 跨版本族
+- Skill layer (how to attack): `slowhttptest-dos` (request-cancel storm timing), `fuzzowski-network-fuzz` (RST/HEADERS interleave fuzzing)
+- Tool layer (what to attack with): nghttp (-m concurrency variants), custom h2 client (frame-level timing), server CPU/allocation sampling
+- Post-hit actions: quantify single-connection work-injection rate → re-test mitigations under variants 1/2 → output the "connection-level budget missing" evidence and merge with the H3-side skill into a cross-version Rapid Reset family
