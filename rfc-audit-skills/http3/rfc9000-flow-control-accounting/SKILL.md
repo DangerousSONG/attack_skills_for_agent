@@ -1,54 +1,55 @@
 ---
 name: rfc9000-flow-control-accounting
-description: 审计 QUIC 实现对流级/连接级流量控制的记账与上限处理是否严格按 RFC 9000 §4——记账错误即存在内存耗尽或整数回绕攻击面（关联 CVE-2024-22189、CVE-2023-49295）
+description: Audit QUIC implementations' stream-level/connection-level flow-control accounting and limit enforcement per RFC 9000 §4 — accounting errors open memory-exhaustion or integer-wraparound attack surfaces (related CVE-2024-22189, CVE-2023-49295)
+zh-signals: 审计 QUIC 实现对流级/连接级流量控制的记账与上限处理是否严格按 RFC 9000 §4——记账错误即存在内存耗尽或整数回绕攻击面（关联 CVE-2024-22189、CVE-2023-49295）
 rfc: RFC 9000 §4（Flow Control）/ §2.1（整数编码与算术）
 license: Apache-2.0
 ---
 
-# RFC 9000 §4 流量控制记账与上限审计
+# RFC 9000 §4 Flow-Control Accounting and Limit Audit
 
-## 1. 约束条款（原文出处）
+## 1. Normative Clauses (Original Sources)
 
-RFC 9000 §4.1：接收方**必须**在连接级与流级两个层面限制发送方可发送的偏移上限（MAX_DATA / MAX_STREAM_DATA）；发送方**不得**发送超出上限的数据，接收方**不得**为超出上限的数据分配内存。
+RFC 9000 §4.1: the receiver **must** limit the offset the sender may send at both connection and stream level (MAX_DATA / MAX_STREAM_DATA); the sender **must not** send data beyond the limit, and the receiver **must not** allocate memory for data beyond the limit.
 
-RFC 9000 §2.1：协议中的整数字段为 62 位（varint），实现做算术运算时必须防范溢出与回绕。
+RFC 9000 §2.1: protocol integer fields are 62-bit (varint); implementations must guard against overflow and wraparound when doing arithmetic.
 
-核心模式一句话：**流量控制是多层状态机（连接级 + 每流级 + 发送缓冲 + 接收窗口），任何一层的记账错误或上限处理瑕疵都可被远程放大为内存耗尽。**
+Core pattern in one sentence: **flow control is a multi-layer state machine (connection level + per-stream level + send buffer + receive window); an accounting error or limit-handling defect at any layer can be remotely amplified into memory exhaustion.**
 
-## 2. 违规判定条件
+## 2. Violation Criteria
 
-| 编号 | 探测 | 判定 |
+| ID | Probe | Criterion |
 |---|---|---|
-| FC-1 | 持续发送数据逼近 MAX_DATA 上限，观察对方是否在超限瞬间正确断开（CONNECTION_ERROR: FLOW_CONTROL_ERROR）还是继续缓冲 | 继续缓冲/不报错 → 记账错误 |
-| FC-2 | 构造 MAX_DATA 增量与消耗交错的时序（多流并发读写），检测窗口记账是否出现"多算已消费"导致合法流被卡死（可用性面）或"少算已消费"导致超限（内存面） | 两类都算违规 |
-| FC-3 | 对 varint 上限（2^62-1）附近的偏移做边界运算（MAX_STREAM_DATA = 2^62-1 后 +1） | 回绕/异常崩溃 → 违规 |
-| FC-4 | 半关闭流（FIN 已发/已收）上的窗口更新是否仍被正确记账 | 忽略记账 → 窗口泄漏，可累积为内存占用 |
+| FC-1 | Keep sending data up to the MAX_DATA limit; observe whether the peer disconnects at the limit instant (CONNECTION_ERROR: FLOW_CONTROL_ERROR) or keeps buffering | Continues buffering / no error → accounting error |
+| FC-2 | Interleave MAX_DATA increments with consumption (concurrent multi-stream read/write); detect window accounting that "over-counts consumed" (legitimate streams get stuck — availability surface) or "under-counts consumed" (limit exceeded — memory surface) | Either class counts as a violation |
+| FC-3 | Do boundary arithmetic near the varint ceiling (2^62-1) (MAX_STREAM_DATA = 2^62-1 then +1) | Wraparound / abnormal crash → violation |
+| FC-4 | Are window updates on half-closed streams (FIN sent/received) still accounted correctly | Accounting ignored → window leak, accumulates into memory occupancy |
 
-判定方法：aioquic/quic-go 自写客户端精细控制帧时序；观测连接错误码与对端内存。
+Method: aioquic/quic-go custom clients with precise frame-timing control; observe connection error codes and peer memory.
 
-## 3. 攻击面猜想
+## 3. Attack-Surface Hypotheses
 
-- **内存耗尽**：接收方为超限数据缓冲（FC-1）——未认证 DoS 的原语
-- **整数回绕**：2^62 边界算术错误（FC-3）可能导致窗口判断反转（"已用 0"假象）→ 无限缓冲
-- **可用性破坏**：记账多算导致合法连接被误杀（FC-2），对抗场景下可定向切断目标连接
+- **Memory exhaustion**: buffering data beyond the limit at the receiver (FC-1) — an unauthenticated DoS primitive
+- **Integer wraparound**: arithmetic errors at the 2^62 boundary (FC-3) can invert window judgment (illusion of "0 used") → unbounded buffering
+- **Availability destruction**: over-counting kills legitimate connections (FC-2) — in adversarial scenarios this can selectively cut target connections
 
-## 4. 关联历史 CVE
+## 4. Related Historical CVEs
 
-| CVE | 实现 | 根因 |
+| CVE | Implementation | Root Cause |
 |---|---|---|
-| **CVE-2024-22189**（7.5 HIGH） | QUIC 生态多家（quic-go 等受影响） | 关联模式：NEW_CONNECTION_ID 洪泛 + RETIRE_CONNECTION_ID 响应压制，迫使对端为每个退役 CID 维护状态直至内存耗尽——本质是多层状态记账与响应义务不对称 |
-| **CVE-2023-49295** | quic-go | 路径验证状态机可被诱导 DoS（同类"协议状态义务未被强制"模式） |
+| **CVE-2024-22189** (7.5 HIGH) | Multiple QUIC ecosystem implementations (quic-go et al. affected) | Related pattern: NEW_CONNECTION_ID flooding + RETIRE_CONNECTION_ID response suppression forces the peer to maintain state per retired CID until memory exhaustion — essentially asymmetric multi-layer state accounting and response obligations |
+| **CVE-2023-49295** | quic-go | Path-validation state machine can be induced into DoS (same "protocol state obligations not enforced" pattern) |
 
-注：流量控制记账类漏洞披露较少，不等于安全——FC-2/FC-4 这类时序面需要差分 fuzz 才能暴露，属"有约束无 CVE"的盲区条款，按方法论这正是值得定向审计的信号。
+Note: flow-control-accounting-class vulnerabilities are rarely disclosed, which is not evidence of safety — timing surfaces like FC-2/FC-4 require differential fuzzing to expose. These are "constrained but CVE-less" blind-spot clauses, which by the methodology is exactly the signal worth targeted auditing.
 
-## 5. 差分验证方法
+## 5. Differential Verification
 
-对照组：quic-go ≥0.60、ngtcp2（两个独立实现的记账行为应一致）。
-对比字段：FC-1~FC-4 的错误码一致性、超限瞬间行为、边界值处理。
-误报排除：实现声明了更保守的本地窗口上限属合规；只标记"超限仍缓冲"与"算术错误"。
+Control group: quic-go ≥0.60, ngtcp2 (two independent implementations should behave identically).
+Comparison fields: error-code consistency for FC-1~FC-4, behavior at the exceed instant, boundary-value handling.
+False-positive exclusion: an implementation declaring a more conservative local window cap is compliant; only flag "over-limit still buffered" and "arithmetic errors".
 
-## 6. 对接的攻击 Skill
+## 6. Downstream Attack Skills
 
-- 技能层（怎么打）：`fuzzowski-network-fuzz`（协议状态机 fuzz）、`grammarinator-gen-fuzz`（自定义 QUIC 帧语法生成；均在 tool-skills/）
-- 工具层（用什么打）：aioquic（帧级控制）、quic-go 调试客户端、自研帧时序脚本
-- 命中后动作：最小化复现序列 → 按"记账错误/回绕/泄漏"分类 → 评估 DoS 放大比
+- Skill layer (how to attack): `fuzzowski-network-fuzz` (protocol state-machine fuzzing), `grammarinator-gen-fuzz` (custom QUIC frame-grammar generation; both in tool-skills/)
+- Tool layer (what to attack with): aioquic (frame-level control), quic-go debug client, self-developed frame-timing scripts
+- Post-hit actions: minimize the reproducing sequence → classify as "accounting error / wraparound / leak" → assess the DoS amplification ratio

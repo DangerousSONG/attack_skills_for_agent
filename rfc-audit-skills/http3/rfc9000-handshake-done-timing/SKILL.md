@@ -1,57 +1,58 @@
 ---
 name: rfc9000-handshake-done-timing
-description: 审计 QUIC 服务端对 HANDSHAKE_DONE 帧的发送时机与接收处理是否严格按 RFC 9000 §19.20 与 RFC 9001 §4.9.2——时序与密钥丢弃顺序错误可被恶意服务端/对端触发断言崩溃（关联 CVE-2025-59530 quic-go，野外已观测）
+description: Audit QUIC server handling of HANDSHAKE_DONE frame send-timing and receipt processing per RFC 9000 §19.20 and RFC 9001 §4.9.2 — timing and key-discard-order errors can be triggered by a malicious server/peer into assertion crashes (related CVE-2025-59530 quic-go, observed in the wild)
+zh-signals: 审计 QUIC 服务端对 HANDSHAKE_DONE 帧的发送时机与接收处理是否严格按 RFC 9000 §19.20 与 RFC 9001 §4.9.2——时序与密钥丢弃顺序错误可被恶意服务端/对端触发断言崩溃（关联 CVE-2025-59530 quic-go，野外已观测）
 rfc: RFC 9000 §19.20（HANDSHAKE_DONE）/ RFC 9001 §4.9.2（密钥丢弃）
 license: Apache-2.0
 ---
 
-# RFC 9000 §19.20 HANDSHAKE_DONE 时序与密钥丢弃审计
+# RFC 9000 §19.20 HANDSHAKE_DONE Timing and Key-Discard Audit
 
-## 1. 约束条款（原文出处）
+## 1. Normative Clauses (Original Sources)
 
-RFC 9000 §19.20（原文）：
+RFC 9000 §19.20 (verbatim):
 > Servers MUST NOT send a HANDSHAKE_DONE frame before completing the handshake.
 > A server MUST treat receipt of a HANDSHAKE_DONE frame as a connection error of type PROTOCOL_VIOLATION.
 
-即两条义务：**发送方**（服务端）不得在握手完成前发送 HANDSHAKE_DONE；**接收方**（服务端角色）收到 HANDSHAKE_DONE 必须按 PROTOCOL_VIOLATION 终止连接。
+That is, two obligations: the **sender** (server role) must not send HANDSHAKE_DONE before the handshake completes; the **receiver** (server role) must terminate the connection with PROTOCOL_VIOLATION on receiving HANDSHAKE_DONE.
 
-RFC 9001 §4.9.2：握手确认后必须按既定顺序丢弃 Initial 密钥 / Handshake 密钥；丢弃时机的任何"提前"或"遗漏"都会破坏后续帧解密状态机。
+RFC 9001 §4.9.2: after handshake confirmation, Initial keys / Handshake keys must be discarded in the prescribed order; any "too early" or "missed" discard timing breaks the subsequent frame-decryption state machine.
 
-核心模式一句话：**HANDSHAKE_DONE 是"握手已确认"的唯一信号帧，它的发送时机与收到后的密钥丢弃顺序共同构成握手期的资源生命周期——两条义务任何一条松掉，都可被远程触发崩溃。**
+Core pattern in one sentence: **HANDSHAKE_DONE is the only signal frame of "handshake confirmed"; its send timing and the key-discard order after receipt together form the resource lifecycle of the handshake period — either obligation loosened can be crashed remotely.**
 
-## 2. 违规判定条件
+## 2. Violation Criteria
 
-| 编号 | 探测 | 判定 |
+| ID | Probe | Criterion |
 |---|---|---|
-| HD-1 | 作为恶意服务端，在握手尚未完成（客户端尚未确认服务端证书验证通过/密钥未就绪）时提前发送 HANDSHAKE_DONE，观察对端客户端行为 | 客户端进入断言/空指针崩溃 → 违反 §19.20 发送义务依赖的对端假设 |
-| HD-2 | 作为客户端向服务端发送 HANDSHAKE_DONE 帧（合法客户端永不应发送），观察服务端 | 服务端未以 PROTOCOL_VIOLATION 终止连接 → 违反 §19.20 接收义务 |
-| HD-3 | 在收到 HANDSHAKE_DONE 后，验证实现是否**立即**丢弃 Initial 密钥（修复 quic-go CVE-2025-59530 的做法），还是在应丢弃 Handshake 密钥的时机才丢弃 | 丢弃顺序与 §4.9.2 不符 → 密钥生命周期漏洞 |
-| HD-4 | 握手期乱序注入 HANDSHAKE_DONE 重复帧 / 与 NewSessionTicket 交错的时序 | 状态机死锁或二次处理崩溃 → 违规 |
+| HD-1 | As a malicious server, send HANDSHAKE_DONE early — before the handshake completes (client has not confirmed server-certificate verification / keys not ready) — and observe the peer client | Client enters assertion / NULL-pointer crash → violates the peer-side assumption of the §19.20 send obligation |
+| HD-2 | As a client, send a HANDSHAKE_DONE frame to the server (a legitimate client must never send one) and observe the server | Server does not terminate with PROTOCOL_VIOLATION → violates the §19.20 receipt obligation |
+| HD-3 | After receiving HANDSHAKE_DONE, verify whether the implementation **immediately** discards Initial keys (the quic-go CVE-2025-59530 fix) or only discards them when Handshake keys should be dropped | Discard order inconsistent with §4.9.2 → key-lifecycle vulnerability |
+| HD-4 | Inject duplicate HANDSHAKE_DONE frames out of order during the handshake / interleaved with NewSessionTicket timing | State-machine deadlock or double-processing crash → violation |
 
-判定方法：aioquic 自写对端精确控制 HANDSHAKE_DONE 的发送时点；quic-go 调试日志观测密钥丢弃事件。
+Method: aioquic custom peer with precise control of HANDSHAKE_DONE send timing; quic-go debug logs to observe key-discard events.
 
-## 3. 攻击面猜想
+## 3. Attack-Surface Hypotheses
 
-- **远程断言崩溃（未认证）**：HD-1 ——恶意服务端在握手期即可打崩任意使用该客户端库的应用（quic-go 案例即 Solana Firedancer 野外被观测）
-- **协议状态混乱**：HD-2 ——客户端伪造 HANDSHAKE_DONE 使服务端进入"握手已确认"状态，跳过了本应继续的握手校验
-- **密钥生命周期错位**：HD-3 ——Initial 密钥存活过久意味着握手期伪造包有更长攻击窗口；丢弃过早则合法重传被误杀（可用性面）
+- **Remote assertion crash (unauthenticated)**: HD-1 — a malicious server can crash any application using the client library during the handshake phase (the quic-go case was observed in the wild against Solana Firedancer)
+- **Protocol-state confusion**: HD-2 — a client forges HANDSHAKE_DONE to push the server into a "handshake confirmed" state, skipping the handshake verification that should have continued
+- **Key-lifecycle misalignment**: HD-3 — Initial keys surviving too long means a longer attack window for forged handshake-phase packets; discarding too early kills legitimate retransmissions (availability surface)
 
-## 4. 关联历史 CVE
+## 4. Related Historical CVEs
 
-| CVE | 实现 | 根因 |
+| CVE | Implementation | Root Cause |
 |---|---|---|
-| **CVE-2025-59530**（7.5 HIGH，CWE-617 Reachable Assertion） | quic-go < 0.49.0 / 0.54.1 / 0.55.0 | 客户端在握手未确认时收到服务端提前发送的 HANDSHAKE_DONE，触发断言崩溃；野外已观测到针对 Solana Firedancer 的攻击。修复 PR #5354：收到 HANDSHAKE_DONE 即丢弃 Initial 密钥，消除错误时序下的断言路径 |
+| **CVE-2025-59530** (7.5 HIGH, CWE-617 Reachable Assertion) | quic-go < 0.49.0 / 0.54.1 / 0.55.0 | The client receives a HANDSHAKE_DONE sent early by the server before handshake confirmation, triggering an assertion crash; attacks observed in the wild. Fix PR #5354: discard Initial keys immediately on receiving HANDSHAKE_DONE, eliminating the assertion path under wrong timing |
 
-注：HD-2/HD-4 属"有约束、暂无公开 CVE"的盲区条款——多数实现只修了崩溃路径（HD-1），未验证接收义务与乱序时序，值得定向审计。
+Note: HD-2/HD-4 are blind-spot clauses with "constraints but no public CVE yet" — most implementations only fixed the crash path (HD-1) without verifying the receipt obligation and out-of-order timing; worth targeted auditing.
 
-## 5. 差分验证方法
+## 5. Differential Verification
 
-对照组：quic-go ≥ 0.55.0（已修复）、msquic / ngtcp2。
-对比字段：HD-1 是否崩溃、HD-2 是否返回 PROTOCOL_VIOLATION、HD-3 密钥丢弃事件时机、HD-4 乱序容忍度。
-误报排除：实现选择更保守的"不立即断言而是记录并忽略"策略属合规；只标记"可达断言/未终止连接/密钥顺序错误"。
+Control group: quic-go ≥ 0.55.0 (patched), msquic / ngtcp2.
+Comparison fields: HD-1 crash or not, HD-2 PROTOCOL_VIOLATION or not, HD-3 key-discard event timing, HD-4 out-of-order tolerance.
+False-positive exclusion: an implementation choosing a more conservative "log and ignore instead of asserting immediately" strategy is compliant; only flag "reachable assertion / connection not terminated / wrong key order".
 
-## 6. 对接的攻击 Skill
+## 6. Downstream Attack Skills
 
-- 技能层（怎么打）：`fuzzowski-network-fuzz`（握手期帧时序 fuzz）、`grammarinator-gen-fuzz`（QUIC 握手帧序列语法生成；均在 tool-skills/）
-- 工具层（用什么打）：aioquic（作为恶意服务端/客户端的帧级时序控制）
-- 命中后动作：最小化触发帧序列 → 确认为可达断言或密钥生命周期错位 → 评估影响面（客户端库 → 所有下游应用）
+- Skill layer (how to attack): `fuzzowski-network-fuzz` (handshake-phase frame-timing fuzzing), `grammarinator-gen-fuzz` (QUIC handshake frame-sequence grammar generation; both in tool-skills/)
+- Tool layer (what to attack with): aioquic (frame-level timing control as malicious server/client)
+- Post-hit actions: minimize the triggering frame sequence → confirm reachable assertion or key-lifecycle misalignment → assess the impact surface (client library → all downstream applications)

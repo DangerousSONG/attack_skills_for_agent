@@ -1,51 +1,52 @@
 ---
 name: rfc9000-connection-id-retirement
-description: 审计 QUIC 实现对 Connection ID 生命周期（NEW_CONNECTION_ID / RETIRE_CONNECTION_ID / active_connection_id_limit）义务的处理是否对称——义务不对称即存在内存耗尽攻击面（关联 CVE-2024-22189，7.5 HIGH）
+description: Audit QUIC implementations' handling of Connection ID lifecycle obligations (NEW_CONNECTION_ID / RETIRE_CONNECTION_ID / active_connection_id_limit) for symmetry — asymmetric obligations create a memory-exhaustion attack surface (related CVE-2024-22189, 7.5 HIGH)
+zh-signals: 审计 QUIC 实现对 Connection ID 生命周期（NEW_CONNECTION_ID / RETIRE_CONNECTION_ID / active_connection_id_limit）义务的处理是否对称——义务不对称即存在内存耗尽攻击面（关联 CVE-2024-22189，7.5 HIGH）
 rfc: RFC 9000 §5.1（Connection IDs）/ §19（Frame 处理规则）
 license: Apache-2.0
 ---
 
-# RFC 9000 §5.1 Connection ID 生命周期义务对称性审计
+# RFC 9000 §5.1 Connection ID Lifecycle Obligation-Symmetry Audit
 
-## 1. 约束条款（原文出处）
+## 1. Normative Clauses (Original Sources)
 
-RFC 9000 §5.1.2：端点发送 NEW_CONNECTION_ID 后，对端可用 RETIRE_CONNECTION_ID 要求退役；**收到 RETIRE_CONNECTION_ID 的端点必须停止使用该 CID 并以 RETIRE_CONNECTION_ID 确认（帧义务成对出现）**。
+RFC 9000 §5.1.2: after an endpoint sends NEW_CONNECTION_ID, the peer may use RETIRE_CONNECTION_ID to request retirement; **the endpoint receiving RETIRE_CONNECTION_ID must stop using that CID and confirm with a RETIRE_CONNECTION_ID (the frame obligations come in pairs)**.
 
-RFC 9000 §5.1.1：`active_connection_id_limit` 传输参数限制对端可处于激活状态的 CID 数量；达到上限前**不得**发出新的 NEW_CONNECTION_ID。
+RFC 9000 §5.1.1: the `active_connection_id_limit` transport parameter limits how many CIDs the peer may keep active; **no new NEW_CONNECTION_ID may be issued before the limit is reached headroom-wise**.
 
-§19.16：RETIRE_CONNECTION_ID 帧对当前仍在使用的 CID、或从未由对端分配的 CID 的引用，必须按协议错误（FRAME_ENCODING_ERROR）处理。
+§19.16: a RETIRE_CONNECTION_ID frame referencing a CID still in use, or one never issued by the peer, must be treated as a protocol error (FRAME_ENCODING_ERROR).
 
-核心模式一句话：**协议为状态对象定义了"分配-使用-退役"的成对义务，义务不对称（一方必须维护状态、另一方可以低成本触发）即被武器化。**
+Core pattern in one sentence: **the protocol defines paired "allocate-use-retire" obligations for state objects; asymmetric obligations (one side must maintain state while the other can trigger it at low cost) get weaponized.**
 
-## 2. 违规判定条件
+## 2. Violation Criteria
 
-| 编号 | 探测 | 判定 |
+| ID | Probe | Criterion |
 |---|---|---|
-| CI-1 | 快速连续发送大量 NEW_CONNECTION_ID 并立即 RETIRE，迫使对端为每次退役维护响应状态 | 对端内存随迭代次数单调增长且无上限 → 漏洞 |
-| CI-2 | 通过选择性 ACK + RTT 操纵压制对端拥塞窗口，使其 RETIRE_CONNECTION_ID 响应排队（CVE-2024-22189 精确时序） | 响应义务被积压、状态无界增长 → 漏洞 |
-| CI-3 | 发送 NEW_CONNECTION_ID 使对端激活 CID 数超过其声明的 `active_connection_id_limit` | 未按协议错误处理/未强制上限 → 违规 |
-| CI-4 | RETIRE 引用当前 active CID 或对端从未分配的 CID | 未返回 FRAME_ENCODING_ERROR → 帧校验不严 |
+| CI-1 | Rapidly send a large number of NEW_CONNECTION_IDs and immediately RETIRE them, forcing the peer to maintain response state per retirement | Peer memory grows monotonically with iteration count and has no cap → vulnerability |
+| CI-2 | Suppress the peer's congestion window via selective ACK + RTT manipulation so its RETIRE_CONNECTION_ID responses queue (CVE-2024-22189 precise timing) | Response obligations back up, state grows unbounded → vulnerability |
+| CI-3 | Send enough NEW_CONNECTION_IDs to push the peer's active CID count beyond its declared `active_connection_id_limit` | Not handled as a protocol error / limit not enforced → violation |
+| CI-4 | RETIRE references a currently active CID or one the peer never issued | FRAME_ENCODING_ERROR not returned → lax frame validation |
 
-判定方法：aioquic 帧级脚本；观测对端内存曲线与连接错误码。
+Method: aioquic frame-level scripts; observe the peer's memory curve and connection error codes.
 
-## 3. 攻击面猜想
+## 3. Attack-Surface Hypotheses
 
-未认证远程内存耗尽：攻击成本 = 小流量帧序列，目标成本 = 每轮迭代一份不可释放的 CID 状态（CVE-2024-22189 实测可耗尽）。CI-3/CI-4 的校验不严是独立攻击面（状态机混淆），也常与 CI-1 组合。
+Unauthenticated remote memory exhaustion: attack cost = a small-volume frame sequence; target cost = one unreleasable CID state per iteration (CVE-2024-22189 measured exhaustion achievable). The lax validation in CI-3/CI-4 is an independent attack surface (state-machine confusion) and often combines with CI-1.
 
-## 4. 关联历史 CVE
+## 4. Related Historical CVEs
 
-| CVE | 实现 | 根因 |
+| CVE | Implementation | Root Cause |
 |---|---|---|
-| **CVE-2024-22189**（7.5 HIGH） | QUIC 多家实现（以 quic-go 为代表披露） | 攻击者洪泛 NEW_CONNECTION_ID 并退役旧 CID，接收方须为每次退役回 RETIRE_CONNECTION_ID；攻击者靠选择性 ACK 压垮对端拥塞窗口+操纵 RTT，使响应无法发出，状态无限堆积直至内存耗尽 |
+| **CVE-2024-22189** (7.5 HIGH) | Multiple QUIC implementations (disclosed with quic-go as the representative) | The attacker floods NEW_CONNECTION_ID and retires old CIDs; the receiver must return RETIRE_CONNECTION_ID per retirement; the attacker uses selective ACKs to crush the peer's congestion window and manipulates RTT so responses cannot be sent; state piles up without bound until memory exhaustion |
 
-## 5. 差分验证方法
+## 5. Differential Verification
 
-对照组：quic-go 修复版（≥0.43）、ngtcp2。
-对比字段：CI-1 迭代 1k/10k/100k 轮的内存曲线斜率；CI-2 时序压制下响应延迟；CI-3/CI-4 的错误码。
-误报排除：实现可选地主动限制 CID 发放速率属合规加固；只标记"义务不对称可被强制"的实现。
+Control group: quic-go patched version (≥0.43), ngtcp2.
+Comparison fields: memory-curve slope over 1k/10k/100k CI-1 iterations; response latency under CI-2 timing suppression; error codes for CI-3/CI-4.
+False-positive exclusion: an implementation optionally rate-limiting CID issuance proactively is compliant hardening; only flag implementations where "obligation asymmetry can be forced".
 
-## 6. 对接的攻击 Skill
+## 6. Downstream Attack Skills
 
-- 技能层（怎么打）：`fuzzowski-network-fuzz`（状态机差分）、`slowhttptest-dos`（资源耗尽验证；均在 tool-skills/）
-- 工具层（用什么打）：aioquic（帧级时序控制主力）、quic-go 客户端做对照
-- 命中后动作：量化每轮迭代的状态堆积量 → 给出 N 轮内存耗尽的时间估计 → 输出影响版本面
+- Skill layer (how to attack): `fuzzowski-network-fuzz` (state-machine differential), `slowhttptest-dos` (resource-exhaustion verification; both in tool-skills/)
+- Tool layer (what to attack with): aioquic (primary frame-level timing control), quic-go client as control
+- Post-hit actions: quantify state accumulation per iteration → give a time estimate for memory exhaustion at N iterations → output the affected version surface
