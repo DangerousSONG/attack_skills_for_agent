@@ -2,39 +2,43 @@
 name: sublist3r-passive-subdomains
 description: "Sublist3r generates fast subdomain lists. Signals: asset mapping, subdomain, classic passive subdomain enumeration, live port probing, threads"
 zh-signals: "Sublist3r: 快速子域清单。信号:资产测绘,子域名,经典被动子域枚举,探测存活端口,线程。"
+when-to-use: >-
+  Use when you need a fast passive subdomain list for initial asset mapping.
+  It aggregates multiple search engines without API keys, and can optionally
+  brute-force, probe live ports, and set thread count.
 ---
 
 # Sublist3r
 
-- 攻击大类:C01 资产测绘与指纹识别
-- 上游仓库:https://github.com/aboul3la/Sublist3r
-- 上游 License:LGPL-2.1(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C01 Asset Mapping and Fingerprinting
+- Upstream Repository: https://github.com/aboul3la/Sublist3r
+- Upstream License: LGPL-2.1 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/aboul3la/Sublist3r && cd Sublist3r && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python sublist3r.py -d target.com` | 经典被动子域枚举 |
-| `-b` | 启用 bruteforce 模块 |
-| `-p 80,443` | 探测存活端口 |
-| `-t 50` | 线程 |
-| `-o out.txt` | 输出 |
+| `python sublist3r.py -d target.com` | Classic passive subdomain enumeration |
+| `-b` | Enable the bruteforce module |
+| `-p 80,443` | Probe live ports |
+| `-t 50` | Threads |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 快速子域清单
+### Fast Subdomain List
 
 ```bash
 python sublist3r.py -d target.com -t 100 -o subs.txt
 cat subs.txt | httpx -silent -o alive.txt
 ```
 
-## 注意事项
+## Notes
 
-经典老牌,聚合多个搜索引擎;无 API key 也能跑,适合快速出初版清单。
+A classic long-standing tool that aggregates multiple search engines; runs without an API key, ideal for quickly producing a first-pass list.

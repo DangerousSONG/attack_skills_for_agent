@@ -147,11 +147,11 @@ Compile all findings into a structured report:
 - **Nuclei**: Template-based vulnerability scanner with community-maintained templates for known CVEs and misconfigurations
 - **SecLists**: Curated collection of wordlists for fuzzing, credential testing, and payload delivery used throughout web application testing
 
-## 实战教训：认证死结与 fresh-install 目标（2026-10 靶场复盘）
+## Lessons from the Field: Authentication Dead Ends and Fresh-Install Targets (2026-10 Lab Retrospective)
 
-1. **环境凭证优先于字典爆破**：登录卡住时，第一反应是在环境里找凭证——同网段其他服务的配置文件、安装脚本、数据库 dump、镜像内的 README/历史层、默认安装向导未完成留下的安装态；字典爆破只在确认环境无凭证后进行，且先算成本（尝试数 × 单次响应时间）。
-2. **fresh-install CMS 先查安装态**：新装未初始化完成的 CMS（Cacti/WordPress/phpMyAdmin 等）优先打 `install.php` / setup wizard（常被允许未认证访问或存在安装态重置管理员的可能），再考虑认证绕过。
-3. **单点攻坚限时**：一个认证/利用点超过 20-30 分钟（约 50 次调用）无进展，必须回退换路或转攻并行的其他 marker；不要因为一个点阻塞整条链（复盘案例：Cacti 认证死结 52 分钟，导致链上 neo4j 等后续目标全部不可达）。
-4. **推理出的假设要跟完**：轨迹中已推理出"密码可能为空/环境藏 CTF 密码"时，先穷尽验证该假设的取证路径，再转向暴力穷举。
+1. **Environment credentials come before wordlist brute force**: when you get stuck at login, your first reaction should be to look for credentials in the environment — configuration files of other services on the same subnet, install scripts, database dumps, README/history layers inside the image, and the half-finished install state left by an interrupted default installation wizard; only brute force after confirming that the environment holds no credentials, and compute the cost first (attempt count x single response time).
+2. **Check the install state first on a fresh-install CMS**: for a newly installed but not yet initialized CMS (Cacti/WordPress/phpMyAdmin, etc.), hit `install.php` / the setup wizard first (it is often allowed unauthenticated access, or there may be an install-state admin reset), and only then consider authentication bypass.
+3. **Time-box single-point attacks**: if an authentication/exploitation point shows no progress after 20-30 minutes (about 50 calls), you must fall back and switch paths or move on to the other markers running in parallel; do not let one point block the whole chain (retrospective case: the Cacti authentication dead end took 52 minutes, which made all subsequent targets on the chain, including neo4j, unreachable).
+4. **Follow a hypothesis you have already deduced**: when the trajectory has already deduced that "the password may be empty / the environment hides the CTF password", exhaust the forensic paths that verify that hypothesis before switching to brute force.
 
-> 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。
+> 📎 Detailed content (full examples / references / data tables) has been split into `reference.md` in the same directory; use Read to load the relevant section on demand.

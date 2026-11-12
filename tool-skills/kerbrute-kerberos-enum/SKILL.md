@@ -2,45 +2,46 @@
 name: kerbrute-kerberos-enum
 description: "kerbrute performs pre-auth enumeration, password spraying, and targeted breach-password brute force. Signals: brute force, password spraying, dictionary cracking, thread count."
 zh-signals: "kerbrute: 预认证枚举+口令喷洒、从 breach 密码定向爆破。信号:暴力破解,口令喷射,从密码字典爆破,线程数。"
+when-to-use: "Use during Active Directory assessment to enumerate valid users via Kerberos pre-auth, then spray or brute force passwords against identified accounts. Requires a domain, a user list, and an optional wordlist or thread count."
 ---
 
 # kerbrute
 
-- 攻击大类:C28 暴力破解与口令喷射
-- 上游仓库:https://github.com/ropnop/kerbrute
-- 上游 License:Apache-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C28 Brute Force and Password Spraying
+- Upstream Repository: https://github.com/ropnop/kerbrute
+- Upstream License: Apache-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/ropnop/kerbrute@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `userenum -d corp.local --dc dc01.corp.local users.txt` | Kerberos 用户名枚举(不锁定账户) |
-| `bruteforce -d corp.local --dc dc01 passwords.txt` | 从密码字典爆破 |
-| `passwordspray -d corp.local --dc dc01 users.txt Passw0rd!` | 口令喷洒 |
-| `-t 20` | 线程数 |
-| `-o out.txt` | 输出 |
+| `userenum -d corp.local --dc dc01.corp.local users.txt` | Kerberos username enumeration (does not lock accounts) |
+| `bruteforce -d corp.local --dc dc01 passwords.txt` | Brute force from a password wordlist |
+| `passwordspray -d corp.local --dc dc01 users.txt Passw0rd!` | Password spraying |
+| `-t 20` | Thread count |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 预认证枚举+口令喷洒
+### Pre-auth enumeration plus password spraying
 
 ```bash
 kerbrute userenum -d corp.local --dc dc01.corp.local names.txt -o valid.txt
 kerbrute passwordspray -d corp.local --dc dc01.corp.local valid.txt 'Spring2026!' -o spray.txt
 ```
 
-### 从 breach 密码定向爆破
+### Targeted brute force with breached passwords
 
 ```bash
 kerbrute bruteforce -d corp.local --dc dc01.corp.local breached-creds.txt
 ```
 
-## 注意事项
+## Notes
 
-Kerberos 预认证错误码区分'用户不存在/密码错误/账户锁定',不触发 AD 账户锁定策略,比 SMB 爆破隐蔽。
+Kerberos pre-auth error codes distinguish 'user does not exist/wrong password/account locked', and AD account lockout policies are not triggered, making it stealthier than SMB brute force.

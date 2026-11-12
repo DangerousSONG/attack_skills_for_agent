@@ -2,37 +2,40 @@
 name: jwtcat-token-crack
 description: "jwtcat takes over weak JWT signing keys. Signals: API attack, interface testing, JWT signing key brute force, inline token."
 zh-signals: "jwtcat: 弱 JWT 密钥接管。信号:api攻击,接口测试,JWT 签名密钥爆破,直接内联 token。"
+when-to-use: >-
+  Use when testing APIs that issue JWT tokens and you suspect a weak HMAC signing key; brute-
+  force the secret from a wordlist, then forge tokens for other users.
 ---
 
 # jwtcat
 
-- 攻击大类:C10 API与GraphQL攻击
-- 上游仓库:https://github.com/aress31/jwtcat
-- 上游 License:Apache-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C10 API and GraphQL Attacks
+- Upstream Repository: https://github.com/aress31/jwtcat
+- Upstream License: Apache-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install jwtcat
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `jwtcat -t token.txt -w wordlist.txt` | JWT 签名密钥爆破 |
-| `-t eyJ... -w rockyou.txt` | 直接内联 token |
-| `-o out.txt` | 输出 |
+| `jwtcat -t token.txt -w wordlist.txt` | JWT signing key brute force |
+| `-t eyJ... -w rockyou.txt` | Inline token directly |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 弱 JWT 密钥接管
+### Weak JWT Key Takeover
 
 ```bash
 jwtcat -t token.txt -w rockyou.txt
-# 弱 HS256 密钥爆破后伪造任意用户 token
+# After brute-forcing a weak HS256 key, forge tokens for arbitrary users
 ```
 
-## 注意事项
+## Notes
 
-JWT 密钥字典爆破,命中后用 pyjwt 等伪造 admin token。
+JWT key dictionary brute force; on a hit, forge an admin token with pyjwt or similar.

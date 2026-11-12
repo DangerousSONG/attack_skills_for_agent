@@ -2,37 +2,38 @@
 name: smtptester-spoof
 description: "SMTPTester: SPF and DKIM bypass testing. Signals: phishing, social engineering, SMTP spoof test, TLS."
 zh-signals: "SMTPTester: SPF/DKIM 绕过测试。信号:钓鱼,社会工程,SMTP 伪造测试,TLS。"
+when-to-use: "Use SMTPTester when testing whether a mail server can be abused to spoof sender addresses due to weak SPF/DKIM, e.g., during phishing and social-engineering assessment of a target's email infrastructure."
 ---
 
 # SMTPTester
 
-- 攻击大类:C08 钓鱼与社会工程
-- 上游仓库:https://github.com/xFreed0m/SMTPTester
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C08 Phishing and Social Engineering
+- Upstream Repository: https://github.com/xFreed0m/SMTPTester
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/xFreed0m/SMTPTester && cd SMTPTester && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 SMTPTester.py -t mail.t.com -f attacker@evil.com -v` | SMTP 伪造测试 |
-| `-t target -f from -to victim@corp.com` | 参数 |
+| `python3 SMTPTester.py -t mail.t.com -f attacker@evil.com -v` | SMTP spoof test |
+| `-t target -f from -to victim@corp.com` | Parameters |
 | `-s` | TLS |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### SPF/DKIM 绕过测试
+### SPF/DKIM Bypass Test
 
 ```bash
 python3 SMTPTester.py -t mail.t.com -f ceo@corp.com -to finance@corp.com
-# 测试邮件伪造
+# Test email spoofing
 ```
 
-## 注意事项
+## Notes
 
-SMTP 开放中继+伪造测试。
+Tests SMTP open relays and spoofing.

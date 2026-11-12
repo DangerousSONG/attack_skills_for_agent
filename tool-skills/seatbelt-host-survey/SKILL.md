@@ -2,38 +2,42 @@
 name: seatbelt-host-survey
 description: "Seatbelt: Enumerates Windows privilege escalation surface. Signals: Windows privilege escalation, UAC bypass, full host reconnaissance, by group, system groups."
 zh-signals: "Seatbelt: Windows 提权面系统枚举。信号:windows提权,uac绕过,全量主机侦察,按组,系统组。"
+when-to-use: >-
+  Use after gaining a foothold on Windows when you need a comprehensive host
+  survey to identify privilege escalation paths such as unquoted service paths,
+  writable services, AlwaysInstallElevated, and UAC settings.
 ---
 
 # Seatbelt
 
-- 攻击大类:C17 Windows本地提权
-- 上游仓库:https://github.com/GhostPack/Seatbelt
-- 上游 License:BSD-3-Clause(GhostPack)(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C17 Windows Local Privilege Escalation
+- Upstream Repository: https://github.com/GhostPack/Seatbelt
+- Upstream License: BSD-3-Clause(GhostPack) (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
-release 下载 Seatbelt.exe 或 dotnet build
+release download Seatbelt.exe or dotnet build
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `Seatbelt.exe` | 全量主机侦察 |
-| `Seatbelt.exe -group=user` | 按组 |
-| `-group=system` | 系统组 |
-| `-o out.txt` | 输出 |
+| `Seatbelt.exe` | Full host reconnaissance |
+| `Seatbelt.exe -group=user` | By group |
+| `-group=system` | System groups |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Windows 提权面系统枚举
+### Systematic enumeration of the Windows privilege escalation surface
 
 ```bash
 Seatbelt.exe -group=user -group=system
-# 输出: 浏览器凭据/未引号服务路径/可写服务/AlwaysInstallElevated/UAC 配置
+# Output: browser credentials / unquoted service paths / writable services / AlwaysInstallElevated / UAC configuration
 ```
 
-## 注意事项
+## Notes
 
-GhostPack 出品 90+ 检查项;提权线索一网打尽,输出直接指导 privesc 路径。
+By GhostPack, 90+ checks; captures every privilege escalation lead at once, and the output directly guides the privesc path.

@@ -2,36 +2,40 @@
 name: ccrawldns-commoncrawl
 description: "ccrawldns: Leverages CommonCrawl data sources. Signals: asset mapping, subdomains."
 zh-signals: "ccrawldns: CommonCrawl 数据源利用。信号:资产测绘,子域名。"
+when-to-use: >-
+  Use when mining CommonCrawl for passive subdomains and URLs of a target
+  domain; run it against the domain and combine with other passive sources such
+  as gau or waybackurls.
 ---
 
 # ccrawldns
 
-- 攻击大类:C01 资产测绘与指纹识别
-- 上游仓库:https://github.com/ghostlulzhacks/ccrawldns
-- 上游 License:NOASSERTION(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C01 Asset Mapping and Fingerprinting
+- Upstream Repository: https://github.com/ghostlulzhacks/ccrawldns
+- Upstream License: NOASSERTION (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/ghostlulzhacks/ccrawldns
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python ccrawldns.py -t target.com` | 从 CommonCrawl 提子域/URL |
-| `-o out.txt` | 输出 |
+| `python ccrawldns.py -t target.com` | Extract subdomains/URLs from CommonCrawl |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### CommonCrawl 数据源利用
+### Leveraging CommonCrawl Data Sources
 
 ```bash
 python ccrawldns.py -t corp.com
-# CommonCrawl 免费索引,含 Wayback 没有的新站
+# free CommonCrawl index, includes new sites that Wayback does not have
 ```
 
-## 注意事项
+## Notes
 
-CommonCrawl 是常被忽略的被动数据源;与 gau/waybackurls 三源齐下。
+CommonCrawl is an often-overlooked passive data source; combine it with gau/waybackurls for three sources at once.

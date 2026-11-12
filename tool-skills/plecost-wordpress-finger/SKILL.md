@@ -2,38 +2,42 @@
 name: plecost-wordpress-finger
 description: "WordPress target vulnerability surface. Signals: web vulnerability, injection, plugin inventory, JSON output, concurrency 10."
 zh-signals: "Plecost: WP 目标漏洞面。信号:web漏洞,注入,插件清单,JSON 输出,并发 10。"
+when-to-use: >-
+  Use when you have an authorized WordPress target and need to fingerprint the core version,
+  installed plugins and themes to map CVE exposure before exploitation. Requires a reachable
+  URL and optionally a plugin inventory file.
 ---
 
 # Plecost
 
-- 攻击大类:C09 Web利用(CMS漏洞)
-- 上游仓库:https://github.com/iniqua/plecost
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Exploitation (CMS Vulnerabilities)
+- Upstream Repository: https://github.com/iniqua/plecost
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install plecost
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `plecost -u https://t.com` | WordPress 版本/插件/主题漏洞扫描 |
-| `-i /usr/share/wordpress/plugins.txt` | 插件清单 |
-| `-o report.json` | JSON 输出 |
-| `-n 10` | 并发 10 |
+| `plecost -u https://t.com` | WordPress version/plugin/theme vulnerability scan |
+| `-i /usr/share/wordpress/plugins.txt` | Plugin inventory |
+| `-o report.json` | JSON output |
+| `-n 10` | Concurrency 10 |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### WP 目标漏洞面
+### WordPress target vulnerability surface
 
 ```bash
 plecost -u https://blog.t.com -o wp.json
-# 输出有 CVE 的插件及版本,对着 CVE 打
+# Output plugins and versions that have CVEs, then target those CVEs
 ```
 
-## 注意事项
+## Notes
 
-纯 Python 轻量 WordPress 漏洞扫描,比 WPScan 更轻,漏洞库持续更新。
+A lightweight pure-Python WordPress vulnerability scanner, lighter than WPScan, with a continuously updated vulnerability database.

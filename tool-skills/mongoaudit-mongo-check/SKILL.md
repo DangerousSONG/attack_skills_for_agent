@@ -2,37 +2,39 @@
 name: mongoaudit-mongo-check
 description: "mongoaudit: MongoDB unauthorized and weak configuration checks. Signals: port scanning, nmap, MongoDB audit, with authentication, JSON output."
 zh-signals: "mongoaudit: MongoDB 未授权+弱配置。信号:端口扫描,nmap,MongoDB 审计,带认证,JSON 输出。"
+when-to-use: >-
+  Use when assessing a MongoDB instance for unauthorized access, weak authentication and outdated vulnerabilities, with optional credentials and JSON report output.
 ---
 
 # mongoaudit
 
-- 攻击大类:C42 网络扫描与枚举
-- 上游仓库:https://github.com/stampery/mongoaudit
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C42 Network Scanning and Enumeration
+- Upstream Repository: https://github.com/stampery/mongoaudit
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install mongoaudit
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `mongoaudit -h 10.0.0.5 -p 27017` | MongoDB 审计 |
-| `-h host -u user -p pass` | 带认证 |
-| `-f out.json` | JSON 输出 |
+| `mongoaudit -h 10.0.0.5 -p 27017` | MongoDB audit |
+| `-h host -u user -p pass` | With authentication |
+| `-f out.json` | JSON output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### MongoDB 未授权+弱配置
+### MongoDB unauthorized access and weak configuration
 
 ```bash
 mongoaudit -h 10.0.0.5
-# 未授权访问/弱口令/旧版漏洞
+# Unauthorized access, weak credentials, outdated version vulnerabilities
 ```
 
-## 注意事项
+## Notes
 
-MongoDB 安全审计,10+ 项检测含 CVE。
+MongoDB security audit with 10+ checks including CVE coverage.

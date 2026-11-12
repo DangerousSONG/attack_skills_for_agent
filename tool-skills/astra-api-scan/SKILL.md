@@ -2,38 +2,43 @@
 name: astra-api-scan
 description: "Astra: batch scans REST API vulnerabilities. Signals: api attack, interface testing, REST API scan, JSON report, API-only mode"
 zh-signals: "Astra: REST API 漏洞批扫。信号:api攻击,接口测试,REST API 扫描,JSON 报告,仅 API 模式。"
+when-to-use: >-
+  Use when assessing a REST API endpoint and you need batch vulnerability
+  scanning aligned with OWASP API Security Top 10, including authentication,
+  SQLi, XSS, and information disclosure; supports authenticated headers and JSON
+  reports.
 ---
 
 # Astra
 
-- 攻击大类:C10 API与业务逻辑攻击
-- 上游仓库:https://github.com/flipkart-incubator/Astra
-- 上游 License:Apache-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C10 API and Business Logic Attacks
+- Upstream Repository: https://github.com/flipkart-incubator/Astra
+- Upstream License: Apache-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/flipkart-incubator/Astra && cd Astra && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python astra.py -u https://t.com/api -m scan` | REST API 扫描 |
-| `-H 'Authorization: Bearer x'` | 头 |
-| `-m scan -o json` | JSON 报告 |
-| `-u URL -m api` | 仅 API 模式 |
+| `python astra.py -u https://t.com/api -m scan` | REST API scan |
+| `-H 'Authorization: Bearer x'` | Header |
+| `-m scan -o json` | JSON report |
+| `-u URL -m api` | API-only mode |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### REST API 漏洞批扫
+### Batch REST API vulnerability scanning
 
 ```bash
 python astra.py -u https://api.target.com -m scan
-# 输出 OWASP API Top10 各项结果(鉴权/SQLi/XSS/信息泄露)
+# Outputs results for each OWASP API Top 10 category (authentication/SQLi/XSS/information disclosure)
 ```
 
-## 注意事项
+## Notes
 
-Flipkart 出品的 API 扫描;覆盖 OWASP API Security Top 10。
+API scanner from Flipkart, covering the OWASP API Security Top 10.

@@ -2,46 +2,48 @@
 name: patator-multi-brute
 description: "HTTP login form brute forcing with filters and database brute forcing. Signals: brute force, password spraying, SSH, SMB."
 zh-signals: "Patator: HTTP 登录表单爆破+条件过滤、数据库爆破。信号:暴力破解,口令喷射,SSH,SMB。"
+when-to-use: >-
+  Use when brute forcing or password spraying services such as HTTP forms, SSH, SMB, FTP and databases, especially when flexible per-response filters are needed.
 ---
 
 # Patator
 
-- 攻击大类:C28 暴力破解与口令喷射
-- 上游仓库:https://github.com/lanjelot/patator
-- 上游 License:LGPL-2.1(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C28 Brute Force and Password Spraying
+- Upstream Repository: https://github.com/lanjelot/patator
+- Upstream License: LGPL-2.1 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/lanjelot/patator && cd patator
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
 | `python patator.py ssh_login host=10.0.0.5 user=FILE0 password=FILE1 0=users.txt 1=pass.txt` | SSH |
 | `http_fuzz url=https://t.com/login user_pass=FILE0:FILE1 ...` | HTTP |
 | `smb_login` | SMB |
 | `ftp_login` | FTP |
-| `-t 20` | 线程 |
-| `-x ignore:code=401` | 排除条件 |
-| `range=0-10000` | 生成器 |
+| `-t 20` | Threads |
+| `-x ignore:code=401` | Exclude condition |
+| `range=0-10000` | Generator |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### HTTP 登录表单爆破+条件过滤
+### HTTP Login Form Brute Force with Conditional Filtering
 
 ```bash
 python patator.py http_fuzz url=https://target/login.php method=POST body='user=FILE0&pass=FILE1' 0=users.txt 1=rockyou.txt -x ignore:fgrep='Invalid' -t 20
 ```
 
-### 数据库爆破
+### Database Brute Force
 
 ```bash
 python patator.py mssql_login host=10.0.0.8 user=sa password=FILE0 0=pass.txt
 ```
 
-## 注意事项
+## Notes
 
-Python 写的万能爆破框架,条件过滤(-x ignore)极其灵活;支持自定义请求任意字段。
+A universal brute-force framework written in Python with extremely flexible conditional filtering (-x ignore); it supports custom requests on arbitrary fields.

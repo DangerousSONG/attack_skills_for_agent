@@ -2,38 +2,42 @@
 name: qark-android
 description: "QARK: Static APK vulnerability scanner. Signals: mobile, Android attack, APK static scanning, JSON report, generate executable PoC."
 zh-signals: "QARK: APK 静态漏洞扫描。信号:移动端,android攻击,APK 静态扫描,JSON 报告,生成可执行 PoC。"
+when-to-use: >-
+  Use when statically scanning an Android APK for exported components, weak
+  crypto, hardcoded secrets, and WebView issues; generate a JSON report and
+  optional proof-of-concept exploits.
 ---
 
 # QARK
 
-- 攻击大类:C43 移动端攻击
-- 上游仓库:https://github.com/linkedin/qark
-- 上游 License:NOASSERTION(需人工)(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C43 Mobile Attacks
+- Upstream Repository: https://github.com/linkedin/qark
+- Upstream License: NOASSERTION (manual review required) (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install qark
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `qark --apk app.apk` | APK 静态扫描 |
-| `--report-type json` | JSON 报告 |
-| `--exploit-apk` | 生成可执行 PoC |
-| `-o outdir` | 输出 |
+| `qark --apk app.apk` | APK static scan |
+| `--report-type json` | JSON report |
+| `--exploit-apk` | Generate an executable PoC |
+| `-o outdir` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### APK 静态漏洞扫描
+### Static APK vulnerability scanning
 
 ```bash
 qark --apk target.apk --report-type json
-# 检测: 导出组件/弱加密/硬编码密钥/WebView 配置/SDK 漏洞
+# Detects: exported components/weak crypto/hardcoded secrets/WebView configuration/SDK vulnerabilities
 ```
 
-## 注意事项
+## Notes
 
-LinkedIn 出品;报告含漏洞详情与修复建议,适合快速评估。
+By LinkedIn; the report contains vulnerability details and remediation recommendations, making it suitable for quick assessment.

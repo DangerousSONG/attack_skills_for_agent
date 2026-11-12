@@ -2,40 +2,44 @@
 name: dnsenum-perl-recon
 description: "dnsenum: comprehensive DNS enumeration. Signals: subdomain, domain enumeration, standard enumeration, dictionary brute force, recursive subdomains."
 zh-signals: "dnsenum: DNS 全面枚举。信号:子域名,域名枚举,标准枚举,字典爆破,递归子域。"
+when-to-use: >-
+  Use when performing DNS reconnaissance against a domain, including NS/MX/A
+  records, zone transfer attempts, dictionary brute force, recursive subdomains,
+  and whois netblock reverse lookup.
 ---
 
 # dnsenum
 
-- 攻击大类:C02 域名与DNS侦察
-- 上游仓库:https://github.com/fwaeytens/dnsenum
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C02 Domain and DNS Reconnaissance
+- Upstream Repository: https://github.com/fwaeytens/dnsenum
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 apt install dnsenum
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `dnsenum target.com` | 标准枚举 |
-| `-f wordlist.txt` | 字典爆破 |
-| `-r` | 递归子域 |
-| `-w` | whois 反查网段 |
-| `-d 15` | 字典线程 |
-| `-o out.xml` | XML 输出 |
+| `dnsenum target.com` | Standard enumeration |
+| `-f wordlist.txt` | Dictionary brute force |
+| `-r` | Recursive subdomains |
+| `-w` | Whois netblock reverse lookup |
+| `-d 15` | Dictionary threads |
+| `-o out.xml` | XML output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### DNS 全面枚举
+### Comprehensive DNS Enumeration
 
 ```bash
 dnsenum corp.com -w -r -o dns.xml
-# 输出: NS/MX/A/AXFR尝试/whois网段/逆向解析
+# Output: NS/MX/A/AXFR attempts/whois netblocks/reverse resolution
 ```
 
-## 注意事项
+## Notes
 
-Perl 经典脚本;zone transfer(-f) 在配置错误域名上是直给突破口。
+A classic Perl script; zone transfer (-f) is a straight-up break point on misconfigured domains.

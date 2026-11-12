@@ -2,47 +2,50 @@
 name: amass-attack-surface
 description: "Amass: performs full subdomain enumeration and attack surface mapping, enhanced with API keys. Signals: asset mapping, subdomain, passive+active enumeration, passive-only"
 zh-signals: "Amass: 子域名全量枚举与攻击面测绘、带 API key 的增强枚举。信号:资产测绘,子域名,被动+主动枚举,纯被动。"
+when-to-use: >-
+  Use when enumerating a target domain's subdomains and attack surface, either
+  passive-only for stealth or passive+active, optionally with API keys for richer sources.
 ---
 
 # Amass
 
-- 攻击大类:C01 资产测绘与指纹识别
-- 上游仓库:https://github.com/owasp-amass/amass
-- 上游 License:Apache-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C01 Asset Mapping and Fingerprinting
+- Upstream Repository: https://github.com/owasp-amass/amass
+- Upstream License: Apache-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
-go install github.com/owasp-amass/amass/v4/...@master 或 snap install amass
+go install github.com/owasp-amass/amass/v4/...@master or snap install amass
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `amass enum -d target.com` | 被动+主动枚举 |
-| `-passive` | 纯被动 |
-| `-active` | 主动探测含 TLS 指纹 |
-| `-src -v` | 显示数据来源 |
-| `-o out.txt` | 输出 |
-| `amass intel -d target.com -whois` | ASN/whois 情报 |
-| `-config config.ini` | API key 配置 |
+| `amass enum -d target.com` | Passive + active enumeration |
+| `-passive` | Passive only |
+| `-active` | Active probing including TLS fingerprinting |
+| `-src -v` | Show the data sources |
+| `-o out.txt` | Output |
+| `amass intel -d target.com -whois` | ASN/whois intelligence |
+| `-config config.ini` | API key configuration |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 子域名全量枚举与攻击面测绘
+### Full subdomain enumeration and attack surface mapping
 
 ```bash
 amass enum -d corp.com -active -o subs.txt
-amass intel -d corp.com -whois  # 找关联 ASN/域名
+amass intel -d corp.com -whois  # find related ASNs/domains
 ```
 
-### 带 API key 的增强枚举
+### Enhanced enumeration with API keys
 
 ```bash
 amass enum -d target.com -config ~/.config/amass/config.ini -passive
 ```
 
-## 注意事项
+## Notes
 
-OWASP 出品,数据源最全的测绘工具;config.ini 配 Shodan/Censys 等 API key 后效果显著提升。
+An OWASP project and the most complete mapping tool in terms of data sources; configuring Shodan/Censys and other API keys in config.ini improves the results significantly.

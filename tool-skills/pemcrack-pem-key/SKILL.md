@@ -2,36 +2,37 @@
 name: pemcrack-pem-key
 description: "Private key passphrase cracking for SSH lateral movement. Signals: brute force, password spraying, PEM private key passphrase cracking, dictionary mode."
 zh-signals: "pemcrack: 私钥口令爆破(SSH 横向)。信号:暴力破解,口令喷射,PEM 私钥口令爆破,字典模式。"
+when-to-use: "Use when you obtain an encrypted PEM private key and need to recover its passphrase for SSH lateral movement."
 ---
 
 # pemcrack
 
-- 攻击大类:C28 云与身份喷洒
-- 上游仓库:https://github.com/robertdavidgraham/pemcrack
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C28 Cloud and Identity Spraying
+- Upstream Repository: https://github.com/robertdavidgraham/pemcrack
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/robertdavidgraham/pemcrack && make
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `./pemcrack pemfile.pem password.txt` | PEM 私钥口令爆破 |
-| `./pemcrack key.pem rockyou.txt` | 字典模式 |
+| `./pemcrack pemfile.pem password.txt` | PEM private key passphrase brute force |
+| `./pemcrack key.pem rockyou.txt` | Dictionary mode |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 私钥口令爆破(SSH 横向)
+### Private Key Passphrase Brute Force (SSH Lateral Movement)
 
 ```bash
 ./pemcrack id_rsa rockyou.txt
-# 捡到加密私钥先跑一遍,SSH 免密直接通
+# Run it once on a recovered encrypted private key to get passwordless SSH access
 ```
 
-## 注意事项
+## Notes
 
-Robert Graham 出品,加密 PEM 私钥的口令爆破,拿到运维遗留私钥时横向价值大。
+By Robert Graham, brute forces passphrases on encrypted PEM private keys, which is highly valuable for lateral movement when a leftover ops private key turns up.

@@ -2,37 +2,38 @@
 name: seeker-geo-phish
 description: "seeker: precise phishing targeting. Signals: phishing, social engineering, custom phishing page, nearby WiFi phishing template."
 zh-signals: "seeker: 精准定位钓鱼。信号:钓鱼,社会工程,手动定制钓鱼页,邻近 WiFi 钓鱼模板。"
+when-to-use: "Use when running a phishing or social engineering campaign that needs precise target geolocation via a custom phishing page or nearby WiFi template. Requires a publicly reachable host and a chosen phishing template."
 ---
 
 # seeker
 
-- 攻击大类:C08 钓鱼与社会工程
-- 上游仓库:https://github.com/thewhiteh4t/seeker
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C08 Phishing and Social Engineering
+- Upstream Repository: https://github.com/thewhiteh4t/seeker
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/thewhiteh4t/seeker && cd seeker && chmod +x install.sh && ./install.sh
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `./seeker.py -t manual` | 手动定制钓鱼页 |
-| `-t nearphish` | 邻近 WiFi 钓鱼模板 |
-| `-k <key>` | Google Maps API key 配置 |
+| `./seeker.py -t manual` | Manually customize the phishing page |
+| `-t nearphish` | Nearby WiFi phishing template |
+| `-k <key>` | Google Maps API key configuration |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 精准定位钓鱼
+### Precise targeting for phishing
 
 ```bash
 ./seeker.py -t manual
-# 生成链接发给目标,目标点开后浏览器地理位置授权→回传经纬度
+# Generate a link and send it to the target; once they open it the browser geolocation prompt is triggered and the coordinates are sent back
 ```
 
-## 注意事项
+## Notes
 
-依赖目标授权浏览器定位;务必在授权测试框架内使用。
+Relies on the target granting browser geolocation access; always use it within an authorized testing framework.

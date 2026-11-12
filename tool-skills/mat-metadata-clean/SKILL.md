@@ -2,37 +2,40 @@
 name: mat-metadata-clean
 description: "MAT: Clean metadata from exfiltrated files. Signals: trace cleanup, anti-forensics, batch in-place cleanup, list metadata without clearing, verify."
 zh-signals: "MAT (Metadata Anonymisation Toolkit): 外传文件元数据清洗。信号:痕迹清理,反取证,批量原地清理,列出元数据不清除,验证。"
+when-to-use: >-
+  Use when preparing files for exfiltration or release and you must strip author, timestamp, GPS,
+  and other metadata to prevent attribution.
 ---
 
 # MAT (Metadata Anonymisation Toolkit)
 
-- 攻击大类:C20 反取证与痕迹清理
-- 上游仓库:https://0xacab.org/jvoisin/mat2 或 https://gitweb.torproject.org/mat.git
-- 上游 License:GPL-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C20 Anti-Forensics and Trace Cleanup
+- Upstream Repository: https://0xacab.org/jvoisin/mat2 or https://gitweb.torproject.org/mat.git
+- Upstream License: GPL-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
-pip install mat2 (新版) 或 apt install mat
+pip install mat2 (newer) or apt install mat
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `mat2 sensitive.pdf` | 清除单文件全部元数据(作者/时间/GPS) |
-| `mat2 --inplace *.jpg` | 批量原地清理 |
-| `-l` | 列出元数据不清除 |
-| `--check` | 验证 |
+| `mat2 sensitive.pdf` | Clear all metadata from a single file (author/time/GPS) |
+| `mat2 --inplace *.jpg` | Batch in-place cleanup |
+| `-l` | List metadata without clearing it |
+| `--check` | Verify |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 外传文件元数据清洗
+### Metadata Cleaning for Exfiltrated Files
 
 ```bash
-mat2 report_draft.docx  # 输出 report_draft.cleaned.docx,Exif/XMP 全清
+mat2 report_draft.docx  # Outputs report_draft.cleaned.docx with all Exif/XMP removed
 ```
 
-## 注意事项
+## Notes
 
-mat2 是活跃继任;清 PDF/JPG/Office 元数据防溯源;对截图同样有效。
+mat2 is the active successor to MAT; clears PDF/JPG/Office metadata to prevent attribution, and works just as well on screenshots.

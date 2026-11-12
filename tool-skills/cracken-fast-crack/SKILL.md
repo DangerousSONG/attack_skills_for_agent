@@ -2,37 +2,38 @@
 name: cracken-fast-crack
 description: "cracken: Filters billion-scale dictionaries using masks. Signals: password cracking, hash cracking, high-speed mask filtering, range."
 zh-signals: "cracken: 亿级字典掩码过滤。信号:密码破解,哈希破解,掩码高速过滤,范围。"
+when-to-use: "Use cracken when you need to filter billions of existing wordlist entries against a mask pattern at high speed, e.g., to trim rockyou.txt to candidates matching a target's password policy before hash cracking."
 ---
 
 # cracken
 
-- 攻击大类:C25 哈希与密码破解
-- 上游仓库:https://github.com/shmuelamar/cracken
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C25 Hash and Password Cracking
+- Upstream Repository: https://github.com/shmuelamar/cracken
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 cargo install cracken
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `cracken 'h?s?a' -w wordlist.txt` | 掩码高速过滤 |
-| `-p pattern -m min-max` | 范围 |
-| `-o out.txt` | 输出 |
+| `cracken 'h?s?a' -w wordlist.txt` | High-speed mask filtering |
+| `-p pattern -m min-max` | Range |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 亿级字典掩码过滤
+### Billion-Scale Dictionary Mask Filtering
 
 ```bash
 cracken '?u?l?l?l?l?l?d' -w rockyou.txt
-# Rust 性能,亿行秒级
+# Rust performance, hundreds of millions of lines per second
 ```
 
-## 注意事项
+## Notes
 
-Rust 掩码过滤工具,配合现有字典用。
+A Rust mask filtering tool that works with existing wordlists.

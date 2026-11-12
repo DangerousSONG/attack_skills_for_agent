@@ -2,37 +2,41 @@
 name: zeratool-auto-pwn
 description: "Zeratool: Automated CTF exploit. Signals: pwn, binary exploitation, leak mode, overwrite."
 zh-signals: "Zeratool: CTF 自动 exploit。信号:pwn,二进制利用,泄漏模式,覆盖。"
+when-to-use: >-
+  Use when solving a CTF binary exploitation challenge and you want automated
+  overflow discovery, ROP chain construction, and shell spawning. Supports
+  leak and overwrite modes.
 ---
 
 # Zeratool
 
-- 攻击大类:C46 二进制漏洞利用与Pwn
-- 上游仓库:https://github.com/ChrisTheCoolHut/Zeratool
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C46 Binary Exploitation and Pwn
+- Upstream Repository: https://github.com/ChrisTheCoolHut/Zeratool
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/ChrisTheCoolHut/Zeratool && cd Zeratool && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 zeratool.py bin chall` | CTF 二进制自动 pwn |
-| `-l 1` | 泄漏模式 |
-| `-u` | 覆盖 |
+| `python3 zeratool.py bin chall` | Automated CTF binary pwn |
+| `-l 1` | Leak mode |
+| `-u` | Overwrite |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### CTF 自动 exploit
+### Automated CTF exploit
 
 ```bash
 python3 zeratool.py /pwn/chall
-# 自动找溢出+ROP+shell
+# Automatically finds the overflow, builds the ROP chain, and spawns a shell
 ```
 
-## 注意事项
+## Notes
 
-CTF 二进制自动利用框架,angr 驱动。
+Automated CTF binary exploitation framework driven by angr.

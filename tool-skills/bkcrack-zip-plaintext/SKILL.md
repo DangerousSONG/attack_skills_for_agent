@@ -2,38 +2,41 @@
 name: bkcrack-zip-plaintext
 description: "bkcrack: performs ZIP known-plaintext attacks. Signals: password cracking, hash cracking, view ZIP encryption info, decrypt directly with key, decrypt to new ZIP"
 zh-signals: "bkcrack: ZIP 已知明文攻击。信号:密码破解,哈希破解,查看 ZIP 加密信息,用密钥直接解密,解密出新 ZIP。"
+when-to-use: >-
+  Use when you have an authorized ZipCrypto-encrypted ZIP archive and at least one known
+  plaintext file, and want to recover the internal key or produce a decrypted archive.
 ---
 
 # bkcrack
 
-- 攻击大类:C25 口令与哈希破解
-- 上游仓库:https://github.com/kimci86/bkcrack
-- 上游 License:Zlib(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C25 Password and Hash Cracking
+- Upstream Repository: https://github.com/kimci86/bkcrack
+- Upstream License: Zlib (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/kimci86/bkcrack && cd bkcrack && cmake . && make
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `./bkcrack -L archive.zip` | 查看 ZIP 加密信息 |
-| `./bkcrack -C archive.zip -c file.txt -p plain.txt` | 已知明文攻击 |
-| `./bkcrack -C archive.zip -c f.txt -k k1 k2 k3` | 用密钥直接解密 |
-| `./bkcrack -C a.zip -c f.txt -p plain.txt -d new.zip` | 解密出新 ZIP |
+| `./bkcrack -L archive.zip` | View ZIP encryption info |
+| `./bkcrack -C archive.zip -c file.txt -p plain.txt` | Known-plaintext attack |
+| `./bkcrack -C archive.zip -c f.txt -k k1 k2 k3` | Decrypt directly with the key |
+| `./bkcrack -C a.zip -c f.txt -p plain.txt -d new.zip` | Decrypt to a new ZIP |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### ZIP 已知明文攻击
+### ZIP known-plaintext attack
 
 ```bash
 ./bkcrack -C backup.zip -c config.xml -p known_config.xml
-# 得到内部密钥后 -d 生成无密码 ZIP
+# Once the internal key is recovered, -d produces a passwordless ZIP
 ```
 
-## 注意事项
+## Notes
 
-传统 ZipCrypto 已知明文攻击的现代实现,C++ 极快,可秒级恢复加密 ZIP 密钥。
+A modern C++ implementation of the classic ZipCrypto known-plaintext attack; extremely fast, recovering encrypted ZIP keys in seconds.

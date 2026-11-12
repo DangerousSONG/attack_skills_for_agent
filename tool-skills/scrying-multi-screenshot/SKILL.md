@@ -2,40 +2,44 @@
 name: scrying-multi-screenshot
 description: "Scrying: Periodically captures target screenshots. Signals: screen capture, screenshots, single-target screenshot, RDP only, output directory."
 zh-signals: "Scrying: 目标屏幕定时截图采集。信号:屏幕捕获,截图,单目标截图,仅 RDP,输出目录。"
+when-to-use: >-
+  Use when you need to periodically capture screenshots of RDP, VNC, and web
+  targets in bulk to quickly locate admin panels or default pages; accepts Nmap
+  XML output and an output directory.
 ---
 
 # Scrying
 
-- 攻击大类:C34 截图与取证
-- 上游仓库:https://github.com/nccgroup/scrying
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C34 Screen Capture and Forensics
+- Upstream Repository: https://github.com/nccgroup/scrying
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
-cargo install scrying 或下载 release
+cargo install scrying or download the release
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `scrying --target https://t.com` | 单目标截图 |
-| `scrying -f targets.txt` | 批量(RDP/VNC/Web) |
-| `--rdp` | 仅 RDP |
-| `-o out/` | 输出目录 |
-| `--nmap xml` | 解析 Nmap 结果 |
+| `scrying --target https://t.com` | Single-target screenshot |
+| `scrying -f targets.txt` | Batch (RDP/VNC/Web) |
+| `--rdp` | RDP only |
+| `-o out/` | Output directory |
+| `--nmap xml` | Parse Nmap results |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 目标屏幕定时截图采集
+### Periodic Target Screen Capture
 
 ```bash
 nmap -p 3389,5900,80,443,8080 --open 10.0.0.0/24 -oX n.xml
 scrying -f n.xml -o shots/
-# 快速定位管理后台/默认页面
+# Quickly locate admin panels / default pages
 ```
 
-## 注意事项
+## Notes
 
-NCC 出品,RDP/VNC/Web 三类服务批量截图,安全评估报告配图利器。
+By NCC, batch screenshotting of RDP/VNC/Web services, a great fit for illustrations in security assessment reports.

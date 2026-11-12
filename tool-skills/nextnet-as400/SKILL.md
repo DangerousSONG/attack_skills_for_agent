@@ -2,37 +2,40 @@
 name: nextnet-as400
 description: "nextnet: ICS/legacy system discovery. Signals: port scanning, nmap, special protocol discovery, AS400 scanning."
 zh-signals: "nextnet: 工控/遗留系统发现。信号:端口扫描,nmap,特殊协议发现,AS400 扫描。"
+when-to-use: >-
+  Use when mapping ICS or legacy networks and you need to discover non-standard protocol devices
+  such as AS/400 systems across a subnet.
 ---
 
 # nextnet
 
-- 攻击大类:C42 网络扫描与枚举
-- 上游仓库:https://github.com/hdm/nextnet
-- 上游 License:BSD-2-Clause(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C42 Network Scanning and Enumeration
+- Upstream Repository: https://github.com/hdm/nextnet
+- Upstream License: BSD-2-Clause (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/hdm/nextnet@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `nextnet -p 1-10000 10.0.0.0/24` | 特殊协议发现 |
-| `-p ports -s as400` | AS400 扫描 |
-| `-o out.txt` | 输出 |
+| `nextnet -p 1-10000 10.0.0.0/24` | Special protocol discovery |
+| `-p ports -s as400` | AS400 scan |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 工控/遗留系统发现
+### ICS/Legacy System Discovery
 
 ```bash
 nextnet 10.0.0.0/16
-# hdm 出品,发现非标准协议设备
+# By hdm, discovers devices running non-standard protocols
 ```
 
-## 注意事项
+## Notes
 
-hdm 出品,遗留系统/工控协议发现。
+By hdm, a legacy system / ICS protocol discovery tool.
