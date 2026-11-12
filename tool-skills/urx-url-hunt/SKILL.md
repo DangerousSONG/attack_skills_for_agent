@@ -2,39 +2,43 @@
 name: urx-url-hunt
 description: "urx: Multi-source URL aggregation. Signals: data collection, packing, pipeline filtering, concurrency."
 zh-signals: "urx: 多源 URL 聚合。信号:数据收集,打包,管道过滤,并发。"
+when-to-use: >-
+  Use during URL and content discovery to aggregate URLs from multiple passive
+  sources such as Wayback, Common Crawl, and OTX, filter them through pipes, and
+  feed downstream tools.
 ---
 
 # urx
 
-- 攻击大类:C33 URL与内容发现
-- 上游仓库:https://github.com/hahwul/urx
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C33 URL and Content Discovery
+- Upstream Repository: https://github.com/hahwul/urx
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 cargo install urx
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `urx -u https://t.com` | 多源 URL 收割(Wayback/CC/OTX) |
-| `--pipe 'grep admin'` | 管道过滤 |
-| `-o out.txt` | 输出 |
-| `-c 50` | 并发 |
-| `--include-wayback --include-otx` | 指定数据源 |
+| `urx -u https://t.com` | Multi-source URL harvesting (Wayback/CC/OTX) |
+| `--pipe 'grep admin'` | Pipeline filtering |
+| `-o out.txt` | Output |
+| `-c 50` | Concurrency |
+| `--include-wayback --include-otx` | Specify data sources |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 多源 URL 聚合
+### Multi-Source URL Aggregation
 
 ```bash
 urx -u https://t.com --pipe 'grep -Ei "api|admin|token"' | tee gold.txt
-# 各源结果去重合并且同时输出原始和去重 URL
+# Results from each source are deduplicated while both the raw and deduplicated URLs are output
 ```
 
-## 注意事项
+## Notes
 
-Rust 编写的高速 URL 聚合器,一次查询 Wayback Machine/Common Crawl/AlienVault OTX 等多源。
+High-speed URL aggregator written in Rust, querying multiple sources such as Wayback Machine/Common Crawl/AlienVault OTX in one go.

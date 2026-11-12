@@ -2,46 +2,49 @@
 name: slither-solidity-audit
 description: "Slither: audits contract reentrancy and permission flaws, plus proxy upgrade integrity. Signals: blockchain, web3, scan current contract project, summary."
 zh-signals: "Slither: 合约重入/权限漏洞审计、代理升级合约完整性检查。信号:区块链,web3,扫当前合约项目,摘要。"
+when-to-use: >-
+  Use when auditing a Solidity codebase for reentrancy, access-control, or proxy-upgrade issues,
+  or when triaging static-analysis findings before deeper fuzzing.
 ---
 
 # Slither
 
-- 攻击大类:C48 区块链与Web3安全
-- 上游仓库:https://github.com/crytic/slither
-- 上游 License:AGPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C48 Blockchain and Web3 Security
+- Upstream Repository: https://github.com/crytic/slither
+- Upstream License: AGPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install slither-analyzer
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `slither .` | 扫当前合约项目 |
-| `--print human-summary` | 摘要 |
-| `--detect reentrancy-eth` | 单类检测 |
-| `--print call-graph` | 调用图 |
-| `--json out.json` | 结构化输出 |
-| `-triage` | 交互式筛选误报 |
+| `slither .` | Scan the current contract project |
+| `--print human-summary` | Summary |
+| `--detect reentrancy-eth` | Single detector |
+| `--print call-graph` | Call graph |
+| `--json out.json` | Structured output |
+| `-triage` | Interactively triage false positives |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 合约重入/权限漏洞审计
+### Contract reentrancy and permission flaw audit
 
 ```bash
 slither contracts/ --detect reentrancy-eth,unprotected-upgrade
-# 高危项: 状态变量在 external call 后修改且无常量锁
+# High risk items: a state variable modified after an external call without a reentrancy guard
 ```
 
-### 代理升级合约完整性检查
+### Proxy upgrade contract integrity check
 
 ```bash
 slither . --detect delegatecall-loop,incorrect-proxy-implementation
 ```
 
-## 注意事项
+## Notes
 
-静态分析秒级出结果;复杂业务逻辑漏洞要结合 echidna 模糊测试。本项目内容二次开源为 Apache-2.0。
+Static analysis returns results in seconds; complex business logic flaws need to be combined with echidna fuzzing. The content of this project is re-released under Apache-2.0.

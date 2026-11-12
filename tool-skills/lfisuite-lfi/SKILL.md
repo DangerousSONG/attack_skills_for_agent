@@ -2,38 +2,39 @@
 name: lfisuite-lfi
 description: "LFISuite automates LFI exploitation. Signals: web vulnerability, injection, interactive menu, target URL."
 zh-signals: "LFISuite: 全自动 LFI 打点。信号:web漏洞,注入,交互菜单,目标 URL。"
+when-to-use: "Use when testing a web application for local file inclusion and you need an automated workflow covering filter, log poisoning, session, and phpinfo bypasses toward an interactive shell. Requires an interactive terminal and a target URL with a suspected LFI parameter."
 ---
 
 # LFISuite
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/D35m0nd142/LFISuite
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/D35m0nd142/LFISuite
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/D35m0nd142/LFISuite && cd LFISuite
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python lfisuite.py` | 交互菜单 |
-| `选择 [1] 自动 LFI 扫描` | 目标 URL |
-| `Log poison 模块` | 日志投毒 getshell |
-| `phpinfo 模块` | 通过 phpinfo 落地文件 |
+| `python lfisuite.py` | Interactive menu |
+| `choose [1] automated LFI scan` | Target URL |
+| `Log poison module` | Log poisoning to get a shell |
+| `phpinfo module` | Drop a file via phpinfo |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 全自动 LFI 打点
+### Fully automated LFI exploitation
 
 ```bash
 python lfisuite.py
-# 输入目标 → 自动遍历绕过技巧(filter/日志/会话/phpinfo) → 交互 shell
+# Enter the target → automatically walks through bypass techniques (filter/log/session/phpinfo) → interactive shell
 ```
 
-## 注意事项
+## Notes
 
-把 LFI 所有手工技巧集成化;日志投毒和 phpinfo+临时文件两条链都内置。
+Integrates all manual LFI techniques; both the log poisoning chain and the phpinfo plus temp file chain are built in.

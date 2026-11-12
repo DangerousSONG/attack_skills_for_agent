@@ -2,36 +2,37 @@
 name: whichcdn-detect
 description: "whichCDN: CDN identification for bypass strategy selection. Signals: web vulnerabilities, injection, batch."
 zh-signals: "whichCDN: CDN 识别选绕过策略。信号:web漏洞,注入,批量。"
+when-to-use: "Use whichCDN when you need to identify whether a target sits behind a CDN and which provider it uses, including batch host lists, to choose an appropriate bypass strategy."
 ---
 
 # whichCDN
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/Nitr4x/whichCDN
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/Nitr4x/whichCDN
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/Nitr4x/whichCDN && cd whichCDN && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python whichCDN.py https://t.com` | CDN 识别 |
-| `-i hosts.txt` | 批量 |
+| `python whichCDN.py https://t.com` | CDN identification |
+| `-i hosts.txt` | Batch |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### CDN 识别选绕过策略
+### CDN Identification to Select a Bypass Strategy
 
 ```bash
 python whichCDN.py https://t.com
-# Cloudflare/Akamai/Incapsula 针对性绕过
+# Targeted bypass against Cloudflare/Akamai/Incapsula
 ```
 
-## 注意事项
+## Notes
 
-CDN 识别工具,18+ 服务商指纹。
+A CDN identification tool with fingerprints for 18+ providers.

@@ -2,38 +2,39 @@
 name: reconnoitre-auto-recon
 description: "reconnoitre: Automates internal network reconnaissance. Signals: red team, methodology, service enumeration, DNS enumeration, full scan."
 zh-signals: "reconnoitre: 内网自动侦察。信号:红队,方法论,服务枚举,DNS 枚举,全量。"
+when-to-use: "Use when performing automated internal network reconnaissance against a CIDR range and you need service, DNS and SNMP enumeration archived per host with a red team methodology."
 ---
 
 # reconnoitre
 
-- 攻击大类:C50 红队方法论与自动化
-- 上游仓库:https://github.com/codingo/Reconnoitre
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C50 Red Team Methodology and Automation
+- Upstream Repository: https://github.com/codingo/Reconnoitre
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/codingo/Reconnoitre && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 reconnoitre.py -t 10.0.0.0/24 -o out/ --services` | 服务枚举 |
-| `-t cidr -o out --dns` | DNS 枚举 |
-| `-t cidr -o out --perform` | 全量 |
-| `--snmp` | SNMP 枚举 |
+| `python3 reconnoitre.py -t 10.0.0.0/24 -o out/ --services` | Service enumeration |
+| `-t cidr -o out --dns` | DNS enumeration |
+| `-t cidr -o out --perform` | Full run |
+| `--snmp` | SNMP enumeration |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 内网自动侦察
+### Automated Internal Network Reconnaissance
 
 ```bash
 python3 reconnoitre.py -t 10.0.0.0/24 -o enum/ --perform
-# 目录结构+服务+DNS 自动归档,codingo 出品
+# Automatically archives the directory structure + services + DNS, by codingo
 ```
 
-## 注意事项
+## Notes
 
-内网自动化侦察框架,输出按主机归档。
+Automated internal network reconnaissance framework, archiving the output per host.

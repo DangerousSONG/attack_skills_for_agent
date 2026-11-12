@@ -2,47 +2,48 @@
 name: dnsrecon-dns-enum
 description: "dnsrecon: SRV record internal service discovery and zone transfer attempts. Signals: subdomain, domain enumeration, standard enumeration, dictionary brute force."
 zh-signals: "dnsrecon: SRV 记录挖内部服务、Zone Transfer 尝试。信号:子域名,域名枚举,标准枚举,字典爆破。"
+when-to-use: "Use dnsrecon when performing domain reconnaissance and you need standard enumeration, zone-transfer attempts, dictionary brute-forcing, or SRV record discovery to map internal services and domain controllers."
 ---
 
 # dnsrecon
 
-- 攻击大类:C02 域名与DNS侦察
-- 上游仓库:https://github.com/darkoperator/dnsrecon
-- 上游 License:LGPL-2.1(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C02 Domain and DNS Reconnaissance
+- Upstream Repository: https://github.com/darkoperator/dnsrecon
+- Upstream License: LGPL-2.1 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
-apt install dnsrecon 或 pip install dnsrecon
+apt install dnsrecon or pip install dnsrecon
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `-d target.com` | 标准枚举 |
-| `-t axfr` | zone transfer 检测 |
-| `-t brt -D wordlist` | 字典爆破 |
-| `-t srv` | SRV 记录枚举 |
-| `-t rvl` | 反向解析 |
-| `--csv out.csv` | CSV 输出 |
-| `--threads 10` | 线程 |
+| `-d target.com` | Standard enumeration |
+| `-t axfr` | Zone transfer check |
+| `-t brt -D wordlist` | Dictionary brute force |
+| `-t srv` | SRV record enumeration |
+| `-t rvl` | Reverse lookup |
+| `--csv out.csv` | CSV output |
+| `--threads 10` | Threads |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### SRV 记录挖内部服务
+### Discovering internal services via SRV records
 
 ```bash
 dnsrecon -d corp.com -t srv --csv srv.csv
-# 输出 _ldap._tcp 等 → 定位域控/邮件/会议服务
+# Output such as _ldap._tcp → locate domain controller / mail / conferencing services
 ```
 
-### Zone Transfer 尝试
+### Zone transfer attempt
 
 ```bash
 dnsrecon -d target.com -t axfr
 ```
 
-## 注意事项
+## Notes
 
-dnsenum 的 Python 增强版,SRV 枚举对 AD 环境价值高;XML/CSV 输出便于管道。
+A Python-enhanced version of dnsenum; SRV enumeration is highly valuable in AD environments; XML/CSV output makes piping easy.

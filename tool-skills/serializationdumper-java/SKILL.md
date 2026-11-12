@@ -2,37 +2,40 @@
 name: serializationdumper-java
 description: "SerializationDumper: Java serialization data analysis. Signals: web vulnerability, injection, fetch and parse from URL, parse from file."
 zh-signals: "SerializationDumper: Java 序列化数据分析。信号:web漏洞,注入,从 URL 拉取解析,从文件解析。"
+when-to-use: >-
+  Use when analyzing Java serialized data from a Base64 string, URL, or file
+  to understand object structure before deserialization exploitation.
 ---
 
 # SerializationDumper
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/NickstaDB/SerializationDumper
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/NickstaDB/SerializationDumper
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/NickstaDB/SerializationDumper && cd SerializationDumper && javac *.java
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `java SerializationDumper base64string` | 解析 Java 序列化数据 |
-| `-r url` | 从 URL 拉取解析 |
-| `-f file` | 从文件解析 |
+| `java SerializationDumper base64string` | Parse Java serialized data |
+| `-r url` | Fetch and parse from a URL |
+| `-f file` | Parse from a file |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Java 序列化数据分析
+### Java serialization data analysis
 
 ```bash
 java SerializationDumper rO0ABXNy...
-# 反序列化漏洞分析第一步,看清对象结构
+# First step of deserialization vulnerability analysis: understand the object structure
 ```
 
-## 注意事项
+## Notes
 
-Java 序列化字节流解析器,反序列化漏洞研究必备。
+Java serialized byte stream parser, essential for deserialization vulnerability research.

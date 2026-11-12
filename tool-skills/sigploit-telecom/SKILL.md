@@ -2,37 +2,41 @@
 name: sigploit-telecom
 description: "SigPloit: SS7 and Diameter attacks. Signals: VPN vulnerability, firewall, telecom signaling attack framework, module."
 zh-signals: "SigPloit: SS7/Diameter 攻击。信号:vpn漏洞,防火墙,电信信令攻击框架,模块。"
+when-to-use: >-
+  Use when testing SS7 or Diameter telecom signaling weaknesses in an
+  authorized telecom environment; load the relevant module and set the target
+  subscriber or network identifiers.
 ---
 
 # SigPloit
 
-- 攻击大类:C11 边界设备与VPN攻击
-- 上游仓库:https://github.com/SigPloiter/SigPloit
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C11 Perimeter Device and VPN Attacks
+- Upstream Repository: https://github.com/SigPloiter/SigPloit
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/SigPloiter/SigPloit
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python sigploit.py` | 电信信令攻击框架 |
-| `use ss7/location_tracking` | 模块 |
-| `set target +1234` | 目标 |
+| `python sigploit.py` | Telecom signaling attack framework |
+| `use ss7/location_tracking` | Module |
+| `set target +1234` | Target |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### SS7/Diameter 攻击
+### SS7/Diameter attacks
 
 ```bash
 python sigploit.py && use ss7/intercept_sms
-# 运营商信令
+# Carrier signaling
 ```
 
-## 注意事项
+## Notes
 
-电信协议攻击框架。
+Telecom protocol attack framework.

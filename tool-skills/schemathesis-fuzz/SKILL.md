@@ -2,40 +2,43 @@
 name: schemathesis-fuzz
 description: "Schemathesis: OpenAPI specification-driven fuzzing. Signals: API attack, interface testing, property-based fuzzing, test endpoints only, full checks."
 zh-signals: "Schemathesis: OpenAPI 规范驱动模糊测试。信号:api攻击,接口测试,属性化模糊测试,只测端点,全检查。"
+when-to-use: >-
+  Use when an OpenAPI schema is available and you want property-based fuzzing of API endpoints
+  with authenticated requests to surface crashes and validation gaps.
 ---
 
 # Schemathesis
 
-- 攻击大类:C10 API与业务逻辑攻击
-- 上游仓库:https://github.com/schemathesis/schemathesis
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C10 API and Business Logic Attacks
+- Upstream Repository: https://github.com/schemathesis/schemathesis
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install schemathesis
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `st run https://t.com/openapi.json` | 属性化模糊测试 |
-| `-H 'Authorization: Bearer x'` | 头 |
-| `-E POST /users` | 只测端点 |
-| `--checks all` | 全检查 |
-| `-o yaml` | 报告格式 |
-| `--stateful=links` | 有状态测试 |
+| `st run https://t.com/openapi.json` | Property-based fuzzing |
+| `-H 'Authorization: Bearer x'` | Header |
+| `-E POST /users` | Test endpoints only |
+| `--checks all` | All checks |
+| `-o yaml` | Report format |
+| `--stateful=links` | Stateful testing |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### OpenAPI 规范驱动模糊测试
+### OpenAPI Specification-Driven Fuzzing
 
 ```bash
 st run https://api.target.com/openapi.json -H 'Authorization: Bearer $TOKEN' --checks all
-# 自动生成边界值/类型混淆/SQLi 特征输入,输出可复现用例
+# Automatically generates boundary values/type confusion/SQLi-style inputs and outputs reproducible cases
 ```
 
-## 注意事项
+## Notes
 
-基于 OpenAPI/Swagger 规范自动生成测试用例;契约违背与 5xx 都是 findings。
+Automatically generates test cases from the OpenAPI/Swagger specification; contract violations and 5xx responses are both findings.

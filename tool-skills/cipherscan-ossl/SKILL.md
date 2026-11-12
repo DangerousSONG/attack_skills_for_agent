@@ -2,37 +2,38 @@
 name: cipherscan-ossl
 description: "cipherscan: Checks TLS cipher suite compliance. Signals: cryptographic attack, encryption cracking, cipher suite scanning, JSON, verbose."
 zh-signals: "cipherscan: TLS 套件合规检查。信号:密码学攻击,加密破解,密码套件扫描,JSON,详细。"
+when-to-use: "Use when assessing a TLS endpoint's cipher suite configuration and compliance against Mozilla guidelines."
 ---
 
 # cipherscan
 
-- 攻击大类:C49 密码学攻击
-- 上游仓库:https://github.com/jvehent/cipherscan
-- 上游 License:MPL-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C49 Cryptographic Attacks
+- Upstream Repository: https://github.com/jvehent/cipherscan
+- Upstream License: MPL-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/jvehent/cipherscan
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `./cipherscan t.com:443` | 密码套件扫描 |
+| `./cipherscan t.com:443` | Cipher suite scan |
 | `-o out.json` | JSON |
-| `-v` | 详细 |
+| `-v` | Verbose |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### TLS 套件合规检查
+### TLS Cipher Suite Compliance Check
 
 ```bash
 ./cipherscan t.com:443
-# Mozilla 规范分级
+# graded against the Mozilla guidelines
 ```
 
-## 注意事项
+## Notes
 
-Mozilla 出品,cipherscan 规范工具。
+From Mozilla; cipherscan is their compliance tool.

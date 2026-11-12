@@ -2,7 +2,8 @@
 name: exposure-risk-quantification
 description: "FAIR-aligned exposure risk quantification: 0-100/A-F scores, dollar loss estimates, ownership downweighting, attack-path amplification, one-page board report. Signals: risk quantification, FAIR, risk scoring, attack path, board report."
 zh-signals: "FAIR 对齐的暴露风险量化:发现项打成 0-100/A-F 分与美元损失估算、所有权降权、攻击路径放大、董事会一页纸报告。信号:风险量化,fair,风险评分,攻击路径,董事会报告。"
-when-to-use: "FAIR-aligned exposure quantification: turns a pile of recon findings into a defensible 0-100 + A-F org risk score (Likelihood x Impact, three ownership-aware factors: exposure/threat/impact), an owne
+when-to-use: >-
+  FAIR-aligned exposure quantification: turns a pile of recon findings into a defensible 0-100 + A-F org risk score (Likelihood x Impact, three ownership-aware factors: exposure/threat/impact), an owne
 version: 1.0
 sources: asm_reference_impl, ibm_ponemon, public_research
 triggers:
@@ -137,4 +138,4 @@ not a style preference.
 
 ---
 
-> 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。
+> 📎 Detailed content (full examples / references / data tables) has been split into `reference.md` in the same directory; use Read to load the relevant section on demand.

@@ -46,7 +46,7 @@ var_dump(md5('240610708') == md5('QNKCDZO'));
 | Source code uses `==` to compare passwords, tokens, or HMAC values | Go to Sections 1-3 |
 | `md5($a) == md5($b)` or loose `sha1` comparison | Section 2 magic hashes |
 | `hash_hmac(...) != '0'` or compared with `"0"` | Section 3 |
-| `strcmp`、`json_decode(..., true)`、`intval` | Section 5 |
+| `strcmp`, `json_decode(..., true)`, `intval` | Section 5 |
 
 ---
 
@@ -147,4 +147,4 @@ Brute-force **`$data`** (e.g. timestamp, nonce, counter) until `hash_hmac` outpu
 
 ```text
 
-> 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。
+> 📎 Detailed content (full examples / references / data tables) has been split into `reference.md` in the same directory; use Read to load the relevant section on demand.

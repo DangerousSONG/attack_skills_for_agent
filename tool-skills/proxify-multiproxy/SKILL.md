@@ -2,37 +2,39 @@
 name: proxify-multiproxy
 description: "Multi-protocol proxy forwarding. Signals: intranet tunneling, tunnel, multi-level proxy, SOCKS5, traffic capture to disk."
 zh-signals: "proxify: 多协议代理转发。信号:内网穿透,隧道,起多级代理,SOCKS5,流量落盘。"
+when-to-use: >-
+  Use when you need a multi-protocol HTTP/SOCKS5 proxy for pivoting, multi-level proxying and capturing traffic to disk during internal assessments.
 ---
 
 # proxify
 
-- 攻击大类:C32 隧道与内网穿透
-- 上游仓库:https://github.com/projectdiscovery/proxify
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C32 Tunneling and Internal Network Pivoting
+- Upstream Repository: https://github.com/projectdiscovery/proxify
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/projectdiscovery/proxify@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `proxify -http-addr 0.0.0.0:8888` | 起多级代理 |
+| `proxify -http-addr 0.0.0.0:8888` | Start a multi-level proxy |
 | `-socks5-addr 0.0.0.0:9050` | SOCKS5 |
-| `-output out/` | 流量落盘 |
+| `-output out/` | Write traffic to disk |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 多协议代理转发
+### Multi-Protocol Proxy Forwarding
 
 ```bash
 proxify -http-addr 127.0.0.1:8080
-# HTTP/SOCKS5 互转+TLS 拦截
+# HTTP/SOCKS5 conversion + TLS interception
 ```
 
-## 注意事项
+## Notes
 
-ProjectDiscovery 出品,多功能代理工具。
+By ProjectDiscovery, a multi-purpose proxy tool.

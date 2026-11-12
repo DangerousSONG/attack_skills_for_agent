@@ -2,40 +2,42 @@
 name: kscan-asset-mapping
 description: "Kscan unifies internal and external asset mapping. Signals: asset mapping, subdomain, subnet live hosts and fingerprints, weak password detection."
 zh-signals: "Kscan: 内网+外网统一测绘。信号:资产测绘,子域名,网段存活+指纹,弱口令检测。"
+when-to-use: >-
+  Use for unified internal and external asset mapping: resolve subdomains,
+  fingerprint live hosts across subnets, and detect weak passwords.
 ---
 
 # Kscan
 
-- 攻击大类:C01 资产测绘与指纹识别
-- 上游仓库:https://github.com/lcvvvv/kscan
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C01 Asset Mapping and Fingerprinting
+- Upstream Repository: https://github.com/lcvvvv/kscan
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
-release 下载 kscan 二进制
+Download the kscan binary from the release page
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `kscan -t target.com` | 资产测绘 |
-| `--spy` | 网段存活+指纹 |
-| `-t 10.0.0.0/16` | 网段 |
-| `--check` | 弱口令检测 |
-| `--hydra` | 联动爆破 |
-| `-o out.txt` | 输出 |
+| `kscan -t target.com` | Asset mapping |
+| `--spy` | Subnet live hosts + fingerprints |
+| `-t 10.0.0.0/16` | Network segment |
+| `--check` | Weak password detection |
+| `--hydra` | Brute force integration |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 内网+外网统一测绘
+### Unified internal and external mapping
 
 ```bash
 kscan --spy -o netmap.txt
-kscan -t 10.0.0.0/16 --check  # 存活/端口/指纹/弱口令一站出
+kscan -t 10.0.0.0/16 --check  # live hosts / ports / fingerprints / weak passwords in one pass
 ```
 
-## 注意事项
-
-国产一体化测绘,内置指纹与弱口令检测;输出对网段梳理友好。
+## Notes
+An all-in-one domestic mapping tool with built-in fingerprinting and weak password detection; the output is friendly for network segment surveying.

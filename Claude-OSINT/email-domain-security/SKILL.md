@@ -2,7 +2,8 @@
 name: email-domain-security
 description: "Defensible email spoofing assessment using DNS only: SPF/DMARC/DKIM adjudication, 10-query limit PermError, SPF include takeover supply-chain risk, passive. Signals: email security, SPF."
 zh-signals: "仅凭 DNS 做可辩护的邮件伪造判定:SPF/DMARC/DKIM 组合裁决、10次查询上限 PermError、SPF include 接管供应链风险分析,纯被动。信号:邮件安全,spf。"
-when-to-use: "Rigorous, defensible email-spoofability verdict and SPF supply-chain risk analysis computed from published DNS alone. Deepens the record-level SPF/DMARC/DKIM/BIMI/MTA-STS/DNSSEC fetch recipes in the 
+when-to-use: >-
+  Rigorous, defensible email-spoofability verdict and SPF supply-chain risk analysis computed from published DNS alone. Deepens the record-level SPF/DMARC/DKIM/BIMI/MTA-STS/DNSSEC fetch recipes in the
 version: 1.0
 sources: asm_reference_impl, rfc_7208, public_research
 triggers:
@@ -134,4 +135,4 @@ For every record pulled: **FQDN queried + record type + UTC timestamp + resolver
 
 ---
 
-> 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。
+> 📎 Detailed content (full examples / references / data tables) has been split into `reference.md` in the same directory; use Read to load the relevant section on demand.

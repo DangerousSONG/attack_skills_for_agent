@@ -2,38 +2,41 @@
 name: cmsscanner-wp-lib
 description: "CMSScanner: Uses a WPScan-based engine for generic CMS scanning. Signals: web vulnerability, injection, generic CMS scanning, plugin/theme/user enumeration, forced scan."
 zh-signals: "CMSScanner: WPScan 引擎二次开发。信号:web漏洞,注入,通用 CMS 扫描,枚举插件/主题/用户,强制扫描。"
+when-to-use: >-
+  Use when building or running a custom CMS scanner; the WPScan engine library enumerates
+  plugins, themes, and users across supported CMS platforms.
 ---
 
 # CMSScanner
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/wpscanteam/CMSScanner
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/wpscanteam/CMSScanner
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 gem install cms_scanner
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `cms_scan -u https://t.com` | 通用 CMS 扫描 |
-| `--enumerate p,t,u` | 枚举插件/主题/用户 |
-| `-f` | 强制扫描 |
-| `-o out.txt` | 输出 |
+| `cms_scan -u https://t.com` | Generic CMS scanning |
+| `--enumerate p,t,u` | Enumerate plugins/themes/users |
+| `-f` | Forced scan |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### WPScan 引擎二次开发
+### WPScan engine secondary development
 
 ```bash
 cms_scan -u https://t.com -e u
-# WPScan 团队的底层库,适合写自定义扫描器
+# The underlying library from the WPScan team, ideal for writing custom scanners
 ```
 
-## 注意事项
+## Notes
 
-WPScan 底层扫描库,提供统一 API 供二次开发自定义 CMS 扫描器。
+The low-level scanning library behind WPScan, providing a unified API for building custom CMS scanners.

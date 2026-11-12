@@ -2,39 +2,42 @@
 name: fuxploider-upload
 description: "Fuxploider tests upload functionality bypass matrices. Signals: web vulnerabilities, injection, upload vulnerability detection, target scripting language, extension probing."
 zh-signals: "Fuxploider: 上传功能绕过矩阵。信号:web漏洞,注入,上传漏洞检测,目标脚本语言,扩展名探测。"
+when-to-use: >-
+  Use when a web application exposes a file-upload feature and you want to automatically test
+  extension, MIME, and content bypass matrices.
 ---
 
 # Fuxploider
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/almandin/fuxploider
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/almandin/fuxploider
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/almandin/fuxploider && cd fuxploider && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python fuxploider.py --url https://t.com/upload --not-regex 'wrong'` | 上传漏洞检测 |
-| `--scripts extension` | 目标脚本语言 |
-| `--detect-extensions` | 扩展名探测 |
-| `--true-regex 'success'` | 成功指纹 |
-| `-t 10` | 线程 |
+| `python fuxploider.py --url https://t.com/upload --not-regex 'wrong'` | Upload vulnerability detection |
+| `--scripts extension` | Target scripting language |
+| `--detect-extensions` | Extension probing |
+| `--true-regex 'success'` | Success fingerprint |
+| `-t 10` | Threads |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 上传功能绕过矩阵
+### Upload functionality bypass matrix
 
 ```bash
 python fuxploider.py --url http://target/upload --not-regex 'error' --detect-extensions
-# 自动测试扩展名绕过(phtml/.htaccess/大小写/双写)+ MIME 混淆
+# Automatically tests extension bypasses (phtml/.htaccess/case/double extension) plus MIME confusion
 ```
 
-## 注意事项
+## Notes
 
-上传测试全自动:扩展名/MIME/内容检查三层绕过各几十个技巧轮换。
+Fully automated upload testing: dozens of techniques are rotated across the extension, MIME and content check layers.

@@ -2,38 +2,41 @@
 name: simplify-android-deobf
 description: "simplify: Android malicious and hardened sample deobfuscation. Signals: mobile, Android attack, Android deobfuscation, specified classes only, single-method timeout."
 zh-signals: "simplify: Android 恶意/加固样本反混淆。信号:移动端,android攻击,Android 反混淆,仅处理指定类,单方法超时。"
+when-to-use: >-
+  Use when analyzing packed or obfuscated Android malware and you want constant propagation and
+  dead-code removal to make the smali logic readable.
 ---
 
 # simplify
 
-- 攻击大类:C43 移动平台攻击
-- 上游仓库:https://github.com/CalebFenton/simplify
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C43 Mobile Platform Attacks
+- Upstream Repository: https://github.com/CalebFenton/simplify
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/CalebFenton/simplify && ./gradlew fatjar
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `java -jar simplify/build/libs/simplify.jar app.apk -o simple.apk` | Android 反混淆 |
-| `--include-classes com/corp/**` | 仅处理指定类 |
-| `--max-execution-time 30` | 单方法超时 |
-| `-it` | 输出中间结果 |
+| `java -jar simplify/build/libs/simplify.jar app.apk -o simple.apk` | Android deobfuscation |
+| `--include-classes com/corp/**` | Process only the specified classes |
+| `--max-execution-time 30` | Per-method timeout |
+| `-it` | Output intermediate results |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Android 恶意/加固样本反混淆
+### Deobfuscate malicious or hardened Android samples
 
 ```bash
 java -jar simplify.jar packed.apk -o clean.apk
-# 常量传播/死代码消除后 jadx 看逻辑顺畅很多
+# After constant propagation/dead-code elimination the logic reads far better in jadx
 ```
 
-## 注意事项
+## Notes
 
-Android dex 反混淆与反虚拟机检测工具,适合分析加壳/混淆样本。
+Android dex deobfuscation and anti-VM-detection tool, well suited to analyzing packed or obfuscated samples.

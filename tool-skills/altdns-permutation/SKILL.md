@@ -2,37 +2,40 @@
 name: altdns-permutation
 description: "altdns: mutates known subdomains for brute forcing. Signals: subdomain, domain enumeration, permutation candidate generation, resolve after generation, threads"
 zh-signals: "altdns: 已知子域变形爆破。信号:子域名,域名枚举,置换生成候选子域,生成后解析,线程。"
+when-to-use: >-
+  Use when you already have known subdomains and want to generate permutation candidates such as
+  dev-api and api-dev, then resolve them to find hidden hosts.
 ---
 
 # altdns
 
-- 攻击大类:C02 域名与DNS侦察
-- 上游仓库:https://github.com/infosec-au/altdns
-- 上游 License:Apache-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C02 Domain and DNS Reconnaissance
+- Upstream Repository: https://github.com/infosec-au/altdns
+- Upstream License: Apache-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install py-altdns
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `altdns -i known.txt -o permutations.txt -w words.txt` | 置换生成候选子域 |
-| `-r -s resolved.txt` | 生成后解析 |
-| `-t 20` | 线程 |
+| `altdns -i known.txt -o permutations.txt -w words.txt` | Generate permutation candidate subdomains |
+| `-r -s resolved.txt` | Resolve after generation |
+| `-t 20` | Threads |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 已知子域变形爆破
+### Mutation Brute Force of Known Subdomains
 
 ```bash
 altdns -i subs.txt -o cand.txt -w ~/tools/words.txt -r -s resolved.txt
-# 基于已知子域模式生成 dev-api/api-dev 等置换并解析
+# Generate permutations such as dev-api/api-dev from known subdomain patterns and resolve them
 ```
 
-## 注意事项
+## Notes
 
-解决'已知子域之外的未知模式';配 massdns/puredns 解析效果最佳。
+Solves "unknown patterns beyond the known subdomains"; works best when paired with massdns/puredns for resolution.

@@ -2,7 +2,8 @@
 name: cloud-saas-exposure
 description: "Passive organization-level cloud/supply-chain exposure discovery: S3/GCS/Azure Blob bucket takeover, AWS account ID recovery, npm/PyPI dependency confusion, cloud-native/K8s/CI control-plane fingerprinting. Signals: cloud assets, exposure surface."
 zh-signals: "组织级云与供应链暴露面发现:S3/GCS/Azure Blob 桶发现与接管、AWS 账户ID离线恢复、npm/PyPI 依赖混淆确认、云原生/K8s/CI 控制面指纹,纯被动。信号:云资产,暴露面。"
-when-to-use: "Organization-grade cloud and supply-chain attack-surface discovery: S3/GCS/Azure Blob bucket discovery via observed-name mining (CNAME/cert-SAN/Wayback) and bounded two-class permutation (6 prefixes 
+when-to-use: >-
+  Organization-grade cloud and supply-chain attack-surface discovery: S3/GCS/Azure Blob bucket discovery via observed-name mining (CNAME/cert-SAN/Wayback) and bounded two-class permutation (6 prefixes
 version: 1.0
 sources: asm_reference_impl, public_research
 triggers:
@@ -124,4 +125,4 @@ reaches the finding stream (§6.3).
 
 ---
 
-> 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。
+> 📎 Detailed content (full examples / references / data tables) has been split into `reference.md` in the same directory; use Read to load the relevant section on demand.

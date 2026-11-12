@@ -2,37 +2,40 @@
 name: sslstrip-downgrade
 description: "sslstrip downgrades HTTPS to HTTP. Signals: MITM, mitm, logging, POST only"
 zh-signals: "sslstrip: HTTPS 降级 HTTP。信号:中间人,mitm,日志,仅 post。"
+when-to-use: >-
+  Use during an authorized man-in-the-middle engagement to downgrade victims'
+  HTTPS traffic to plaintext HTTP and capture credentials and session data.
 ---
 
 # sslstrip
 
-- 攻击大类:C40 嗅探与中间人攻击
-- 上游仓库:https://github.com/moxie0/sslstrip
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C40 Sniffing and Man-in-the-Middle Attacks
+- Upstream Repository: https://github.com/moxie0/sslstrip
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 apt install sslstrip
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `sslstrip -l 8080` | HTTPS 降级 |
-| `-w log.txt` | 日志 |
-| `-p` | 仅 post |
+| `sslstrip -l 8080` | HTTPS downgrade |
+| `-w log.txt` | Log |
+| `-p` | POST only |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### HTTPS 降级 HTTP
+### HTTPS downgraded to HTTP
 
 ```bash
 sslstrip -l 8080
-# 配合 ARP 欺骗,明文收割
+# Pair with ARP spoofing to harvest plaintext
 ```
 
-## 注意事项
+## Notes
 
-经典 HTTPS 降级攻击工具。
+The classic HTTPS downgrade attack tool.

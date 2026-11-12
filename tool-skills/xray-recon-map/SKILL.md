@@ -2,36 +2,39 @@
 name: xray-recon-map
 description: "XRay: Shodan data-driven asset graph. Signals: asset mapping, subdomains, Shodan-driven mapping, dictionary mode."
 zh-signals: "XRay: Shodan 数据驱动的资产图谱。信号:资产测绘,子域名,Shodan 驱动测绘,字典模式。"
+when-to-use: >-
+  Use when mapping an authorized domain's assets through Shodan data instead of active
+  scanning, optionally with a wordlist, to produce a service and vulnerability graph.
 ---
 
 # XRay
 
-- 攻击大类:C01 资产测绘与指纹识别
-- 上游仓库:https://github.com/evilsocket/xray
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C01 Asset Mapping and Fingerprinting
+- Upstream Repository: https://github.com/evilsocket/xray
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/evilsocket/xray@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `xray -shodan-key X -domain corp.com` | Shodan 驱动测绘 |
-| `-domain corp.com -wordlist words.txt` | 字典模式 |
+| `xray -shodan-key X -domain corp.com` | Shodan-driven mapping |
+| `-domain corp.com -wordlist words.txt` | Wordlist mode |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Shodan 数据驱动的资产图谱
+### Shodan Data-Driven Asset Graph
 
 ```bash
 xray -shodan-key $KEY -domain corp.com -o report
-# 自动: Shodan 搜目标→端口/服务/漏洞关联→HTML 图谱
+# automatic: Shodan search of the target → port/service/vulnerability correlation → HTML graph
 ```
 
-## 注意事项
+## Notes
 
-evilsocket 出品;用 Shodan 数据替代主动扫描,隐蔽性极好。
+From evilsocket; uses Shodan data instead of active scanning, which is extremely stealthy.

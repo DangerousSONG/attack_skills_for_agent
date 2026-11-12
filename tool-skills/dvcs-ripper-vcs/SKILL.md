@@ -2,38 +2,41 @@
 name: dvcs-ripper-vcs
 description: "dvcs-ripper: full recovery of leaked .git repositories. Signals: supply chain, CI/CD, SVN, Mercurial, Bazaar."
 zh-signals: "dvcs-ripper: 泄露的 .git 全量还原。信号:供应链,cicd,SVN,Mercurial,Bazaar。"
+when-to-use: >-
+  Use when a target exposes .git, .svn, .hg or .bzr metadata and you need to download
+  and reconstruct the full repository, including history and embedded secrets.
 ---
 
 # dvcs-ripper
 
-- 攻击大类:C12 供应链与CI/CD攻击
-- 上游仓库:https://github.com/kost/dvcs-ripper
-- 上游 License:GPL-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C12 Supply Chain and CI/CD Attacks
+- Upstream Repository: https://github.com/kost/dvcs-ripper
+- Upstream License: GPL-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/kost/dvcs-ripper && cd dvcs-ripper
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `rip-git.pl -v -u https://t.com/.git/` | 远程 .git 下载+还原 |
+| `rip-git.pl -v -u https://t.com/.git/` | Remote .git download and reconstruction |
 | `rip-svn.pl -u URL/.svn/` | SVN |
 | `rip-hg.pl -u URL/.hg/` | Mercurial |
 | `rip-bzr.pl` | Bazaar |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 泄露的 .git 全量还原
+### Full Recovery of Leaked .git Repositories
 
 ```bash
 ./rip-git.pl -v -u https://target.com/.git/
-git log --oneline  # 翻历史提交找密钥;checkout 早期版本比对
+git log --oneline  # search commit history for secrets; check out early versions to compare
 ```
 
-## 注意事项
+## Notes
 
-.git/.svn 暴露=源码+历史+密钥全泄露;比 githack 支持更多 VCS 且处理不完整下载。
+Exposed .git/.svn means source code, history, and secrets all leak; supports more VCS types than githack and handles incomplete downloads.

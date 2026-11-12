@@ -2,37 +2,40 @@
 name: tlshelpers-cert
 description: "tlshelpers performs quick TLS checks. Signals: cryptographic attack, cryptographic cracking, certificate download, cipher scan, PCAP analysis"
 zh-signals: "tlshelpers: TLS 快速检查。信号:密码学攻击,加密破解,证书下载,套件扫描,PCAP 分析。"
+when-to-use: >-
+  Use when quickly checking a host's TLS configuration, downloading its certificate
+  chain, scanning cipher suites, or analyzing ciphers from a PCAP capture.
 ---
 
 # tlshelpers
 
-- 攻击大类:C49 密码学攻击
-- 上游仓库:https://github.com/hannob/tlshelpers
-- 上游 License:0BSD(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C49 Cryptographic Attacks
+- Upstream Repository: https://github.com/hannob/tlshelpers
+- Upstream License: 0BSD (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/hannob/tlshelpers
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `./getcert.sh t.com` | 证书下载 |
-| `./cipherscan.sh t.com` | 套件扫描 |
-| `./sniffer2ciphers.py pcap` | PCAP 分析 |
+| `./getcert.sh t.com` | Certificate download |
+| `./cipherscan.sh t.com` | Cipher suite scan |
+| `./sniffer2ciphers.py pcap` | PCAP analysis |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### TLS 快速检查
+### Quick TLS checks
 
 ```bash
 ./getcert.sh t.com > cert.pem
-# 证书链分析
+# Certificate chain analysis
 ```
 
-## 注意事项
+## Notes
 
-Hanno Böck 的 TLS 检查脚本集。
+A set of TLS inspection scripts by Hanno Böck.

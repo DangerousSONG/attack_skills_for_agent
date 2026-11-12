@@ -2,38 +2,42 @@
 name: adaptix-c2-framework
 description: "AdaptixC2: builds a C2 framework and manages sessions. Signals: c2, command and control, start server, generate multi-platform payloads, lateral movement essential"
 zh-signals: "AdaptixC2: C2 控制框架搭建与会话管理。信号:c2,命令控制,启动服务端,生成多平台载荷,横向必备。"
+when-to-use: >-
+  Use when deploying a modern command-and-control framework for multi-platform
+  operations; start the team server, generate platform-specific agents, and
+  manage sessions, SOCKS proxies, and pivoting.
 ---
 
 # AdaptixC2
 
-- 攻击大类:C35 C2框架
-- 上游仓库:https://github.com/Adaptix-Framework/AdaptixC2
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C35 C2 Frameworks
+- Upstream Repository: https://github.com/Adaptix-Framework/AdaptixC2
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
-git clone https://github.com/Adaptix-Framework/AdaptixC2 && 按 docs 编译 server+agent
+git clone https://github.com/Adaptix-Framework/AdaptixC2 && build server+agent per the docs
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `./adaptix-server -listen 0.0.0.0:443` | 启动服务端 |
-| `agent 生成: console 里 listeners→generate` | 生成多平台载荷 |
-| `socks 代理模块` | 横向必备 |
-| `console 内 pivot` | 内网 pivot |
+| `./adaptix-server -listen 0.0.0.0:443` | Start the server |
+| `agent generation: listeners→generate in the console` | Generate multi-platform payloads |
+| `socks proxy module` | Essential for lateral movement |
+| `pivot in the console` | Internal network pivot |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### C2 控制框架搭建与会话管理
+### C2 Framework Setup and Session Management
 
 ```bash
 ./adaptix-server
-# Web 控制台+多 listener,beacon 支持 Win/Linux/macOS
+# Web console + multiple listeners; beacons support Win/Linux/macOS
 ```
 
-## 注意事项
+## Notes
 
-现代开源 C2(原 Havoc 分支方向),支持多协议 listener+SOCKS 代理+丰富后渗透模块。
+Modern open-source C2 (forked from the Havoc line), supports multi-protocol listeners + SOCKS proxy + a rich post-exploitation module set.

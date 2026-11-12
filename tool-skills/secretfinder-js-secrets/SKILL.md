@@ -2,37 +2,40 @@
 name: secretfinder-js-secrets
 description: "SecretFinder: harvests hardcoded secrets from frontend JS. Signals: API attack, interface testing, JS secret extraction, bulk, simultaneous crawling."
 zh-signals: "SecretFinder: 前端 JS 硬编码密钥收割。信号:api攻击,接口测试,JS 中秘密提取,批量,同时爬站。"
+when-to-use: >-
+  Use when analyzing frontend JavaScript files to extract hardcoded secrets such as
+  AWS keys, Slack tokens, JWTs or private keys, individually or in bulk.
 ---
 
 # SecretFinder
 
-- 攻击大类:C10 API与业务逻辑攻击
-- 上游仓库:https://github.com/mazen160/secrets-patterns-db
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C10 API and Business Logic Attacks
+- Upstream Repository: https://github.com/mazen160/secrets-patterns-db
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
-git clone https://github.com/mazen160/secrets-patterns-db 或 SecretFinder 主仓
+git clone https://github.com/mazen160/secrets-patterns-db or the main SecretFinder repo
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python SecretFinder.py -i https://t.com/app.js -o results.txt` | JS 中秘密提取 |
-| `-i urls.txt` | 批量 |
-| `-e` | 同时爬站 |
+| `python SecretFinder.py -i https://t.com/app.js -o results.txt` | Extract secrets from JS |
+| `-i urls.txt` | Batch |
+| `-e` | Crawl sites simultaneously |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 前端 JS 硬编码密钥收割
+### Harvest Hardcoded Secrets from Frontend JS
 
 ```bash
 python SecretFinder.py -i https://target/static/app.js -o keys.txt
-# 正则匹配 40+ 模式: AWS key/Slack token/JWT/私钥
+# Regex matching across 40+ patterns: AWS keys, Slack tokens, JWTs, private keys
 ```
 
-## 注意事项
+## Notes
 
-前端秘密提取事实工具;与 linkfinder(端点发现)组成 JS 分析双件套。
+A de facto tool for extracting frontend secrets; paired with linkfinder (endpoint discovery) it forms a complete JS analysis toolkit.

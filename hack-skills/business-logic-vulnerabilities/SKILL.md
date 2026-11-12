@@ -46,14 +46,14 @@ Update quantity to: -100
 ```
 **Impact**: Receive credit to account, items for free, bank transfers in reverse.
 
-### Decimal Quantity — "0元购" Case
+### Decimal Quantity — the "0 CNY Purchase" Case
 Real instructor-led case: an e-commerce app accepted **fractional `quantity`** because backend trusted client float values:
 ```json
 // Cart item:
 {"id": 114016, "skuQty": 0.02}
-// Original price ¥500 → final price ¥10
+// Original price CNY 500 → final price CNY 10
 // Variant on a food delivery app:
-// FoodNum=0.01 → 68元 商品 实付 0.68元
+// FoodNum=0.01 → item worth 68 CNY, actually paid 0.68 CNY
 ```
 Why it works: server multiplies `unit_price * quantity` without enforcing `quantity ∈ Z+`, so a 2% sliver order pays 2% price but ships the full item. Reproduce by intercepting the cart submit → setting `skuQty` / `FoodNum` to `0.02` → finishing checkout.
 
@@ -130,7 +130,7 @@ POST /api/withdraw-funds ← same balance, parallel
 ```
 
 ### Turbo Intruder — Bypassing Per-Number SMS Rate Limit
-Real case: when a normal request returns `"该号码短时间内申请发送短信次数过多，拒绝发送"`, sending the **same payload** with high concurrency through Turbo Intruder defeats the simple counter:
+Real case: when a normal request returns `"This number requested too many SMS messages in a short time, sending refused"`, sending the **same payload** with high concurrency through Turbo Intruder defeats the simple counter:
 ```python
 def queueRequests(target, wordlists):
     engine = RequestEngine(endpoint=target.endpoint,
@@ -143,6 +143,6 @@ def queueRequests(target, wordlists):
 ```
 Result: the per-phone limiter races and many requests slip through, generating multiple distinct verification codes (a real SMS-bombing case). Root cause: counter increment is non-atomic vs. the read.
 
-> 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。
+> 📎 Detailed content (full examples / references / data tables) has been split into `reference.md` in the same directory; use Read to load the relevant section on demand.
 
-> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`CHECKLIST.md`、`METHODOLOGY.md`、`SCENARIOS.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。
+> 📎 **Reference Document Notice**: this skill is adapted from an upstream open-source repository; the following reference documents are **not distributed with this library**: `CHECKLIST.md`, `METHODOLOGY.md`, `SCENARIOS.md`. The key points of the related topics are retained in the corresponding descriptions in this document; if you need the expanded content, grep the library using keywords from the body text or search on your own.

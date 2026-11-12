@@ -2,37 +2,40 @@
 name: armscgen-shellcode
 description: "ARMSCGen: generates ARM/embedded shellcode. Signals: pwn, binary exploitation, reverse shell, list"
 zh-signals: "ARMSCGen: ARM/嵌入式 shellcode。信号:pwn,二进制利用,反向 shell,列表。"
+when-to-use: >-
+  Use when exploiting ARM or embedded Linux targets and you need architecture-specific shellcode
+  such as reverse shells or egghunters.
 ---
 
 # ARMSCGen
 
-- 攻击大类:C46 二进制漏洞利用与Pwn
-- 上游仓库:https://github.com/alexpark07/ARMSCGen
-- 上游 License:GPL-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C46 Binary Exploitation and Pwn
+- Upstream Repository: https://github.com/alexpark07/ARMSCGen
+- Upstream License: GPL-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/alexpark07/ARMSCGen
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 ARMSCGen.py -f sc_flimsy` | ARM shellcode 生成 |
-| `-f sc_reverse_tcp` | 反向 shell |
-| `-l` | 列表 |
+| `python3 ARMSCGen.py -f sc_flimsy` | ARM shellcode generation |
+| `-f sc_reverse_tcp` | Reverse shell |
+| `-l` | List |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### ARM/嵌入式 shellcode
+### ARM/Embedded Shellcode
 
 ```bash
 python3 ARMSCGen.py -f sc_egghunter
-# ARM 架构 shellcode
+# ARM architecture shellcode
 ```
 
-## 注意事项
+## Notes
 
-ARM shellcode 生成器。
+An ARM shellcode generator.

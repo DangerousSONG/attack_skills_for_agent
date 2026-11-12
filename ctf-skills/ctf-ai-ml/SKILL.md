@@ -118,4 +118,4 @@ print(f'Shape: {img.shape}, Range: [{img.min():.3f}, {img.max():.3f}]')
 - **Gradient-based input recovery:** Using model gradients to reconstruct private training data from shared gradients (federated learning attacks). See [model-attacks.md](model-attacks.md#ml-model-inversion-via-gradient-descent-bsidessf-2025).
 - **Activation maximization:** Optimizing input to maximize a specific neuron's activation, revealing what the network has learned.
 
-> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`adversarial-ml.md`、`llm-attacks.md`、`model-attacks.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。
+> 📎 **Reference Document Notice**: this skill is adapted from an upstream open-source repository; the following reference documents are **not distributed with this library**: `adversarial-ml.md`, `llm-attacks.md`, `model-attacks.md`. The key points of the related topics are retained in the corresponding descriptions in this document; if you need the expanded content, grep the library using keywords from the body text or search on your own.

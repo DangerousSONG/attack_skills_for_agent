@@ -2,37 +2,40 @@
 name: subjs-js-extract
 description: "subjs batch-extracts JavaScript files. Signals: web vulnerability, injection, subjs, concurrency"
 zh-signals: "subjs: JS 文件批量提取。信号:web漏洞,注入,subjs`,并发。"
+when-to-use: >-
+  Use to batch-extract JavaScript file URLs from a list of web pages, feeding
+  the results into secret or vulnerability scanners.
 ---
 
 # subjs
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/lc/subjs
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/lc/subjs
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/lc/subjs@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `cat urls.txt | subjs` | 从 URL 提取 JS 链接 |
-| `-c 20` | 并发 |
-| `-o out.txt` | 输出 |
+| `cat urls.txt | subjs` | Extract JS links from URLs |
+| `-c 20` | Concurrency |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### JS 文件批量提取
+### Batch JavaScript File Extraction
 
 ```bash
 cat gau_urls.txt | subjs | tee js.txt
-# 喂给 nuclei/secret 扫描
+# feed the results into nuclei/secret scanning
 ```
 
-## 注意事项
+## Notes
 
-从 HTML 页面批量提取 <script src>,常与 gau 组合使用。
+Batch-extracts <script src> from HTML pages; often used together with gau.

