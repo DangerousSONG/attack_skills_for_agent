@@ -1,6 +1,9 @@
 ---
 name: disk-forensics
 description: "Analyze disk images, file systems, and memory captures for digital evidence recovery in forensic investigations and CTF challenges. Use when the user mentions 'disk forensics,' 'forensic analysis,' 'disk image,' 'file carving,' 'deleted files,' 'evidence recovery,' 'timeline analysis,' 'memory forensics,' 'volatility,' 'autopsy,' 'sleuthkit,' 'plaso,' 'log2timeline,' 'artifact analysis,' 'chain of custody,' or needs to examine a forensic image."
+zh-signals: "分析磁盘镜像、文件系统与内存转储以恢复数字取证证据。信号:磁盘取证,镜像分析,文件雕刻,时间线,内存取证"
+when-to-use: >-
+  Use when examining a forensic disk image, file system, or memory capture to recover evidence, carve deleted files, or build a timeline.
 allowed-tools: Bash, Read, Write, Grep, Glob
 ---
 

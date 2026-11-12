@@ -1,6 +1,8 @@
 ---
 name: hunt-fintech-graphql
 description: Hunt fintech-specific GraphQL vulnerabilities
+zh-signals: "针对金融科技 GraphQL 后端挖掘漏洞，重点关注涉及资金流转的 mutation 与账本逻辑缺陷。信号:GraphQL,金融科技,资金流转,漏洞挖掘,账本"
+when-to-use: "Use when hunting vulnerabilities in fintech GraphQL backends where money-movement mutations and ledger resolvers raise the impact to critical. Requires explicit written authorization for the target scope."
 category: security
 risk: offensive
 source: https://github.com/elementalsouls/Claude-BugHunter

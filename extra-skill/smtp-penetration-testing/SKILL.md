@@ -1,6 +1,8 @@
 ---
 name: smtp-penetration-testing
 description: "Conduct comprehensive security assessments of SMTP (Simple Mail Transfer Protocol) servers to identify vulnerabilities including open relays, user enumeration, weak authentication, and misconfiguration."
+zh-signals: "对 SMTP 服务器进行安全评估，检测开放中继、用户枚举与弱认证。信号:SMTP,开放中继,用户枚举,弱认证,邮件服务器,渗透测试"
+when-to-use: "Use when conducting an authorized security assessment of SMTP servers for open relay, user enumeration, weak authentication, or misconfiguration."
 risk: offensive
 source: community
 author: zebbern

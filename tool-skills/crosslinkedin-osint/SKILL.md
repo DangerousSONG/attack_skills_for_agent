@@ -2,37 +2,38 @@
 name: crosslinkedin-osint
 description: "CrossLinked: Builds employee dictionaries from LinkedIn. Signals: email harvesting, employee information, format."
 zh-signals: "CrossLinked: LinkedIn 员工字典。信号:邮箱收集,员工信息,格式。"
+when-to-use: "Use during email OSINT to generate employee email candidates from LinkedIn based on a known corporate email format."
 ---
 
 # CrossLinked
 
-- 攻击大类:C03 邮箱与人员OSINT
-- 上游仓库:https://github.com/m8sec/CrossLinked
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C03 Email and Personnel OSINT
+- Upstream Repository: https://github.com/m8sec/CrossLinked
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install crosslinked
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `crosslinked -f '{first}.{last}@corp.com' corp` | LinkedIn 员工邮箱生成 |
-| `-f fmt -t company` | 格式 |
-| `-o out.txt` | 输出 |
+| `crosslinked -f '{first}.{last}@corp.com' corp` | LinkedIn employee email generation |
+| `-f fmt -t company` | Format |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### LinkedIn 员工字典
+### LinkedIn Employee Dictionary
 
 ```bash
 crosslinked -f '{first}.{last}@corp.com' 'Target Corp'
-# 邮箱喷洒前置
+# Preparation step for email spraying
 ```
 
-## 注意事项
+## Notes
 
-m8sec 出品,LinkedIn 员工信息转邮箱字典。
+By m8sec, converts LinkedIn employee information into an email dictionary.

@@ -8,6 +8,8 @@ description: |
   entropy/predictability analysis of any generated value. Works on any domain. Chains from
   /web-exploit or /pentester; chains into /business-logic when boundary violations, predictable
   IDs, or mass assignment are confirmed.
+zh-signals: "系统化的参数与内容发现模糊测试，覆盖隐藏路径、输入校验与批量赋值。信号:参数模糊测试,内容发现,输入校验,批量赋值,Web安全"
+when-to-use: "Use when systematically fuzzing web parameters and discovering hidden content, input validation gaps, or mass assignment issues, chaining from web-exploit or pentester."
 argument-hint: "<target-url> [endpoints=<comma-list>] [depth=quick|standard|thorough]"
 user-invocable: true
 ---

@@ -1,6 +1,10 @@
 ---
 name: gh-export
 description: Formats all confirmed pentest findings from findings.json into copy-pasteable GitHub issue markdown blocks, following the AppSec reporting guide template.
+zh-signals: "将 findings.json 中已确认的渗透测试发现格式化为可直接粘贴的 GitHub Issue Markdown。信号:GitHub Issue,findings.json,报告导出,渗透发现,AppSec"
+when-to-use: >-
+  Use when exporting confirmed pentest findings from findings.json into
+  copy-pasteable GitHub issue markdown blocks following the AppSec guide.
 argument-hint: "[optional: path to findings.json]"
 user-invocable: true
 ---

@@ -1,6 +1,10 @@
 ---
 name: clickjacking-hunter
 description: Complete clickjacking (UI redressing) methodology framing protection detection, single-click and multi-step PoC construction, JS frame-busting bypass, drag-and-drop and OAuth consent variants, and report structure. Trigger when the user asks to test for clickjacking or UI redressing, wants to check if a sensitive endpoint (account delete, 2FA disable, OAuth consent) is frameable, needs to build a clickjacking PoC for a report, or wants to bypass JavaScript frame-busting protections.
+zh-signals: "点击劫持（UI 重定向）测试方法，检测框架保护并构造单步/多步 PoC。信号:点击劫持,UI重定向,X-Frame-Options,CSP,PoC"
+when-to-use: >-
+  Use when testing for clickjacking/UI redressing, checking whether a sensitive endpoint
+  is frameable, building a PoC, or bypassing JavaScript frame-busting protections.
 metadata:
   version: "1.0.0"
   author: Rifteo

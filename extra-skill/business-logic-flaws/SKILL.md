@@ -2,6 +2,8 @@
 name: business-logic-flaws
 description: >
   Business logic flaws are application vulnerabilities where valid functions are abused in unintended ways: price manipulation via hidden field tampering, workflow step-skipping, function call limit bypass (coupon reuse), process timing exploitation (race conditions on balance updates), and request forging via guessable/predictable parameters. Detect using Burp Suite proxy interception, HTTP POST/GET parameter analysis, and misuse-case testing against multi-step workflows. Tools: Burp Suite, OWASP ZAP.
+zh-signals: "识别并测试业务逻辑缺陷，如价格篡改、流程跳过、优惠券复用与竞态条件。信号:业务逻辑,价格篡改,流程绕过,竞态条件,越权,参数伪造"
+when-to-use: "Use when assessing multi-step workflows, price or quantity handling, coupon logic, or other business rules that may be abused rather than injected."
 license: MIT
 compatibility: Designed for Claude Code. Requires Burp Suite or OWASP ZAP.
 metadata:

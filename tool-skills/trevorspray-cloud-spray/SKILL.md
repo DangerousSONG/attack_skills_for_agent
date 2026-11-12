@@ -2,39 +2,43 @@
 name: trevorspray-cloud-spray
 description: "TREVORspray performs proxy-pool O365 spraying. Signals: password cracking, hash cracking, custom IdP, SSH proxy-pool spraying, threads"
 zh-signals: "TREVORspray: 代理池 O365 喷洒。信号:密码破解,哈希破解,自定义 IdP,SSH 代理池喷洒,线程。"
+when-to-use: >-
+  Use when conducting authorized password spraying against O365/Entra or a
+  custom IdP and you want to route attempts through an SSH proxy pool to avoid
+  per-IP lockouts.
 ---
 
 # TREVORspray
 
-- 攻击大类:C25 口令与哈希破解
-- 上游仓库:https://github.com/blacklanternsecurity/TREVORspray
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C25 Password and Hash Cracking
+- Upstream Repository: https://github.com/blacklanternsecurity/TREVORspray
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install trevorspray
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `trevorspray --emails users.txt --passwords pass.txt` | O365 喷洒 |
-| `--url https://login.target.com --usernames u.txt` | 自定义 IdP |
-| `--ssh hosts.txt --key id_rsa` | SSH 代理池喷洒 |
-| `-t 100` | 线程 |
-| `--lockout-threshold 3` | 锁账号保护 |
+| `trevorspray --emails users.txt --passwords pass.txt` | O365 spraying |
+| `--url https://login.target.com --usernames u.txt` | Custom IdP |
+| `--ssh hosts.txt --key id_rsa` | SSH proxy pool spraying |
+| `-t 100` | Threads |
+| `--lockout-threshold 3` | Account lockout protection |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 代理池 O365 喷洒
+### Proxy-pool O365 spraying
 
 ```bash
 trevorspray --emails emails.txt --passwords Winter2024! --lockout-threshold 3
-# 用被控主机做代理(--ssh),规避单 IP 限速
+# Use compromised hosts as proxies (--ssh) to evade per-IP rate limits
 ```
 
-## 注意事项
+## Notes
 
-Black Lantern 出品,喷射 O365/Entra 及各类 IdP,内置代理池和智能锁账号规避。
+By Black Lantern; sprays O365/Entra and all kinds of IdPs, with a built-in proxy pool and smart lockout evasion.

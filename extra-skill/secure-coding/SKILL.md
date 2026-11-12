@@ -1,6 +1,8 @@
 ---
 name: secure-coding
 description: Language-agnostic secure-coding patterns — input validation, injection-safe APIs, authN/authZ, crypto, secrets, dependency hygiene. The default lens when no framework-specific skill applies.
+zh-signals: "与语言无关的安全编码模式，涵盖输入校验、注入安全 API、认证授权、加密与依赖卫生。信号:安全编码,输入校验,注入防护,加密,依赖安全"
+when-to-use: "Use when writing or reviewing code for security and no framework-specific skill applies, especially for untrusted input, secrets, authentication, or crypto."
 ---
 
 # Secure Coding Standards

@@ -1,6 +1,8 @@
 ---
 name: s800-vehicle-network-security-testing
 description: Vehicle network security testing framework for automotive CAN bus and network protocol analysis
+zh-signals: "面向汽车 CAN 总线与车载网络协议的车辆网络安全测试框架，用于 ECU 评估与协议模糊测试。信号:车联网,CAN总线,汽车安全,ECU,协议测试"
+when-to-use: "Use when assessing automotive vehicle networks — CAN bus traffic analysis, ECU security testing, or protocol fuzzing on automotive systems."
 triggers:
   - test vehicle network security
   - analyze CAN bus traffic

@@ -1,6 +1,8 @@
 ---
 name: iac-security
 description: IaC misconfig scanning and cloud-aware review for Terraform, CloudFormation, Ansible and Pulumi. Covers tool orchestration (checkov/tfsec/kics/cfn-nag), policy-as-code (OPA/Conftest), CIS benchmark mapping, IAM over-permission detection, drift monitoring.
+zh-signals: "基础设施即代码的配置错误扫描与云安全审查，覆盖 Terraform、CloudFormation 等。信号:IaC安全,Terraform,配置扫描,云安全,CIS基准"
+when-to-use: "Use when reviewing Terraform, CloudFormation, Ansible, or Pulumi for misconfigurations, IAM over-permission, or compliance evidence."
 ---
 
 # IaC Security

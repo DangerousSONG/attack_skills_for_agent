@@ -1,6 +1,8 @@
 ---
 name: ffuf-web-fuzzing
 description: Expert guidance for ffuf web fuzzing during penetration testing, including authenticated fuzzing with raw requests, auto-calibration, and result analysis
+zh-signals: "指导使用 ffuf 进行 Web 模糊测试，涵盖原始请求认证爆破、自动校准与结果分析。信号:ffuf模糊测试,Web爆破,认证爆破,自动校准,结果分析"
+when-to-use: "Use when fuzzing web targets with ffuf during authorized security testing, including authenticated fuzzing and result analysis."
 risk: offensive
 source: community
 date_added: "2026-09-04"

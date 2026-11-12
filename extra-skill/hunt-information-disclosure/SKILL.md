@@ -1,6 +1,10 @@
 ---
 name: hunt-information-disclosure
 description: Hunt error leakage, DVCS exposure, source maps, config files, and differential oracles.
+zh-signals: "狩猎错误泄露、版本控制暴露、源码映射、配置文件与差异预言机等信息泄露面。信号:信息泄露,错误泄露,源码映射,配置泄露,DVCS"
+when-to-use: >-
+  Use when hunting information disclosure via stack traces, debug endpoints, versioned
+  paths, source maps, config files, or differential oracles that amplify other vulnerabilities.
 category: redteam
 version: 1.1.0
 revision_date: 2026-07-25

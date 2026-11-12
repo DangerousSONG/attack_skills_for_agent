@@ -1,6 +1,10 @@
 ---
 name: api-noauth-hunt
 description: Use when an API may expose data or privileged operations without authentication.
+zh-signals: "发现并验证无需认证即可访问的 API 操作，识别未授权数据暴露与特权接口。信号:API未授权,凭证缺失,数据泄露,接口枚举,访问控制"
+when-to-use: >-
+  Use when an API may expose data or privileged operations without authentication, such as
+  non-standard HTTP ports, API subdomains, or internal endpoints found in JS bundles.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

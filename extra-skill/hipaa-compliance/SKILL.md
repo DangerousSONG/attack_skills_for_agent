@@ -2,6 +2,8 @@
 name: hipaa-compliance
 description: Implement HIPAA security and privacy rules. Configure PHI protections
   and BAA requirements. Use when handling healthcare data.
+zh-signals: "实施 HIPAA 安全与隐私规则，配置 PHI 保护与技术保障并满足 BAA 要求，适用于医疗健康数据处理场景。信号:HIPAA,ePHI保护,BAA,医疗合规,隐私规则"
+when-to-use: "Use when handling healthcare data and you need to implement HIPAA security and privacy rules, configure PHI protections, or address BAA requirements."
 category: security
 risk: safe
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

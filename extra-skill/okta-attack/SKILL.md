@@ -1,6 +1,9 @@
 ---
 name: okta-attack
 description: Okta-as-IdP red-team attack chain — tenant discovery, user enumeration (multiple vectors), authentication flow analysis (factors enumeration, push-notification fatigue, SMS bypass), password spray with lockout discipline, Okta-specific phishing primitives (kits, FastPass abuse, OIDC redirect_uri tampering), MFA enumeration, post-compromise admin API surface. Many enterprise orgs use Okta instead of (or alongside) Entra ID. Distinct endpoints, distinct rate-limiting, distinct factor flows. Use when recon shows `<tenant>.okta.com`, `<tenant>.okta-emea.com`, `<tenant>.oktapreview.com`, or autodiscover-style records pointing at Okta IdP.
+zh-signals: "围绕 Okta 作为 IdP 的红队攻击链，覆盖租户发现、用户枚举、认证流程分析、密码喷洒与 OIDC/SAML 滥用。信号:Okta,SSO攻击,用户枚举,密码喷洒,OIDC重定向。"
+when-to-use: >-
+  Use when recon shows <tenant>.okta.com, <tenant>.okta-emea.com, <tenant>.oktapreview.com, or autodiscover-style records pointing at Okta IdP, and you need to enumerate users, analyze authentication flows, or attempt authorized SSO abuse.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

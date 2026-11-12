@@ -1,6 +1,11 @@
 ---
 name: competition-identity-windows
 description: Internal downstream skill for ctf-sandbox-orchestrator. CTF-sandbox workflow for Active Directory, Kerberos, LDAP, OAuth, enterprise messaging, Windows host forensics, credential material, and lateral-movement challenges. Use when the user asks to trace tickets or tokens, inspect mailbox rules, analyze Windows host evidence, understand an AD trust path, or explain a lateral-movement chain across sandbox-linked nodes. Use only after `$ctf-sandbox-orchestrator` has already established sandbox assumptions and routed here.
+zh-signals: "作为 ctf-sandbox-orchestrator 的下游技能，处理 Active Directory、Kerberos、LDAP、OAuth、企业邮件、Windows 主机取证、凭据材料与横向移动挑战。信号:CTF,Active Directory,Kerberos,Windows取证,横向移动,凭据"
+when-to-use: >-
+  Use only after ctf-sandbox-orchestrator has established sandbox assumptions and routed
+  here, when tracing AD tickets or tokens, mailbox rules, Windows host evidence, AD trust
+  paths, or lateral-movement chains across sandbox-linked nodes.
 ---
 
 # Competition Identity Windows

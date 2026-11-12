@@ -1,6 +1,11 @@
 ---
 name: competition-cloud-metadata-path
 description: Internal downstream skill for ctf-sandbox-orchestrator. CTF-sandbox workflow for cloud metadata services, instance identity, workload identity, link-local credential paths, role assumption, and metadata-to-privilege trust edges. Use when the user asks to inspect metadata-service access, instance credentials, pod or workload identity, link-local token paths, SSRF-to-metadata escalation, or explain how metadata-derived credentials turn into accepted cloud or control-plane privilege. Use only after `$ctf-sandbox-orchestrator` has already established sandbox assumptions and routed here.
+zh-signals: "作为 ctf-sandbox-orchestrator 的下游技能，追踪云元数据服务、实例与工作负载身份到最终云权限的信任链。信号:云元数据,实例身份,工作负载身份,SSRF,权限提升"
+when-to-use: >-
+  Use only after $ctf-sandbox-orchestrator is active and has established sandbox
+  assumptions, when the decisive edge is proving how metadata-derived identity becomes
+  accepted cloud or control-plane privilege.
 ---
 
 # Competition Cloud Metadata Path

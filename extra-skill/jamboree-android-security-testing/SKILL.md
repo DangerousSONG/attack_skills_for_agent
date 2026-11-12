@@ -1,6 +1,10 @@
 ---
 name: jamboree-android-security-testing
 description: Configure and orchestrate Android security testing environments with Magisk, Burp Suite, Objection, and rooted emulators for mobile penetration testing
+zh-signals: "用 Magisk、Burp Suite 与 Objection 编排 Android 安全测试环境并进行移动端渗透。信号:android,magisk,burp,objection,frida,ssl pinning"
+when-to-use: >-
+  Use when setting up or operating a rooted Android emulator with Magisk, Burp Suite, and
+  Objection/Frida for mobile penetration testing, traffic interception, or SSL pinning bypass.
 triggers:
   - set up android security testing environment
   - configure burp suite with android emulator

@@ -1,6 +1,8 @@
 ---
 name: hunt-websocket
 description: Hunt WebSocket vulnerabilities
+zh-signals: "狩猎 WebSocket 安全漏洞（CSWSH、无逐消息鉴权、实时数据泄露）。信号:websocket,cswh,跨站劫持,消息鉴权,实时数据泄露"
+when-to-use: "Use when assessing WebSocket endpoints for cross-site WebSocket hijacking (CSWSH), missing per-message authorization, or real-time data exposure under authorized scope."
 category: security
 risk: offensive
 source: https://github.com/elementalsouls/Claude-BugHunter

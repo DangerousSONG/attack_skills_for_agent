@@ -1,6 +1,8 @@
 ---
 name: ctf-writeup
 description: Generates a single standardized submission-style CTF writeup for competition handoff and organizer review. Use after solving a CTF challenge to document the solution steps, tools used, and lessons learned in a structured format.
+zh-signals: "为已解决的 CTF 题目生成标准化的提交式 writeup，记录解题步骤与工具。信号:CTF,writeup,解题报告,题目复盘,提交"
+when-to-use: "Use after solving a CTF challenge to document the solution steps, tools used, and lessons learned in a standardized submission format."
 license: MIT
 compatibility: Requires filesystem-based agent (Claude Code or similar) with bash and Python 3.
 allowed-tools: Bash Read Write Edit Glob Grep Task WebFetch WebSearch

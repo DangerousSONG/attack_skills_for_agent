@@ -1,6 +1,8 @@
 ---
 name: api-audit
 description: "Audit REST, GraphQL, and RPC APIs against the OWASP API Security Top 10 (2023). Use when the user mentions 'API security,' 'API audit,' 'BOLA,' 'broken object level authorization,' 'BFLA,' 'function-level authorization,' 'mass assignment,' 'API rate limiting,' 'GraphQL security,' 'REST security,' 'API authentication,' 'API authorization,' 'excessive data exposure,' or needs to review API endpoints for security weaknesses."
+zh-signals: "依据 OWASP API Security Top 10 审计 REST、GraphQL 与 RPC API 的授权与数据暴露问题。信号:API审计,BOLA,BFLA,GraphQL安全,OWASP API"
+when-to-use: "Use when reviewing REST, GraphQL, or RPC API endpoints for security weaknesses against the OWASP API Security Top 10, including BOLA, BFLA, and excessive data exposure."
 allowed-tools: Read, Grep, Glob, Bash, Write
 ---
 

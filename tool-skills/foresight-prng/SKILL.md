@@ -2,36 +2,40 @@
 name: foresight-prng
 description: "foresight predicts weak PRNG output. Signals: cryptographic attack, encryption cracking, LCG parameter recovery."
 zh-signals: "foresight: 弱 PRNG 预测。信号:密码学攻击,加密破解,LCG 参数恢复。"
+when-to-use: >-
+  Use when a target relies on a weak pseudo-random number generator and you need
+  to recover its internal state or LCG parameters from observed output to predict
+  future values.
 ---
 
 # foresight
 
-- 攻击大类:C49 密码学攻击
-- 上游仓库:https://github.com/ALSchwalm/foresight
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C49 Cryptographic Attacks
+- Upstream Repository: https://github.com/ALSchwalm/foresight
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install foresight
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python -m foresight gmpredict 12345 67890 11111` | PRNG 预测 |
-| `python -m foresight lcg a c m` | LCG 参数恢复 |
+| `python -m foresight gmpredict 12345 67890 11111` | PRNG prediction |
+| `python -m foresight lcg a c m` | LCG parameter recovery |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 弱 PRNG 预测
+### Weak PRNG Prediction
 
 ```bash
 python -m foresight mt19937 42
-# 恢复梅森旋转种子
+# Recover the Mersenne Twister seed
 ```
 
-## 注意事项
+## Notes
 
-PRNG 状态恢复工具,预测弱随机数。
+A PRNG state recovery tool for predicting weak random numbers.

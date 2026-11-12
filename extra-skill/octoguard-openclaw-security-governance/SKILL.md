@@ -1,6 +1,8 @@
 ---
 name: octoguard-openclaw-security-governance
 description: Security governance and audit system for OpenClaw AI agents with real-time policy enforcement, token monitoring, and alert notifications
+zh-signals: "为 OpenClaw AI Agent 部署安全治理与审计，实现策略拦截、token 监控与告警。信号:OctoGuard,OpenClaw,AI Agent安全,策略治理,审计告警"
+when-to-use: "Use when setting up security monitoring, policy enforcement, audit logging, or token alerts for OpenClaw AI agents."
 triggers:
   - "set up OctoGuard security monitoring"
   - "configure OpenClaw security policies"

@@ -1,6 +1,9 @@
 ---
 name: security-scanning-security-dependencies
 description: "You are a security expert specializing in dependency vulnerability analysis, SBOM generation, and supply chain security. Scan project dependencies across multiple ecosystems to identify vulnerabilities, assess risks, and provide automated remediation strategies."
+zh-signals: "扫描多生态依赖漏洞并生成 SBOM 与修复建议。信号:依赖漏洞,SBOM,供应链安全,许可证风险,漏洞修复。"
+when-to-use: >-
+  Use when auditing project dependencies for vulnerabilities or license risks, generating SBOMs, or planning remediation across multiple package ecosystems.
 risk: safe
 source: community
 date_added: "2026-02-27"

@@ -3,6 +3,8 @@ name: windows-hardening
 description: Harden Windows servers per security baselines and CIS benchmarks. Configure
   Group Policy, Windows Defender, and security features. Use when securing Windows
   Server environments.
+zh-signals: "按微软安全基线与 CIS 基准加固 Windows 服务器，配置组策略、Defender 与安全特性。信号:Windows加固,CIS基准,组策略,Defender,安全基线"
+when-to-use: "Use when securing Windows Server environments by applying Microsoft security baselines or CIS benchmarks and hardening Group Policy, Windows Defender, and related security features."
 category: security
 risk: critical
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

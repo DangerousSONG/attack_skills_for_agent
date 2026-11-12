@@ -1,6 +1,8 @@
 ---
 name: code-maturity-assessor
 description: Systematic code maturity assessment using Trail of Bits' 9-category framework. Analyzes codebase for arithmetic safety, auditing practices, access controls, complexity, decentralization, documentation, MEV risks, low-level code, and testing, then produces a scorecard with evidence-based ratings and a priority-ordered roadmap. Use when assessing or scoring the maturity of a smart contract or blockchain codebase, producing a maturity scorecard or evaluation, or judging how mature, well-tested, or well-documented such a project is against a rubric.
+zh-signals: "代码成熟度评估技能，基于 Trail of Bits 九大类框架分析算术安全、访问控制、复杂度、测试与文档并输出评分卡与改进路线图。信号:代码成熟度,TrailofBits,评分卡,智能合约,安全评估"
+when-to-use: "Use when assessing or scoring the maturity of a smart contract or blockchain codebase, producing an evidence-based maturity scorecard, or judging how well-tested and documented a project is against a rubric."
 ---
 
 # Code Maturity Assessor

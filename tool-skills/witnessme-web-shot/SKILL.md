@@ -2,38 +2,42 @@
 name: witnessme-web-shot
 description: "WitnessMe: Web asset full-page screenshots. Signals: screen capture, screenshot, single URL screenshot, batch, start web service to view results."
 zh-signals: "WitnessMe: Web 资产整段截图。信号:屏幕捕获,截图,单 URL 截图,批量,起 Web 服务看结果。"
+when-to-use: >-
+  Use when you need to capture full-page screenshots of many web assets for
+  reporting or attack-surface visualization; accepts a URL list and serves
+  results through a web panel.
 ---
 
 # WitnessMe
 
-- 攻击大类:C34 截图与取证
-- 上游仓库:https://github.com/byt3bl33d3r/WitnessMe
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C34 Screen Capture and Forensics
+- Upstream Repository: https://github.com/byt3bl33d3r/WitnessMe
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install witnessme
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `witnessme snapshot -t https://t.com` | 单 URL 截图 |
-| `witnessme snapshot -f urls.txt` | 批量 |
-| `witnessme server -p 8080` | 起 Web 服务看结果 |
-| `--no-http` | 仅 HTTP(S) |
+| `witnessme snapshot -t https://t.com` | Single URL screenshot |
+| `witnessme snapshot -f urls.txt` | Batch |
+| `witnessme server -p 8080` | Start a web service to view the results |
+| `--no-http` | HTTP(S) only |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Web 资产整段截图
+### Full-page screenshots of web assets
 
 ```bash
 cat subdomains.txt | witnessme snapshot -f -
-# 生成带缩略图的 Web 面板,报告用
+# Produces a web panel with thumbnails, ready for reporting
 ```
 
-## 注意事项
+## Notes
 
-byt3bl33d3r 出品,headless Chrome 批量网页截图+服务端展示,Web 攻击面可视化。
+By byt3bl33d3r, headless Chrome batch webpage screenshots plus a server-side viewer for visualizing the web attack surface.

@@ -1,62 +1,64 @@
 ---
 name: xss-methodology
-description: "反射型/存储型/DOM XSS 的检测、利用和绕过。当 Web 应用有用户输入回显（搜索/评论/表单/URL参数）、或发现存储型内容输出点时使用。包含上下文分析决策树、WAF绕过技巧、CSP绕过方法、DOM Clobbering、mXSS、SVG XSS。优先于其他漏洞测试——XSS 是最低成本的高危漏洞，发现后立即构造 PoC"
+description: "Detection, exploitation, and bypass of reflected, stored, and DOM XSS. Use when a web application echoes user input (search/comments/forms/URL parameters) or when stored content output points are found. Includes a context-analysis decision tree, WAF bypass techniques, CSP bypass methods, DOM Clobbering, mXSS, and SVG XSS. Prioritize over other vulnerability testing — XSS is the lowest-cost high-severity vulnerability, so construct a PoC as soon as one is found"
+zh-signals: "反射型/存储型/DOM XSS 的检测、利用与绕过，含上下文决策树、WAF/CSP 绕过、DOM Clobbering 与 mXSS。信号:XSS,跨站脚本,上下文,WAF绕过,CSP绕过"
+when-to-use: "Use when a web app echoes user input (search, comments, forms, URL parameters) or has stored output points, to test reflected, stored, or DOM XSS and construct a PoC."
 metadata:
   tags: "xss,cross-site scripting,injection,bypass,dom,reflected,stored,csp"
   category: "exploit"
   mitre_attack: "T1189,T1059.007"
 ---
 
-# XSS 跨站脚本完整方法论
+# XSS Cross-Site Scripting Complete Methodology
 
-## ⛔ 深入参考（遇到 WAF/CSP 时必读）
+## ⛔ In-Depth Reading (Must Read When Facing WAF/CSP)
 
-- WAF/过滤绕过 payload 大全、CSP 绕过进阶、DOM Clobbering、mXSS、SVG XSS、存储型/DOM XSS → [references/xss-bypass-and-types.md](references/xss-bypass-and-types.md)
-- CSP 绕过与 DOM XSS 深入技术 → [references/csp-bypass-and-dom-xss.md](references/csp-bypass-and-dom-xss.md)
+- Full collection of WAF/filter bypass payloads, advanced CSP bypass, DOM Clobbering, mXSS, SVG XSS, stored/DOM XSS → [references/xss-bypass-and-types.md](references/xss-bypass-and-types.md)
+- In-depth CSP bypass and DOM XSS techniques → [references/csp-bypass-and-dom-xss.md](references/csp-bypass-and-dom-xss.md)
 
 ---
 
-## Phase 0: 回显点发现（最先执行！）
+## Phase 0: Reflection Point Discovery (Execute First!)
 
-1. 每个参数发送唯一标记（`xss123test`），在响应中搜索
-2. 不仅检查 HTML body，也检查响应头（`Location:`, `Set-Cookie:`）
-3. 常见：搜索结果页、错误页面、用户资料页
+1. Send a unique marker (`xss123test`) with every parameter and search for it in the response
+2. Check not only the HTML body but also the response headers (`Location:`, `Set-Cookie:`)
+3. Common ones: search result pages, error pages, user profile pages
 
-## Phase 1: 上下文分析（决定 payload）
+## Phase 1: Context Analysis (Determines the Payload)
 
-| 上下文 | 示例 | 基础 Payload |
+| Context | Example | Basic Payload |
 |--------|------|-------------|
-| HTML 标签间 | `<div>INJECT</div>` | `<script>alert(1)</script>` |
-| 属性值（双引号） | `<input value="INJECT">` | `" onfocus=alert(1) autofocus="` |
-| 属性值（单引号） | `<input value='INJECT'>` | `' onfocus=alert(1) autofocus='` |
-| JavaScript 字符串 | `var x="INJECT"` | `";alert(1)//` |
+| Between HTML tags | `<div>INJECT</div>` | `<script>alert(1)</script>` |
+| Attribute value (double quotes) | `<input value="INJECT">` | `" onfocus=alert(1) autofocus="` |
+| Attribute value (single quotes) | `<input value='INJECT'>` | `' onfocus=alert(1) autofocus='` |
+| JavaScript string | `var x="INJECT"` | `";alert(1)//` |
 | URL/href | `<a href="INJECT">` | `javascript:alert(1)` |
-| JS 模板字面量 | `` var x=`INJECT` `` | `${alert(1)}` 或 `` `+alert(1)+` `` |
+| JS template literal | `` var x=`INJECT` `` | `${alert(1)}` or `` `+alert(1)+` `` |
 
-**关键**：不同上下文需要不同 payload！先确定上下文再选择。
+**Key**: Different contexts require different payloads! Determine the context first, then choose.
 
-## Phase 2: 基础 XSS 测试
+## Phase 2: Basic XSS Testing
 
 ```
 1. <script>alert(1)</script>
-2. <img src=x onerror=alert(1)>      ← script 被过滤时
+2. <img src=x onerror=alert(1)>      ← when script is filtered
 3. <svg onload=alert(1)>
-4. " onfocus=alert(1) autofocus="    ← 属性注入
+4. " onfocus=alert(1) autofocus="    ← attribute injection
 ```
 
-**验证**：检查响应 HTML 中 payload 是否被原样保留（未编码）。`<` 变成 `&lt;` → 已转义，换参数。
+**Verification**: Check whether the payload is preserved as-is (unencoded) in the response HTML. `<` becomes `&lt;` → it has been escaped, switch parameters.
 
-## Phase 3: 绕过与高级利用
+## Phase 3: Bypass and Advanced Exploitation
 
-遇到 WAF/过滤 → [references/xss-bypass-and-types.md](references/xss-bypass-and-types.md)
+Encountering a WAF/filter → [references/xss-bypass-and-types.md](references/xss-bypass-and-types.md)
 
-速查：
-- `<script>` 被过滤 → `<img>`, `<svg>`, `<details>`, `<video>`
-- `alert` 被过滤 → `confirm()`, `prompt()`, `print()`
-- `()` 被过滤 → `` alert`1` ``
-- CSP 限制 → 检查 `unsafe-inline` / nonce / JSONP 端点
+Quick reference:
+- `<script>` filtered → `<img>`, `<svg>`, `<details>`, `<video>`
+- `alert` filtered → `confirm()`, `prompt()`, `print()`
+- `()` filtered → `` alert`1` ``
+- CSP restrictions → check `unsafe-inline` / nonce / JSONP endpoints
 
-## 注意事项
-- **先测回显再测注入**：没有回显就没有 XSS
-- **HTTP-only Cookie 无法通过 XSS 窃取**
-- 记录每个参数的编码行为
+## Notes
+- **Test reflection before testing injection**: no reflection means no XSS
+- **HTTP-only cookies cannot be stolen through XSS**
+- Record the encoding behavior of every parameter

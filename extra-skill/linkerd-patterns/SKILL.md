@@ -1,6 +1,8 @@
 ---
 name: linkerd-patterns
 description: "Production patterns for Linkerd service mesh - the lightweight, security-first service mesh for Kubernetes."
+zh-signals: "Linkerd 服务网格的生产级配置模式（mTLS、流量拆分、服务配置）。信号:linkerd,service mesh,kubernetes,mTLS,流量拆分"
+when-to-use: "Use when setting up a lightweight Kubernetes service mesh, implementing automatic mTLS, traffic splits, service profiles, retries, or multi-cluster."
 risk: critical
 source: community
 date_added: "2026-02-27"

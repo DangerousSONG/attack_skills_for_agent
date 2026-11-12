@@ -2,6 +2,8 @@
 name: aws-iam
 description: Manage IAM users, roles, and policies. Implement least-privilege access
   and security best practices. Use when configuring AWS identity and access management.
+zh-signals: "管理 AWS IAM 用户、角色与策略，实施最小权限访问与身份安全最佳实践。信号:AWS,IAM,最小权限,OIDC,权限边界"
+when-to-use: "Use when creating IAM roles or least-privilege policies, configuring OIDC federation, implementing permission boundaries, or auditing AWS access."
 category: devops
 risk: critical
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

@@ -1,16 +1,21 @@
 ---
 name: diagram-generator
 description: generate, refine, validate, and render diagrams from natural language, notes, code snippets, schemas, tables, or existing diagram source. use for flowcharts, swimlanes, sequence diagrams, state diagrams, er diagrams, class diagrams, architecture/c4-style diagrams, dependency graphs, gantt charts, mind maps, user journeys, sankey-style flows, org charts, network graphs, and other visual models. supports mermaid by default, graphviz dot for complex graph layout, plantuml for uml-heavy engineering diagrams, and svg output when direct markup is more reliable.
+zh-signals: "从自然语言、代码、schema 或表格生成并渲染流程图、时序图、架构图等多种图表。信号:图表生成,mermaid,graphviz,plantuml,流程图,可视化"
+when-to-use: >-
+  Use when you need to create, refine, validate, or render diagrams such as flowcharts,
+  sequence diagrams, ER/class diagrams, architecture diagrams, or mind maps from natural
+  language or structured inputs.
 ---
 
 # Diagram Generator
 
-## ACTION REQUIRED（读完后立刻执行）
+## ACTION REQUIRED (execute immediately after reading)
 
-1. `NOW`：确认当前任务是否命中本 skill 的适用范围
-2. `NOW`：读取 `../tool-index.md`，校验工具可用性和实际路径
-3. `NEXT`：缺工具时调用 bootstrap，不要猜路径
-4. `ACT`：进入"工作流"第一步并执行，不要停在确认状态
+1. `NOW`: Confirm whether the current task falls within this skill's applicable scope
+2. `NOW`: Read `../tool-index.md` and verify tool availability and real paths
+3. `NEXT`: Call bootstrap when a tool is missing; do not guess paths
+4. `ACT`: Enter and execute the first step of the "Workflow" section; do not stop at the confirmation stage
 
 ## Purpose
 
@@ -114,7 +119,7 @@ python "<SKILL_ROOT>/diagram-generator/scripts/render_diagram.py" input.dot --fo
 python "<SKILL_ROOT>/diagram-generator/scripts/render_diagram.py" input.puml --format svg --out output.svg
 ```
 
-> `<SKILL_ROOT>` 是本包 `skills/` 目录的实际路径，AI 应自动检测。
+> `<SKILL_ROOT>` is the actual path of this package's `skills/` directory; the AI should detect it automatically.
 
 The renderer is intentionally dependency-tolerant. It tries common local tools and reports actionable installation hints if a renderer is unavailable. Do not claim an image was rendered unless the script completed successfully and the output file exists.
 
@@ -134,7 +139,7 @@ Before finalizing:
 Use this structure for most diagram answers:
 
 ```markdown
-下面是可编辑的 [language] 版本：
+Below is the editable [language] version:
 
 ```[language]
 [source]
@@ -150,39 +155,39 @@ For English user requests, respond in English. For Chinese user requests, respon
 
 ---
 
-## 按需自举（On-Demand Bootstrap）
+## On-Demand Bootstrap
 
-### 自动化能力边界
+### Automation Capability Boundaries
 
-| 工具 | 可自动安装 | 安装方式 | 说明 |
+| Tool | Auto-Installable | Installation Method | Description |
 |------|-----------|---------|------|
-| Mermaid CLI (mmdc) | ✓ | npm install -g @mermaid-js/mermaid-cli | 渲染 Mermaid 为 PNG/SVG |
-| Graphviz (dot) | ✗ | 手动安装 | https://graphviz.org/download/ |
-| PlantUML | ✗ | 需要 Java + plantuml.jar | https://plantuml.com/download |
-| Python (render script) | ✓ | 已在 bootstrap 中 | `scripts/render_diagram.py` 依赖 |
+| Mermaid CLI (mmdc) | ✓ | npm install -g @mermaid-js/mermaid-cli | Render Mermaid to PNG/SVG |
+| Graphviz (dot) | ✗ | Manual installation | https://graphviz.org/download/ |
+| PlantUML | ✗ | Requires Java + plantuml.jar | https://plantuml.com/download |
+| Python (render script) | ✓ | Already included in bootstrap | Required by `scripts/render_diagram.py` |
 
-### 说明
+### Notes
 
-本 skill 主要输出文本格式的图表源码（Mermaid/DOT/PlantUML），不一定需要本地渲染工具。只有当用户明确要求生成 PNG/SVG/PDF 文件时才需要对应的渲染器。
+This skill mainly outputs text-format diagram source (Mermaid/DOT/PlantUML) and does not necessarily need a local rendering tool. A corresponding renderer is only needed when the user explicitly asks for PNG/SVG/PDF output.
 
-如果渲染器不可用，`scripts/render_diagram.py` 会输出安装提示而不是报错。
+If the renderer is unavailable, `scripts/render_diagram.py` prints installation hints instead of failing.
 
 ---
 
-## 路由上下文
+## Routing Context
 
-**上游入口**: `skills/SKILL.md`（总控）、`routing.md`
-**触发条件**: 用户说"画图"、"流程图"、"架构图"、"攻击路径图"、"时序图"、"Mermaid"、"Graphviz"、"PlantUML"
-**下游出口**:
-- 生成的图表可嵌入 `docs-generator/` 的报告中
-- 攻击路径图可配合 `pentest-tools/` 的渗透报告
+**Upstream Entry Points**: `skills/SKILL.md` (master control), `routing.md`
+**Trigger conditions**: the user says "draw a diagram", "flowchart", "architecture diagram", "attack path diagram", "sequence diagram", "Mermaid", "Graphviz", or "PlantUML"
+**Downstream Exit Points**:
+- Generated diagrams can be embedded in reports produced by `docs-generator/`
+- Attack path diagrams can be paired with pentest reports from `pentest-tools/`
 
-**同级关联模块**: `docs-generator/`（报告中嵌入图表）
+**Sibling related module**: `docs-generator/` (embed diagrams in reports)
 
 
-## 任务完成自检（声称完成前 MUST 通过）
+## Task Completion Self-Check (MUST pass before claiming completion)
 
-- [ ] 我是否执行了工作流中的每一步（而不是只阅读）？
-- [ ] 我是否基于 `tool-index` 使用了真实工具路径？
-- [ ] 我是否产出了可复现证据（命令/脚本/截图/报告）？
-- [ ] 我是否完成并回写了 RULES 要求的 Checklist 项？
+- [ ] Did I execute every step in the workflow (rather than only reading it)?
+- [ ] Did I use real tool paths based on `tool-index`?
+- [ ] Did I produce reproducible evidence (commands / scripts / screenshots / reports)?
+- [ ] Did I complete and write back the Checklist items required by RULES?

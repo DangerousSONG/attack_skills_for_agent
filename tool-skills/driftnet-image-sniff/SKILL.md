@@ -2,38 +2,41 @@
 name: driftnet-image-sniff
 description: "driftnet: LAN image sniffing. Signals: man-in-the-middle, MITM, image traffic sniffing, audio, save to disk."
 zh-signals: "driftnet: 局域网图片嗅探。信号:中间人,mitm,图片流量嗅探,音频,落盘。"
+when-to-use: >-
+  Use when conducting authorized network sniffing or MITM testing on a LAN and you want
+  to capture and display images or audio traffic passing through the interface.
 ---
 
 # driftnet
 
-- 攻击大类:C40 嗅探与中间人攻击
-- 上游仓库:https://github.com/deiv/driftnet
-- 上游 License:GPL-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C40 Sniffing and Man-in-the-Middle Attacks
+- Upstream Repository: https://github.com/deiv/driftnet
+- Upstream License: GPL-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 apt install driftnet
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `driftnet -i eth0` | 图片流量嗅探 |
-| `-a` | 音频 |
-| `-d tmp/` | 落盘 |
-| `-f` | 前台 |
+| `driftnet -i eth0` | Image traffic sniffing |
+| `-a` | Audio |
+| `-d tmp/` | Save to disk |
+| `-f` | Foreground |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 局域网图片嗅探
+### LAN image sniffing
 
 ```bash
 driftnet -i eth0
-# ARP 欺骗下看目标浏览图片
+# Watch what images the target browses under ARP spoofing
 ```
 
-## 注意事项
+## Notes
 
-网络图片嗅探工具。
+A network image sniffing tool.

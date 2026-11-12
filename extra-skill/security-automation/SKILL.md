@@ -3,6 +3,11 @@ name: security-automation
 description: Automate security workflows and remediation. Build security pipelines,
   automate compliance checks, and implement SOAR capabilities. Use when scaling security
   operations or implementing DevSecOps.
+zh-signals: "自动化安全工作流与修复，构建安全流水线、合规检查与 SOAR 能力。信号:安全自动化,SOAR,DevSecOps,合规检查,修复"
+when-to-use: >-
+  Use when scaling security operations, building security pipelines,
+  automating compliance checks, or implementing DevSecOps and SOAR
+  capabilities.
 category: security
 risk: critical
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

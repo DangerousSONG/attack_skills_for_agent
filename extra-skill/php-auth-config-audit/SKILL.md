@@ -1,79 +1,84 @@
 ---
 name: php-auth-config-audit
 description: |
-  PHP 源码认证、配置与逻辑类漏洞审计。当在 PHP 白盒审计中需要检测认证绕过、
-  权限控制、安全配置、密码学误用或业务逻辑漏洞时触发。
-  覆盖 5 类风险: 认证绕过(硬编码凭据/弱比较/JWT 缺陷)、授权失控(IDOR/水平越权)、
-  安全配置(CORS/错误暴露/调试模式)、密码学误用(弱哈希/ECB/硬编码密钥)、业务逻辑(竞争条件/支付篡改)。
+  PHP source code audit for authentication, configuration, and logic flaws. Trigger it during
+  PHP white-box audits when checking authentication bypass, access control, security configuration,
+  cryptographic misuse, or business logic vulnerabilities.
+  Covers 5 risk categories: authentication bypass (hardcoded credentials/weak comparison/JWT flaws),
+  broken access control (IDOR/horizontal privilege escalation),
+  security configuration (CORS/error exposure/debug mode), cryptographic misuse (weak hash/ECB/hardcoded keys),
+  and business logic (race condition/payment tampering).
+zh-signals: "PHP 源码认证、授权、配置、密码学与业务逻辑类漏洞审计。信号:认证绕过,越权,安全配置,密码学误用,业务逻辑"
+when-to-use: "Use during PHP white-box audits when checking authentication bypass, IDOR and authorization, insecure configuration, cryptographic misuse, or business logic flaws."
 metadata:
-  tags: authentication, authorization, idor, config, cors, debug mode, cryptography, weak hash, business logic, 认证绕过, 授权, 越权, 配置审计, 密码学, 业务逻辑
+  tags: authentication, authorization, idor, config, cors, debug mode, cryptography, weak hash, business logic, authentication bypass, authorization, privilege bypass, config audit, cryptography, business logic
   category: code-audit
 ---
 
-# PHP 认证配置与逻辑类漏洞源码审计
-本 skill 聚焦源码层面的认证、授权、配置、密码学和业务逻辑缺陷。运行时利用（如 JWT 伪造、条件竞争脚本）属于对应黑盒 exploit skill 范畴。
+# PHP Authentication, Configuration, and Logic Flaw Source Code Audit
+This skill focuses on authentication, authorization, configuration, cryptographic, and business logic defects at the source code level. Runtime exploitation (such as JWT forgery or race condition scripts) belongs to the corresponding black-box exploit skill.
 
-## 深入参考
+## Further Reading
 
-- 5 类风险的危险模式 / 安全模式代码对比 / 检测方法 → [references/auth-config-patterns.md](references/auth-config-patterns.md)
+- Dangerous patterns for the 5 risk categories / safe pattern code comparison / detection methods → [references/auth-config-patterns.md](references/auth-config-patterns.md)
 
 ---
 
-## 5 类风险速查表
+## Quick Reference Table for the 5 Risk Categories
 
-| 类型 | 典型模式 | 危险信号 | 严重度 |
+| Type | Typical Pattern | Danger Signal | Severity |
 |------|----------|----------|--------|
-| 认证绕过 | 硬编码凭据、`==` 弱比较、JWT algorithm none | 登录/令牌验证逻辑 | Critical-High |
-| 授权失控 | IDOR 直接引用、缺少 ownership 检查、中间件跳过 | 资源访问无权限校验 | High-Critical |
-| 安全配置 | `display_errors=On`、CORS `*`、调试模式残留 | 信息泄露/跨域滥用 | Medium-High |
-| 密码学误用 | `md5($pass)`、ECB 模式、硬编码密钥 | 密码存储/加解密逻辑 | High-Critical |
-| 业务逻辑 | 竞争条件、支付金额可控、状态机跳步 | 交易/库存/状态流转 | High-Critical |
+| Authentication bypass | Hardcoded credentials, `==` weak comparison, JWT algorithm none | Login/token validation logic | Critical-High |
+| Broken access control | Direct IDOR reference, missing ownership check, middleware skip | Resource access without authorization checks | High-Critical |
+| Security configuration | `display_errors=On`, CORS `*`, leftover debug mode | Information disclosure/cross-origin abuse | Medium-High |
+| Cryptographic misuse | `md5($pass)`, ECB mode, hardcoded keys | Password storage/encryption logic | High-Critical |
+| Business logic | Race condition, controllable payment amount, state machine step skipping | Transactions/inventory/state transitions | High-Critical |
 
-## 认证审计要点
+## Authentication Audit Points
 
-- **硬编码密码/API Key**: 搜索 `password`/`secret`/`api_key`/`token` 赋值为字面量字符串的位置
-- **弱比较**: `==` 对比密码/token 导致类型混淆（`"0e123" == "0e456"` 为 true），必须使用 `===` 或 `hash_equals`
-- **JWT 缺陷**: algorithm confusion（RS256→HS256）、签名未验证、`alg:none` 接受、密钥泄露、`kid` 参数注入
-- **Remember Me**: token 是否可预测（`md5(username.time())`）、是否绑定用户/设备
-- **密码重置**: token 可预测性、token 是否绑定目标用户、是否有过期机制
+- **Hardcoded passwords/API keys**: search for places where `password`/`secret`/`api_key`/`token` is assigned a literal string
+- **Weak comparison**: using `==` to compare passwords/tokens causes type confusion (`"0e123" == "0e456"` is true), so `===` or `hash_equals` is mandatory
+- **JWT flaws**: algorithm confusion (RS256→HS256), unverified signature, acceptance of `alg:none`, key leakage, `kid` parameter injection
+- **Remember Me**: whether the token is predictable (`md5(username.time())`) and whether it is bound to a user/device
+- **Password reset**: token predictability, whether the token is bound to the target user, and whether an expiry mechanism exists
 
-## 授权审计要点
+## Authorization Audit Points
 
-- **IDOR**: `$_GET['id']` 直接查询无 `WHERE user_id=` 归属检查，对象引用可水平篡改
-- **路由级 vs 函数级权限**: 中间件挂载范围是否完整覆盖、是否存在未保护的路由
-- **中间件跳过**: 路由分组遗漏、`withoutMiddleware` 滥用、OPTIONS 预检绕过
-- **水平越权 vs 垂直越权**: 水平 — 同角色访问他人资源；垂直 — 低权限访问高权限功能
+- **IDOR**: `$_GET['id']` used directly in a query without a `WHERE user_id=` ownership check, allowing horizontal tampering with object references
+- **Route-level vs function-level permissions**: whether the middleware mounting scope fully covers the routes and whether unprotected routes exist
+- **Middleware skipping**: missing route groups, abuse of `withoutMiddleware`, OPTIONS preflight bypass
+- **Horizontal vs vertical privilege escalation**: horizontal — same role accessing another user's resources; vertical — low-privileged user reaching high-privileged functionality
 
-## 配置审计要点
+## Configuration Audit Points
 
-- **错误暴露**: `display_errors=On` + `error_reporting=E_ALL` 泄露路径/SQL/栈信息
-- **CORS**: `Access-Control-Allow-Origin: *` 配合 `Allow-Credentials: true` 允许任意源携带凭据
-- **调试模式**: Laravel `APP_DEBUG=true`、ThinkPHP `app_debug`、自定义 `DEBUG` 常量残留
-- **安全头缺失**: `X-Frame-Options`、`Content-Security-Policy`、`X-Content-Type-Options` 未设置
+- **Error exposure**: `display_errors=On` combined with `error_reporting=E_ALL` leaks paths/SQL/stack information
+- **CORS**: `Access-Control-Allow-Origin: *` combined with `Allow-Credentials: true` allows any origin to carry credentials
+- **Debug mode**: leftover Laravel `APP_DEBUG=true`, ThinkPHP `app_debug`, or custom `DEBUG` constants
+- **Missing security headers**: `X-Frame-Options`, `Content-Security-Policy`, `X-Content-Type-Options` not set
 
-## 密码学审计要点
+## Cryptography Audit Points
 
-- **弱哈希**: `md5($pass)` / `sha1($pass)` 用于密码存储，应使用 `password_hash(PASSWORD_BCRYPT)`
-- **ECB 模式**: 确定性加密，相同明文产生相同密文，可分析推断内容
-- **硬编码密钥**: `KEY`/`IV`/`SECRET` 写死在源码中，搜索 `openssl_encrypt`/`mcrypt_*` 调用的密钥来源
-- **弱随机数**: `mt_rand`/`rand`/`uniqid` 用于生成安全令牌，应使用 `random_bytes`/`random_int`
+- **Weak hash**: `md5($pass)` / `sha1($pass)` used for password storage; `password_hash(PASSWORD_BCRYPT)` should be used instead
+- **ECB mode**: deterministic encryption where identical plaintext yields identical ciphertext, allowing content to be inferred
+- **Hardcoded keys**: `KEY`/`IV`/`SECRET` hardcoded in source; trace the key sources of `openssl_encrypt`/`mcrypt_*` calls
+- **Weak randomness**: `mt_rand`/`rand`/`uniqid` used to generate security tokens; `random_bytes`/`random_int` should be used instead
 
-## 逻辑审计要点
+## Logic Audit Points
 
-- **竞争条件**: 余额/库存先查后减无事务/无锁（SELECT→UPDATE 无 `FOR UPDATE`）
-- **支付金额篡改**: 金额从客户端传入而非服务端计算、缺少签名验证
-- **状态机跳步**: 订单状态从"待支付"直接跳到"已发货"，缺少状态转换合法性校验
-- **批量操作无限制**: 无频率限制/无数量上限，可被滥用进行批量操作
+- **Race condition**: balance/inventory is checked and then decremented without a transaction/lock (SELECT→UPDATE without `FOR UPDATE`)
+- **Payment amount tampering**: the amount comes from the client instead of being computed server-side, and signature verification is missing
+- **State machine step skipping**: an order status jumps directly from "pending payment" to "shipped" without validation of legal state transitions
+- **Unlimited bulk operations**: no rate limiting and no quantity cap, so it can be abused for bulk operations
 
-## 检测清单
+## Detection Checklist
 
-- [ ] 硬编码凭据搜索已完成（password/secret/key/token/api_key）
-- [ ] 所有 `==` 比较密码/token 的位置已标记
-- [ ] JWT 签名验证逻辑已审查（algorithm、密钥来源、kid）
-- [ ] IDOR 风险点已检查 ownership 校验
-- [ ] 路由权限覆盖完整性已验证
-- [ ] php.ini / 框架配置安全基线已对照
-- [ ] 密码存储方式已确认（password_hash vs md5/sha1）
-- [ ] 加密密钥管理方式已审查（硬编码 vs 环境变量/密钥管理）
-- [ ] 竞争条件敏感操作已检查事务/锁机制
-- [ ] 支付/交易流程的金额来源和签名验证已确认
+- [ ] The search for hardcoded credentials is complete (password/secret/key/token/api_key)
+- [ ] Every location comparing a password/token with `==` is marked
+- [ ] JWT signature validation logic has been reviewed (algorithm, key source, kid)
+- [ ] IDOR risk points have been checked for ownership validation
+- [ ] Completeness of route permission coverage has been verified
+- [ ] php.ini / framework configuration has been checked against the security baseline
+- [ ] The password storage method is confirmed (password_hash vs md5/sha1)
+- [ ] The encryption key management method has been reviewed (hardcoded vs environment variable/key management)
+- [ ] Race-condition-sensitive operations have been checked for transaction/lock mechanisms
+- [ ] The amount source and signature validation of the payment/transaction flow are confirmed

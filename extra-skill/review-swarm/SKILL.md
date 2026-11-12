@@ -1,6 +1,8 @@
 ---
 name: review-swarm
 description: "Parallel read-only multi-agent review of a current git diff or explicit file scope to find behavioral regressions, security or privacy risks, performance or reliability issues, and contract or test coverage gaps."
+zh-signals: "用多个只读子代理并行审查 git diff，汇总行为回归与安全风险。信号:并行审查,代码审查,多代理,diff审查,只读"
+when-to-use: "Use when the user asks for a review swarm or parallel read-only review of a diff to surface regressions, security, or test-coverage gaps."
 risk: safe
 source: https://github.com/Dimillian/Skills/tree/main/review-swarm
 source_repo: Dimillian/Skills

@@ -2,37 +2,38 @@
 name: sprayhound-ad-spray
 description: "sprayhound sends spray results directly to attack paths. Signals: brute force, password spraying, spray+BH integration, threads"
 zh-signals: "sprayhound: 喷洒结果直通攻击路径。信号:暴力破解,口令喷射,喷洒+BH 联动,线程。"
+when-to-use: "Use sprayhound when spraying passwords against Active Directory and you want successful credentials automatically correlated with BloodHound attack paths."
 ---
 
 # sprayhound
 
-- 攻击大类:C28 暴力破解与口令喷射
-- 上游仓库:https://github.com/Hackndo/sprayhound
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C28 Brute Force and Password Spraying
+- Upstream Repository: https://github.com/Hackndo/sprayhound
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/Hackndo/sprayhound && cd sprayhound && pip install .
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `sprayhound -d corp.local -u users.txt -p passwords.txt` | 喷洒+BH 联动 |
-| `-d d -u u.txt -p p.txt -b` | BloodHound 集成 |
-| `-t 5` | 线程 |
+| `sprayhound -d corp.local -u users.txt -p passwords.txt` | Spraying + BloodHound integration |
+| `-d d -u u.txt -p p.txt -b` | BloodHound integration |
+| `-t 5` | Threads |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 喷洒结果直通攻击路径
+### Spray Results Feed Directly into Attack Paths
 
 ```bash
 sprayhound -d corp.local -u users.txt -p pass.txt -b
-# 命中后自动查 BH 最短路径
+# Automatically query the shortest BH path on a hit
 ```
 
-## 注意事项
+## Notes
 
-Hackndo 出品,密码喷洒+BloodHound 集成,命中即出攻击路径。
+By Hackndo, password spraying plus BloodHound integration that yields attack paths on every hit.

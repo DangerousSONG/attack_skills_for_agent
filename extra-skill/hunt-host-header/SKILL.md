@@ -1,6 +1,8 @@
 ---
 name: hunt-host-header
 description: "Hunt Host Header Injection — password reset poisoning → ATO, web cache poisoning via unkeyed Host/X-Forwarded-Host, routing-based SSRF (Host picks upstream → cloud metadata/internal services), path-override SSRF/ACL-bypass (X-Original-URL/X-Rewrite-URL), OAuth redirect_uri/issuer poisoning, and absolute-URL link poisoning in emails. High to Critical when it reaches ATO or mass cache poisoning. Built on public Host-header research (PortSwigger 'Practical web cache poisoning' + James Kettle, and the classic password-reset-poisoning class). Use on any forgot-password flow, CDN/reverse-proxy-fronted app, OAuth/OIDC endpoint, or absolute-URL-in-email feature."
+zh-signals: "挖掘 Host 头注入漏洞，覆盖密码重置投毒、Web 缓存投毒、路由型 SSRF 与 OAuth 投毒。信号:Host头注入,缓存投毒,密码重置,SSRF,OAuth"
+when-to-use: "Use on forgot-password flows, CDN/reverse-proxy-fronted apps, OAuth/OIDC endpoints, or features that embed absolute URLs, when hunting Host header injection that may reach account takeover or cache poisoning."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

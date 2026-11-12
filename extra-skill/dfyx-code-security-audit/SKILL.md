@@ -1,6 +1,11 @@
 ---
 name: dfyx-code-security-audit
 description: AI-powered code security audit skill using deep data flow analysis and business logic understanding for vulnerability detection
+zh-signals: "使用深度数据流分析和业务逻辑理解对代码库进行安全审计，检测注入、认证、反序列化等漏洞。信号:代码审计,数据流分析,漏洞检测,静态分析,安全审查"
+when-to-use: >-
+  Use when asked to audit a codebase or project for security vulnerabilities,
+  perform a security code review, or run a multi-language static analysis across
+  the ten security dimensions.
 triggers:
   - audit this codebase for security vulnerabilities
   - perform a security code review
@@ -16,7 +21,7 @@ triggers:
 
 > Skill by [ara.so](https://ara.so) — Security Skills collection.
 
-Expert-level code security auditing using white-box static analysis methodology through a five-phase standardized audit protocol. Designed by the EastSword team (东方隐侠团队) for systematic discovery and validation of security vulnerabilities in source code.
+Expert-level code security auditing using white-box static analysis methodology through a five-phase standardized audit protocol. Designed by the EastSword team for systematic discovery and validation of security vulnerabilities in source code.
 
 ## What This Skill Does
 

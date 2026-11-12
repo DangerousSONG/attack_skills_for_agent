@@ -1,6 +1,11 @@
 ---
 name: economist-attack
 description: Weighs each attack path's effort against its likely impact, pursuing the highest-value surfaces first to find the most important weakness with the least wasted effort it shapes the order you test in, not what you test. Trigger when doing any offensive security engagement and deciding where to focus effort, when the attack surface is large and not everything can be tested with equal depth, or when the goal is maximum impact from available time and effort. Works standalone or alongside a mindset skill like redmind.
+zh-signals: "按投入与预期影响权衡每条攻击路径，优先攻击价值最高的面，以最少浪费找到最重要弱点并决定测试顺序。信号:攻击优先级,投入产出,攻击路径,红队策略,影响评估"
+when-to-use: >-
+  Use during any offensive-security engagement when deciding where to focus effort, when
+  the attack surface is large and cannot be tested equally deeply, or when maximizing impact
+  from limited time.
 license: MIT
 metadata:
   version: "1.0.0"

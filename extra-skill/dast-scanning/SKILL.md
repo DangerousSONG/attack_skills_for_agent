@@ -2,6 +2,8 @@
 name: dast-scanning
 description: Perform dynamic application security testing with OWASP ZAP, Burp Suite,
   and Nikto.
+zh-signals: "使用 OWASP ZAP、Burp Suite 与 Nikto 对授权目标执行动态应用安全测试（DAST）。信号:DAST,动态扫描,ZAP,Burp,Nikto,漏洞扫描"
+when-to-use: "Use when performing authorized dynamic application security testing of a running web application with ZAP, Burp Suite, or Nikto after explicit scope confirmation."
 category: security
 risk: offensive
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

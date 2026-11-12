@@ -1,6 +1,8 @@
 ---
 name: security-investigator-automation
 description: Automated security investigations using Microsoft Sentinel, Defender XDR, GitHub Copilot Agent Skills, and MCP servers for natural language threat hunting
+zh-signals: "利用 Microsoft Sentinel、Defender XDR 与 MCP 的自然语言安全调查自动化。信号:安全调查,Sentinel,Defender XDR,威胁狩猎,MCP"
+when-to-use: "Use when automating security investigations or threat hunting across Microsoft Sentinel, Defender XDR, Graph API, and threat intelligence platforms."
 triggers:
   - "investigate security incident with Sentinel"
   - "automate threat hunting in Microsoft Defender"

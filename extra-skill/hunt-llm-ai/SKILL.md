@@ -1,6 +1,11 @@
 ---
 name: hunt-llm-ai
 description: "Hunt LLM/AI feature bugs — prompt injection, indirect injection, exfiltration viatool-use/markdown, ASCII smuggling, agentic AI security (OWASP Agentic Apps 2026, ASI01-ASI10). Patterns: direct injection ('ignore previous instructions'), indirect injection via documents/web pages/email the model reads, ASCII smuggling (Unicode Tags block U+E0000-U+E007F, invisible to humans, decoded by the model),tool-use exfiltration (model has fetch/browse tool, attacker injects OOB URL, model exfils chat history/secrets), markdown-image zero-click exfil, system-prompt extraction, IDOR-via-AI (cross-tenant data). Targets: chatbots, RAG, summarizers, agentic copilots, MCPtools. Detection: any LLM-backed endpoint, doc upload triggering AI processing, autonomous agent withtools. Validate: OOB/Collaborator callback for exfil, verbatim-reproducible system-prompt leak (run twice), verifiable cross-tenant leak or RCE. Confabulation is NOT a finding. Use when hunting AI features, chatbots, RAG, agentic systems, MCP."
+zh-signals: "狩猎 LLM/AI 功能漏洞，覆盖提示注入、ASCII 走私、工具调用外带与智能体安全。信号:llm,提示注入,rag,ascii走私,agentic,外带"
+when-to-use: >-
+  Use when hunting AI features such as chatbots, RAG, summarizers, agentic copilots, or MCP
+  tools, especially where prompt injection, indirect injection, or tool-use exfiltration may
+  cross a provable trust boundary.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

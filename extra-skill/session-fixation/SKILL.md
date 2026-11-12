@@ -6,6 +6,10 @@ description: >
   whether pre-login tokens remain valid after login, and whether session IDs are transmitted over
   HTTP or included in GET parameters. Analyze token randomness via Burp Sequencer. Test JSESSIONID,
   ASP.NET Forms Auth cookies. Tools: OWASP ZAP, Burp Suite Repeater/Sequencer, JHijack.
+zh-signals: "检测与利用会话固定和会话令牌暴露漏洞，覆盖令牌随机性与 Cookie 安全。信号:会话固定,session fixation,令牌暴露,jsessionid,cookie安全"
+when-to-use: >-
+  Use when testing whether the server rotates sessions after login, whether pre-login
+  tokens stay valid, or whether session IDs leak via HTTP or GET parameters.
 license: MIT
 compatibility: Designed for Claude Code. Requires Burp Suite or OWASP ZAP.
 metadata:

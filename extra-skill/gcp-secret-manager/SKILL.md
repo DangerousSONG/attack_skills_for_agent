@@ -3,6 +3,8 @@ name: gcp-secret-manager
 description: Secure secrets in Google Cloud Secret Manager. Configure IAM policies,
   integrate with GKE, and manage secret versions. Use when managing secrets in GCP
   environments.
+zh-signals: "在 Google Cloud Secret Manager 中安全管理密钥与版本。信号:gcp,secret manager,密钥管理,iam,gke"
+when-to-use: "Use when managing secrets in GCP environments, configuring IAM policies for Secret Manager, or integrating secrets with GKE."
 category: security
 risk: critical
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

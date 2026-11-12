@@ -1,6 +1,8 @@
 ---
 name: django-security
 description: Django security review — CSRF, ORM-level SQL injection (raw/extra/annotate), template injection via |safe, admin hardening, middleware ordering, settings deploy checklist, and recent Django CVE patterns.
+zh-signals: "Django 应用安全审查，覆盖 CSRF、ORM 注入与模板注入。信号:Django安全,ORM注入,CSRF,模板注入,安全配置。"
+when-to-use: "Use when reviewing a Django app's settings and SECURE options, auditing CSRF handling or @csrf_exempt, inspecting ORM paths using raw, extra, annotate or RawSQL, checking |safe or mark_safe template injection, or hardening the Django admin."
 ---
 
 # Django Security

@@ -1,6 +1,8 @@
 ---
 name: vibers-code-review
 description: Human review workflow for AI-generated GitHub projects with spec-based feedback, security review, and follow-up PRs from the Vibers service.
+zh-signals: "面向 AI 生成 GitHub 项目的基于规格的人工代码审查与后续修复 PR 流程。信号:代码审查,ai生成代码,安全审查,规格对齐,github pr"
+when-to-use: "Use when you want human review of AI-generated GitHub code against a project spec, with feedback delivered as a follow-up PR, and are willing to grant the Vibers service collaborator access."
 risk: critical
 source: https://github.com/marsiandeployer/vibers-action
 date_added: "2026-03-17"

@@ -2,6 +2,8 @@
 name: xxe
 description: >
   XML External Entity (XXE) injection exploits XML parsers that process DTD external entity declarations, enabling local file disclosure (`file:///etc/passwd`), SSRF via `http://` entities, and DoS via Billion Laughs. Vulnerable Java APIs include `DocumentBuilder`, `SAXParser`, `dom4j`, `TransformerFactory`, `SAXReader`, `XMLInputFactory`, Xerces. Detect by injecting `<!DOCTYPE>` DTD with `SYSTEM` entity references. Tools: Burp Suite, wfuzz XML fuzz strings.
+zh-signals: "XML 外部实体注入测试，利用解析器实现文件读取、SSRF 与带外数据外泄。信号:XXE,XML注入,外部实体,文件读取,SSRF"
+when-to-use: "Use when the target accepts XML input (SOAP, application/xml, SVG or office files) and you need to test for XML external entity injection."
 license: MIT
 compatibility: Designed for Claude Code. Requires Burp Suite or OWASP ZAP.
 metadata:

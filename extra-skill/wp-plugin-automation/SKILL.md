@@ -1,6 +1,8 @@
 ---
 name: wp-plugin-automation
 description: "Scripts and workflows to batch-test popular WordPress plugin CVEs across hundreds of domains. Covers automated plugin detection, version extraction from readme.txt, CVE matching against a curated matrix of high-impact plugin vulnerabilities (ElementsKit, Revslider, WPDM, Gravity Forms, Contact Form 7, Jetpack, WP File Manager, GSpeech), and exploitation PoC generation. Use after initial WordPress detection recon — when you have a target list of WP domains and need to find which specific plugin CVEs are exploitable at scale."
+zh-signals: "批量测试 WordPress 插件 CVE。信号:WordPress,插件,CVE,批量检测,redteam"
+when-to-use: "Use after WordPress detection recon when you have a list of WP domains and need to detect plugin versions and test for exploitable plugin CVEs at scale."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

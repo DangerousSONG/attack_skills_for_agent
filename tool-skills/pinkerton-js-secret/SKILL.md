@@ -2,37 +2,40 @@
 name: pinkerton-js-secret
 description: "Harvest frontend keys. Signals: web vulnerability, injection, JS key/endpoint extraction, depth."
 zh-signals: "Pinkerton: 前端密钥收割。信号:web漏洞,注入,JS 密钥/端点提取,深度。"
+when-to-use: >-
+  Use when auditing frontend JavaScript for hardcoded keys, secrets and
+  endpoints with a configurable crawl depth.
 ---
 
 # Pinkerton
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/oppsec/Pinkerton
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/oppsec/Pinkerton
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install pinkerton
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `pinkerton -u https://t.com` | JS 密钥/端点提取 |
-| `-u url -d 3` | 深度 |
-| `-o out.txt` | 输出 |
+| `pinkerton -u https://t.com` | JS key/endpoint extraction |
+| `-u url -d 3` | Depth |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 前端密钥收割
+### Frontend Key Harvesting
 
 ```bash
 pinkerton -u https://t.com
-# API key/AccessToken/私钥正则匹配 JS
+# Regex-match API key/AccessToken/private key in JS
 ```
 
-## 注意事项
+## Notes
 
-JS 文件敏感信息提取,30+ 种密钥正则。
+Sensitive information extraction from JS files, with 30+ key regexes.

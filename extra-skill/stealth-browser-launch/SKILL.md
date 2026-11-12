@@ -1,6 +1,11 @@
 ---
 name: stealth-browser-launch
 description: Launch stealth Chromium with C++ fingerprint patches for anti-bot bypass.
+zh-signals: "启动带 C++ 指纹补丁的隐身 Chromium，绕过 Cloudflare、Akamai、DataDome 等反爬检测。信号:隐身浏览器,反爬绕过,指纹伪装,Chromium,Cloudflare"
+when-to-use: >-
+  Use when a target blocks curl/httpx/nuclei with bot protection, requires full browser
+  JavaScript execution, returns 403 to unauthenticated requests, or needs CAPTCHA-protected
+  endpoints accessed behind residential proxies.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

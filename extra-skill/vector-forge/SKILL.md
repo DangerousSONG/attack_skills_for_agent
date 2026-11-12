@@ -1,6 +1,11 @@
 ---
 name: vector-forge
 description: "Mutation-driven test vector generation. Finds implementations of a cryptographic algorithm or protocol, runs mutation testing to identify escaped mutants, then generates new test vectors that deliberately exercise the uncovered code paths. Compares before/after mutation kill rates to prove vector effectiveness. Use when generating cryptographic test vectors, measuring Wycheproof coverage gaps, finding escaped mutants via mutation testing, creating cross-implementation test suites, or improving test vector coverage for crypto primitives."
+zh-signals: "变异测试驱动的密码学测试向量生成，找出逃逸变异体并生成覆盖缺失路径的新向量。信号:测试向量,变异测试,密码学,Wycheproof,覆盖率"
+when-to-use: >-
+  Use when generating cryptographic test vectors, measuring Wycheproof coverage
+  gaps, finding escaped mutants, or improving test vector coverage for crypto
+  primitives.
 ---
 
 # Vector Forge

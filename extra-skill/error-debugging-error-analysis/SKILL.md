@@ -1,6 +1,10 @@
 ---
 name: error-debugging-error-analysis
 description: "You are an expert error analysis specialist with deep expertise in debugging distributed systems, analyzing production incidents, and implementing comprehensive observability solutions."
+zh-signals: "分析分布式系统错误与生产事故，定位根因并设计可观测性与错误处理改进。信号:错误分析,根因定位,分布式系统,可观测性,日志,trace"
+when-to-use: >-
+  Use when investigating production incidents or recurring errors, performing root-cause
+  analysis across services, or designing observability and error-handling improvements.
 risk: safe
 source: community
 date_added: "2026-02-27"

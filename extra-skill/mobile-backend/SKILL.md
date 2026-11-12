@@ -1,54 +1,58 @@
 ---
 name: mobile-backend
-description: "移动 App 后端 API 安全测试。当目标是移动应用的后端接口、发现 /api/v1/ 等移动端 API 路径、或需要测试 App 与服务器之间的通信安全时使用。覆盖 API 端点发现、认证机制测试、业务逻辑漏洞、移动端特有的安全问题"
+description: "Mobile app backend API security testing. Use when the target is a mobile app's backend interface, when mobile API paths such as /api/v1/ are discovered, or when communication security between the app and its server needs testing. Covers API endpoint discovery, authentication mechanism testing, business logic flaws, and mobile-specific security issues"
+zh-signals: "移动 App 后端 API 安全测试，覆盖端点发现、认证机制、业务逻辑漏洞与移动端特有风险。信号:移动后端,API测试,认证绕过,IDOR,业务逻辑"
+when-to-use: >-
+  Use when the target is a mobile app's backend API, you discover /api/v1/ style mobile
+  API paths, or you need to test communication security between an app and its server.
 metadata:
-  tags: "mobile,api,backend,auth,app,ios,android,移动安全,业务逻辑,支付"
+  tags: "mobile,api,backend,auth,app,ios,android,mobile-security,business-logic,payment"
   category: "exploit"
 ---
 
-# 移动 App 后端 API 安全测试方法论
+# Mobile App Backend API Security Testing Methodology
 
-移动后端 API 和传统 Web 的区别：移动端通常直接调用 REST API（不经过浏览器），认证机制、参数格式、业务逻辑都有移动端特色。
+Differences between mobile backend APIs and traditional web: mobile clients usually call REST APIs directly (without a browser), and authentication mechanisms, parameter formats and business logic all have mobile-specific characteristics.
 
-## ⛔ 深入参考（必读）
+## ⛔ Further Reading (Must Read)
 
-- 支付篡改、验证码绕过、竞态、数据安全、移动端特有问题 → [references/mobile-logic-bugs.md](references/mobile-logic-bugs.md)
+- Payment tampering, CAPTCHA bypass, race conditions, data security, mobile-specific issues → [references/mobile-logic-bugs.md](references/mobile-logic-bugs.md)
 
-## Phase 1: API 端点发现
+## Phase 1: API Endpoint Discovery
 
 ```bash
-# spray 目录爆破（推荐）
+# spray directory brute-forcing (recommended)
 spray -u http://target -d $ABOUTSECURITY_ROOT/Dic/Web/Directory/Fuzz_common.txt
-# 或 ffuf
+# or ffuf
 ffuf -u http://target/FUZZ -w $ABOUTSECURITY_ROOT/Dic/Web/Directory/Fuzz_common.txt -mc 200,301,302,403
 # /api/v1/, /api/v2/, /mobile/api/, /graphql
 ```
-检查文档：`/docs`, `/swagger`, `/openapi.json`, `/redoc`
+Check documentation: `/docs`, `/swagger`, `/openapi.json`, `/redoc`
 
-App 逆向：抓包（Burp/Charles）| APK 反编译搜索 URL 字符串
+App reverse engineering: capture traffic (Burp/Charles) | decompile the APK and search for URL strings
 
-## Phase 2: 认证机制测试
+## Phase 2: Authentication Mechanism Testing
 
-| 认证方式 | 特征 | 攻击方向 |
+| Auth Method | Fingerprint | Attack Direction |
 |----------|------|----------|
 | JWT | `Bearer eyJ...` | `jwt-attack-methodology` |
-| API Key | `X-API-Key` | 泄露检测 |
+| API Key | `X-API-Key` | leak detection |
 | OAuth | `/oauth/token` | `oauth-sso-attack` |
-| 自定义签名 | `sign=md5(...)` | 签名算法逆向 |
+| Custom signature | `sign=md5(...)` | signature algorithm reverse engineering |
 
-绕过测试：不带 Token 访问 | 过期 Token | 修改 user_id/role | 低权限访问高权限 API
+Bypass testing: access without a token | expired token | modify user_id/role | low-privilege access to high-privilege APIs
 
-## Phase 3: 业务逻辑漏洞
+## Phase 3: Business Logic Flaws
 
-### 越权访问（IDOR）
+### Broken Access Control (IDOR)
 ```
-GET /api/v1/users/1001/profile → 自己
-GET /api/v1/users/1002/profile → 别人？→ IDOR！
+GET /api/v1/users/1001/profile → yourself
+GET /api/v1/users/1002/profile → someone else? → IDOR!
 ```
 
-### 支付/验证码/竞态
-→ 详细方法和 payload → [references/mobile-logic-bugs.md](references/mobile-logic-bugs.md)
+### Payment / CAPTCHA / Race Conditions
+→ detailed methods and payloads → [references/mobile-logic-bugs.md](references/mobile-logic-bugs.md)
 
-## 注意事项
-- 移动 API 通常比 Web 更信任客户端——后端校验更少
-- 注意 API 版本差异（v1 可能有漏洞，v2 修复了但 v1 未下线）
+## Notes
+- Mobile APIs usually trust the client more than web does — the backend performs fewer validations
+- Watch for API version differences (v1 may be vulnerable, v2 may have fixed it while v1 is still online)

@@ -1,6 +1,11 @@
 ---
 name: apk-redteam-pipeline
 description: End-to-end Android APK red-team pipeline — automated APK acquisition (Play Store + apkpure + apkmirror fallback), jadx decompilation, secret/URL/JWT/Firebase grep, pinned-cert extraction, exported-component enumeration, Frida runtime instrumentation templates, intent-injection probes. Built from an authorized external red-team engagement where 7 APKs were pulled manually, 4 download attempts truncated, and a hardcoded JWT + 30 internal API endpoints were recovered from one of the apps. Use when target has a mobile app catalogue (Play Store developer page), when you find an APK URL hosted on a web server, or when post-recon mentions "mobile app" in scope.
+zh-signals: "端到端 Android APK 红队流水线：自动化获取 APK、jadx 反编译、提取密钥/URL/JWT/Firebase、证书固定提取、组件枚举、Frida 运行时插桩与 intent 注入探测。信号:APK,jadx,反编译,密钥提取,Frida,intent注入"
+when-to-use: >-
+  Use when the target has a mobile app catalogue or an APK URL in scope and you need
+  automated APK acquisition, decompilation, secret extraction, component enumeration,
+  and Frida-based runtime instrumentation.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

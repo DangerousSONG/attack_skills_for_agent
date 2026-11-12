@@ -1,6 +1,8 @@
 ---
 name: '007'
 description: Security audit, hardening, threat modeling (STRIDE/PASTA), Red/Blue Team, OWASP checks, code review, incident response, and infrastructure security for any project.
+zh-signals: "提供安全审计、加固、威胁建模（STRIDE/PASTA）、红蓝对抗、OWASP 检查与应急响应的通用安全方法论。信号:安全审计,威胁建模,STRIDE,OWASP,红蓝对抗,应急响应"
+when-to-use: "Use when performing a security audit, threat model (STRIDE/PASTA), OWASP-based review, red/blue team exercise, or incident response for a project."
 risk: critical
 source: community
 date_added: '2026-03-06'

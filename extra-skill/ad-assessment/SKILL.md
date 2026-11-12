@@ -4,6 +4,8 @@ description: |
   Active Directory security audit using the MITRE ATT&CK framework. Full domain enumeration, trust mapping, GPO analysis, ACL abuse paths, ADCS attacks (ESC1-ESC8), delegation abuse (constrained/unconstrained/RBCD), fine-grained password policies, LAPS deployment, service account security, and Kerberos configuration.
 
   Uses enum4linux-ng, netexec, impacket, ldapsearch, certipy-ad, bloodhound-python, and rpcclient. Produces attack path diagrams, prioritized risk register, and PoCs. Chains into /gh-export for issue filing.
+zh-signals: "基于 MITRE ATT&CK 的 Active Directory 安全审计，覆盖域枚举、ACL、ADCS 与委派攻击。信号:AD审计,域枚举,ADCS,委派攻击,攻击路径"
+when-to-use: "Use when auditing an Active Directory environment for misconfigurations, dangerous ACLs, ADCS ESC vulnerabilities, delegation abuse, and privilege escalation paths within an authorized assessment."
 argument-hint: "<dc-ip-or-domain> [domain=DOMAIN] [user=USER] [pass=PASS] [depth=quick|standard|thorough]"
 user-invocable: true
 ---

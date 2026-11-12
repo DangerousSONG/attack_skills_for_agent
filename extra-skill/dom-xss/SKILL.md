@@ -2,6 +2,9 @@
 name: dom-xss
 description: >
   DOM-based XSS occurs when JavaScript reads attacker-controlled sources (`location.hash`, `document.referrer`, `window.name`, `location.search`) and passes them to dangerous sinks (`document.write`, `innerHTML`, `eval`, `location.href`, `setTimeout`, `jQuery.html()`) without sanitization. Unlike reflected/stored XSS, payloads never reach the server. Detect by auditing JavaScript for tainted data flow from DOM sources to sinks. Tools: Burp Suite DOM Invader, Chrome DevTools, DOMPurify (fix).
+zh-signals: "检测与利用 DOM 型 XSS，覆盖 source 到 sink 的客户端污点流分析。信号:DOM型XSS,污点流,innerHTML,eval,DOM Invader。"
+when-to-use: >-
+  Use when client-side JavaScript reads attacker-controlled DOM sources such as location.hash, location.search, document.referrer, or window.name and passes them to dangerous sinks like innerHTML, document.write, or eval.
 license: MIT
 compatibility: Designed for Claude Code. Requires Burp Suite with DOM Invader, or manual JavaScript review via browser DevTools.
 metadata:

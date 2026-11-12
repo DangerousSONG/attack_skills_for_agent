@@ -2,37 +2,40 @@
 name: stardox-github
 description: "Stardox analyzes repository stargazers. Signals: attack surface, cloud assets, stargazer analysis"
 zh-signals: "Stardox: 仓库 star 用户分析。信号:攻击面,云资产,stargazer 分析。"
+when-to-use: >-
+  Use when performing OSINT on an authorized GitHub repository and you want to analyze its
+  stargazers to identify potentially relevant users.
 ---
 
 # Stardox
 
-- 攻击大类:C05 外部攻击面与云资产暴露
-- 上游仓库:https://github.com/0xPrateek/Stardox
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C05 External Attack Surface and Cloud Asset Exposure
+- Upstream Repository: https://github.com/0xPrateek/Stardox
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/0xPrateek/Stardox && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 stardox.py -r target/repo` | stargazer 分析 |
-| `-r repo -d` | 详情 |
-| `-o out.txt` | 输出 |
+| `python3 stardox.py -r target/repo` | Stargazer analysis |
+| `-r repo -d` | Details |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 仓库 star 用户分析
+### Repository Stargazer Analysis
 
 ```bash
 python3 stardox.py -r corp/internal
-# 谁在看内部仓库(内部人员?
+# who is watching the internal repository (internal staff?
 ```
 
-## 注意事项
+## Notes
 
-Github 仓库 star 者 OSINT。
+OSINT on GitHub repository stargazers.

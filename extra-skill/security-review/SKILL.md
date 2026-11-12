@@ -1,6 +1,8 @@
 ---
 name: security-review
 description: Security review workflow for a PR, feature or codebase — scope, automated scans, manual OWASP/CWE pattern-check, prioritize and report. Uses secure-coding as pattern library.
+zh-signals: "对 PR、功能或代码库开展安全审查，涵盖范围界定、自动扫描、OWASP/CWE 模式检查与报告。信号:安全审查,代码审计,OWASP,CWE,PR审查"
+when-to-use: "Use when a bounded PR, feature, or codebase needs a systematic security review and a prioritized report is the deliverable."
 ---
 
 # Security Review

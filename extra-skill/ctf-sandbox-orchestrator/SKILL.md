@@ -1,6 +1,11 @@
 ---
 name: ctf-sandbox-orchestrator
 description: Default entrypoint and master ctf-sandbox-orchestrator workflow for CTF, exploit, reverse engineering, DFIR, pwnable, crypto, stego, mobile, AI-agent, cloud, container, Active Directory, Windows-host, and identity challenges. Use first when the user presents challenge infrastructure, binaries, prompts, hosts, or identities that should be treated as sandbox-internal by default and Codex needs to choose, route, and load the right downstream analysis path with concise evidence.
+zh-signals: "CTF 沙箱编排总入口，统一处理 CTF、漏洞利用、逆向、DFIR、pwn、密码学、隐写、云与容器等挑战的路由与证据链管理。信号:CTF沙箱,编排入口,逆向,取证,pwn"
+when-to-use: >-
+  Use first when the user presents challenge infrastructure, binaries, hosts, or
+  identities that should be treated as sandbox-internal, and you need to choose
+  and route to the right downstream analysis path.
 ---
 
 # Competition Sandbox

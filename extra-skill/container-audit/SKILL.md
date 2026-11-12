@@ -1,6 +1,11 @@
 ---
 name: container-audit
 description: "Audit container images, Dockerfiles, and Kubernetes manifests for misconfigurations, excessive privileges, exposed secrets, and runtime risks. Use when the user mentions 'container security,' 'Docker security,' 'Dockerfile audit,' 'Kubernetes security,' 'K8s security,' 'pod security,' 'container hardening,' 'kubectl audit,' 'image scanning,' 'distroless,' 'rootless containers,' 'pod security policy,' 'pod security standards,' 'PSS,' 'network policy,' 'OPA Gatekeeper,' 'Kyverno,' 'runtime security,' or needs to review container or orchestration security."
+zh-signals: "审计容器镜像、Dockerfile 与 Kubernetes 清单中的错误配置、过度权限、密钥泄露和运行时风险。信号:容器安全,Docker审计,Kubernetes安全,Pod安全,镜像扫描"
+when-to-use: >-
+  Use when reviewing Dockerfiles, container images, Kubernetes manifests, Helm
+  charts, or cluster posture for misconfigurations, excessive privileges, exposed
+  secrets, and runtime risks.
 allowed-tools: Bash, Read, Write, Grep, Glob, WebSearch
 ---
 

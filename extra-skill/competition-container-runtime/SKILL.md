@@ -1,6 +1,8 @@
 ---
 name: competition-container-runtime
 description: Internal downstream skill for ctf-sandbox-orchestrator. CTF-sandbox workflow for live container runtime analysis, mounted secrets, sidecars, namespaces, init containers, entrypoint drift, and route-to-container resolution. Use when the user asks why a live container differs from manifests, where a mounted secret is consumed, how a sidecar or init container changes runtime state, or which route resolves to which live container. Use only after `$ctf-sandbox-orchestrator` has already established sandbox assumptions and routed here.
+zh-signals: "CTF 沙箱容器运行时分析，涵盖挂载密钥、边车、命名空间、init 容器与路由解析。信号:容器运行时,CTF 沙箱,边车,挂载密钥,路由解析"
+when-to-use: "Use only as a downstream specialization after ctf-sandbox-orchestrator is active, when a live container differs from manifests or mounted secrets and routes need tracing."
 ---
 
 # Competition Container Runtime

@@ -1,6 +1,8 @@
 ---
 name: on-call-handoff-patterns
 description: "Effective patterns for on-call shift transitions, ensuring continuity, context transfer, and reliable incident response across shifts."
+zh-signals: "值班交接模板与流程，确保跨班次的事件上下文与责任平滑传递。信号:值班交接,OnCall,事件响应,交接模板,运维"
+when-to-use: "Use when transitioning on-call shifts, writing handoff summaries, or documenting ongoing incidents and investigations across teams."
 risk: critical
 source: community
 date_added: "2026-02-27"

@@ -1,6 +1,8 @@
 ---
 name: hunt-firebase
 description: "Hunt Firebase / Firestore / GCP exploitation — Firebase API key discovery in JS bundles, anonymous auth via signUp endpoint, Firestore collection enumeration with anon key, Realtime Database read/write without auth, Firebase Storage bucket listing, Firebase Hosting detection, GCP service account JSON exploitation, IAM policy enumeration from leaked SA keys. Built from field experience where Firebase API keys in JS bundles unlocked full Firestore read-access on 12+ targets including healthcare platforms and delivery apps. Use when a JS bundle, APK, or .env file reveals a Firebase API key (AIzaSy...) or when target uses firebaseio.com / firestore.googleapis.com endpoints."
+zh-signals: "狩猎 Firebase/Firestore/GCP 配置缺陷，利用 JS 中泄露的 API key 枚举集合并未授权读取或写入数据。信号:Firebase,Firestore,GCP,API密钥,未授权访问"
+when-to-use: "Use when a JS bundle, APK, or .env file reveals a Firebase API key (AIzaSy...) or the target uses firebaseio.com or firestore.googleapis.com endpoints."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

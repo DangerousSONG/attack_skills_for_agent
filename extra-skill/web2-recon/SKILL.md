@@ -1,6 +1,8 @@
 ---
 name: web2-recon
 description: Web2 recon pipeline — subdomain enumeration (subfinder, Chaos API, assetfinder), live host discovery (dnsx, httpx), URL crawling (katana, waybackurls, gau), directory fuzzing (ffuf), JS analysis (LinkFinder, SecretFinder), continuous monitoring (new subdomain alerts, JS change detection, GitHub commit watch). Use when starting recon on any web2 target or when asked about asset discovery, subdomain enum, or attack surface mapping.
+zh-signals: "Web2 资产侦察流水线，覆盖子域枚举、存活探测、URL 爬取、目录爆破与 JS 分析。信号:Web2侦察,子域枚举,存活探测,目录爆破,资产发现"
+when-to-use: "Use when starting reconnaissance on any web2 target, or when asked about asset discovery, subdomain enumeration, URL crawling, directory fuzzing, or attack surface mapping."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

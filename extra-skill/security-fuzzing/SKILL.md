@@ -1,6 +1,8 @@
 ---
 name: security-fuzzing
 description: "Essential fuzzing payloads: SQL injection, command injection, special characters. Curated essentials for vulnerability testing."
+zh-signals: "提供用于漏洞测试的 SQL 注入、命令注入与特殊字符模糊测试 payload。信号:模糊测试,payload,SQL注入,命令注入,SecLists"
+when-to-use: "Use when you need curated fuzzing payloads for SQL injection, command injection, or input-validation testing in authorized assessments."
 ---
 
 # SecLists Fuzzing (Curated)

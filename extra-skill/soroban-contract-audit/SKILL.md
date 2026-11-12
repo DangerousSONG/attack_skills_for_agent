@@ -1,6 +1,8 @@
 ---
 name: soroban-contract-audit
 description: 'Soroban smart contract security audit register: authorization checks, panic pathways, integer overflows, and storage footprint verification for Stellar.'
+zh-signals: "审计 Stellar 上 Soroban 智能合约的授权检查、panic 路径、整数溢出与存储占用。信号:Soroban,智能合约审计,Stellar,授权检查,整数溢出"
+when-to-use: "Use when auditing Soroban smart contracts on Stellar for authorization invariants, panic pathways, integer overflows, and storage footprint compliance."
 category: engineering
 risk: safe
 source: self

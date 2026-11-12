@@ -1,6 +1,9 @@
 ---
 name: security-passwords
 description: "Top password lists for authorized security testing: common passwords, darkweb leaks, worst passwords. Curated essentials (<10MB)."
+zh-signals: "提供用于授权安全测试的常见密码、泄露密码与最差密码字典。信号:密码字典,口令喷洒,凭据测试,SecLists,认证测试"
+when-to-use: >-
+  Use for authorized password spraying, credential testing, or password policy validation when curated password wordlists are needed.
 ---
 
 # SecLists Passwords (Curated)

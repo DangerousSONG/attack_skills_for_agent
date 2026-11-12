@@ -2,39 +2,42 @@
 name: aquatone-visual-recon
 description: "Aquatone: performs domain flyover visual verification. Signals: asset mapping, subdomain, aquatone, output directory, scan timeout"
 zh-signals: "Aquatone: 域名飞越式可视化核查。信号:资产测绘,子域名,aquatone`,输出目录,扫描超时。"
+when-to-use: >-
+  Use when you have a list of subdomains or hosts and want screenshot-based visual
+  triage of live web assets, clustered by response similarity.
 ---
 
 # Aquatone
 
-- 攻击大类:C01 资产测绘与指纹识别
-- 上游仓库:https://github.com/michenriksen/aquatone
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C01 Asset Mapping and Fingerprinting
+- Upstream Repository: https://github.com/michenriksen/aquatone
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/michenriksen/aquatone@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `cat hosts.txt | aquatone` | 管道输入批量截图 |
-| `-ports large` | 端口集(xlarge/large/medium/small) |
-| `-out ./aquatone` | 输出目录 |
-| `-scan-timeout 90000` | 扫描超时 |
-| `-screenshot-timeout 30000` | 截图超时 |
+| `cat hosts.txt | aquatone` | Batch screenshots via piped input |
+| `-ports large` | Port set (xlarge/large/medium/small) |
+| `-out ./aquatone` | Output directory |
+| `-scan-timeout 90000` | Scan timeout |
+| `-screenshot-timeout 30000` | Screenshot timeout |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 域名飞越式可视化核查
+### Domain Flyover Visual Verification
 
 ```bash
 cat subdomains.txt | aquatone -out report -ports large
-# report/aquatone_report.html 按响应相似度聚类,一眼挑管理台
+# report/aquatone_report.html clusters by response similarity, making admin consoles easy to spot
 ```
 
-## 注意事项
+## Notes
 
-按响应体相似度聚类分组,适合海量子域快速筛目标;项目维护放缓但功能稳定。
+Clusters and groups by response body similarity, ideal for quickly triaging a large subdomain list; project maintenance has slowed but the functionality is stable.

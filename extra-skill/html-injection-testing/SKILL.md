@@ -1,6 +1,10 @@
 ---
 name: html-injection-testing
 description: "Identify and exploit HTML injection vulnerabilities that allow attackers to inject malicious HTML content into web applications. This vulnerability enables attackers to modify page appearance, create phishing pages, and steal user credentials through injected forms."
+zh-signals: "识别与利用 HTML 注入漏洞，通过注入恶意 HTML 篡改页面、构造钓鱼页并窃取凭据。信号:HTML注入,钓鱼,凭据窃取,注入测试,Web漏洞"
+when-to-use: >-
+  Use when testing web applications for HTML injection that could alter page
+  content, enable phishing pages, or steal credentials.
 risk: offensive
 source: community
 author: zebbern

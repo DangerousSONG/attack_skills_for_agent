@@ -2,45 +2,46 @@
 name: masscan-internet
 description: "masscan: Network-wide fast mapping and banner-level service identification. Signals: port scanning, nmap, full subnet full port high-speed scan, banner fingerprinting."
 zh-signals: "masscan: 网段级快速测绘、Banner 级服务识别。信号:端口扫描,nmap,全网段全端口高速扫,带 banner 抓指纹。"
+when-to-use: "Use when you need internet-scale or full-subnet high-speed port scanning with banner grabbing for service identification. Requires root privileges, target ranges, and rate and interface settings to avoid flooding."
 ---
 
 # masscan
 
-- 攻击大类:C42 网络扫描与枚举
-- 上游仓库:https://github.com/robertdavidgraham/masscan
-- 上游 License:AGPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C42 Network Scanning and Enumeration
+- Upstream Repository: https://github.com/robertdavidgraham/masscan
+- Upstream License: AGPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
-apt install masscan 或编译
+apt install masscan or build from source
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `masscan 10.0.0.0/8 -p0-65535 --rate 100000` | 全网段全端口高速扫 |
-| `-p445,3389,22 --banner` | 带 banner 抓指纹 |
-| `--excludefile exclude.txt` | 排除列表 |
-| `-oG out.gnmap` | grepable 输出 |
-| `--rate` | 发包速率(pps) |
+| `masscan 10.0.0.0/8 -p0-65535 --rate 100000` | Full subnet, full port high-speed scan |
+| `-p445,3389,22 --banner` | Grab banners for fingerprinting |
+| `--excludefile exclude.txt` | Exclusion list |
+| `-oG out.gnmap` | Grepable output |
+| `--rate` | Packet send rate (pps) |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 网段级快速测绘
+### Network segment level fast mapping
 
 ```bash
 masscan 172.16.0.0/12 -p1-65535 --rate 30000 -oG mass.gnmap
-# 出结果后: awk '{print $4}' mass.gnmap | cut -d/ -f1 | sort -u > alive.txt
+# After the results: awk '{print $4}' mass.gnmap | cut -d/ -f1 | sort -u > alive.txt
 ```
 
-### Banner 级服务识别
+### Banner level service identification
 
 ```bash
 masscan 10.0.0.0/24 -p443 --banners --rate 5000
 ```
 
-## 注意事项
+## Notes
 
-异步 SYN 扫描,速率可调到 10万pps+;注意过大的 rate 会打挂低端网络设备,授权环境内先小 rate 试。
+Asynchronous SYN scanning, and the rate can be pushed to 100k pps or more; note that an excessive rate can take down low-end network gear, so try a low rate first in an authorized environment.

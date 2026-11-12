@@ -2,6 +2,10 @@
 name: soc2-compliance
 description: Implement SOC 2 Trust Services Criteria. Configure security, availability,
   and processing integrity controls. Use when achieving SOC 2 certification.
+zh-signals: "落实 SOC 2 信任服务准则的安全、可用性与处理完整性控制，支撑 SOC 2 认证。信号:SOC2,合规认证,信任服务准则,访问控制,审计"
+when-to-use: >-
+  Use when pursuing SOC 2 certification and you need to implement security, availability,
+  and processing integrity controls across your organization.
 category: security
 risk: safe
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

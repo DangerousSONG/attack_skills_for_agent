@@ -1,6 +1,8 @@
 ---
 name: guidelines-advisor
 description: Smart contract development advisor based on Trail of Bits' best practices. Analyzes codebase to generate documentation/specifications, review architecture, check upgradeability patterns, assess implementation quality, identify pitfalls, review dependencies, and evaluate testing. Use when asking whether a smart contract project follows development best practices, reviewing on-chain/off-chain split, upgradeability, or delegatecall proxy patterns against guidelines, or seeking recommendations on contract design, inheritance, events, documentation, dependencies, or test strategy.
+zh-signals: "基于 Trail of Bits 最佳实践评估智能合约开发规范，涵盖文档、架构、可升级性、依赖与测试。信号:智能合约,Solidity,可升级性,代理,测试,最佳实践"
+when-to-use: "Use when assessing whether a smart contract project follows development best practices, reviewing upgradeability or delegatecall proxy patterns, or seeking guidance on contract design, dependencies, and testing."
 ---
 
 # Guidelines Advisor

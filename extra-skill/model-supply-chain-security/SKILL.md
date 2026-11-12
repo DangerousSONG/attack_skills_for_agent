@@ -2,6 +2,10 @@
 name: model-supply-chain-security
 description: Secure the AI model supply chain with artifact signing, provenance attestation,
   SBOM workflows, dependency controls, and trusted model promotion.
+zh-signals: "保障 AI 模型供应链安全，覆盖制品签名、来源证明、SBOM 流程、依赖管控与可信模型晋升。信号:模型供应链,制品签名,来源证明,SBOM,依赖管控"
+when-to-use: >-
+  Use when securing an AI model supply chain — artifact signing, provenance
+  attestation, SBOM workflows, dependency controls, and trusted model promotion.
 category: security
 risk: safe
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

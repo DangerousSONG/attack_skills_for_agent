@@ -1,6 +1,8 @@
 ---
 name: security-awareness-malicious-repository-detection
 description: Detect and analyze potentially malicious repositories disguising as legitimate software cracks or pirated tools
+zh-signals: "识别伪装成破解软件或盗版工具的恶意仓库并分析其威胁指标。信号:恶意仓库,假破解,盗版,威胁指标,供应链,检测"
+when-to-use: "Use when evaluating whether a repository that appears to distribute cracks or pirated security software is malicious and should be reported."
 triggers:
   - identify malicious repository patterns
   - detect fake software crack repository

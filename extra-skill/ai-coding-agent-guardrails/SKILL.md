@@ -3,6 +3,8 @@ name: ai-coding-agent-guardrails
 description: Secure AI coding agents (Claude Code, Cursor, Codex, Copilot) with permission
   boundaries, secret protection, code review gates, and safe sandbox configurations
   for team environments.
+zh-signals: "为团队中的 AI 编码代理配置权限边界、密钥保护、代码审查门禁与安全沙箱。信号:AI编码代理,权限边界,密钥保护,代码审查,沙箱,团队安全"
+when-to-use: "Use when securing or configuring AI coding agents such as Claude Code, Cursor, Codex, or Copilot for team environments."
 category: security
 risk: safe
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

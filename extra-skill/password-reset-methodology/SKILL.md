@@ -1,51 +1,56 @@
 ---
 name: password-reset-methodology
-description: "密码重置与用户注册/越权修改方法论。当目标存在忘记密码/密码重置、验证码回显、校验绕过、任意用户密码修改、越权注册（registersysuser、goedituser 等接口）、thinkphp 商城登录短信验证码等场景时使用。覆盖密码重置链路分析、验证码回显/爆破、短信验证码绕过、任意用户密码修改与越权注册、spring 类 .do 接口鉴权绕过（login_tologin.do 等）与授权边界"
+description: "Methodology for password reset and user registration / unauthorized profile modification. Use when the target has a forgot-password/password-reset flow, verification code reflection, check bypasses, arbitrary user password modification, unauthorized registration (endpoints such as registersysuser, goedituser), thinkphp mall login SMS verification codes, and similar scenarios. Covers password reset chain analysis, verification code reflection/brute force, SMS verification code bypass, arbitrary user password modification and unauthorized registration, authorization bypass on spring-style .do endpoints (e.g. login_tologin.do), and authorization boundaries"
+zh-signals: "分析密码重置链路，排查验证码回显与爆破、短信验证码绕过、任意用户密码修改与越权注册等问题。信号:密码重置,验证码回显,任意用户密码修改,越权注册,鉴权绕过"
+when-to-use: >-
+  Use when a target has forgot-password/reset flows, verification-code
+  reflection, check bypasses, arbitrary password change, or
+  privilege-escalation registration endpoints.
 metadata:
-  tags: "密码重置,密码修改,验证码回显,验证码,短信验证码,校验绕过,任意用户密码修改,任意用户,越权,注册,registersysuser,goedituser,login_tologin.do,thinkphp,商城,登录,重置,password,reset,assessment,授权"
+  tags: "password reset,password modification,verification code reflection,verification code,SMS verification code,check bypass,arbitrary user password modification,arbitrary user,privilege bypass,registration,registersysuser,goedituser,login_tologin.do,thinkphp,mall,login,reset,password,reset,assessment,authorization"
   category: "exploit"
 ---
 
-# 密码重置 / 越权注册与修改方法论
+# Password Reset / Unauthorized Registration and Modification Methodology
 
-## 适用场景
+## Applicable Scenarios
 
-涉及密码找回、验证码、用户注册/资料修改接口时使用。
+Use when password recovery, verification codes, or user registration/profile modification endpoints are involved.
 
-## Phase 1: 密码重置链路分析
+## Phase 1: Password Reset Chain Analysis
 
 ```
-忘记密码流程
-├── 步骤：手机号/邮箱 → 验证码 → 重置密码
-├── 每个步骤的请求/响应都要抓包分析
-└── 重点：验证码如何校验、如何返回、是否可重放
+Forgot-password flow
+├── Steps: phone number/email → verification code → password reset
+├── Capture and analyze the request/response of every step
+└── Key focus: how the verification code is validated, how it is returned, and whether it can be replayed
 ```
 
-## Phase 2: 验证码问题排查
+## Phase 2: Verification Code Troubleshooting
 
-1. **验证码回显**：响应包/接口返回中直接包含验证码（短信/图片/邮箱验证码回显）
-2. **验证码可爆破**：验证码位数过短（4 位）且无频率限制
-3. **验证码校验绕过**：删除/置空 code 参数、修改响应、并发重放、万能验证码
-4. **短信轰炸/发送接口未限频**：发送验证码接口无次数限制
+1. **Verification code reflection**: the response packet / API response contains the verification code directly (SMS/image/email code reflection)
+2. **Verification code can be brute-forced**: the code is too short (4 digits) and there is no rate limit
+3. **Verification code check bypass**: delete or blank out the code parameter, modify the response, replay concurrently, use a universal code
+4. **SMS bombing / send endpoint not rate limited**: the endpoint that sends verification codes has no request count limit
 
-## Phase 3: 任意用户密码修改与越权注册
+## Phase 3: Arbitrary User Password Modification and Unauthorized Registration
 
-- 重置接口替换目标手机号/用户 ID：`mobile=<目标>&code=<自己的验证码>`
-- 注册/改资料接口越权：`registersysuser`、`goedituser` 等接口无鉴权或未校验数据归属
-- 校验方式：用 A 的验证码重置 B 的账号；低权限/未登录调用管理类注册接口
-- 示例：`login_tologin.do` 类登录/注册入口存在鉴权绕过时，可未授权注册管理员
+- Replace the target phone number / user ID in the reset endpoint: `mobile=<target>&code=<your own code>`
+- Unauthorized registration/profile modification endpoints: `registersysuser`, `goedituser` and similar endpoints have no authorization check or do not verify data ownership
+- Validation method: use A's verification code to reset B's account; call administrative registration endpoints with low privileges or while unauthenticated
+- Example: when a login/registration entry point like `login_tologin.do` has an authorization bypass, an administrator account can be registered without authorization
 
-## Phase 4: thinkphp 商城短信验证码
+## Phase 4: thinkphp Mall SMS Verification Codes
 
-- 商城类系统（thinkphp 框架）短信验证码常见问题：验证码存 Session 可并发、接口可重放、返回包泄露 code
-- 登录/注册/找回密码三处验证码逻辑分别测试
+- Common problems with SMS verification codes in mall-style systems (thinkphp framework): the code is stored in the Session so it can be used concurrently, the endpoint can be replayed, and the response packet leaks the code
+- Test the verification code logic in login, registration, and password recovery separately
 
-## 授权边界
+## Authorization Boundary
 
-- 仅限授权渗透测试
-- 不批量重置他人账号；验证到可越权即停
+- Authorized penetration testing only
+- Do not bulk-reset other people's accounts; stop as soon as unauthorized modification is confirmed
 
-## 关联
+## Related Skills
 
-- 鉴权绕过补充 → 401-403-bypass
-- 图片验证码识别绕过 → captcha-bypass-methodology
+- Authorization bypass supplement → 401-403-bypass
+- Image captcha recognition and bypass → captcha-bypass-methodology

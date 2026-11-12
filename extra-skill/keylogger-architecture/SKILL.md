@@ -1,6 +1,8 @@
 ---
 name: keylogger-architecture
 description: Use when designing or analyzing keystroke/input capture — SetWindowsHookEx, raw input devices, ETW-based capture, kernel drivers, stealth techniques and their IOCs
+zh-signals: "分析或设计键盘输入捕获的攻防方法，涵盖 Windows 钩子、原始输入、ETW 与内核驱动等实现及其 IOC。信号:键盘记录,键盘钩子,输入捕获,EDR规避"
+when-to-use: "Use when designing or analyzing keystroke and input-capture mechanisms for red-team implants or malware analysis, including stealth considerations and detection IOCs."
 metadata:
   type: offensive
   phase: research
@@ -12,7 +14,7 @@ depends_on: [privesc-windows, edr-evasion]
 feeds_into: [red-team-ops]
 inputs: [target_os, edr_product]
 outputs: [keylogger_binary, captured_input]
-  ---
+---
 
 # Keylogger Architecture
 

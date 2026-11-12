@@ -1,6 +1,8 @@
 ---
 name: rails-security
 description: Rails security review — Brakeman integration, mass-assignment via strong_parameters, SQL injection in ActiveRecord, template injection via html_safe/raw, Devise hardening, credentials.yml.enc, force_ssl and CSP config, recent Rails/Rack CVE patterns.
+zh-signals: "Ruby on Rails 安全审查（Brakeman、强参数、SQL 注入、模板注入、Devise）。信号:rails安全,brakeman,activerecord,sql注入,csp"
+when-to-use: "Use when reviewing a Rails app, triaging a Brakeman report, or checking strong parameters, ActiveRecord SQL injection, html_safe/raw usage, Devise, credentials, or CSP/SSL config."
 ---
 
 # Rails Security

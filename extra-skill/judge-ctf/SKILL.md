@@ -1,6 +1,8 @@
 ---
 name: judge-ctf
-description: "CTF flag 评判检查清单。当需要判断 CTF 挑战是否完成（flag 是否已获取）、分析攻击失败原因、或为下一步攻击提供精确指导时使用。覆盖 flag 搜索验证、漏洞发现评估、漏洞利用评估、flag 位置推断、常见题型模式匹配（SQLi/LFI/RCE/IDOR/SSRF/反序列化）"
+description: "CTF flag evaluation checklist. Use when judging whether a CTF challenge is solved (flag captured), analyzing why an attack failed, or providing precise guidance for the next attack step. Covers flag search and verification, vulnerability discovery assessment, exploitation assessment, flag location inference, and common challenge pattern matching (SQLi/LFI/RCE/IDOR/SSRF/deserialization)"
+zh-signals: "评估 CTF 挑战是否完成、flag 是否获取，并诊断攻击失败原因、给出下一步精确指导。信号:CTF,flag评判,漏洞评估,失败诊断,下一步指导"
+when-to-use: "Use when judging whether a CTF challenge is solved (flag captured), diagnosing why an attack failed, or planning the next exploitation step. Applies to SQLi, LFI, RCE, IDOR, SSRF, and deserialization challenges."
 metadata:
   tags: "judge,evaluation,ctf,flag,decision"
   category: "general"

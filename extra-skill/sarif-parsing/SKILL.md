@@ -5,6 +5,8 @@ description: >-
   scanners. Triggers on "parse sarif", "read scan results", "aggregate findings", "deduplicate
   alerts", or "process sarif output". Handles filtering, deduplication, format conversion, and
   CI/CD integration of SARIF data. Does NOT run scans — use the Semgrep or CodeQL skills for that.
+zh-signals: "解析与处理 CodeQL、Semgrep 等静态分析工具输出的 SARIF 文件。信号:SARIF,静态分析,结果聚合,告警去重,CI/CD"
+when-to-use: "Use when parsing, filtering, deduplicating, converting, or integrating SARIF scan results; this does not run scans."
 allowed-tools: Bash Read Glob Grep
 ---
 

@@ -2,6 +2,10 @@
 name: mcp-server-security
 description: Secure Model Context Protocol (MCP) servers with transport encryption,
   tool authorization, input validation, and audit logging for safe AI agent integrations.
+zh-signals: "为 MCP 服务器提供传输加密、工具授权、输入校验与审计日志等安全加固指导。信号:MCP安全,工具授权,传输加密,输入校验"
+when-to-use: >-
+  Use when deploying or hardening an MCP server that exposes tools to AI agents, or when
+  connecting an agent runtime to MCP servers over stdio, SSE, or Streamable HTTP.
 category: security
 risk: safe
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

@@ -1,6 +1,9 @@
 ---
 name: report-writing
 description: Bug bounty report writing for H1/Bugcrowd/Intigriti/Immunefi — report templates, human tone guidelines, impact-first writing, CVSS 3.1 scoring, title formula, impact statement formula, severity decision guide, downgrade counters, pre-submit checklist. Use after validating a finding and before submitting. Never use "could potentially" — prove it or don't report.
+zh-signals: "面向 H1/Bugcrowd/Intigriti/Immunefi 的漏洞报告撰写与定级指导。信号:漏洞报告,CVSS评分,严重等级,报告模板,赏金平台。"
+when-to-use: >-
+  Use after validating a finding and before submitting to HackerOne, Bugcrowd, Intigriti, or Immunefi, when drafting impact-first reports, CVSS scoring, severity justification, or downgrade rebuttals.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

@@ -2,6 +2,8 @@
 name: aws-vpc
 description: Design and implement VPCs and networking. Configure subnets, route tables,
   and security groups. Use when setting up AWS network infrastructure.
+zh-signals: "设计与实现 AWS VPC 网络，配置子网、路由表与安全组。信号:AWS,VPC,子网,路由表,安全组,网络架构"
+when-to-use: "Use when setting up AWS network infrastructure, subnet isolation, routing, NAT gateways, or security groups."
 category: devops
 risk: critical
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

@@ -1,6 +1,8 @@
 ---
 name: hunt-mcp-security
 description: Hunt Model Context Protocol (MCP) vulnerabilities in AI-tool integration systems.
+zh-signals: "狩猎 AI 工具集成系统中的 Model Context Protocol (MCP) 漏洞，聚焦工具权限与提示注入。信号:MCP,AI安全,提示注入,工具权限,数据外泄"
+when-to-use: "Use when a target deploys AI agents with MCP tool access, tool registration or access control logic, or RAG integrations and you need to test privilege escalation and prompt injection."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

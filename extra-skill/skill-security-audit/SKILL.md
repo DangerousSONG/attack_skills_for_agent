@@ -1,6 +1,9 @@
 ---
 name: skill-security-audit
 description: "Audit an Agent Skill, MCP server, connector, or desktop extension before installation by tracing code, dependencies, permissions, credentials, data flow, and irreversible actions."
+zh-signals: "在安装前审计 Agent Skill、MCP 服务器或扩展的权限、数据流与不可逆操作。信号:技能安全审计,MCP安全,供应链审计,权限审查,数据流追踪。"
+when-to-use: >-
+  Use before installing an unfamiliar Agent Skill, MCP server, connector, plugin, or desktop extension, especially when it handles files, credentials, accounts, network requests, or destructive actions.
 category: security
 risk: safe
 source: community

@@ -5,6 +5,8 @@ description: 'Static Application Security Testing (SAST) for code vulnerability
   analysis across multiple languages and frameworks
 
   '
+zh-signals: "多语言多框架的静态应用安全测试（SAST）。信号:SAST,静态分析,代码审计,注入,硬编码密钥"
+when-to-use: "Use for source-code security analysis covering injection flaws, hardcoded secrets, framework patterns, and compliance mapping (OWASP, PCI-DSS, SOC2)."
 risk: critical
 source: community
 date_added: '2026-02-27'

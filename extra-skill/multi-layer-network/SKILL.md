@@ -1,74 +1,78 @@
 ---
 name: multi-layer-network
-description: "多层网络渗透与隧道搭建。当需要从 DMZ 跳转到内网、跨网段渗透、或目标在多层防火墙/网络分区后面时使用。覆盖代理搭建(frp/chisel/SSH)、多跳隧道链、端口转发、SOCKS 代理。从边界突破到域控的完整多层攻击路径"
+description: "Multi-layer network penetration and tunnel setup. Use when pivoting from a DMZ foothold into the internal network, penetrating across network segments, or when the target sits behind multiple firewalls and network zones. Covers proxy setup (frp/chisel/SSH), multi-hop tunnel chains, port forwarding, and SOCKS proxies. The complete multi-layer attack path from perimeter breach to domain controller"
+zh-signals: "多层网络渗透与隧道搭建，从 DMZ 立足点穿透防火墙进入内网。信号:内网穿透,隧道,代理,frp,chisel,横向移动"
+when-to-use: >-
+  Use when pivoting from a DMZ foothold across network segments, or when the target sits
+  behind multiple firewalls and requires tunnels, port forwarding, or SOCKS proxies.
 metadata:
-  tags: "pivot,proxy,tunnel,multi-layer,lateral,隧道,代理,端口转发,frp,chisel,ssh,socks,内网穿透,跳板,DMZ"
+  tags: "pivot,proxy,tunnel,multi-layer,lateral,tunneling,proxy,port-forwarding,frp,chisel,ssh,socks,internal-network-pivoting,pivot-host,DMZ"
   category: "lateral"
 ---
 
-# 多层网络渗透方法论
+# Multi-Layer Network Penetration Methodology
 
-## ⛔ 深入参考（必读）
+## ⛔ Further Reading (Must Read)
 
-- 需要 frp/chisel/Neo-reGeorg/SSH 隧道配置命令、多跳代理链、proxychains 用法 → [references/tunnel-tools.md](references/tunnel-tools.md)
+- frp/chisel/Neo-reGeorg/SSH tunnel configuration commands, multi-hop proxy chains, proxychains usage → [references/tunnel-tools.md](references/tunnel-tools.md)
 
 ---
 
-## Phase 1: 边界突破与立足点
+## Phase 1: Perimeter Breach and Foothold
 
-获取 DMZ 主机 Shell 后，立即收集网络信息：
+Once you have a shell on a DMZ host, collect network information immediately:
 ```bash
 ip addr && ip route && arp -a && cat /etc/hosts      # Linux
 ipconfig /all && route print && arp -a                 # Windows
 ```
 
-**关键判断**：
-- 双网卡（eth0=外网, eth1=10.x.x.x）→ 天然跳板
-- 只有内网 IP → 需要搭建反向隧道
+**Key Decision**:
+- Dual NICs (eth0=external, eth1=10.x.x.x) → a natural pivot
+- Internal IP only → set up a reverse tunnel
 
-### 目标网络测绘
+### Target Network Mapping
 ```bash
 for i in $(seq 1 254); do ping -c 1 -W 1 10.0.0.$i &>/dev/null && echo "10.0.0.$i alive"; done
 fscan -h 10.0.0.0/24 -nopoc
 ```
 
-## Phase 2: 隧道选择决策树
+## Phase 2: Tunnel Selection Decision Tree
 
 ```
-目标出网情况？
-├─ 可出网（有外网访问）
-│   ├─ 有 SSH 凭据？→ SSH -D 1080（零部署，最简单）
-│   ├─ 需要长期稳定？→ frp（断线重连）
-│   └─ 快速部署？→ chisel（单二进制）
-├─ 仅 HTTP 出网 → Neo-reGeorg HTTP 隧道
-└─ 完全不出网 → SSH 反向隧道 / 在跳板上中转
+Can the target reach the Internet?
+├─ Outbound access available (external network reachable)
+│   ├─ SSH credentials available? → SSH -D 1080 (zero deployment, simplest)
+│   ├─ Need long-term stability? → frp (auto-reconnect)
+│   └─ Need rapid deployment? → chisel (single binary)
+├─ HTTP-only outbound → Neo-reGeorg HTTP tunnel
+└─ No outbound access at all → SSH reverse tunnel / relay through the pivot host
 ```
 
-所有工具的详细配置命令见 → [references/tunnel-tools.md](references/tunnel-tools.md)
+See → [references/tunnel-tools.md](references/tunnel-tools.md) for the detailed configuration commands of every tool
 
-## 隧道工具选择速查
+## Tunnel Tool Selection Quick Reference
 
-| 场景 | 推荐工具 | 原因 |
+| Scenario | Recommended Tool | Rationale |
 |------|----------|------|
-| 有 SSH 凭据 | SSH 隧道 | 零部署，最简单 |
-| 目标出网 + 长期使用 | frp | 最稳定，支持断线重连 |
-| 目标出网 + 快速部署 | chisel | 单二进制，无配置文件 |
-| 仅 HTTP 出网 | Neo-reGeorg | HTTP 隧道穿越防火墙 |
-| 高性能需求 | ligolo-ng | TUN 接口，接近原生性能 |
+| SSH credentials available | SSH tunnel | Zero deployment, simplest |
+| Outbound access + long-term use | frp | Most stable, supports auto-reconnect |
+| Outbound access + rapid deployment | chisel | Single binary, no config file |
+| HTTP-only outbound | Neo-reGeorg | HTTP tunnel crosses firewalls |
+| High performance required | ligolo-ng | TUN interface, near-native performance |
 
-## Phase 3: 深层渗透
+## Phase 3: Deep Penetration
 
-通过代理进入内网后，按优先级：
-1. **内网侦察**
-2. **域环境攻击**
-3. **凭据喷洒**
-4. **横向移动**
+Once you are inside the internal network through the proxy, proceed in priority order:
+1. **Internal network reconnaissance**
+2. **Domain environment attacks**
+3. **Credential spraying**
+4. **Lateral movement**
 
-## 注意事项
-- **proxychains 只支持 TCP**，不支持 ICMP（ping 不可用，nmap 用 `-Pn -sT`）
-- 隧道建立后先 `proxychains curl` 测试连通性再做大范围扫描
-- 隧道进程容易中断，用 `autossh` 或 frp 断线重连保持稳定
-- 记录每一跳的凭据和隧道命令，便于重建
+## Notes
+- **proxychains only supports TCP**, not ICMP (ping is unavailable, use `-Pn -sT` with nmap)
+- After the tunnel is established, test connectivity with `proxychains curl` before running large-scale scans
+- Tunnel processes break easily — use `autossh` or frp auto-reconnect to keep them stable
+- Record the credentials and tunnel command for every hop so the path can be rebuilt
 
-## Proxychains 限制
-- UDP 不支持：proxychains 仅代理 TCP，UDP 扫描（-sU）会失败
+## Proxychains Limitations
+- No UDP support: proxychains only proxies TCP, so UDP scans (-sU) will fail

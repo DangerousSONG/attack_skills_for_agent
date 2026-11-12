@@ -3,6 +3,8 @@ name: code-review-sensei
 version: 1.0.0
 description: Expert code reviewer that catches bugs, security issues, performance
   problems, and design flaws with actionable fix suggestions.
+zh-signals: "专家级代码审查，发现缺陷、安全问题、性能与设计问题并给出修复建议。信号:代码审查,安全漏洞,性能优化,设计缺陷,修复建议"
+when-to-use: "Use when the task requires an expert code review that catches bugs, security issues, performance problems, and design flaws."
 author: yundu-ai
 tags:
 - code-review

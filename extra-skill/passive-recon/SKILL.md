@@ -1,74 +1,76 @@
 ---
 name: passive-recon
-description: "纯被动 OSINT 情报收集，不触碰目标。当需要在不被目标察觉的情况下收集资产情报、在正式渗透前做预研、或通过 FOFA/Quake/Hunter 等搜索引擎发现暴露资产时使用。同时适用于需要从多引擎交叉比对获取完整资产视图的场景"
+description: "Purely passive OSINT intelligence collection that never touches the target. Use when you need to gather asset intelligence without the target noticing, for pre-engagement research before a formal penetration test, or to discover exposed assets through search engines such as FOFA/Quake/Hunter. Also applies to scenarios that require a complete asset view obtained by cross-comparing multiple engines"
+zh-signals: "纯被动 OSINT 资产收集，使用 FOFA、Quake、Hunter 等引擎在不触碰目标的情况下发现暴露资产。信号:被动侦察,OSINT,FOFA,Quake,资产发现"
+when-to-use: "Use when collecting target intelligence without touching the target, doing pre-engagement research, or cross-comparing search engines for asset discovery."
 metadata:
-  tags: "osint,passive,fofa,quake,hunter,被动侦察,情报收集,资产发现,搜索引擎,whois,dns"
+  tags: "osint,passive,fofa,quake,hunter,passive reconnaissance,intelligence collection,asset discovery,search engine,whois,dns"
   category: "recon"
 ---
 
-# 被动 OSINT 情报收集方法论
+# Passive OSINT Intelligence Collection Methodology
 
-> **⛔ 深入参考**：各引擎的完整查询语法和 API 调用方式见 `references/search-engine-syntax.md`
+> **⛔ In-depth reference**: the full query syntax and API invocation methods for each engine are in `references/search-engine-syntax.md`
 
-被动侦察的核心优势是**零接触**——不会在目标日志中留下痕迹。适合渗透前期预研、红队侦察、或在授权范围外只能做被动收集的场景。
+The core advantage of passive reconnaissance is **zero contact** — it leaves no trace in the target's logs. It suits pre-engagement research, red team reconnaissance, or scenarios where only passive collection is allowed within the authorized scope.
 
-## Phase 1: 多引擎资产搜索
+## Phase 1: Multi-Engine Asset Search
 
 ### FOFA
-通过 `http_request` 或 `curl` 查询 FOFA API（`https://fofa.info/api/v1/search/all?...`）— 国内最大的网络空间测绘引擎，适合发现国内资产。
+Query the FOFA API (`https://fofa.info/api/v1/search/all?...`) via `http_request` or `curl` — the largest cyberspace mapping engine in China, ideal for discovering domestic assets.
 
-常用查询模式：
-- 域名资产：`domain="example.com"`
-- IP 段：`ip="192.168.1.0/24"`
-- 特定服务：`domain="example.com" && port="8080"`
-- 特定组件：`domain="example.com" && app="WordPress"`
+Common query patterns:
+- Domain assets: `domain="example.com"`
+- IP range: `ip="192.168.1.0/24"`
+- Specific service: `domain="example.com" && port="8080"`
+- Specific component: `domain="example.com" && app="WordPress"`
 
 ### Quake
-通过 `http_request` 或 `curl` 查询 Quake API（`https://quake.360.net/api/v3/search/quake_service`）— 360 网络空间测绘，擅长深度指纹识别。
+Query the Quake API (`https://quake.360.net/api/v3/search/quake_service`) via `http_request` or `curl` — 360's cyberspace mapping engine, strong at deep fingerprinting.
 
-常用查询模式：
-- 域名：`domain:"example.com"`
-- 服务：`domain:"example.com" AND port:8443`
-- 组件：`domain:"example.com" AND app:"Apache Tomcat"`
+Common query patterns:
+- Domain: `domain:"example.com"`
+- Service: `domain:"example.com" AND port:8443`
+- Component: `domain:"example.com" AND app:"Apache Tomcat"`
 
 ### Hunter
-通过 `http_request` 或 `curl` 查询 Hunter API（`https://hunter.qianxin.com/openApi/search`）— 鹰图平台，擅长 IP 关联分析和资产聚合。
+Query the Hunter API (`https://hunter.qianxin.com/openApi/search`) via `http_request` or `curl` — the Yingtu platform, strong at IP correlation analysis and asset aggregation.
 
-## Phase 2: 结果交叉比对
+## Phase 2: Cross-Comparison of Results
 
-三个引擎各有侧重，交叉比对才能获取完整视图：
+Each engine has its own emphasis, so only cross-comparison yields a complete view:
 
-| 维度 | 分析方法 |
+| Dimension | Analysis Method |
 |------|----------|
-| IP/域名清单 | 三引擎去重合并，标注仅单一引擎发现的（可能是新上线/已下线） |
-| 端口分布 | 统计高危端口（22/3306/6379/9200），标注非标准端口 |
-| 技术栈 | 汇总 Web 框架、中间件、CMS 版本 |
-| 管理后台 | 搜索 title 含 "login"/"admin"/"dashboard" 的资产 |
-| 证书信息 | SSL 证书中的 CN/SAN 可能泄露内部域名 |
-| 历史数据 | 对比不同时间点数据，发现新增/下线资产 |
+| IP/domain inventory | Deduplicate and merge across the three engines, flagging those found by only one engine (possibly newly launched or decommissioned) |
+| Port distribution | Count high-risk ports (22/3306/6379/9200), flagging non-standard ports |
+| Technology stack | Aggregate web frameworks, middleware, and CMS versions |
+| Admin panels | Search for assets whose title contains "login"/"admin"/"dashboard" |
+| Certificate information | CN/SAN in SSL certificates may leak internal domain names |
+| Historical data | Compare data across time points to discover newly added or decommissioned assets |
 
-## Phase 3: 高价值目标识别
+## Phase 3: High-Value Target Identification
 
-从被动收集结果中优先标注：
-1. **暴露的管理后台** — 通常是最短攻击路径
-2. **过期/未维护的服务** — 旧版本组件更可能有已知漏洞
-3. **内部系统误暴露** — OA/VPN/GitLab/Jenkins 等不应公网可达的服务
-4. **数据库端口暴露** — Redis/MongoDB/Elasticsearch 无认证是常见问题
-5. **开发/测试环境** — dev/test/staging 子域通常安全措施较弱
+Prioritize the following in the passively collected results:
+1. **Exposed admin panels** — usually the shortest attack path
+2. **Outdated/unmaintained services** — old component versions are more likely to have known vulnerabilities
+3. **Internal systems exposed by mistake** — services such as OA/VPN/GitLab/Jenkins that should not be reachable from the public internet
+4. **Exposed database ports** — unauthenticated Redis/MongoDB/Elasticsearch is a common problem
+5. **Development/test environments** — dev/test/staging subdomains usually have weaker security controls
 
-## 注意事项
-- 纯被动收集，**不要**直接访问或扫描目标
-- 搜索引擎数据有时效性，最新资产可能未收录
-- 不同引擎查询语法不同，注意区分
+## Notes
+- Purely passive collection, **do not** directly access or scan the target
+- Search engine data has a time lag; the newest assets may not be indexed yet
+- Query syntax differs between engines, so pay attention to the differences
 
-## 多引擎交叉验证
-- 单引擎独有的结果可能新上线或已下线
-- 数据时效性：各引擎收录时间不同、更新频率不同
-- 标注来源：标记仅单一引擎发现的资产，需进一步验证
-- 注意：不能扫描、不能直接访问目标、不能端口扫描
+## Multi-Engine Cross-Validation
+- Results unique to a single engine may be newly launched or decommissioned
+- Data timeliness: each engine indexes at a different time and updates at a different frequency
+- Mark the source: flag assets found by only one engine, they require further verification
+- Note: you may not scan, may not directly access the target, and may not port scan
 
-## 其他被动信息源
-- WHOIS 查询域名注册信息
-- DNS 历史记录
-- GitHub 搜索泄露代码/凭据
-- 其他公开来源（社交媒体、论坛等）
+## Other Passive Information Sources
+- WHOIS domain registration lookups
+- DNS history records
+- GitHub searches for leaked code/credentials
+- Other public sources (social media, forums, etc.)

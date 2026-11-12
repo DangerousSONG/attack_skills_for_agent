@@ -1,6 +1,8 @@
 ---
 name: competition-kernel-container-escape
 description: Internal downstream skill for ctf-sandbox-orchestrator. CTF-sandbox workflow for kernel attack surface, namespace and cgroup boundaries, container isolation assumptions, syscall paths, and escape primitive verification. Use when the user asks to analyze container-to-host escape paths, kernel exploit prerequisites, namespace crossover, capability misuse, or prove whether an exploit primitive crosses the sandbox boundary. Use only after `$ctf-sandbox-orchestrator` has already established sandbox assumptions and routed here.
+zh-signals: "分析容器逃逸与内核攻击面以证明沙箱边界穿越。信号:容器逃逸,内核利用,命名空间,能力滥用,边界穿越。"
+when-to-use: "Use when analyzing container-to-host escape paths, kernel exploit prerequisites, namespace or cgroup boundary crossover, capability misuse, seccomp or LSM assumptions, and proving whether an exploit primitive crosses the sandbox boundary."
 ---
 
 # Competition Kernel Container Escape

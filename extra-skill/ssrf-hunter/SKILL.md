@@ -1,6 +1,11 @@
 ---
 name: ssrf-hunter
 description: Complete SSRF detection and exploitation methodology injection point discovery, cloud metadata theft (AWS/GCP/Azure), internal network enumeration, protocol handler abuse, filter bypass techniques, blind SSRF via OOB, and report structure. Trigger when the user sees any parameter that accepts a URL, hostname, IP, or path, wants to check if a server fetches external resources, is testing cloud-hosted applications for metadata endpoint access, or wants to probe internal services through a compromised SSRF point.
+zh-signals: "SSRF 检测与利用方法论，覆盖注入点发现、云元数据窃取、内网枚举、协议处理器滥用、过滤器绕过与盲 SSRF。信号:SSRF,云元数据,内网枚举,过滤器绕过,盲SSRF"
+when-to-use: >-
+  Use when a parameter accepts a URL, hostname, IP, or path, when testing
+  cloud-hosted apps for metadata access, or when probing internal services
+  through an SSRF point.
 metadata:
   version: "1.0.0"
   author: Rifteo

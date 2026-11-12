@@ -1,88 +1,90 @@
 ---
 name: ai-identity-security
 description: |
-  AI 系统身份与权限安全测试方法论。当目标系统涉及 Agent 身份认证、多 Agent 权限管理、
-  角色设定安全、会话管理、或 MCP/API 凭据管控时触发。
-  覆盖: 角色逃逸(假定场景/假定角色/遗忘法/目标劫持)、权限失控(Action 越权/MCP 未授权资源获取)、
-  多 Agent 身份伪造、会话劫持、凭据泄露与滥用。
+  AI system identity and permission security testing methodology. Triggered when the target system involves Agent authentication, multi-Agent permission management,
+  role definition security, session management, or MCP/API credential control.
+  Covers: role escape (assumed scenario / assumed role / forgetting method / goal hijacking), permission loss of control (Action privilege bypass / MCP unauthorized resource access),
+  multi-Agent identity forgery, session hijacking, credential leakage and abuse.
+zh-signals: "AI 系统身份与权限安全测试。信号:AI身份,角色逃逸,权限失控,会话劫持,MCP越权,凭据泄露"
+when-to-use: "Use when the target involves agent authentication, multi-agent permission management, role constraints, session management, or MCP/API credential control."
 metadata:
-  tags: ai identity, role escape, 角色逃逸, agent impersonation, 身份伪造, action permission, 权限失控, session hijack, 会话劫持, credential abuse, mcp unauthorized, 凭据泄露, multi-agent identity, 越权访问
+  tags: ai identity, role escape, agent impersonation, identity forgery, action permission, permission loss of control, session hijack, credential abuse, mcp unauthorized, credential leakage, multi-agent identity, unauthorized access
   category: ai-security
 ---
 
-# AI 身份与权限安全测试方法论
+# AI Identity and Permission Security Testing Methodology
 
-## 概述
+## Overview
 
-AI 身份安全关注的是**应用层角色设定与权限边界**的可靠性。与 prompt-jailbreak（针对模型安全对齐）不同，身份安全测试的目标是验证业务赋予 AI 的角色限制、权限分配、会话隔离和凭据管控是否可被绕过。当 Agent 获得工具调用和外部系统访问能力后，身份失控的影响从"说了不该说的话"升级为"做了不该做的事"。
+AI identity security focuses on the reliability of **application-layer role definitions and permission boundaries**. Unlike prompt-jailbreak (which targets model safety alignment), identity security testing aims to verify whether the role restrictions, permission assignments, session isolation, and credential controls granted to the AI by the business can be bypassed. Once an Agent gains tool-calling and external system access capabilities, the impact of identity loss of control escalates from "saying things it shouldn't" to "doing things it shouldn't".
 
-## 攻击面总览
+## Attack Surface Overview
 
-| 攻击类别 | 子攻击 | GAARM 编号 |
+| Attack Category | Sub-Attacks | GAARM Number |
 |----------|--------|-----------|
-| 角色逃逸 | 假定场景 / 假定角色 / 遗忘法 / 目标劫持 | 0052.001-004 |
-| 权限失控 | Action 模块越权 / MCP 未授权资源获取 / 账户越权 | 0053/0057/0058 |
-| 身份伪造 | 会话令牌窃取 / Agent 身份伪装 / 信任链欺骗 | 0059 |
-| 会话与凭据 | 会话劫持 / 缓存欺骗 / API Key 泄露 | 0055/0056 |
+| Role escape | Assumed scenario / assumed role / forgetting method / goal hijacking | 0052.001-004 |
+| Permission loss of control | Action module privilege bypass / MCP unauthorized resource access / account privilege bypass | 0053/0057/0058 |
+| Identity forgery | Session token theft / Agent identity impersonation / trust chain deception | 0059 |
+| Session and credential | Session hijacking / cache deception / API key leakage | 0055/0056 |
 
-## 深入参考
+## Further Reading
 
-- 各攻击类别的详细测试 Payload、攻击链与检测方法 → [references/identity-attack-techniques.md](references/identity-attack-techniques.md)
-
----
-
-## Phase 0: 身份架构侦察
-
-- 识别 Agent 认证方式（API Key / OAuth / Session Token / 无认证）
-- 枚举权限模型（RBAC / ABAC / 无显式权限控制），确认角色设定的实现方式（system prompt / 代码逻辑 / 配置文件）
-- 探测会话管理机制（会话 ID 生成方式、过期策略、跨会话隔离程度）
-
-## Phase 1: 角色逃逸测试 (GAARM.0052)
-
-- **假定场景逃逸**：构造混淆场景使模型偏离工作目标，结合关键字定位尝试泄露系统设定
-- **假定角色逃逸**：要求模型扮演特定角色（DAN / 开发者模式），使其忽略应用层角色限制
-- **遗忘法逃逸**：诱导模型"忘记"先前的角色指令，重置为无约束状态
-- **目标劫持**：通过操纵使 AI 偏离原始角色设定去执行攻击者期望的任务
-
-角色逃逸与越狱的边界：jailbreak 攻击模型的安全对齐（让模型生成有害内容），角色逃逸攻击应用的业务角色设定（让客服 Bot 执行管理操作）。两者可组合使用但测试目标不同。
-
-## Phase 2: 权限失控测试 (GAARM.0053/0057/0058)
-
-- **Action 模块越权**：通过 Prompt 注入或参数篡改，触发 Agent 执行超出授权范围的 Action（如将普通查询操作替换为管理操作）
-- **MCP 未授权资源获取**：测试 MCP Server 权限验证是否存在缺陷，恶意 Server 能否绕过权限检查访问系统资源（详见 `mcp-security`）
-- **账户越权**：验证 Agent 在多租户场景下是否能跨账户访问数据
-
-## Phase 3: 多 Agent 身份伪造 (GAARM.0059)
-
-- **会话令牌窃取**：通过 Prompt 注入诱导 Agent 输出会话凭据或将其发送到外部端点
-- **Agent 身份伪装**：在多 Agent 系统中伪造来自高权限 Agent 的消息，欺骗目标 Agent 执行越权操作
-- **信任链欺骗**：利用 Agent 间的隐式信任关系，通过攻陷低权限 Agent 间接控制高权限 Agent
-
-## Phase 4: 会话与凭据安全 (GAARM.0055/0056)
-
-- **会话劫持**：测试会话 ID 的可预测性、固定性和传输安全性
-- **缓存欺骗**：验证 CDN/代理缓存是否可能泄露包含认证信息的响应
-- **API Key 泄露**：检查 Agent 配置中的凭据是否可通过 Prompt 注入被诱导输出
+- Detailed test payloads, attack chains, and detection methods for each attack category → [references/identity-attack-techniques.md](references/identity-attack-techniques.md)
 
 ---
 
-## 检测清单
+## Phase 0: Identity Architecture Reconnaissance
+
+- Identify the Agent authentication method (API Key / OAuth / Session Token / no authentication)
+- Enumerate the permission model (RBAC / ABAC / no explicit permission control) and confirm how role definitions are implemented (system prompt / code logic / configuration files)
+- Probe the session management mechanism (session ID generation method, expiry policy, degree of cross-session isolation)
+
+## Phase 1: Role Escape Testing (GAARM.0052)
+
+- **Assumed scenario escape**: construct a confusing scenario that makes the model deviate from its work objective, combined with keywords to attempt leaking the system prompt
+- **Assumed role escape**: ask the model to play a specific role (DAN / developer mode) so it ignores application-layer role restrictions
+- **Forgetting method escape**: induce the model to "forget" prior role instructions and reset to an unconstrained state
+- **Goal hijacking**: manipulate the AI into deviating from its original role definition to execute the attacker's desired task
+
+The boundary between role escape and jailbreak: jailbreak attacks the model's safety alignment (making the model generate harmful content), while role escape attacks the application's business role definition (making a customer service bot perform admin operations). The two can be combined but their testing goals differ.
+
+## Phase 2: Permission Loss of Control Testing (GAARM.0053/0057/0058)
+
+- **Action module privilege bypass**: through prompt injection or parameter tampering, trigger the Agent to execute an Action beyond its authorized scope (e.g. replacing a normal query operation with an admin operation)
+- **MCP unauthorized resource access**: test whether MCP Server permission validation has flaws and whether a malicious Server can bypass permission checks to access system resources (see `mcp-security` for details)
+- **Account privilege bypass**: verify whether the Agent can access data across accounts in multi-tenant scenarios
+
+## Phase 3: Multi-Agent Identity Forgery (GAARM.0059)
+
+- **Session token theft**: use prompt injection to induce the Agent to output session credentials or send them to an external endpoint
+- **Agent identity impersonation**: in a multi-Agent system, forge messages coming from a high-privilege Agent to deceive the target Agent into performing privileged operations
+- **Trust chain deception**: exploit implicit trust relationships between Agents to indirectly control a high-privilege Agent by compromising a low-privilege one
+
+## Phase 4: Session and Credential Security (GAARM.0055/0056)
+
+- **Session hijacking**: test the predictability, fixation, and transport security of session IDs
+- **Cache deception**: verify whether CDN/proxy caches may leak responses containing authentication information
+- **API key leakage**: check whether credentials in the Agent configuration can be induced to output via prompt injection
+
+---
+
+## Detection Checklist
 
 ```
-1. [ ] 身份架构已侦察？认证方式、权限模型、会话管理机制已明确？
-2. [ ] 角色逃逸：假定场景/角色/遗忘法/目标劫持是否能突破角色设定？
-3. [ ] 权限失控：Action 参数是否可被篡改？MCP 权限验证是否完整？
-4. [ ] 身份伪造：多 Agent 间消息来源是否经过验证？信任链是否可被利用？
-5. [ ] 会话安全：会话 ID 是否安全生成？是否存在固定会话攻击面？
-6. [ ] 凭据管控：API Key 和 Token 是否可通过注入被泄露？
-7. [ ] 跨租户隔离：多租户场景下数据访问边界是否可靠？
+1. [ ] Identity architecture reconnoitered? Authentication method, permission model, and session management mechanism are clear?
+2. [ ] Role escape: can assumed scenario / role / forgetting method / goal hijacking break the role definition?
+3. [ ] Permission loss of control: can Action parameters be tampered with? Is MCP permission validation complete?
+4. [ ] Identity forgery: is the message source between multiple Agents verified? Can the trust chain be exploited?
+5. [ ] Session security: are session IDs generated securely? Does a session fixation attack surface exist?
+6. [ ] Credential control: can API keys and tokens be leaked through injection?
+7. [ ] Cross-tenant isolation: are data access boundaries reliable in multi-tenant scenarios?
 ```
 
 ---
 
-## 参考资源
+## Reference Resources
 
-- [GAARM Framework — AI Agent 攻击分类](https://github.com/ArcadeAI/GAARM)
+- [GAARM Framework — AI Agent attack taxonomy](https://github.com/ArcadeAI/GAARM)
 - [OWASP Agentic AI Security — ASI03 Identity & Access](https://owasp.org/www-project-agentic-ai-security/)
-- [MCP-Remote 高危漏洞分析](https://invariantlabs.ai/blog/mcp-remote-vulnerability)
-- [CVE-2025-49596 — MCP 浏览器命令执行](https://www.cve.org/CVERecord?id=CVE-2025-49596)
+- [MCP-Remote high-risk vulnerability analysis](https://invariantlabs.ai/blog/mcp-remote-vulnerability)
+- [CVE-2025-49596 — MCP browser command execution](https://www.cve.org/CVERecord?id=CVE-2025-49596)

@@ -2,6 +2,8 @@
 name: aws-s3
 description: Configure S3 buckets, policies, and lifecycle rules. Implement versioning,
   replication, and security. Use when managing object storage on AWS.
+zh-signals: "配置 AWS S3 存储桶策略与生命周期规则，实现版本控制、复制与安全加固。信号:AWS S3,存储桶策略,生命周期,版本控制,安全加固"
+when-to-use: "Use when creating or hardening S3 buckets, writing bucket policies, or configuring versioning, replication, and lifecycle rules on AWS."
 category: devops
 risk: critical
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

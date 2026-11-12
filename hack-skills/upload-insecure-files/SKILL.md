@@ -31,7 +31,7 @@ Use this file as the deep upload workflow reference. Also load:
 - [xxe xml external entity](../xxe-xml-external-entity/SKILL.md) when SVG, OOXML, or XML imports are accepted
 - [cmdi command injection](../cmdi-command-injection/SKILL.md) when a processor, converter, or media pipeline executes system tools
 - [business logic vulnerabilities](../business-logic-vulnerabilities/SKILL.md) when quotas, overwrite rules, approvals, or storage paths create logic bugs
-- [ghost-bits-cast-attack](../ghost-bits-cast-attack/SKILL.md) when the server is **Apache Tomcat** and the WAF blocks `.jsp` in `filename*` — Tomcat's `RFC2231Utility` narrows each char to byte, so `1.陪sp` (U+966A low byte = `j`) writes `1.jsp` to disk while the WAF sees no `.jsp` literal
+- [ghost-bits-cast-attack](../ghost-bits-cast-attack/SKILL.md) when the server is **Apache Tomcat** and the WAF blocks `.jsp` in `filename*` — Tomcat's `RFC2231Utility` narrows each char to byte, so `1.\u966Asp` (U+966A low byte = `j`) writes `1.jsp` to disk while the WAF sees no `.jsp` literal
 
 ---
 
@@ -147,6 +147,6 @@ The highest-value upload bugs often live in asynchronous processors.
 
 ## 6. HIGH-VALUE EXPLOITATION PATHS
 
-> 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。
+> 📎 Detailed content (full examples / references / data tables) has been split into `reference.md` in the same directory; use Read to load the relevant section on demand.
 
-> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`SCENARIOS.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。
+> 📎 **Reference Document Notice**: this skill is adapted from an upstream open-source repository; the following reference document is **not distributed with this library**: `SCENARIOS.md`. The key points of the related topics are retained in the corresponding descriptions in this document; if you need the expanded content, grep the library using keywords from the body text or search on your own.

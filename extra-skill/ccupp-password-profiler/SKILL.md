@@ -1,49 +1,51 @@
 ---
 name: ccupp-password-profiler
-description: "使用 ccupp 基于社工信息生成弱口令字典。ccupp 是中文场景下最完整的密码画像工具——输入目标的姓名、生日、电话、身份证等信息，自动生成拼音变体、日期变体、文化数字（520/1314/888）组合的密码字典。当需要对目标人员做定向弱口令爆破、社工密码猜测、或者通用弱口令字典不够用需要定制化字典时使用此技能"
+description: "Use ccupp to generate weak password wordlists based on social engineering data. ccupp is the most complete password profiler for Chinese-language scenarios — enter the target's name, birthday, phone number, ID number, and similar details, and it automatically generates a password wordlist combining pinyin variants, date variants, and culturally significant numbers (520/1314/888). Use this skill when you need targeted weak password brute forcing against a specific person, social engineering based password guessing, or when generic weak password wordlists are not enough and a customized wordlist is required"
+zh-signals: "使用 ccupp 基于社工信息生成中文场景定向弱口令字典。信号:ccupp,弱口令,社工字典,密码画像,定向爆破"
+when-to-use: "Use when you need a customized weak-password wordlist from target personal information such as name, birthday, phone, or ID for targeted password guessing."
 metadata:
-  tags: "ccupp,password,弱口令,社工,字典,密码生成,profiler,拼音,bruteforce,wordlist"
+  tags: "ccupp,password,weak-password,social-engineering,wordlist,password-generation,profiler,pinyin,bruteforce"
   category: "tool"
 ---
 
-# ccupp 社工密码字典生成
+# ccupp Social Engineering Password Wordlist Generation
 
-ccupp（Chinese Common User Passwords Profiler）根据目标的个人信息智能生成密码字典——比通用字典更精准，因为大多数人的密码都包含自己的姓名、生日、电话等信息。
+ccupp (Chinese Common User Passwords Profiler) intelligently generates password wordlists from the target's personal information — more accurate than generic wordlists, because most people's passwords contain their own name, birthday, phone number, and similar data.
 
-项目地址：https://github.com/WangYihang/ccupp
+Project address: https://github.com/WangYihang/ccupp
 
-## 安装
+## Installation
 
 ```bash
-# 方式 1: f8x 自动安装（推荐）
+# Method 1: automatic install via f8x (recommended)
 f8x -install ccupp
 
-# 方式 2: 手动安装（ccupp 未发布到 PyPI，需 clone 后本地安装）
+# Method 2: manual install (ccupp is not published on PyPI, clone it and install locally)
 git clone https://github.com/WangYihang/ccupp.git
 cd ccupp
 pipx install .
 ```
 
-## 快速开始
+## Quick Start
 
 ```bash
-# 生成示例配置文件
+# Generate a sample configuration file
 ccupp init
 
-# 交互式输入目标信息
+# Enter the target information interactively
 ccupp interactive
 
-# 从配置文件生成密码
+# Generate passwords from the configuration file
 ccupp generate -o passwords.txt
 ```
 
-## 配置文件格式
+## Configuration File Format
 
-创建 `config.yaml`，填入目标社工信息：
+Create `config.yaml` and fill in the target's social engineering information:
 
 ```yaml
-- surname: 张
-  first_name: 三
+- surname: Zhang
+  first_name: San
   phone_numbers:
     - '13800138000'
   identity: '110101199001011234'
@@ -52,13 +54,13 @@ ccupp generate -o passwords.txt
     - '01'
     - '01'
   hometowns:
-    - 北京
-    - 海淀
+    - Beijing
+    - Haidian
   workplaces:
-    - - 阿里巴巴
+    - - Alibaba
       - alibaba
   educational_institutions:
-    - - 北京大学
+    - - Peking University
       - pku
   accounts:
     - zhangsan
@@ -66,54 +68,54 @@ ccupp generate -o passwords.txt
     - old_pass123
 ```
 
-每个字段都会参与密码组合——信息越多，字典覆盖越精准。
+Every field participates in password combinations — the more information you supply, the more accurate the wordlist coverage.
 
-## 生成策略与优先级
+## Generation Strategies and Priorities
 
-ccupp 按可能性从高到低排序输出，排在前面的密码命中率更高：
+ccupp outputs passwords sorted from most to least likely, and the ones at the top have higher hit rates:
 
-1. **旧密码变体** — 大小写/leetspeak/后缀变换（人倾向于在旧密码基础上微调）
-2. **姓名+生日** — 中国用户最常见的弱口令模式（`zhangsan1990`）
-3. **姓名+电话尾号** — 如 `zs8000`、`zhangsan138`
-4. **双组件组合** — 任意两类信息交叉
-5. **文化数字** — 组件 + 520/1314/888/666（中国特色）
-6. **键盘模式** — qwerty/1qaz2wsx + 组件
+1. **Old password variants** — case changes / leetspeak / suffix transformations (people tend to lightly modify an old password)
+2. **Name + birthday** — the most common weak password pattern for Chinese users (`zhangsan1990`)
+3. **Name + phone suffix** — e.g. `zs8000`, `zhangsan138`
+4. **Two-component combinations** — any cross-combination of two categories of information
+5. **Cultural numbers** — component + 520/1314/888/666 (a distinctly Chinese pattern)
+6. **Keyboard patterns** — qwerty/1qaz2wsx + component
 
-## 常用参数
+## Common Parameters
 
 ```bash
-# 过滤密码长度（配合目标密码策略）
+# Filter password length (to match the target's password policy)
 ccupp generate --min-length 8 --max-length 16
 
-# 禁用某些策略（缩小字典体积）
+# Disable certain strategies (to shrink the wordlist size)
 ccupp generate --no-leetspeak --no-cultural --no-keyboard
 
-# JSON 格式输出（便于程序处理）
+# JSON output (convenient for programmatic processing)
 ccupp generate -f json -o passwords.json
 
-# 查看统计信息
+# View statistics
 ccupp generate --stats
 ```
 
-## 实战工作流
+## Operational Workflow
 
 ```
-收集目标信息（姓名/生日/电话/公司）
+Collect target information (name/birthday/phone/company)
   │
-  ├─ ccupp generate → 定制字典 passwords.txt
+  ├─ ccupp generate → customized wordlist passwords.txt
   │
-  └─ 用字典爆破
+  └─ Brute force with the wordlist
      ├─ zombie -i target -s ssh -u zhangsan -P passwords.txt
      ├─ zombie -i target -s rdp -u zhangsan -P passwords.txt
      └─ hydra -l zhangsan -P passwords.txt target ssh
 ```
 
-## 决策树
+## Decision Tree
 
 ```
-需要密码字典？
-├─ 有目标个人信息 → ccupp generate（定制字典，精准命中）
-├─ 无个人信息，通用场景 → SecLists/rockyou.txt
-├─ 企业批量弱口令 → 公司名+年份+特殊字符（手工或脚本）
-└─ 已有旧密码 → ccupp 旧密码变体策略（填入 passwords 字段）
+Need a password wordlist?
+├─ Have the target's personal information → ccupp generate (customized wordlist, accurate hits)
+├─ No personal information, generic scenario → SecLists/rockyou.txt
+├─ Enterprise bulk weak passwords → company name + year + special characters (manual or scripted)
+└─ Have an old password → ccupp old password variant strategy (fill in the passwords field)
 ```

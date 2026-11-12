@@ -2,37 +2,40 @@
 name: crackql-graphql-batch
 description: "CrackQL: Performs batch GraphQL injection and brute-force attacks. Signals: API attack, interface testing, verbose."
 zh-signals: "CrackQL: GraphQL 批量注入/爆破。信号:api攻击,接口测试,详细。"
+when-to-use: >-
+  Use when testing a GraphQL endpoint for batch query abuse, injection, or
+  credential brute-forcing with a query template and wordlist.
 ---
 
 # CrackQL
 
-- 攻击大类:C10 API与GraphQL攻击
-- 上游仓库:https://github.com/nicholasaleks/CrackQL
-- 上游 License:BSD-3-Clause(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C10 API and GraphQL Attacks
+- Upstream Repository: https://github.com/nicholasaleks/CrackQL
+- Upstream License: BSD-3-Clause (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/nicholasaleks/CrackQL && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python CrackQL.py -t https://t.com/graphql -q query.graphql -w wordlist.txt` | GraphQL 批量查询/爆破 |
-| `-v` | 详细 |
-| `-o out.txt` | 输出 |
+| `python CrackQL.py -t https://t.com/graphql -q query.graphql -w wordlist.txt` | GraphQL batch query/brute-force |
+| `-v` | Verbose |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### GraphQL 批量注入/爆破
+### GraphQL Batch Injection/Brute-Force
 
 ```bash
 python CrackQL.py -t https://api.t.com/graphql -q login.graphql -w passwords.txt
-# 一次请求批量试密码,绕过单 IP 限速
+# try many passwords in a single request, bypassing per-IP rate limiting
 ```
 
-## 注意事项
+## Notes
 
-利用 GraphQL 批量请求特性(batching)做认证爆破/注入,请求合并绕过频率限制。
+Abuses the GraphQL batching feature for credential brute-forcing and injection; merged requests bypass rate limits.

@@ -1,6 +1,8 @@
 ---
 name: owasp-audit
 description: "Audit application source code against the OWASP Top 10 (2021) vulnerability categories — broken access control, cryptographic failures, injection, insecure design, security misconfiguration, vulnerable components, authentication failures, data integrity, logging failures, SSRF. Use when the user mentions 'OWASP,' 'OWASP Top 10,' 'security audit,' 'security review,' 'secure code review,' 'code security review,' 'vulnerability audit,' 'find vulnerabilities,' 'appsec review,' 'application security audit,' 'check for security issues,' 'broken access control,' 'IDOR,' 'SQL injection,' 'XSS,' 'SSRF,' or wants to check their codebase for common security weaknesses."
+zh-signals: "依据 OWASP Top 10 (2021) 对应用源码进行安全审计。信号:OWASP审计,代码审计,安全审查,应用安全,漏洞排查"
+when-to-use: "Use when asked to audit application source code against the OWASP Top 10 or perform a secure code review."
 allowed-tools: Read, Grep, Glob, Bash, Write
 ---
 

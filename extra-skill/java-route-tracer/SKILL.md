@@ -1,349 +1,352 @@
 ---
 name: java-route-tracer
-description: Java Web 源码路由多层级调用链追踪工具。根据用户指定的路由路径，追踪从 Controller/Action 到 DAO 层的完整调用链，输出每一层的文件位置、方法签名和可传入参数。适用于多种漏洞类型的参数流向追踪：(1) SQL注入 - 追踪参数到SQL拼接点，(2) 命令注入 - 追踪参数到Runtime.exec()，(3) SSRF - 追踪参数到HTTP请求，(4) XSS - 追踪参数到响应输出，(5) 文件操作 - 追踪参数到File操作，(6) XXE/反序列化/LDAP注入/表达式注入等。支持 Spring MVC、Struts 2、Servlet、JAX-RS 等框架。**支持反编译 .class/.jar 文件提取调用链**。结合 java-route-mapper 使用可实现完整的路由+调用链审计。
+description: "Multi-level route call-chain tracing tool for Java Web source code. Given a route path specified by the user, trace the complete call chain from Controller/Action to the DAO layer, and output the file location, method signature, and injectable parameters of each layer. Applicable to parameter flow tracing for multiple vulnerability types: (1) SQL injection - trace parameters to SQL concatenation points, (2) command injection - trace parameters to Runtime.exec(), (3) SSRF - trace parameters to HTTP requests, (4) XSS - trace parameters to response output, (5) file operations - trace parameters to File operations, (6) XXE/deserialization/LDAP injection/expression injection, etc. Supports Spring MVC, Struts 2, Servlet, JAX-RS and other frameworks. **Supports decompiling .class/.jar files to extract call chains**. Combined with java-route-mapper, it enables full route + call-chain auditing."
+zh-signals: "追踪 Java Web 路由从 Controller 到 DAO 的调用链与参数流向。信号:Java路由追踪,调用链,参数可控性,Sink定位,反编译。"
+when-to-use: >-
+  Use when tracing a Java route's full call chain from Controller/Action to DAO or sink across Spring MVC, Struts 2, Servlet, or JAX-RS, and mapping parameter flow to SQLi, RCE, SSRF, XSS, or file sinks.
 ---
 
-# Java Route Tracer - 路由调用链追踪
+# Java Route Tracer - Route Call-Chain Tracing
 
-根据用户指定的路由，追踪从入口到最终使用点的完整调用链，输出层级调用信息。**适用于多种漏洞类型的参数流向追踪。**
+Given a user-specified route, trace the complete call chain from the entry point to the final usage point and output layer-by-layer call information. **Applicable to parameter flow tracing across multiple vulnerability types.**
 
-## 核心功能
+## Core Features
 
-**只输出调用链信息，不进行漏洞检测或安全建议。**
+**Outputs call-chain information only; performs no vulnerability detection or security recommendations.**
 
-输出内容包括：
-- **完整 HTTP 数据包** - Burp Suite 可直接使用的请求模板
-- **详细参数定义** - 每个参数的名称、类型、嵌套结构
-- **层级调用关系** - Controller → Service → DAO → 父类
-- **参数流向追踪** - 从 HTTP 入口到最终使用点的完整路径
-- **参数变量名追踪** - 同一参数在不同类中的变量名变化
-- **最终使用点标注** - 参数在最终层如何被使用
+Output includes:
+- **Complete HTTP request packet** - request template directly usable in Burp Suite
+- **Detailed parameter definitions** - name, type, and nested structure of each parameter
+- **Layer-by-layer call relationships** - Controller → Service → DAO → parent class
+- **Parameter flow tracing** - the complete path from the HTTP entry point to the final usage point
+- **Parameter variable-name tracing** - how the same parameter's variable name changes across classes
+- **Final usage point annotation** - how the parameter is used at the final layer
 
-## 适用漏洞类型
+## Applicable Vulnerability Types
 
-| 漏洞类型 | 追踪最终使用点 |
+| Vulnerability type | Traced final usage point |
 |:---------|:---------------|
-| SQL 注入 | `sql + param`、`Statement.execute()`、MyBatis `${}`、Hibernate HQL 拼接 |
-| 命令注入 | `Runtime.exec(cmd)`、`ProcessBuilder(cmd)` |
-| SSRF | `HttpClient.execute(url)`、`URL.openConnection()`、`RestTemplate` |
-| XSS | `response.getWriter().write()`、模板引擎输出、`@ResponseBody` |
-| 文件操作 | `new File(path)`、`FileInputStream()`、`Files.read()` |
-| XXE | `DocumentBuilder.parse()`、`SAXParser`、`XMLReader` |
-| 反序列化 | `ObjectInputStream.readObject()`、`JSON.parseObject()` |
-| LDAP 注入 | `DirContext.search(filter)`、`LdapTemplate` |
-| 表达式注入 | `SpelExpression.getValue()`、OGNL、MVEL、Freemarker |
-| 路径遍历 | `new File(basePath + userInput)`、`Paths.get()` |
+| SQL injection | `sql + param`, `Statement.execute()`, MyBatis `${}`, Hibernate HQL concatenation |
+| Command injection | `Runtime.exec(cmd)`, `ProcessBuilder(cmd)` |
+| SSRF | `HttpClient.execute(url)`, `URL.openConnection()`, `RestTemplate` |
+| XSS | `response.getWriter().write()`, template engine output, `@ResponseBody` |
+| File operations | `new File(path)`, `FileInputStream()`, `Files.read()` |
+| XXE | `DocumentBuilder.parse()`, `SAXParser`, `XMLReader` |
+| Deserialization | `ObjectInputStream.readObject()`, `JSON.parseObject()` |
+| LDAP injection | `DirContext.search(filter)`, `LdapTemplate` |
+| Expression injection | `SpelExpression.getValue()`, OGNL, MVEL, Freemarker |
+| Path traversal | `new File(basePath + userInput)`, `Paths.get()` |
 
 ---
 
-## 工作流程
+## Workflow
 
-### 1. 接收用户输入
+### 1. Receive user input
 
-用户提供：
-- **路由路径**：如 `/admin/user_login.action` 或 `/api/faceCapture`
-- **项目路径**：源码或反编译文件所在目录
+Provided by the user:
+- **Route path**: e.g. `/admin/user_login.action` or `/api/faceCapture`
+- **Project path**: directory containing source code or decompiled files
 
-### 2. 定位入口点与方法识别
+### 2. Locate the entry point and identify methods
 
-根据框架类型定位路由入口类：
+Locate the route entry class based on the framework type:
 
-| 框架 | 入口定位方式 |
+| Framework | Entry point location method |
 |:-----|:-------------|
-| Spring MVC | `@RequestMapping` 注解匹配 |
-| Struts 2 | struts.xml 中 action 配置 |
-| Servlet | web.xml 或 `@WebServlet` |
-| JAX-RS | `@Path` 注解匹配 |
+| Spring MVC | `@RequestMapping` annotation matching |
+| Struts 2 | action configuration in struts.xml |
+| Servlet | web.xml or `@WebServlet` |
+| JAX-RS | `@Path` annotation matching |
 
-**重要说明**：当入口类包含多个业务方法时（如 Web Service 有多个接口方法、Controller 有多个端点方法），技能会自动识别并追踪所有方法。详细实现策略请参考：[multi-method-tracing.md](references/multi-method-tracing.md)
+**Important note**: When the entry class contains multiple business methods (e.g., a Web Service with multiple interface methods, or a Controller with multiple endpoint methods), the skill automatically identifies and traces all of them. For the detailed implementation strategy, see: [multi-method-tracing.md](references/multi-method-tracing.md)
 
-### 2.1 多方法追踪执行流程（强制要求）
+### 2.1 Multi-method tracing execution flow (mandatory)
 
-**必须严格按照以下步骤执行，使用 TodoWrite 工具管理任务：**
+**You must strictly follow the steps below and use the TodoWrite tool to manage tasks:**
 
-#### 步骤 1: 统计所有方法
+#### Step 1: Count all methods
 
-首先扫描入口类，识别所有需要追踪的方法，输出方法清单：
+First scan the entry class, identify all methods that need tracing, and output the method list:
 
 ```
-正在扫描入口类: VehicleQueryServiceImpl
+Scanning entry class: VehicleQueryServiceImpl
 
-发现以下 10 个方法需要追踪:
+Found the following 10 methods to trace:
 1. getBasicQuery(searchJson, pageJson, extend)
 2. getAdvancedQuery(searchJson, pageJson, extend)
 3. getDetailQuery(searchJson, pageJson, extend)
 4. getStatisticsQuery(searchJson, pageJson, extend)
 5. getExportQuery(searchJson, pageJson, extend)
-... (列出所有方法)
+... (list all methods)
 10. getReportQuery(searchJson, pageJson, extend)
 
-共计: 10 个方法
+Total: 10 methods
 ```
 
-#### 步骤 2: 创建 TodoList 任务
+#### Step 2: Create TodoList tasks
 
-**必须使用 TodoWrite 工具，将每个方法添加为独立任务：**
+**You must use the TodoWrite tool to add each method as a separate task:**
 
 ```python
 TodoWrite([
-    {"content": "追踪方法 1/10: getBasicQuery", "status": "pending", "activeForm": "追踪 getBasicQuery"},
-    {"content": "追踪方法 2/10: getAdvancedQuery", "status": "pending", "activeForm": "追踪 getAdvancedQuery"},
-    {"content": "追踪方法 3/10: getDetailQuery", "status": "pending", "activeForm": "追踪 getDetailQuery"},
-    {"content": "追踪方法 4/10: getStatisticsQuery", "status": "pending", "activeForm": "追踪 getStatisticsQuery"},
-    # ... 所有 10 个方法
-    {"content": "追踪方法 10/10: getReportQuery", "status": "pending", "activeForm": "追踪 getReportQuery"},
-    {"content": "生成总索引文件", "status": "pending", "activeForm": "生成总索引"}
+    {"content": "Trace method 1/10: getBasicQuery", "status": "pending", "activeForm": "Trace getBasicQuery"},
+    {"content": "Trace method 2/10: getAdvancedQuery", "status": "pending", "activeForm": "Trace getAdvancedQuery"},
+    {"content": "Trace method 3/10: getDetailQuery", "status": "pending", "activeForm": "Trace getDetailQuery"},
+    {"content": "Trace method 4/10: getStatisticsQuery", "status": "pending", "activeForm": "Trace getStatisticsQuery"},
+    # ... all 10 methods
+    {"content": "Trace method 10/10: getReportQuery", "status": "pending", "activeForm": "Trace getReportQuery"},
+    {"content": "Generate the overall index file", "status": "pending", "activeForm": "Generate overall index"}
 ])
 ```
 
-#### 步骤 3: 逐个执行任务（优化策略）
+#### Step 3: Execute tasks one by one (optimization strategy)
 
-按照 TodoList 顺序执行每个任务，根据接口数量采用不同的追踪策略：
+Execute each task in TodoList order, adopting different tracing strategies based on the interface count:
 
-| 接口序号 | 追踪策略 | 报告内容 |
+| Interface index | Tracing strategy | Report content |
 |:---------|:---------|:---------|
-| 第 1 个接口 | 完整追踪链 | 包含所有层级、分支、变量追踪、可控性判定 |
-| 第 2 个及之后的接口 | 简化追踪链 | 必须包含：请求模板 + 该方法参数定义 + 调用链 + Sink识别 + 可控性判定 |
+| 1st interface | Full call chain | Includes all layers, branches, variable tracing, and controllability determination |
+| 2nd and later interfaces | Simplified call chain | Must include: request template + parameter definitions for this method + call chain + sink identification + controllability determination |
 
-**执行流程：**
-1. 将当前任务标记为 `in_progress`
-2. 根据接口序号选择追踪策略
-3. 生成相应类型的报告文件
-4. 将任务标记为 `completed`
-5. 继续下一个任务
+**Execution flow:**
+1. Mark the current task as `in_progress`
+2. Choose the tracing strategy based on the interface index
+3. Generate the corresponding type of report file
+4. Mark the task as `completed`
+5. Continue to the next task
 
 ```
---- 方法 1/10: getBasicQuery ---
-状态: in_progress
-[完整追踪链...]
-[生成报告: myproject_trace_getBasicQuery_20260205.md]
-状态: completed ✅
+--- Method 1/10: getBasicQuery ---
+Status: in_progress
+[Full call chain...]
+[Generate report: myproject_trace_getBasicQuery_20260205.md]
+Status: completed ✅
 
---- 方法 2/10: getAdvancedQuery ---
-状态: in_progress
-[简化追踪链...]
-[生成报告: myproject_trace_getAdvancedQuery_20260205.md (简化版)]
-状态: completed ✅
+--- Method 2/10: getAdvancedQuery ---
+Status: in_progress
+[Simplified call chain...]
+[Generate report: myproject_trace_getAdvancedQuery_20260205.md (simplified)]
+Status: completed ✅
 
---- 方法 3/10: getDetailQuery ---
-状态: in_progress
-[简化追踪链...]
-[生成报告: myproject_trace_getDetailQuery_20260205.md (简化版)]
-状态: completed ✅
+--- Method 3/10: getDetailQuery ---
+Status: in_progress
+[Simplified call chain...]
+[Generate report: myproject_trace_getDetailQuery_20260205.md (simplified)]
+Status: completed ✅
 
-... 继续直到所有任务完成 ...
+... Continue until all tasks are complete ...
 ```
 
-#### 步骤 4: 完成验证
+#### Step 4: Completion verification
 
-所有方法追踪完成后：
+After all methods have been traced:
 
-1. 生成总索引文件
-2. 验证生成的文件数量
-3. 输出完成报告
+1. Generate the overall index file
+2. Verify the number of generated files
+3. Output the completion report
 
 ```bash
-# 验证命令
+# Verification command
 ls route_tracer/{route_name}/*.md | wc -l
-# 期望结果: 11 (10个方法报告 + 1个总索引)
+# Expected result: 11 (10 method reports + 1 overall index)
 ```
 
-### 2.2 中断恢复机制
+### 2.2 Interruption recovery mechanism
 
-**如果执行中断，下次继续时必须：**
+**If execution is interrupted, upon resuming you must:**
 
-1. 检查已生成的报告文件
-2. 对比方法清单，识别未完成的方法
-3. 只为未完成的方法创建 TodoList 任务
-4. 继续执行
+1. Check the report files already generated
+2. Compare against the method list and identify unfinished methods
+3. Create TodoList tasks only for the unfinished methods
+4. Continue execution
 
 ```python
-# 检查已完成的方法
+# Check completed methods
 existing_files = ls("/path/to/route_tracer/{route_name}/*.md")
 completed_methods = [extract_method_name(f) for f in existing_files]
 
-# 创建剩余任务
+# Create remaining tasks
 remaining_tasks = []
 for method in all_methods:
     if method not in completed_methods:
         remaining_tasks.append({
-            "content": f"追踪方法: {method}",
+            "content": f"Trace method: {method}",
             "status": "pending",
-            "activeForm": f"追踪 {method}"
+            "activeForm": f"Trace {method}"
         })
 
 TodoWrite(remaining_tasks)
 ```
 
-### 2.3 强制规则
+### 2.3 Mandatory rules
 
-| 规则 | 说明 |
+| Rule | Description |
 |:-----|:-----|
-| **必须统计** | 开始前必须统计并输出所有方法数量 |
-| **必须用 TodoList** | 必须使用 TodoWrite 将每个方法添加为任务 |
-| **接口优化策略** | 当接口数量 > 3 时，采用以下优化方案：<br>- 第 1 个接口：生成完整调用链追踪（包含所有层级、分支、变量追踪）<br>- 第 2 个及之后的接口：只生成完整 Burp Suite 数据包 + 简单追踪链（不包含详细代码和分支判定） |
-| **必须标记状态** | 每个任务完成后立即标记为 completed |
-| **禁止提前结束** | TodoList 中有 pending 任务时禁止结束 |
-| **必须验证数量** | 结束前必须验证生成的文件数量 |
+| **Must count** | Before starting, you must count and output the total number of methods |
+| **Must use TodoList** | You must use TodoWrite to add each method as a task |
+| **Interface optimization strategy** | When the interface count > 3, adopt the following optimization:<br>- 1st interface: generate a full call-chain trace (including all layers, branches, and variable tracing)<br>- 2nd and later interfaces: generate only the complete Burp Suite packet + a simple call chain (without detailed code or branch determination) |
+| **Must mark status** | Mark each task as completed immediately after it finishes |
+| **No early termination** | Do not finish while pending tasks remain in the TodoList |
+| **Must verify count** | Before finishing, you must verify the number of generated files |
 
-### 2.4 文件生成规则（强制）
+### 2.4 File generation rules (mandatory)
 
-**所有接口数量统一使用以下策略，无需分批处理：**
+**Use the following strategy uniformly for all interface counts; no batching is needed:**
 
-| 接口序号 | 报告类型 | 内容 |
+| Interface index | Report type | Content |
 |:---------|:---------|:-----|
-| 第 1 个 | 完整版 | 所有层级、分支、变量追踪、可控性判定（约 20000-30000 字符） |
-| 第 2 个及之后 | 简化版 | 请求模板 + 该方法参数定义 + 调用链 + Sink识别 + 可控性判定（约 2000-4000 字符） |
+| 1st | Full version | All layers, branches, variable tracing, controllability determination (approx. 20,000-30,000 characters) |
+| 2nd and later | Simplified version | Request template + parameter definitions for this method + call chain + sink identification + controllability determination (approx. 2,000-4,000 characters) |
 
-**文件命名规范：**
+**File naming convention:**
 
-| 规则 | 格式 |
+| Rule | Format |
 |:-----|:-----|
-| ✅ 正确 | `{项目名}_trace_{方法名}_{时间戳}.md` |
-| ❌ 错误 | `{方法名}_{时间戳}.md` （缺少项目前缀） |
+| ✅ Correct | `{project_name}_trace_{method_name}_{timestamp}.md` |
+| ❌ Incorrect | `{method_name}_{timestamp}.md` (missing project prefix) |
 
-**变量替换检查（强制）：**
+**Variable substitution check (mandatory):**
 
-生成每个简化版报告时，必须确保以下内容被正确替换（禁止保留模板变量）：
+When generating each simplified report, you must ensure the following are correctly substituted (template variables must not remain):
 
-| 检查项 | 错误示例 | 正确示例 |
+| Check item | Incorrect example | Correct example |
 |:-------|:---------|:---------|
-| 方法名 | `${method}` | `getRegionWanderSearchCount` |
-| 路由路径 | `/api/${method}` | `/itc/ws/carQuery` → `getRegionWanderSearchCount` |
-| 服务实现类 | `${ServiceImpl}` | `CarQueryServiceImpl` |
-| SOAP 方法标签 | `<web:${method}>` | `<web:getRegionWanderSearchCount>` |
-| 调用链方法 | `${ServiceImpl}.${method}()` | `CarQueryServiceImpl.getRegionWanderSearchCount()` |
+| Method name | `${method}` | `getRegionWanderSearchCount` |
+| Route path | `/api/${method}` | `/itc/ws/carQuery` → `getRegionWanderSearchCount` |
+| Service implementation class | `${ServiceImpl}` | `CarQueryServiceImpl` |
+| SOAP method tag | `<web:${method}>` | `<web:getRegionWanderSearchCount>` |
+| Call-chain method | `${ServiceImpl}.${method}()` | `CarQueryServiceImpl.getRegionWanderSearchCount()` |
 
-**文件内容验证：**
+**File content verification:**
 
-生成每个文件后，必须检查：
-1. **文件名**包含项目前缀（如 `myproject_trace_`）
-2. **文件内容**中不包含任何 `${...}` 形式的未替换变量
-3. **方法名**在报告标题、数据包、调用链中都正确显示
+After generating each file, you must check:
+1. The **file name** contains the project prefix (e.g. `myproject_trace_`)
+2. The **file content** contains no unsubstituted variables in the form `${...}`
+3. The **method name** is correctly displayed in the report title, packet, and call chain
 
-### 2.5 简化版必须包含内容（强制）
+### 2.5 Required content of the simplified version (mandatory)
 
-| 必须包含 | 说明 | 不可省略 |
+| Must include | Description | Cannot omit |
 |:---------|:-----|:---------|
-| HTTP/SOAP 请求模板 | 占位符格式 `{{param}}`，用于说明结构 | ✅ |
-| **测试用数据包示例** | **包含实际测试值的完整数据包，可直接用于Burp测试** | ✅ |
-| **该方法特有的参数定义表** | 从该方法代码签名读取，不可假设 | ✅ |
-| 调用链层级图 | [L1] → [L2] → [Sink] 格式 | ✅ |
-| **Sink 识别** | 识别该方法的最终使用点类型 | ✅ |
-| **可控性判定结论** | 该方法参数的可控性判定 | ✅ |
+| HTTP/SOAP request template | Placeholder format `{{param}}`, used to show the structure | ✅ |
+| **Test packet example** | **Complete packet with actual test values, directly usable for Burp testing** | ✅ |
+| **Parameter definition table specific to this method** | Read from the method's code signature; do not assume | ✅ |
+| Call-chain layer diagram | [L1] → [L2] → [Sink] format | ✅ |
+| **Sink identification** | Identify the final usage point type of this method | ✅ |
+| **Controllability conclusion** | Controllability determination for this method's parameters | ✅ |
 
-### 2.5.1 测试数据包生成规则（强制）
+### 2.5.1 Test packet generation rules (mandatory)
 
-**测试数据包必须包含实际可测试的值，禁止使用占位符：**
+**Test packets must contain actual testable values; placeholders are forbidden:**
 
-| Java类型 | 占位符（禁止） | 实际值生成规则 |
+| Java type | Placeholder (forbidden) | Actual value generation rule |
 |:---------|:---------------|:---------------|
-| String (ID类) | `{{userId}}` | 数字字符串如 `1001` |
-| String (名称类) | `{{name}}` | 有意义的测试值如 `testUser` |
-| String (日期类) | `{{date}}` | 标准格式如 `2026-01-01` |
-| String (路径类) | `{{path}}` | 合法路径如 `/tmp/test.txt` |
-| String (URL类) | `{{url}}` | 完整URL如 `http://example.com/api` |
-| int/Integer | `{{count}}` | 数字如 `10` |
-| boolean/Boolean | `{{flag}}` | `true` 或 `false` |
-| JSON字符串 | `{{xxxJson}}` | 完整JSON如 `{"id":"1","name":"test"}` |
+| String (ID type) | `{{userId}}` | Numeric string such as `1001` |
+| String (name type) | `{{name}}` | Meaningful test value such as `testUser` |
+| String (date type) | `{{date}}` | Standard format such as `2026-01-01` |
+| String (path type) | `{{path}}` | Legal path such as `/tmp/test.txt` |
+| String (URL type) | `{{url}}` | Full URL such as `http://example.com/api` |
+| int/Integer | `{{count}}` | Number such as `10` |
+| boolean/Boolean | `{{flag}}` | `true` or `false` |
+| JSON string | `{{xxxJson}}` | Full JSON such as `{"id":"1","name":"test"}` |
 
-**生成测试值的方法：**
+**How to generate test values:**
 
-1. **从代码中提取** - 查找代码注释、单元测试、示例数据中的值
-2. **从字段语义推断** - 根据字段名含义生成合理值（如 `email` → `test@example.com`）
-3. **从类型推断** - String用描述性文本，数字用合理范围值
-4. **使用通用安全测试值** - 避免特殊字符，确保请求可正常发送
+1. **Extract from code** - look for values in code comments, unit tests, or sample data
+2. **Infer from field semantics** - generate reasonable values from the field name's meaning (e.g. `email` → `test@example.com`)
+3. **Infer from type** - use descriptive text for String and reasonable range values for numbers
+4. **Use common safe test values** - avoid special characters and ensure the request can be sent normally
 
-### 2.6 方法参数独立检查规则（强制）
+### 2.6 Independent method-parameter check rules (mandatory)
 
-**在追踪每个方法时，必须执行以下步骤，禁止跳过：**
+**When tracing each method, you must perform the following steps; skipping is forbidden:**
 
-#### 步骤1：读取该方法的实际代码签名
+#### Step 1: Read the method's actual code signature
 
-必须读取实际代码获取真实参数，禁止假设：
+You must read the actual code to obtain the real parameters; assumptions are forbidden:
 
 ```
-方法A: getDictionaryAll(String codeTypes)           → 1个参数
-方法B: getCommonQuery(String searchJson, ...)       → 3个参数
-方法C: executeCommand(String cmd, String args)      → 2个参数
+Method A: getDictionaryAll(String codeTypes)           → 1 parameter
+Method B: getCommonQuery(String searchJson, ...)       → 3 parameters
+Method C: executeCommand(String cmd, String args)      → 2 parameters
 ```
 
-#### 步骤2：独立追踪该方法的调用链到 Sink
+#### Step 2: Independently trace the method's call chain to the sink
 
-不同方法可能有不同的 Sink 类型：
+Different methods may have different sink types:
 
-| 方法示例 | 调用链 | Sink 类型 |
+| Example method | Call chain | Sink type |
 |:---------|:-------|:----------|
-| getCommonQuery | → DAO → SQL执行 | SQL |
+| getCommonQuery | → DAO → SQL execution | SQL |
 | executeTask | → Runtime.exec() | COMMAND |
 | fetchUrl | → HttpClient.get() | HTTP |
 | parseXml | → DocumentBuilder.parse() | XML |
-| getDictionaryAll | → Map.get() | 无敏感Sink |
+| getDictionaryAll | → Map.get() | No sensitive sink |
 
-#### 步骤3：判定该方法参数的可控性
+#### Step 3: Determine the controllability of the method's parameters
 
-根据该方法实际追踪到的 Sink 类型进行判定：
+Determine based on the sink type actually traced for this method:
 
-| Sink 类型 | 判定要点 |
+| Sink type | Determination criteria |
 |:----------|:---------|
-| SQL | 参数是否拼接到 SQL |
-| COMMAND | 参数是否传递到命令执行 |
-| HTTP | 参数是否用于构造 URL |
-| FILE | 参数是否用于文件路径 |
-| XML | 参数是否传递到 XML 解析器 |
-| 无敏感Sink | 标注"无敏感操作" |
+| SQL | Whether the parameter is concatenated into SQL |
+| COMMAND | Whether the parameter is passed to command execution |
+| HTTP | Whether the parameter is used to construct a URL |
+| FILE | Whether the parameter is used for a file path |
+| XML | Whether the parameter is passed to an XML parser |
+| No sensitive sink | Mark as "no sensitive operation" |
 
-#### 步骤4：输出该方法的独立判定结果
+#### Step 4: Output the independent determination result for this method
 
-**禁止行为：**
-- ❌ 禁止写"参考第1个接口的参数定义"
-- ❌ 禁止复用其他方法的可控性结论
-- ❌ 禁止假设所有方法都有相同的参数或 Sink 类型
+**Forbidden behavior:**
+- ❌ Do not write "refer to the parameter definitions of the 1st interface"
+- ❌ Do not reuse the controllability conclusions of other methods
+- ❌ Do not assume all methods have the same parameters or sink types
 
-### 2.7 简化版生成前检查清单（每个方法必须执行）
+### 2.7 Pre-generation checklist for the simplified version (must be executed for each method)
 
-| # | 检查项 | 必须执行 |
+| # | Check item | Mandatory |
 |:--|:-------|:---------|
-| 1 | 读取该方法的代码签名，获取实际参数列表 | ☐ |
-| 2 | 追踪该方法的调用链到最终使用点 | ☐ |
-| 3 | 识别该方法的 Sink 类型（SQL/COMMAND/HTTP/FILE/XML/无） | ☐ |
-| 4 | 判定该方法参数的可控性 | ☐ |
-| 5 | 输出该方法的可控性判定表 | ☐ |
+| 1 | Read the method's code signature and obtain the actual parameter list | ☐ |
+| 2 | Trace the method's call chain to the final usage point | ☐ |
+| 3 | Identify the method's sink type (SQL/COMMAND/HTTP/FILE/XML/none) | ☐ |
+| 4 | Determine the controllability of the method's parameters | ☐ |
+| 5 | Output the controllability determination table for this method | ☐ |
 
-### 3. 追踪调用链
+### 3. Trace the call chain
 
-从入口方法开始，逐层追踪：
+Starting from the entry method, trace layer by layer:
 
 ```
-Controller/Action 层
-    ↓ 调用
-Service/Manager 层
-    ↓ 调用
-DAO/Repository 层
-    ↓ 执行
-SQL/数据库操作
+Controller/Action layer
+    ↓ calls
+Service/Manager layer
+    ↓ calls
+DAO/Repository layer
+    ↓ executes
+SQL/database operations
 ```
 
-**追踪规则：**
+**Tracing rules:**
 
-1. **识别方法调用** - 检查方法体中的 `this.xxx()` 或注入对象的方法调用
-2. **跟踪依赖注入** - 识别 `@Autowired`、`@Resource`、构造器注入的对象
-3. **追踪父类方法** - 如果调用 `super.xxx()` 或继承方法，追踪到父类
-4. **记录参数传递** - 记录参数如何从上层传递到下层
+1. **Identify method calls** - check `this.xxx()` calls in the method body or method calls on injected objects
+2. **Follow dependency injection** - identify objects injected via `@Autowired`, `@Resource`, or constructor injection
+3. **Trace parent-class methods** - if `super.xxx()` or an inherited method is called, trace to the parent class
+4. **Record parameter passing** - record how parameters are passed from upper to lower layers
 
-### 4. 反编译支持
+### 4. Decompilation support
 
-当源码不可用时，使用 java-decompile-mcp 反编译：
+When source code is unavailable, decompile with java-decompile-mcp:
 
 ```python
-# 反编译单个文件
+# Decompile a single file
 mcp__java-decompile-mcp__decompile_file(
     file_path="/path/to/SomeClass.class",
     output_dir="/path/to/output",
     save_to_file=True
 )
 
-# 反编译目录
+# Decompile a directory
 mcp__java-decompile-mcp__decompile_directory(
     directory_path="/path/to/classes",
     output_dir="/path/to/output",
@@ -352,7 +355,7 @@ mcp__java-decompile-mcp__decompile_directory(
     max_workers=4
 )
 
-# 批量反编译
+# Batch decompile
 mcp__java-decompile-mcp__decompile_files(
     file_paths=["/path/to/A.class", "/path/to/B.class"],
     output_dir="/path/to/output",
@@ -362,27 +365,27 @@ mcp__java-decompile-mcp__decompile_files(
 
 ---
 
-## 输出格式
+## Output Format
 
-**严格按照 references/ 目录中的填充式模板生成输出文件。**
+**Strictly follow the fill-in templates in the references/ directory to generate output files.**
 
-| 场景 | 模板 | 文件命名 |
+| Scenario | Template | File naming |
 |------|------|---------|
-| 第 1 个接口（完整版） | [OUTPUT_TEMPLATE_FULL.md](references/OUTPUT_TEMPLATE_FULL.md) | `{project_name}_trace_{method_name}_{YYYYMMDD_HHMMSS}.md` |
-| 第 2+ 个接口（简化版） | [OUTPUT_TEMPLATE_SIMPLE.md](references/OUTPUT_TEMPLATE_SIMPLE.md) | `{project_name}_trace_{method_name}_{YYYYMMDD_HHMMSS}.md` |
-| 多方法索引 | [OUTPUT_TEMPLATE_INDEX.md](references/OUTPUT_TEMPLATE_INDEX.md) | `{project_name}_trace_all_methods_{YYYYMMDD_HHMMSS}.md` |
+| 1st interface (full version) | [OUTPUT_TEMPLATE_FULL.md](references/OUTPUT_TEMPLATE_FULL.md) | `{project_name}_trace_{method_name}_{YYYYMMDD_HHMMSS}.md` |
+| 2nd+ interfaces (simplified version) | [OUTPUT_TEMPLATE_SIMPLE.md](references/OUTPUT_TEMPLATE_SIMPLE.md) | `{project_name}_trace_{method_name}_{YYYYMMDD_HHMMSS}.md` |
+| Multi-method index | [OUTPUT_TEMPLATE_INDEX.md](references/OUTPUT_TEMPLATE_INDEX.md) | `{project_name}_trace_all_methods_{YYYYMMDD_HHMMSS}.md` |
 
-**关键规则：**
-- 所有【填写】占位符必须替换为实际内容
-- 每个方法必须独立追踪到 Sink，禁止复用其他方法结论
-- 多方法路由必须生成索引文件
-- 通用规范参考: [shared/OUTPUT_STANDARD.md](../shared/OUTPUT_STANDARD.md)
+**Key Rules:**
+- All [FILL IN] placeholders must be replaced with actual content
+- Each method must be traced independently to the sink; reusing conclusions from other methods is forbidden
+- Multi-method routes must generate an index file
+- Common specification reference: [shared/OUTPUT_STANDARD.md](../shared/OUTPUT_STANDARD.md)
 
-### 单方法路由
+### Single-method route
 
-**文件命名：** `{项目名}_audit/route_tracer/{路由名}/{项目名}_trace_{路由标识}_{时间戳}.md`
+**File naming:** `{project-name}_audit/route_tracer/{route-name}/{project-name}_trace_{route-id}_{timestamp}.md`
 
-**目录结构：**
+**Directory structure:**
 ```
 {project_name}_audit/
 └── route_tracer/
@@ -390,88 +393,88 @@ mcp__java-decompile-mcp__decompile_files(
         └── {project_name}_trace_{route_id}_20260204.md
 ```
 
-### 多接口方法路由（重要）
+### Multi-interface method routes (important)
 
-**当入口类包含多个业务方法时（如 Web Service、Controller 有多个端点），必须为每个方法生成独立的追踪报告文件。**
+**When the entry class contains multiple business methods (e.g., a Web Service or a Controller with multiple endpoints), you must generate a separate trace report file for each method.**
 
-**文件命名规则：**
-- 单个方法报告：`{项目名}_trace_{方法名}_{时间戳}.md`
-- 总索引报告：`{项目名}_trace_all_methods_{时间戳}.md`
+**File naming rules:**
+- Single method report: `{project-name}_trace_{method-name}_{timestamp}.md`
+- Overall index report: `{project-name}_trace_all_methods_{timestamp}.md`
 
-**目录结构：**
+**Directory structure:**
 ```
 {project_name}_audit/
 └── route_tracer/
     └── {route_name}/
-        ├── {project_name}_trace_getBasicQuery_20260204.md        # 方法1
-        ├── {project_name}_trace_getAdvancedQuery_20260204.md     # 方法2
-        ├── {project_name}_trace_getDetailQuery_20260204.md       # 方法3
-        ├── {project_name}_trace_getImageQuery_20260204.md        # 方法N
-        ├── ... (每个方法一个独立文件)
-        └── {project_name}_trace_all_methods_20260204.md           # 总索引
+        ├── {project_name}_trace_getBasicQuery_20260204.md        # method 1
+        ├── {project_name}_trace_getAdvancedQuery_20260204.md     # method 2
+        ├── {project_name}_trace_getDetailQuery_20260204.md       # method 3
+        ├── {project_name}_trace_getImageQuery_20260204.md        # method N
+        ├── ... (one separate file per method)
+        └── {project_name}_trace_all_methods_20260204.md           # overall index
 ```
 
-**路由名说明：**
-- 路由名从路由路径提取，去掉前缀斜杠和特殊字符
-- 例如：`/itc/ws/carQuery` → `itc_ws_carQuery`
-- 例如：`/api/user/login.action` → `api_user_login`
+**Route Name Notes:**
+- Route names are extracted from the route path, stripping leading slashes and special characters
+- For example: `/itc/ws/carQuery` → `itc_ws_carQuery`
+- For example: `/api/user/login.action` → `api_user_login`
 
-**执行流程：**
+**Execution flow:**
 ```
-正在扫描入口类: VehicleQueryServiceImpl
+Scanning entry class: VehicleQueryServiceImpl
 
-✅ 发现 10 个入口方法
+✅ Found 10 entry methods
 
---- 方法 1/10: getBasicQuery ---
-[生成独立报告: myproject_trace_getBasicQuery_20260204.md]
+--- Method 1/10: getBasicQuery ---
+[Generate separate report: myproject_trace_getBasicQuery_20260204.md]
 
---- 方法 2/10: getAdvancedQuery ---
-[生成独立报告: myproject_trace_getAdvancedQuery_20260204.md]
+--- Method 2/10: getAdvancedQuery ---
+[Generate separate report: myproject_trace_getAdvancedQuery_20260204.md]
 
 ...
 
-✅ 所有 10 个方法追踪完成
-✅ 生成总索引: myproject_trace_all_methods_20260204.md
+✅ All 10 methods traced
+✅ Generated overall index: myproject_trace_all_methods_20260204.md
 ```
 
-**总索引报告内容：**
+**Overall index report content:**
 ```markdown
-# /api/ws/vehicleQuery Web Service 所有方法追踪索引
+# /api/ws/vehicleQuery Web Service All-Method Tracing Index
 
-生成时间: 2026-02-04
-入口类: VehicleQueryServiceImpl
-方法总数: 10
+Generated: 2026-02-04
+Entry class: VehicleQueryServiceImpl
+Total methods: 10
 
-## 方法清单
+## Method list
 
-| # | 方法名 | 参数列表 | 详细报告 |
+| # | Method name | Parameter list | Detailed report |
 |:--|:-------|:---------|:---------|
-| 1 | getBasicQuery | searchJson, pageJson, extend | [查看](myproject_trace_getBasicQuery_20260204.md) |
-| 2 | getAdvancedQuery | searchJson, pageJson, extend | [查看](myproject_trace_getAdvancedQuery_20260204.md) |
-| 3 | getDetailQuery | searchJson, pageJson, extend | [查看](myproject_trace_getDetailQuery_20260204.md) |
+| 1 | getBasicQuery | searchJson, pageJson, extend | [View](myproject_trace_getBasicQuery_20260204.md) |
+| 2 | getAdvancedQuery | searchJson, pageJson, extend | [View](myproject_trace_getAdvancedQuery_20260204.md) |
+| 3 | getDetailQuery | searchJson, pageJson, extend | [View](myproject_trace_getDetailQuery_20260204.md) |
 | ... | ... | ... | ... |
 ```
 
-详细实现策略请参考：[multi-method-tracing.md](references/multi-method-tracing.md)
+For the detailed implementation strategy, see: [multi-method-tracing.md](references/multi-method-tracing.md)
 
-### 输出模板
+### Output templates
 
-#### 完整追踪链（适用于第 1 个接口）
+#### Full trace chain (for the 1st interface)
 
-完整的调用链追踪报告，包含所有层级、分支、变量追踪等内容。
+A complete call-chain trace report containing all layers, branches, variable tracing, and so on.
 
 ````markdown
-# 路由调用链追踪报告
+# Route Call-Chain Trace Report
 
-**追踪路由**: `/admin/image/getImageCapture.action`
-**生成时间**: 2026-02-04
-**项目路径**: /path/to/project
+**Traced route**: `/admin/image/getImageCapture.action`
+**Generated**: 2026-02-04
+**Project path**: /path/to/project
 
 ---
 
-## 1. HTTP 请求数据包
+## 1. HTTP request packet
 
-### 1.1 完整请求模板
+### 1.1 Complete request template
 
 ```http
 POST /admin/image/getImageCapture.action HTTP/1.1
@@ -482,35 +485,35 @@ Cookie: JSESSIONID={{session}}
 searchJson={{searchJson}}&pageJson={{pageJson}}&extend={{extend}}
 ```
 
-### 1.2 参数详细定义
+### 1.2 Detailed parameter definitions
 
-#### 顶层参数
+#### Top-level parameters
 
-| 参数名 | Java类型 | HTTP位置 | 必填 | 说明 |
+| Parameter name | Java type | HTTP location | Required | Description |
 |:-------|:---------|:---------|:-----|:-----|
-| searchJson | String | Body | 是 | JSON格式，反序列化为 ImageCaptureBean |
-| pageJson | String | Body | 是 | JSON格式，反序列化为 Page<ImageCapture> |
-| extend | String | Body | 否 | 扩展参数 |
+| searchJson | String | Body | Yes | JSON format, deserialized into ImageCaptureBean |
+| pageJson | String | Body | Yes | JSON format, deserialized into Page<ImageCapture> |
+| extend | String | Body | No | Extended parameters |
 
-#### pageJson 内部结构 (Page<ImageCapture>)
+#### Internal structure of pageJson (Page<ImageCapture>)
 
-| 字段名 | Java类型 | 说明 | 最终使用位置 |
+| Field name | Java type | Description | Final usage location |
 |:-------|:---------|:-----|:-------------|
-| orderBy | String | 排序字段 | **AbstractDao.findSql():234 - SQL拼接** |
-| order | String | 排序方向 (asc/desc) | **AbstractDao.findSql():234 - SQL拼接** |
-| pageSize | int | 每页条数 | 分页查询 |
-| currentPage | int | 当前页码 | 分页查询 |
+| orderBy | String | Sort field | **AbstractDao.findSql():234 - SQL concatenation** |
+| order | String | Sort direction (asc/desc) | **AbstractDao.findSql():234 - SQL concatenation** |
+| pageSize | int | Records per page | Paginated query |
+| currentPage | int | Current page number | Paginated query |
 
-#### searchJson 内部结构 (ImageCaptureBean)
+#### Internal structure of searchJson (ImageCaptureBean)
 
-| 字段名 | Java类型 | 说明 |
+| Field name | Java type | Description |
 |:-------|:---------|:-----|
-| userBean | UserBean | 用户信息对象 |
-| startTime | String | 开始时间 |
-| endTime | String | 结束时间 |
-| deviceIds | List<String> | 设备ID列表 |
+| userBean | UserBean | User information object |
+| startTime | String | Start time |
+| endTime | String | End time |
+| deviceIds | List<String> | Device ID list |
 
-### 1.3 测试用数据包示例
+### 1.3 Test packet example
 
 ```http
 POST /admin/image/getImageCapture.action HTTP/1.1
@@ -523,27 +526,27 @@ searchJson={"userBean":{"loginName":"admin"},"startTime":"2026-01-01","endTime":
 
 ---
 
-## 2. 调用链层级追踪
+## 2. Layer-by-layer call-chain tracing
 
-### [Level 1] Action 入口层
+### [Level 1] Action entry layer
 
-**文件**: `com/example/web/action/ImageCaptureAction.java:125`
-**类名**: `ImageCaptureAction`
-**方法签名**:
+**File**: `com/example/web/action/ImageCaptureAction.java:125`
+**Class**: `ImageCaptureAction`
+**Method signature**:
 ```java
 public String getImageCapture(String searchJson, String pageJson, String extend)
 ```
 
-**完整代码:**
+**Full code:**
 ```java
 public String getImageCapture(String searchJson, String pageJson, String extend) {
-    // pageJson 反序列化为 Page 对象
+    // Deserialize pageJson into a Page object
     Page<ImageCapture> page = (Page)JsonUtils.fromJson(pageJson, (new TypeToken<Page<ImageCapture>>() {
     }).getType(), (String)null);
 
     this.defaultImageCaptureSearchOrder(page);
 
-    // searchJson 反序列化为 ImageCaptureBean 对象
+    // Deserialize searchJson into an ImageCaptureBean object
     ImageCaptureBean searchBean = (ImageCaptureBean)JsonUtils.fromJson(searchJson, ImageCaptureBean.class, (String)null);
 
     if (searchBean.getUserBean() != null && StringUtil.isEmpty(searchBean.getUserBean().getHostLoginIp())) {
@@ -559,7 +562,7 @@ public String getImageCapture(String searchJson, String pageJson, String extend)
     }).getType(), new Object[]{page, searchBean});
 
     if (json == null) {
-        // 关键调用: 传递 searchBean, page, extend 到 Manager 层
+        // Key call: pass searchBean, page, extend to the Manager layer
         json = this.imageCaptureManager.getImageCaptureJson(searchBean, page, extend);
     }
 
@@ -567,113 +570,113 @@ public String getImageCapture(String searchJson, String pageJson, String extend)
 }
 ```
 
-**参数转换:**
+**Parameter conversion:**
 
-| HTTP参数 | 转换后类型 | 转换后变量名 | 传递到下一层 |
+| HTTP parameter | Converted type | Converted variable name | Passed to next layer |
 |:---------|:-----------|:-------------|:-------------|
 | pageJson (String) | Page<ImageCapture> | page | ✅ |
 | searchJson (String) | ImageCaptureBean | searchBean | ✅ |
 | extend (String) | String | extend | ✅ |
 
-**Page对象关键字段:**
-- `page.orderBy` ← pageJson.orderBy (String类型)
-- `page.order` ← pageJson.order (String类型)
+**Key fields of the Page object:**
+- `page.orderBy` ← pageJson.orderBy (String type)
+- `page.order` ← pageJson.order (String type)
 
-**下一层调用**: `this.imageCaptureManager.getImageCaptureJson(searchBean, page, extend)`
+**Next-layer call**: `this.imageCaptureManager.getImageCaptureJson(searchBean, page, extend)`
 
 ---
 
-### [Level 2] Manager 服务层
+### [Level 2] Manager service layer
 
-**文件**: `com/example/service/ImageCaptureManager.java:89`
-**类名**: `ImageCaptureManager`
-**方法签名**:
+**File**: `com/example/service/ImageCaptureManager.java:89`
+**Class**: `ImageCaptureManager`
+**Method signature**:
 ```java
 public String getImageCaptureJson(ImageCaptureBean searchBean, Page<ImageCapture> page, String extend)
 ```
 
-**完整代码:**
+**Full code:**
 ```java
 public String getImageCaptureJson(ImageCaptureBean searchBean, Page<ImageCapture> page, String extend) {
-    // 关键调用: 将 page 传递给 DAO 层
+    // Key call: pass page to the DAO layer
     Page<ImageCapture> result = this.imageCaptureDao.getImageCapturePage(searchBean, page);
     return JsonUtils.toJson(result);
 }
 ```
 
-**参数传递:**
+**Parameter passing:**
 
-| 接收参数 | 类型 | 传递到下一层 |
+| Received parameter | Type | Passed to next layer |
 |:---------|:-----|:-------------|
 | searchBean | ImageCaptureBean | ✅ |
-| page | Page<ImageCapture> | ✅ (含 orderBy, order) |
-| extend | String | ❌ (未传递) |
+| page | Page<ImageCapture> | ✅ (includes orderBy, order) |
+| extend | String | ❌ (not passed) |
 
-**下一层调用**: `this.imageCaptureDao.getImageCapturePage(searchBean, page)`
+**Next-layer call**: `this.imageCaptureDao.getImageCapturePage(searchBean, page)`
 
 ---
 
-### [Level 3] DAO 数据访问层
+### [Level 3] DAO data-access layer
 
-**文件**: `com/example/dao/ImageCaptureDao.java:56`
-**类名**: `ImageCaptureDao`
-**父类**: `AbstractDao<ImageCapture>`
-**方法签名**:
+**File**: `com/example/dao/ImageCaptureDao.java:56`
+**Class**: `ImageCaptureDao`
+**Parent class**: `AbstractDao<ImageCapture>`
+**Method signature**:
 ```java
 public Page<ImageCapture> getImageCapturePage(ImageCaptureBean searchBean, Page<ImageCapture> page)
 ```
 
-**完整代码:**
+**Full code:**
 ```java
 public Page<ImageCapture> getImageCapturePage(ImageCaptureBean searchBean, Page<ImageCapture> page) {
     String sql = buildQuerySql(searchBean);
-    // 关键调用: 调用父类 AbstractDao.findSql()，传入 page 对象
+    // Key call: call the parent class AbstractDao.findSql(), passing the page object
     return super.findSql(sql, page);
 }
 ```
 
-**参数传递:**
+**Parameter passing:**
 
-| 接收参数 | 类型 | 传递到下一层 |
+| Received parameter | Type | Passed to next layer |
 |:---------|:-----|:-------------|
-| searchBean | ImageCaptureBean | ❌ (用于构建SQL) |
-| page | Page<ImageCapture> | ✅ (传递给父类) |
+| searchBean | ImageCaptureBean | ❌ (used to build SQL) |
+| page | Page<ImageCapture> | ✅ (passed to parent class) |
 
-**下一层调用**: `super.findSql(sql, page)` → 父类 `AbstractDao.findSql()`
+**Next-layer call**: `super.findSql(sql, page)` → parent class `AbstractDao.findSql()`
 
 ---
 
-### [Level 4] 父类基础层 (最终使用点)
+### [Level 4] Parent base layer (final usage point)
 
-**文件**: `com/example/dao/base/AbstractDao.java:234`
-**类名**: `AbstractDao<T>`
-**方法签名**:
+**File**: `com/example/dao/base/AbstractDao.java:234`
+**Class**: `AbstractDao<T>`
+**Method signature**:
 ```java
 protected Page<T> findSql(String sql, Page<T> page)
 ```
 
-**完整代码:**
+**Full code:**
 ```java
 protected Page<T> findSql(String sql, Page<T> page) {
     if (page.getOrderBy() != null) {
-        // ⚠️ 最终使用点: orderBy 和 order 直接拼接到 SQL 语句
+        // ⚠️ Final usage point: orderBy and order are concatenated directly into the SQL statement
         sql = sql + " ORDER BY " + page.getOrderBy() + " " + page.getOrder();
     }
-    // 执行 SQL 查询
+    // Execute the SQL query
     return executeQuery(sql, page);
 }
 ```
 
-**参数最终使用:**
+**Final parameter usage:**
 
-| 参数 | 类型 | 使用方式 | 代码位置 |
+| Parameter | Type | Usage | Code location |
 |:-----|:-----|:---------|:---------|
-| page.getOrderBy() | String | **直接拼接到 SQL** | AbstractDao.java:235 |
-| page.getOrder() | String | **直接拼接到 SQL** | AbstractDao.java:235 |
+| page.getOrderBy() | String | **Concatenated directly into SQL** | AbstractDao.java:235 |
+| page.getOrder() | String | **Concatenated directly into SQL** | AbstractDao.java:235 |
 
 ---
 
-## 3. 调用链总结图
+## 3. Call-chain summary diagram
 
 ```
 HTTP Request
@@ -689,346 +692,346 @@ HTTP Request
 │                              ├─ pageSize: int                        │
 │                              └─ currentPage: int                     │
 │                                                                      │
-└─ extend (String) ──────→ (未向下传递)                                │
+└─ extend (String) ──────→ (not passed downward)                       │
                                                                        │
 ┌──────────────────────────────────────────────────────────────────────┘
 │
-▼ 参数流向追踪
+▼ Parameter flow tracing
 
 [L1] ImageCaptureAction.getImageCapture()
       │
-      │  page (含 orderBy, order), searchBean
+      │  page (includes orderBy, order), searchBean
       ▼
 [L2] ImageCaptureManager.getImageCaptureJson()
       │
-      │  page (含 orderBy, order), searchBean
+      │  page (includes orderBy, order), searchBean
       ▼
 [L3] ImageCaptureDao.getImageCapturePage()
       │
-      │  page (含 orderBy, order)
+      │  page (includes orderBy, order)
       ▼
 [L4] AbstractDao.findSql()
       │
       └──→ sql = sql + " ORDER BY " + page.getOrderBy() + " " + page.getOrder()
            ▲                              ▲
            │                              │
-           └── orderBy 直接拼接 ──────────┴── order 直接拼接
+           └── orderBy concatenated directly ───┴── order concatenated directly
 ```
 
 ---
 
-## 4. 参数变量名追踪表（核心）
+## 4. Parameter variable-name tracing table (core)
 
-**追踪同一参数在不同类中的变量名变化：**
+**Trace how the same parameter's variable name changes across classes:**
 
-### 4.1 pageJson.orderBy 参数追踪
+### 4.1 pageJson.orderBy parameter tracing
 
-| 层级 | 类名 | 变量名 | 类型 | 代码位置 | 说明 |
+| Layer | Class | Variable name | Type | Code location | Notes |
 |:-----|:-----|:-------|:-----|:---------|:-----|
-| HTTP | - | `pageJson` | String | 请求Body | 原始JSON字符串 |
-| L1 | ImageCaptureAction | `pageJson` → `page.orderBy` | Page.orderBy: String | :125 | JsonUtils.fromJson()反序列化 |
-| L2 | ImageCaptureManager | `page.orderBy` | Page.orderBy: String | :89 | 参数名不变，直接传递 |
-| L3 | ImageCaptureDao | `page.orderBy` | Page.orderBy: String | :56 | 参数名不变，传递给父类 |
-| L4 | AbstractDao | `page.getOrderBy()` | String | :235 | **最终使用: SQL拼接** |
+| HTTP | - | `pageJson` | String | Request body | Original JSON string |
+| L1 | ImageCaptureAction | `pageJson` → `page.orderBy` | Page.orderBy: String | :125 | JsonUtils.fromJson() deserialization |
+| L2 | ImageCaptureManager | `page.orderBy` | Page.orderBy: String | :89 | Name unchanged, passed directly |
+| L3 | ImageCaptureDao | `page.orderBy` | Page.orderBy: String | :56 | Name unchanged, passed to parent class |
+| L4 | AbstractDao | `page.getOrderBy()` | String | :235 | **Final usage: SQL concatenation** |
 
-### 4.2 pageJson.order 参数追踪
+### 4.2 pageJson.order parameter tracing
 
-| 层级 | 类名 | 变量名 | 类型 | 代码位置 | 说明 |
+| Layer | Class | Variable name | Type | Code location | Notes |
 |:-----|:-----|:-------|:-----|:---------|:-----|
-| HTTP | - | `pageJson` | String | 请求Body | 原始JSON字符串 |
-| L1 | ImageCaptureAction | `pageJson` → `page.order` | Page.order: String | :125 | JsonUtils.fromJson()反序列化 |
-| L2 | ImageCaptureManager | `page.order` | Page.order: String | :89 | 参数名不变 |
-| L3 | ImageCaptureDao | `page.order` | Page.order: String | :56 | 参数名不变 |
-| L4 | AbstractDao | `page.getOrder()` | String | :235 | **最终使用: SQL拼接** |
+| HTTP | - | `pageJson` | String | Request body | Original JSON string |
+| L1 | ImageCaptureAction | `pageJson` → `page.order` | Page.order: String | :125 | JsonUtils.fromJson() deserialization |
+| L2 | ImageCaptureManager | `page.order` | Page.order: String | :89 | Name unchanged |
+| L3 | ImageCaptureDao | `page.order` | Page.order: String | :56 | Name unchanged |
+| L4 | AbstractDao | `page.getOrder()` | String | :235 | **Final usage: SQL concatenation** |
 
-### 4.3 searchJson 参数追踪
+### 4.3 searchJson parameter tracing
 
-| 层级 | 类名 | 变量名 | 类型 | 代码位置 | 说明 |
+| Layer | Class | Variable name | Type | Code location | Notes |
 |:-----|:-----|:-------|:-----|:---------|:-----|
-| HTTP | - | `searchJson` | String | 请求Body | 原始JSON字符串 |
-| L1 | ImageCaptureAction | `searchJson` → `searchBean` | ImageCaptureBean | :128 | JsonUtils.fromJson()反序列化 |
-| L2 | ImageCaptureManager | `searchBean` | ImageCaptureBean | :89 | 参数名不变 |
-| L3 | ImageCaptureDao | `searchBean` | ImageCaptureBean | :56 | **最终使用: buildQuerySql()** |
+| HTTP | - | `searchJson` | String | Request body | Original JSON string |
+| L1 | ImageCaptureAction | `searchJson` → `searchBean` | ImageCaptureBean | :128 | JsonUtils.fromJson() deserialization |
+| L2 | ImageCaptureManager | `searchBean` | ImageCaptureBean | :89 | Name unchanged |
+| L3 | ImageCaptureDao | `searchBean` | ImageCaptureBean | :56 | **Final usage: buildQuerySql()** |
 
-### 4.4 变量名变化示例（当参数名在不同层改变时）
+### 4.4 Variable-name change example (when the parameter name changes across layers)
 
 ```
 HTTP: pageJson (String)
        ↓ JsonUtils.fromJson()
 L1 ImageCaptureAction: page (Page<ImageCapture>)
-       ↓ 方法参数传递
-L2 ImageCaptureManager: page (Page<ImageCapture>)  ← 同名
-       ↓ 方法参数传递
-L3 ImageCaptureDao: page (Page<ImageCapture>)  ← 同名
+       ↓ method parameter passing
+L2 ImageCaptureManager: page (Page<ImageCapture>)  ← same name
+       ↓ method parameter passing
+L3 ImageCaptureDao: page (Page<ImageCapture>)  ← same name
        ↓ super.findSql(sql, page)
-L4 AbstractDao: page (Page<T>)  ← 泛型类型变化
+L4 AbstractDao: page (Page<T>)  ← generic type change
        ↓ page.getOrderBy()
-最终使用: sql = sql + " ORDER BY " + page.getOrderBy()
+Final usage: sql = sql + " ORDER BY " + page.getOrderBy()
 ```
 
-### 4.5 完整参数追踪汇总
+### 4.5 Complete parameter tracing summary
 
-| 原始HTTP参数 | L1变量名 | L2变量名 | L3变量名 | L4变量名 | 最终使用 |
+| Original HTTP parameter | L1 variable name | L2 variable name | L3 variable name | L4 variable name | Final usage |
 |:-------------|:---------|:---------|:---------|:---------|:---------|
-| pageJson | page | page | page | page | page.getOrderBy() → SQL拼接 |
-| pageJson.orderBy | page.orderBy | page.orderBy | page.orderBy | page.getOrderBy() | SQL ORDER BY 子句 |
-| pageJson.order | page.order | page.order | page.order | page.getOrder() | SQL ORDER BY 子句 |
+| pageJson | page | page | page | page | page.getOrderBy() → SQL concatenation |
+| pageJson.orderBy | page.orderBy | page.orderBy | page.orderBy | page.getOrderBy() | SQL ORDER BY clause |
+| pageJson.order | page.order | page.order | page.order | page.getOrder() | SQL ORDER BY clause |
 | searchJson | searchBean | searchBean | searchBean | - | buildQuerySql() |
-| extend | extend | - | - | - | 未向下传递 |
+| extend | extend | - | - | - | Not passed downward |
 ````
 
 ---
 
-## 5. 参数实际使用检查（CRITICAL - 防止漏洞误判）
+## 5. Actual parameter usage check (CRITICAL - prevent false positives)
 
-**追踪每个参数从 HTTP 入口到最终使用点，判定参数是否真正参与敏感操作。**
+**Trace each parameter from the HTTP entry point to the final usage point, and determine whether the parameter truly participates in a sensitive operation.**
 
-**此检查对于准确判定漏洞至关重要，可避免将"参数传递但未使用"的情况误判为漏洞。**
+**This check is essential for accurate vulnerability determination and prevents "parameter passed but unused" cases from being misjudged as vulnerabilities.**
 
-### 5.1 检查说明
+### 5.1 Check description
 
-| 状态 | 含义 | 对漏洞判定的作用 |
+| Status | Meaning | Effect on vulnerability determination |
 |:-----|:-----|:-----------------|
-| ✅ 被使用 | 参数值直接或间接参与敏感操作 | 必须进一步检测是否存在漏洞 |
-| ❌ 未使用 | 参数被传递但未参与敏感操作（被硬编码覆盖/被忽略） | **排除漏洞** |
-| ⚠️ 部分使用 | 参数的部分字段被使用，部分未使用 | 仅检测被使用的字段 |
+| ✅ Used | The parameter value directly or indirectly participates in a sensitive operation | Must further check whether a vulnerability exists |
+| ❌ Not used | The parameter is passed but does not participate in a sensitive operation (overwritten by hardcoding / ignored) | **Rule out the vulnerability** |
+| ⚠️ Partially used | Some fields of the parameter are used, others are not | Check only the used fields |
 
-### 5.2 各漏洞类型的"硬编码覆盖"场景
+### 5.2 "Hardcoded override" scenarios for each vulnerability type
 
-| 漏洞类型 | 参数 | 硬编码覆盖场景 | 结论 |
+| Vulnerability type | Parameter | Hardcoded override scenario | Conclusion |
 |:---------|:-----|:---------------|:-----|
-| **SQL 注入** | `page.orderBy` | SQL 已硬编码 `order by createTime desc` | 参数未使用 |
-| **命令注入** | `cmd` | 代码硬编码 `Runtime.exec("ls -la")` | 参数未使用 |
-| **SSRF** | `url` | 代码硬编码 `httpClient.get("http://internal/api")` | 参数未使用 |
-| **文件操作** | `path` | 代码硬编码 `new File("/tmp/fixed.txt")` | 参数未使用 |
-| **XXE** | `xml` | 代码使用固定 XML 模板 | 参数未使用 |
-| **表达式注入** | `expr` | 代码硬编码表达式 `SpEL.parse("#{fixed}")` | 参数未使用 |
+| **SQL injection** | `page.orderBy` | SQL already hardcodes `order by createTime desc` | Parameter not used |
+| **Command injection** | `cmd` | Code hardcodes `Runtime.exec("ls -la")` | Parameter not used |
+| **SSRF** | `url` | Code hardcodes `httpClient.get("http://internal/api")` | Parameter not used |
+| **File operations** | `path` | Code hardcodes `new File("/tmp/fixed.txt")` | Parameter not used |
+| **XXE** | `xml` | Code uses a fixed XML template | Parameter not used |
+| **Expression injection** | `expr` | Code hardcodes the expression `SpEL.parse("#{fixed}")` | Parameter not used |
 
-### 5.3 参数使用检查表（输出模板）
+### 5.3 Parameter usage checklist (output template)
 
 ```markdown
-## 参数实际使用检查
+## Actual Parameter Usage Check
 
-| 参数 | Sink类型 | 覆盖类型 | 覆盖条件 | 可控性结论 | 可控场景 |
+| Parameter | Sink type | Override type | Override condition | Controllability conclusion | Controllable scenario |
 |:-----|:---------|:---------|:---------|:-----------|:---------|
-| page.orderBy | SQL ORDER BY | 条件覆盖 | `isEmpty(orderBy)` | ⚠️ 条件可控 | 非空时可控 |
-| page.order | SQL ORDER BY | 无覆盖 | - | ✅ 完全可控 | 任意值 |
-| cmd | Runtime.exec | 无覆盖 | - | ✅ 完全可控 | 任意值 |
-| url | HTTP请求 | 安全检查覆盖 | `!isInternalUrl(url)` | ⚠️ 条件可控 | 外网URL时可控 |
-| path | File操作 | 白名单覆盖 | `!allowedPaths.contains()` | ⚠️ 白名单内可控 | /tmp, /data 等 |
-| searchBean.keyword | SQL WHERE | 无条件覆盖 | 总是覆盖 | ❌ 不可控 | 无 |
+| page.orderBy | SQL ORDER BY | Conditional override | `isEmpty(orderBy)` | ⚠️ Conditionally controllable | Controllable when non-empty |
+| page.order | SQL ORDER BY | No override | - | ✅ Fully controllable | Any value |
+| cmd | Runtime.exec | No override | - | ✅ Fully controllable | Any value |
+| url | HTTP request | Security-check override | `!isInternalUrl(url)` | ⚠️ Conditionally controllable | Controllable for external URLs |
+| path | File operation | Whitelist override | `!allowedPaths.contains()` | ⚠️ Controllable within the whitelist | e.g. /tmp, /data |
+| searchBean.keyword | SQL WHERE | Unconditional override | Always overridden | ❌ Not controllable | None |
 ```
 
-**可控性结论说明：**
+**Controllability conclusion description:**
 
-| 结论 | 含义 | 审计要求 |
+| Conclusion | Meaning | Audit requirement |
 |:-----|:-----|:---------|
-| ✅ 完全可控 | 参数无任何覆盖，用户输入直接到达 Sink | 必须审计 Sink 点安全性 |
-| ⚠️ 条件可控 | 参数在特定条件下可控 | 需验证绕过条件后审计 |
-| ❌ 不可控 | 参数被无条件覆盖或安全处理 | 可排除该参数的漏洞 |
+| ✅ Fully controllable | The parameter has no override and user input reaches the sink directly | Must audit the security of the sink |
+| ⚠️ Conditionally controllable | The parameter is controllable under specific conditions | Verify the bypass conditions before auditing |
+| ❌ Not controllable | The parameter is unconditionally overridden or safely handled | The vulnerability for this parameter can be ruled out |
 
-### 5.4 通用覆盖条件识别规则（适用于所有漏洞类型）
+### 5.4 General override-condition identification rules (applicable to all vulnerability types)
 
-**在追踪到参数赋值操作后，必须检查覆盖条件，此规则适用于任何类型的参数：**
+**After tracing a parameter assignment operation, you must check the override condition; this rule applies to any type of parameter:**
 
-| 覆盖类型 | 代码特征 | 可控性判定 | 适用场景 |
+| Override type | Code pattern | Controllability determination | Applicable scenario |
 |:---------|:---------|:-----------|:---------|
-| **无条件覆盖** | `x = "hardcoded";` (不在 if 内) | ❌ 不可控 | 所有漏洞类型 |
-| **空值保护覆盖** | `if (isEmpty(x)) { x = default; }` | ⚠️ 非空时可控 | 所有漏洞类型 |
-| **null保护覆盖** | `if (x == null) { x = default; }` | ⚠️ 非null时可控 | 所有漏洞类型 |
-| **白名单覆盖** | `if (!list.contains(x)) { x = default; }` | ⚠️ 白名单内可控 | 所有漏洞类型 |
-| **安全检查覆盖** | `if (!isAllowed(x)) { x = safe; }` | ⚠️ 绕过检查时可控 | SSRF/文件/命令 |
-| **格式校验覆盖** | `if (!isValid(x)) { x = default; }` | ⚠️ 符合格式时可控 | 所有漏洞类型 |
-| **条件分支覆盖** | `if (cond) { x = default; }` | ⚠️ 条件不满足时可控 | 所有漏洞类型 |
+| **Unconditional override** | `x = "hardcoded";` (not inside an if) | ❌ Not controllable | All vulnerability types |
+| **Empty-value guard override** | `if (isEmpty(x)) { x = default; }` | ⚠️ Controllable when non-empty | All vulnerability types |
+| **Null guard override** | `if (x == null) { x = default; }` | ⚠️ Controllable when non-null | All vulnerability types |
+| **Whitelist override** | `if (!list.contains(x)) { x = default; }` | ⚠️ Controllable within the whitelist | All vulnerability types |
+| **Security-check override** | `if (!isAllowed(x)) { x = safe; }` | ⚠️ Controllable when the check is bypassed | SSRF/file/command |
+| **Format-validation override** | `if (!isValid(x)) { x = default; }` | ⚠️ Controllable when the format is met | All vulnerability types |
+| **Conditional-branch override** | `if (cond) { x = default; }` | ⚠️ Controllable when the condition is not met | All vulnerability types |
 
-**常见覆盖条件识别（通用）：**
+**Common override-condition identification (general):**
 
-| 条件类型 | 识别模式 | 可控场景 |
+| Condition type | Identification pattern | Controllable scenario |
 |:---------|:---------|:---------|
-| **空值检查** | `isEmpty()`, `isBlank()`, `== null`, `length() == 0` | 非空时可控 |
-| **白名单检查** | `contains()`, `Arrays.asList()`, `allowedList.contains()` | 白名单内可控 |
-| **黑名单检查** | `!contains()`, `blacklist.contains()` → 拒绝 | 不在黑名单时可控 |
-| **格式校验** | `matches()`, `Pattern.compile()`, `isValid()` | 符合格式时可控 |
-| **安全检查** | `isAllowed()`, `isSafe()`, `checkSecurity()` | 绕过检查时可控 |
-| **范围检查** | `x > min && x < max`, `inRange()` | 范围内可控 |
+| **Empty-value check** | `isEmpty()`, `isBlank()`, `== null`, `length() == 0` | Controllable when non-empty |
+| **Whitelist check** | `contains()`, `Arrays.asList()`, `allowedList.contains()` | Controllable within the whitelist |
+| **Blacklist check** | `!contains()`, `blacklist.contains()` → reject | Controllable when not in the blacklist |
+| **Format validation** | `matches()`, `Pattern.compile()`, `isValid()` | Controllable when the format is met |
+| **Security check** | `isAllowed()`, `isSafe()`, `checkSecurity()` | Controllable when the check is bypassed |
+| **Range check** | `x > min && x < max`, `inRange()` | Controllable within the range |
 
-**原有硬编码覆盖检测规则（仍然适用）：**
+**Existing hardcoded-override detection rules (still applicable):**
 
-| 敏感操作类型 | 硬编码覆盖判断方法 | 示例 |
+| Sensitive operation type | Hardcoded-override detection method | Example |
 |:-------------|:-------------------|:-----|
-| SQL ORDER BY | 检查 SQL 字符串是否已包含 `order by` | `sql + " order by id desc"` |
-| SQL WHERE | 检查条件是否使用参数化 `#{}` 或硬编码值 | `WHERE status = 1` |
-| 命令执行 | 检查命令字符串是否使用硬编码命令 | `exec("ls -la")` |
-| HTTP 请求 | 检查 URL 是否使用硬编码地址 | `get("http://fixed.com")` |
-| 文件操作 | 检查路径是否使用硬编码路径 | `new File("/tmp/log.txt")` |
-| XML 解析 | 检查 XML 是否来自固定模板 | `parse(FIXED_XML)` |
+| SQL ORDER BY | Check whether the SQL string already contains `order by` | `sql + " order by id desc"` |
+| SQL WHERE | Check whether the condition uses parameterized `#{}` or a hardcoded value | `WHERE status = 1` |
+| Command execution | Check whether the command string uses a hardcoded command | `exec("ls -la")` |
+| HTTP request | Check whether the URL uses a hardcoded address | `get("http://fixed.com")` |
+| File operations | Check whether the path uses a hardcoded path | `new File("/tmp/log.txt")` |
+| XML parsing | Check whether the XML comes from a fixed template | `parse(FIXED_XML)` |
 
-### 5.5 硬编码覆盖详情输出格式
+### 5.5 Output format for hardcoded override details
 
-**当发现参数被硬编码覆盖时，必须输出详情：**
+**When a parameter is found to be hardcoded-overridden, you must output the details:**
 
 ```
-### 硬编码覆盖详情
+### Hardcoded Override Details
 
-#### {参数名} - 被硬编码覆盖
+#### {param-name} - hardcoded override
 
-**代码位置**: `{ClassName}.java:{line}`
+**Code location**: `{ClassName}.java:{line}`
 
-**覆盖代码**: {展示硬编码覆盖的代码片段}
+**Override code**: {code snippet showing the hardcoded override}
 
-**判定**:
-- {参数}被传递到{方法}
-- 但{敏感操作}已经包含硬编码值
-- **结论**: ❌ 参数未使用，不存在漏洞
+**Determination**:
+- {param} is passed to {method}
+- but {sensitive operation} already contains a hardcoded value
+- **Conclusion**: ❌ The parameter is unused; no vulnerability exists
 ```
 
-### 5.6 参数实际使用检查清单
+### 5.6 Actual parameter usage checklist
 
-**在输出追踪报告前，必须完成以下检查：**
+**Before outputting the trace report, you must complete the following checks:**
 
-| # | 检查项 | 状态 |
+| # | Check item | Status |
 |:--|:-------|:-----|
-| 1 | 识别所有传递到最终层的参数 | ☐ |
-| 2 | 确定每个参数的敏感操作类型 | ☐ |
-| 3 | 检查是否存在硬编码覆盖 | ☐ |
-| 4 | 标注每个参数的实际使用状态 | ☐ |
-| 5 | 对"被硬编码覆盖"的参数输出详情 | ☐ |
-| 6 | **检查覆盖条件语义，输出可控性结论** | ☐ |
+| 1 | Identify all parameters passed to the final layer | ☐ |
+| 2 | Determine the sensitive operation type for each parameter | ☐ |
+| 3 | Check whether a hardcoded override exists | ☐ |
+| 4 | Annotate the actual usage status of each parameter | ☐ |
+| 5 | Output details for parameters that are "hardcoded-overridden" | ☐ |
+| 6 | **Check the semantics of override conditions and output the controllability conclusion** | ☐ |
 
 ---
 
-## 6. 参数可控性判定（CRITICAL - 通用漏洞判定依据）
+## 6. Parameter controllability determination (CRITICAL - general basis for vulnerability determination)
 
-**适用于所有漏洞类型：SQL注入、命令注入、SSRF、文件操作、XXE、表达式注入等。**
+**Applicable to all vulnerability types: SQL injection, command injection, SSRF, file operations, XXE, expression injection, etc.**
 
-**详细判定原则请参考：[CONTROLLABILITY_ANALYSIS.md](references/CONTROLLABILITY_ANALYSIS.md)**
+**For detailed determination principles, see: [CONTROLLABILITY_ANALYSIS.md](references/CONTROLLABILITY_ANALYSIS.md)**
 
-### 6.1 核心判定流程
+### 6.1 Core determination flow
 
 ```
-1. 追踪参数从 HTTP 入口到 Sink 的完整路径
-2. 识别路径上所有对参数的赋值/覆盖操作
-3. 检查覆盖操作的条件语义（识别代码意图，非模式匹配）
-4. 输出可控性结论
+1. Trace the parameter's complete path from the HTTP entry point to the sink
+2. Identify all assignment/override operations on the parameter along the path
+3. Check the condition semantics of the override operations (identify code intent, not pattern matching)
+4. Output the controllability conclusion
 ```
 
-### 6.2 覆盖类型与可控性
+### 6.2 Override types and controllability
 
-| 覆盖类型 | 判定标准 | 可控性结论 |
+| Override type | Determination criteria | Controllability conclusion |
 |:---------|:---------|:-----------|
-| **无覆盖** | 参数直接传递到 Sink | ✅ 完全可控 |
-| **无条件覆盖** | 赋值不在任何条件内 | ❌ 不可控 |
-| **条件覆盖** | 赋值在条件内，需判定语义 | ⚠️ 条件可控 |
+| **No override** | The parameter is passed directly to the sink | ✅ Fully controllable |
+| **Unconditional override** | The assignment is not inside any condition | ❌ Not controllable |
+| **Conditional override** | The assignment is inside a condition; semantics must be determined | ⚠️ Conditionally controllable |
 
-### 6.3 条件语义判定（关键）
+### 6.3 Condition semantics determination (key)
 
-**根据代码语义识别，而非匹配固定方法名：**
+**Identify from code semantics, not by matching fixed method names:**
 
-| 语义类型 | 判断方法 | 可控场景 |
+| Semantic type | Determination method | Controllable scenario |
 |:---------|:---------|:---------|
-| 空值保护 | 条件判断参数是否为空，为空时设默认值 | 非空时可控 |
-| 白名单验证 | 条件判断参数是否在允许列表中 | 白名单内可控 |
-| 安全检查 | 条件判断参数是否安全 | 绕过检查时可控 |
+| Empty-value guard | The condition checks whether the parameter is empty and sets a default when it is | Controllable when non-empty |
+| Whitelist validation | The condition checks whether the parameter is in the allowlist | Controllable within the whitelist |
+| Security check | The condition checks whether the parameter is safe | Controllable when the check is bypassed |
 
-### 6.4 输出格式
+### 6.4 Output format
 
-**必须输出可控性判定表：**
+**You must output the controllability determination table:**
 
 ```markdown
-| 参数 | Sink类型 | 覆盖类型 | 覆盖条件 | 可控性结论 | 可控场景 |
+| Parameter | Sink type | Override type | Override condition | Controllability conclusion | Controllable scenario |
 |:-----|:---------|:---------|:---------|:-----------|:---------|
 | {name} | {sink} | {type} | {condition} | {✅/⚠️/❌} | {scenario} |
 ```
 
-**必须输出可控性汇总：**
+**You must output the controllability summary:**
 
 ```markdown
-| 可控性类型 | 参数列表 | 审计要求 |
+| Controllability type | Parameter list | Audit requirement |
 |:-----------|:---------|:---------|
-| ✅ 完全可控 | {list} | 必须审计 Sink 安全性 |
-| ⚠️ 条件可控 | {list} | 需验证绕过条件 |
-| ❌ 不可控 | {list} | 可排除漏洞可能 |
+| ✅ Fully controllable | {list} | Must audit sink security |
+| ⚠️ Conditionally controllable | {list} | Must verify the bypass conditions |
+| ❌ Not controllable | {list} | The possibility of a vulnerability can be ruled out |
 ```
 
-### 6.5 Sink 类型
+### 6.5 Sink types
 
-| Sink | 说明 |
+| Sink | Description |
 |:-----|:-----|
-| SQL | SQL 拼接/执行 |
-| COMMAND | 系统命令执行 |
-| HTTP | HTTP 请求发起 |
-| FILE | 文件读写操作 |
-| XML | XML 解析 |
-| LDAP | LDAP 查询 |
-| EXPRESSION | 表达式解析 |
-| DESERIALIZE | 反序列化 |
-| RESPONSE | 响应输出 |
-| PATH | 路径拼接 |
+| SQL | SQL concatenation/execution |
+| COMMAND | System command execution |
+| HTTP | HTTP request initiation |
+| FILE | File read/write operations |
+| XML | XML parsing |
+| LDAP | LDAP query |
+| EXPRESSION | Expression parsing |
+| DESERIALIZE | Deserialization |
+| RESPONSE | Response output |
+| PATH | Path concatenation |
 
 ---
 
-## 7. 分支条件追踪（CRITICAL - 避免漏洞误判）
+## 7. Branch-condition tracing (CRITICAL - avoid false positives)
 
-**追踪调用链时，必须记录所有条件分支，确保识别代码是否真的会执行！**
+**When tracing the call chain, you must record all conditional branches to ensure you identify whether the code will actually execute!**
 
-**详细判定原则请参考：[BRANCH_TRACING.md](references/BRANCH_TRACING.md)**
+**For detailed determination principles, see: [BRANCH_TRACING.md](references/BRANCH_TRACING.md)**
 
-### 7.1 核心判定流程
+### 7.1 Core determination flow
 
 ```
-1. 识别代码中的条件分支（if/else/switch）
-2. 检查每个分支的执行内容
-3. 判定敏感操作在哪些分支中执行
-4. 输出执行路径结论
+1. Identify conditional branches in the code (if/else/switch)
+2. Check the execution content of each branch
+3. Determine in which branches the sensitive operation executes
+4. Output the execution-path conclusion
 ```
 
-### 7.2 必须识别的分支类型
+### 7.2 Branch types that must be identified
 
-**根据代码语义识别，而非匹配固定方法名：**
+**Identify from code semantics, not by matching fixed method names:**
 
-| 分支类型 | 语义特征 | 追踪要点 |
+| Branch type | Semantic feature | Tracing focus |
 |:---------|:---------|:---------|
-| 环境/平台分支 | 根据运行环境选择不同路径 | 标注各环境执行内容 |
-| 安全检查分支 | 对输入进行安全验证 | 标注拦截条件 |
-| 功能开关分支 | 根据配置决定是否执行 | 标注开关状态影响 |
-| 空值/异常分支 | 检查参数有效性 | 标注提前退出条件 |
-| 权限判断分支 | 检查用户权限 | 标注权限要求 |
+| Environment/platform branch | Selects different paths based on the runtime environment | Annotate what executes in each environment |
+| Security-check branch | Performs security validation on input | Annotate the blocking conditions |
+| Feature-flag branch | Decides whether to execute based on configuration | Annotate the effect of the flag state |
+| Empty-value/exception branch | Checks parameter validity | Annotate the early-exit conditions |
+| Permission-check branch | Checks user permissions | Annotate the permission requirements |
 
-### 7.3 提前退出点识别
+### 7.3 Early-exit point identification
 
-| 退出类型 | 语义 | 必须标注 |
+| Exit type | Semantics | Must annotate |
 |:---------|:-----|:---------|
-| 安全拦截退出 | 安全检查失败，拒绝继续 | ⚠️ 安全拦截 |
-| 空值保护退出 | 参数无效，提前返回 | ⚠️ 提前退出 |
-| 异常抛出退出 | 条件不满足，抛出异常 | ⚠️ 异常退出 |
+| Security-block exit | Security check fails; refuse to continue | ⚠️ Security block |
+| Empty-value guard exit | Parameter invalid; return early | ⚠️ Early exit |
+| Exception-throw exit | Condition not met; throw an exception | ⚠️ Exception exit |
 
-### 7.4 输出格式
+### 7.4 Output format
 
-**必须输出分支结构：**
+**You must output the branch structure:**
 
 ```markdown
 methodName(param)
-    ├─ [if 条件A] → 分支A执行内容
-    │      └─→ 敏感操作 ⚠️
-    └─ [else] → 默认分支 / return / throw
+    ├─ [if condition A] → content executed in branch A
+    │      └─→ sensitive operation ⚠️
+    └─ [else] → default branch / return / throw
 ```
 
-**必须输出执行路径结论：**
+**You must output the execution-path conclusion:**
 
 ```markdown
-| 路径 | 条件 | 敏感操作 | 可利用性 |
+| Path | Condition | Sensitive operation | Exploitability |
 |:-----|:-----|:---------|:---------|
-| 路径A | {条件} | ✅ 执行 | 可利用 |
-| 路径B | {条件} | ❌ 不执行 | 不可利用 |
+| Path A | {condition} | ✅ Executes | Exploitable |
+| Path B | {condition} | ❌ Does not execute | Not exploitable |
 ```
 
 ---
 
-## 追踪策略
+## Tracing strategies
 
-### 策略 1: 依赖注入追踪
+### Strategy 1: Dependency injection tracing
 
-识别 Spring/Struts 的依赖注入：
+Identify Spring/Struts dependency injection:
 
 ```java
 // Spring
@@ -1042,44 +1045,44 @@ public void setImageCaptureService(ImageCaptureService service) {
 }
 ```
 
-追踪 `imageCaptureManager.xxx()` 调用时，定位到 `ImageCaptureManager` 类。
+When tracing the `imageCaptureManager.xxx()` call, locate the `ImageCaptureManager` class.
 
-### 策略 2: 继承链追踪
+### Strategy 2: Inheritance-chain tracing
 
-当调用 `super.xxx()` 或父类方法时：
+When `super.xxx()` or a parent-class method is called:
 
 ```java
 public class ImageCaptureDao extends AbstractDao<ImageCapture> {
     public Page<ImageCapture> query(Page<ImageCapture> page) {
-        return super.findSql(sql, page);  // 追踪到 AbstractDao
+        return super.findSql(sql, page);  // trace to AbstractDao
     }
 }
 ```
 
-追踪步骤：
-1. 识别 `extends AbstractDao`
-2. 在父类中查找 `findSql` 方法
-3. 继续追踪父类的父类（如有）
+Tracing steps:
+1. Identify `extends AbstractDao`
+2. Find the `findSql` method in the parent class
+3. Continue tracing the parent's parent (if any)
 
-### 策略 3: 接口实现追踪
+### Strategy 3: Interface implementation tracing
 
-当调用接口方法时：
+When an interface method is called:
 
 ```java
 @Autowired
-private UserService userService;  // 接口类型
+private UserService userService;  // interface type
 
-userService.getUser(id);  // 需要找到实现类
+userService.getUser(id);  // need to find the implementation class
 ```
 
-追踪步骤：
-1. 识别 `UserService` 是接口
-2. 查找 `implements UserService` 的类
-3. 定位到实现类的方法
+Tracing steps:
+1. Identify that `UserService` is an interface
+2. Find the class that `implements UserService`
+3. Locate the method in the implementation class
 
-### 策略 4: MyBatis/Hibernate 追踪
+### Strategy 4: MyBatis/Hibernate tracing
 
-对于 ORM 框架：
+For ORM frameworks:
 
 **MyBatis:**
 ```java
@@ -1088,46 +1091,46 @@ public interface UserMapper {
     List<User> selectByPage(@Param("page") Page page);
 }
 ```
-追踪到对应的 XML 文件中的 SQL 定义。
+Trace to the SQL definition in the corresponding XML file.
 
 **Hibernate:**
 ```java
 session.createQuery("FROM User WHERE id = " + id);
 ```
-直接在代码中识别 HQL/SQL。
+Identify the HQL/SQL directly in the code.
 
 ---
 
-## 反编译工具使用
+## Decompilation tool usage
 
-### 何时反编译
+### When to decompile
 
-| 场景 | 操作 |
+| Scenario | Action |
 |:-----|:-----|
-| .java 源码存在 | 直接读取检查 |
-| 只有 .class 文件 | 使用 decompile_file |
-| 整个项目只有 .class | 使用 decompile_directory |
-| 父类在 JAR 包中 | 先解压 JAR，再 decompile_file |
+| .java source exists | Read and inspect directly |
+| Only .class files exist | Use decompile_file |
+| The whole project has only .class files | Use decompile_directory |
+| Parent class is inside a JAR | Extract the JAR first, then use decompile_file |
 
-### 反编译命令参考
+### Decompilation command reference
 
 ```python
-# 检查 CFR 状态
+# Check CFR status
 mcp__java-decompile-mcp__check_cfr_status()
 
-# 检查 Java 版本
+# Check the Java version
 mcp__java-decompile-mcp__get_java_version()
 
-# 如果 CFR 不存在，下载
+# If CFR is missing, download it
 mcp__java-decompile-mcp__download_cfr_tool(target_dir="/path/to/tools")
 
-# 反编译单个类
+# Decompile a single class
 mcp__java-decompile-mcp__decompile_file(
     file_path="/path/to/AbstractDao.class",
     save_to_file=True
 )
 
-# 反编译整个 DAO 包
+# Decompile the entire DAO package
 mcp__java-decompile-mcp__decompile_directory(
     directory_path="/path/to/com/example/dao",
     recursive=True,
@@ -1137,133 +1140,133 @@ mcp__java-decompile-mcp__decompile_directory(
 
 ---
 
-## 输出规范
+## Output specification
 
-### 必须包含的信息
+### Required information
 
-每个层级必须包含：
+Each layer must include:
 
-1. **文件位置** - 完整包路径 + 文件名 + 行号
-2. **类名** - 包括父类信息（如有）
-3. **方法签名** - 方法名 + 参数列表 + 返回类型
-4. **关键代码** - 展示调用下一层的代码片段
-5. **参数传递** - 说明参数如何传递到下一层
+1. **File location** - full package path + file name + line number
+2. **Class name** - including parent-class information (if any)
+3. **Method signature** - method name + parameter list + return type
+4. **Key code** - the code snippet that calls the next layer
+5. **Parameter passing** - explain how parameters are passed to the next layer
 
-### 禁止的操作
+### Forbidden operations
 
-- ❌ 不进行漏洞检测或漏洞判定
-- ❌ 不提供修复方案
-- ❌ 不推断不存在的调用关系
-- ❌ 不省略任何层级
+- ❌ Do not perform vulnerability detection or vulnerability determination
+- ❌ Do not provide remediation plans
+- ❌ Do not infer call relationships that do not exist
+- ❌ Do not omit any layer
 
-### 输出文件命名
+### Output file naming
 
 ```
 {project_name}_audit/route_tracer/{route_name}/{project_name}_trace_{route_id}_{timestamp}.md
 
-示例:
+Example:
 myproject_audit/route_tracer/itc_ws_carQuery/myproject_trace_getImageCapture_20260204.md
 ```
 
-#### 简单追踪链（适用于第 2 个及之后的接口）
+#### Simple trace chain (for the 2nd and later interfaces)
 
-**必须包含以下内容：请求模板 + 该方法参数定义 + 调用链 + Sink识别 + 可控性判定**
+**Must include the following: request template + parameter definitions for this method + call chain + sink identification + controllability determination**
 
 ```markdown
-# 路由调用链追踪报告（简化版）
+# Route Call-Chain Trace Report (Simplified)
 
-**追踪路由**: `{route}`
-**方法**: `{method}`
-**生成时间**: {date}
+**Traced route**: `{route}`
+**Method**: `{method}`
+**Generated**: {date}
 
 ---
 
-## 1. HTTP 请求数据包
+## 1. HTTP request packet
 
-### 1.1 完整请求模板
+### 1.1 Complete request template
 ```http
-{该方法的完整请求模板}
+{complete request template for this method}
 ```
 
-### 1.2 该方法参数定义
+### 1.2 Parameter definitions for this method
 
-**参数来源**: 从 `{ClassName}.{method}()` 方法签名读取
+**Parameter source**: read from the `{ClassName}.{method}()` method signature
 
-#### 顶层参数
-| 参数名 | Java类型 | 说明 |
+#### Top-level parameters
+| Parameter name | Java type | Description |
 |:-------|:---------|:-----|
 | {param} | {type} | {desc} |
 
-#### 参数内部结构（如有）
-| 字段名 | Java类型 | 说明 |
+#### Internal parameter structure (if any)
+| Field name | Java type | Description |
 |:-------|:---------|:-----|
 | {field} | {type} | {desc} |
 
-### 1.3 测试用数据包示例
+### 1.3 Test packet example
 ```http
-{测试数据包}
+{test packet}
 ```
 
 ---
 
-## 2. 调用链追踪
+## 2. Call-chain tracing
 
-### 调用链层级
+### Call-chain layers
 ```
 [L1] {Class}.{method}()
     ↓
 [L2] {Class}.{method}()
     ↓
-[Sink] {Sink类型}: {具体位置}
+[Sink] {sink type}: {specific location}
 ```
 
-### Sink 识别
+### Sink identification
 
-| Sink 类型 | 位置 | 说明 |
+| Sink type | Location | Description |
 |:----------|:-----|:-----|
-| {SQL/COMMAND/HTTP/FILE/XML/无敏感Sink} | {Class.java:line} | {具体操作} |
+| {SQL/COMMAND/HTTP/FILE/XML/no sensitive sink} | {Class.java:line} | {specific operation} |
 
-### 参数传递关系
-| 参数 | L1 | L2 | ... | 最终使用 |
+### Parameter passing relationships
+| Parameter | L1 | L2 | ... | Final usage |
 |:-----|:---|:---|:----|:---------|
 | {param} | {var} | {var} | ... | {usage} |
 
 ---
 
-## 3. 可控性判定
+## 3. Controllability determination
 
-| 参数 | Sink类型 | 覆盖类型 | 覆盖条件 | 可控性结论 | 可控场景 |
+| Parameter | Sink type | Override type | Override condition | Controllability conclusion | Controllable scenario |
 |:-----|:---------|:---------|:---------|:-----------|:---------|
 | {param} | {sink} | {type} | {condition} | {✅/⚠️/❌/-} | {scenario} |
 
-**可控性汇总**:
-| 类型 | 参数 | 审计要求 |
+**Controllability summary**:
+| Type | Parameter | Audit requirement |
 |:-----|:-----|:---------|
-| ✅ 完全可控 | {list} | 需审计 Sink 安全性 |
-| ⚠️ 条件可控 | {list} | 需验证绕过条件 |
-| ❌ 不可控 | {list} | 可排除漏洞可能 |
-| - 无敏感Sink | {list} | 低风险 |
+| ✅ Fully controllable | {list} | Must audit sink security |
+| ⚠️ Conditionally controllable | {list} | Must verify the bypass conditions |
+| ❌ Not controllable | {list} | The possibility of a vulnerability can be ruled out |
+| - No sensitive sink | {list} | Low risk |
 ```
 
-**简化版生成注意事项：**
-- 必须从该方法实际代码读取参数，禁止假设
-- 必须独立追踪该方法的调用链到 Sink
-- 必须识别该方法的 Sink 类型（可能与第1个接口不同）
-- 必须输出该方法的可控性判定（禁止复用其他方法结论）
-- 如果该方法无敏感 Sink，在可控性判定中标注"无敏感Sink，低风险"
+**Notes for generating the simplified version:**
+- Read parameters from the method's actual code; assumptions are forbidden
+- Independently trace the method's call chain to the sink
+- Identify the method's sink type (it may differ from the 1st interface)
+- Output the controllability determination for this method (reusing conclusions from other methods is forbidden)
+- If the method has no sensitive sink, mark it as "no sensitive sink, low risk" in the controllability determination
 
 ---
 
-## 限制与边界
+## Limits and boundaries
 
-**仅执行以下操作：**
-- 追踪指定路由的调用链
-- 输出每层的文件位置和方法签名
-- 记录参数传递关系
-- 生成 HTTP 请求模板
+**Only the following operations are performed:**
+- Trace the call chain of the specified route
+- Output the file location and method signature of each layer
+- Record parameter passing relationships
+- Generate HTTP request templates
 
-**不执行以下操作：**
-- 不进行安全漏洞检测
-- 不提供修复方案
-- 不判定漏洞等级
-- 不检查业务逻辑正确性
+**The following operations are not performed:**
+- No security vulnerability detection
+- No remediation plans provided
+- No vulnerability severity determination
+- No business-logic correctness checks

@@ -1,6 +1,8 @@
 ---
 name: local-legal-seo-audit
 description: "Audit and improve local SEO for law firms, attorneys, forensic experts and legal/professional services sites with local presence, focusing on GBP, directories, E-E-A-T and practice/location pages."
+zh-signals: "审计并改进律所、律师与专业服务网站的本地 SEO，聚焦 GBP、目录、E-E-A-T 与地区页面。信号:本地SEO,法律行业SEO,Google Business Profile,E-E-A-T,目录优化"
+when-to-use: "Use when auditing or improving local SEO for law firms, attorneys, or professional services sites with a local presence."
 risk: safe
 source: original
 date_added: "2026-02-27"

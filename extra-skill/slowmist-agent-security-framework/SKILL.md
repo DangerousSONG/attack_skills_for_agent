@@ -1,6 +1,8 @@
 ---
 name: slowmist-agent-security-framework
 description: Comprehensive security review framework for AI agents to audit skills, repositories, URLs, on-chain addresses, and services in adversarial environments
+zh-signals: "面向 AI Agent 的综合安全审查框架，审计技能、仓库、URL、链上地址与服务中的恶意模式与供应链风险。信号:AI Agent安全,安全审查,恶意模式,供应链,链上风险"
+when-to-use: "Use when an AI agent must vet a skill, repository, URL, MCP server, on-chain address, or external service for malicious patterns and adversarial risk before trusting it."
 triggers:
   - review this skill for security issues
   - check if this GitHub repository is safe

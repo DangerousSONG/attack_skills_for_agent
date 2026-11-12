@@ -1,83 +1,87 @@
 ---
 name: gogo-scan
-description: "使用 gogo 进行端口扫描和指纹识别。gogo 是 chainreactors 出品的高速端口扫描器，支持主动/被动指纹识别、智能分组输出、自动 TLS 握手提取证书信息。和 fscan 的区别：gogo 专注于扫描精度和指纹覆盖（2000+ 指纹规则），而 fscan 兼顾弱口令和 POC。当需要精确识别目标服务和中间件版本（而不只是端口开放）时优先使用 gogo。涉及端口扫描、服务识别、指纹识别、资产发现的场景都应考虑此技能"
+description: "Perform port scanning and fingerprinting with gogo. gogo is a high-speed port scanner by chainreactors that supports active/passive fingerprinting, structured group output, and automatic certificate extraction via the TLS handshake. Difference from fscan: gogo focuses on scan precision and fingerprint coverage (2000+ fingerprint rules), while fscan also handles weak credentials and POCs. Prefer gogo when you need to accurately identify target services and middleware versions (not just open ports). Consider this skill for port scanning, service identification, fingerprinting, and asset discovery scenarios"
+zh-signals: "使用 gogo 进行高速端口扫描与指纹识别，内置 2000+ 指纹规则并输出结构化结果。信号:端口扫描,指纹识别,gogo,资产发现,服务识别"
+when-to-use: >-
+  Use when you need accurate port scanning and service/middleware fingerprinting with
+  2000+ fingerprint rules, prioritizing precision over password or POC scanning.
 metadata:
-  tags: "gogo,port,scan,fingerprint,指纹,端口,扫描,资产发现,chainreactors"
+  tags: "gogo,port,scan,fingerprint,fingerprinting,port,scanning,asset discovery,chainreactors"
   category: "tool"
 ---
 
-# gogo 高速端口扫描与指纹识别
+# gogo High-Speed Port Scanning and Fingerprinting
 
-gogo 的核心优势是**指纹精度**——内置 2000+ 指纹规则，能精确识别 Web 框架、中间件版本、CMS 类型，输出结构化 JSON 便于后续处理。
+The core advantage of gogo is **fingerprint precision** - it ships with 2000+ fingerprint rules that accurately identify web frameworks, middleware versions and CMS types, and outputs structured JSON for downstream processing.
 
-项目地址：https://github.com/chainreactors/gogo
+Project address: https://github.com/chainreactors/gogo
 
-## 基本用法
+## Basic Usage
 
 ```bash
-# 扫描单个目标
+# Scan a single target
 gogo -i 10.0.0.1
 
-# 扫描网段
+# Scan a network segment
 gogo -i 10.0.0.0/24
 
-# 扫描指定端口
+# Scan the specified ports
 gogo -i 10.0.0.0/24 -p 80,443,8080,8443
 
-# 扫描 Top1000 端口
+# Scan the Top1000 ports
 gogo -i 10.0.0.0/24 -p top1000
 
-# 从文件读取目标
+# Read targets from a file
 gogo -l targets.txt
 ```
 
-## 输出控制
+## Output Control
 
 ```bash
-# JSON 输出（便于后续处理）
+# JSON output (easy to process downstream)
 gogo -i 10.0.0.0/24 -o result.json -f json
 
-# 只输出存活 + 有指纹的
+# Only output live hosts that have fingerprints
 gogo -i 10.0.0.0/24 --filter
 
-# CSV 输出
+# CSV output
 gogo -i 10.0.0.0/24 -o result.csv -f csv
 ```
 
-## 高级扫描
+## Advanced Scanning
 
 ```bash
-# 调整并发（默认 500，内网可加大）
+# Adjust concurrency (500 by default, can be raised on an internal network)
 gogo -i 10.0.0.0/16 -t 2000
 
-# 启用版本探测（更精确但更慢）
+# Enable version probing (more precise but slower)
 gogo -i 10.0.0.1 -p top1000 -v
 
-# 指定超时（毫秒）
+# Specify the timeout (milliseconds)
 gogo -i 10.0.0.0/24 --timeout 3000
 
-# 排除端口
+# Exclude ports
 gogo -i 10.0.0.0/24 --exclude-port 22,80
 ```
 
-## 与其他工具联动
+## Integration with Other Tools
 
 ```bash
-# gogo 发现服务 → nuclei 扫描漏洞
+# gogo discovers services → nuclei scans for vulnerabilities
 gogo -i 10.0.0.0/24 -p top1000 -o result.json -f json
 cat result.json | jq -r '.[] | select(.port==80 or .port==443 or .port==8080) | .uri' | nuclei -t ~/nuclei-templates/
 
-# gogo 发现服务 → httpx 探测
+# gogo discovers services → httpx probes them
 gogo -i 10.0.0.0/24 -o result.json -f json
 cat result.json | jq -r '.uri' | httpx -silent
 ```
 
-## 决策树
+## Decision Tree
 
 ```
-需要扫描什么？
-├─ 快速看网段存活 + 弱口令 + POC → fscan
-├─ 精确指纹识别（Web 框架/CMS/中间件版本）→ gogo
-├─ 大规模端口扫描（SYN/全端口）→ naabu 或 nmap
-└─ 子域名资产 → subfinder + httpx
+What do you need to scan?
+├─ Quick look at segment liveness + weak credentials + POCs → fscan
+├─ Precise fingerprinting (web framework / CMS / middleware versions) → gogo
+├─ Large-scale port scanning (SYN / full port range) → naabu or nmap
+└─ Subdomain assets → subfinder + httpx
 ```

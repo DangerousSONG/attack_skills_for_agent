@@ -1,6 +1,8 @@
 ---
 name: source-leak-hunt
 description: Mass scan for exposed env files, backups, and git configs.
+zh-signals: "大规模扫描暴露的环境文件、备份与 git 配置等源码泄露，并基于内容过滤误报。信号:源码泄露,环境文件,备份文件,git 配置,敏感文件"
+when-to-use: "Use when mass-scanning web targets for exposed .env, backup, git config, or other sensitive files and filtering false positives."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

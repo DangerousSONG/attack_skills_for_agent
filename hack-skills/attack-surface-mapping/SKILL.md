@@ -4,11 +4,12 @@ description: "Given a single target application, map its attack surface from exp
 zh-signals: "给定单一目标应用,从它已暴露的面绘制攻击面,然后停手——测试在其他 skill。信号:攻击面,资产梳理,单目标,暴露面分析。"
 when-to-use: Attack Surface Mapping
   Draw a testable attack surface from one authorized target URL or one
-  application. Use when the user says 攻击面, 供给面, 画攻击面, map the surface,
-  application recon, find the business host, JS inventory, or when the only
-  visible page is login. Derive hosts, APIs, keys, and the object graph from
-  what the app already exposes. Do not open with directory brute or payload
-  spray. Use when the user runs /attack-surface-mapping.
+  application. Use when the user says attack surface, supply surface, draw
+  the attack surface, map the surface, application recon, find the business
+  host, JS inventory, or when the only visible page is login. Derive hosts,
+  APIs, keys, and the object graph from what the app already exposes. Do not
+  open with directory brute or payload spray. Use when the user runs
+  /attack-surface-mapping.
 ---
 
 # Attack Surface Mapping
@@ -195,4 +196,4 @@ Then load [hack](../hack/SKILL.md) for effort order and the matching category sk
 - Calling mapping "done" because the homepage returned 200
 - Minting a new notes tree when the workspace or proxy project already holds the evidence
 
-> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`SURFACE_PATTERNS.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。
+> 📎 **Reference Document Notice**: this skill is adapted from an upstream open-source repository; the following reference document is **not distributed with this library**: `SURFACE_PATTERNS.md`. The key points of the related topics are retained in the corresponding descriptions in this document; if you need the expanded content, grep the library using keywords from the body text or search on your own.

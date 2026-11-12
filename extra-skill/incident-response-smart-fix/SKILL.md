@@ -1,6 +1,8 @@
 ---
 name: incident-response-smart-fix
 description: "Investigate production issues, reproduce root causes, implement scoped fixes, and verify recovery using tests and observability."
+zh-signals: "调查生产问题、复现根因、实施范围受控的修复并用测试与可观测性验证恢复。信号:事件响应,根因分析,生产修复,可观测性,多代理"
+when-to-use: "Use when investigating a production incident and you need to reproduce the root cause, implement a scoped fix, and verify recovery with tests and observability."
 risk: critical
 source: community
 date_added: "2026-02-27"

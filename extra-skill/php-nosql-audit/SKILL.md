@@ -1,51 +1,52 @@
 ---
 name: php-nosql-audit
-description: PHP Web 源码 NoSQL 注入审计工具。识别用户输入进入 MongoDB/DocumentDB 查询构造，分析是否存在 operator 注入（$gt/$ne/$where 等），输出分级、PoC 与修复建议（禁止省略）。
+description: "PHP Web source code NoSQL injection audit tool. Identifies user input reaching MongoDB/DocumentDB query construction, analyzes whether operator injection ($gt/$ne/$where, etc.) is possible, and outputs severity grading, PoC and remediation recommendations (must not be omitted)."
+zh-signals: "审计 PHP 源码中的 NoSQL 注入风险，识别 operator 注入导致的鉴权绕过与数据泄露。信号:PHP 审计,NoSQL 注入,MongoDB,operator 注入,源码审计"
+when-to-use: "Use when reviewing PHP source code where user input reaches MongoDB/DocumentDB query construction and operator injection is possible."
 ---
 
-# PHP NoSQL 注入审计（php-nosql-audit）
+# PHP NoSQL Injection Audit (php-nosql-audit)
 
-分析 PHP 项目源码，识别用户输入如何进入 NoSQL 查询条件，并检测 operator 注入导致的鉴权绕过/数据泄露。
+Analyze PHP project source code to identify how user input enters NoSQL query conditions, and detect operator injection leading to authentication bypass / data exposure.
 
-## 分级与编号
-- 详见：`shared/SEVERITY_RATING.md`
-- 漏洞编号：`{C/H/M/L}-NOSQL-{序号}`
+## Severity Rating and Numbering
+- See `shared/SEVERITY_RATING.md` for details
+- Vulnerability ID: `{C/H/M/L}-NOSQL-{sequence}`
 
-## 必检 Sink（强制）
-常见于 MongoDB 驱动/ODM：
+## Mandatory Sinks to Check (Required)
+Common in MongoDB drivers / ODM:
 - `collection->find($filter)`
 - `findOne($filter)` / `update($filter, {value})` / `delete($filter)`
-- `where($condition)` 或 `->filter({value})`
-- 将用户输入拼入查询数组/表达式的封装函数
+- `where($condition)` or `->filter({value})`
+- Wrapper functions that splice user input into the query array/expression
 
-## 必检危险模式（强制）
-必须输出以下判断证据：
-- 用户输入直接作为 filter/condition 数组的一部分（尤其是 `json_decode` 的结果）
-- 存在“把用户输入当成结构化条件”的行为，而未强制类型/白名单
-- query 中包含可能被滥用的运算符字段：`$ne/$gt/$lt/$or/$and/$where/$regex`
+## Mandatory Dangerous Patterns (Required)
+Must output the evidence for the following judgments:
+- User input used directly as part of the filter/condition array (especially the result of `json_decode`)
+- Behavior that "treats user input as a structured condition" without enforcing types/allowlists
+- Query contains operator fields that can be abused: `$ne/$gt/$lt/$or/$and/$where/$regex`
 
-## tracer 触发条件
-当用户输入是 JSON/数组/嵌套结构，且进入查询构造前有多层封装时，必须追踪到最终 sink。
+## tracer Trigger Conditions
+When the user input is JSON / an array / a nested structure and several layers of wrapping exist before query construction, the trace must reach the final sink.
 
-## 报告输出
+## Report Output
 ```
 {output_path}/vuln_audit/nosql_{timestamp}.md
 ```
 
-## 条目模板（强制）
-每条漏洞必须包含：
-- 位置证据（查询构造函数/最终 find/update 调用）
-- 数据流链（输入解析 -> 类型 -> 查询条件）
-- 可利用前置条件（鉴权状态/需要登录与否/能否改变查询操作符）
-- 验证 PoC（必须真实路由与真实参数名；payload 为结构化 NoSQL 条件示例）
-- 修复建议（严格字段 allowlist + 强制类型 + 避免把用户输入当作查询表达式）
+## Entry Template (Mandatory)
+Every vulnerability must include:
+- Location evidence (the query construction function / the final find/update call)
+- Data flow chain (input parsing -> type -> query condition)
+- Exploitability preconditions (authentication state / whether login is required / whether the query operator can be changed)
+- Verification PoC (must use the real route and the real parameter name; the payload is a structured NoSQL condition example)
+- Recommended fixes (strict field allowlist + enforced types + never treat user input as a query expression)
 
-## 证据引用（强制：来自 php-route-tracer）
-每条 NoSQL 注入疑似漏洞必须逐项引用 trace 输出中 `## 9) Sink Evidence Type Checklist` 的 **NOSQL 行**对应证据要点（允许状态为待验证，但证据引用必须存在）：
-1. `EVID_NOSQL_QUERY_CONSTRUCTION`：NoSQL 查询构造点证据（对应 find/update/delete 或 query builder 执行点）
-2. `EVID_NOSQL_USER_INPUT_INTO_QUERY_STRUCTURE`：用户输入进入查询条件结构的证据（可控字段进入 filter/where 的结构）
-3. `EVID_NOSQL_OPERATOR_INJECTION_FIELDS`：operator 注入字段证据（$ne/$gt/$or/$where/$regex 等）
+## Evidence Citation (Mandatory: from php-route-tracer)
+Every suspected NoSQL injection vulnerability must cite the matching evidence points of the **NOSQL row** in the `## 9) Sink Evidence Type Checklist` section of the trace output item by item (the status may be pending verification, but the evidence citations must exist):
+1. `EVID_NOSQL_QUERY_CONSTRUCTION`: evidence of the NoSQL query construction point (the corresponding find/update/delete or query builder execution point)
+2. `EVID_NOSQL_USER_INPUT_INTO_QUERY_STRUCTURE`: evidence of user input entering the query condition structure (the controllable field entering the filter/where structure)
+3. `EVID_NOSQL_OPERATOR_INJECTION_FIELDS`: evidence of the operator injection fields ($ne/$gt/$or/$where/$regex, etc.)
 
-## tracer 证据缺失处理（强制）
-- 若无法定位上述 1~3 任一关键证据要点：该漏洞状态只能标记为 `⚠️待验证`，不得直接给出 `✅已确认可利用`。
-
+## Handling Missing tracer Evidence (Mandatory)
+- If none of the key evidence points 1-3 above can be located: the vulnerability status may only be marked `⚠️ Unverified`, and must not be directly marked `✅ Confirmed Exploitable`.

@@ -1,6 +1,10 @@
 ---
 name: hunt-k8s
 description: "Hunt Kubernetes & Docker — API anonymous access, kubelet 10250 exec (SPDY/WebSocket, NOT plain POST) and the simpler /run primitive, etcd 2379 unauth, dashboard skip-login, RBAC misconfig, secret/SA-token abuse, docker.sock host escape, runc/container-escape (Leaky Vessels CVE-2024-21626), API-server-mediated nodes/proxy RCE, EphemeralContainers node-shell, bound/projected SA-token audience+expiry abuse, admission-controller bypass, Helm/Tiller remnants. Use when target runs containerized infra, exposes K8s ports (6443/10250/10255/2379/8443), or cloud metadata reveals K8s service accounts."
+zh-signals: "狩猎 Kubernetes 与 Docker 的匿名访问、kubelet 执行、RBAC 错误配置与容器逃逸。信号:Kubernetes,Docker,kubelet,RBAC,容器逃逸"
+when-to-use: >-
+  Use when a target runs containerized infrastructure, exposes K8s ports
+  (6443/10250/10255/2379/8443), or cloud metadata reveals Kubernetes service accounts.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

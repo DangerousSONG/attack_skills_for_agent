@@ -1,6 +1,8 @@
 ---
 name: ops-proxyns
 description: "Kernel-level proxy protection via proxy-ns — forces ALL traffic (TCP/UDP/DNS) through Tor using Linux network namespaces. Unlike proxychains, this works with Go/Rust/static binaries, prevents DNS leaks, and is impossible for applications to bypass. Includes Tor circuit rotation, IPv6 leak prevention, stealth headers, and jitter configuration. Use AT THE START of any pentest or recon engagement — before any probes that could leak your source IP. Setup once at the beginning of a session and run the entire toolchain inside the proxy-ns shell."
+zh-signals: "通过 proxy-ns 网络命名空间将全部流量强制走 Tor，实现内核级代理与 OPSEC 保护。信号:proxy-ns,Tor,OPSEC,网络命名空间,匿名代理,DNS防泄漏"
+when-to-use: "Use at the start of any pentest or recon engagement to route all TCP/UDP/DNS traffic through Tor and prevent source-IP or DNS leaks."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

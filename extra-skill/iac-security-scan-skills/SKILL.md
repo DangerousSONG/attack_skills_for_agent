@@ -1,6 +1,8 @@
 ---
 name: iac-security-scan-skills
 description: AI-powered Infrastructure-as-Code security scanner with attack chain analysis and multi-domain vulnerability detection
+zh-signals: "对 Terraform 与 CloudFormation 等基础设施即代码进行攻击链与多域安全扫描。信号:IaC安全,Terraform,CloudFormation,攻击链,合规,基础设施扫描"
+when-to-use: "Use when scanning Infrastructure-as-Code such as Terraform or CloudFormation for vulnerabilities, attack paths, or compliance gaps."
 triggers:
   - scan infrastructure as code for security issues
   - run IaC security analysis

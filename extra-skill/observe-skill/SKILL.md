@@ -7,6 +7,10 @@ description: >
   or failure outcome. Creates the observations file if it does not exist, then appends
   an entry with date, task description, skill used, outcome, what worked, what failed,
   and any error messages observed.
+zh-signals: "将技能执行结果记录到 observations 日志，用于跟踪技能成效。信号:记录执行结果,技能复盘,执行日志,成功失败归档"
+when-to-use: >-
+  Use when the user asks to log, record, or note how a skill run went, or immediately
+  after a skill completes with a clear success, partial, or failure outcome.
 license: MIT
 compatibility: Designed for Claude Code. No external tools required.
 metadata:

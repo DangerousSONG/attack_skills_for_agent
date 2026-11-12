@@ -2,45 +2,49 @@
 name: rsactftool
 description: "RsaCtfTool: Recovers weak RSA private keys and decrypts known ciphertexts. Signals: cryptographic attack, encryption cracking, known n/e/ciphertext decryption, specified attack."
 zh-signals: "RsaCtfTool: CTF/弱 RSA 私钥恢复、已知密文解密。信号:密码学攻击,加密破解,已知 n/e/密文解密,指定攻击。"
+when-to-use: >-
+  Use when recovering weak RSA private keys or decrypting known ciphertexts
+  from public parameters; supply a public key or n/e/c values and let it try
+  multiple attacks automatically.
 ---
 
 # RsaCtfTool
 
-- 攻击大类:C49 密码学攻击
-- 上游仓库:https://github.com/Ganapati/RsaCtfTool
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C49 Cryptographic Attacks
+- Upstream Repository: https://github.com/Ganapati/RsaCtfTool
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/Ganapati/RsaCtfTool && cd RsaCtfTool && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `--publickey key.pub --private` | 公钥反推私钥(多攻击链自动尝试) |
-| `-n N -e E --uncipher C` | 已知 n/e/密文解密 |
-| `--attack hastad,factordb,wiener` | 指定攻击 |
-| `--dumpkey` | 导出中间结果 |
-| `--iscong` | 检测参数是否一致 |
+| `--publickey key.pub --private` | Recover the private key from the public key (multiple attack chains tried automatically) |
+| `-n N -e E --uncipher C` | Decrypt a known n/e/ciphertext |
+| `--attack hastad,factordb,wiener` | Specify the attack |
+| `--dumpkey` | Export intermediate results |
+| `--iscong` | Check whether the parameters are congruent |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### CTF/弱 RSA 私钥恢复
+### CTF/Weak RSA Private Key Recovery
 
 ```bash
 python3 RsaCtfTool.py --publickey ./key.pub --private --dumpkey
-# 自动跑 factordb/wiener/hastad/smallq 等 20+ 攻击
+# Automatically runs 20+ attacks such as factordb/wiener/hastad/smallq
 ```
 
-### 已知密文解密
+### Decryption of Known Ciphertext
 
 ```bash
 python3 RsaCtfTool.py -n 12345... -e 65537 --uncipher 0xabcd...
 ```
 
-## 注意事项
+## Notes
 
-集成 factordb 在线查询;生产环境强密钥(n≥3072)无效,仅限弱 key/CTF。
+Integrates the factordb online lookup; ineffective against strong production keys (n≥3072), limited to weak keys and CTFs.

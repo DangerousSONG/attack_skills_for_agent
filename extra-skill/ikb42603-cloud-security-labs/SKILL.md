@@ -1,6 +1,8 @@
 ---
 name: ikb42603-cloud-security-labs
 description: AWS cloud computing security essentials lab exercises covering IAM, encryption, network security, and monitoring
+zh-signals: "AWS 云安全实验练习，覆盖 IAM、KMS 加密、网络隔离与 CloudTrail/CloudWatch 监控。信号:AWS安全,IAM,KMS,安全组,CloudTrail"
+when-to-use: "Use when completing hands-on AWS cloud security lab exercises covering IAM, encryption, network security, and monitoring."
 triggers:
   - "how do I complete the cloud security labs"
   - "setup AWS IAM lab exercise"

@@ -1,118 +1,120 @@
 ---
 name: java-file-upload-audit
-description: Java Web 源码文件上传漏洞审计工具。用于从源码中识别所有文件上传入口并检查上传路径、文件名处理与校验逻辑漏洞。适用于：(1) 识别 Servlet/Commons FileUpload 与 Spring Boot MultipartFile 上传实现，(2) 发现任意文件上传、路径穿越与可执行文件上传漏洞，(3) 检查文件名/目录/类型/大小校验是否缺失或可绕过，(4) 审计上传目录与访问控制。**支持反编译 .class/.jar 文件提取上传逻辑**。结合 java-route-mapper 使用可实现完整的路由+文件上传审计。
+description: "Java Web source code file upload vulnerability auditing tool. Used to identify every file upload entry point in the source code and check the upload path, filename handling, and validation logic for vulnerabilities. Applicable to: (1) identifying Servlet/Commons FileUpload and Spring Boot MultipartFile upload implementations, (2) discovering arbitrary file upload, path traversal, and executable file upload vulnerabilities, (3) checking whether filename/directory/type/size validation is missing or bypassable, (4) auditing upload directories and access control. **Supports decompiling .class/.jar files to extract upload logic**. Combined with java-route-mapper it enables a complete route + file upload audit."
+zh-signals: "审计 Java Web 源码中的文件上传入口，检查任意上传、路径穿越、类型校验与目录访问控制漏洞。信号:Java,文件上传,源码审计,路径穿越,反编译"
+when-to-use: "Use when auditing Java Web source (Servlet/Commons FileUpload or Spring MultipartFile) for file-upload vulnerabilities, including decompiling .class/.jar files when source is unavailable."
 ---
 
-# Java 文件上传漏洞审计工具
+# Java File Upload Vulnerability Auditing Tool
 
-检查 Java Web 项目源码，识别文件上传实现并检测上传相关漏洞（任意文件上传、路径穿越、文件覆盖、Web 根目录可执行等）。
+Inspect Java Web project source code, identify file upload implementations, and detect upload-related vulnerabilities (arbitrary file upload, path traversal, file overwrite, web-root executability, etc.).
 
-## 核心要求
+## Core Requirements
 
-**此技能必须完整分析所有上传相关代码，不允许省略。**
+**This skill must fully analyze all upload-related code; omissions are not allowed.**
 
-- ✅ 识别所有上传入口点（ServletFileUpload / MultipartFile / transferTo / FileItem）
-- ✅ 标注每个上传点的保存路径、文件名来源与校验策略
-- ✅ 检测所有潜在的上传漏洞模式（类型校验缺失、路径穿越、Web 根目录写入、文件覆盖）
-- ✅ 当源码不可用时必须反编译，并输出反编译文件清单（文件名 + 位置）
-- ❌ 禁止省略任何上传入口
-- ❌ 禁止跳过反编译步骤
+- ✅ Identify all upload entry points (ServletFileUpload / MultipartFile / transferTo / FileItem)
+- ✅ Annotate the save path, filename origin, and validation strategy of each upload point
+- ✅ Detect all potential upload vulnerability patterns (missing type validation, path traversal, web root writes, file overwrite)
+- ✅ When source code is unavailable, decompilation is mandatory, and a decompiled file list (file name + location) must be output
+- ❌ Never omit any upload entry point
+- ❌ Never skip the decompilation step
 
 ---
 
-## 漏洞分级标准
+## Vulnerability Severity Rating Standard
 
-**详见 [SEVERITY_RATING.md](../shared/SEVERITY_RATING.md)**
+**See [SEVERITY_RATING.md](../shared/SEVERITY_RATING.md) for details**
 
-- 漏洞编号格式: `{C/H/M/L}-UPLOAD-{序号}`
-- 严重等级 = f(可达性 R, 影响范围 I, 利用复杂度 C)
-- Score = R × 0.40 + I × 0.35 + C × 0.25，映射 CVSS 3.1
+- Vulnerability ID format: `{C/H/M/L}-UPLOAD-{sequence number}`
+- Severity Level = f(Reachability R, Impact Scope I, Exploitation Complexity C)
+- Score = R × 0.40 + I × 0.35 + C × 0.25, mapped to CVSS 3.1
 
-| 前缀 | CVSS 3.1 | 含义 |
+| Prefix | CVSS 3.1 | Meaning |
 |------|----------|------|
-| 🔴 **C** | 9.0-10.0 | 可直接导致系统沦陷 |
-| 🟠 **H** | 7.0-8.9 | 可造成重大损害 |
-| 🟡 **M** | 4.0-6.9 | 可造成一定损害 |
-| 🔵 **L** | 0.1-3.9 | 安全加固项 |
+| 🔴 **C** | 9.0-10.0 | Can directly lead to full system compromise |
+| 🟠 **H** | 7.0-8.9 | Can cause major damage |
+| 🟡 **M** | 4.0-6.9 | Can cause moderate damage |
+| 🔵 **L** | 0.1-3.9 | Hardening item |
 
 ---
 
-## 技能协作流程（CRITICAL）
+## Skill Collaboration Workflow (CRITICAL)
 
-**java-file-upload-audit 必须在 java-route-mapper 之后执行，基于已梳理的路由信息进行审计。**
+**java-file-upload-audit must run after java-route-mapper and audit based on the already-mapped route information.**
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    完整审计流程                                  │
+│                    Complete Audit Flow                          │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
-│  [步骤1] java-route-mapper                                      │
+│  [Step 1] java-route-mapper                                     │
 │     │                                                           │
-│     │ 输出：                                                    │
-│     │ ├─ 所有 HTTP 路由列表                                     │
-│     │ ├─ 每个路由的参数定义                                     │
-│     │ │   ├─ 参数名、类型                                       │
-│     │ │   └─ JSON 内部字段                                      │
-│     │ └─ Burp Suite 请求模板                                    │
+│     │ Output:                                                   │
+│     │ ├─ Full list of HTTP routes                               │
+│     │ ├─ Parameter definitions for each route                   │
+│     │ │   ├─ Parameter name, type                               │
+│     │ │   └─ Inner JSON fields                                  │
+│     │ └─ Burp Suite request templates                           │
 │     │                                                           │
 │     ↓                                                           │
-│  [步骤2] java-file-upload-audit（本技能）                       │
+│  [Step 2] java-file-upload-audit (this skill)                   │
 │     │                                                           │
-│     │ 输入：java-route-mapper 的输出                            │
+│     │ Input: output of java-route-mapper                        │
 │     │                                                           │
-│     │ 执行：                                                    │
-│     │ ├─ 快速扫描上传实现                                       │
-│     │ ├─ 参数-上传映射分析                                      │
-│     │ ├─ 校验逻辑与保存路径分析                                 │
-│     │ └─ 执行条件分析                                           │
+│     │ Actions:                                                  │
+│     │ ├─ Quick scan for upload implementations                  │
+│     │ ├─ Parameter-to-upload mapping analysis                   │
+│     │ ├─ Validation logic and save path analysis                │
+│     │ └─ Execution condition analysis                           │
 │     │                                                           │
-│     ├─── 需要深入追踪 ───→ java-route-tracer                    │
+│     ├─── Deep tracing needed ───→ java-route-tracer             │
 │     │                           │                               │
-│     │    ←── 返回调用链信息 ────┘                               │
+│     │    ←── call chain info returned ──┘                       │
 │     │                                                           │
 │     ↓                                                           │
-│  [步骤3] 输出综合审计报告                                       │
+│  [Step 3] Output the consolidated audit report                  │
 │                                                                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### 输入依赖（来自 java-route-mapper）
+### Input Dependencies (from java-route-mapper)
 
-**在开始审计前，必须先检查是否已有 java-route-mapper 的输出文件：**
+**Before starting the audit, you must first check whether a java-route-mapper output file already exists:**
 
 ```
 {project_name}_audit/
 ├── route_mapper/
-│   ├── {project_name}_route_mapper_{timestamp}.md    ← 主索引（先读此文件定位模块详情）
+│   ├── {project_name}_route_mapper_{timestamp}.md    ← main index (read this first to locate module details)
 │   ├── {module_name}/
-│   │   └── {project_name}_module_{module_name}_{timestamp}.md  ← 模块详情
+│   │   └── {project_name}_module_{module_name}_{timestamp}.md  ← module details
 │   └── webservice/
 │       └── {project_name}_ws_{service_name}_{timestamp}.md
 └── file_upload_audit/
-    └── {project_name}_file_upload_audit_{timestamp}.md  ← 本技能输出
+    └── {project_name}_file_upload_audit_{timestamp}.md  ← output of this skill
 ```
 
-**如果 route_mapper 输出不存在，建议先运行：**
+**If the route_mapper output does not exist, it is recommended to run first:**
 ```python
 Skill(skill="java-route-mapper", args="--project {project_path}")
 ```
 
-### 从 route_mapper 获取的关键信息
+### Key Information Obtained from route_mapper
 
-| 信息 | 用途 |
+| Information | Purpose |
 |:-----|:-----|
-| 路由路径 | 定位上传 Controller/Servlet 入口 |
-| 参数名 + 类型 | 识别 MultipartFile / FileItem / fileName 参数 |
-| JSON 内部字段 | 识别嵌套上传参数 |
-| 参数用途描述 | 判断是否用于文件名或保存路径 |
+| Route path | Locate upload Controller/Servlet entry points |
+| Parameter name + type | Identify MultipartFile / FileItem / fileName parameters |
+| Inner JSON fields | Identify nested upload parameters |
+| Parameter purpose description | Determine whether it is used for the filename or the save path |
 
 ---
 
-## 工作流程（三阶段）
+## Workflow (Three Phases)
 
-### 阶段1: 快速扫描（优先执行）
+### Stage 1: Quick Scan (execute first)
 
-**目标：快速定位上传相关代码，不遗漏关键点。**
+**Goal: quickly locate upload-related code without missing any key point.**
 
 ```bash
 # 1.1 Servlet/Commons FileUpload
@@ -121,123 +123,123 @@ rg -n "ServletFileUpload|DiskFileItemFactory|FileItem|isMultipartContent" --glob
 # 1.2 Spring Boot MultipartFile
 rg -n "MultipartFile|@RequestParam\\(\"file\"\\)|transferTo\\(" --glob="*.java"
 
-# 1.3 文件名/路径相关
+# 1.3 Filename/path related
 rg -n "getOriginalFilename|getName\\(\\)|getRealPath\\(\"/uploads\"\\)|uploadDir" --glob="*.java"
 rg -n "new File\\(|Paths\\.get\\(|Path\\.of\\(|File\\.separator" --glob="*.java"
 
-# 1.4 上传接口路由
+# 1.4 Upload interface routes
 rg -n "@PostMapping\\(|@RequestMapping\\(.*upload|/upload" --glob="*.java"
 ```
 
-**输出：高危文件清单（按优先级排序）**
+**Output: list of high-risk files (sorted by priority)**
 
-| 优先级 | 文件类型 | 审计重点 |
+| Priority | File Type | Audit Focus |
 |:-------|:---------|:---------|
-| P0 | `*Controller.java` / `*Servlet.java` 中包含 upload 逻辑 | MultipartFile/FileItem |
-| P1 | `*Service.java`, `*ServiceImpl.java` | 文件保存路径/重命名 |
-| P2 | `*Util.java`, `*Storage.java`, `*File*.java` | 通用存储封装 |
-| P3 | `*Config.java`, `application.yml` | 文件大小/目录配置 |
+| P0 | `*Controller.java` / `*Servlet.java` containing upload logic | MultipartFile/FileItem |
+| P1 | `*Service.java`, `*ServiceImpl.java` | File save path/renaming |
+| P2 | `*Util.java`, `*Storage.java`, `*File*.java` | Generic storage wrappers |
+| P3 | `*Config.java`, `application.yml` | File size/directory configuration |
 
-### 阶段2: 参数-上传映射分析
+### Stage 2: Parameter-to-Upload Mapping Analysis
 
-**基于 route_mapper 输出，检查每个上传参数是否影响文件名或保存路径。**
+**Based on the route_mapper output, check whether each upload parameter influences the filename or the save path.**
 
-#### 2.1 高危参数识别
+#### 2.1 High-Risk Parameter Identification
 
-| 参数来源 | 参数名 | 类型 | 漏洞等级 |
+| Parameter Source | Parameter Name | Type | Vulnerability Level |
 |:---------|:-------|:-----|:-----|
-| @RequestParam | `file` | MultipartFile | **高危** - 直接上传 |
-| FileItem | `item` | FileItem | **高危** - fileName 可控 |
-| @RequestParam | `fileName` | String | **高危** - 文件名拼接 |
-| JSON | `upload.path` | String | **高危** - 目录拼接 |
+| @RequestParam | `file` | MultipartFile | **High** - direct upload |
+| FileItem | `item` | FileItem | **High** - fileName controllable |
+| @RequestParam | `fileName` | String | **High** - filename concatenation |
+| JSON | `upload.path` | String | **High** - directory concatenation |
 
-#### 2.2 参数追踪（示例）
+#### 2.2 Parameter Tracing (example)
 
 ```
-HTTP 参数: file (MultipartFile)
+HTTP parameter: file (MultipartFile)
     ↓
 Controller.handleFileUpload(file)
     ↓
-file.getOriginalFilename()  ← 文件名来源
+file.getOriginalFilename()  ← filename origin
     ↓
 Paths.get(uploadDir).resolve(fileName)
     ↓
-file.transferTo(filePath)   ← 上传写入点
+file.transferTo(filePath)   ← upload write point
 ```
 
-#### 2.3 上传点检查
+#### 2.3 Upload Point Checks
 
-对每个上传写入点，检查：
+For each upload write point, check:
 
-1. **文件名来源是否可控？**
-   - `getOriginalFilename()` / `item.getName()` → 高危
-   - 服务器生成随机名 → 低危
+1. **Is the filename source controllable?**
+   - `getOriginalFilename()` / `item.getName()` → High
+   - Server-generated random name → Low
 
-2. **是否有路径规范化与目录限制？**
-   - `getCanonicalPath()` + 固定上传目录 → 较安全
-   - 直接拼接路径 → 高危
+2. **Is there path normalization and directory restriction?**
+   - `getCanonicalPath()` + fixed upload directory → relatively safe
+   - Direct path concatenation → High
 
-3. **是否做类型/内容校验？**
-   - 白名单扩展名/Content-Type/魔数校验 → 安全
-   - 仅检查非空或无校验 → 高危
+3. **Is type/content validation performed?**
+   - Extension whitelist/Content-Type/magic number validation → safe
+   - Only a non-empty check or no validation → High
 
-4. **上传目录是否在 Web 根目录？**
-   - `getRealPath("/uploads")` / `/uploads/` → 高危
-   - 非 Web 可访问目录 → 较安全
+4. **Is the upload directory inside the web root?**
+   - `getRealPath("/uploads")` / `/uploads/` → High
+   - Directory not accessible from the web → relatively safe
 
-### 阶段3: 深入检查与报告
+### Stage 3: Deep Review and Reporting
 
-当上传逻辑复杂或参数多层传递时，调用 java-route-tracer 获取完整调用链并补充校验路径分析。
+When the upload logic is complex or parameters are passed through multiple layers, call java-route-tracer to obtain the complete call chain and supplement the validation path analysis.
 
 ---
 
-## 上传实现识别（来自 Notion 资料的关键点）
+## Upload Implementation Identification (key points from the Notion material)
 
 ### 1) Servlet/Commons FileUpload
 
-**识别特征：**
+**Identification features:**
 - `ServletFileUpload.isMultipartContent(request)`
 - `DiskFileItemFactory` / `ServletFileUpload`
 - `upload.parseRequest(request)` → `List<FileItem>`
-- `item.getName()` 作为文件名
-- `item.write(storeFile)` 写入文件
-- `getServletContext().getRealPath("/uploads")` 作为保存目录
+- `item.getName()` used as the filename
+- `item.write(storeFile)` writes the file
+- `getServletContext().getRealPath("/uploads")` used as the save directory
 
-**Notion 记录要点：**
-- 示例未校验表单字段名，`name="file"` **不会被校验**。
-- 仅设置了大小上限（如 `upload.setSizeMax(5MB)`），未见扩展名/类型/路径校验。
+**Notion notes:**
+- The example does not validate the form field name, so `name="file"` **is not checked**.
+- Only a size limit is set (e.g. `upload.setSizeMax(5MB)`); no extension/type/path validation is visible.
 
 ### 2) Spring Boot MultipartFile
 
-**识别特征：**
+**Identification features:**
 - `@RequestParam("file") MultipartFile file`
 - `file.getOriginalFilename()`
 - `file.transferTo(filePath)`
-- 固定上传目录 `uploadDir = "/uploads/"`
+- Fixed upload directory `uploadDir = "/uploads/"`
 
-**Notion 记录要点：**
-- `@RequestParam("file")` 会校验表单字段名，需要 `name="file"`。
-- 示例未见文件名净化、类型白名单或目录隔离。
+**Notion notes:**
+- `@RequestParam("file")` does validate the form field name, so `name="file"` is required.
+- The example shows no filename sanitization, type whitelist, or directory isolation.
 
-**详细检测规则参见** [UPLOAD_RULES.md](references/UPLOAD_RULES.md)
+**See [UPLOAD_RULES.md](references/UPLOAD_RULES.md) for detailed detection rules**
 
 ---
 
-## 反编译阶段（CRITICAL）
+## Decompilation Phase (CRITICAL)
 
-**当源码不可用时，必须使用 MCP Java Decompiler 反编译上传相关类。**
+**When source code is unavailable, the MCP Java Decompiler must be used to decompile upload-related classes.**
 
-### 反编译工具调用
+### Decompiler Tool Invocation
 
 ```python
-# 反编译单个上传相关类
+# Decompile a single upload-related class
 mcp__java-decompile-mcp__decompile_file(
     file_path="/path/to/UploadController.class",
     output_dir="/path/to/decompiled",
     save_to_file=True
 )
 
-# 反编译上传相关目录
+# Decompile an upload-related directory
 mcp__java-decompile-mcp__decompile_directory(
     directory_path="/path/to/WEB-INF/classes/com/example/upload",
     output_dir="/path/to/decompiled",
@@ -246,7 +248,7 @@ mcp__java-decompile-mcp__decompile_directory(
     max_workers=4
 )
 
-# 反编译多个指定文件
+# Decompile multiple specified files
 mcp__java-decompile-mcp__decompile_files(
     file_paths=[
         "/path/to/UploadController.class",
@@ -258,39 +260,39 @@ mcp__java-decompile-mcp__decompile_files(
 )
 ```
 
-### 必须反编译的类
+### Classes That Must Be Decompiled
 
-| 类型 | 匹配模式 | 目的 |
+| Type | Match Pattern | Purpose |
 |------|----------|------|
-| Controller/Servlet | `*Upload*Controller.class`, `*Servlet.class` | 提取上传入口 |
-| Service/Storage | `*Storage*.class`, `*FileService*.class` | 追踪保存路径 |
-| 工具类 | `*UploadUtil*.class`, `*FileUtil*.class` | 查找通用校验 |
-| 配置类 | `*Config*.class` | 获取上传目录/大小限制 |
+| Controller/Servlet | `*Upload*Controller.class`, `*Servlet.class` | Extract upload entry points |
+| Service/Storage | `*Storage*.class`, `*FileService*.class` | Trace save paths |
+| Utility classes | `*UploadUtil*.class`, `*FileUtil*.class` | Find generic validation |
+| Configuration classes | `*Config*.class` | Obtain upload directory/size limits |
 
-**反编译输出要求：**
-- 输出“反编译文件清单”，包含原始文件名与反编译输出路径
-- 反编译文件路径需可定位到具体目录
+**Decompilation output requirements:**
+- Output a "decompiled file list" containing the original file names and the decompiled output paths
+- Decompiled file paths must be locatable to a specific directory
 
 ---
 
-## 执行条件分析（CRITICAL - 避免误报）
+## Execution Condition Analysis (CRITICAL - avoid false positives)
 
-**发现上传逻辑后，必须检查该逻辑是否真的会被执行！**
+**After finding upload logic, you must check whether that logic will actually be executed!**
 
-| 检查项 | 说明 | 影响 |
+| Check Item | Description | Impact |
 |--------|------|------|
-| 权限校验 | 仅管理员可访问 | 影响可利用性 |
-| 参数校验 | 字段名/类型/大小校验 | 降低漏洞可利用性 |
-| 目录限制 | 固定上传目录 | 降低路径穿越 |
-| 可访问性 | 上传目录是否可 Web 访问 | 决定是否可执行 |
+| Permission check | Only administrators can access | Affects exploitability |
+| Parameter validation | Field name/type/size validation | Reduces vulnerability exploitability |
+| Directory restriction | Fixed upload directory | Reduces path traversal |
+| Accessibility | Whether the upload directory is web accessible | Determines whether the file is executable |
 
-结论分级必须标注：✅ 已确认可利用 / ⚠️ 待验证 / ❌ 不可利用 / 🔍 环境依赖
+Conclusion ratings must be labeled: ✅ confirmed exploitable / ⚠️ pending verification / ❌ not exploitable / 🔍 environment dependent
 
 ---
 
-## 报告生成
+## Report Generation
 
-**输出单个综合审计报告文件：**
+**Output a single comprehensive audit report file:**
 
 ```
 {project_name}_audit/file_upload_audit/
@@ -298,40 +300,40 @@ mcp__java-decompile-mcp__decompile_files(
     └── {project_name}_file_upload_audit_{timestamp}.md
 ```
 
-**路由名说明：**
-- 路由名从路由路径提取，去掉前缀斜杠和特殊字符
-- 例如：`/api/file/upload` → `api_file_upload`
+**Route Name Notes:**
+- Route names are extracted from the route path, stripping leading slashes and special characters
+- Example: `/api/file/upload` → `api_file_upload`
 
 ---
 
-## 输出格式
+## Output Format
 
-**严格按照 [references/OUTPUT_TEMPLATE.md](references/OUTPUT_TEMPLATE.md) 中的填充式模板生成输出文件。**
+**Generate the output file strictly following the fill-in template in [references/OUTPUT_TEMPLATE.md](references/OUTPUT_TEMPLATE.md).**
 
-- 文件名格式: `{project_name}_file_upload_audit_{YYYYMMDD_HHMMSS}.md`
-- 不得修改模板结构、不得增删章节、不得调整顺序
-- 所有【填写】占位符必须替换为实际内容
-- 通用规范参考: [shared/OUTPUT_STANDARD.md](../shared/OUTPUT_STANDARD.md)
-
----
-
-## 审计检查清单（防遗漏）
-
-### 代码分析检查
-- [ ] 所有上传入口已分析（Servlet/MultipartFile）
-- [ ] 每个上传点均标注文件名来源与保存路径
-- [ ] 目录与访问控制已分析
-
-### 反编译检查
-- [ ] 源码不可用时已反编译
-- [ ] 反编译文件清单已输出（文件名 + 位置）
-
-### 报告完整性检查
-- [ ] **综合审计报告已生成，且通过 OUTPUT_TEMPLATE.md 末尾的自检清单**
+- File name format: `{project_name}_file_upload_audit_{YYYYMMDD_HHMMSS}.md`
+- Do not modify the template structure, add or remove sections, or change their order
+- All [FILL IN] placeholders must be replaced with actual content
+- Common specification reference: [shared/OUTPUT_STANDARD.md](../shared/OUTPUT_STANDARD.md)
 
 ---
 
-## 参考资料
+## Audit Checklist (to prevent omissions)
 
-- [OUTPUT_TEMPLATE.md](references/OUTPUT_TEMPLATE.md) - 输出报告填充式模板
-- [UPLOAD_RULES.md](references/UPLOAD_RULES.md) - 上传实现识别与风险规则
+### Code Analysis Check
+- [ ] All upload entry points have been analyzed (Servlet/MultipartFile)
+- [ ] Filename origin and save path are annotated for every upload point
+- [ ] Directory and access control have been analyzed
+
+### Decompilation Check
+- [ ] Decompilation has been performed when the source code is unavailable
+- [ ] The decompiled file list has been output (file name + location)
+
+### Report Completeness Check
+- [ ] **The comprehensive audit report has been generated and passes the self-check checklist at the end of OUTPUT_TEMPLATE.md**
+
+---
+
+## References
+
+- [OUTPUT_TEMPLATE.md](references/OUTPUT_TEMPLATE.md) - Fill-in template for the output report
+- [UPLOAD_RULES.md](references/UPLOAD_RULES.md) - Upload implementation identification and risk rules

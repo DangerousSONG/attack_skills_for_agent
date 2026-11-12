@@ -1,6 +1,10 @@
 ---
 name: hunt-metrics-exposure
 description: "Hunt public /metrics, /health, and actuator endpoints leaking AI usage, DB pools, and operational intelligence."
+zh-signals: "狩猎暴露在公网的 /metrics、/health 与 actuator 端点，挖掘 AI 使用、数据库连接池等运营情报泄露。信号:指标泄露,监控端点,actuator,运营情报,信息泄露"
+when-to-use: >-
+  Use when the target runs modern observability tooling (Go, .NET, Java, Node.js) that
+  may expose /metrics, /health, or actuator endpoints leaking operational intelligence.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

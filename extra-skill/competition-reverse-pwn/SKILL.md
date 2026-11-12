@@ -1,6 +1,8 @@
 ---
 name: competition-reverse-pwn
 description: Internal downstream skill for ctf-sandbox-orchestrator. CTF-sandbox workflow for reverse engineering, malware, DFIR, firmware, pwnable, and native exploit challenges. Use when the user asks to reverse a binary, unpack a sample, inspect a memory dump or PCAP, recover malware behavior, debug a crash, or build or verify an exploit chain under sandbox assumptions. Use only after `$ctf-sandbox-orchestrator` has already established sandbox assumptions and routed here.
+zh-signals: "在已建立沙箱假设后处理 CTF 逆向、恶意样本、DFIR、固件与原生漏洞利用挑战。信号:CTF逆向,pwn利用,恶意样本分析,内存取证,固件分析"
+when-to-use: "Use only after ctf-sandbox-orchestrator has established sandbox assumptions, for binary-heavy reverse engineering, DFIR, or exploit challenges."
 ---
 
 # Competition Reverse Pwn

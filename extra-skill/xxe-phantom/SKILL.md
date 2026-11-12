@@ -1,6 +1,8 @@
 ---
 name: xxe-phantom
 description: An XXE detection and exploitation methodology engine. Triggered when testing for XML injection, interacting with XML content-types/endpoints, or processing XML-based file uploads (SVG, DOCX, SAML, SOAP). Facilitates classic file reads, blind OOB exfiltration, WAF bypasses, and SSRF chaining. Includes report structuring.
+zh-signals: "XXE 检测与利用方法引擎，覆盖经典文件读取、盲 OOB 外带与 WAF 绕过。信号:XXE,XML注入,OOB外带,WAF绕过,SSRF"
+when-to-use: "Use when testing XML endpoints, content-types, or XML-based uploads (SVG, DOCX, SAML, SOAP) for external entity injection."
 license: MIT
 metadata:
   version: "1.0.0"

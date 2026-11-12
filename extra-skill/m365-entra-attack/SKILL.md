@@ -1,6 +1,11 @@
 ---
 name: m365-entra-attack
 description: Microsoft 365 / Entra ID red-team attack chain
+zh-signals: "针对 Microsoft 365 / Entra ID 的红队攻击链，涵盖租户发现、用户枚举、密码喷洒与条件访问绕过。信号:M365,Entra ID,密码喷洒,用户枚举,条件访问"
+when-to-use: >-
+  Use when an authorized engagement targets Microsoft 365 / Entra ID — tenant
+  discovery, user enumeration, password spraying, or Conditional Access bypass
+  analysis — with a list of corporate emails or stealer-leaked credentials.
 category: security
 risk: offensive
 source: https://github.com/elementalsouls/Claude-BugHunter

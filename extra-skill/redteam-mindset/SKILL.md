@@ -1,6 +1,8 @@
 ---
 name: redteam-mindset
 description: Red-team operator discipline
+zh-signals: "红队作战思维与操作纪律，指导授权红队评估中的目标导向、隐蔽性与风险控制。信号:红队,作战思维,纪律,隐蔽性,授权评估"
+when-to-use: "Use when approaching an authorized red-team engagement and you need operator discipline, target-focused planning, and stealth/risk-control guidance."
 category: security
 risk: offensive
 source: https://github.com/elementalsouls/Claude-BugHunter

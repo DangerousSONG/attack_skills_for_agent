@@ -1,6 +1,10 @@
 ---
 name: azure-keyvault-keys-ts
 description: "Manage cryptographic keys using Azure Key Vault Keys SDK for JavaScript (@azure/keyvault-keys). Use when creating, encrypting/decrypting, signing, or rotating keys."
+zh-signals: "使用 Azure Key Vault Keys JavaScript SDK 管理加密密钥，涵盖创建、加解密、签名与轮换。信号:azure key vault,密钥管理,加解密,签名,密钥轮换"
+when-to-use: >-
+  Use when creating, encrypting/decrypting, signing, or rotating cryptographic keys
+  with the Azure Key Vault Keys JavaScript SDK.
 risk: critical
 source: community
 date_added: "2026-02-27"

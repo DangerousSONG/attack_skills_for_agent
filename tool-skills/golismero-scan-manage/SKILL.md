@@ -2,38 +2,42 @@
 name: golismero-scan-manage
 description: "Golismero performs scanning with knowledge-base management. Signals: web vulnerabilities, injection, fully automated scanning, HTML report, plugin enable."
 zh-signals: "Golismero: 带知识库管理的扫描。信号:web漏洞,注入,全自动扫描,HTML 报告,启用插件。"
+when-to-use: >-
+  Use when you want an automated web vulnerability scan with knowledge-base
+  management and HTML reporting, enabling bundled plugins such as nikto and
+  nmap.
 ---
 
 # Golismero
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/golismero/golismero
-- 上游 License:GPL-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/golismero/golismero
+- Upstream License: GPL-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/golismero/golismero
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python golismero.py scan t.com` | 全自动扫描 |
-| `python golismero.py scan t.com -o report.html` | HTML 报告 |
-| `-e nikto,nmap` | 启用插件 |
-| `-a` | 全部插件 |
+| `python golismero.py scan t.com` | Fully automated scan |
+| `python golismero.py scan t.com -o report.html` | HTML report |
+| `-e nikto,nmap` | Enable plugins |
+| `-a` | All plugins |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 带知识库管理的扫描
+### Scanning with Knowledge-Base Management
 
 ```bash
 python golismero.py scan t.com -o report.html
-# 结果自动去重+知识库分类,适合团队协作
+# Results are deduplicated and classified by the knowledge base, suited to team collaboration
 ```
 
-## 注意事项
+## Notes
 
-开源漏洞管理框架,插件化,自带去重和报告系统。
+Open-source vulnerability management framework, plugin-based, with built-in deduplication and a reporting system.

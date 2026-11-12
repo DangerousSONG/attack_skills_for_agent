@@ -1,6 +1,8 @@
 ---
 name: email-security-auditor-cpp
 description: Audit email account security, validate credentials, and manage email lists using this C++ email security testing utility
+zh-signals: "邮箱账户安全审计与凭据验证。信号:邮箱审计,SMTP,IMAP,凭据验证,邮件安全"
+when-to-use: "Use when auditing email account security, validating SMTP/IMAP credentials, or managing email lists for authorized security testing."
 triggers:
   - how do I audit email account security
   - validate email credentials programmatically

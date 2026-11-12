@@ -10,6 +10,11 @@ description: >-
   LLM for harmful content, jailbreaks, prompt injection, or backdoor/trigger behavior; to
   build a safe/unsafe dataset; or to mine novel attacks at scale. Complements the hacker
   skill (code/infra exploitability): this skill targets model behavior and produces data.
+zh-signals: "运行有界红队自研究循环，为 LLM 护栏生成对抗性训练数据（越狱、提示注入、有害内容、后门）。信号:LLM红队,越狱,提示注入,护栏训练,数据集"
+when-to-use: >-
+  Use when asked to red-team or stress-test an LLM for harmful content, jailbreaks,
+  prompt injection, or backdoor behavior, or to build a safe/unsafe guardrail dataset
+  at scale.
 ---
 
 # Red-Team Autoresearch

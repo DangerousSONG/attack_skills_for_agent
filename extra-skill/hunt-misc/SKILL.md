@@ -2,6 +2,10 @@
 name: hunt-misc
 description: Hunting skill for misc vulnerabilities. Built from 225 public bug bounty
   reports. Use when hunting misc on any target.
+zh-signals: "基于公开漏洞报告整理杂项漏洞的挖掘方法，用于对任意目标开展 misc 类漏洞猎取。信号:杂项漏洞,漏洞挖掘,漏洞报告,Bug Bounty"
+when-to-use: >-
+  Use when hunting miscellaneous vulnerability classes on a target, with explicit written
+  authorization and the relevant testing tools available.
 category: security
 risk: offensive
 source: https://github.com/elementalsouls/Claude-BugHunter

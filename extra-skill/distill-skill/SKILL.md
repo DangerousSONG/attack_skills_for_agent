@@ -8,6 +8,11 @@ description: >
   pastes raw security content (bug report, pentest report, CTF writeup, blog
   post, ezine, book chapter) and wants it transformed into structured hunting
   methodology.
+zh-signals: "从安全报告、CTF 文章或书籍中提炼可复用攻击手法并生成 SKILL.md。信号:技能生成,知识提炼,ctf,报告,meta"
+when-to-use: >-
+  Use when the user pastes raw security content (bug report, pentest report, CTF writeup,
+  blog post, ezine, or book chapter) or asks to distill, extract, or convert it into a
+  structured hunting skill.
 license: MIT
 compatibility: Designed for Claude Code.
 metadata:

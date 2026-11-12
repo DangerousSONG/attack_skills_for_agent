@@ -1,6 +1,8 @@
 ---
 name: hunt-write-gap
 description: "Hunt read-protected write-gaping endpoints. PATCH/POST/DELETE without authorization while GET is protected. Agnostic: Supabase, Firebase, REST, GraphQL."
+zh-signals: "狩猎读受保护但写接口缺少授权的 write-gap 越权漏洞。信号:write-gap,越权,PATCH,Supabase,GraphQL"
+when-to-use: "Use when you have authenticated read access to your own data and need to test whether write methods allow unauthorized modification."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

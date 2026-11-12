@@ -1,6 +1,8 @@
 ---
 name: security-checklist
 description: Review a scoped architecture against evidence-based network, identity, data, secrets, dependency and incident-response controls.
+zh-signals: "对照基于证据的网络、身份、数据、机密、依赖与应急响应控制项审查架构安全性。信号:安全清单,架构审计,VPC,身份认证,依赖安全,应急响应"
+when-to-use: "Use when reviewing a scoped architecture against network, identity, data, secrets, dependency, and incident-response security controls."
 source: community
 date_added: "2026-09-04"
 risk: safe

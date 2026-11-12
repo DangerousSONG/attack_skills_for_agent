@@ -1,6 +1,8 @@
 ---
 name: find-skills
 description: Helps users discover and install Rifteo agent skills when they ask questions like "is there a skill for X", "how do I write a finding", "find a skill that can...", or want to extend their agent for security and audit work.
+zh-signals: "帮助用户发现并安装 Rifteo agent 技能，当用户询问是否有某类技能或想扩展安全与审计能力时使用。信号:技能发现,技能安装,Rifteo,agent技能,安全审计"
+when-to-use: "Use when the user asks whether a skill exists for a task, wants to extend their agent for security or audit work, or needs help discovering and installing Rifteo skills."
 ---
 
 # Find Rifteo Skills

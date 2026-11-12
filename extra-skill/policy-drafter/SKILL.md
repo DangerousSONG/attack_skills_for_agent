@@ -1,6 +1,8 @@
 ---
 name: policy-drafter
 description: Policy-drafting workflow for security policies — AUP, Incident Response Plan, Access Control, Data Classification, BCP, Change Management, Vendor Management, Crypto, and Remote Work. Structure with Purpose/Scope/Statement/Roles/Enforcement/Review, ISO 27001 Annex A.5 alignment, NL/EN drafting.
+zh-signals: "安全政策起草工作流，覆盖 AUP、事件响应、访问控制等文档结构。信号:安全政策,合规文档,ISO 27001,AUP,事件响应"
+when-to-use: "Use when drafting or reviewing security policies such as AUP, incident response, access control, or data classification documents."
 ---
 
 # Policy Drafter

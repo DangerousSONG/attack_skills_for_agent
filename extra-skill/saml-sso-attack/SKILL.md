@@ -1,6 +1,8 @@
 ---
 name: saml-sso-attack
 description: Attack SAML SSO via XSW, signature strip, metadata extract.
+zh-signals: "针对 SAML SSO 的身份认证攻击，涵盖 XML 签名包装、签名剥离、元数据提取与用户枚举。信号:SAML SSO,XSW,签名绕过,IdP 元数据,身份伪造"
+when-to-use: "Use when a target uses SAML SSO (SAMLRequest/SAMLResponse parameters, IdP metadata, or ADFS) and you need to test for signature wrapping, signature stripping, or assertion forgery."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

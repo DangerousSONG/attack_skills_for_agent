@@ -1,6 +1,8 @@
 ---
 name: ir-runbook
 description: Incident Response runbook — NIST SP 800-61 phases (Preparation/Detection-Analysis/Containment-Eradication-Recovery/Lessons-Learned), per-scenario playbooks (ransomware, BEC, data exfil, credential compromise, cloud), regulatory reporting (NIS2 24h/72h, AVG breach 72h, DORA), comms templates, and post-incident review.
+zh-signals: "基于 NIST SP 800-61 的事件响应运行手册与场景化处置流程。信号:事件响应,IR,勒索软件,NIS2,应急处置"
+when-to-use: "Use when building or executing incident response runbooks, selecting scenarios, or tracking regulatory reporting timelines."
 ---
 
 # IR Runbook

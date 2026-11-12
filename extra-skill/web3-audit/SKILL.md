@@ -1,6 +1,8 @@
 ---
 name: web3-audit
 description: Smart contract security audit
+zh-signals: "对智能合约开展安全审计，检查常见合约漏洞与链上逻辑风险。信号:智能合约,Web3,合约审计,链上安全,漏洞"
+when-to-use: "Use when auditing smart contracts or Web3 projects for security weaknesses in contract logic and deployment."
 category: security
 risk: offensive
 source: https://github.com/elementalsouls/Claude-BugHunter

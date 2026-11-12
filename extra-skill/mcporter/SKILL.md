@@ -1,6 +1,10 @@
 ---
 name: mcporter
 description: Use the mcporter CLI to list, configure, auth, and call MCP servers/tools directly (HTTP or stdio), including ad-hoc servers, config edits, and CLI/type generation.
+zh-signals: "使用 mcporter CLI 列出、配置、认证并直接调用 MCP 服务器与工具（HTTP 或 stdio）。信号:mcporter,MCP服务器,CLI工具,认证配置,类型生成"
+when-to-use: >-
+  Use when you need to list, configure, authenticate, or call MCP servers and tools
+  directly via the mcporter CLI, including ad-hoc servers and config edits.
 homepage: http://mcporter.dev
 metadata:
   {

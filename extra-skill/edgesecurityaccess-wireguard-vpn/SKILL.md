@@ -1,6 +1,8 @@
 ---
 name: edgesecurityaccess-wireguard-vpn
 description: WireGuard-based rapid VPN networking software for Linux with HTTP API and utility tools
+zh-signals: "基于 WireGuard 的快速 VPN 组网软件部署与管理。信号:WireGuard,VPN搭建,密钥生成,用户配置,ESA服务端。"
+when-to-use: "Use when deploying an EdgeSecurityAccess WireGuard VPN server, building the ESA mainframe with Go, creating ESA VPN users and configurations, managing WireGuard peers, or troubleshooting ESA client connectivity."
 triggers:
   - set up EdgeSecurityAccess VPN server
   - configure ESA WireGuard networking

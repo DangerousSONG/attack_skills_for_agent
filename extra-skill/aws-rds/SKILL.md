@@ -2,6 +2,8 @@
 name: aws-rds
 description: Provision and manage RDS databases. Configure backups, replication, and
   security. Use when deploying managed relational databases on AWS.
+zh-signals: "在 AWS 上部署与管理 RDS 数据库，配置备份、复制与安全。信号:AWS RDS,数据库部署,备份复制,安全配置,托管数据库"
+when-to-use: "Use when deploying or managing Amazon RDS relational databases on AWS, including backups, replication, security, and parameter tuning."
 category: devops
 risk: critical
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

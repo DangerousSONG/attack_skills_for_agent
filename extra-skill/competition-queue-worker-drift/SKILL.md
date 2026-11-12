@@ -1,6 +1,8 @@
 ---
 name: competition-queue-worker-drift
 description: Internal downstream skill for ctf-sandbox-orchestrator. CTF-sandbox workflow for queues, async workers, cron jobs, delayed tasks, retry behavior, worker-only config drift, and payload-to-side-effect chains. Use when the user asks to trace a queue payload, inspect async job execution, explain worker-only behavior, follow retries or dead-letter handling, or connect an enqueued item to a later file, cache, email, or privilege-bearing side effect. Use only after `$ctf-sandbox-orchestrator` has already established sandbox assumptions and routed here.
+zh-signals: "CTF 沙箱中追踪队列、异步 worker、重试与 payload 到副作用链的工作流。信号:队列,异步worker,任务重试,worker配置漂移,副作用链"
+when-to-use: "Use only after ctf-sandbox-orchestrator has established sandbox assumptions, when tracing a queue payload, inspecting async job execution, or connecting an enqueued item to a later side effect."
 ---
 
 # Competition Queue Worker Drift

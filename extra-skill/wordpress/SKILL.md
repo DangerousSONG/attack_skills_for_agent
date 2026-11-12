@@ -1,6 +1,8 @@
 ---
 name: wordpress
 description: "Complete WordPress development workflow covering theme development, plugin creation, WooCommerce integration, performance optimization, and security hardening. Includes WordPress 7.0 features: Real-Time Collaboration, AI Connectors, Abilities API, DataViews, and PHP-only blocks."
+zh-signals: "完整的 WordPress 开发工作流（主题、插件、WooCommerce、性能与安全加固）。信号:wordpress,主题开发,插件开发,woocommerce,安全加固"
+when-to-use: "Use when building WordPress sites, creating themes or plugins, setting up WooCommerce, optimizing performance, or hardening WordPress security."
 category: workflow-bundle
 risk: safe
 source: personal

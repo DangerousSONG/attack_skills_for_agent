@@ -3,6 +3,8 @@ name: monte-carlo-context-detection
 description: Route data-related requests to the right Monte Carlo skill or workflow.
   USE WHEN alerts, incidents, data broken, stale, coverage gaps, data quality, or
   any ambiguous data observability request.
+zh-signals: "将含糊的数据可观测性请求路由到合适的 Monte Carlo 技能或工作流。信号:数据可观测性,Monte Carlo,告警,路由,数据质量"
+when-to-use: "Use for ambiguous or incomplete data-observability requests that do not clearly name a specific skill; ask clarifying questions first."
 when_to_use: 'Invoke for ambiguous or incomplete data-observability requests that
   don''t clearly name a specific skill.
 

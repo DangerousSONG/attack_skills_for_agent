@@ -1,6 +1,10 @@
 ---
 name: wireshark-analysis
 description: "Execute comprehensive network traffic analysis using Wireshark to capture, filter, and examine network packets for security investigations, performance optimization, and troubleshooting."
+zh-signals: "使用 Wireshark 捕获、过滤与分析网络流量，支持安全调查、性能优化与故障排查。信号:Wireshark,流量分析,数据包捕获,安全调查,故障排查"
+when-to-use: >-
+  Use when capturing, filtering, and examining network packets for security
+  investigations, performance optimization, or troubleshooting.
 risk: critical
 source: community
 author: zebbern

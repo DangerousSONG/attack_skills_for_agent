@@ -1,6 +1,10 @@
 ---
 name: hunt-prototype-pollution
 description: Hunt client-side and server-side prototype pollution for XSS, auth bypass, and RCE.
+zh-signals: "狩猎客户端与服务端原型污染，串联 DOM XSS、认证绕过与 RCE 利用链。信号:原型污染,原型链,XSS,RCE,Node.js"
+when-to-use: >-
+  Use when testing for client-side or server-side prototype pollution that can chain to
+  XSS, auth bypass, or RCE in JavaScript and Node.js targets.
 category: redteam
 version: 1.1.0
 revision_date: 2026-07-25

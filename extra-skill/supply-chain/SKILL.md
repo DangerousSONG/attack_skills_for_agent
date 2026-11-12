@@ -6,6 +6,8 @@ description: |
   Plus CI/CD pipeline review: GitHub Actions / GitLab CI / CircleCI misconfigurations — pull_request_target abuse, unpinned action SHAs, secrets leaked in logs, over-broad OIDC trust, and poisoned pipeline execution (PPE, direct and indirect). Assesses SLSA provenance gaps.
 
   White-box first: reads manifests, lockfiles, and workflow YAML from a local codebase. Uses semgrep, trufflehog, and registry probes. Chains from /codebase or /pentester; into /analyze-cve for confirmed vulnerable versions and /cloud-security when a pipeline holds cloud OIDC trust.
+zh-signals: "软件供应链与 CI/CD 安全评估，检查依赖混淆、仿冒包、锁文件篡改、恶意安装钩子与管道注入风险。信号:供应链,依赖混淆,CI/CD,管道注入,锁文件"
+when-to-use: "Use to assess a repository's dependency and CI/CD pipeline security from a white-box perspective. Covers dependency confusion, typosquatting, install hooks, lockfile integrity, and poisoned pipeline execution."
 argument-hint: "<repo-path-or-url> [ecosystem=npm|pypi|maven|go|ruby|nuget|mixed] [focus=deps|ci|both] [depth=quick|standard|thorough]"
 user-invocable: true
 ---

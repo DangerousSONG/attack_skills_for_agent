@@ -1,6 +1,8 @@
 ---
 name: offensive-wpa-enterprise
 description: "WPA/WPA2/WPA3-Enterprise (802.1X / EAP) attack methodology — EAP method identification (PEAP-MSCHAPv2, EAP-TTLS, EAP-TLS, EAP-GTC, EAP-PWD, EAP-FAST), evil-twin RADIUS attacks with eaphammer for credential capture, MSCHAPv2 challenge-response cracking, EAP-TLS client certificate theft paths (DPAPI, NDES, AD CS auto-enrollment), supplicant validation bypass (missing server cert validation, missing CN pinning, BYOD misconfigurations), and post-capture pivots into AD via cracked domain credentials. Use for corporate Wi-Fi engagements where the network is 802.1X authenticated."
+zh-signals: "针对 802.1X/EAP 企业无线网络的攻击方法，覆盖 EAP 识别、evil-twin RADIUS、MSCHAPv2 破解与证书窃取。信号:WPA企业,802.1X,EAP,evil-twin,RADIUS"
+when-to-use: "Use for authorized corporate Wi-Fi engagements where the network uses 802.1X/EAP authentication, to identify EAP methods, capture MSCHAPv2 challenge-responses, or target certificate paths."
 ---
 
 # WPA-Enterprise (802.1X / EAP) Attacks

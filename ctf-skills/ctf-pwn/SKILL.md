@@ -141,6 +141,6 @@ bash -c '{ echo "cmd1"; echo "cmd2"; sleep 1; } | nc host port'
 - Full RELRO -> target `__free_hook`, `__malloc_hook` (glibc < 2.34), or return addresses
 - Stack canary present -> prefer heap-based attacks or leak canary first
 
-> 📎 详细内容（完整示例 / 参考 / 数据表）已拆分至同目录 `reference.md`，按需用 Read 读取对应小节。
+> 📎 Detailed content (full examples / references / data tables) has been split into `reference.md` in the same directory; use Read to load the relevant section on demand.
 
-> 📎 **参考文档说明**：本 skill 转自上游开源仓库，以下参考文档**未随本库分发**：`advanced-exploits-2.md`、`advanced-exploits-3.md`、`advanced-exploits-4.md`、`advanced-exploits-5.md`、`advanced-exploits.md`、`advanced.md`、`field-notes.md`、`format-string.md`、`heap-fsop.md`、`heap-techniques-2.md`、`heap-techniques.md`、`kernel-bypass.md`、`kernel-techniques.md`、`kernel.md`、`overflow-basics.md`、`rop-advanced.md`、`rop-and-shellcode.md`、`sandbox-escape.md`、`tools-mcp.md`。相关主题的要点已保留在本文对应描述中；如需展开内容，请按正文关键词在库内 grep 或自行检索。
+> 📎 **Reference Document Notice**: this skill is adapted from an upstream open-source repository; the following reference documents are **not distributed with this library**: `advanced-exploits-2.md`, `advanced-exploits-3.md`, `advanced-exploits-4.md`, `advanced-exploits-5.md`, `advanced-exploits.md`, `advanced.md`, `field-notes.md`, `format-string.md`, `heap-fsop.md`, `heap-techniques-2.md`, `heap-techniques.md`, `kernel-bypass.md`, `kernel-techniques.md`, `kernel.md`, `overflow-basics.md`, `rop-advanced.md`, `rop-and-shellcode.md`, `sandbox-escape.md`, `tools-mcp.md`. The key points of the related topics are retained in the corresponding descriptions in this document; if you need the expanded content, grep the library using keywords from the body text or search on your own.

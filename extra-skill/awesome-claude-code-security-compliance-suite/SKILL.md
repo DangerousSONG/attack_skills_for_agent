@@ -1,6 +1,10 @@
 ---
 name: awesome-claude-code-security-compliance-suite
 description: Security & compliance skill suite providing OWASP scanning, CVE detection, GDPR/SOC2 audits, threat modeling, and incident response workflows for AI coding agents
+zh-signals: "面向 AI 编码代理的安全与合规套件，提供 OWASP 扫描、CVE 检测、GDPR/SOC2 审计、威胁建模与事件响应。信号:OWASP扫描,CVE检测,GDPR,SOC2,威胁建模"
+when-to-use: >-
+  Use when scanning code for OWASP vulnerabilities, checking dependencies for
+  CVEs, auditing GDPR/SOC2 compliance, or generating threat models.
 triggers:
   - scan this code for OWASP vulnerabilities
   - check dependencies for CVEs and security issues

@@ -1,6 +1,10 @@
 ---
 name: hunt-fastapi
 description: "Hunt FastAPI-specific vulnerabilities: dependency injection gaps, Pydantic coercion, and OpenAPI mining."
+zh-signals: "狩猎 FastAPI 特有漏洞，覆盖依赖注入鉴权缺口、Pydantic 类型转换与 OpenAPI 挖掘。信号:fastapi,依赖注入,pydantic,openapi,asgi,api安全"
+when-to-use: >-
+  Use when the target uses FastAPI (indicated by /docs, /redoc, /openapi.json, or uvicorn),
+  especially when authorization relies on Depends or Pydantic validation.
 category: redteam
 version: 1.1.0
 revision_date: 2026-07-25

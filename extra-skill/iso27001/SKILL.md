@@ -1,6 +1,10 @@
 ---
 name: iso27001
 description: ISO/IEC 27001:2022 ISMS implementation and certification prep — clauses 4-10 (context, leadership, planning, support, operation, evaluation, improvement), Annex A 93 controls across four themes, Statement of Applicability, Stage 1/Stage 2 audit prep, and the certification cycle.
+zh-signals: "ISO/IEC 27001:2022 ISMS 实施与认证准备，覆盖第 4-10 条款、附录 A 的 93 项控制、适用性声明与阶段审核。信号:ISO27001,ISMS,认证准备,附录A,适用性声明"
+when-to-use: >-
+  Use when implementing an ISO/IEC 27001:2022 ISMS, drafting a Statement of
+  Applicability, or preparing for Stage 1/Stage 2 certification audits.
 ---
 
 # ISO 27001 Mapper

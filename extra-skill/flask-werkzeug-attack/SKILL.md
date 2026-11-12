@@ -1,6 +1,8 @@
 ---
 name: flask-werkzeug-attack
 description: Exploit Flask/Werkzeug debugger exposure for traceback and SECRET leaks.
+zh-signals: "利用 Flask/Werkzeug 调试器暴露获取 traceback、SECRET 并可执行 Python 控制台。信号:Flask,Werkzeug,调试器,信息泄露,SECRET,RCE"
+when-to-use: "Use when a Flask/Werkzeug debug page is exposed through debug=True, HTTP 500 tracebacks, or __debugger__ parameters."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

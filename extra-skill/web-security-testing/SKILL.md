@@ -1,6 +1,8 @@
 ---
 name: web-security-testing
 description: "Web application security testing workflow for OWASP Top 10 vulnerabilities including injection, XSS, authentication flaws, and access control issues."
+zh-signals: "Web 应用 OWASP Top 10 安全测试工作流。信号:Web安全,OWASP Top 10,注入,XSS,访问控制"
+when-to-use: "Use when testing a web application against OWASP Top 10 categories such as injection, XSS, authentication flaws, and broken access control."
 category: granular-workflow-bundle
 risk: safe
 source: personal

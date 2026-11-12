@@ -1,6 +1,8 @@
 ---
 name: broken-authentication
 description: "Identify and exploit authentication and session management vulnerabilities in web applications. Broken authentication consistently ranks in the OWASP Top 10 and can lead to account takeover, identity theft, and unauthorized access to sensitive systems."
+zh-signals: "识别并利用 Web 应用中的认证与会话管理漏洞，可能导致账号接管与未授权访问。信号:认证缺陷,会话管理,账号接管,OWASP,登录绕过"
+when-to-use: "Use when testing web application authentication and session management for password policy, session handling, MFA, or credential weaknesses."
 risk: offensive
 source: community
 author: zebbern

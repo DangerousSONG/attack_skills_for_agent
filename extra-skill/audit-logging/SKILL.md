@@ -2,6 +2,8 @@
 name: audit-logging
 description: Implement centralized audit logging and SIEM integration. Configure log
   retention and security monitoring. Use when implementing audit trail requirements.
+zh-signals: "实现集中式审计日志、SIEM 集成与日志留存安全监控。信号:审计日志,SIEM,日志留存,合规,安全监控,取证"
+when-to-use: "Use when implementing audit trail requirements, centralized logging, or SIEM integration for compliance and security monitoring."
 category: security
 risk: safe
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

@@ -1,6 +1,8 @@
 ---
 name: remediation-planner
 description: Convert a security finding or vulnerability into a prioritized step-by-step remediation plan with effort estimates per step. Trigger when the user provides a vulnerability, finding, or bug needing a fix plan, asks "how do we fix this?" or "what's the remediation for X?", wants to estimate the work involved in addressing a finding, or needs a remediation roadmap to present to developers or stakeholders.
+zh-signals: "将安全发现或漏洞转化为按优先级排序的分步修复计划，并为每步估算工作量。信号:修复计划,漏洞修复,优先级排序,工作量估算,修复路线图"
+when-to-use: "Use when the user provides a vulnerability or finding and asks how to fix it, how much effort is involved, or needs a remediation roadmap."
 license: MIT
 metadata:
   version: "1.0.0"

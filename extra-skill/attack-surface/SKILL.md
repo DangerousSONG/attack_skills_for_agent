@@ -1,6 +1,10 @@
 ---
 name: attack-surface
 description: Maps every entry point, component, and trust boundary of a target before testing begins prevents missed coverage and prioritizes the highest-value attack paths. Trigger when the user provides a target and wants to know where to start, says "map the attack surface", "what should I test", or "where do I begin", or is starting any engagement after scope-grill is complete.
+zh-signals: "在测试前梳理目标的入口点、组件与信任边界，以规划覆盖面和高价值攻击路径。信号:攻击面,资产测绘,入口点,信任边界,侦察"
+when-to-use: >-
+  Use when a target is provided and you need to know where to start, or before any engagement
+  once scope is established, to map entry points and prioritize attack paths.
 license: MIT
 metadata:
   version: "1.0.0"

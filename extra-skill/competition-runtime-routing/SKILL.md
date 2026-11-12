@@ -1,6 +1,9 @@
 ---
 name: competition-runtime-routing
 description: Internal downstream skill for ctf-sandbox-orchestrator. CTF-sandbox workflow for reverse proxies, Host headers, forwarded headers, vhost routing, websocket upgrades, path-prefix rewriting, base-URL derivation, and multi-node route resolution. Use when the user asks which host or container serves a route, why a public-looking domain still belongs to the sandbox, how headers or proxies change behavior, or how a route resolves across proxy, container, and worker boundaries. Use only after `$ctf-sandbox-orchestrator` has already established sandbox assumptions and routed here.
+zh-signals: "在 CTF 沙箱中追踪反向代理、Host 头、vhost 与多节点路由解析。信号:CTF沙箱,反代路由,vhost,Host头,路径前缀。"
+when-to-use: >-
+  Use only as a downstream specialization after ctf-sandbox-orchestrator has established sandbox assumptions, when the decisive question is which node, proxy rule, or header-derived branch serves the live request.
 ---
 
 # Competition Runtime Routing

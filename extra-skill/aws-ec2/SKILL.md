@@ -2,6 +2,10 @@
 name: aws-ec2
 description: Manage EC2 instances, AMIs, and auto-scaling groups. Configure security
   groups, key pairs, and instance types. Use when deploying compute resources on AWS.
+zh-signals: "管理 AWS EC2 实例、AMI 与自动伸缩组，配置安全组与密钥对。信号:aws,ec2,ami,自动伸缩,安全组"
+when-to-use: >-
+  Use when deploying or managing EC2 compute resources, building AMIs, configuring
+  security groups and key pairs, or troubleshooting instance issues on AWS.
 category: devops
 risk: critical
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

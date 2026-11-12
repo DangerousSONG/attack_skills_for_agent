@@ -1,6 +1,10 @@
 ---
 name: snowflake-development
 description: "Comprehensive Snowflake development assistant covering SQL best practices, data pipeline design (Dynamic Tables, Streams, Tasks, Snowpipe), Cortex AI functions, Cortex Agents, Snowpark Python, dbt integration, performance tuning, and security hardening."
+zh-signals: "Snowflake 开发助手，覆盖 SQL 最佳实践、数据管道、Cortex AI 与 Snowpark。信号:snowflake,sql优化,数据管道,cortex ai,snowpark"
+when-to-use: >-
+  Use when writing Snowflake SQL, building data pipelines, using Cortex AI, or working
+  with Snowpark Python, dbt, performance tuning, or security hardening.
 category: data-engineering
 risk: safe
 source: community

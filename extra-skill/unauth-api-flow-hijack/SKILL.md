@@ -1,6 +1,9 @@
 ---
 name: unauth-api-flow-hijack
 description: Exploit unauthenticated multi-step API flows without credentials.
+zh-signals: "在无凭据情况下利用未认证的多步 API 业务流程。信号:未授权API,业务流程劫持,多步流程,文件上传,数据导出。"
+when-to-use: >-
+  Use when an API exposes a multi-step business flow such as interview, onboarding, checkout, upload, or export that requires no authentication at any step.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

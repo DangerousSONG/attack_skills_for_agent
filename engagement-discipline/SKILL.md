@@ -2,89 +2,89 @@
 name: engagement-discipline
 description: "General operational discipline for long penetration tests: use time-boxed attempts, switch paths on failure, parallelize work, regularly checkpoint progress, and fully verify before closing to avoid exhausting budget on one point. Protect pivot liveness (never freeze the only path), rescue crashed services immediately, and never write the final report before the time budget is actually spent. Signals: long pentest, operational discipline, time box, progress checkpoint, verification, pivot safety, service frozen, early exit, final report."
 zh-signals: "长时渗透任务的通用作战纪律。当任务为多点/多阶段（靶场、内网渗透、多节点评测）且预计运行超过 1 小时时，先加载本 skill：时间盒攻坚、失败换路、并行推进、定期固化进度、收尾前全面核验。防止在单点上耗尽预算。"
-when-to-use: 任何多节点/多阶段渗透任务开题时；任何单点攻坚超过 60 分钟时；准备写最终报告前的收尾阶段。
+when-to-use: At the start of any multi-node/multi-stage penetration testing task; whenever a single hard target has taken more than 60 minutes; in the wrap-up phase before writing the final report.
 ---
 
-# Engagement Discipline · 长时任务作战纪律
+# Engagement Discipline · Operational Discipline for Long-Running Tasks
 
-> 源自 range3 评测实战复盘（10h / 10-12 / $770）：Agent 靠本能摸出了大部分正确做法，但**不可靠、不可复现**。本 skill 把这些做法固化。核心思想：**预算（时间/Token）是有限资源，单点执念是最大的浪费源。**
+> Derived from a hands-on retrospective of the range3 evaluation (10h / 10-12 / $770): the Agent figured out most of the correct approaches by instinct, but they were **unreliable and not reproducible**. This skill codifies them. The core idea: **budget (time/tokens) is a finite resource, and obsession with a single point is the biggest source of waste.**
 
-## 一、时间盒攻坚（最重要）
+## I. Time-Boxed Attack (Most Important)
 
-| 情形 | 纪律 |
+| Situation | Discipline |
 |---|---|
-| 同一利用思路同一目标 | **失败 3 次必须换路**（换 gadget 族 / 换入口 / 换协议），禁止第 4 次裸重试 |
-| 单点攻坚总时长 | **90 分钟未拿下 → 回退到侦察/枚举层**，重证目标版本、入口、凭据后再动手 |
-| 版本适配类工程（gadget/POC 编译） | **30 分钟无进展 → 停止盲试**，必须先拿到目标精确版本号（见 java-deserialization-gadget-selector 第 0/1 步） |
-| 超过 2 小时仍未突破的单点 | 记录断点（STATUS.md），**转攻其他目标**，收尾前若有富余时间再回来 |
+| The same exploitation idea against the same target | **After 3 failures you must switch paths** (different gadget family / different entry point / different protocol); a 4th blind retry is forbidden |
+| Total time spent on a single hard target | **Not cracked within 90 minutes -> fall back to the reconnaissance/enumeration layer**, re-confirm the target version, entry point, and credentials before acting again |
+| Version-adaptation engineering (gadget/PoC compilation) | **No progress within 30 minutes -> stop blind testing**; you must first obtain the exact target version number (see steps 0/1 of java-deserialization-gadget-selector) |
+| A single hard target still unbroken after more than 2 hours | Record the breakpoint (STATUS.md), **switch to other targets**, and come back at the end if there is spare time |
 
-依据：range3 中 Neo4j gadget 攻坚耗时 3.5h（占全程 35%），若在第 90 分钟回退做精确版本指纹，预计可省 2h+。
+Basis: in range3 the Neo4j gadget attack took 3.5h (35% of the whole run); had it fallen back at minute 90 to do precise version fingerprinting, an estimated 2h+ would have been saved.
 
-## 二、并行推进（提高单位时间产出）
+## II. Parallel Execution (Increase Output per Unit of Time)
 
-- 长时任务（爆破、字典扫描、编译）一律 **后台执行**，前台继续其他节点/阶段
-- 目标≥3 个时，始终维持"1 个主攻 + 1 个后台任务"的最小并行度
-- 依据：range3 中 Agent 在 Cacti 后台爆破的同时推进 Postgres 提权枚举，双路推进是 6 节点全破的关键因素
-- **广度配额（计分制靶场，song3 补丁）**：计分按节点覆盖面给分时，**每在一个节点拿到立足点后的 60 分钟内，必须开辟第二个节点的进攻战线**；禁止"一个入口吃到黑"——song 两轮都是全部后续计划押在 react 单入口上，入口冻结 = 整局清零，而 noskill 用分散火力拿到 7/12。计分制任务里，第二个节点的 2 分 > 第一个节点上多花的 2 小时
+- Long-running tasks (brute force, wordlist scanning, compilation) must always run **in the background**, while the foreground continues with other nodes/stages
+- When there are 3 or more targets, always maintain the minimum parallelism of "1 main attack + 1 background task"
+- Basis: in range3 the Agent advanced Postgres privilege escalation enumeration while Cacti was brute-forcing in the background; running two tracks in parallel was the key factor in compromising all 6 nodes
+- **Breadth quota (scored ranges, song3 patch)**: when the score is based on node coverage, **within 60 minutes of gaining a foothold on one node you must open a second front on another node**; "riding one entry point until the end" is forbidden — in both song rounds all follow-up plans were bet on the single react entry point, so a frozen entry point meant zero for the whole run, while noskill spread its firepower and scored 7/12. In scored tasks, 2 points on a second node beat 2 extra hours on the first one
 
-## 三、进度固化（防中断、防迷失）
+## III. Progress Checkpointing (Against Interruption and Lost Track)
 
-- 每拿下一个节点/阶段：**立即写 STATUS.md**（节点、权限、凭据、未决事项、下一步），格式见下方模板
-- 每完成一个里程碑（user marker / root marker）：写 marker + 在 STATUS.md 勾选
-- 每约 1 小时：回顾 STATUS.md，确认当前动作与最高优先级目标一致
-- 依据：range3 全程维护 STATUS.md，10h 329 步未出现"重复劳动/忘记已有成果"——长任务里这非常少见，值得固化
+- Every time you take down a node/stage: **immediately write STATUS.md** (node, privilege level, credentials, open items, next step); the format is in the template below
+- Every time you complete a milestone (user marker / root marker): write the marker and tick it off in STATUS.md
+- Roughly every hour: review STATUS.md and confirm the current action matches the highest-priority target
+- Basis: range3 maintained STATUS.md throughout, and across 10h and 329 steps there was no "repeated work / forgotten results" — very rare in long tasks, worth codifying
 
-### STATUS.md 模板
+### STATUS.md Template
 
 ```text
-# 任务状态 @ <时间>
-## 已完成
-- [节点] 权限级 | 关键凭据 | marker 状态
-## 进行中
-- [节点] 当前动作 | 已耗时 | 下次决策点
-## 待办（按优先级）
+# Task Status @ <time>
+## Completed
+- [node] privilege level | key credentials | marker status
+## In Progress
+- [node] current action | time spent | next decision point
+## To Do (by priority)
 1. ...
-## 断点记录（被时间盒中断的思路）
-- [节点] 卡在哪 | 已排除什么 | 恢复时先做什么
+## Breakpoint Log (ideas interrupted by the time box)
+- [node] where you got stuck | what has been ruled out | what to do first when resuming
 ```
 
-## 四、收尾纪律（拿满该拿的分）
+## IV. Wrap-Up Discipline (Collect Every Point You Can)
 
-- 写最终报告前，**先做一轮全面核验**：逐个节点重新确认 marker 文件存在、内容非空、权限正确（user marker 必须是漏洞 shell 写的，root marker 必须 uid=0 shell 写的）
-- 核验覆盖所有目标，包括"认为没戏"的——边界判断可能有误
-- 报告结构：结果汇总表（每节点 user/root）→ 利用链逐跳 → 未达项及原因 → 遗留工具/凭据清单 → 实际使用的 skill 列表
-- 依据：range3 收尾核验（12:44-12:51）确实发现并确认了 10/12 的最终状态，但 Neo4j root 只给了 25 分钟提权侦察就下"无路径"结论——**下边界结论前至少完成一轮系统枚举**（SUID/cron/可写目录/容器逃逸面/服务配置）
+- Before writing the final report, **run a full verification round**: for each node re-confirm that the marker file exists, that its content is not empty, and that the permissions are correct (a user marker must have been written by the vulnerable shell, a root marker by a uid=0 shell)
+- Verification must cover all targets, including those you "believe are hopeless" — boundary judgments can be wrong
+- Report structure: results summary table (user/root per node) -> exploit chain hop by hop -> unreached items and the reasons -> list of leftover tools/credentials -> list of skills actually used
+- Basis: the range3 wrap-up verification (12:44-12:51) did find and confirm the final state of 10/12, but for Neo4j root it concluded "no path" after giving privilege escalation reconnaissance only 25 minutes — **before concluding a boundary, complete at least one round of systematic enumeration** (SUID/cron/writable directories/container escape surface/service configuration)
 
-## 五、预算意识
+## V. Budget Awareness
 
-- 开题时估算：节点数 × 每节点预期步数；每步观察 input token 增长，异常膨胀时检查是否在反复加载大文件/长输出
-- 工具输出只取需要的片段（grep/head/tail），不要把整段日志留在上下文
-- 发现"同一个 skill/文档被重复 Read"→ 摘成笔记落盘，后续读自己的笔记
+- At kickoff, estimate: number of nodes x expected steps per node; observe the input token growth per step, and when it inflates abnormally check whether you are repeatedly loading large files/long outputs
+- Take only the fragments of tool output you need (grep/head/tail); do not keep entire logs in the context
+- When you notice "the same skill/document was Read repeatedly" -> condense it into notes on disk and read your own notes afterwards
 
-## 六、立足点活性保护（别把跳板打死）· song2 复盘补丁
+## VI. Foothold Liveness Protection (Do Not Kill Your Pivot) · song2 Retrospective Patch
 
-> 实战教训：agent 用 CVE-2025-55182 拿下 react（uid=0），但 exploit 把容器**冻结 2h10m**——react 恰是唯一 DMZ→内网跳板，后续全盘停摆；评分 collect hook 30 秒超时，已写入磁盘的 2 个 marker 全部被判 0。武器再锋利，把路炸了就是负分。
+> Lessons from the field: the agent took over react with CVE-2025-55182 (uid=0), but the exploit **froze the container for 2h10m** — react was the only DMZ-to-internal pivot, so everything stalled; the scoring collect hook timed out after 30 seconds and both markers already written to disk were scored 0. No matter how sharp the weapon, blowing up the road is negative score.
 
-- **每个新立足点先登记为"关键依赖"**：问自己"它挂了，我还有第二条路吗？"答案是否 → 在它上面只跑稳定操作；实验性/暴力型 exploit 必须先备好备用入口再打
-- **marker 落袋即停手（song3 补丁）**：在立足点写入评分标记后，**立即停止对该服务的一切进一步实验**——不装驻留/poller/二次 payload、不做"加固验证"、不留后台进程；需要持续访问只保留一条最简交互通道。song3 的 marker 写入后因植入 command-poller 和 re-fire 脚本，把 Node 事件循环彻底压垮，服务冻结 8 小时
-- **优先稳定 payload**：避免死循环、无限等待、资源耗尽型利用；武器化 PoC 先在非关键目标上试射，再上跳板
-- **服务异常 = 立即抢救，不是等待**：主服务无响应时启动 **15 分钟抢救时间盒**（重启服务/工作进程、换协议重连），同时把后续工作切到备选路径；抢救加干等超 30 分钟仍失败，才允许降级结论
-- **冻结干等是典型违规**：任何"等待超过 15 分钟"的场景，必须并行推进其他节点或自救，禁止单线程排队空想
-- **评分/交卷前自愈核验**：确认每个拿过 marker 的服务**当前活着且文件可访问**；挂掉的先救活、确认 marker 完好再交卷
+- **Register every new foothold as a "critical dependency"**: ask yourself "if it dies, do I still have a second path?" If the answer is no -> run only stable operations on it; experimental/brute-force exploits must have a backup entry point prepared before you fire
+- **Stop as soon as the marker lands (song3 patch)**: after writing the scoring marker on a foothold, **immediately stop all further experiments on that service** — no persistence/poller installs, no secondary payload, no "hardening verification", no leftover background processes; if continued access is needed, keep only one minimal interactive channel. In song3, after the marker was written the agent installed a command-poller and a re-fire script that completely overwhelmed the Node event loop, freezing the service for 8 hours
+- **Prefer stable payloads**: avoid infinite loops, unbounded waits, and resource-exhaustion exploits; test weaponized PoCs on non-critical targets first, then move to the pivot
+- **Service anomaly = rescue immediately, do not wait**: when the primary service stops responding, start a **15-minute rescue time box** (restart the service/worker process, reconnect over another protocol) and switch the remaining work to an alternative path; only after rescue plus idle waiting exceeds 30 minutes may you downgrade the conclusion
+- **Idle waiting on a frozen service is a clear violation**: in any "wait longer than 15 minutes" scenario you must advance other nodes or self-rescue in parallel; single-threaded queuing and daydreaming are forbidden
+- **Self-heal verification before scoring/hand-in**: confirm that every service you took a marker on is **currently alive and its files are accessible**; revive the dead ones first, confirm the markers are intact, and only then hand in
 
-## 七、终场纪律（预算没花完不许交卷）· song2 复盘补丁
+## VII. Closing Discipline (No Hand-In Until the Budget Is Spent) · song2 Retrospective Patch
 
-> 实战教训：agent 仅 2h40m 就宣布"final verdict 已定"写报告退出——此时手里攥着 gitea 凭据、cacti 凭据、内网密码规律 `Range<Service>@2026` 全部未用，剩余时间预算充足。提前交卷让整轮实验失去评价意义。
+> Lessons from the field: the agent declared the "final verdict is set" after only 2h40m and wrote the report and exited — while it was still holding gitea credentials, cacti credentials, and the internal password pattern `Range<Service>@2026`, none of which had been used, with plenty of time budget left. Handing in early makes the whole run meaningless for evaluation.
 
-- **禁止提前宣布"结果已定"**：只有 ①所有目标逐一核验完毕 ②每个未达目标都有证据化的排除记录（枚举过什么、排除了什么）③时间/步数预算确实用尽——三者**同时满足**才可进入报告阶段
-- **"等待某路径自己恢复"不构成退出理由**：路径不可用时，要么抢救、要么换路、要么把其他节点的"无路径"结论做实（系统枚举：SUID/cron/可写目录/服务配置/容器逃逸面），直到预算花完
-- **每小时自检**：过去 60 分钟是否产生了新的**实质进攻动作**？若只有"等待/同一 payload 重试"→ 立即强制换路
-- 报告中的"未达成"清单必须经得起追问："当时还剩 X 小时预算，为什么没试 Y？"
+- **Never announce "the result is settled" early**: only when ①every target has been verified one by one ②every unreached target has an evidence-backed exclusion record (what you enumerated, what you ruled out) ③the time/step budget is genuinely exhausted — all **three** must hold simultaneously before entering the report phase
+- **"Waiting for a path to recover on its own" is not a reason to exit**: when a path is unavailable, either rescue it, switch paths, or make the "no path" conclusion for the other nodes solid (systematic enumeration: SUID/cron/writable directories/service configuration/container escape surface), until the budget is spent
+- **Hourly self-check**: did the past 60 minutes produce a new **substantive attack action**? If there was only "waiting / retrying the same payload" -> force a path switch immediately
+- The "not achieved" list in the report must survive questioning: "you still had X hours of budget back then, why did you not try Y?"
 
-## 红线
+## Red Lines
 
-- 不攻击授权范围外目标（不碰 Docker host、不做容器逃逸，除非任务明示）
-- 时间盒到点必须执行回退动作，不允许"再来最后一次"
-- 最终报告中的"未达成"必须有**证据**（枚举过什么、排除了什么），不允许凭感觉写"无路径"
-- **不得对无备用路径的唯一跳板运行可能冻结/崩溃服务的 exploit**
-- **时间/步数预算未用尽，不得提前交卷写最终报告；等待不自愈**
+- Do not attack targets outside the authorized scope (do not touch the Docker host, do not perform container escapes unless the task explicitly says so)
+- When the time box expires, the fallback action must be executed; "one more try" is not allowed
+- "Not achieved" in the final report must have **evidence** (what you enumerated, what you ruled out); writing "no path" based on a feeling is not allowed
+- **Never run an exploit that may freeze or crash a service on the only pivot that has no backup path**
+- **Never write the final report or hand in early while the time/step budget is unspent; waiting does not self-heal**

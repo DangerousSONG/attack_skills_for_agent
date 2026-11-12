@@ -2,37 +2,40 @@
 name: graphw00f-graphql-finger
 description: "graphw00f locates GraphQL endpoints and fingerprints technology stacks. Signals: API attacks, interface testing, full fingerprint database detection."
 zh-signals: "graphw00f: GraphQL 端点定位+技术栈。信号:api攻击,接口测试,指纹库全检测。"
+when-to-use: >-
+  Use during API or GraphQL reconnaissance when you need to locate a GraphQL
+  endpoint and fingerprint its engine so you can map known vulnerabilities.
 ---
 
 # graphw00f
 
-- 攻击大类:C10 API与GraphQL攻击
-- 上游仓库:https://github.com/dolevf/graphw00f
-- 上游 License:BSD-3-Clause(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C10 API and GraphQL Attacks
+- Upstream Repository: https://github.com/dolevf/graphw00f
+- Upstream License: BSD-3-Clause (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/dolevf/graphw00f && cd graphw00f && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 main.py -d -t https://t.com/graphql` | GraphQL 引擎指纹识别 |
-| `-f` | 指纹库全检测 |
-| `-p` | 仅探测 GraphQL 端点 |
+| `python3 main.py -d -t https://t.com/graphql` | GraphQL engine fingerprinting |
+| `-f` | Full fingerprint database detection |
+| `-p` | Probe for GraphQL endpoints only |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### GraphQL 端点定位+技术栈
+### GraphQL Endpoint Discovery and Tech Stack Fingerprinting
 
 ```bash
 python3 main.py -d -t https://t.com/api
-# 识别 Apollo/Hasura/Lighthouse 等引擎,对着对应 CVE 打
+# Identify engines such as Apollo/Hasura/Lighthouse, then target the matching CVEs
 ```
 
-## 注意事项
+## Notes
 
-GraphQL 服务器指纹库,识别后按引擎查已知漏洞(如旧版 Apollo 的调试接口)。
+A GraphQL server fingerprint database; once the engine is identified, look up its known vulnerabilities (such as the debug interface in older Apollo releases).

@@ -1,6 +1,8 @@
 ---
 name: avira-security-loader-2026-deployment
 description: Automated Windows bootstrapper for deploying Avira Internet Security 2026 on 64-bit Windows 10/11 systems
+zh-signals: "用于在 64 位 Windows 10/11 上部署 Avira Internet Security 2026 的自动化引导器。信号:Avira,安全软件部署,Windows引导器,自动化安装,排障"
+when-to-use: "Use when deploying Avira Internet Security 2026 on 64-bit Windows 10/11 systems, automating the installation, or troubleshooting Avira loader errors."
 triggers:
   - "how do I deploy Avira Internet Security 2026"
   - "automate Avira security suite installation"

@@ -1,6 +1,8 @@
 ---
 name: skill-security-scanner
 description: Claude Skills security scanning tool that detects malicious code, network requests, file access, and command injection risks before installation
+zh-signals: "静态扫描 Claude Skill 中的恶意代码、网络请求、敏感文件访问与命令注入风险。信号:skill安全扫描,恶意代码,静态分析,命令注入,供应链安全"
+when-to-use: "Use before installing or auditing a Claude Skill to detect malicious code, unauthorized network requests, and dangerous command patterns."
 triggers:
   - scan this Claude skill for security risks
   - check if this skill is safe to install

@@ -1,6 +1,8 @@
 ---
 name: skill-security
 description: Audit an AI agent skill for security risks before installing or trusting it. Runs a deterministic scanner (regex patterns, Python AST analysis, source-to-sink taint tracking, and YARA signatures) and then reasons about intent — catching prompt injection, credential exfiltration, persistence, memory poisoning, malicious code, supply-chain risks, and description-vs-behavior mismatch. Make sure to use this skill whenever the user wants to scan, audit, vet, review, or check the safety of a skill, plugin, SKILL.md, or agent tool — whether it is a local folder, a zip/.skill file, or a cloned repo — and whenever someone asks "is this skill safe to install?".
+zh-signals: "在安装或信任 AI 代理技能前审计其安全风险，结合确定性扫描器与语义判断识别提示注入、凭据外泄、持久化与描述行为不符。信号:技能审计,提示注入,凭据外泄,供应链,风险评估"
+when-to-use: "Use whenever the user wants to scan, audit, vet, or check the safety of a skill, plugin, SKILL.md, or agent tool before installing or trusting it. Applies to local folders, archives, or cloned repos."
 ---
 
 # skill-security

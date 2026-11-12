@@ -1,6 +1,8 @@
 ---
 name: security-requirement-extraction
 description: "Derive security requirements from threat models and business context. Use when translating threats into actionable requirements, creating security user stories, or building security test cases."
+zh-signals: "从威胁模型与业务上下文推导安全需求，产出安全用户故事、验收标准与测试用例。信号:安全需求,威胁建模,用户故事,验收标准,合规映射"
+when-to-use: "Use when translating threat models or business context into actionable security requirements, security user stories, acceptance criteria, or security test cases."
 risk: safe
 source: community
 date_added: "2026-02-27"

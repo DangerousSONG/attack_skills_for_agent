@@ -1,6 +1,8 @@
 ---
 name: dependency-audit
 description: "Audit project dependencies, frameworks, languages, and dev tools for known vulnerabilities, CVEs, and security anti-patterns. Use when the user mentions 'dependency audit,' 'npm audit,' 'CVE,' 'vulnerable packages,' 'supply chain security,' 'outdated dependencies,' 'known vulnerabilities,' 'security advisory,' 'package security,' 'framework vulnerability,' 'is this package safe,' or needs to check whether their stack has known security issues."
+zh-signals: "审计项目依赖、框架、语言与开发工具的已知漏洞、CVE 与供应链风险。信号:依赖审计,CVE,漏洞包,供应链安全,过期依赖"
+when-to-use: "Use when checking whether a project's dependencies, frameworks, runtimes, or dev tools have known CVEs, security advisories, or supply chain risks."
 allowed-tools: Bash, Read, Write, Grep, Glob, WebSearch
 ---
 

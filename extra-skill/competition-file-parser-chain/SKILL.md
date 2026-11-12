@@ -1,6 +1,8 @@
 ---
 name: competition-file-parser-chain
 description: Internal downstream skill for ctf-sandbox-orchestrator. CTF-sandbox workflow for file uploads, imports, previews, archive extraction, format conversion, parser invocation, and deserialization chains. Use when the user asks to inspect an upload or import path, trace archive extraction, preview or converter behavior, explain how a file reaches a parser or deserializer, or connect one uploaded artifact to the decisive backend effect. Use only after `$ctf-sandbox-orchestrator` has already established sandbox assumptions and routed here.
+zh-signals: "追踪 CTF 沙箱中上传文件经解析、转换与反序列化直至后端效果的链路。信号:CTF,文件上传,解析链,反序列化,归档解压"
+when-to-use: "Use only after $ctf-sandbox-orchestrator is active, when the hard part is following an uploaded file through parsers, converters, and deserializers."
 ---
 
 # Competition File Parser Chain

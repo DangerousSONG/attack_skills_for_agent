@@ -1,6 +1,8 @@
 ---
 name: scada-hikvision-isapi
 description: Enumerate Hikvision ISAPI endpoints on SCADA and IoT web interfaces.
+zh-signals: "枚举 SCADA 与物联网环境中海康威视 ISAPI 接口的侦察指南。信号:海康威视,ISAPI,SCADA,IoT侦察,摄像头"
+when-to-use: "Use when enumerating Hikvision ISAPI endpoints on SCADA or IoT surveillance interfaces during authorized reconnaissance."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

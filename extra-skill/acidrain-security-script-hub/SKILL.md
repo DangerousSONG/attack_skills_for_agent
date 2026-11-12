@@ -1,6 +1,8 @@
 ---
 name: acidrain-security-script-hub
 description: Web-oriented XSS analysis resources, JavaScript utilities, and PHP examples for authorized security testing and hands-on learning
+zh-signals: "提供面向 Web 的 XSS 分析资源、JavaScript 工具与 PHP 示例，用于经授权的安全测试与学习。信号:XSS,JavaScript,PHP,安全测试,注入"
+when-to-use: "Use when working with the AcidRain security script hub for authorized XSS testing, JavaScript injection utilities, or PHP security examples in controlled environments."
 triggers:
   - how do I use acidrain for xss testing
   - set up acidrain security scripts

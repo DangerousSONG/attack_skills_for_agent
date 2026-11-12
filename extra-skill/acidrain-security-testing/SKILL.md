@@ -1,6 +1,10 @@
 ---
 name: acidrain-security-testing
 description: Use AcidRain's XSS analysis resources, JavaScript utilities, and PHP injection testing samples for authorized security research and hands-on learning
+zh-signals: "使用 AcidRain 的 XSS 分析资源、JavaScript 工具与 PHP 注入测试样例开展授权的安全研究与学习。信号:AcidRain,XSS,注入测试,JavaScript工具,授权测试"
+when-to-use: >-
+  Use when conducting authorized web security testing or hands-on learning with
+  AcidRain's XSS payloads, JavaScript utilities, and PHP injection samples.
 triggers:
   - test XSS vulnerabilities with AcidRain
   - use AcidRain security scripts

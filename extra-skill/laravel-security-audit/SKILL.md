@@ -1,6 +1,8 @@
 ---
 name: laravel-security-audit
 description: "Security auditor for Laravel applications. Analyzes code for vulnerabilities, misconfigurations, and insecure practices using OWASP standards and Laravel security best practices."
+zh-signals: "审计 Laravel 应用的安全漏洞、配置错误与不安全实践，依据 OWASP 与 Laravel 最佳实践。信号:Laravel安全,源码审计,OWASP,配置错误,漏洞检测"
+when-to-use: "Use when auditing Laravel 10/11+ applications for vulnerabilities, misconfigurations, and insecure coding practices against OWASP and Laravel best practices."
 risk: safe
 source: community
 date_added: "2026-02-27"

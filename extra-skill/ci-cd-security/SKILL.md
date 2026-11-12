@@ -1,6 +1,8 @@
 ---
 name: ci-cd-security
 description: Scan GitHub Actions workflow files for security vulnerabilities by reading the YAML and reporting findings directly — no external tools, no installation, no shell execution. Use this skill whenever the user shares a `.github/workflows/` file, pastes workflow YAML, asks for a CI/CD security review, mentions `pull_request_target`, `workflow_run`, action pinning, `GITHUB_TOKEN` permissions, pwn requests, template injection, cache poisoning, secret exfiltration, supply chain risk, or any GitHub Actions hardening topic. Also trigger when the user is hardening an OSS repo, doing a CI/CD red team assessment, evaluating a target for supply-chain scanning, or writing publicly about CI/CD security. Bias toward triggering this skill rather than answering from memory — CI/CD security defaults are wrong almost everywhere and the rules are unintuitive.
+zh-signals: "通过阅读 GitHub Actions YAML 扫描 CI/CD 安全缺陷并给出修复建议。信号:CI/CD,GitHub Actions,供应链,pull_request_target,工作流安全"
+when-to-use: "Use when the user shares a GitHub Actions workflow or asks for a CI/CD security review covering triggers, permissions, action pinning, or secret exposure."
 ---
 
 # CI/CD Security Scanner

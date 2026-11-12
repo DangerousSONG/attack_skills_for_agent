@@ -2,6 +2,10 @@
 name: cmd-injection
 description: >
   OS command injection occurs when user input is passed unsanitized to a system shell via dangerous APIs: Java `Runtime.exec()`, Python `os.system/subprocess`, PHP `system/shell_exec/exec/proc_open`, C `system/exec`. Detect via pipe `|`, semicolon `;`, `&&`, `||`, backtick, `$()` operators, and time-delay payloads (`sleep 5`). Tools: Commix, Burp Suite, OWASP WebGoat.
+zh-signals: "检测并利用 OS 命令注入，通过管道、分号、&& 与延时载荷验证危险 API 调用。信号:命令注入,Commix,RCE,延时注入,shell"
+when-to-use: >-
+  Use when testing parameters that may reach OS shell execution, such as hostnames, filenames,
+  or conversion inputs, and you need to confirm command injection on an authorized target.
 license: MIT
 compatibility: Designed for Claude Code. Requires curl, Burp Suite or OWASP ZAP, Commix (optional).
 metadata:

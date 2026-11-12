@@ -6,6 +6,8 @@ description: >-
   a resilience score. Use when the user asks to "test my chatbot for prompt
   injection", "check if my AI app is jailbreakable", "red-team my LLM",
   "evaluate prompt-injection defenses", or audit a system prompt's guardrails.
+zh-signals: "使用分类载荷库与 canary 检测对自有 LLM 应用进行提示词注入与越狱红队测试并评分。信号:提示词注入,LLM红队,越狱测试,canary,防御评估"
+when-to-use: "Use when asked to test a chatbot or AI app for prompt injection/jailbreak resistance, evaluate guardrails, or regression-test prompt defenses in CI. Only for systems you own or are authorized to test."
 license: MIT
 ---
 

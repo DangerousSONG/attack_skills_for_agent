@@ -1,6 +1,8 @@
 ---
 name: ikb42603-cloud-computing-security-essentials
 description: Educational AWS cloud security labs covering IAM, encryption, network security, monitoring, and incident detection
+zh-signals: "提供覆盖 IAM、加密、网络安全、监控与事件检测的 AWS 云安全教学实验。信号:AWS云安全,IAM,加密,VPC,CloudTrail,安全实验"
+when-to-use: "Use when setting up or teaching hands-on AWS cloud security labs covering IAM, encryption and key management, VPC/network isolation, access control, and CloudTrail/CloudWatch monitoring."
 triggers:
   - how do I set up AWS IAM security labs
   - configure cloud security exercises with AWS

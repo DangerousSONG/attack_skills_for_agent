@@ -1,6 +1,8 @@
 ---
 name: competition-windows-pivot
 description: Internal downstream skill for ctf-sandbox-orchestrator. CTF-sandbox workflow for Kerberos, WinRM, SMB, RDP, Windows credential material, replayable tickets, delegation edges, and host-to-host pivot chains. Use when the user asks to replay Kerberos material, trace a WinRM, SMB, or RDP pivot, understand host-to-host privilege movement, or prove which Windows service accepted a credential or ticket. Use only after `$ctf-sandbox-orchestrator` has already established sandbox assumptions and routed here.
+zh-signals: "追踪 Windows 主机间横向移动与 Kerberos 凭据重放链。信号:Windows横向,WinRM,SMB,Kerberos重放,委派边。"
+when-to-use: "Use when replaying Kerberos tickets or credential material, tracing a WinRM, SMB, RDP, or WMI pivot, analyzing host-to-host privilege movement, or proving which Windows service accepted a replayed artifact."
 ---
 
 # Competition Windows Pivot

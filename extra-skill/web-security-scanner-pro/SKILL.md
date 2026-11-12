@@ -1,6 +1,8 @@
 ---
 name: web-security-scanner-pro
 description: Advanced Python web security scanner with 49 modules, evasion engine, CVE database, and WAF bypass for penetration testing
+zh-signals: "基于 Python 的高级 Web 安全扫描器，集成多模块、逃逸引擎、CVE 库与 WAF 绕过能力。信号:Web扫描器,漏洞检测,WAF绕过,CVE,渗透测试"
+when-to-use: "Use when you need to scan a website or web application for vulnerabilities such as SQLi, XSS, WordPress issues, or CVE exposures, including WAF-protected targets."
 triggers:
   - scan website for vulnerabilities
   - run security audit on web application

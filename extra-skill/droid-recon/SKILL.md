@@ -1,6 +1,8 @@
 ---
 name: droid-recon
 description: Full static analysis methodology for Android APK files on Linux — decompiles with apktool and jadx, hunts for hardcoded secrets and API keys, maps endpoints and network surface, fingerprints the tech stack, detects vulnerability patterns, and produces a structured Markdown report aligned to OWASP MASVS. Trigger when the user provides an APK file and asks for a security review, secret scan, endpoint extraction, or mobile pentest.
+zh-signals: "Android APK 静态安全分析方法论，反编译并按 OWASP MASVS 输出结构化报告。信号:APK分析,Android逆向,密钥扫描,端点提取,移动渗透"
+when-to-use: "Use when a user provides an APK file and requests a security review, secret scan, endpoint extraction, or mobile pentest."
 license: MIT
 metadata:
   version: "1.0.0"

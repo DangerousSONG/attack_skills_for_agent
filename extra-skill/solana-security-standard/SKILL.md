@@ -1,6 +1,8 @@
 ---
 name: solana-security-standard
 description: Use the SOL-0XX Solana security standard to scan, detect, and prevent 37 classes of Solana program vulnerabilities ($514M+ in real exploits) across AI tools, editors, CLI, and CI
+zh-signals: "依据 SOL-0XX 标准扫描与预防 37 类 Solana 程序漏洞，覆盖工具、编辑器与 CI。信号:Solana安全,SOL-0XX,Anchor,智能合约审计,CI扫描"
+when-to-use: "Use when scanning, detecting, or preventing Solana program vulnerabilities against the SOL-0XX standard in AI tools, editors, CLI, or CI pipelines."
 triggers:
   - scan my Solana program for security issues
   - check this Anchor code against SOL-0XX rules

@@ -1,6 +1,10 @@
 ---
 name: google-dorks-catalog
 description: "High-precision Google dorks for exposed configs, secrets, and credentials -- real-world validated"
+zh-signals: "提供经真实环境验证的高精度 Google Dork 清单，用于发现暴露的配置、密钥与凭据。信号:Google Dorks,敏感信息,被动侦察,OSINT,凭据泄露"
+when-to-use: >-
+  Use during passive reconnaissance on a target to find exposed configs, secrets, and
+  credentials using high-precision Google dorks.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

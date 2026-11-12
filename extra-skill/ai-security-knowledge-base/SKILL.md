@@ -1,6 +1,9 @@
 ---
 name: ai-security-knowledge-base
 description: Comprehensive AI security knowledge base covering ML algorithms, threat modeling, offensive AI tactics, and defensive strategies including OWASP LLM Top 10 and adversarial ML
+zh-signals: "汇总 AI 安全知识，覆盖 OWASP LLM Top 10、对抗机器学习、进攻性 AI 与防御策略。信号:AI安全,OWASP LLM Top 10,提示注入,对抗样本,深度伪造。"
+when-to-use: >-
+  Use when learning or referencing AI/LLM security fundamentals, OWASP ML/LLM Top 10 risks, adversarial machine learning, prompt injection defenses, or offensive and defensive AI techniques.
 triggers:
   - "teach me about AI security vulnerabilities"
   - "how do I defend against prompt injection attacks"
@@ -38,7 +41,7 @@ cd AI_Security_Top
 
 # The repository contains markdown documentation files
 ls *.md
-# Expected output: AI.md, 深度学习.md, 监督学习算法.md, AI安全.md, MCP安全.md, 进攻性AI.md, 算法赋能安全.md, etc.
+# Expected output: AI.md, Deep Learning.md, Supervised Learning Algorithms.md, AI Security.md, MCP Security.md, Offensive AI.md, Algorithm-Enabled Security.md, etc.
 ```
 
 ## Key Documentation Structure
@@ -47,17 +50,17 @@ ls *.md
 
 **AI.md** - Artificial Intelligence overview, history, and core concepts
 
-**深度学习.md** - Deep learning architectures (CNN, RNN, Transformer)
+**Deep Learning.md** - Deep learning architectures (CNN, RNN, Transformer)
 
-**监督学习算法.md** - Supervised learning: Linear/Logistic Regression, SVM, Decision Trees, Random Forests, Naive Bayes
+**Supervised Learning Algorithms.md** - Supervised learning: Linear/Logistic Regression, SVM, Decision Trees, Random Forests, Naive Bayes
 
-**无监督学习算法.md** - Unsupervised learning: K-Means, GMM clustering, association rules
+**Unsupervised Learning Algorithms.md** - Unsupervised learning: K-Means, GMM clustering, association rules
 
-**强化学习.md** - Reinforcement learning: Agent-based decision making and game theory
+**Reinforcement Learning.md** - Reinforcement learning: Agent-based decision making and game theory
 
 ### 2. AI Security Frameworks
 
-**AI安全.md** - OWASP ML/LLM Top 10 vulnerabilities including:
+**AI Security.md** - OWASP ML/LLM Top 10 vulnerabilities including:
 - Prompt Injection (direct and indirect)
 - Insecure Output Handling
 - Training Data Poisoning
@@ -69,16 +72,16 @@ ls *.md
 - Overreliance
 - Model Theft
 
-**MCP安全.md** - Model Context Protocol security:
+**MCP Security.md** - Model Context Protocol security:
 - Tool poisoning attacks
 - Cursor IDE vulnerabilities
 - Protocol-level exploitation
 
-**skill安全.md** - AI skill security configurations and defensive practices
+**Skill Security.md** - AI skill security configurations and defensive practices
 
 ### 3. Offensive AI Tactics
 
-**进攻性AI.md** - Red team operations including:
+**Offensive AI.md** - Red team operations including:
 
 #### AI-Powered Vulnerability Scanning
 ```python
@@ -175,7 +178,7 @@ synthetic_audio = synthesizer.speak(
 
 ### 4. Defensive AI Applications
 
-**算法赋能安全.md** - Blue team ML applications:
+**Algorithm-Enabled Security.md** - Blue team ML applications:
 
 #### Anomaly Detection
 ```python

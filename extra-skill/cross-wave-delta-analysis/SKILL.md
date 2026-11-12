@@ -1,6 +1,10 @@
 ---
 name: cross-wave-delta-analysis
 description: Compare recon waves to find NEW, REGRESSED, PERSISTENT findings.
+zh-signals: "对比多轮侦察结果，识别新增、回归与持续存在的发现并跟踪风险变化。信号:侦察对比,增量分析,回归,基线,风险变化"
+when-to-use: >-
+  Use when comparing multiple recon waves to classify findings as NEW, REGRESSED, or
+  PERSISTENT.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

@@ -1,6 +1,11 @@
 ---
 name: phishing-sim
 description: Phishing-simulation campaign workflow — RoE and ethical-scope template, population segmentation, pretexting patterns (HR/IT/finance/vendor/calendar), infrastructure (sender domain, SPF/DKIM/DMARC, tracking), click-rate and credential-success metrics, opt-out and duty of care, NL/EU AVG context for employee monitoring.
+zh-signals: "规划钓鱼演练活动，涵盖 RoE 与伦理范围、人群分段、pretext 设计、发件域与 SPF/DKIM/DMARC 基础设施、点击率与凭据成功率指标及 NL/EU AVG 合规。信号:钓鱼演练,社会工程,RoE,pretext,SPF/DKIM,合规"
+when-to-use: >-
+  Use when planning an authorized phishing-simulation or awareness campaign that needs
+  scope and ethics templates, population segmentation, pretexting, email infrastructure,
+  metrics, and employee-monitoring compliance context.
 ---
 
 # Phishing Simulation

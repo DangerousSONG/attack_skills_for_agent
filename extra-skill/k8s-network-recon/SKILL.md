@@ -1,122 +1,127 @@
 ---
 name: k8s-network-recon
-description: "Kubernetes 集群内网络侦察与服务发现。当已获得 Pod Shell、需要发现集群内其他服务、执行 K8s 内网扫描时使用。覆盖 DNS PTR 反查、SRV 记录枚举、AXFR 域传输、K8Spider 使用。任何在 Pod 中需要横向侦察、寻找隐藏服务、确定攻击目标的场景都应使用此技能，即使用户没有明确提到 DNS"
+description: "Network reconnaissance and service discovery inside a Kubernetes cluster. Use after obtaining a pod shell, when you need to discover other services in the cluster or run internal K8s scanning. Covers DNS PTR reverse lookups, SRV record enumeration, AXFR zone transfers, and K8Spider usage. Use this skill whenever lateral reconnaissance inside a pod, hunting for hidden services, or determining attack targets is needed, even if the user never mentions DNS"
+zh-signals: "在已获得 Pod Shell 后进行 Kubernetes 集群内网络侦察与服务发现，覆盖 DNS PTR 反查、SRV 枚举、AXFR 与 K8Spider。信号:K8s内网侦察,DNS反查,服务发现,K8Spider,SRV记录"
+when-to-use: >-
+  Use after obtaining a pod shell in a Kubernetes cluster when you need to
+  discover internal services, scan the cluster network, or identify
+  lateral-movement targets.
 metadata:
-  tags: "k8s,kubernetes,dns,recon,service-discovery,k8spider,cluster,内网侦察,服务发现"
+  tags: "k8s,kubernetes,dns,recon,service-discovery,k8spider,cluster,internal recon,service discovery"
   category: "cloud"
 ---
 
-→ 读 [references/network-attacks.md](references/network-attacks.md)
+→ Read [references/network-attacks.md](references/network-attacks.md)
 
-# Kubernetes 集群内网络侦察
+# Network Reconnaissance Inside a Kubernetes Cluster
 
-在 K8s 集群中横向移动的第一步是弄清楚还有哪些服务在运行。因为 K8s 用 DNS 做服务发现，每个 Service 和 Pod 都有可预测的 DNS 名称，这意味着通过 DNS 反查就能系统性地枚举整个集群。
+The first step of lateral movement in a K8s cluster is figuring out what other services are running. Because K8s uses DNS for service discovery and every Service and Pod has a predictable DNS name, the whole cluster can be enumerated systematically through DNS reverse lookups.
 
-## K8s DNS 命名规则
+## K8s DNS Naming Rules
 
-| 资源类型 | DNS 格式 | 示例 |
+| Resource Type | DNS Format | Example |
 |---------|---------|------|
 | Service | `<svc>.<ns>.svc.cluster.local` | `redis.default.svc.cluster.local` |
 | Pod | `<pod-ip-dashed>.<ns>.pod.cluster.local` | `10-244-0-5.default.pod.cluster.local` |
 | Headless Service | `<pod-name>.<svc>.<ns>.svc.cluster.local` | `web-0.nginx.default.svc.cluster.local` |
 
-> **注意**: DNS 后缀不一定是 `cluster.local`，由集群配置决定。检查 `/etc/resolv.conf` 中的 `search` 行。
+> **Note**: The DNS suffix is not necessarily `cluster.local`; it depends on the cluster configuration. Check the `search` line in `/etc/resolv.conf`.
 
-### SRV 记录
+### SRV Records
 
-Service 的 SRV 记录暴露端口信息：
+The SRV records of a Service expose port information:
 ```bash
 nslookup -type=srv <service>.<namespace>.svc.cluster.local
-# 输出示例: service = 0 50 80 svc.ns.svc.cluster.local
-# 即使没有 _proto 前缀，也能查到所有有效端口
+# Example output: service = 0 50 80 svc.ns.svc.cluster.local
+# Even without the _proto prefix, all valid ports can be found
 ```
 
 ---
 
-## Phase 1: 确定扫描范围
+## Phase 1: Determine the Scan Scope
 
-DNS PTR 反查是逐 IP 的——/16 范围有 65535 个 IP，盲扫可能需要几十分钟。先花 30 秒确定 Service CIDR，能把扫描时间从分钟级降到秒级。
+DNS PTR reverse lookups are per-IP — a /16 range has 65535 IPs, so blind scanning can take tens of minutes. Spend 30 seconds determining the Service CIDR to bring scan time from minutes down to seconds.
 
-**先获取入口点信息（按可靠度从高到低）**
+**First obtain entry point information (ordered by reliability, highest first)**
 ```bash
-# 1. 环境变量（最快，几乎必有）
+# 1. Environment variables (fastest, almost always present)
 echo $KUBERNETES_SERVICE_HOST
 env | grep -i service_host
 
-# 2. DNS 配置（nameserver 地址通常在 Service CIDR 内）
+# 2. DNS configuration (the nameserver address is usually inside the Service CIDR)
 cat /etc/resolv.conf
 
-# 3. DNS 查询（返回的 API Server IP 暴露 CIDR 段）
+# 3. DNS query (the returned API Server IP exposes the CIDR segment)
 nslookup kubernetes.default.svc.cluster.local
 
-# 4. 路由表/ARP（辅助推断）
+# 4. Routing table/ARP (auxiliary inference)
 cat /etc/hosts && ip route && arp -a 2>/dev/null
 
-# 5. 避免用 ip addr — sidecar 注入的虚拟网卡会干扰判断
+# 5. Avoid `ip addr` — virtual NICs injected by sidecars distort the judgement
 ```
 
-从获取到的 IP 推断 Service CIDR。
+Infer the Service CIDR from the IP you obtained.
 
-### 子网范围选择策略
-⚠️ **禁止用 /8 或更大范围** — 16M+ IP 永远扫不完，会浪费整轮时间。
+### Subnet Range Selection Strategy
+⚠️ **Never use /8 or larger** — 16M+ IPs can never be scanned and would waste the whole round.
 
-推荐扫描粒度：
-1. 先用上面获取的 `KUBERNETES_SERVICE_HOST` 确定 Service CIDR
-2. 从 `/24` 开始（256 IP，秒级完成），无结果则扩到 `/16`（65K IP，分钟级）
-3. 常见 Service CIDR：`10.96.0.0/16`、`10.100.0.0/16`、`10.43.0.0/16`（K3s）
-4. 如果 `KUBERNETES_SERVICE_HOST` 是 `10.96.0.1`，扫 `10.96.0.0/16`
+Recommended scan granularity:
+1. Use the `KUBERNETES_SERVICE_HOST` obtained above to determine the Service CIDR
+2. Start with `/24` (256 IPs, completes in seconds); if there are no results, expand to `/16` (65K IPs, minutes)
+3. Common Service CIDRs: `10.96.0.0/16`, `10.100.0.0/16`, `10.43.0.0/16` (K3s)
+4. If `KUBERNETES_SERVICE_HOST` is `10.96.0.1`, scan `10.96.0.0/16`
 
 ---
 
-## Phase 2: DNS 批量扫描
+## Phase 2: Batch DNS Scanning
 
-### 使用 K8Spider（推荐）
+### Using K8Spider (recommended)
 
 ```bash
-# PTR 反查 + SRV 记录 + 多线程，一条命令完成全部扫描
+# PTR reverse lookups + SRV records + multithreading, all scanning in one command
 k8spider scan -subnet 10.100.0.0/24
 
-# 更大的范围
-k8spider scan -subnet 10.96.0.0/12    # 默认 Service CIDR
-k8spider scan -subnet 10.244.0.0/16   # Pod CIDR (Flannel 默认)
-k8spider scan -subnet 10.42.0.0/16    # Pod CIDR (K3s 默认)
+# Larger ranges
+k8spider scan -subnet 10.96.0.0/12    # default Service CIDR
+k8spider scan -subnet 10.244.0.0/16   # Pod CIDR (Flannel default)
+k8spider scan -subnet 10.42.0.0/16    # Pod CIDR (K3s default)
 ```
 
-> **备选**: 部分 CTF 环境预装了 `dnscan`（用法: `dnscan -subnet <cidr>`），功能类似但不支持 SRV 记录枚举。优先用 K8Spider。
+> **Alternative**: Some CTF environments ship `dnscan` preinstalled (usage: `dnscan -subnet <cidr>`). It is functionally similar but does not support SRV record enumeration. Prefer K8Spider.
 
-### 无工具时的手动方法
+### Manual Method When No Tool Is Available
 
 ```bash
-# PTR 反查 (逐个 IP)
+# PTR reverse lookups (one IP at a time)
 for i in $(seq 1 254); do
   nslookup 10.100.0.$i 2>/dev/null | grep -v "NXDOMAIN" | grep "name =" &
 done; wait
 
-# AXFR 域传输（如果 CoreDNS 允许）
+# AXFR zone transfer (if CoreDNS allows it)
 dig axfr cluster.local @$(grep nameserver /etc/resolv.conf | awk '{print $2}')
 
-# Wildcard DNS（已被新版 CoreDNS 废弃，但老版本可能有效）
+# Wildcard DNS (deprecated in newer CoreDNS, but may still work on older versions)
 nslookup any.any.svc.cluster.local
 ```
 
 ---
 
-## Phase 3: 服务利用
+## Phase 3: Exploit the Discovered Services
 
-发现服务后，按攻击价值优先级排序：
+After discovering services, rank them by attack value:
 
-1. **直接 flag/数据服务**（名称含 flag、secret、internal）→ 立即 curl 访问
-2. **集群管控面**（API Server 6443、etcd 2379、kubelet 10250）→ 未授权访问 = 集群接管
-3. **策略/Webhook 服务**（kyverno-svc、gatekeeper）→ 可提取注入的 Secret
-4. **监控/运维**（prometheus 9090、grafana 3000、dashboard 8443）→ 信息泄露 + 凭据
-5. **业务服务**（其他自定义服务）→ 根据名称和端口判断
+1. **Direct flag/data services** (names containing flag, secret, internal) → curl them immediately
+2. **Cluster control plane** (API Server 6443, etcd 2379, kubelet 10250) → unauthenticated access = cluster takeover
+3. **Policy/Webhook services** (kyverno-svc, gatekeeper) → can extract injectable Secrets
+4. **Monitoring/operations** (prometheus 9090, grafana 3000, dashboard 8443) → information disclosure + credentials
+5. **Business services** (other custom services) → judge by name and port
 
 ```bash
-# 访问发现的服务
+# Access the discovered services
 curl <service>.<namespace>.svc.cluster.local
 curl <service>.<namespace>.svc.cluster.local:<port>
 
-# 对高价值目标尝试多个路径
+# Try multiple paths against high-value targets
 curl -s http://<svc>:<port>/
 curl -s http://<svc>:<port>/flag
 curl -s http://<svc>:<port>/api/v1
@@ -125,19 +130,19 @@ curl -sk https://<svc>:<port>/
 
 ---
 
-## 相关技能
+## Related Skills
 
-发现服务后，根据目标类型加载对应技能：
-- Istio/Envoy 相关服务 → `Skill(skill="k8s-istio-bypass")`
+After discovering services, load the corresponding skill based on the target type:
+- Istio/Envoy related services → `Skill(skill="k8s-istio-bypass")`
 - Kyverno/OPA Webhook → `Skill(skill="k8s-webhook-abuse")`
-- NFS/EFS 存储 → `Skill(skill="k8s-storage-exploit")`
+- NFS/EFS storage → `Skill(skill="k8s-storage-exploit")`
 - API Server/Kubelet → `Skill(skill="k8s-container-escape")`
-- K8Spider 工具详细用法 → `Skill(skill="k8spider")`
+- Detailed K8Spider usage → `Skill(skill="k8spider")`
 
-## 工具速查
+## Tool Quick Reference
 
-| 工具 | 用途 | 安装 |
+| Tool | Purpose | Installation |
 |------|------|------|
-| K8Spider | K8s DNS 批量扫描（PTR+SRV+AXFR+多线程） | `go install github.com/Esonhugh/k8spider@latest` |
-| nslookup/dig | 手动 DNS 查询 | 系统自带 |
-| CDK | 容器渗透工具集（含服务发现） | f8x 安装 |
+| K8Spider | Batch K8s DNS scanning (PTR+SRV+AXFR+multithreading) | `go install github.com/Esonhugh/k8spider@latest` |
+| nslookup/dig | Manual DNS queries | built into the system |
+| CDK | Container penetration toolkit (includes service discovery) | installed via f8x |

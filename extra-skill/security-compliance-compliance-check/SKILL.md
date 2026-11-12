@@ -1,6 +1,8 @@
 ---
 name: security-compliance-compliance-check
 description: "You are a compliance expert specializing in regulatory requirements for software systems including GDPR, HIPAA, SOC2, PCI-DSS, and other industry standards. Perform comprehensive compliance audits and provide implementation guidance for achieving and maintaining compliance."
+zh-signals: "法规合规审计技能，覆盖 GDPR、HIPAA、SOC2、PCI-DSS 等标准的合规检查与实施指导。信号:合规审计,GDPR,HIPAA,SOC2,PCI-DSS"
+when-to-use: "Use when assessing compliance readiness for GDPR, HIPAA, SOC2, or PCI-DSS, building control checklists and audit evidence, or designing compliance monitoring and reporting."
 risk: safe
 source: community
 date_added: "2026-02-27"

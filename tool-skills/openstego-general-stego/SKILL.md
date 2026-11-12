@@ -2,38 +2,39 @@
 name: openstego-general-stego
 description: "General file steganography. Signals: steganography, embed data, extract data, digital watermark."
 zh-signals: "OpenStego: 通用文件隐写。信号:隐写,steganography,嵌入数据,提取数据,数字水印。"
+when-to-use: "Use to embed or extract hidden data and digital watermarks in image files as a cross-platform Java steganography tool."
 ---
 
 # OpenStego
 
-- 攻击大类:C38 隐写与数据提取
-- 上游仓库:https://github.com/syvaidya/openstego
-- 上游 License:GPL-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C38 Steganography and Data Extraction
+- Upstream Repository: https://github.com/syvaidya/openstego
+- Upstream License: GPL-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
-下载 release JAR: java -jar openstego.jar
+Download the release JAR: java -jar openstego.jar
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `java -jar openstego.jar embed -mf secret.txt -cf cover.png -sf out.png` | 嵌入数据 |
-| `java -jar openstego.jar extract -sf out.png -xd .` | 提取数据 |
-| `java -jar openstego.jar embedmark -cf cover.png -mf watermark.txt -sf signed.png` | 数字水印 |
-| `-a lsb` | 算法: LSB/RandomLSB |
+| `java -jar openstego.jar embed -mf secret.txt -cf cover.png -sf out.png` | Embed data |
+| `java -jar openstego.jar extract -sf out.png -xd .` | Extract data |
+| `java -jar openstego.jar embedmark -cf cover.png -mf watermark.txt -sf signed.png` | Digital watermark |
+| `-a lsb` | Algorithm: LSB/RandomLSB |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 通用文件隐写
+### General File Steganography
 
 ```bash
 java -jar openstego.jar embed -mf creds.txt -cf photo.jpg -sf out.jpg
-# 图片带数据过检查;Java 跨平台
+# Data hidden in an image passes inspection; Java cross-platform
 ```
 
-## 注意事项
+## Notes
 
-Java 跨平台通用隐写工具,支持 LSB 嵌入+数字水印,兼容常见图片格式。
+Cross-platform general-purpose Java steganography tool, supports LSB embedding + digital watermarks, compatible with common image formats.

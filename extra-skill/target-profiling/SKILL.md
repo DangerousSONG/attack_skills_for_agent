@@ -1,69 +1,74 @@
 ---
 name: target-profiling
-description: "目标全景画像与攻击面分析。当需要系统性整理目标资产、生成结构化目标档案、或在多人协作渗透中需要共享目标信息时使用。侧重于分析和报告，而非扫描本身。适合在 recon-full 之后对数据进行深度分析"
+description: "Target panorama profiling and attack surface analysis. Use when you need to systematically organize target assets, generate a structured target profile, or share target information during multi-person penetration testing. Focuses on analysis and reporting rather than scanning itself. Suitable for deep analysis of data after recon-full"
+zh-signals: "目标全景画像与攻击面分析，整理资产档案并支持多人协作共享。信号:目标画像,攻击面分析,资产整理,侦察报告"
+when-to-use: >-
+  Use when systematically organizing target assets, generating a structured target
+  profile, or sharing target information in multi-person engagements, typically after
+  recon is done.
 metadata:
-  tags: "recon,profiling,fingerprint,port,画像,档案,资产分析,攻击面评估"
+  tags: "recon,profiling,fingerprint,port,profiling,profile,asset analysis,attack surface assessment"
   category: "recon"
 ---
 
-# 目标全景画像方法论
+# Target Panorama Profiling Methodology
 
-本技能与 `recon-full`（主动扫描）互补：recon-full 负责「发现」，target-profiling 负责「分析和整理」。如果还没做侦察，先执行 recon-full。
+This skill complements `recon-full` (active scanning): recon-full handles "discovery", target-profiling handles "analysis and organization". If reconnaissance has not been done yet, run recon-full first.
 
-## Phase 1: 数据汇总
-用 `evidence_list`（按类型筛选资产记录）和 `list_vulns` 获取已有的侦察数据。如果数据不足，补充执行：
-- `subfinder -d domain` / `ksubdomain -d domain` — 子域名
-- `naabu -host target` — 端口（nmap 作为备选）
-- `httpx -u target -tech-detect` / `curl -sI target` — 指纹
+## Phase 1: Data Aggregation
+Use `evidence_list` (filter asset records by type) and `list_vulns` to obtain the existing reconnaissance data. If the data is insufficient, additionally run:
+- `subfinder -d domain` / `ksubdomain -d domain` — subdomains
+- `naabu -host target` — ports (nmap as an alternative)
+- `httpx -u target -tech-detect` / `curl -sI target` — fingerprints
 
-## Phase 2: 攻击面分析
+## Phase 2: Attack Surface Analysis
 
-### 2.1 技术栈分布
-统计目标使用的技术栈，识别统一管理的和独立部署的系统：
-- 统一框架（如全站 Spring Boot）→ 一个漏洞可能影响所有系统
-- 混合技术栈 → 各系统独立评估
+### 2.1 Technology Stack Distribution
+Count the technology stacks used by the target and identify centrally managed versus independently deployed systems:
+- Unified framework (e.g. the whole site runs Spring Boot) → one vulnerability may affect all systems
+- Mixed technology stacks → evaluate each system independently
 
-### 2.2 暴露面评估
-按风险等级分类已发现的服务：
+### 2.2 Exposure Assessment
+Classify discovered services by risk level:
 
-**极高风险**（应优先攻击）：
-- 管理后台（admin/manager/console）
-- 开发/测试环境（dev/staging/test）
-- 暴露的数据库端口（3306/5432/6379/27017）
-- CI/CD 系统（Jenkins/GitLab/Harbor）
+**Critical risk** (should be attacked first):
+- Admin panels (admin/manager/console)
+- Development/test environments (dev/staging/test)
+- Exposed database ports (3306/5432/6379/27017)
+- CI/CD systems (Jenkins/GitLab/Harbor)
 
-**高风险**：
-- 带已知漏洞的组件（旧版 Spring/Struts/Log4j）
-- 认证页面（可能存在弱密码/默认凭据）
-- API 端点（可能缺少认证）
+**High risk**:
+- Components with known vulnerabilities (old Spring/Struts/Log4j)
+- Authentication pages (weak passwords/default credentials may exist)
+- API endpoints (may lack authentication)
 
-**中风险**：
-- 标准 Web 应用（需要进一步手动测试）
-- 邮件/VPN 入口（社工攻击入口）
+**Medium risk**:
+- Standard web applications (need further manual testing)
+- Mail/VPN entry points (social engineering entry points)
 
-**低风险**：
-- CDN/静态资源
-- 纯展示型网站
+**Low risk**:
+- CDN/static assets
+- Purely informational websites
 
-### 2.3 网络拓扑推断
-从子域名和 IP 分布推断网络结构：
-- 同一 IP 段 → 可能同一机房/VPC
-- CDN 后的真实 IP → 可能绕过 WAF
-- 内外网混部 → 横向移动的潜在路径
+### 2.3 Network Topology Inference
+Infer the network structure from the subdomain and IP distribution:
+- Same IP range → possibly the same data center/VPC
+- Real IPs behind a CDN → possibly able to bypass the WAF
+- Mixed internal/external deployment → potential lateral movement paths
 
-## Phase 3: 输出目标档案
+## Phase 3: Produce the Target Profile
 
-生成结构化报告，包含：
-1. **资产清单**：域名/IP/端口/服务/版本
-2. **技术栈总览**：框架/中间件/CMS 分布
-3. **攻击优先级**：按风险等级排序的攻击目标列表
-4. **推荐攻击路径**：基于发现的信息，建议 2-3 条最有可能成功的攻击路径
-5. **信息缺口**：还需要进一步侦察的方面
+Generate a structured report containing:
+1. **Asset inventory**: domain/IP/port/service/version
+2. **Technology stack overview**: framework/middleware/CMS distribution
+3. **Attack priority**: a list of attack targets sorted by risk level
+4. **Recommended attack paths**: based on the information found, suggest the 2-3 attack paths most likely to succeed
+5. **Information gaps**: the aspects that still require further reconnaissance
 
-## 网络拓扑推断
-- 子网分析：10.0.1.x 可能是 Web 段（同一子网的 Web 服务器），10.0.2.x 可能是数据库段（不同子网，有网络隔离）
+## Network Topology Inference
+- Subnet analysis: 10.0.1.x is likely the web segment (web servers in the same subnet), 10.0.2.x is likely the database segment (a different subnet, with network segmentation)
 
-## 信息缺口识别
-- 子域名来源单一：缺 OSINT、缺爬虫，覆盖不足
-- 端口不全：默认 Top 1000 端口不够，需要全端口（65535）扫描
-- 非标准端口（30000+）高端口可能隐藏服务
+## Information Gap Identification
+- Single-source subdomains: missing OSINT, missing crawler, insufficient coverage
+- Incomplete ports: the default Top 1000 ports are not enough, a full port (65535) scan is required
+- Non-standard ports (30000+) — high ports may hide services

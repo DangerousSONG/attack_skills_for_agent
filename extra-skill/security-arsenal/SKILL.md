@@ -2,6 +2,8 @@
 name: security-arsenal
 description: Security payloads, bypass tables, wordlists, gf pattern names, always-rejected
   bug list, and conditionally-valid-with-chain table.
+zh-signals: "汇集安全测试载荷、绕过表、字典、gf 模式名、常见被拒漏洞清单及需组合链路的条件有效漏洞表。信号:安全武器库,payload,绕过表,wordlist,gf模式,漏洞清单"
+when-to-use: "Use when you need reference payloads, bypass tables, wordlists, gf pattern names, or guidance on always-rejected versus chain-dependent bug classes during security testing."
 category: security
 risk: offensive
 source: https://github.com/elementalsouls/Claude-BugHunter

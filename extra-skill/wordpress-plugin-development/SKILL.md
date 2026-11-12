@@ -1,6 +1,8 @@
 ---
 name: wordpress-plugin-development
 description: "WordPress plugin development workflow covering plugin architecture, hooks, admin interfaces, REST API, security best practices, and WordPress 7.0 features: Real-Time Collaboration, AI Connectors, Abilities API, DataViews, and PHP-only blocks."
+zh-signals: "指导 WordPress 插件开发，涵盖架构、钩子、管理界面、REST API 与安全实践。信号:WordPress,插件开发,钩子,REST API,安全实践"
+when-to-use: "Use when creating or extending a WordPress plugin, adding admin interfaces or REST endpoints, or implementing WordPress 7.0 features."
 category: granular-workflow-bundle
 risk: safe
 source: personal

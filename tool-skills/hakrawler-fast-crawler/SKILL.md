@@ -2,41 +2,42 @@
 name: hakrawler-fast-crawler
 description: "hakrawler quickly harvests site endpoints. Signals: asset mapping, subdomains, hakrawler, crawl depth 3, include subdomains."
 zh-signals: "hakrawler: 站点端点快速收割。信号:资产测绘,子域名,hakrawler`,爬深 3 层,包含子域。"
+when-to-use: "Use during asset mapping to quickly harvest URLs, endpoints, and JavaScript files from a site, optionally including subdomains. Requires a target URL and a crawl depth."
 ---
 
 # hakrawler
 
-- 攻击大类:C01 资产测绘与指纹识别
-- 上游仓库:https://github.com/hakluke/hakrawler
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C01 Asset Mapping and Fingerprinting
+- Upstream Repository: https://github.com/hakluke/hakrawler
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/hakluke/hakrawler@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `echo https://target.com | hakrawler` | 爬取端点/表单/JS |
-| `-d 3` | 爬深 3 层 |
-| `-subs` | 包含子域 |
-| `-u` | 显示来源 URL |
-| `-t 20` | 线程 |
-| `-insecure` | 忽略 TLS 错误 |
-| `-proxy http://127.0.0.1:8080` | 过代理 |
+| `echo https://target.com | hakrawler` | Crawl endpoints/forms/JS |
+| `-d 3` | Crawl depth 3 |
+| `-subs` | Include subdomains |
+| `-u` | Show source URL |
+| `-t 20` | Threads |
+| `-insecure` | Ignore TLS errors |
+| `-proxy http://127.0.0.1:8080` | Go through a proxy |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 站点端点快速收割
+### Fast Harvest of Site Endpoints
 
 ```bash
 echo https://app.target.com | hakrawler -d 2 -subs | sort -u > endpoints.txt
-grep -E '\?.*=' endpoints.txt > params.txt  # 送参数字典爆破
+grep -E '\?.*=' endpoints.txt > params.txt  # feed into a parameter wordlist brute force
 ```
 
-## 注意事项
+## Notes
 
-Go 写的快爬虫,输出纯文本适合管道;表单和 JS 发现能力适合喂给 fuzzer。
+A fast crawler written in Go whose plain-text output suits pipelines; its form and JS discovery is useful input for a fuzzer.

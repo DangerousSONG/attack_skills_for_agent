@@ -1,6 +1,8 @@
 ---
 name: active-directory-attacks
 description: "Provide comprehensive techniques for attacking Microsoft Active Directory environments. Covers reconnaissance, credential harvesting, Kerberos attacks, lateral movement, privilege escalation, and domain dominance for red team operations and penetration testing."
+zh-signals: "Active Directory 环境攻击技术，覆盖侦察、凭据获取、Kerberos 与横向移动。信号:ActiveDirectory,域渗透,Kerberos,横向移动,提权"
+when-to-use: "Use during authorized red-team engagements against Microsoft Active Directory environments for reconnaissance, credential harvesting, and privilege escalation."
 risk: offensive
 source: community
 author: zebbern

@@ -1,6 +1,10 @@
 ---
 name: zimbra-attack
 description: Zimbra SOAP user enum, CVE-2022-37042, SSRF when webmail.
+zh-signals: "针对 Zimbra 邮件系统的攻击，覆盖 SOAP 用户枚举、上传路径穿越与代理 SSRF。信号:zimbra,soap,用户枚举,cve-2022-37042,ssrf,邮件系统"
+when-to-use: >-
+  Use when the target exposes webmail., mail., or zimbra. hosts or a /zimbra/ path, and you
+  need SOAP user enumeration, version fingerprinting, CVE-2022-37042, or proxy SSRF testing.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

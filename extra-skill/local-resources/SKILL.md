@@ -1,90 +1,94 @@
 ---
 name: local-resources
-description: "本地资源库导航——字典库(Dic)、Payload库、POC库的结构和使用方法。当需要使用 ffuf/spray 目录爆破、密码爆破、或构造 Fuzz payload 时必读。覆盖字典选择策略、payload 模板调用、POC 库搜索方法。字典库统一安装在 /pentest 目录下"
+description: "Navigation of the local resource library — wordlists (Dic), payload library, and POC library, with their structure and usage. Must read when using ffuf/spray for directory brute-forcing, password brute-forcing, or building fuzz payloads. Covers wordlist selection strategy, payload template invocation, and POC library search methods. All wordlists are installed under the /pentest directory"
+zh-signals: "本地字典、Payload 与 POC 资源库导航，指导目录爆破、密码爆破与 Fuzz 字典选择。信号:字典库,payload,ffuf,spray,目录爆破,资源导航"
+when-to-use: >-
+  Use when you need a local wordlist, payload template, or POC reference for
+  ffuf/spray directory brute force, password brute force, or fuzzing.
 metadata:
   category: "general"
-  tags: "dictionary,wordlist,payload,poc,ffuf,spray,resource,字典,工具"
+  tags: "dictionary,wordlist,payload,poc,ffuf,spray,resource,wordlist,tool"
 ---
 
-# 本地资源库导航
+# Local Resource Library Navigation
 
-⚠️ **核心规则：字典统一在 /pentest 目录** — aboutsecurity 字典库和 nuclei 模板库均安装在 `/pentest/` 下。
+⚠️ **Core rule: wordlists live under /pentest** — the aboutsecurity wordlist library and the nuclei template library are both installed under `/pentest/`.
 
-## 📁 字典库 (Dic/) — 目录爆破 / 密码爆破 / 参数 Fuzz
+## 📁 Wordlist Library (Dic/) — Directory Brute-Force / Password Brute-Force / Parameter Fuzzing
 
-### 工具链
+### Toolchain
 ```bash
-# 查看字典库分类
+# List the wordlist categories
 ls /pentest/AboutSecurity/Dic/
-# 查看 Web 字典子分类
+# List the web wordlist subcategories
 ls /pentest/AboutSecurity/Dic/Web/
-# 使用字典（示例）
+# Use a wordlist (example)
 spray -u http://target -d /pentest/AboutSecurity/Dic/Web/Directory/Fuzz_common.txt
 ffuf -u http://target/FUZZ -w /pentest/AboutSecurity/Dic/Web/Directory/Fuzz_common.txt
 ```
 
-### 常用字典速查表
+### Common Wordlist Quick Reference
 
-| 场景 | 路径 | 行数 |
+| Scenario | Path | Lines |
 |------|-------------------|------|
-| 通用目录爆破 | `Web/Directory/Fuzz_common.txt` | ~5k |
-| PHP 文件发现 | `Web/Directory/php/Fuzz_php.txt` | ~48k |
+| Generic directory brute-force | `Web/Directory/Fuzz_common.txt` | ~5k |
+| PHP file discovery | `Web/Directory/php/Fuzz_php.txt` | ~48k |
 | PHP Top100 | `Web/Directory/php/Top100_php.txt` | ~100 |
-| CTF URI Fuzz | `Web/CTF/Fuzz_uri.txt` | ~220 |
-| CTF 参数 Fuzz | `Web/CTF/Fuzz_param.txt` | ~44 |
-| CTF SQL Fuzz | `Web/CTF/Fuzz_sql.txt` | ~94 |
-| 后台路径 | `Web/Directory/Fuzz_admin_dir.txt` | — |
-| API 路径 | `Web/Directory/Fuzz_api.txt` | — |
-| 备份文件 | `Web/File_Backup/` | — |
-| 密码 Top100 | `Auth/password/top100.txt` | — |
-| DNS 子域名 | `Web/dns/` | — |
+| CTF URI fuzzing | `Web/CTF/Fuzz_uri.txt` | ~220 |
+| CTF parameter fuzzing | `Web/CTF/Fuzz_param.txt` | ~44 |
+| CTF SQL fuzzing | `Web/CTF/Fuzz_sql.txt` | ~94 |
+| Admin panel paths | `Web/Directory/Fuzz_admin_dir.txt` | — |
+| API paths | `Web/Directory/Fuzz_api.txt` | — |
+| Backup files | `Web/File_Backup/` | — |
+| Password Top100 | `Auth/password/top100.txt` | — |
+| DNS subdomains | `Web/dns/` | — |
 
-### 决策树：该用哪个字典？
+### Decision Tree: Which Wordlist Should You Use?
 
 ```
-目标是 Web 应用？
-├── CTF/靶场 → Web/CTF/Fuzz_uri.txt（小而精）
-├── PHP 站 → Web/Directory/php/Fuzz_php.txt（全面）
-├── 通用站 → Web/Directory/Fuzz_common.txt
-├── 找后台 → Web/Directory/Fuzz_admin_dir.txt
-├── 找 API → Web/Directory/Fuzz_api.txt
-└── 找备份 → Web/File_Backup/
+Is the target a web application?
+├── CTF/lab range → Web/CTF/Fuzz_uri.txt (small and precise)
+├── PHP site → Web/Directory/php/Fuzz_php.txt (comprehensive)
+├── Generic site → Web/Directory/Fuzz_common.txt
+├── Looking for an admin panel → Web/Directory/Fuzz_admin_dir.txt
+├── Looking for APIs → Web/Directory/Fuzz_api.txt
+└── Looking for backups → Web/File_Backup/
 
-目标是认证服务？
-├── 密码爆破 → Auth/password/top100.txt
-├── 用户名枚举 → Auth/username/
-└── 特定服务 → Port/{mysql,ssh,rdp,...}/
+Is the target an authentication service?
+├── Password brute-force → Auth/password/top100.txt
+├── Username enumeration → Auth/username/
+└── Specific service → Port/{mysql,ssh,rdp,...}/
 ```
 
-## 📁 Payload 库 — 漏洞验证 payload
+## 📁 Payload Library — Vulnerability Validation Payloads
 
-### 工具链
+### Toolchain
 ```bash
-# 查看 aboutsecurity 字典库分类
+# List the aboutsecurity wordlist categories
 ls /pentest/AboutSecurity/Dic/
-# 查看 nuclei 模板库
+# List the nuclei template library
 ls ~/nuclei-templates/
-# 读取具体 payload 文件
+# Read a specific payload file
 cat /pentest/AboutSecurity/Dic/SQL-Inj/bypass-waf.txt
 ```
 
-### 可用分类
-SQL-Inj | XSS | LFI | SSRF | XXE | RCE | 403 绕过 | upload | CORS | HPP | SSI
+### Available Categories
+SQL-Inj | XSS | LFI | SSRF | XXE | RCE | 403 bypass | upload | CORS | HPP | SSI
 
-## ⚠️ 使用外部工具的正确流程
+## ⚠️ The Correct Workflow When Using External Tools
 
 ```
-❌ 错误：ffuf -u http://target/FUZZ -w /usr/share/wordlists/common.txt
+❌ Wrong: ffuf -u http://target/FUZZ -w /usr/share/wordlists/common.txt
                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-                                        猜测路径，大概率不存在
+                                        Guessing the path, it most likely does not exist
 
-✅ 正确：
-1. ls /pentest/AboutSecurity/Dic/Web/Directory/  → 确认字典存在
+✅ Correct:
+1. ls /pentest/AboutSecurity/Dic/Web/Directory/  → confirm the wordlist exists
 2. ffuf -u http://target/FUZZ -w /pentest/AboutSecurity/Dic/Web/Directory/Fuzz_common.txt
 ```
 
-## 💡 高效使用提示
+## 💡 Efficient Usage Tips
 
-1. **spray / ffuf 已封装字典** — 如果只是简单目录爆破，直接用 `spray -u target -d wordlist.txt` 或 `ffuf -u target/FUZZ -w wordlist.txt`
-2. **自定义参数用 ffuf** — 需要自定义参数（如 -e .bak -mc 200）时用 `ffuf -u target/FUZZ -w /pentest/AboutSecurity/Dic/...`
-3. **CTF 场景优先用小字典** — Web/CTF/ 下的字典精简且针对性强，避免大字典浪费时间
+1. **spray / ffuf already wrap the wordlists** — for simple directory brute-forcing, use `spray -u target -d wordlist.txt` or `ffuf -u target/FUZZ -w wordlist.txt` directly
+2. **Use ffuf for custom parameters** — when you need custom parameters (e.g. -e .bak -mc 200), use `ffuf -u target/FUZZ -w /pentest/AboutSecurity/Dic/...`
+3. **Prefer small wordlists in CTF scenarios** — the wordlists under Web/CTF/ are streamlined and highly targeted, avoiding wasted time with large wordlists

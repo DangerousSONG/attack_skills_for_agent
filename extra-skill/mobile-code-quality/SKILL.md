@@ -7,6 +7,11 @@ description: >
   stack canary absent, RELRO, ARC disabled, third-party library CVE, vulnerable dependency, outdated SDK,
   targetSdkVersion, update enforcement missing, implicit Intent, URL loading in WebView,
   object persistence, memory corruption, OWASP dependency check. Covers MASVS-CODE-1/2/3/4.
+zh-signals: "检测移动应用（Android/iOS）代码质量漏洞，覆盖 SQLite 注入、WebView 脚本注入、intent 注入、不安全反序列化、二进制加固缺失与依赖 CVE（MASVS-CODE）。信号:移动应用安全,SQL注入,WebView,反序列化,MASVS,依赖CVE"
+when-to-use: >-
+  Use when auditing Android or iOS application code for quality and security defects such
+  as SQLite/WebView injection, intent injection, unsafe deserialization, missing binary
+  hardening, and vulnerable third-party dependencies.
 license: MIT
 compatibility: Designed for Claude Code. jadx, apktool, semgrep, MobSF, OWASP Dependency-Check, checksec, Frida recommended.
 metadata:

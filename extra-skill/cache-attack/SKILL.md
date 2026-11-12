@@ -1,6 +1,8 @@
 ---
 name: cache-attack
 description: Poison CDN cache or deceive when X-Cache header is detected.
+zh-signals: "针对 CDN 与反向代理的 Web 缓存投毒和缓存欺骗测试方法。信号:缓存投毒,缓存欺骗,CDN安全,X-Cache,Web缓存"
+when-to-use: "Use when a target sits behind a CDN or reverse-proxy cache, shows X-Cache/Age headers, or needs web cache poisoning or deception testing."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

@@ -1,6 +1,10 @@
 ---
 name: hunt-brute-force
 description: "Hunt Missing/Weak Rate Limiting — login brute force, OTP/2FA brute force (10^6 keyspace), password-reset-token brute, credential stuffing, username/email enumeration via error-string / status-code / timing differences, weak password policy, missing CAPTCHA, IP-based rate-limit bypass via X-Forwarded-For and friends, ReDoS. Distinguishes hard lockout vs soft IP-throttle vs CAPTCHA-injection vs silent shadow-throttling (avoids false-negative 'no rate limit' conclusions). Medium to Critical depending on what the brute reaches (OTP→ATO = Critical)."
+zh-signals: "狩猎缺失或过弱的速率限制，覆盖登录/OTP 暴力破解、凭据填充、账户枚举、CAPTCHA 缺失与 ReDoS。信号:暴力破解,速率限制,OTP,凭据填充,用户枚举"
+when-to-use: >-
+  Use when hunting missing or weak rate limiting on login, OTP/2FA, password
+  reset, or enumeration endpoints, and distinguishing lockout vs throttling.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

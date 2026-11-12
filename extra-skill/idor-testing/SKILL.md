@@ -1,6 +1,11 @@
 ---
 name: idor-testing
 description: "Provide systematic methodologies for identifying and exploiting Insecure Direct Object Reference (IDOR) vulnerabilities in web applications."
+zh-signals: "系统化识别与利用 Web 应用中的 IDOR（不安全的直接对象引用）漏洞，覆盖参数篡改、枚举与越权访问验证。信号:IDOR,越权访问,对象引用,参数篡改,枚举测试"
+when-to-use: >-
+  Use when testing a web application for IDOR vulnerabilities with multiple
+  authorized test accounts, focusing on object references in URLs, request bodies,
+  or file paths.
 risk: offensive
 source: community
 author: zebbern

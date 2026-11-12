@@ -2,36 +2,40 @@
 name: gitrecon-github-osint
 description: "GitRecon collects GitHub organization information. Signals: asset mapping, subdomains, token."
 zh-signals: "GitRecon: GitHub 组织信息收集。信号:资产测绘,子域名,token。"
+when-to-use: >-
+  Use during asset mapping to collect information about a GitHub user or
+  organization, including repositories and exposed subdomains, optionally with a
+  token for higher rate limits.
 ---
 
 # GitRecon
 
-- 攻击大类:C01 资产测绘与指纹识别
-- 上游仓库:https://github.com/GONZOsint/gitrecon
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C01 Asset Mapping and Fingerprinting
+- Upstream Repository: https://github.com/GONZOsint/gitrecon
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/GONZOsint/gitrecon && cd gitrecon && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python gitrecon.py -s target` | 按用户/组织搜 GitHub |
+| `python gitrecon.py -s target` | Search GitHub by user/organization |
 | `-t X` | token |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### GitHub 组织信息收集
+### GitHub Organization Information Gathering
 
 ```bash
 python gitrecon.py -s targetcorp -t $GITHUB_TOKEN
-# 员工账号/repos/gists/事件全列,盯密钥泄露
+# lists all employee accounts, repos, gists, and events — watch for secret leaks
 ```
 
-## 注意事项
+## Notes
 
-GitHub 账户级 OSINT;盯组织成员的 public gists 是密钥泄露重灾区。
+Account-level OSINT on GitHub; organization members' public gists are a prime target for secret leaks.

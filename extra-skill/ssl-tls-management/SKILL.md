@@ -3,6 +3,9 @@ name: ssl-tls-management
 description: Manage SSL/TLS certificates with Let's Encrypt and internal PKI. Configure
   secure HTTPS, certificate renewal, and cipher suites. Use when implementing secure
   communications.
+zh-signals: "管理 SSL/TLS 证书与安全通信，覆盖 Let's Encrypt、cert-manager 与加密套件配置。信号:SSL/TLS,证书管理,Let's Encrypt,cert-manager,加密套件。"
+when-to-use: >-
+  Use when issuing or renewing TLS certificates with Let's Encrypt or cert-manager, configuring HTTPS and cipher suites, or auditing certificate expiry and TLS settings.
 category: security
 risk: critical
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

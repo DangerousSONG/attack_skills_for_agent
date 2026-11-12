@@ -10,6 +10,8 @@ description: >-
   and sinks. For fast single-file pattern matching, or when no build is available for a
   compiled language, use the semgrep skill; to parse SARIF that already exists rather than
   produce it, use the sarif-parsing skill.
+zh-signals: "使用 CodeQL 进行跨过程数据流与污点分析的安全扫描。信号:CodeQL,SAST,污点分析,静态分析,数据流"
+when-to-use: "Use when running CodeQL to scan a codebase for vulnerabilities with interprocedural data-flow and taint tracking across supported languages."
 allowed-tools: Bash Read Write Edit Glob Grep AskUserQuestion TaskCreate TaskList TaskUpdate TaskGet
 ---
 

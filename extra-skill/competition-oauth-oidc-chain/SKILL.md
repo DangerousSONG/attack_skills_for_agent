@@ -1,6 +1,10 @@
 ---
 name: competition-oauth-oidc-chain
 description: Internal downstream skill for ctf-sandbox-orchestrator. CTF-sandbox workflow for OAuth, OIDC, redirect flows, state or nonce handling, PKCE, token exchange, refresh logic, claim mapping, and accepted login paths. Use when the user asks to trace redirects, callback parameters, scopes, state, nonce, PKCE, refresh tokens, consent, or explain how an OAuth or OIDC chain turns into accepted identity or privilege. Use only after `$ctf-sandbox-orchestrator` has already established sandbox assumptions and routed here.
+zh-signals: "追踪 OAuth/OIDC 重定向、state/nonce、PKCE 与令牌交换链路，判定令牌如何被接受为身份或权限。信号:OAuth,OIDC,重定向,PKCE,令牌交换"
+when-to-use: >-
+  Use after `$ctf-sandbox-orchestrator` is active, when tracing OAuth/OIDC redirects,
+  callback parameters, token exchange, or how tokens and claims become an accepted identity.
 ---
 
 # Competition OAuth OIDC Chain

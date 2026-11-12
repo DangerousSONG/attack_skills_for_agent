@@ -1,61 +1,63 @@
 ---
 name: php-ssrf-audit
-description: PHP Web 源码 SSRF 审计工具。识别用户可控 URL/地址进入网络请求 Sink，追踪内网/协议/端口限制与回显，输出可利用性分级、PoC 与修复建议（禁止省略）。
+description: "PHP web source code SSRF audit tool. Identifies user-controllable URLs/addresses reaching network request sinks, traces internal network/protocol/port restrictions and response reflection, and outputs exploitability grading, PoCs, and remediation recommendations (must not be omitted)."
+zh-signals: "审计 PHP 源码中的 SSRF 风险，追踪用户可控 URL 进入网络请求 Sink，评估协议与内网限制并输出 PoC。信号:SSRF,PHP审计,内网访问,URL可控,漏洞利用"
+when-to-use: "Use when auditing PHP source code for server-side request forgery, where user-controlled URLs reach network request sinks and you need exploitability grading, PoCs, and fixes."
 ---
 
-# PHP SSRF 审计（php-ssrf-audit）
+# PHP SSRF Audit (php-ssrf-audit)
 
-分析 PHP 项目源码，识别 SSRF 风险：用户可控 URL/主机/路径进入网络请求或读取类函数，且缺少协议 allowlist、DNS/IP 内网拒绝、端口限制等控制。
+Analyze PHP project source code to identify SSRF risks: user-controllable URL/host/path reaching network request or file-read functions without protocol allowlists, DNS/IP internal-network rejection, port restrictions, or similar controls.
 
-## 分级与编号
-- 详见：`shared/SEVERITY_RATING.md`
-- 漏洞编号：`{C/H/M/L}-SSRF-{序号}`
+## Severity Rating and Numbering
+- See `shared/SEVERITY_RATING.md` for details
+- Vulnerability ID: `{C/H/M/L}-SSRF-{sequence}`
 
-## SSRF Sink（必做）
-识别至少以下网络/地址访问点：
+## SSRF Sinks (Mandatory)
+Identify at least the following network/address access points:
 - `curl_setopt(CURLOPT_URL, $url)` / `curl_exec`
 - `file_get_contents($url)` / `readfile($url)` / `fopen($url, {value})`
 - `stream_get_contents($stream)` / `fsockopen` / `pfsockopen`
-- `get_headers($url)` / `dns_get_record`（配合地址解析时）
-危险模式：
-- URL/Host/Port/Path 来自用户输入且可控
-- 协议未限制（允许 `file://`、`gopher://`、`php://` 等）
+- `get_headers($url)` / `dns_get_record` (when combined with address resolution)
+Dangerous patterns:
+- URL/Host/Port/Path comes from user input and is controllable
+- Protocol is unrestricted (`file://`, `gopher://`, `php://`, etc. are allowed)
 
-## 必做的安全检查点
-- 协议白名单：仅允许 `http/https`（如有必要）
-- DNS/IP 解析后内网网段拦截：拒绝 `127.0.0.1/::1/10.0.0.0/8/172.16.0.0/12/192.168.0.0/16` 等
-- 端口限制：拒绝内网高危端口（由项目策略决定）
-- 重定向处理：跟随跳转的限制（如 `CURLOPT_FOLLOWLOCATION`）
-- 重定向与最终地址校验：即使初始 URL 通过 allowlist，仍必须对“重定向后的最终 URL”执行同等拦截与协议校验
-- DNS rebinding 防护：允许域名访问时，必须在实际发起请求前进行最终解析，或使用安全解析策略避免“先外网后内网”
-- URL 归一化：对编码后的主机/路径（双重编码、大小写、用户信息段 `user:pass@host`）先归一化再做 allowlist 判断
+## Mandatory Security Checkpoints
+- Protocol allowlist: allow only `http/https` (if necessary)
+- Block internal network ranges after DNS/IP resolution: reject `127.0.0.1/::1/10.0.0.0/8/172.16.0.0/12/192.168.0.0/16`, etc.
+- Port restrictions: reject high-risk internal ports (as defined by project policy)
+- Redirect handling: restrict followed redirects (e.g. `CURLOPT_FOLLOWLOCATION`)
+- Redirect and final address validation: even if the initial URL passes the allowlist, the same blocking and protocol validation MUST still be applied to the "final URL after redirects"
+- DNS rebinding protection: when allowing domain access, a final resolution MUST be performed immediately before the actual request, or a safe resolution policy must be used to avoid "external first, internal later"
+- URL normalization: normalize encoded hosts/paths (double encoding, case, userinfo segment `user:pass@host`) before the allowlist check
 
-## 触发 tracer 的条件
-- URL 由多字段拼接（schema + host + path + query）
-- 存在多层函数调用或编码/解码/替换
-- 安全判断依赖字符串规范化（必须追踪真实最终 URL）
+## When to Trigger the Tracer
+- The URL is assembled from multiple fields (schema + host + path + query)
+- There are multi-layer function calls or encode/decode/replace operations
+- The security decision depends on string normalization (the real final URL MUST be traced)
 
-## 报告输出
+## Report Output
 ```
 {output_path}/vuln_audit/ssrf_{timestamp}.md
 ```
 
-## 漏洞条目模板（强制）
-与 `php-sql-audit` 同结构，但在数据流链里必须覆盖：
-- 最终用于发起请求的 URL/Host/Port 变量来源与拼接过程
-- 协议选择与内网拦截判断的分支证据
+## Vulnerability Entry Template (Mandatory)
+Same structure as `php-sql-audit`, but the data flow chain MUST cover:
+- The source and assembly process of the URL/Host/Port variables actually used to issue the request
+- Branch evidence for protocol selection and internal-network blocking decisions
 
-## 证据引用（强制：来自 php-route-tracer）
-每条 SSRF 疑似漏洞必须逐项引用 trace 输出中 `## 9) Sink Evidence Type Checklist` 的 **SSRF 行**对应证据要点（禁止只写“可能”；允许状态为待验证，但证据引用必须存在）：
-1. `EVID_SSRF_URL_NORMALIZATION`：URL 归一化步骤（对应 SSRF 行中的证据点）
-2. `EVID_SSRF_FINAL_URL_HOST_PORT`：发起请求前的最终 URL/Host/Port（对应 SSRF 行中的证据点）
-3. `EVID_SSRF_FINAL_REDIRECT_URL`：若存在重定向/跟随跳转：最终重定向后地址证据（对应 SSRF 行中的证据点）
-4. `EVID_SSRF_DNSIP_AND_INNER_BLOCK`：DNS/IP 解析与内网拦截判定证据（对应 SSRF 行中的证据点）
+## Evidence Citation (Mandatory: from php-route-tracer)
+Every suspected SSRF vulnerability MUST cite the corresponding evidence points of the **SSRF row** in `## 9) Sink Evidence Type Checklist` of the trace output, item by item (writing only "possibly" is forbidden; a pending-verification status is allowed, but the evidence citations MUST exist):
+1. `EVID_SSRF_URL_NORMALIZATION`: URL normalization steps (corresponding to the evidence points in the SSRF row)
+2. `EVID_SSRF_FINAL_URL_HOST_PORT`: the final URL/Host/Port before the request is issued (corresponding to the evidence points in the SSRF row)
+3. `EVID_SSRF_FINAL_REDIRECT_URL`: if redirects/follow-redirects exist: evidence of the address after the final redirect (corresponding to the evidence points in the SSRF row)
+4. `EVID_SSRF_DNSIP_AND_INNER_BLOCK`: evidence of DNS/IP resolution and the internal-network blocking decision (corresponding to the evidence points in the SSRF row)
 
-## tracer 证据缺失处理（强制）
-- 若在 trace 中找不到上述 1~4 任一关键证据点：该条漏洞状态只能标记为 `⚠️待验证`，不得给出 `✅已确认可利用`。
+## Handling Missing tracer Evidence (Mandatory)
+- If any of the key evidence points 1~4 above cannot be found in the trace: this finding can only be marked as `⚠️Pending Verification`, and must not be given `✅Confirmed Exploitable`.
 
-#### PoC（强制）
-- 必须给出可执行请求（HTTP 代码块）
-- PoC URL 必须使用真实路由并替换为真实可控字段名
+#### PoC (Mandatory)
+- Must provide an executable request (HTTP code block)
+- The PoC URL must use a real route with real controllable field names
 

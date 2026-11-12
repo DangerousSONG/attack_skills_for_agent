@@ -2,38 +2,39 @@
 name: cr3dov3r-leak-lookup
 description: "Cr3dOv3r: Collects leaked passwords and verifies credential reuse. Signals: email harvesting, employee information, silent mode, plaintext password databases only, no credential reuse testing."
 zh-signals: "Cr3dOv3r: 收集泄露口令并验证凭据复用。信号:邮箱收集,员工信息,静默,只查明文密码库,不测试凭据复用。"
+when-to-use: "Use when looking up leaked passwords for target emails and verifying credential reuse during OSINT or credential assessment. Requires target email addresses and optionally silent mode."
 ---
 
 # Cr3dOv3r
 
-- 攻击大类:C03 邮箱与人员OSINT
-- 上游仓库:https://github.com/D4Vinci/Cr3dOv3r
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C03 Email and Personnel OSINT
+- Upstream Repository: https://github.com/D4Vinci/Cr3dOv3r
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/D4Vinci/Cr3dOv3r && cd Cr3dOv3r && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python Cr3dOv3r.py victim@email.com` | breach 库+凭据复用检查 |
-| `-q` | 静默 |
-| `-p` | 只查明文密码库 |
-| `-np` | 不测试凭据复用 |
+| `python Cr3dOv3r.py victim@email.com` | Breach database plus credential reuse check |
+| `-q` | Quiet |
+| `-p` | Plaintext password databases only |
+| `-np` | Do not test credential reuse |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 收集泄露口令并验证凭据复用
+### Collecting leaked passwords and verifying credential reuse
 
 ```bash
 python Cr3dOv3r.py admin@corp.com
-# 输出 HaveIBeenPwned 泄露记录+明文密码,并尝试在各平台复用登录
+# Outputs HaveIBeenPwned breach records plus plaintext passwords, and attempts to reuse the login on various platforms
 ```
 
-## 注意事项
+## Notes
 
-把'查泄露'和'测复用'串成一条;项目更新放缓,结果需人工复核。
+Chains "lookup leaks" and "test reuse" into a single flow; project updates have slowed, so review the results manually.

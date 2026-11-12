@@ -1,6 +1,9 @@
 ---
 name: security-bluebook-builder
 description: "Build a minimal but real security policy for sensitive apps. The output is a single, coherent Blue Book document using MUST/SHOULD/CAN language, with explicit assumptions, scope, and security gates."
+zh-signals: "为敏感应用编写使用 MUST/SHOULD/CAN 语言的精简可执行安全策略蓝皮书。信号:安全策略,威胁建模,MUST/SHOULD/CAN,安全门禁,数据分级。"
+when-to-use: >-
+  Use when a concise but enforceable security policy is needed for an app handling sensitive data, including explicit assumptions, scope, trust boundaries, controls, and go/no-go security gates.
 risk: safe
 source: community
 date_added: "2026-09-04"

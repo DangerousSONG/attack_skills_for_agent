@@ -1,6 +1,8 @@
 ---
 name: zk-proof-verification-pipeline
 description: 'Zero-knowledge cryptographic verification pipeline register: proving system, circuit verification keys, public inputs, and gas costs.'
+zh-signals: "零知识证明验证流水线登记技能，用于记录证明系统、验证密钥、公开输入、空值跟踪与 gas 成本。信号:零知识证明,SNARK,验证密钥,公共输入,Gas成本"
+when-to-use: "Use when formalizing zero-knowledge proof verification contracts, registering proving systems and verification keys, or tracking public inputs, nullifiers, and gas costs in privacy systems."
 category: engineering
 risk: safe
 source: self

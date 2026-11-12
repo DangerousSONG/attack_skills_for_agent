@@ -1,6 +1,8 @@
 ---
 name: gitlab-public-recon
 description: Mine GitLab for secrets, CI tokens when subdomain found.
+zh-signals: "枚举公开 GitLab 仓库，提取源码、凭据、内网 IP 与 CI/CD 令牌。信号:GitLab,信息收集,源码泄露,凭据,CI/CD令牌"
+when-to-use: "Use when a target has a gitlab. subdomain or self-hosted GitLab instance with public repositories to mine for secrets."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

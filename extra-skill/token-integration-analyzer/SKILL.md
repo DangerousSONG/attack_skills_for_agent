@@ -1,6 +1,8 @@
 ---
 name: token-integration-analyzer
 description: Token integration and implementation analyzer based on Trail of Bits' token integration checklist. Analyzes token implementations for ERC20/ERC721 conformity, checks for 20+ weird token patterns, assesses contract composition and owner privileges, performs on-chain scarcity analysis, and evaluates how protocols handle non-standard tokens. Use when integrating or accepting arbitrary ERC20/ERC721 tokens, auditing a token implementation for standards conformity, or assessing risk from weird tokens such as fee-on-transfer, rebasing, missing return values, or blocklists.
+zh-signals: "基于 Trail of Bits 清单分析代币实现与集成安全性。信号:代币审计,ERC20合规,ERC721,怪异代币,集成风险。"
+when-to-use: "Use when integrating or accepting arbitrary ERC20/ERC721 tokens, auditing a token implementation for standards conformity, running slither-check-erc or slither-prop, or assessing risks from weird tokens such as fee-on-transfer, rebasing, missing return values, or blocklists."
 ---
 
 # Token Integration Analyzer

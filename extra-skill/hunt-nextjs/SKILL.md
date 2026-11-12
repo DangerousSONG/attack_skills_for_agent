@@ -1,6 +1,8 @@
 ---
 name: hunt-nextjs
 description: Hunt Next.js specific vulnerabilities
+zh-signals: "针对 Next.js 的专项漏洞挖掘指南，覆盖已知 CVE 与常见配置缺陷。信号:Next.js,漏洞挖掘,前端框架,CVE,Web安全"
+when-to-use: "Use when hunting Next.js-specific vulnerabilities such as known CVEs, middleware bypasses, and misconfigurations in authorized assessments."
 category: security
 risk: offensive
 source: https://github.com/elementalsouls/Claude-BugHunter

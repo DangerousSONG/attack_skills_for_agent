@@ -1,6 +1,10 @@
 ---
 name: trailmark-review-gate
 description: "Runs a Trailmark structural review gate over a branch, pull request, fix commit, release diff, or git ref range to detect new entrypoints, new tainted paths, removed validation or authorization calls, privilege-boundary drift, blast-radius growth, complexity growth, and newly reachable sensitive sinks. Use when reviewing a PR, branch, remediation commit, or release diff where graph-level security regressions should be checked before merge."
+zh-signals: "在分支、PR 或修复提交上运行 Trailmark 结构化审查门禁，检测新增入口点、污染路径与权限边界漂移。信号:代码审查门禁,结构化差异,权限边界,攻击面,回归检测"
+when-to-use: >-
+  Use when reviewing a branch, pull request, remediation commit, or release diff
+  where graph-level security regressions should be checked before merge.
 allowed-tools:
   - Bash
   - Read

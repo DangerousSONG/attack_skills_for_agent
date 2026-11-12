@@ -6,6 +6,8 @@ description: >
   Secure Enclave, kSecAccessControlBiometryCurrentSet, userAuthenticationValidityDurationSeconds,
   confirmCredentials, biometric fallback, PIN bypass, passive authentication, enrolled biometrics detection,
   Frida hook auth, jailbreak bypass, TouchID, FaceID, fingerprint. Covers MASVS-AUTH-1/2/3.
+zh-signals: "检测 Android/iOS 应用的认证与生物识别绕过漏洞。信号:移动认证,生物识别,Frida,认证绕过,iOS,Android"
+when-to-use: "Use when assessing mobile apps for biometric or authentication bypass, especially BiometricPrompt/LAContext flows and Keystore binding."
 license: MIT
 compatibility: Designed for Claude Code. Frida, objection, jadx, apktool, Burp Suite recommended.
 metadata:

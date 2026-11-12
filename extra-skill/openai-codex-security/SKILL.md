@@ -1,6 +1,8 @@
 ---
 name: openai-codex-security
 description: OpenAI Codex Security CLI and SDK for AI-powered vulnerability scanning, validation, and automated security fixes in codebases
+zh-signals: "使用 OpenAI Codex Security CLI/SDK 进行 AI 驱动的代码漏洞扫描、验证与自动化修复。信号:Codex Security,AI 代码审计,漏洞扫描,自动修复,OpenAI"
+when-to-use: "Use when you need AI-powered vulnerability scanning, validation, or automated security fixes across a codebase using the OpenAI Codex Security CLI or SDK."
 triggers:
   - scan my code for security vulnerabilities
   - run a codex security scan

@@ -1,75 +1,77 @@
 ---
 name: evasion-technique-integrate
-description: "免杀技术整合：将免杀技术（API 混淆、字符串加密、Syscall、反调试、AMSI 绕过等）植入已有 Loader 代码。当需要向已有 Loader 添加新加载技术、或现有 Loader 被检测到需要替换组件时使用。先读 references/evasion-techniques-db.json 确认组件库中有你需要的技术，再执行集成"
+description: "AV evasion technique integration: implant AV evasion techniques (API obfuscation, string encryption, Syscall, anti-debug, AMSI bypass, etc.) into an existing loader codebase. Use when you need to add a new loading technique to an existing loader, or when a detected loader needs its components replaced. Read references/evasion-techniques-db.json first to confirm the technique you need exists in the component library, then perform the integration"
+zh-signals: "将 API 混淆、字符串加密、Syscall、反调试与 AMSI 绕过等免杀技术植入现有 Loader 代码。信号:免杀技术整合,API混淆,Syscall,AMSI绕过,Loader植入"
+when-to-use: "Use when adding new evasion techniques to an existing loader or replacing detected components using the bundled technique database."
 metadata:
   tags: "evasion,integrate,api-hashing,xor,syscall,anti-debug,amsi,unhooking,bypass"
   category: "evasion"
 ---
 
-# 免杀技术整合方法论
+# AV Evasion Technique Integration Methodology
 
-## ⛔ 深入参考
+## ⛔ Further Reading
 
-- 172 条免杀技术库 → [references/evasion-techniques-db.json](references/evasion-techniques-db.json)
-- 整合模式与代码示例 → [references/integration-patterns.md](references/integration-patterns.md)
+- 172-entry AV evasion technique library → [references/evasion-techniques-db.json](references/evasion-techniques-db.json)
+- Integration patterns and code examples → [references/integration-patterns.md](references/integration-patterns.md)
 
 ---
 
-## 7 类免杀技术速查
+## Quick Reference for the 7 AV Evasion Technique Categories
 
-| 类型 | 目的 | 复杂度 | 典型技术 |
+| Type | Purpose | Complexity | Typical techniques |
 |------|------|--------|---------|
-| api_obfuscation | 隐藏 API 导入 | medium | API Hashing, IAT 混淆 |
-| string_obfuscation | 隐藏敏感字符串 | simple | XOR 加密, 编译期混淆 |
-| memory_evasion | 避免 RWX 内存页 | simple | 权限翻转 (RW→RX) |
-| execution_evasion | 绕过 Hook | complex | 直接 Syscall, 间接 Syscall |
-| anti_analysis | 检测调试/沙箱 | medium | IsDebuggerPresent, 时间差, CPU 核心数 |
-| amsi_etw_bypass | 禁用 AMSI/ETW | medium | AmsiScanBuffer Patch, EtwEventWrite Patch |
-| unhooking | 恢复被 Hook 的 DLL | complex | NTDLL 重映射 |
+| api_obfuscation | Hide API imports | medium | API Hashing, IAT obfuscation |
+| string_obfuscation | Hide sensitive strings | simple | XOR encryption, compile-time obfuscation |
+| memory_evasion | Avoid RWX memory pages | simple | Permission flipping (RW→RX) |
+| execution_evasion | Bypass hooks | complex | Direct Syscall, indirect Syscall |
+| anti_analysis | Detect debugging/sandbox | medium | IsDebuggerPresent, timing checks, CPU core count |
+| amsi_etw_bypass | Disable AMSI/ETW | medium | AmsiScanBuffer Patch, EtwEventWrite Patch |
+| unhooking | Restore a hooked DLL | complex | NTDLL remapping |
 
-## 整合流程
+## Integration Workflow
 
 ```
-1. 读取目标 Loader 源码
-2. 查免杀技术库 → references/evasion-techniques-db.json
-3. 分析兼容性
-   ├─ 使用 RWX？ → 加 memory_evasion（权限翻转）
-   ├─ 使用标准 API？ → 加 execution_evasion（Syscall）
-   ├─ 有明文字符串？ → 加 string_obfuscation（XOR）
-   └─ 无反调试？ → 加 anti_analysis
-4. 逐项整合（参考 references/integration-patterns.md）
-5. 交叉编译验证
-6. 输出变更报告
+1. Read the target loader source code
+2. Check the AV evasion technique library → references/evasion-techniques-db.json
+3. Analyze compatibility
+   ├─ Uses RWX? → add memory_evasion (permission flipping)
+   ├─ Uses standard APIs? → add execution_evasion (Syscall)
+   ├─ Has plaintext strings? → add string_obfuscation (XOR)
+   └─ No anti-debug? → add anti_analysis
+4. Integrate technique by technique (refer to references/integration-patterns.md)
+5. Cross-compile to verify
+6. Output a change report
 ```
 
-## 兼容性矩阵
+## Compatibility Matrix
 
-| Loader 特征 | 兼容技术 |
+| Loader characteristic | Compatible technique |
 |------------|---------|
-| 任意 Loader | API 混淆、字符串混淆、反调试 |
-| 使用 RWX 内存 | 权限翻转 |
-| 使用标准 Win API | Syscall 替换 |
-| 未做 Unhook | NTDLL Unhooking |
+| Any loader | API obfuscation, string obfuscation, anti-debug |
+| Uses RWX memory | Permission flipping |
+| Uses standard Win APIs | Syscall replacement |
+| Does not unhook | NTDLL unhooking |
 
-## 快速代码示例
+## Quick Code Examples
 
-### 权限翻转（最常用）
+### Permission Flipping (Most Common)
 ```c
-// Before: PAGE_EXECUTE_READWRITE（一步到位，易被检测）
+// Before: PAGE_EXECUTE_READWRITE (one step, easy to detect)
 LPVOID addr = VirtualAlloc(NULL, size, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
 
-// After: 先 RW 写入，再改 RX 执行
+// After: write as RW first, then flip to RX for execution
 LPVOID addr = VirtualAlloc(NULL, size, MEM_COMMIT, PAGE_READWRITE);
 memcpy(addr, shellcode, size);
 VirtualProtect(addr, size, PAGE_EXECUTE_READ, &oldProtect);
 ```
 
-### 字符串 XOR
+### String XOR
 ```c
 char dllName[] = { 0x1a, 0x14, 0x07, ... }; // XOR encrypted
 for (int i = 0; i < sizeof(dllName); i++) dllName[i] ^= KEY;
 ```
 
-## RWX 权限分离
-- 两步操作：先写后执行（W+X 分离），不使用 RWX 一步到位
-- 验证：编译通过、功能正常、验证执行结果
+## RWX Permission Separation
+- Two-step operation: write first, execute later (W+X separation), no one-step RWX
+- Verification: compiles successfully, functionality works, execution result verified

@@ -1,6 +1,8 @@
 ---
 name: audit-skills
 description: "Expert security auditor for AI Skills and Bundles. Performs non-intrusive static analysis to identify malicious patterns, data leaks, system stability risks, and obfuscated payloads across Windows, macOS, Linux/Unix, and Mobile (Android/iOS)."
+zh-signals: "对 AI Skills 与 Bundles 进行非侵入式静态安全审计，识别恶意模式、数据泄露与混淆载荷。信号:Skill 安全审计,静态分析,恶意模式,数据泄露,跨平台"
+when-to-use: "Use when you need to audit AI skills or bundles for malicious patterns, data leaks, stability risks, or obfuscated payloads across platforms."
 category: security
 risk: safe
 source: community

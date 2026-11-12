@@ -1,6 +1,10 @@
 ---
 name: longbridge-market-data
 description: "Real-time quotes, K-line charts, order book, trade ticks, intraday capital flow, market sentiment temperature, trading session schedule, security lists, exchange rates, and IPO calendar for HK/US/A-share/SG via Longbridge. Also covers ADR premium and FX carry frameworks."
+zh-signals: "通过 Longbridge 提供港/美/A 股/新加坡的实时行情、K 线、盘口、资金流、汇率与 IPO 日历等市场数据。信号:实时行情,K线,盘口,资金流,IPO日历"
+when-to-use: >-
+  Use when the user asks for stock quotes, K-line charts, order book, trade ticks, capital flow,
+  market sentiment, exchange rates, or IPO calendar data.
 risk: critical
 source: https://github.com/longbridge/skills/tree/main/skills/longbridge-market-data
 source_repo: longbridge/skills
@@ -32,11 +36,11 @@ Trigger when the user asks about: stock price / quote, K-line / candlestick char
 |---|---|
 | Real-time quote / price | references/quote.md |
 | K-line / chart / OHLCV | references/kline.md |
-| Order book / 盘口 | references/depth.md |
+| Order book / market depth | references/depth.md |
 | Recent trades / ticks | references/trades.md |
 | Intraday minute chart | references/intraday.md |
-| Capital flow / 资金流 | references/capital.md |
-| Market sentiment / 温度 | references/market-temp.md |
+| Capital flow / net capital flow | references/capital.md |
+| Market sentiment / market temperature | references/market-temp.md |
 | Trading session / calendar | references/trading.md |
 | Security list / overnight | references/security-list.md |
 | Market maker / participants | references/participants.md |

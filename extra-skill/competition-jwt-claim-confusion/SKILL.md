@@ -1,6 +1,8 @@
 ---
 name: competition-jwt-claim-confusion
 description: Internal downstream skill for ctf-sandbox-orchestrator. CTF-sandbox workflow for JWT, JWS, and JWE validation paths, header parsing, key selection, claim acceptance, audience and issuer checks, role derivation, and token-to-identity confusion bugs. Use when the user asks to inspect JWT headers or claims, key lookup, `kid` handling, `alg` confusion, audience or issuer validation, role claims, or explain how a token becomes accepted identity or privilege. Use only after `$ctf-sandbox-orchestrator` has already established sandbox assumptions and routed here.
+zh-signals: "CTF 沙箱下行的 JWT 声明混淆分析，覆盖头部解析、密钥选择与声明校验。信号:JWT,声明混淆,CTF,令牌安全,算法混淆"
+when-to-use: "Use only after ctf-sandbox-orchestrator is active, when a CTF challenge hinges on JWT header parsing, key selection, or claim validation confusion."
 ---
 
 # Competition JWT Claim Confusion

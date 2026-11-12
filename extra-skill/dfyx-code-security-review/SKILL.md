@@ -1,6 +1,8 @@
 ---
 name: dfyx-code-security-review
 description: Expert-level code security audit skill using deep data flow analysis and business logic understanding for white-box static analysis across 9 languages
+zh-signals: "使用深度数据流分析与业务逻辑理解，对 9 种语言源码进行白盒静态安全审计。信号:代码安全审计,白盒审计,数据流分析,OWASP漏洞,静态分析"
+when-to-use: "Use when performing a white-box security code review or static analysis of a source code repository across supported languages and frameworks."
 triggers:
   - "audit this codebase for security vulnerabilities"
   - "perform a security code review"

@@ -1,6 +1,8 @@
 ---
 name: hunt-race-condition
 description: Hunting skill for race condition vulnerabilities. Built from 12 public bug bounty reports including modern HTTP/2 single-packet attack cases (James Kettle DEF CON 2023 "Smashing the State Machine"; RyotaK / Flatt Security 10,000-request first-sequence-sync expansion 2024). Covers coupon double-redemption, gift-card double-spend, MFA-OTP-validate race, account-create race, faucet/crypto token double-mint, email-activation race, vote/upvote inflation, password-reset token race, rate-limit bypass via concurrent requests. Use when hunting race conditions, TOCTOU bugs, MFA-bypass-via-timing.
+zh-signals: "狩猎竞态条件漏洞，含 HTTP/2 单包攻击、重复兑换、MFA 绕过与 TOCTOU。信号:竞态条件,HTTP/2单包攻击,TOCTOU,双重花费,MFA绕过"
+when-to-use: "Use when hunting race conditions, TOCTOU bugs, coupon or gift-card double-spend, MFA validation races, or rate-limit bypass via concurrent requests."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

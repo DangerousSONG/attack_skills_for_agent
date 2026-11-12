@@ -1,6 +1,8 @@
 ---
 name: writing-offensive-skills
 description: Use when creating or editing a skill in this offensive-claude repo — for the SKILL.md conventions (trigger descriptions, technique map, runnable scripts, OPSEC/detection, red-flags tables, flowchart rules)
+zh-signals: "编写或修改本攻击性技能仓库中 SKILL.md 的规范与约定。信号:技能编写,SKILL.md规范,触发描述,技术地图,OPSEC,文档规范"
+when-to-use: "Use when creating or editing a skill in this offensive repo and needing the SKILL.md conventions for triggers, technique maps, scripts, and OPSEC."
 ---
 
 # Writing Offensive Skills

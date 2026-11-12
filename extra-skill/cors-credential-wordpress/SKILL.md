@@ -1,6 +1,10 @@
 ---
 name: cors-credential-wordpress
 description: Exploit WP CORS credential reflection for data theft.
+zh-signals: "检测并利用 WordPress REST API 的 CORS 凭据反射配置错误，实现跨域数据窃取与账户接管。信号:CORS配置,凭据反射,WordPress,数据窃取,账户接管"
+when-to-use: >-
+  Use when testing a WordPress REST API for exploitable CORS credential reflection, especially
+  after recon flags Access-Control-Allow-Credentials: true.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

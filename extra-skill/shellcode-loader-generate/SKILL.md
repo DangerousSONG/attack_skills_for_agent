@@ -1,63 +1,65 @@
 ---
 name: shellcode-loader-generate
-description: "Shellcode Loader 组合生成：从知识库选择 storage/allocator/copier/executor 四类组件组合生成 C/C++/Rust Loader。当已获 shellcode、需要生成可在目标环境运行的 Loader 二进制时使用。先读 references/loader-scenarios.json 确认不存在重复场景，再选择 4 组件组合生成"
+description: "Shellcode loader composition and generation: select storage/allocator/copier/executor components from the knowledge base to generate a C/C++/Rust loader. Use when you already have shellcode and need to produce a loader binary that runs in the target environment. First read references/loader-scenarios.json to confirm no duplicate scenario exists, then pick a 4-component combination and generate"
+zh-signals: "从知识库选择存储、分配、复制、执行四类组件组合生成 C/C++/Rust Shellcode Loader。信号:Shellcode Loader,组件组合,免杀,Windows 加载器,代码生成"
+when-to-use: "Use when you already have shellcode and need to generate a runnable loader binary by selecting storage, allocator, copier, and executor components from the knowledge base."
 metadata:
   tags: "shellcode,loader,generate,evasion,windows,c,cpp,rust,VirtualAlloc,CreateThread"
   category: "evasion"
 ---
 
-# Shellcode Loader 组合生成
+# Shellcode Loader Composition and Generation
 
-## ⛔ 深入参考
+## ⛔ Further Reading
 
-- 组件库完整列表（85 组件） → [references/loader-components-db.json](references/loader-components-db.json)
-- 已有场景（避免重复） → [references/loader-scenarios.json](references/loader-scenarios.json)
-- 架构说明与模板 → [references/loader-architecture.md](references/loader-architecture.md)
+- Full component library list (85 components) → [references/loader-components-db.json](references/loader-components-db.json)
+- Existing scenarios (avoid duplicates) → [references/loader-scenarios.json](references/loader-scenarios.json)
+- Architecture description and templates → [references/loader-architecture.md](references/loader-architecture.md)
 
 ---
 
-## 4 组件选择矩阵
+## 4-Component Selection Matrix
 
 ```
 Loader = Storage × Allocator × Copier × Executor
 ```
 
-### Storage（存储方式）— 15 种
-内部嵌入 | 资源段 | 远程URL | 注册表 | ADS | ...
+### Storage (how the shellcode is stored) — 15 options
+Embedded | Resource section | Remote URL | Registry | ADS | ...
 
-### Allocator（内存分配）— 14 种
-| 方法 | 复杂度 | 代码模式 |
+### Allocator (memory allocation) — 14 options
+| Method | Complexity | Code Pattern |
 |------|--------|---------|
 | VirtualAlloc | simple | `VirtualAlloc(NULL, size, MEM_COMMIT\|MEM_RESERVE, PAGE_RWX)` |
 | HeapCreate | medium | `HeapCreate(HEAP_CREATE_ENABLE_EXECUTE, 0, 0)` |
-| NtAllocateVirtualMemory | complex | 直接 NT syscall |
+| NtAllocateVirtualMemory | complex | direct NT syscall |
 
-### Copier（数据复制）— 9 种
-memcpy | RtlMoveMemory | 循环字节复制 | WriteProcessMemory | ...
+### Copier (data copy) — 9 options
+memcpy | RtlMoveMemory | byte-by-byte copy loop | WriteProcessMemory | ...
 
-### Executor（执行方式）— 47 种
-| 方法 | 复杂度 |
+### Executor (execution) — 47 options
+| Method | Complexity |
 |------|--------|
-| 函数指针 | simple |
+| Function pointer | simple |
 | CreateThread | simple |
-| EnumWindows 回调 | medium |
-| APC 注入 | medium |
+| EnumWindows callback | medium |
+| APC injection | medium |
 | Fiber | complex |
 | NtCreateThreadEx | complex |
 
-## 生成流程
+## Generation Workflow
 
 ```
-1. 查组件库 → references/loader-components-db.json
-2. 查已有场景 → references/loader-scenarios.json（避免重复）
-3. 选择 4 组件组合
-4. 选择语言（C/C++/Rust）
-5. 生成代码（使用 references/loader-architecture.md 中的模板）
-6. 交叉编译验证（mingw-gcc / cargo）
-7. 记录场景到知识库
+1. Check the component library → references/loader-components-db.json
+2. Check existing scenarios → references/loader-scenarios.json (avoid duplicates)
+3. Select a 4-component combination
+4. Select the language (C/C++/Rust)
+5. Generate the code (use the templates in references/loader-architecture.md)
+6. Cross-compile to verify (mingw-gcc / cargo)
+7. Record the scenario in the knowledge base
 ```
 
-## 编译命令速查
+## Compilation Command Quick Reference
 
 ```bash
 # C
@@ -70,5 +72,5 @@ x86_64-w64-mingw32-g++ -o loader.exe loader.cpp
 cargo build --release --target x86_64-pc-windows-gnu
 ```
 
-## Rust Loader 注意事项
-- Rust 错误处理：使用 Result / Option 类型，避免 unwrap panic
+## Rust Loader Notes
+- Rust error handling: use Result / Option types to avoid unwrap panics

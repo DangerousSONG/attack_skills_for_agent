@@ -1,6 +1,10 @@
 ---
 name: spring-security
 description: Spring Boot security review — Spring Security config (SecurityFilterChain), OAuth2/OIDC client and resource-server, method-level @PreAuthorize, JWT validation, actuator endpoint lockdown, CSRF model for web vs API, and recent Spring CVE patterns (Spring4Shell, SpEL injection, authorization bypasses).
+zh-signals: "Spring Boot 安全审查，覆盖 SecurityFilterChain、OAuth2/OIDC、JWT、Actuator 锁定、CSRF 与近期 Spring CVE。信号:Spring Security,OAuth2,JWT,Actuator,Spring CVE"
+when-to-use: >-
+  Use when reviewing Spring Boot security configuration, JWT/OAuth2 handling,
+  method-level authorization, actuator exposure, or recent Spring CVEs.
 ---
 
 # Spring Boot Security

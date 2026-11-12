@@ -2,38 +2,42 @@
 name: alterx-dsl-subdomains
 description: "alterx: generates new candidates from passive results. Signals: asset mapping, subdomain, generate candidates from known subdomains, directly specify target"
 zh-signals: "alterx: 被动结果驱动的新候选生成。信号:资产测绘,子域名,基于已知子域生成候选,直接指定目标。"
+when-to-use: >-
+  Use when generating new subdomain candidates from passive enumeration
+  results; feed known subdomains and pipe the enriched candidates into DNS
+  resolution.
 ---
 
 # alterx
 
-- 攻击大类:C01 资产测绘与指纹识别
-- 上游仓库:https://github.com/projectdiscovery/alterx
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C01 Asset Mapping and Fingerprinting
+- Upstream Repository: https://github.com/projectdiscovery/alterx
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/projectdiscovery/alterx/cmd/alterx@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `-l known_subdomains.txt` | 基于已知子域生成候选 |
-| `-list target.com` | 直接指定目标 |
-| `-enrich` | 用 resolver 富化 |
-| `-o out.txt` | 输出 |
+| `-l known_subdomains.txt` | Generate candidates from known subdomains |
+| `-list target.com` | Specify the target directly |
+| `-enrich` | Enrich with a resolver |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 被动结果驱动的新候选生成
+### Passive result-driven candidate generation
 
 ```bash
 subfinder -d corp.com -silent | alterx -enrich | dnsx -silent -a
-# 从已知子域学习模式生成 api2/dev-v2 等新候选并解析
+# Learns the pattern from known subdomains to create candidates such as api2/dev-v2 and resolves them
 ```
 
-## 注意事项
+## Notes
 
-pd 生态 DSL 置换引擎;比 altdns 模式更丰富,配合已知子域效果最佳。
+The DSL permutation engine of the pd ecosystem; richer patterns than altdns, and best results when combined with known subdomains.

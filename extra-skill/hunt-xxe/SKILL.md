@@ -1,6 +1,8 @@
 ---
 name: hunt-xxe
 description: Hunting skill for xxe vulnerabilities.
+zh-signals: "针对 XXE（XML 外部实体注入）漏洞的狩猎方法，覆盖 XML 解析点发现、实体注入与文件读取验证。信号:XXE,XML注入,外部实体,漏洞狩猎,文件读取"
+when-to-use: "Use when hunting for XXE vulnerabilities on targets that parse XML input, to locate injection points and validate file-read or SSRF impact."
 category: security
 risk: offensive
 source: https://github.com/elementalsouls/Claude-BugHunter

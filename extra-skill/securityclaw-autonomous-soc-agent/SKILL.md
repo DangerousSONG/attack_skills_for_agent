@@ -1,6 +1,10 @@
 ---
 name: securityclaw-autonomous-soc-agent
 description: Deploy and operate SecurityClaw, an autonomous SOC agent with RAG-based threat detection, LLM-powered anomaly analysis, and skill-based security automation
+zh-signals: "部署并运营 SecurityClaw 自主 SOC 智能体，基于 RAG 与 LLM 实现威胁检测、异常分析与自动化响应。信号:自主SOC,威胁检测,RAG,LLM分析,OpenSearch"
+when-to-use: >-
+  Use when deploying or operating an autonomous SOC agent for RAG-based threat detection,
+  LLM-driven anomaly analysis, and skill-based security automation.
 triggers:
   - set up an autonomous security operations center agent
   - deploy SecurityClaw for threat detection and anomaly monitoring

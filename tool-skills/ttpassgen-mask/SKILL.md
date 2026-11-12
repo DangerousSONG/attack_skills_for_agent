@@ -2,37 +2,40 @@
 name: ttpassgen-mask
 description: "ttpassgen generates multi-encoding masks. Signals: password cracking, hash cracking, statistics"
 zh-signals: "ttpassgen: 多编码掩码生成。信号:密码破解,哈希破解,统计。"
+when-to-use: >-
+  Use when generating mask-based password wordlists, including multi-byte encodings such
+  as GBK or Big5, for authorized password cracking.
 ---
 
 # ttpassgen
 
-- 攻击大类:C25 哈希与密码破解
-- 上游仓库:https://github.com/tp7309/TTPassGen
-- 上游 License:Apache-2.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C25 Hash and Password Cracking
+- Upstream Repository: https://github.com/tp7309/TTPassGen
+- Upstream License: Apache-2.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install TTpassgen
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `ttpassgen -t '?l?l?l?d?d' -o out.txt` | 掩码生成 |
-| `-t pattern -s` | 统计 |
-| `-o out.txt` | 输出 |
+| `ttpassgen -t '?l?l?l?d?d' -o out.txt` | Mask generation |
+| `-t pattern -s` | Statistics |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 多编码掩码生成
+### Multi-Encoding Mask Generation
 
 ```bash
 ttpassgen -t '?l?l?d?d?d'
-# 支持 GBK/Big5 等编码
+# supports encodings such as GBK/Big5
 ```
 
-## 注意事项
+## Notes
 
-多编码掩码字典生成,中文场景适用。
+Multi-encoding mask wordlist generation, well suited to Chinese-language environments.

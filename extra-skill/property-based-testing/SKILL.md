@@ -2,6 +2,12 @@
 name: property-based-testing
 effort: low
 description: "Writes, reviews, and debugs property-based tests — Hypothesis, fast-check, proptest, jqwik, rapid, and Echidna or Medusa for Solidity invariants. Use whenever tests should cover a whole input domain instead of a hand-picked list of examples: encode/decode and serialize/deserialize pairs, parsers, canonicalizers and normalizers, validators, numeric and Decimal types, comparators and sort order, data structures, and smart-contract state invariants. Also use when adding cases to an existing @given, fast-check, or proptest suite, when judging whether existing property tests assert anything real, and when a generator has shrunk a counterexample and you need to tell a wrong property from a genuine bug. Not for coverage-guided binary fuzzing (libFuzzer, AFL), mutation-testing campaigns, static analysis, benchmarking, or end-to-end UI tests."
+zh-signals: "编写、审查和调试基于属性的测试，使用 Hypothesis、fast-check、proptest 等工具验证覆盖整个输入域的不变量。信号:属性测试,Hypothesis,不变量,随机生成,反例收缩"
+when-to-use: >-
+  Use when tests should cover a whole input domain instead of hand-picked examples —
+  codecs, parsers, normalizers, validators, numeric types, data structures, or
+  Solidity state invariants — and when judging whether a shrunk counterexample is a
+  wrong property or a genuine bug.
 ---
 
 # Property-Based Testing

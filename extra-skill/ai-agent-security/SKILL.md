@@ -2,6 +2,8 @@
 name: ai-agent-security
 description: Secure AI agents against prompt injection, tool abuse, and data exfiltration
   with defense-in-depth controls.
+zh-signals: "为 AI Agent 构建纵深防御，抵御提示注入、工具滥用与数据外泄。信号:AI Agent安全,提示注入,工具滥用,数据外泄,纵深防御"
+when-to-use: "Use when designing or hardening an agentic AI system against prompt injection, unsafe tool execution, data leakage, or privilege abuse."
 category: security
 risk: safe
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

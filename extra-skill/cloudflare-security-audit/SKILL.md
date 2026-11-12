@@ -1,6 +1,11 @@
 ---
 name: "cloudflare-security-audit"
 description: "Audit authorized codebases for exploitable vulnerabilities using scoped reconnaissance, adversarial review, validation, and structured reporting."
+zh-signals: "对授权代码库进行可利用漏洞审计，覆盖侦察、对抗性审查、验证与结构化报告。信号:代码安全审计,漏洞挖掘,渗透测试,授权测试,安全审查"
+when-to-use: >-
+  Use when asked to audit a repository or codebase for exploitable security
+  vulnerabilities — web apps, APIs, services, CLI tools, or libraries — within an
+  explicitly authorized scope.
 risk: "offensive"
 source: "community"
 source_repo: "cloudflare/security-audit-skill"

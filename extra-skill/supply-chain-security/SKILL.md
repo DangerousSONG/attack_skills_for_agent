@@ -1,6 +1,8 @@
 ---
 name: supply-chain-security
 description: Review new or changed dependencies for supply-chain compromise before they enter a project — malicious install scripts (preinstall/postinstall), binding.gyp/node-gyp install-time execution (June 2026 worm), self-propagating worms (Shai-Hulud, binding.gyp), credential harvesting and exfiltration, obfuscated payloads, typosquatting, slopsquatting (AI-hallucinated package names), dependency/namespace confusion, maintainer account takeover, and unpinned or unverified versions. Reads manifests, lockfiles, install scripts, and dependency diffs offline across npm, PyPI, Go, Cargo, RubyGems, Maven, NuGet, and Composer, and reports each risk at file:line with a concrete fix — no install, no execution, no phoning home. Trigger when adding or upgrading a dependency, reviewing a PR that changes package.json / requirements.txt / go.mod / a lockfile, deciding whether a package is safe to install, or when the user mentions Shai-Hulud, binding.gyp, a compromised or malicious package, typosquatting, dependency confusion, or asks "is this dependency safe to add?".
+zh-signals: "软件供应链安全审查技能，离线检查新增或变更依赖中的恶意安装脚本、自我传播蠕虫、凭据窃取与仿冒包。信号:供应链安全,依赖审查,恶意安装脚本,仿冒包,凭据窃取"
+when-to-use: "Use when adding or upgrading a dependency, reviewing a PR that changes manifests or lockfiles, or deciding whether a package is safe to install, especially regarding install scripts, typosquatting, dependency confusion, or known worms."
 ---
 
 # Supply-Chain Security Scanner

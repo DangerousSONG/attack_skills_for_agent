@@ -1,6 +1,8 @@
 ---
 name: hunt-mfa-bypass
 description: "Hunt MFA / 2FA bypass — 7 distinct patterns. (1) MFA not enforced on sensitive endpoints (password change, email change accept without MFA challenge), (2) MFA-step skip via direct navigation to post-login URL, (3) MFA-token replay (same code accepted twice), (4) brute-force the 6-digit OTP without rate limit (10^6 attempts at server speed), (5) race condition on OTP validation, (6) recovery-code dump via /api/me, (7) backup factor downgrade (SMS factor with no rate limit). Plus the chain: cookie theft + password oracle + no step-up = ATO without MFA challenge. Detection: trace auth flow in Burp, find every state transition, check if MFA is middleware-gated vs per-endpoint, check OTP entropy and rate limit on OTP-validate. Validate: attacker session reaching post-MFA state. Use when hunting auth bypass, MFA flows, chaining primitives toward ATO."
+zh-signals: "狩猎 MFA/2FA 绕过，覆盖缺少限速、OTP 重放、步骤跳过与降级等模式。信号:MFA绕过,2FA,OTP,认证绕过,账户接管"
+when-to-use: "Use when hunting authentication bypass in MFA/2FA flows, such as OTP replay, missing rate limits, or MFA-step skipping."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

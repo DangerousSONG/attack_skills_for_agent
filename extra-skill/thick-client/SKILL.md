@@ -1,6 +1,8 @@
 ---
 name: thick-client
 description: "Authorized security testing of desktop thick clients: local storage, update channels, IPC, traffic interception, and client-side trust-boundary review."
+zh-signals: "对桌面厚客户端进行授权安全测试，覆盖本地存储、更新通道、IPC 与客户端信任边界。信号:厚客户端,桌面应用,本地存储,IPC,流量拦截"
+when-to-use: "Use when testing a desktop thick client for local storage, update-channel, IPC, traffic interception, and client-side trust-boundary issues."
 risk: offensive
 source: "https://github.com/zhaoxuya520/reverse-skill"
 source_repo: "zhaoxuya520/reverse-skill"
@@ -30,71 +32,71 @@ license_source: "https://github.com/zhaoxuya520/reverse-skill/blob/main/LICENSE"
 - Checking whether client-side trust decisions can be subverted.
 
 
-## 适用场景
+## Applicable Scenarios
 
-- C/S 架构客户端、Electron/Qt/.NET WinForms/WPF
-- 本地配置/凭证存储、IPC、命名管道
-- 客户端强制校验绕过研究（授权）
-- 自动更新通道与代码签名验证
+- C/S architecture clients, Electron/Qt/.NET WinForms/WPF
+- Local configuration/credential storage, IPC, named pipes
+- Client-side validation bypass research (authorized)
+- Auto-update channels and code signature verification
 
-## 工作流
+## Workflow
 
-### 1. 建边界
-
-```text
-□ 进程树、子进程、驱动/服务
-□ 监听端口与出站域名
-□ 本地敏感路径：%APPDATA%、Keychain、注册表
-```
-
-### 2. 本地攻击面
+### 1. Establish the Boundary
 
 ```text
-□ 明文配置、硬编码密钥、调试开关
-□ DLL 劫持/搜索顺序（Windows）
-□ 数据库文件（SQLite）权限与加密
-□ IPC：谁可连接？是否鉴权？
+□ Process tree, child processes, drivers/services
+□ Listening ports and outbound domains
+□ Local sensitive paths: %APPDATA%, Keychain, registry
 ```
 
-### 3. 网络面
+### 2. Local Attack Surface
 
 ```text
-□ 系统代理 / 应用自定义 TLS
-□ 证书钉扎 → 联合 mobile/js 方法学或 Frida
-□ API 越权：客户端隐藏的管理接口
+□ Plaintext configuration, hardcoded keys, debug switches
+□ DLL hijacking/search order (Windows)
+□ Database files (SQLite) permissions and encryption
+□ IPC: who can connect? Is there authentication?
 ```
 
-### 4. 逆向验证
+### 3. Network Surface
 
 ```text
-□ .NET → dotnet-reverse；原生 → ida/ghidra；Electron → asar + js-reverse
+□ System proxy / app-specific TLS
+□ Certificate pinning → combine with the mobile/js methodology or Frida
+□ API privilege bypass: admin interfaces hidden on the client side
 ```
 
-## 工具链
+### 4. Reverse Engineering Verification
 
-| 工具 | 用途 |
+```text
+□ .NET → dotnet-reverse; native → ida/ghidra; Electron → asar + js-reverse
+```
+
+## Toolchain
+
+| Tool | Purpose |
 |------|------|
-| Process Monitor / API Monitor | 行为 |
-| Burp / mitmproxy | 流量 |
-| dnSpy / IDA / Ghidra | 逆向 |
-| Sysinternals | Windows 面 |
-| asar / nexe 检测 | Electron |
+| Process Monitor / API Monitor | Behavior |
+| Burp / mitmproxy | Traffic |
+| dnSpy / IDA / Ghidra | Reverse engineering |
+| Sysinternals | Windows side |
+| asar / nexe detection | Electron |
 
-## 参考
+## References
 
 - `references/thick-client-checklist.md`
 - `../dotnet-reverse/` `../ida-reverse/` `../js-reverse/` `../api-security/`
 
-## 路由上下文
+## Routing Context
 
-**上游**: MASTER R32  
-**下游**: 纯协议 `protocol-reverse`；供应链更新 `supply-chain-security`
+**Upstream**: MASTER R32  
+**Downstream**: protocol-only `protocol-reverse`; supply chain updates `supply-chain-security`
 
-## 任务完成自检
+## Task Completion Self-Check
 
-- [ ] 是否画出信任边界？
-- [ ] 本地+网络面是否都覆盖？
-- [ ] Checklist？
+- [ ] Has the trust boundary been mapped out?
+- [ ] Are both the local and network surfaces covered?
+- [ ] Checklist?
 
 ## Limitations
 

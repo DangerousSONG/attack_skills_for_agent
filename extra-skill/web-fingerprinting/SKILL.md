@@ -6,6 +6,11 @@ description: >
   wp-settings), HTML meta generators, robots.txt, source map files (.map), JS hardcoded secrets,
   and Google dorking (site:, inurl:, filetype:, intitle:) with tools Nikto, WhatWeb, Wappalyzer,
   Nmap, Shodan, Burp Suite, OWASP ZAP, Waybackurls.
+zh-signals: "通过 banner 抓取、HTTP 头、Cookie、HTML 元信息、源码映射与 Google dorking 识别 Web 服务器、框架与应用入口点。信号:指纹识别,信息收集,banner抓取,Google dorking,技术栈"
+when-to-use: >-
+  Use when identifying a web server's type/version, framework, and application
+  entry points via headers, cookies, banners, source maps, or dorking during
+  authorized recon.
 license: MIT
 compatibility: Designed for Claude Code. Requires curl, nikto, nmap, or Burp Suite.
 metadata:

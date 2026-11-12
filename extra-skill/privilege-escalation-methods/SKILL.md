@@ -1,6 +1,10 @@
 ---
 name: privilege-escalation-methods
 description: "Provide comprehensive techniques for escalating privileges from a low-privileged user to root/administrator access on compromised Linux and Windows systems. Essential for penetration testing post-exploitation phase and red team operations."
+zh-signals: "在已攻陷的 Linux/Windows 主机上从低权限用户提升至 root/管理员。信号:提权,linux提权,windows提权,后渗透,red team,管理员"
+when-to-use: >-
+  Use during post-exploitation on a compromised Linux or Windows system when you need to
+  escalate from a low-privileged user to root or administrator access.
 risk: offensive
 source: community
 author: zebbern

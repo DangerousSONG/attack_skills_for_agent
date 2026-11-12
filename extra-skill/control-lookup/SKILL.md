@@ -1,6 +1,8 @@
 ---
 name: control-lookup
 description: Looks up any control ID across ISO 27001, NIST CSF, PCI-DSS v4, and OWASP returns the full control card, cross-framework mappings with confidence level, related controls, and testing hints. Trigger when the user provides a control ID and asks what it means, asks how controls map across frameworks, searches for a control by keyword or description, needs testing hints or evidence criteria before writing a finding, or wants to understand related or prerequisite controls within a framework.
+zh-signals: "跨 ISO 27001、NIST CSF、PCI-DSS v4 与 OWASP 查询控制项，返回控制卡、映射关系与测试提示。信号:控制项查询,合规映射,ISO 27001,NIST CSF,PCI-DSS"
+when-to-use: "Use when given a control ID or control objective and you need its meaning, cross-framework mappings, related controls, or testing hints."
 license: MIT
 metadata:
   version: "0.0.1"

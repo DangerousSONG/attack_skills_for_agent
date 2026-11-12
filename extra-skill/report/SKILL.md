@@ -1,6 +1,10 @@
 ---
 name: report
 description: Generate a NullPointer Studio styled PDF penetration test report from findings.json. Produces a professional dark-themed PDF with executive summary, risk dashboard, per-finding cards with business risk, remediation summary, and clean controls section.
+zh-signals: "从 findings.json 生成 NullPointer Studio 风格的 PDF 渗透测试报告。信号:渗透报告,PDF生成,findings.json,报告模板"
+when-to-use: >-
+  Use when a pentest session is complete and you need to turn findings.json into a
+  client-ready, styled PDF report with executive summary and remediation.
 argument-hint: "[target name] [optional: findings.json path] [optional: output path]"
 user-invocable: true
 ---

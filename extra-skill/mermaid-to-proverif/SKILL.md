@@ -1,6 +1,8 @@
 ---
 name: mermaid-to-proverif
 description: "Translates Mermaid sequenceDiagrams describing cryptographic protocols into ProVerif formal verification models (.pv files). Use when generating a ProVerif model, formally verifying a protocol, converting a Mermaid diagram to ProVerif, verifying protocol security properties (secrecy, authentication, forward secrecy), checking for replay attacks, or producing a .pv file from a sequence diagram."
+zh-signals: "将描述密码协议的 Mermaid 时序图转换为 ProVerif 形式化验证模型（.pv）。信号:ProVerif,形式化验证,Mermaid,协议验证,密码协议"
+when-to-use: "Use when generating a ProVerif model from a Mermaid sequenceDiagram or formally verifying protocol secrecy, authentication, and replay resistance."
 ---
 
 # Mermaid to ProVerif

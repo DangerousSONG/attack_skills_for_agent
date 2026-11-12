@@ -1,6 +1,9 @@
 ---
 name: dfyx-code-security-auditor
 description: Deep code security audit skill using white-box static analysis with 5-phase protocol covering 10 security dimensions across 9 languages
+zh-signals: "基于五阶段白盒静态分析的深度代码安全审计。信号:代码审计,静态分析,白盒审计,OWASP,数据流分析"
+when-to-use: >-
+  Use when performing a deep white-box security audit of source code across multiple languages and OWASP Top 10 vulnerability classes.
 triggers:
   - "audit this code for security vulnerabilities"
   - "perform a security code review"

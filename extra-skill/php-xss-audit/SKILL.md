@@ -1,55 +1,56 @@
 ---
 name: php-xss-audit
-description: PHP Web 源码 XSS 审计工具。识别用户输入进入输出上下文（HTML/属性/JS/URL/模板），分析转义与防护策略，输出可利用性分级、PoC 与修复建议（禁止省略）。
+description: "PHP web source code XSS auditing tool. Identifies user input reaching output contexts (HTML/attribute/JS/URL/template), analyzes escaping and protection strategies, and outputs exploitability ratings, PoCs, and remediation recommendations (no omissions allowed)."
+zh-signals: "分析 PHP 源码中的 XSS 漏洞，追踪输入到输出上下文并评估转义防护。信号:XSS审计,PHP源码,输出上下文,转义绕过,PoC"
+when-to-use: "Use when auditing PHP source code for cross-site scripting, tracing user input into output contexts, and producing exploitability ratings, PoCs, and remediation advice."
 ---
 
-# PHP XSS 审计（php-xss-audit）
+# PHP XSS Audit (php-xss-audit)
 
-分析 PHP 项目源码，识别跨站脚本（XSS）：用户输入进入输出上下文且未做正确转义/编码，或框架禁用了自动转义导致表达式执行/HTML 注入。
+Analyze PHP project source code and identify cross-site scripting (XSS): user input reaching an output context without correct escaping/encoding, or a framework with auto-escaping disabled that leads to expression execution/HTML injection.
 
-## 分级与编号
-- 详见：`shared/SEVERITY_RATING.md`
-- 漏洞编号：`{C/H/M/L}-XSS-{序号}`
+## Severity Rating and Numbering
+- See `shared/SEVERITY_RATING.md` for details
+- Vulnerability ID: `{C/H/M/L}-XSS-{sequence}`
 
-## XSS Sink（必做）
-识别以下输出点：
-- 原生输出：`echo/print/printf/<?= ?>`（输出变量到响应）
-- 字符串拼接到响应：`header()` / `setcookie()`（若包含可控内容）
-- 模板渲染：
-  - Twig：`{{ }}`（转义）与 `{% autoescape false %}` / `|raw` 风险点
-  - Smarty：`fetch/display` 与不安全变量输出
-  - Blade 类：`{!! !!}`（不转义输出）
-- 动态脚本/事件属性：输出到 `on*` 属性、`<script>` 内、URL 参数
+## XSS Sinks (Mandatory)
+Identify the following output points:
+- Native output: `echo/print/printf/<?= ?>` (outputs a variable into the response)
+- String concatenation into the response: `header()` / `setcookie()` (if it contains controllable content)
+- Template rendering:
+  - Twig: `{{ }}` (escaped) and the `{% autoescape false %}` / `|raw` risk points
+  - Smarty: `fetch/display` and unsafe variable output
+  - Blade-style: `{!! !!}` (unescaped output)
+- Dynamic script/event attributes: output into `on*` attributes, inside `<script>`, or into URL parameters
 
-## 逃逸/防护检查（必做）
-对每条疑似链必须分析：
-- 是否存在 `htmlspecialchars/htmlentities` 或框架自动转义
-- 是否存在上下文编码（HTML、属性、JS、URL）
-- 是否禁用了转义（raw/raw filter/unescaped output）
+## Escaping/Protection Check (Mandatory)
+For every suspected chain you must analyze:
+- Whether `htmlspecialchars/htmlentities` or framework auto-escaping exists
+- Whether context-specific encoding exists (HTML, attribute, JS, URL)
+- Whether escaping is disabled (raw/raw filter/unescaped output)
 
-## tracer 触发条件（必做）
-- 用户输入经历多层处理、拼接成 HTML 片段
-- 存在分支：某分支转义，另一分支不转义
-- 输出点在模板层，输入在 controller 层
+## tracer Trigger Conditions (Required)
+- User input passes through multiple layers of processing and is concatenated into an HTML fragment
+- A branch exists: one branch escapes, another does not
+- The output point is in the template layer while the input is in the controller layer
 
-## 报告输出
-输出到：
+## Report Output
+Output to:
 ```
 {output_path}/vuln_audit/xss_{timestamp}.md
 ```
 
-## 漏洞条目模板（强制）
-与 `php-sql-audit` 基本一致，但在数据流链里必须明确：
-- 输出上下文：HTML body/attribute/script/URL 参数/模板片段
-- 具体转义函数或转义关闭点的位置与证据
-- PoC 必须包含可执行 XSS payload，并区分需要的编码方式
+## Vulnerability Entry Template (Mandatory)
+Essentially the same as `php-sql-audit`, but the data flow chain must explicitly state:
+- Output context: HTML body/attribute/script/URL parameter/template fragment
+- The location and evidence of the specific escaping function or escaping-disabled point
+- The PoC must contain an executable XSS payload and distinguish the required encoding
 
-## 证据引用（强制：来自 php-route-tracer）
-每条 XSS 疑似漏洞必须逐项引用 trace 输出中 `## 9) Sink Evidence Type Checklist` 的 **XSS 行**对应证据要点（允许状态为待验证，但证据引用必须存在）：
-1. `EVID_XSS_OUTPUT_POINT`：响应输出点位置证据（echo/模板输出/`<script>`或属性/URL 上下文）
-2. `EVID_XSS_USER_INPUT_INTO_OUTPUT`：用户输入进入输出的证据
-3. `EVID_XSS_ESCAPE_OR_RAW_CONTROL`：转义/禁用转义证据（htmlspecialchars 等或 raw/raw 模式证据）
+## Evidence Citation (Mandatory: from php-route-tracer)
+Every suspected XSS vulnerability must cite, item by item, the corresponding evidence points of the **XSS row** in `## 9) Sink Evidence Type Checklist` of the trace output (the status may be pending verification, but the evidence citation must exist):
+1. `EVID_XSS_OUTPUT_POINT`: evidence of the response output point (echo/template output/`<script>` or attribute/URL context)
+2. `EVID_XSS_USER_INPUT_INTO_OUTPUT`: evidence of user input reaching the output
+3. `EVID_XSS_ESCAPE_OR_RAW_CONTROL`: escaping/disabled-escaping evidence (htmlspecialchars etc. or raw/raw mode evidence)
 
-## tracer 证据缺失处理（强制）
-- 若无法定位上述 1~3 任一关键证据要点：该漏洞状态只能标记为 `⚠️待验证`，不得直接给出 `✅已确认可利用`。
-
+## Handling Missing tracer Evidence (Mandatory)
+- If none of the key evidence points 1-3 above can be located: the vulnerability status may only be marked `⚠️ Unverified`, and must not be directly marked `✅ Confirmed Exploitable`.

@@ -1,6 +1,10 @@
 ---
 name: vibe-security-skill
 description: Agent skill that audits vibe-coded apps for common security vulnerabilities introduced by AI coding assistants
+zh-signals: "审计 AI 生成（vibe-coded）应用中的常见安全漏洞。信号:vibe coding,安全审计,硬编码密钥,rls,auth安全"
+when-to-use: >-
+  Use when auditing vibe-coded applications for hardcoded secrets, missing RLS policies,
+  insecure auth patterns, payment flaws, or other AI-introduced vulnerabilities.
 triggers:
   - "audit my code for security issues"
   - "check this app for vulnerabilities"

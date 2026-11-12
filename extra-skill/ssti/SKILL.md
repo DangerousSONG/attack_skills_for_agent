@@ -2,6 +2,8 @@
 name: ssti
 description: >
   Server-Side Template Injection (SSTI) occurs when user input is embedded directly into a template engine (Jinja2, Twig, Freemarker, Pebble, Velocity, Smarty, Mako) and evaluated, enabling remote code execution. Detect via math expressions `{{7*7}}` returning `49`, or `${7*7}`, `<%= 7*7 %>`. Leads to full RCE via template sandbox escape, Python `__class__.__mro__` traversal, and Java reflection chains. Tools: tplmap, Burp Suite.
+zh-signals: "服务端模板注入检测与利用，通过模板表达式求值实现远程代码执行。信号:SSTI,模板注入,RCE,Jinja2,tplmap"
+when-to-use: "Use when user input appears to be evaluated by a server-side template engine and you need to confirm SSTI and escalate to remote code execution."
 license: MIT
 compatibility: Designed for Claude Code. Requires curl, Burp Suite; tplmap (optional).
 metadata:

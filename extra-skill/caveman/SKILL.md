@@ -1,6 +1,8 @@
 ---
 name: caveman
 description: Ultra-compressed response mode for cybersecurity contexts strips filler while keeping CVEs, payloads, CVSS scores, and findings exact. User-triggered only never self-activated. Trigger when the user explicitly says "/caveman", "caveman mode", "be brief", "tl;dr", "just the findings", "straight to the point", "keep it short", or similar explicit brevity requests.
+zh-signals: "网络安全场景下的极简压缩回复模式，保留 CVE、载荷与 CVSS 精确信息并去除冗余。信号:caveman,极简回复,精简输出,安全沟通,去冗余"
+when-to-use: "Use only when the user explicitly requests brevity or invokes caveman mode; never activate on your own judgment."
 license: MIT
 metadata:
   version: "1.0.0"

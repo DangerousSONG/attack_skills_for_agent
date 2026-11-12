@@ -1,6 +1,9 @@
 ---
 name: ssh-penetration-testing
 description: "Conduct comprehensive SSH security assessments including enumeration, credential attacks, vulnerability exploitation, tunneling techniques, and post-exploitation activities. This skill covers the complete methodology for testing SSH service security."
+zh-signals: "对 SSH 服务开展枚举、配置审计、凭据攻击、漏洞利用与隧道后渗透。信号:SSH渗透,22端口,暴力破解,ssh-audit,端口转发。"
+when-to-use: >-
+  Use when assessing SSH service security, including enumeration and configuration auditing, credential attacks, known-vulnerability checks, tunneling and port forwarding, and post-exploitation within authorized scope.
 risk: offensive
 source: community
 author: zebbern

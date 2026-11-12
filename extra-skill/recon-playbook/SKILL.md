@@ -1,6 +1,8 @@
 ---
 name: recon-playbook
 description: Use when starting or restructuring an authorized external web and API assessment.
+zh-signals: "授权外部 Web 与 API 资产侦察的总体编排方法。信号:侦察,资产测绘,子域名,dns,api枚举"
+when-to-use: "Use when starting or restructuring an authorized external web and API assessment, turning a root domain or asset list into a prioritized map of applications and hypotheses."
 version: 2.0.0
 license: MIT
 platforms: [linux, macos]

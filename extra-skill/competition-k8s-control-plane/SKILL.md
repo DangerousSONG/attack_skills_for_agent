@@ -1,6 +1,8 @@
 ---
 name: competition-k8s-control-plane
 description: Internal downstream skill for ctf-sandbox-orchestrator. CTF-sandbox workflow for Kubernetes API analysis, service-account trust, RBAC edges, admission and controller behavior, cluster secrets, workload mutation, and namespace-scoped drift. Use when the user asks to inspect kube API permissions, service-account tokens, RoleBinding or ClusterRoleBinding edges, admission webhooks, controller-created pods, secret exposure, or why live workloads differ from manifests. Use only after `$ctf-sandbox-orchestrator` has already established sandbox assumptions and routed here.
+zh-signals: "CTF 沙箱中针对 Kubernetes 控制面的专项分析，覆盖 API 权限、服务账户信任、RBAC 边与准入控制器行为。信号:Kubernetes,CTF,API 权限,RBAC,服务账户"
+when-to-use: "Use only after ctf-sandbox-orchestrator established sandbox assumptions, when the decisive path runs through Kubernetes control-plane state or permissions."
 ---
 
 # Competition K8s Control Plane

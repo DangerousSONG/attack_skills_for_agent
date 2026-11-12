@@ -2,37 +2,41 @@
 name: subover-takeover
 description: "SubOver batch-scans subdomain takeovers. Signals: attack surface, cloud assets, subdomain takeover detection, threads"
 zh-signals: "SubOver: 子域接管批扫。信号:攻击面,云资产,子域接管检测,线程。"
+when-to-use: >-
+  Use when you have a list of subdomains and want a fast batch check for dangling
+  CNAMEs exploitable for takeover across 20+ service fingerprints; supports
+  threading and output files.
 ---
 
 # SubOver
 
-- 攻击大类:C05 外部攻击面与云资产暴露
-- 上游仓库:https://github.com/Ice3man543/SubOver
-- 上游 License:BSD-2-Clause(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C05 External Attack Surface and Cloud Asset Exposure
+- Upstream Repository: https://github.com/Ice3man543/SubOver
+- Upstream License: BSD-2-Clause (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/Ice3man543/SubOver@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `subover -l subs.txt` | 子域接管检测 |
-| `-l file -t 50` | 线程 |
-| `-o out.txt` | 输出 |
+| `subover -l subs.txt` | Subdomain takeover detection |
+| `-l file -t 50` | Threads |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 子域接管批扫
+### Batch Subdomain Takeover Scan
 
 ```bash
 subover -l all_subs.txt
-# dangling CNAME 检测
+# Dangling CNAME detection
 ```
 
-## 注意事项
+## Notes
 
-快速子域接管检测,20+ 服务商指纹。
+Fast subdomain takeover detection with 20+ service provider fingerprints.

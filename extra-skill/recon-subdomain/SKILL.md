@@ -1,6 +1,10 @@
 ---
 name: recon-subdomain
 description: Subdomain enumeration and DNS reconnaissance using subfinder, amass, dnsx, and other tools. Use this skill when user needs to discover subdomains, perform DNS enumeration, gather DNS records, or find hidden subdomains of a target domain.
+zh-signals: "使用 subfinder、amass、dnsx 等工具进行子域名枚举与 DNS 侦察。信号:子域名枚举,dns侦察,subfinder,amass,dnsx,信息收集"
+when-to-use: >-
+  Use when you need to discover subdomains, enumerate DNS records, resolve discovered hosts,
+  or find hidden subdomains of an authorized target domain.
 ---
 
 # Subdomain Enumeration / DNS Reconnaissance

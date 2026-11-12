@@ -2,6 +2,10 @@
 name: dependency-scanning
 description: Scan package dependencies for known vulnerabilities using Snyk, Dependabot,
   and OWASP Dependency-Check.
+zh-signals: "扫描第三方依赖中的已知漏洞，覆盖 Snyk、Dependabot 与 OWASP Dependency-Check。信号:依赖扫描,SCA,供应链安全,CVE,Snyk"
+when-to-use: >-
+  Use when auditing package manifests or lockfiles for known vulnerable dependencies,
+  implementing software composition analysis, or securing the software supply chain.
 category: security
 risk: safe
 source: https://github.com/BagelHole/DevOps-Security-Agent-Skills

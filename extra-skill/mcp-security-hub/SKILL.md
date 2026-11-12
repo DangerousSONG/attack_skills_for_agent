@@ -1,6 +1,8 @@
 ---
 name: mcp-security-hub
 description: Deploy and orchestrate 38 MCP servers for offensive security tools (Nmap, Nuclei, Ghidra, SQLMap, etc.) via Docker
+zh-signals: "部署并编排 38 个安全工具 MCP 服务器。信号:MCP,Docker,安全工具,Nmap,Nuclei,Ghidra"
+when-to-use: "Use when setting up MCP servers that expose offensive security tools such as Nmap, Nuclei, Ghidra, or SQLMap to an AI assistant."
 triggers:
   - set up offensive security MCP servers
   - run nmap scan through Claude

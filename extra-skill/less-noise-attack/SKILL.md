@@ -1,6 +1,11 @@
 ---
 name: less-noise-attack
 description: Runs offensive work in a low-noise mode — passive recon first, minimal footprint, and only deliberate, targeted active actions that blend with legitimate traffic, so the engagement stays below detection thresholds. Not the default; activate only when the user explicitly signals stealth as the priority, e.g. "stay under the radar", "avoid the SOC", "be stealthy", "ghost mode", "don't trigger alerts", or "go quiet".
+zh-signals: "以低噪声模式开展攻击性工作，优先被动侦察、最小化足迹并仅执行融合正常流量的定向主动操作。信号:低噪声,隐蔽行动,被动侦察,规避检测,红队"
+when-to-use: >-
+  Use only when the user explicitly prioritizes stealth — phrases like "stay under
+  the radar", "avoid the SOC", "be stealthy", or "go quiet" — to run passive-first,
+  minimal-footprint offensive operations.
 license: MIT
 metadata:
   version: "1.0.0"

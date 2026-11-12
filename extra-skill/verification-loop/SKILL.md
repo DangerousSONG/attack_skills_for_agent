@@ -1,6 +1,10 @@
 ---
 name: verification-loop
 description: Structured red-team pass over your own output — surface assumptions, gaps, failure modes and security red flags before shipping.
+zh-signals: "对自身产出进行结构化红队式复核，暴露假设、缺口与安全红旗。信号:自检复核,红队审查,假设识别,交付前检查"
+when-to-use: >-
+  Use as a final self-review pass before delivering non-trivial analysis, reports,
+  patches, or threat models, especially when assumptions or unverified security claims remain.
 ---
 
 # Verification Loop

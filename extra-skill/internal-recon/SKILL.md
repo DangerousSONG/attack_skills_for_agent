@@ -1,22 +1,24 @@
 ---
 name: internal-recon
-description: "内网信息收集与拓扑绘制。当已突破边界获取到内网立足点后使用。覆盖存活主机发现、端口扫描、服务识别、关键基础设施定位（域控/数据库/邮件/文件服务器）。内网渗透的第一步——先看清地图再行动"
+description: "Internal network information gathering and topology mapping. Use after breaching the perimeter and gaining an internal foothold. Covers live host discovery, port scanning, service identification, and critical infrastructure location (domain controller / database / mail / file server). The first step of an internal penetration test — see the map clearly before acting"
+zh-signals: "内网信息收集与拓扑绘制，覆盖存活探测、端口扫描、服务识别与高价值目标定位。信号:内网侦察,存活探测,端口扫描,域控定位,拓扑绘制"
+when-to-use: "Use after gaining an internal foothold past the perimeter, to discover live hosts, scan ports, identify services, and locate domain controllers, databases, mail, and file servers."
 metadata:
-  tags: "internal,recon,network,discovery,内网,侦察,拓扑,存活探测,端口扫描,域控"
+  tags: "internal,recon,network,discovery,internal-network,reconnaissance,topology,live-host-detection,port-scanning,domain-controller"
   category: "lateral"
 ---
 
-# 内网信息收集方法论
+# Internal Network Reconnaissance Methodology
 
-内网侦察和外网侦察的区别：内网通常没有 CDN/WAF 保护，但你的操作空间受限于当前立足点的网络位置。核心目标是**快速绘制内网地图**——有哪些主机、什么服务、哪些是高价值目标。
+How internal reconnaissance differs from external reconnaissance: internal networks usually have no CDN/WAF protection, but your operating space is constrained by the network position of your current foothold. The core goal is to **map the internal network quickly** — which hosts exist, what services they run, and which are high-value targets.
 
-## ⛔ 深入参考（必读）
+## ⛔ Further Reading (Must Read)
 
-- 存活探测命令、端口→服务→价值映射表、域控/数据库定位 → [references/network-mapping.md](references/network-mapping.md)
-- fscan 详细用法（弱口令爆破、POC 检测、代理扫描）→ 加载 `fscan-scan` 技能
-- **工具投递方法**（怎么把后渗透 需要的工具 传到目标上、为什么要在目标上执行而非本地）→ 加载 `tool-delivery` 技能
+- Live host detection commands, port → service → value mapping table, domain controller / database location → [references/network-mapping.md](references/network-mapping.md)
+- Detailed fscan usage (weak credential brute-forcing, POC detection, proxy scanning) → load the `fscan-scan` skill
+- **Tool delivery methods** (how to transfer post-exploitation tools to the target, and why to execute them on the target instead of locally) → load the `tool-delivery` skill
 
-## Phase 1: 当前位置分析
+## Phase 1: Current Position Analysis
 
 ```bash
 # Linux
@@ -25,51 +27,51 @@ ip addr && ip route && cat /etc/resolv.conf && arp -a && cat /etc/hosts
 ipconfig /all && route print && arp -a && net view /domain
 ```
 
-**关键判断**：多网卡=跳板 | DNS→内网IP=域环境 | ARP表大=活跃网段
+**Key indicators**: multiple NICs = pivot | DNS resolving to internal IPs = domain environment | large ARP table = active network segment
 
-## Phase 2: 存活主机发现（fscan 优先）
+## Phase 2: Live Host Discovery (fscan first)
 ```bash
-# fscan 一把梭（存活+端口+服务+弱口令+漏洞，速度远超 nmap）
-fscan -h 10.0.0.0/24 -nopoc          # 快速存活+端口
-fscan -h 10.0.0.0/24                  # 全量（含 POC 检测+弱口令）
+# fscan all-in-one (live hosts + ports + services + weak credentials + vulnerabilities, far faster than nmap)
+fscan -h 10.0.0.0/24 -nopoc          # quick live host + port scan
+fscan -h 10.0.0.0/24                  # full scan (includes POC detection + weak credentials)
 
-# nmap 补充（fscan 不可用时降级）
+# nmap fallback (degrade when fscan is unavailable)
 nmap -sn 10.0.0.0/24                  # ICMP ping
-nmap -PR -sn 10.0.0.0/24             # ARP（同网段最可靠）
+nmap -PR -sn 10.0.0.0/24             # ARP (most reliable on the same subnet)
 ```
 
-## Phase 3: 端口扫描（聚焦关键端口）
+## Phase 3: Port Scanning (focus on critical ports)
 ```bash
-# fscan 指定端口（推荐，速度快且自动识别服务）
+# fscan with explicit ports (recommended, fast and auto-identifies services)
 fscan -h TARGETS -p 22,80,135,139,443,445,1433,3306,3389,5432,5985,6379,8080,9200
 
-# nmap 深度识别（需要服务版本/NSE 脚本时用）
+# nmap deep identification (use when service versions / NSE scripts are needed)
 nmap -sT -sV -p 22,80,445,3389 TARGETS
 ```
 
-**高价值端口**：88(域控) | 445(SMB) | 3389(RDP) | 1433(MSSQL) | 6379(Redis)
+**High-value ports**: 88(domain controller) | 445(SMB) | 3389(RDP) | 1433(MSSQL) | 6379(Redis)
 
-→ 完整端口→服务→价值映射表 → [references/network-mapping.md](references/network-mapping.md)
+→ Full port → service → value mapping table → [references/network-mapping.md](references/network-mapping.md)
 
-## Phase 4: 关键基础设施定位
+## Phase 4: Critical Infrastructure Location
 
-- **域控**：88+389+445 = 确认域控 | DNS IP 通常就是域控
-- **数据库**：用收集到的凭据尝试连接
-- **管理系统**：`httpx -tech-detect` / `curl -sI` 发现 Jenkins/GitLab/Zabbix
+- **Domain controller**: 88+389+445 = confirmed DC | the DNS IP is usually the domain controller
+- **Databases**: try connecting with the credentials you have collected
+- **Management systems**: `httpx -tech-detect` / `curl -sI` to find Jenkins/GitLab/Zabbix
 
-## Phase 5: 输出内网地图
-网络拓扑 + 高价值目标清单（域控→数据库→管理系统→跳板机）+ 优先攻击路径
+## Phase 5: Output the Internal Network Map
+Network topology + high-value target list (domain controller → database → management system → pivot host) + priority attack paths
 
-## 注意事项
-- 优先**被动发现**（ARP/路由表），再主动扫描
-- 分批扫描，避免扫 /16 导致网络问题
+## Notes
+- Prefer **passive discovery** (ARP/routing table) first, then active scanning
+- Scan in batches to avoid taking down the network with a /16 sweep
 
-## 被动发现技术
-- NBNS / LLMNR 广播监听：NetBIOS 名称服务可被动获取主机名
-- tcpdump 抓包、监听、嗅探网络流量
-- 端口 3268 — Active Directory Global Catalog（全局编录）
+## Passive Discovery Techniques
+- NBNS / LLMNR broadcast listening: NetBIOS name services leak hostnames passively
+- tcpdump packet capture, listening, and network traffic sniffing
+- Port 3268 — Active Directory Global Catalog
 
-## 多网卡 Pivot
-- 发现双网卡主机（两个网段），可作为跨网段的 pivot 跳板
-- 通过此机器设置代理/转发，访问新网段
-- 新攻击面：扩大范围，深入内网
+## Multi-NIC Pivoting
+- Find dual-NIC hosts (two subnets) — they can serve as cross-subnet pivot hosts
+- Set up proxies/forwarding through such a machine to reach new subnets
+- New attack surface: expand the scope, go deeper into the internal network

@@ -6,6 +6,8 @@ description: >
   displaying old password in plaintext (revealing weak storage), missing current-password
   verification on change forms, and session hijacker lockout via passwordless change.
   Test with Burp Suite, OWASP ZAP following OWASP Forgot Password Cheat Sheet.
+zh-signals: "挖掘密码重置与修改流程中的 CSRF、越权改密、令牌可预测及旧密码明文泄露等缺陷。信号:密码重置,CSRF,越权改密,令牌预测,认证缺陷"
+when-to-use: "Use when testing password reset or password change workflows for CSRF, cross-user modification, token predictability, and missing current-password verification."
 license: MIT
 compatibility: Designed for Claude Code. Requires Burp Suite or OWASP ZAP.
 metadata:

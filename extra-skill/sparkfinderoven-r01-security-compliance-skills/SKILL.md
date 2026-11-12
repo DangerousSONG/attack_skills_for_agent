@@ -1,6 +1,10 @@
 ---
 name: sparkfinderoven-r01-security-compliance-skills
 description: Security & compliance skill suite for OWASP scanning, CVE detection, GDPR/SOC2 audits, threat modeling, and incident response workflows
+zh-signals: "提供 OWASP 扫描、CVE 检测、GDPR/SOC2 合规审计、威胁建模与事件响应等安全合规技能套件。信号:OWASP扫描,CVE检测,合规审计,威胁建模,事件响应"
+when-to-use: >-
+  Use when you need security or compliance workflows such as OWASP scanning, dependency CVE
+  checks, GDPR/SOC2 audits, threat modeling, or incident response.
 triggers:
   - scan my code for OWASP vulnerabilities
   - check dependencies for CVEs

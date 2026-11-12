@@ -2,36 +2,37 @@
 name: dnssearch-enum
 description: "dnsSearch: lightweight fast subdomain brute-forcing. Signals: asset mapping, subdomain, resolver, threads."
 zh-signals: "dnsSearch: 快速子域爆破轻量件。信号:资产测绘,子域名,resolver,线程。"
+when-to-use: "Use dnsSearch when performing lightweight, low-resource subdomain brute-forcing for asset mapping, such as from a jump host, with custom resolvers and thread counts."
 ---
 
 # dnsSearch
 
-- 攻击大类:C01 资产测绘与指纹识别
-- 上游仓库:https://github.com/ptrrkssn/dnssearch
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C01 Asset Mapping and Fingerprinting
+- Upstream Repository: https://github.com/ptrrkssn/dnssearch
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/ptrrkssn/dnssearch && cd dnssearch && make
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `dnssearch -d corp.com -w wordlist.txt` | 子域爆破 |
+| `dnssearch -d corp.com -w wordlist.txt` | Subdomain brute force |
 | `-r resolvers.txt` | resolver |
-| `-t 20` | 线程 |
+| `-t 20` | Threads |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 快速子域爆破轻量件
+### Lightweight Fast Subdomain Brute-Forcer
 
 ```bash
 dnssearch -d corp.com -w subs.txt -r resolvers.txt
 ```
 
-## 注意事项
+## Notes
 
-C 写的小工具,资源占用极低,适合在跳板机上跑。
+A small C tool with very low resource usage, ideal for running on a jump host.

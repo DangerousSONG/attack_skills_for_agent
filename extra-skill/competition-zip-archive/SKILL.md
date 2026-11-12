@@ -1,6 +1,11 @@
 ---
 name: competition-zip-archive
 description: Internal downstream skill for ctf-sandbox-orchestrator. CTF-sandbox workflow for ZIP and PKZIP archive challenges, legacy ZipCrypto identification, known-plaintext recovery with bkcrack, key-based decryption, and reproducible extraction. Use when the user asks to solve an encrypted ZIP challenge, inspect ZipCrypto metadata, recover keys from a known file prefix, or unlock an archive without starting with password brute force. Use only after `$ctf-sandbox-orchestrator` has already established sandbox assumptions and routed here.
+zh-signals: "CTF 加密 ZIP/PKZIP 归档解题流程，覆盖 ZipCrypto 识别与已知明文密钥恢复。信号:zip解密,zipcrypto,bkcrack,已知明文,ctf"
+when-to-use: >-
+  Use when solving an encrypted ZIP challenge, inspecting ZipCrypto metadata,
+  recovering keys from known plaintext, or unlocking an archive after the CTF sandbox
+  orchestrator has routed here.
 ---
 
 # Competition ZIP Archive

@@ -2,35 +2,39 @@
 name: tls-prober-scan
 description: "tls-prober fingerprints TLS stacks. Signals: asset mapping, subdomain, TLS implementation fingerprint, CSV output"
 zh-signals: "tls-prober: TLS 栈指纹识别。信号:资产测绘,子域名,TLS 实现指纹,CSV 输出。"
+when-to-use: >-
+  Use when fingerprinting TLS implementations across a list of targets to
+  narrow down library versions and CVE scope. Supports port selection and CSV
+  output.
 ---
 
 # tls-prober
 
-- 攻击大类:C01 资产测绘与指纹识别
-- 上游仓库:https://github.com/x42/tls-prober
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C01 Asset Mapping and Fingerprinting
+- Upstream Repository: https://github.com/x42/tls-prober
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/x42/tls-prober
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python prober.py -p 443,8443 targets.txt` | TLS 实现指纹 |
-| `-o out.csv` | CSV 输出 |
+| `python prober.py -p 443,8443 targets.txt` | TLS implementation fingerprint |
+| `-o out.csv` | CSV output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### TLS 栈指纹识别
+### TLS Stack Fingerprinting
 
 ```bash
-python prober.py targets.txt  # 识别 OpenSSL/GnuTLS/IIS 版本,缩小 CVE 范围
+python prober.py targets.txt  # Identify OpenSSL/GnuTLS/IIS versions to narrow the CVE scope
 ```
 
-## 注意事项
+## Notes
 
-TLS ClientHello 探测指纹 TLS 库;常与 nmap 服务识别互补。
+Probes TLS libraries via the ClientHello fingerprint; often complements nmap service identification.

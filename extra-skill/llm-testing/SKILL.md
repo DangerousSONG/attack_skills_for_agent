@@ -1,6 +1,8 @@
 ---
 name: llm-testing
 description: Comprehensive LLM security testing prompts for bias detection, data leakage, alignment testing, and adversarial prompt resistance.
+zh-signals: "为 LLM 安全测试提供提示词与词表，覆盖偏见检测、数据泄露、对齐测试与对抗提示抵抗。信号:LLM测试,AI安全,偏见检测,数据泄露,对抗提示"
+when-to-use: "Use when assessing the security, safety, and robustness of a large language model, including bias, data leakage, alignment, privacy boundaries, and adversarial prompt resistance."
 ---
 
 # LLM Testing Skill

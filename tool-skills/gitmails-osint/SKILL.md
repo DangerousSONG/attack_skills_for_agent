@@ -2,37 +2,40 @@
 name: gitmails-osint
 description: "gitmails harvests developer emails. Signals: attack surface, cloud assets, repository committer email extraction, depth."
 zh-signals: "gitmails: 开发者邮箱收割。信号:攻击面,云资产,仓库提交者邮箱提取,深度。"
+when-to-use: >-
+  Use when harvesting developer email addresses and usernames from the commit history of
+  authorized public repositories to enrich OSINT and attack surface mapping.
 ---
 
 # gitmails
 
-- 攻击大类:C05 外部攻击面与云资产暴露
-- 上游仓库:https://github.com/mazen160/gitmails
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C05 External Attack Surface and Cloud Asset Exposure
+- Upstream Repository: https://github.com/mazen160/gitmails
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install gitmails
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `gitmails -u github.com/target` | 仓库提交者邮箱提取 |
-| `-u url -d 3` | 深度 |
-| `-o out.txt` | 输出 |
+| `gitmails -u github.com/target` | Repository committer email extraction |
+| `-u url -d 3` | Depth |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 开发者邮箱收割
+### Developer Email Harvesting
 
 ```bash
 gitmails -u github.com/corp/internal-tool
-# 员工邮箱+用户名
+# employee emails + usernames
 ```
 
-## 注意事项
+## Notes
 
-git 仓库提交历史邮箱提取。
+Extracts emails from git repository commit history.

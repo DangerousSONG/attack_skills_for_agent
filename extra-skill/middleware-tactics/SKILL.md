@@ -1,34 +1,36 @@
 ---
 name: middleware-tactics
-description: "中间件漏洞利用方法论。当发现 Tomcat/WebLogic/JBoss/WildFly/IIS/Nginx/Apache 等 Web 中间件时使用。覆盖管理后台弱口令、部署 WAR/JSP webshell、解析漏洞、配置错误利用、AJP 协议利用。任何涉及中间件、应用服务器、解析漏洞的场景都应使用此技能"
+description: "Middleware vulnerability exploitation methodology. Use when discovering web middleware such as Tomcat/WebLogic/JBoss/WildFly/IIS/Nginx/Apache. Covers admin console default credentials, WAR/JSP webshell deployment, parsing vulnerabilities, misconfiguration exploitation, and AJP protocol exploitation. This skill should be used for any scenario involving middleware, application servers, or parsing vulnerabilities"
+zh-signals: "Web 中间件弱口令、部署与解析漏洞利用方法论。信号:中间件,Tomcat,WebLogic,弱口令,WAR部署。"
+when-to-use: "Use when identifying Tomcat, WebLogic, JBoss, WildFly, IIS, Nginx, or Apache middleware, testing admin console default credentials, deploying WAR or JSP webshells, exploiting AJP Ghostcat, path traversal, or extension parsing flaws."
 metadata:
-  tags: "middleware,tomcat,weblogic,jboss,wildfly,iis,nginx,apache,中间件,解析漏洞,war,部署,管理后台,ajp"
+  tags: "middleware,tomcat,weblogic,jboss,wildfly,iis,nginx,apache,middleware,parsing-vulnerability,war,deployment,admin-console,ajp"
   category: "postexploit"
   mitre_attack: "T1190,T1210"
 ---
 
-# 中间件漏洞利用方法论
+# Middleware Vulnerability Exploitation Methodology
 
-中间件是 Web 应用的运行环境——拿下中间件等于直接在服务器上执行代码。
+Middleware is the runtime environment of web applications — taking over the middleware equals executing code directly on the server.
 
-## ⛔ 深入参考（必读）
+## ⛔ Further Reading (Must Read)
 
-各中间件详细利用命令和 payload 按中间件类型组织，涵盖 Tomcat、WebLogic、JBoss、IIS、Nginx、Apache HTTPD。
+Detailed exploitation commands and payloads for each middleware type are organized by middleware type, covering Tomcat, WebLogic, JBoss, IIS, Nginx, and Apache HTTPD.
 
 ---
 
-## Phase 1: 中间件识别
+## Phase 1: Middleware Identification
 
 ```bash
-# 自动指纹
+# Automated fingerprinting
 whatweb http://TARGET
 curl -sI http://TARGET | grep -i "Server\|X-Powered-By"
 nmap -sV -p 80,443,8080,8009,8443,9090,7001,4848,9200 TARGET
 
-# 常见端口指纹
+# Common port fingerprints
 ```
 
-| 端口 | 中间件 | 管理后台路径 |
+| Port | Middleware | Admin Console Path |
 |------|--------|-------------|
 | 8080 | Tomcat | /manager/html |
 | 7001 | WebLogic | /console |
@@ -38,65 +40,65 @@ nmap -sV -p 80,443,8080,8009,8443,9090,7001,4848,9200 TARGET
 | 80/443 | Nginx | — |
 | 80/443 | Apache | /server-status |
 
-## Phase 2: 攻击决策树
+## Phase 2: Attack Decision Tree
 
 ```
-识别到什么中间件？
+Which middleware did you identify?
 ├─ Tomcat
-│   ├─ /manager 可访问 → 弱口令 → 部署 WAR
-│   ├─ 8009 AJP 开放 → Ghostcat 文件读取/RCE
-│   └─ PUT 方法开启 → 直接写 JSP
+│   ├─ /manager reachable → default credentials → deploy WAR
+│   ├─ 8009 AJP open → Ghostcat file read/RCE
+│   └─ PUT method enabled → write JSP directly
 │
 ├─ WebLogic
-│   ├─ /console 可访问 → 弱口令 → 部署 WAR
-│   └─ T3/IIOP 协议 → 反序列化 RCE（CVE 众多）
+│   ├─ /console reachable → default credentials → deploy WAR
+│   └─ T3/IIOP protocol → deserialization RCE (many CVEs)
 │
 ├─ JBoss/WildFly
-│   ├─ JMX Console 未授权 → 部署 WAR
-│   └─ 反序列化（JMXInvokerServlet）
+│   ├─ JMX Console unauthenticated → deploy WAR
+│   └─ Deserialization (JMXInvokerServlet)
 │
 ├─ IIS
-│   ├─ PUT 方法 → WebDAV 上传
-│   ├─ 短文件名 → 信息泄露
-│   └─ 解析漏洞（6.0/7.5）
+│   ├─ PUT method → WebDAV upload
+│   ├─ Short filename → information disclosure
+│   └─ Parsing vulnerability (6.0/7.5)
 │
 ├─ Nginx
-│   ├─ 目录穿越（alias 错配）
-│   ├─ 解析漏洞（cgi.fix_pathinfo）
-│   └─ CRLF 注入
+│   ├─ Path traversal (alias misconfiguration)
+│   ├─ Parsing vulnerability (cgi.fix_pathinfo)
+│   └─ CRLF injection
 │
 └─ Apache
-    ├─ 路径穿越 (CVE-2021-41773)
+    ├─ Path traversal (CVE-2021-41773)
     └─ mod_cgi/mod_cgid → RCE
 ```
 
-## Phase 3: 通用攻击 — 管理后台弱口令
+## Phase 3: Generic Attack — Admin Console Default Credentials
 
-**方法论**：针对已识别的中间件管理接口，测试默认凭据组合。
+**Methodology**: for identified middleware admin interfaces, test default credential combinations.
 
-1. 确认管理接口可达（Phase 1 端口/路径表）
-2. 使用默认凭据字典尝试登录（每种中间件有特定的默认用户名/密码组合）
-3. 注意锁定策略——部分中间件会在多次失败后锁定账户
-4. 成功登录后进入 Phase 4
+1. Confirm the admin interface is reachable (Phase 1 port/path table)
+2. Try logging in with a default credential dictionary (each middleware has specific default username/password combinations)
+3. Mind the lockout policy — some middleware lock accounts after multiple failures
+4. After a successful login, proceed to Phase 4
 
-## Phase 4: WAR 部署 Getshell
+## Phase 4: WAR Deployment Getshell
 
-**方法论**：获取管理后台权限后，利用部署功能上传 webshell。
+**Methodology**: after obtaining admin console access, use the deployment feature to upload a webshell.
 
-1. **Tomcat Manager** — 通过 manager 文本接口或 HTML 界面部署 WAR 包
-2. **WebLogic Console** — 通过 Console 界面或 REST API 部署应用
-3. **JBoss/WildFly** — 通过 JMX Console 或管理接口部署
+1. **Tomcat Manager** — deploy the WAR package through the manager text interface or the HTML UI
+2. **WebLogic Console** — deploy the application through the Console UI or the REST API
+3. **JBoss/WildFly** — deploy through the JMX Console or the admin interface
 
-通用流程：
-- 生成 WAR 格式的 webshell（msfvenom 或手工打包 JSP）
-- 通过管理接口部署到目标
-- 访问部署路径触发 webshell
+Generic flow:
+- Generate a WAR-format webshell (msfvenom or manually packaged JSP)
+- Deploy it to the target through the admin interface
+- Access the deployment path to trigger the webshell
 
-## Phase 5: 解析漏洞利用
+## Phase 5: Parsing Vulnerability Exploitation
 
-**方法论**：利用中间件对文件扩展名的解析差异绕过上传限制。
+**Methodology**: exploit differences in how middleware parses file extensions to bypass upload restrictions.
 
-核心思路：
-1. **后缀欺骗** — 利用中间件对多后缀、截断符、目录的解析逻辑，使上传的图片/文本文件被作为脚本执行
-2. **FastCGI/CGI 路径解析** — 利用 `cgi.fix_pathinfo` 等配置使非脚本路径被传递给解释器
-3. **PUT 方法** — 直接写入可执行文件到 Web 目录
+Core idea:
+1. **Suffix deception** — abuse the middleware's parsing logic for multi-suffix names, truncation characters, and directories, so uploaded image/text files are executed as scripts
+2. **FastCGI/CGI path parsing** — abuse configurations such as `cgi.fix_pathinfo` to pass non-script paths to the interpreter
+3. **PUT method** — write executable files directly into the web directory

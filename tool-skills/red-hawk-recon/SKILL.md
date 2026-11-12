@@ -2,35 +2,38 @@
 name: red-hawk-recon
 description: "RED_HAWK: Integrated PHP information gathering. Signals: asset mapping, subdomains, interactive target input."
 zh-signals: "RED_HAWK: PHP 一体化信息收集。信号:资产测绘,子域名,交互输入目标。"
+when-to-use: >-
+  Use when running one-shot information gathering from a PHP-capable environment and you want
+  CMS, IP, whois, subdomain, and port results in a single report.
 ---
 
 # RED_HAWK
 
-- 攻击大类:C01 资产测绘与指纹识别
-- 上游仓库:https://github.com/Tuhinshubhra/RED_HAWK
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C01 Asset Mapping and Fingerprinting
+- Upstream Repository: https://github.com/Tuhinshubhra/RED_HAWK
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/Tuhinshubhra/RED_HAWK && cd RED_HAWK
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `php rhawk.php` | 交互输入目标 |
-| `选择扫描类型` | 含 CMS/IP/端口/子域 |
+| `php rhawk.php` | Interactive target input |
+| `choose scan type` | Covers CMS/IP/ports/subdomains |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### PHP 一体化信息收集
+### Integrated PHP Information Gathering
 
 ```bash
-php rhawk.php  # 输入域名出 CMS/IP/whois/子域/端口/Nmap 简报
+php rhawk.php  # Enter a domain to get a CMS/IP/whois/subdomain/port/Nmap briefing
 ```
 
-## 注意事项
+## Notes
 
-PHP 写的一体式侦察;在只有 PHP 的受限环境也能跑。
+An all-in-one recon tool written in PHP; it runs even in restricted environments where only PHP is available.

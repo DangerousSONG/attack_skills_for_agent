@@ -1,6 +1,9 @@
 ---
 name: protocol-reverse-engineering
 description: "Comprehensive techniques for capturing, analyzing, and documenting network protocols for security research, interoperability, and debugging."
+zh-signals: "捕获、分析并文档化网络协议以支持安全研究与互操作分析。信号:协议逆向,流量分析,协议文档,安全研究,调试"
+when-to-use: >-
+  Use when capturing, analyzing, or documenting an unknown network protocol for security research, interoperability, or debugging.
 risk: safe
 source: community
 date_added: "2026-02-27"

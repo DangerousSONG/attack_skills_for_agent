@@ -1,6 +1,10 @@
 ---
 name: pci-compliance
 description: Review payment data flows and engineering control evidence for a scoped PCI assessment, without claiming certification.
+zh-signals: "审查支付数据流与工程控制证据，支撑范围化的 PCI 评估（不宣称认证）。信号:PCI合规,支付安全,数据流审查,控制证据,合规评估"
+when-to-use: >-
+  Use when reviewing payment data flows, preparing engineering controls, or
+  collecting evidence for a scoped PCI assessment.
 metadata:
   aas-risk: critical
   aas-source: community

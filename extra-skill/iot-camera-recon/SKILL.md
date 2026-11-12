@@ -1,6 +1,8 @@
 ---
 name: iot-camera-recon
 description: Attack cameras via RTSP, ONVIF, Axis config when 554 open.
+zh-signals: "针对 IP 摄像头的 RTSP、ONVIF 与厂商配置端点侦察方法。信号:IoT摄像头,RTSP,ONVIF,视频监控,设备侦察"
+when-to-use: "Use when scanning finds RTSP port 554 or camera HTTP ports, or the target is an IP camera or physical-security environment."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

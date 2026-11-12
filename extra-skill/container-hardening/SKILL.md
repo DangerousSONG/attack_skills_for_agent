@@ -1,6 +1,10 @@
 ---
 name: container-hardening
 description: Docker and OCI image hardening — base-image selection, USER/caps/read-only FS discipline, distroless migration, build-time scanning with trivy/grype, image signing via sigstore, and runtime guardrails (seccomp, AppArmor).
+zh-signals: "加固 Docker 与 OCI 镜像，涵盖基础镜像选择、USER/caps/只读文件系统、distroless 迁移、trivy/grype 扫描、sigstore 签名与运行时防护。信号:容器加固,Docker,镜像扫描,distroless,镜像签名"
+when-to-use: >-
+  Use when reviewing a Dockerfile, migrating to distroless, triaging image
+  scans, signing images with cosign, or hardening container runtime settings.
 ---
 
 # Container Hardening

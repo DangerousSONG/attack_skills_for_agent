@@ -1,6 +1,8 @@
 ---
 name: incident-response-incident-response
 description: "Use when working with incident response incident response"
+zh-signals: "协调多智能体的事件响应流程（检测、研判、缓解、复盘）。信号:事件响应,incident response,应急响应,sre,复盘"
+when-to-use: "Use when orchestrating incident response tasks or workflows, including detection/triage, investigation/mitigation, communication, and postmortem across severity levels."
 risk: critical
 source: community
 date_added: "2026-02-27"

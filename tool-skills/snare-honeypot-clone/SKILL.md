@@ -2,37 +2,40 @@
 name: snare-honeypot-clone
 description: "SNARE: clones target sites for phishing. Signals: web vulnerability, injection, start honeypot, clone site, Tanner verdict integration."
 zh-signals: "SNARE: 克隆目标站钓鱼。信号:web漏洞,注入,起蜜罐,克隆站点,联动 Tanner 判定。"
+when-to-use: >-
+  Use when building a phishing or honeypot clone of a target site to capture
+  credentials and observe attacker behavior, optionally integrating Tanner verdicts.
 ---
 
 # SNARE
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/mushorg/snare
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/mushorg/snare
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install snare
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `snare --port 8080 --host-ip 0.0.0.0` | 起蜜罐 |
-| `snare --clone https://t.com` | 克隆站点 |
-| `--tanner tanner.mushmush.org` | 联动 Tanner 判定 |
+| `snare --port 8080 --host-ip 0.0.0.0` | Start the honeypot |
+| `snare --clone https://t.com` | Clone the site |
+| `--tanner tanner.mushmush.org` | Integrate Tanner verdicts |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 克隆目标站钓鱼
+### Clone the Target Site for Phishing
 
 ```bash
 snare --clone https://login.t.com --port 443
-# 镜像登录页+记录凭据,配合 DNS 劫持
+# Mirror the login page + record credentials, works with DNS hijacking
 ```
 
-## 注意事项
+## Notes
 
-蜜罐/站点克隆工具,高保真复刻任意站点。
+A honeypot / site cloning tool that faithfully reproduces any site.

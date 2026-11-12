@@ -1,6 +1,8 @@
 ---
 name: k7-total-security-configuration
 description: Configure and deploy K7 Total Security 16.0.1195 unified defense framework with policy profiles, AI integrations, and multi-platform orchestration
+zh-signals: "配置与部署 K7 Total Security 防护策略模板，涵盖策略配置、AI 事件分析与多平台编排。信号:K7配置,端点防护,策略模板,AI事件分析,多平台部署"
+when-to-use: "Use when configuring K7 Total Security policy profiles, deploying endpoint protection, or integrating AI-based incident analysis."
 triggers:
   - "configure K7 Total Security policy profile"
   - "deploy K7 security endpoint protection"

@@ -11,6 +11,10 @@ description: |
   Keychain dumps, runtime storage inspection, URL-scheme & pasteboard abuse. Chains from /pentester
   and /codebase; into /api-security for backend endpoints, /web-exploit for injection, /post-exploit
   on device access, /ai-redteam on an embedded LLM.
+zh-signals: "iOS 应用安全评估，基于 OWASP MASVS/MASTG 做 IPA 静态与动态分析。信号:iOS安全,MASVS,IPA,MobSF,Keychain"
+when-to-use: >-
+  Use when assessing an iOS app (.ipa, bundle id, or source) against OWASP MASVS 2.0/MASTG,
+  covering secrets, storage, ATS, URL schemes, and optional jailbroken-device dynamic testing.
 argument-hint: "<app.ipa | bundle-id | source-path> [depth=quick|standard|thorough]"
 user-invocable: true
 ---

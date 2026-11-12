@@ -1,6 +1,8 @@
 ---
 name: report-malicious-repository
 description: Identify and report potentially malicious software repositories masquerading as legitimate security tools
+zh-signals: "识别并举报伪装成合法安全工具的潜在恶意软件仓库，防范密钥生成器与盗版软件传播。信号:恶意仓库,伪造工具,举报,GitHub,恶意软件"
+when-to-use: "Use when you need to identify malicious software repositories masquerading as legitimate security tools, or report suspicious GitHub projects distributing keygens, cracked software, or malware."
 triggers:
   - how do I identify malicious software repositories
   - detect fake antivirus or cracked software repos

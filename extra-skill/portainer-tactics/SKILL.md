@@ -1,69 +1,72 @@
 ---
 name: portainer-tactics
 description: |
-  Portainer 后渗透方法论：默认凭据认证突破、用户枚举时间差攻击、Docker API特权容器逃逸RCE、宿主机文件系统挂载。
-  当用户提到Portainer漏洞、Portainer RCE、Portainer Docker逃逸、Portainer认证绕过、Portainer利用、Portainer检测时，必须使用此技能。
-  也适用于用户提到Docker管理面板漏洞、容器管理平台利用、Portainer CE/BE渗透等场景。
+  Portainer post-exploitation methodology: default credential authentication bypass, user enumeration timing attack, Docker API privileged container escape RCE, host filesystem mounting.
+  This skill must be used whenever the user mentions a Portainer vulnerability, Portainer RCE, Portainer Docker escape, Portainer authentication bypass, Portainer exploitation, or Portainer detection.
+  It also applies when the user mentions Docker management panel vulnerabilities, container management platform exploitation, or Portainer CE/BE penetration testing.
+zh-signals: "针对 Portainer 容器管理平台的后渗透与漏洞利用方法。信号:Portainer,Docker逃逸,默认凭据,用户枚举,特权容器"
+when-to-use: >-
+  Use when targeting a confirmed Portainer instance and needing default-credential access, user enumeration, Docker API abuse, or container escape.
 metadata:
-  tags: "Portainer,Docker,容器管理,默认凭据,用户枚举,SSRF,特权容器逃逸,RCE,Kubernetes"
+  tags: "Portainer,Docker,container-management,default-credentials,user-enumeration,SSRF,privileged-container-escape,RCE,Kubernetes"
   category: "postexploit"
   mitre_attack: "T1190,T1059,T1078"
 ---
 
-# Portainer 漏洞利用技能
+# Portainer Exploitation Skill
 
-- **产品**: Portainer (Docker/Kubernetes容器管理平台)
-- **默认端口**: 9000 (HTTP), 9443 (HTTPS) | **识别**: `/api/status` 返回JSON | **FOFA**: `app="Portainer"`
+- **Product**: Portainer (Docker/Kubernetes container management platform)
+- **Default ports**: 9000 (HTTP), 9443 (HTTPS) | **Identification**: `/api/status` returns JSON | **FOFA**: `app="Portainer"`
 
-## 漏洞总览
+## Vulnerability Overview
 
-| 漏洞编号 | 影响版本 | 漏洞类型 | 利用条件 | 危害 |
+| Vulnerability ID | Affected versions | Vulnerability type | Exploitation condition | Impact |
 |---------|---------|---------|---------|------|
-| 默认/弱口令 | 全版本 | 认证突破 | 弱口令 | Critical |
-| CVE-2024-29296 | CE 2.19.4 | 用户枚举(时间差) | 无需认证 | Medium |
-| CVE-2018-12678 | <=1.17 | Request Splitting SSRF→RCE | 无需认证 | Critical |
-| Docker API滥用 | 全版本 | 特权容器逃逸RCE | 需认证 | Critical |
+| Default/weak credentials | All versions | Authentication bypass | Weak credentials | Critical |
+| CVE-2024-29296 | CE 2.19.4 | User enumeration (timing) | No authentication required | Medium |
+| CVE-2018-12678 | <=1.17 | Request Splitting SSRF→RCE | No authentication required | Critical |
+| Docker API abuse | All versions | Privileged container escape RCE | Authentication required | Critical |
 
-## 利用决策树
-
-```
-1. 识别: GET /api/status → 确认Portainer
-2. 认证突破:
-   ├── 尝试默认凭据 admin/已知密码
-   ├── CVE-2024-29296: 用户枚举确定有效用户名
-   └── 暴力破解密码
-3. 认证后: JWT Token → 枚举端点 → 特权容器 → 挂载宿主机 → RCE
-4. 未认证(老版本): CVE-2018-12678 → Request Splitting → Docker API → RCE
-```
-
-## 利用链优先级
+## Exploitation Decision Tree
 
 ```
-1. 默认/弱口令 → JWT Token → Docker API → 特权容器 → RCE
-2. CVE-2024-29296 用户枚举 → 定向暴力破解 → 同上
-3. CVE-2018-12678 (仅<=1.17) → SSRF → Docker API → RCE
+1. Identify: GET /api/status → confirm Portainer
+2. Authentication bypass:
+   ├── Try default credentials admin/known password
+   ├── CVE-2024-29296: user enumeration to determine valid usernames
+   └── Brute force the password
+3. After authentication: JWT Token → enumerate endpoints → privileged container → mount host → RCE
+4. Unauthenticated (old versions): CVE-2018-12678 → Request Splitting → Docker API → RCE
 ```
 
-## 常用API端点
+## Exploit Chain Priorities
 
-| 端点 | 用途 |
+```
+1. Default/weak credentials → JWT Token → Docker API → privileged container → RCE
+2. CVE-2024-29296 user enumeration → targeted brute force → same as above
+3. CVE-2018-12678 (only <=1.17) → SSRF → Docker API → RCE
+```
+
+## Common API Endpoints
+
+| Endpoint | Purpose |
 |------|------|
-| `GET /api/status` | 系统状态/版本 |
-| `POST /api/auth` | 登录认证 |
-| `GET /api/endpoints` | Docker端点列表 |
-| `POST /api/endpoints/{id}/docker/containers/create` | 创建容器 |
-| `POST /api/endpoints/{id}/docker/containers/{cid}/start` | 启动容器 |
-| `POST /api/endpoints/{id}/docker/containers/{cid}/wait` | 等待容器 |
+| `GET /api/status` | System status/version |
+| `POST /api/auth` | Login authentication |
+| `GET /api/endpoints` | Docker endpoint list |
+| `POST /api/endpoints/{id}/docker/containers/create` | Create a container |
+| `POST /api/endpoints/{id}/docker/containers/{cid}/start` | Start a container |
+| `POST /api/endpoints/{id}/docker/containers/{cid}/wait` | Wait for a container |
 
-## 特权容器逃逸方法论
+## Privileged Container Escape Methodology
 
-**技术**: 通过Portainer Docker API创建特权容器，挂载宿主机文件系统，实现容器逃逸RCE。
+**Technique**: create a privileged container through the Portainer Docker API and mount the host filesystem to achieve container escape RCE.
 
-- 利用 Docker API `/containers/create` 端点，创建特权模式容器
-- 将宿主机根目录 `/` 以读写方式挂载到容器内
-- 通过 `chroot` 切换到宿主机文件系统，命令直接作用于宿主机
-- 需要已认证的JWT Token和可用的Docker端点
+- Abuse the Docker API `/containers/create` endpoint to create a container in privileged mode
+- Mount the host root directory `/` into the container with read-write access
+- Use `chroot` to switch to the host filesystem, so commands act directly on the host
+- Requires an authenticated JWT Token and a usable Docker endpoint
 
-## 详细参考
+## Detailed Reference
 
-- [认证后RCE API速查](references/post-auth-rce.md)
+- [Post-auth RCE API quick reference](references/post-auth-rce.md)

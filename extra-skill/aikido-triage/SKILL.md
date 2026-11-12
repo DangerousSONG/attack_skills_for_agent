@@ -2,6 +2,10 @@
 name: aikido-triage
 description: |
   Triages Aikido security findings live via the Aikido MCP — no CSV. Splits findings into SCA, SAST, Application Secrets, and Misconfiguration, applies a category-specific verification playbook to each (source-to-sink taint analysis with trust-boundary/reachability assessment for SAST, /analyze-cve chaining for SCA, usage + opt-in liveness checks for secrets, blast-radius reasoning with optional live-chain confirmation for misconfiguration), scores every finding's business impact and severity, then closes confirmed non-issues directly in Aikido after a single review checkpoint.
+zh-signals: "通过 Aikido MCP 实时分诊安全发现，按类别验证并给出处置结论。信号:Aikido,漏洞分诊,SCA,SAST,密钥泄漏"
+when-to-use: >-
+  Use when triaging Aikido security findings against a local codebase, verifying
+  SCA/SAST/secrets/misconfiguration issues, and closing confirmed non-issues in Aikido.
 argument-hint: "<codebase-path> [repo=<name>] [team=<name>] [workspace=<name>] [severity=critical,high,medium,low]"
 user-invocable: true
 ---

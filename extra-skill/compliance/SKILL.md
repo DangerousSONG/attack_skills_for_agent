@@ -6,6 +6,10 @@ description: |
   and produces a complete matrix marked COMPLIANT / NON_COMPLIANT / NOT_RELEVANT — with
   per-control reasoning and evidence (code snippets, file:line references, diagram observations).
   Outputs a reviewed CSV matrix and a self-contained HTML evidence report.
+zh-signals: "对照 OWASP ASVS 5.0 全量控制项审计代码库与架构图并产出合规矩阵和证据报告。信号:ASVS,合规评估,控制项,代码审计,证据报告"
+when-to-use: >-
+  Use when performing a formal ASVS 5.0 compliance assessment of a codebase and/or
+  architecture diagrams and you need an evidence-backed per-control matrix.
 argument-hint: "<codebase-path> [diagrams=path1,path2,...] [depth=quick|standard|thorough]"
 user-invocable: true
 ---

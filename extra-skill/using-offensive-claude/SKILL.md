@@ -1,6 +1,8 @@
 ---
 name: using-offensive-claude
 description: Use when starting any offensive-security engagement or task — establishes how to find and invoke the right skill before any action (including clarifying questions, recon, exploitation, or reporting)
+zh-signals: "进攻性安全工作总纲，规定在任何行动（澄清问题、侦查、利用或报告）之前先找到并调用正确的技能。信号:进攻性安全,技能路由,总纲,工作流程,纪律"
+when-to-use: "Use when starting any offensive-security engagement or task, to establish how to find and invoke the right skill before any action such as clarifying questions, recon, exploitation, or reporting."
 ---
 
 <SUBAGENT-STOP>

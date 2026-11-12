@@ -1,6 +1,11 @@
 ---
 name: advanced-redteam-ops
 description: Use when designing C2 infrastructure or OPSEC for a long-haul red-team op — redirectors, malleable profiles, tiered/segregated infra, living-off-the-land, data exfiltration
+zh-signals: "设计长周期红队行动的 C2 基础设施与 OPSEC，覆盖重定向器、可塑配置、分层隔离基础设施、就地取材与数据外传。信号:C2基础设施,重定向器,OPSEC,数据外传,红队行动"
+when-to-use: >-
+  Use when designing C2 infrastructure, redirectors, malleable profiles, or
+  OPSEC for a long-haul red-team engagement, including tiered infrastructure
+  and data exfiltration planning.
 metadata:
   type: offensive
   phase: operations
@@ -12,7 +17,7 @@ depends_on: [edr-evasion, exploit-development, red-team-ops]
 feeds_into: [threat-hunting]
 inputs: [c2_framework, redirector_config]
 outputs: [c2_infrastructure, opsec_report, exfil_channel]
-  ---
+---
 
 # Advanced Red Team Operations
 

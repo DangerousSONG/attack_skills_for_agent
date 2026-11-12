@@ -1,6 +1,10 @@
 ---
 name: azure-security-lab-terraform
 description: Deploy and configure the Azure Security Lab - a hands-on Terraform environment with hub-spoke networking, Azure Firewall, NSGs, Key Vault, and security monitoring for learning Azure security controls.
+zh-signals: "使用 Terraform 部署 Azure 安全实验环境，构建 hub-spoke 网络与防火墙。信号:Azure,Terraform,hub-spoke,AzureFirewall,安全实验"
+when-to-use: >-
+  Use when deploying, configuring, validating, or troubleshooting the Terraform-based
+  Azure Security Lab with hub-spoke networking, Azure Firewall, NSGs, and Key Vault.
 triggers:
   - deploy the Azure security lab
   - set up Azure Firewall hub-spoke network

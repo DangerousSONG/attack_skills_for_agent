@@ -1,6 +1,8 @@
 ---
 name: secure-workflow-guide
 description: Guides through Trail of Bits' 5-step secure development workflow. Runs Slither scans, checks special features (upgradeability/ERC conformance/token integration), generates visual security diagrams, helps document security properties for fuzzing/verification, and reviews manual security areas. Use when securing a smart contract end to end rather than hunting one bug, checking a project on every check-in or before deployment, triaging a Slither report, or asking where to start on smart contract security.
+zh-signals: "引导执行 Trail of Bits 五步智能合约安全开发工作流。信号:智能合约安全,Slither,安全开发流程,合约审计,漏洞三分类"
+when-to-use: "Use when securing a smart contract end to end, triaging a Slither report, or running checks before deployment or on every check-in."
 ---
 
 # Secure Workflow Guide

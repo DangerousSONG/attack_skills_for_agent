@@ -1,6 +1,8 @@
 ---
 name: hunt-cache-poison
 description: Hunting skill for cache poison vulnerabilities.
+zh-signals: "Web 缓存投毒漏洞挖掘。信号:缓存投毒,cache poisoning,CDN,Web缓存,Bug bounty"
+when-to-use: "Use when hunting cache poisoning bugs on CDN-served assets, cached authentication endpoints, or other cache-enabled web targets under authorized scope."
 category: security
 risk: offensive
 source: https://github.com/elementalsouls/Claude-BugHunter

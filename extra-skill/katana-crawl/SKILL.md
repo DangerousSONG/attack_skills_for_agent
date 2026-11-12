@@ -1,154 +1,156 @@
 ---
 name: katana-crawl
-description: "使用 katana 进行 Web 爬虫和 URL 发现。当需要爬取目标网站的所有页面和端点、发现隐藏的 API 路径、JavaScript 中的端点、表单提取时使用。katana 是 ProjectDiscovery 出品的下一代爬虫框架，支持标准模式和 Headless 浏览器模式，能解析 JavaScript 发现动态端点。任何涉及 Web 爬虫、URL 发现、JS 端点提取、表单发现、站点地图的场景都应使用此技能"
+description: "Web crawling and URL discovery with katana. Use when you need to crawl all pages and endpoints of a target site, discover hidden API paths, endpoints inside JavaScript, or extract forms. katana is the next-generation crawler framework from ProjectDiscovery, supporting both standard mode and Headless browser mode, and able to parse JavaScript to discover dynamic endpoints. Any scenario involving web crawling, URL discovery, JS endpoint extraction, form discovery, or sitemap discovery should use this skill"
+zh-signals: "使用 katana 进行 Web 爬虫与 URL/JS 端点发现。信号:katana,爬虫,URL发现,JS端点,headless"
+when-to-use: "Use when crawling a target website for pages, endpoints, JS-referenced API paths, forms, or sitemap discovery with katana."
 metadata:
-  tags: "katana,crawl,spider,爬虫,URL发现,JS解析,endpoint,表单,projectdiscovery,headless"
+  tags: "katana,crawl,spider,web crawler,URL discovery,JS parsing,endpoint,form,projectdiscovery,headless"
   category: "tool"
 ---
 
-# katana Web 爬虫方法论
+# katana Web Crawler Methodology
 
-katana 是 ProjectDiscovery 出品的下一代 Web 爬虫框架。核心优势：**JavaScript 解析**（发现动态端点）+ **Headless 模式**（渲染 SPA）+ **管道友好** + **表单自动填充**。
+katana is the next-generation web crawler framework from ProjectDiscovery. Core advantages: **JavaScript parsing** (discovers dynamic endpoints) + **Headless mode** (renders SPAs) + **pipeline friendly** + **automatic form filling**.
 
-项目地址：https://github.com/projectdiscovery/katana
+Project address: https://github.com/projectdiscovery/katana
 
-## Phase 1: 基本爬取
+## Phase 1: Basic Crawling
 
 ```bash
-# 爬取单个目标（默认深度 3）
+# Crawl a single target (default depth 3)
 katana -u http://target.com
 
-# 指定爬取深度
+# Specify crawl depth
 katana -u http://target.com -d 5
 
-# 静默输出（只显示 URL）
+# Silent output (URLs only)
 katana -u http://target.com -silent
 
-# 输出到文件
+# Output to file
 katana -u http://target.com -silent -o urls.txt
 ```
 
-## Phase 2: JavaScript 解析（关键能力）
+## Phase 2: JavaScript Parsing (Key Capability)
 
-现代 Web 应用大量使用 JS 框架，传统爬虫无法发现 JS 中硬编码的 API 端点：
+Modern web applications use JS frameworks heavily, and traditional crawlers cannot find API endpoints hardcoded in JS:
 
 ```bash
-# 启用 JS 端点解析（推荐始终开启）
+# Enable JS endpoint parsing (recommended to always enable)
 katana -u http://target.com -jc
 
-# 启用 jsluice 深度 JS 解析（更全面，内存消耗大）
+# Enable jsluice deep JS parsing (more thorough, higher memory usage)
 katana -u http://target.com -jsluice
 
-# Headless 模式（渲染页面后爬取，适合 SPA/React/Vue）
+# Headless mode (crawl after rendering the page, suitable for SPA/React/Vue)
 katana -u http://target.com -headless
 
-# Headless + 使用系统 Chrome
+# Headless + use system Chrome
 katana -u http://target.com -headless -system-chrome
 ```
 
-## Phase 3: 批量爬取
+## Phase 3: Batch Crawling
 
 ```bash
-# 从文件读取目标
+# Read targets from a file
 katana -list urls.txt -silent
 
-# 从 stdin 管道
+# Pipe from stdin
 cat urls.txt | katana -silent
 
-# 配合其他工具
+# Combine with other tools
 subfinder -d target.com -silent | httpx -silent | katana -silent -jc
 ```
 
-## Phase 4: 输出过滤
+## Phase 4: Output Filtering
 
 ```bash
-# 只输出特定扩展名
+# Only output specific extensions
 katana -u http://target.com -em php,jsp,asp -silent
 
-# 排除静态资源
+# Exclude static assets
 katana -u http://target.com -ef png,jpg,css,gif,svg,woff -silent
 
-# 正则匹配（只输出包含 api 的 URL）
+# Regex match (only output URLs containing api)
 katana -u http://target.com -mr "api|admin|login" -silent
 
-# 正则过滤（排除包含 logout 的 URL）
+# Regex filter (exclude URLs containing logout)
 katana -u http://target.com -fr "logout|static" -silent
 
-# 提取表单元素
+# Extract form elements
 katana -u http://target.com -form-extraction -jsonl
 ```
 
-## Phase 5: 范围控制
+## Phase 5: Scope Control
 
 ```bash
-# 限制在同一域名内（默认行为）
+# Restrict to the same domain (default behavior)
 katana -u http://target.com
 
-# 显示外部端点（不爬取，只显示）
+# Show external endpoints (display only, not crawled)
 katana -u http://target.com -display-out-scope
 
-# 自定义范围（正则）
+# Custom scope (regex)
 katana -u http://target.com -crawl-scope "target\.com|api\.target\.com"
 
-# 排除特定路径
+# Exclude specific paths
 katana -u http://target.com -crawl-out-scope "logout|signout"
 
-# 无范围限制（危险，慎用）
+# No scope restriction (dangerous, use with care)
 katana -u http://target.com -no-scope
 ```
 
-## Phase 6: 高级配置
+## Phase 6: Advanced Configuration
 
 ```bash
-# 限时爬取（比赛场景重要）
+# Time-limited crawl (important in CTF scenarios)
 katana -u http://target.com -crawl-duration 60s
 
-# 控制并发和速率
+# Control concurrency and rate
 katana -u http://target.com -c 20 -rl 100
 
-# 自定义 Header（带 Cookie 访问需要认证的页面）
+# Custom Header (use a Cookie to access pages that require authentication)
 katana -u http://target.com -H "Cookie: session=abc123"
 
-# 使用代理
+# Use a proxy
 katana -u http://target.com -proxy http://127.0.0.1:8080
 
-# JSONL 输出（包含完整请求信息）
+# JSONL output (includes full request information)
 katana -u http://target.com -jsonl -o results.jsonl
 
-# 已知文件扫描（robots.txt, sitemap.xml）
+# Known file scan (robots.txt, sitemap.xml)
 katana -u http://target.com -known-files all -d 3
 
-# 技术检测
+# Technology detection
 katana -u http://target.com -tech-detect
 
-# XHR 请求提取（Headless 模式）
+# XHR request extraction (Headless mode)
 katana -u http://target.com -headless -xhr-extraction
 ```
 
-## Phase 7: 管道集成
+## Phase 7: Pipeline Integration
 
 ```bash
-# 爬虫 → 漏洞扫描
+# Crawler -> vulnerability scan
 katana -u http://target.com -jc -silent | nuclei -severity critical,high
 
-# 爬虫 → 筛选 JS 文件 → 敏感信息提取
+# Crawler -> filter JS files -> sensitive information extraction
 katana -u http://target.com -jc -silent -em js | while read url; do
   curl -s "$url" | grep -iE "api_key|password|secret|token"
 done
 
-# 爬虫 → 参数提取 → SQLi 测试
+# Crawler -> parameter extraction -> SQLi testing
 katana -u http://target.com -jc -silent | grep "?" | sort -u > params.txt
 
-# 子域名 → 存活 → 爬虫 → 漏洞扫描（完整链）
+# Subdomain -> live hosts -> crawler -> vulnerability scan (full chain)
 subfinder -d target.com -silent | httpx -silent | katana -jc -silent | nuclei
 ```
 
-## 爬取策略选择
+## Crawl Strategy Selection
 
-| 场景 | 策略 | 命令 |
+| Scenario | Strategy | Command |
 |------|------|------|
-| 快速发现（比赛） | 浅爬 + JS | `katana -u URL -d 2 -jc -silent` |
-| 全面爬取 | 深爬 + Headless | `katana -u URL -d 5 -headless -jc` |
-| API 端点发现 | JS 解析 + 过滤 | `katana -u URL -jc -em js,json -silent` |
-| 认证后爬取 | 带 Cookie | `katana -u URL -H "Cookie: ..." -jc` |
-| SPA 应用 | Headless 必须 | `katana -u URL -headless -system-chrome` |
+| Fast discovery (CTF) | Shallow crawl + JS | `katana -u URL -d 2 -jc -silent` |
+| Full crawl | Deep crawl + Headless | `katana -u URL -d 5 -headless -jc` |
+| API endpoint discovery | JS parsing + filtering | `katana -u URL -jc -em js,json -silent` |
+| Post-authentication crawl | With Cookie | `katana -u URL -H "Cookie: ..." -jc` |
+| SPA application | Headless is mandatory | `katana -u URL -headless -system-chrome` |

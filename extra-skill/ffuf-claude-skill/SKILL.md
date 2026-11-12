@@ -1,6 +1,9 @@
 ---
 name: ffuf-claude-skill
 description: "Web fuzzing with ffuf"
+zh-signals: "使用 ffuf 对已授权目标进行 Web 模糊测试与路径发现。信号:ffuf,Web模糊测试,目录爆破,字典,授权测试。"
+when-to-use: >-
+  Use when performing authorized web fuzzing with ffuf against a bounded target and defined wordlist, with scope, rate limits, and prohibited side effects agreed beforehand.
 risk: offensive
 source: "https://github.com/jthack/ffuf_claude_skill"
 date_added: "2026-02-27"

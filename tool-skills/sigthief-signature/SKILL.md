@@ -2,37 +2,41 @@
 name: sigthief-signature
 description: "SigThief: steals legitimate digital signatures for trojans. Signals: malware development, evasion, steal valid signature, strip signature from signed file, check signature only."
 zh-signals: "SigThief: 给木马偷取合法数字签名。信号:恶意软件开发,免杀开发,偷合法签名,从已签名文件剥离签名信息,只检查签名。"
+when-to-use: >-
+  Use when you need to copy a valid digital signature onto a payload or strip
+  and check signatures during malware development and evasion testing. Note
+  that it copies rather than forges signatures.
 ---
 
 # SigThief
 
-- 攻击大类:C45 恶意软件开发与免杀
-- 上游仓库:https://github.com/secretsquirrel/SigThief
-- 上游 License:BSD-3-Clause(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C45 Malware Development and AV Evasion
+- Upstream Repository: https://github.com/secretsquirrel/SigThief
+- Upstream License: BSD-3-Clause (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/secretsquirrel/SigThief
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python sigthief.py -i legit.exe -t evil.exe -o signed.exe` | 偷合法签名 |
-| `-r` | 从已签名文件剥离签名信息 |
-| `-c` | 只检查签名 |
+| `python sigthief.py -i legit.exe -t evil.exe -o signed.exe` | Steal a legitimate signature |
+| `-r` | Strip the signature information from a signed file |
+| `-c` | Check the signature only |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 给木马偷取合法数字签名
+### Stealing a legitimate digital signature for a trojan
 
 ```bash
 python sigthief.py -i C:\Windows\System32\consent.exe -t payload.exe -o signed_payload.exe
-# 伪签名让文件带'已验证发布者'属性,过部分 SmartScreen/信誉检查
+# The spoofed signature gives the file a "Verified Publisher" attribute, passing some SmartScreen/reputation checks
 ```
 
-## 注意事项
+## Notes
 
-签名是复制非伪造(文件哈希不符),过深度校验会失效;但对初筛/信誉检查有效。
+The signature is copied, not forged (the file hash does not match), so it fails deep verification; it still works against first-pass and reputation checks.

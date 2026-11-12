@@ -2,38 +2,39 @@
 name: narthex-pass-gen
 description: "narthex: Dictionary enhancement pipeline. Signals: password cracking, hash cracking, combination, insertion, leet transformation."
 zh-signals: "narthex: 字典增强流水线。信号:密码破解,哈希破解,组合,插入,leet 变换。"
+when-to-use: "Use narthex when you need to enhance an existing password dictionary through combination, insertion, and leet transformations before hash cracking, as an alternative to hashcat rules."
 ---
 
 # narthex
 
-- 攻击大类:C25 哈希与密码破解
-- 上游仓库:https://github.com/MichaelConstant/narthex
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C25 Hash and Password Cracking
+- Upstream Repository: https://github.com/MichaelConstant/narthex
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/MichaelConstant/narthex && cd narthex && make
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `./nhance -w wordlist.txt -o out.txt` | 字典增强 |
-| `./ncombi -i in -o out` | 组合 |
-| `./ninsert -i in -c 123` | 插入 |
-| `./nleet -i in` | leet 变换 |
+| `./nhance -w wordlist.txt -o out.txt` | Dictionary enhancement |
+| `./ncombi -i in -o out` | Combination |
+| `./ninsert -i in -c 123` | Insertion |
+| `./nleet -i in` | leet transformation |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 字典增强流水线
+### Dictionary Enhancement Pipeline
 
 ```bash
 cat base.txt | ./nhance | ./nleet > final.txt
-# 组合/插入/变换全家桶
+# The full combination/insertion/transformation toolkit
 ```
 
-## 注意事项
+## Notes
 
-字典操作工具集,hashcat 规则替代。
+A dictionary manipulation toolset, an alternative to hashcat rules.

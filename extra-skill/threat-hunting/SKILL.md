@@ -1,6 +1,8 @@
 ---
 name: threat-hunting
 description: "Conduct proactive, hypothesis-driven threat hunts — search SIEM / EDR / logs for adversaries who haven't tripped an alert yet. ATT&CK-driven, hypothesis-based methodology. Use when the user mentions 'threat hunting,' 'proactive hunt,' 'TaHiTI,' 'PEAK framework,' 'MITRE ATT&CK hunt,' 'hypothesis-driven hunt,' 'hunt hypothesis,' 'living off the land,' 'LOLBins,' 'beaconing,' 'lateral movement detection,' 'data staging,' 'persistence hunting,' or wants to find threats that have evaded existing detections."
+zh-signals: "以假设驱动的主动威胁狩猎，在 SIEM/EDR/日志中搜索尚未告警的攻击者。信号:威胁狩猎,假设驱动,PEAK框架,ATT&CK,LOLBins"
+when-to-use: "Use when proactively hunting for adversaries who have evaded existing detections, following a hypothesis-driven ATT&CK or PEAK methodology across SIEM, EDR, and log sources."
 allowed-tools: Read, Write, Bash, Grep, Glob, WebSearch
 ---
 

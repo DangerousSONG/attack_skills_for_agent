@@ -1,59 +1,61 @@
 ---
 name: oauth-sso-attack
-description: "OAuth 2.0 / SSO / OpenID Connect 认证流程攻击。当目标有「使用 Google/GitHub/微信 登录」按钮、redirect_uri 参数、authorization_code 流程、或 /.well-known/openid-configuration 端点时使用。覆盖 redirect_uri 劫持、state 缺失 CSRF、token 泄露、scope 提升"
+description: "Attacks on OAuth 2.0 / SSO / OpenID Connect authentication flows. Use when the target has a 'Sign in with Google/GitHub/WeChat' button, a redirect_uri parameter, an authorization_code flow, or a /.well-known/openid-configuration endpoint. Covers redirect_uri hijacking, missing state leading to CSRF, token leakage, and scope escalation"
+zh-signals: "针对 OAuth 2.0/SSO/OIDC 认证流程的攻击，涵盖 redirect_uri 劫持、state CSRF 与 token 泄露。信号:OAuth,SSO,OIDC,redirect_uri劫持,token泄露"
+when-to-use: "Use when a target exposes third-party login, redirect_uri parameters, authorization_code flows, or OpenID Connect discovery endpoints and you need to test OAuth/SSO weaknesses."
 metadata:
-  tags: "oauth,sso,openid,oidc,redirect_uri,authorization,token,login,认证,第三方登录,cas,saml"
+  tags: "oauth,sso,openid,oidc,redirect_uri,authorization,token,login,authentication,third-party login,cas,saml"
   category: "exploit"
 ---
 
-# OAuth/SSO 攻击方法论
+# OAuth/SSO Attack Methodology
 
-OAuth 2.0 是现代 Web 应用最常见的第三方认证协议。攻击面集中在认证流程的各个跳转环节——redirect_uri 校验、state 参数、token 传递。
+OAuth 2.0 is the most common third-party authentication protocol in modern web applications. The attack surface concentrates on each redirect step of the authentication flow — redirect_uri validation, the state parameter, and token delivery.
 
-## ⛔ 深入参考（必读）
+## ⛔ Further Reading (Must Read)
 
-- redirect_uri 完整 payload、Token 泄露途径、账户接管流程 → [references/oauth-attack-vectors.md](references/oauth-attack-vectors.md)
+- Full redirect_uri payloads, token leakage paths, and account takeover flows → [references/oauth-attack-vectors.md](references/oauth-attack-vectors.md)
 
-## Phase 1: 识别 OAuth 流程
+## Phase 1: Identify the OAuth Flow
 
-点击「第三方登录」，观察重定向 URL 中的 `client_id`, `redirect_uri`, `response_type`, `scope`, `state`。
+Click the third-party login button and observe `client_id`, `redirect_uri`, `response_type`, `scope`, and `state` in the redirect URL.
 
-检查端点：`/.well-known/openid-configuration`, `/oauth/authorize`, `/api/auth/providers`
+Check the endpoints: `/.well-known/openid-configuration`, `/oauth/authorize`, `/api/auth/providers`
 
-## Phase 2: redirect_uri 劫持（最常见）
+## Phase 2: redirect_uri Hijacking (Most Common)
 
-目标：让 code/token 发到攻击者 URL。快速测试：
+Objective: make the code/token go to the attacker's URL. Quick tests:
 ```
 redirect_uri=https://target.com/callback/../evil
 redirect_uri=https://evil.target.com/callback
 redirect_uri=https://target.com/callback?next=https://evil.com
 redirect_uri=https://evil.com/steal
 ```
-→ 完整 payload 列表 → [references/oauth-attack-vectors.md](references/oauth-attack-vectors.md)
+→ Full payload list → [references/oauth-attack-vectors.md](references/oauth-attack-vectors.md)
 
-## Phase 3: state 缺失 → CSRF 攻击
+## Phase 3: Missing state → CSRF Attack
 
-无 `state` 参数时：攻击者获取 code → 构造 callback 链接 → 诱导受害者点击 → 账户绑定攻击者第三方账户
+When there is no `state` parameter: the attacker obtains a code → crafts a callback link → lures the victim into clicking it → the account gets linked to the attacker's third-party account
 
-## Phase 4: Token 泄露
+## Phase 4: Token Leakage
 
-- **Referer 泄露**：回调页含外部资源 → token 通过 Referer 头外泄
-- **Implicit Flow**：`response_type=token` → access_token 在 URL fragment
-- **日志**：code 在 URL query，可能被记录
+- **Referer leakage**: the callback page loads external resources → the token leaks through the Referer header
+- **Implicit flow**: `response_type=token` → the access_token is in the URL fragment
+- **Logs**: the code is in the URL query and may be recorded
 
-## Phase 5: 其他攻击面
+## Phase 5: Other Attack Surfaces
 
-- Scope 提升：`scope=openid profile email admin`
-- client_secret 泄露：检查 JS 源码/GitHub/配置文件
-- 账户接管：邮箱匹配合并 → [references/oauth-attack-vectors.md](references/oauth-attack-vectors.md)
+- Scope escalation: `scope=openid profile email admin`
+- client_secret leakage: check JS source code, GitHub, and configuration files
+- Account takeover: email matching and merging → [references/oauth-attack-vectors.md](references/oauth-attack-vectors.md)
 
-## Phase 6: CTF 与账户接管
+## Phase 6: CTF and Account Takeover
 
-### 6.1 CTF 中的 OAuth
-- 重点考察 redirect_uri 绕过，Flag 在管理员 token 或高权限 scope API 中
+### 6.1 OAuth in CTFs
+- The focus is redirect_uri bypass, and the flag usually sits in the admin token or a high-privilege scoped API
 
-### 6.2 账户接管 — 邮箱预关联攻击
-1. 攻击者注册 `attacker@target.com`（后缀匹配利用）
-2. 在第三方平台修改邮箱为受害者邮箱
-3. 受害者 OAuth 登录时自动关联到已有账户（邮箱匹配）
-4. 关键：检查目标是否验证邮箱（绕过邮箱验证）
+### 6.2 Account Takeover — Email Pre-Registration Attack
+1. The attacker registers `attacker@target.com` (exploiting suffix matching)
+2. Changes the email on the third-party platform to the victim's email
+3. When the victim logs in via OAuth, the account is automatically linked to the existing account (email match)
+4. Key point: check whether the target verifies the email (email verification bypass)

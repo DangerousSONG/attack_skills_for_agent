@@ -1,6 +1,10 @@
 ---
 name: 0xcarnemuerta-security-hub-portfolio
 description: Browser-based security portfolio and technical blog covering AI security, data protection, ML threats, and secure engineering practices
+zh-signals: "搭建与定制基于浏览器的安全作品集和技术博客站点，内容涵盖 AI 安全、数据保护与 ML 威胁。信号:安全作品集,静态站点,技术博客,GitHub Pages,前端部署"
+when-to-use: >-
+  Use when setting up, serving, customizing, or deploying the 0xcarnemuerta security
+  portfolio and blog — a static HTML/CSS/JS site with no backend.
 triggers:
   - "set up the 0xcarnemuerta security portfolio locally"
   - "how do I customize the security hub portfolio"

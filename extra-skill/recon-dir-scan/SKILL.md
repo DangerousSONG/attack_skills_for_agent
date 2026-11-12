@@ -1,6 +1,8 @@
 ---
 name: recon-dir-scan
 description: Directory and file enumeration using ffuf, gobuster, dirsearch, and feroxbuster. Use this skill when user needs to discover hidden directories, enumerate files, find backup files, or map application structure through path fuzzing.
+zh-signals: "使用 ffuf、gobuster、dirsearch 与 feroxbuster 进行目录与文件枚举，发现隐藏目录、备份文件并通过路径模糊测试映射应用结构。信号:目录扫描,文件枚举,ffuf,gobuster,feroxbuster,路径模糊"
+when-to-use: "Use when you need to discover hidden directories, enumerate files or backup files, or map an application's structure through path fuzzing with ffuf, gobuster, dirsearch, or feroxbuster."
 ---
 
 # Directory and File Enumeration

@@ -1,6 +1,9 @@
 ---
 name: solidity-security
 description: "Master smart contract security best practices, vulnerability prevention, and secure Solidity development patterns."
+zh-signals: "指导 Solidity 智能合约安全开发与审计，防范重入、溢出与访问控制缺陷。信号:Solidity安全,智能合约审计,重入攻击,访问控制,DeFi安全。"
+when-to-use: >-
+  Use when writing or auditing Solidity smart contracts and DeFi protocols, reviewing for reentrancy, overflow, access-control, or gas-related security issues, or preparing contracts for a professional audit.
 risk: safe
 source: community
 date_added: "2026-02-27"

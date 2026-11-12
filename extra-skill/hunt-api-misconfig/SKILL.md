@@ -1,6 +1,8 @@
 ---
 name: hunt-api-misconfig
 description: "Hunt API security misconfiguration — mass assignment, JWT attacks, prototype pollution, HTTP verb tampering. Mass assignment: send {is_admin:true, role:admin, verified:true} on profile/account/reset endpoints — server blindly applies. JWT: alg=none, weak HMAC bruteforce, kid path traversal, JWK injection, token confusion. Prototype pollution: __proto__ injection in JSON merge / Object.assign / lodash _.merge → polluted prototype reaches sink (RCE in Node, XSS in browser). HTTP verb: GET-bypass-CSRF, X-HTTP-Method-Override, TRACE enabled. Detection: API responses with extra fields, JWTs in headers (decode at jwt.io). CORS misconfiguration (reflect-any-origin, null origin, subdomain-regex bypass, postMessage) is owned by hunt-cors. Use when hunting API misconfigs, JWT flaws, mass-assignment, prototype pollution."
+zh-signals: "狩猎 API 安全配置错误，覆盖批量赋值、JWT 算法攻击、原型链污染与 HTTP 方法篡改。信号:API配置错误,批量赋值,JWT,原型链污染,方法篡改"
+when-to-use: "Use when hunting API misconfigurations — mass assignment, JWT flaws, prototype pollution, or HTTP verb tampering — on endpoints that accept JSON bodies and bearer tokens."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

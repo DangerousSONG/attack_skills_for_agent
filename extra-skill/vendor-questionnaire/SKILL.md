@@ -1,6 +1,8 @@
 ---
 name: vendor-questionnaire
 description: Vendor security questionnaire workflow — vendor tiering, standardized questionnaires (CAIQ, SIG-Lite/Core, VSA), custom authoring, evidence reuse against existing attestations (SOC 2, ISO 27001), and ongoing vendor-risk monitoring.
+zh-signals: "处理供应商安全问卷流程，包括分级、CAIQ/SIG 问卷、证据复用与持续供应商风险监控。信号:供应商评估,安全问卷,CAIQ,SOC2,第三方风险"
+when-to-use: "Use when tiering vendors, authoring or answering security questionnaires (CAIQ, SIG-Lite/Core, VSA), reusing attestation evidence, or monitoring ongoing vendor risk."
 ---
 
 # Vendor Security Questionnaire

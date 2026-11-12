@@ -1,6 +1,10 @@
 ---
 name: recon-port-scan
 description: Port scanning and service identification using nmap, masscan, and rustscan. Use this skill when user needs to discover open ports, identify running services, detect service versions, or fingerprint operating systems on target hosts.
+zh-signals: "使用 nmap、masscan、rustscan 进行端口扫描与服务识别，发现开放端口、服务版本与操作系统指纹。信号:端口扫描,nmap,masscan,服务识别,指纹"
+when-to-use: >-
+  Use when you need to discover open ports, identify running services, detect service versions,
+  or fingerprint operating systems on authorized target hosts.
 ---
 
 # Port Scanning / Reconnaissance

@@ -2,6 +2,8 @@
 name: ruzzy
 type: fuzzer
 description: "Sets up and runs Ruzzy, Trail of Bits' coverage-guided Ruby fuzzer and the only production-ready one for the language. Covers harness structure, fuzzing pure Ruby and the native C extensions in gems, and sanitizer builds. Use when fuzzing a Ruby library or gem, testing a Ruby C extension for memory safety, or asking how to fuzz Ruby at all."
+zh-signals: "Trail of Bits 的 Ruby 覆盖率引导模糊测试器配置与运行方法。信号:模糊测试,Ruzzy,Ruby,内存安全,覆盖率引导"
+when-to-use: "Use when fuzzing a Ruby library or gem, testing a Ruby C extension for memory safety, or asking how to fuzz Ruby at all."
 ---
 
 # Ruzzy

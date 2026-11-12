@@ -1,6 +1,9 @@
 ---
 name: anthropic-cybersecurity-skills
 description: Use 754 structured cybersecurity skills mapped to MITRE ATT&CK, NIST CSF, ATLAS, D3FEND, and NIST AI RMF for AI-driven security operations
+zh-signals: "提供 754 个映射到 MITRE ATT&CK、NIST CSF、ATLAS、D3FEND 与 NIST AI RMF 的安全技能库。信号:安全技能库,MITRE ATT&CK,NIST CSF,ATLAS,安全运营。"
+when-to-use: >-
+  Use when you need to discover, map, or load structured cybersecurity skills for incident investigation, malware analysis, memory forensics, threat hunting, or cloud security posture work.
 triggers:
   - "help me investigate this security incident"
   - "analyze this malware sample"

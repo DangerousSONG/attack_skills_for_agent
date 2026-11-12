@@ -1,95 +1,97 @@
 ---
 name: red-team-assessment
-description: "红队评估全流程方法论。当开始一个完整的渗透测试项目/红队评估、需要从侦察到报告的完整流程编排时使用。适用于外网打点、安全评估项目、定期渗透测试。本技能负责任务调度——具体漏洞利用调用专项 skills，不要在本技能内做深度漏洞测试"
+description: "End-to-end red-team assessment methodology. Use when starting a complete penetration test project or red-team assessment and you need the full orchestration from reconnaissance to reporting. Suitable for external foothold acquisition, security assessment projects, and periodic penetration tests. This skill handles task scheduling — invoke specialized skills for specific exploitation, and do not perform deep vulnerability testing inside this skill"
+zh-signals: "红队评估全流程编排，从侦察到报告，适用于外网打点与定期渗透测试。信号:红队评估,渗透测试流程,外网打点,任务编排,安全评估"
+when-to-use: "Use when starting a full penetration test or red-team assessment and you need end-to-end orchestration from reconnaissance to reporting, delegating exploitation to specialized skills."
 metadata:
-  tags: "red-team,assessment,渗透测试,安全评估,全流程,外网打点,automation,pentest"
+  tags: "red-team,assessment,pentest,security-assessment,end-to-end,foothold,automation,pentest"
   category: "general"
 ---
 
-# 红队评估全流程方法论
+# Red Team Assessment End-to-End Methodology
 
-本技能是渗透测试的**总流程编排**——不包含具体漏洞利用技术（那些在 exploit/ 的各专项 skill 中），而是指导你按正确的顺序、用正确的策略推进整个评估。
+This skill is the **overall process orchestration** for a penetration test — it does not contain specific exploitation techniques (those live in the specialized skills under exploit/), but it guides you to advance the entire assessment in the right order and with the right strategy.
 
-## Phase 1: 被动侦察（零接触）
+## Phase 1: Passive Reconnaissance (Zero Contact)
 
-在不触碰目标的情况下收集情报：
+Gather intelligence without touching the target:
 
-1. **OSINT 搜索引擎**
-   - 通过 `http_request` 或 `curl` 查询 FOFA / Quake / Hunter API 三引擎交叉搜索
-   - 目标：IP/域名资产清单、暴露的服务、技术栈
+1. **OSINT search engines**
+   - Query the FOFA / Quake / Hunter APIs through `http_request` or `curl` for cross-engine searching
+   - Target: an inventory of IP/domain assets, exposed services, and the technology stack
 
-2. **公开信息收集**
-   - GitHub/GitLab 搜索组织名和域名（可能泄露源码/凭据）
-   - 招聘信息分析（泄露技术栈和内部系统）
-   - SSL 证书透明度日志（发现子域名）
+2. **Public information gathering**
+   - Search GitHub/GitLab for organization names and domains (may leak source code / credentials)
+   - Job posting analysis (leaks the technology stack and internal systems)
+   - SSL certificate transparency logs (find subdomains)
 
-**产出**：初始资产清单 + 技术栈概览
+**Output**: initial asset inventory + technology stack overview
 
-## Phase 2: 主动侦察
+## Phase 2: Active Reconnaissance
 
-基于被动侦察结果，有针对性地主动探测：
+Based on the passive reconnaissance results, actively probe in a targeted way:
 
-1. **子域名枚举** — `subfinder` / `ksubdomain`
-2. **端口扫描** — `naabu`（聚焦高价值端口，nmap 作为备选）
-3. **存活检测** — `httpx`（确认 HTTP 服务）
-4. **指纹识别** — `httpx -tech-detect` / `nuclei -t technologies/`（技术栈 → 决定攻击方向）
-5. **目录爆破** — `spray` / `ffuf`（发现隐藏入口）
+1. **Subdomain enumeration** — `subfinder` / `ksubdomain`
+2. **Port scanning** — `naabu` (focus on high-value ports, nmap as a fallback)
+3. **Live host detection** — `httpx` (confirm HTTP services)
+4. **Fingerprinting** — `httpx -tech-detect` / `nuclei -t technologies/` (technology stack → determines the attack direction)
+5. **Directory brute-forcing** — `spray` / `ffuf` (discover hidden entry points)
 
-**产出**：完整资产地图（域名+IP+端口+技术栈+隐藏路径）
+**Output**: a complete asset map (domain + IP + port + technology stack + hidden paths)
 
-## Phase 3: 漏洞发现
+## Phase 3: Vulnerability Discovery
 
-### 3.1 自动化扫描
-- `nuclei -u TARGET -severity critical,high` — Nuclei POC 扫描
-- `nuclei -u TARGET -t default-logins/` — 默认口令检测
+### 3.1 Automated Scanning
+- `nuclei -u TARGET -severity critical,high` — Nuclei POC scanning
+- `nuclei -u TARGET -t default-logins/` — default credential detection
 
-### 3.2 手动测试（按资产类型）
-对每个 Web 应用，根据技术栈选择专项测试：
+### 3.2 Manual Testing (By Asset Type)
+For each web application, select specialized tests based on the technology stack:
 
-| 发现 | 测试方向 |
+| Finding | Test Direction |
 |------|----------|
-| 登录页面 | SQL注入、弱密码 |
-| 搜索/查询功能 | SQL注入、XSS |
-| 文件上传 | 文件上传绕过 |
-| API 端点 | IDOR、认证绕过 |
-| 模板渲染 | SSTI |
-| JWT Token | JWT 攻击 |
-| Java 应用 | 反序列化 |
+| Login page | SQL injection, weak passwords |
+| Search / query function | SQL injection, XSS |
+| File upload | File upload bypass |
+| API endpoint | IDOR, authentication bypass |
+| Template rendering | SSTI |
+| JWT token | JWT attacks |
+| Java application | Deserialization |
 
-### 3.3 关键决策
-- **广度优先**：先对所有资产做快速扫描，标记所有可能的入口
-- **深度攻击**：选择最有可能突破的 2-3 个入口做深入测试
-- 不要在一个点上卡太久——3-5 轮无进展就换方向
+### 3.3 Key Decisions
+- **Breadth first**: run a quick scan across all assets first and mark every possible entry point
+- **Deep attacks**: pick the 2-3 entry points most likely to yield a foothold and test them deeply
+- Do not get stuck on a single point — after 3-5 rounds without progress, change direction
 
-## Phase 4: 漏洞利用与验证
+## Phase 4: Exploitation and Validation
 
-发现漏洞后，进行利用验证：
-1. 确认漏洞可利用（PoC 验证）
-2. 评估影响范围（数据泄露 / RCE / 权限提升）
-3. 如获得 shell → 执行后渗透
-4. 记录完整的利用步骤（复现用）
+After discovering a vulnerability, validate the exploitation:
+1. Confirm the vulnerability is exploitable (PoC validation)
+2. Assess the impact scope (data leak / RCE / privilege escalation)
+3. If you obtain a shell → proceed with post-exploitation
+4. Record the complete exploitation steps (for reproduction)
 
-## Phase 5: 报告输出
+## Phase 5: Report Output
 
-生成正式报告。
+Produce the formal report.
 
-**关键原则**：
-- 发现按风险等级排序（严重 > 高 > 中 > 低 > 信息）
-- 每个发现必须有：描述、影响、复现步骤、修复建议
-- 管理层摘要用非技术语言
-- 附录包含工具列表和详细技术数据
+**Key principles**:
+- Order the findings by risk level (critical > high > medium > low > informational)
+- Every finding must have: description, impact, reproduction steps, remediation recommendation
+- The executive summary uses non-technical language
+- The appendix contains the tool list and detailed technical data
 
-## 时间分配建议
-| 阶段 | 时间占比 |
+## Recommended Time Allocation
+| Phase | Time Share |
 |------|----------|
-| 被动+主动侦察 | 20% |
-| 漏洞发现 | 30% |
-| 利用验证 | 35% |
-| 报告 | 15% |
+| Passive + active reconnaissance | 20% |
+| Vulnerability discovery | 30% |
+| Exploitation validation | 35% |
+| Reporting | 15% |
 
-## 时间管理策略
-- 快速测试模式：30 分钟或 60 分钟时间限制内完成
-- 优先选择最容易、最有效的攻击路径，再深入复杂漏洞
-- 时间有限时注重效率和 ROI，合理分配资源
-- 遇到瓶颈及时换路（pivot）：切换攻击面、放弃当前路径、转向其他攻击面
-- 寻找替代方案和新入口点
+## Time Management Strategy
+- Fast testing mode: complete within a 30-minute or 60-minute time limit
+- Prioritize the easiest and most effective attack path, then move on to complex vulnerabilities
+- When time is limited, focus on efficiency and ROI and allocate resources sensibly
+- When you hit a bottleneck, change path (pivot): switch the attack surface, abandon the current path, and turn to another attack surface
+- Look for alternative approaches and new entry points

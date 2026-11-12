@@ -1,6 +1,8 @@
 ---
 name: supply-chain-attack-recon
 description: External recon for software supply-chain attack surface — package-namespace squatting candidates, dependency-confusion vulnerabilities, GitHub Actions injection openings, container image registry exposure, SBOM mining, internal-package-name leakage, and CI/CD configuration exposure. Reconnaissance and identification ONLY — actual package publishing / typosquat attacks are EXTERNAL-OFFENSIVE and require explicit written sign-off because they can affect the entire npm/PyPI ecosystem. Use when the target has a public GitHub org, when their build artifacts/SBOMs are reachable, when their docker images are on Docker Hub/GHCR, or when you find internal package names in their JS bundles.
+zh-signals: "软件供应链攻击面的外部侦察，识别命名空间抢注、依赖混淆、CI 暴露与镜像泄露。信号:供应链侦察,依赖混淆,名称抢注,SBOM,CI/CD 暴露"
+when-to-use: "Use when a target has a public GitHub org, reachable SBOMs or build artifacts, or images on public registries and supply-chain recon is in scope."
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

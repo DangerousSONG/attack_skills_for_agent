@@ -1,6 +1,9 @@
 ---
 name: hunt-grpc
 description: "Hunt gRPC vulnerabilities — server reflection enabled (enumerate all services/methods), missing authentication / metadata-stripping on internal endpoints, plaintext gRPC over HTTP/2, internal endpoint disclosure, proto file leakage, gRPC-Web/grpc-gateway transcoding injection, and HTTP/2 Rapid Reset DoS (CVE-2023-44487). Use when target exposes port 50051 / 443 / 8443 / 9090 with HTTP/2, when grpcurl/grpcui detects reflection, when an Envoy or grpc-gateway proxy is fronting a microservice, or when recon reveals a microservice architecture."
+zh-signals: "猎取 gRPC 漏洞，覆盖反射枚举、缺失认证、元数据伪造、proto 泄露与 gRPC-Web 转码注入。信号:gRPC反射,50051端口,认证绕过,元数据伪造,gRPC-Web。"
+when-to-use: >-
+  Use when a target exposes gRPC on ports such as 50051, 443, 8443, or 9090, when grpcurl detects server reflection, or when an Envoy/grpc-gateway proxy fronts a microservice.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

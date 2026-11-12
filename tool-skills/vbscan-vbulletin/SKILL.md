@@ -2,37 +2,38 @@
 name: vbscan-vbulletin
 description: "VBScan: vBulletin vulnerability scanning. Signals: web vulnerabilities, injection, vBulletin scan, with cookie, report output."
 zh-signals: "VBScan: vBulletin 漏洞扫描。信号:web漏洞,注入,vBulletin 扫描,带 Cookie,输出报告。"
+when-to-use: "Use when scanning a vBulletin forum for known version, component, and vulnerability issues."
 ---
 
 # VBScan
 
-- 攻击大类:C09 Web应用漏洞利用
-- 上游仓库:https://github.com/rezasp/vbscan
-- 上游 License:GPL-3.0(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C09 Web Application Vulnerability Exploitation
+- Upstream Repository: https://github.com/rezasp/vbscan
+- Upstream License: GPL-3.0 (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/rezasp/vbscan
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `perl vbscan.pl https://t.com/forum` | vBulletin 扫描 |
-| `--cookies 'x=1'` | 带 Cookie |
-| `-o` | 输出报告 |
+| `perl vbscan.pl https://t.com/forum` | vBulletin scan |
+| `--cookies 'x=1'` | With Cookie |
+| `-o` | Output report |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### vBulletin 漏洞扫描
+### vBulletin vulnerability scan
 
 ```bash
 perl vbscan.pl https://t.com/forum
-# 版本/组件/漏洞库比对
+# Version / component / vulnerability database comparison
 ```
 
-## 注意事项
+## Notes
 
-vBulletin 论坛专项扫描器。
+A dedicated scanner for vBulletin forums.

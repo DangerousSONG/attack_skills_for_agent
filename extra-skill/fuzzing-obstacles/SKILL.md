@@ -2,6 +2,8 @@
 name: fuzzing-obstacles
 type: technique
 description: "Patches past the barriers that stop a fuzzer making progress — checksum and hash verification, magic-value validation, time-based seeds, and other non-deterministic global state. Covers locating the blocking check, neutering it behind a fuzzing build flag, and avoiding the false positives a patch can introduce. Use when a fuzzer is stuck at validation, when coverage shows large regions behind a checksum, or when valid inputs are impractical to generate."
+zh-signals: "通过条件编译绕过校验和、魔术值与时间种子等模糊测试障碍。信号:模糊测试,校验和,条件编译,确定性问题,覆盖率"
+when-to-use: "Use when a fuzzer is stuck at checksum verification, magic-value validation, or non-deterministic global state, or coverage shows large regions behind such checks."
 ---
 
 # Overcoming Fuzzing Obstacles

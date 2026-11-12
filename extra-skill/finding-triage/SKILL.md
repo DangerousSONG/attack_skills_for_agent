@@ -1,6 +1,8 @@
 ---
 name: finding-triage
 description: "Triage a single security finding — from a scanner, audit, advisory, or report — to a defensible disposition with a mitigation plan, false-positive justification, or accepted-risk writeup. Use when the user mentions 'triage this finding,' 'is this a real vulnerability,' 'mitigation plan,' 'false positive,' 'accept this risk,' 'compensating controls,' 'risk justification,' 'security ticket,' 'CVSS this,' 'should we fix this,' 'disposition,' 'sign off on,' or has a single security finding and needs to decide what to do."
+zh-signals: "对单条安全发现进行定级与处置决策。信号:漏洞定级,误报判定,处置,CVSS,风险接受"
+when-to-use: "Use when the user has a single security finding and needs a defensible disposition, mitigation plan, false-positive justification, or accepted-risk writeup."
 allowed-tools: Read, Grep, Glob, Bash, WebSearch
 ---
 

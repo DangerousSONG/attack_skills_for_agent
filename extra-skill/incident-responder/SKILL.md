@@ -1,6 +1,8 @@
 ---
 name: incident-responder
 description: Expert SRE incident responder specializing in rapid problem resolution, modern observability, and comprehensive incident management.
+zh-signals: "SRE 事件响应，快速定位故障、利用可观测性并执行完整事件管理与复盘。信号:事件响应,SRE,故障处置,可观测性,事后复盘"
+when-to-use: "Use when an active incident needs rapid severity assessment, coordinated response, and post-incident analysis."
 risk: critical
 source: community
 date_added: '2026-02-27'

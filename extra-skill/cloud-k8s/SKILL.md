@@ -1,6 +1,10 @@
 ---
 name: cloud-k8s
 description: "Authorized cloud, container, and Kubernetes security assessment: metadata SSRF, IAM misconfiguration, container escape paths, and cluster RBAC review."
+zh-signals: "授权范围内开展云、容器与 Kubernetes 安全评估，涵盖元数据 SSRF、IAM 配置错误、容器逃逸与集群 RBAC 审查。信号:云安全,Kubernetes,容器逃逸,IAM,RBAC"
+when-to-use: >-
+  Use when assessing cloud workloads, containers, or Kubernetes clusters within an approved
+  scope, including metadata SSRF, IAM misconfiguration, and RBAC review.
 risk: offensive
 source: "https://github.com/zhaoxuya520/reverse-skill"
 source_repo: "zhaoxuya520/reverse-skill"
@@ -30,46 +34,46 @@ license_source: "https://github.com/zhaoxuya520/reverse-skill/blob/main/LICENSE"
 - Reviewing IAM/RBAC configurations for privilege-escalation paths.
 
 
-## 适用场景
+## Applicable Scenarios
 
-- 云元数据 SSRF（169.254.169.254 / IMDS）
-- IAM 过度权限、公开存储桶、错误安全组
-- Docker/containerd 逃逸路径评估
-- Kubernetes RBAC、Secrets、Admission、供应链镜像
-- 容器镜像漏洞（可联动 `supply-chain-security/`）
+- Cloud metadata SSRF (169.254.169.254 / IMDS)
+- Over-permissive IAM, public storage buckets, misconfigured security groups
+- Docker/containerd escape path assessment
+- Kubernetes RBAC, Secrets, Admission, supply chain images
+- Container image vulnerabilities (can be linked with `supply-chain-security/`)
 
-## 工作流
+## Workflow
 
-### Phase 1 — 身份与边界
+### Phase 1 — Identity and Boundaries
 
 ```text
-□ 当前身份：云 AK/SK、K8s SA、节点 SSH？
-□ 范围：单账号 / 单 cluster / 单 namespace
-□ 网络档：authorized_target_only
+□ Current identity: cloud AK/SK, K8s SA, node SSH?
+□ Scope: single account / single cluster / single namespace
+□ Network tier: authorized_target_only
 ```
 
-### Phase 2 — 云控制面
+### Phase 2 — Cloud Control Plane
 
 ```bash
-# 示例（按厂商替换；MUST 在授权账号内）
+# Example (replace per vendor; MUST stay within the authorized account)
 aws sts get-caller-identity
 aws s3 ls
-# Azure / GCP 对应 identity 命令
+# Corresponding identity commands for Azure / GCP
 ```
 
 ```text
-□ 公开桶 / 错误 ACL
-□ 元数据：IMDSv1 vs v2；SSRF 链
-□ 角色可扮演（PassRole）与横向
+□ Public buckets / misconfigured ACLs
+□ Metadata: IMDSv1 vs v2; SSRF chains
+□ Role assumption (PassRole) and lateral movement
 ```
 
-### Phase 3 — 容器
+### Phase 3 — Containers
 
 ```text
-□ 是否 privileged / hostPath / hostNetwork
-□ capabilities（SYS_ADMIN 等）
-□ 可写宿主机路径 → 逃逸候选
-□ 镜像历史与已知 CVE → Trivy
+□ privileged / hostPath / hostNetwork present?
+□ capabilities (SYS_ADMIN and similar)
+□ Writable host paths → escape candidates
+□ Image history and known CVEs → Trivy
 ```
 
 ### Phase 4 — Kubernetes
@@ -81,40 +85,40 @@ kubectl get clusterrolebindings
 ```
 
 ```text
-□ SA token 挂载与权限
-□ 危险 admission webhook 缺失
-□ etcd / dashboard 暴露
-□ 网络策略是否默认放行
+□ SA token mounting and permissions
+□ Missing dangerous admission webhooks
+□ etcd / dashboard exposure
+□ Whether network policies default to allow
 ```
 
-## 工具链
+## Toolchain
 
-| 工具 | 用途 | 自举 |
+| Tool | Purpose | Bootstrap |
 |------|------|------|
-| kubectl | 集群交互 | 手动 |
-| trivy | 镜像/IaC | bootstrap `trivy` 若可用 |
-| kube-bench / kubeaudit | CIS/配置 | 手动 |
-| pacu / scoutsuite | 云审计（授权） | 手动 |
-| nuclei | 已知云漏洞模板 | bootstrap nmap/nuclei 生态 |
+| kubectl | Cluster interaction | Manual |
+| trivy | Image/IaC | bootstrap `trivy` if available |
+| kube-bench / kubeaudit | CIS/configuration | Manual |
+| pacu / scoutsuite | Cloud audit (authorized) | Manual |
+| nuclei | Known cloud vulnerability templates | bootstrap the nmap/nuclei ecosystem |
 
-## 参考
+## References
 
 - `references/k8s-cloud-checklist.md`
-- CTF 对照：`../../CTF-Sandbox-Orchestrator/competition-agent-cloud/`
+- CTF cross-reference: `../../CTF-Sandbox-Orchestrator/competition-agent-cloud/`
 - `../supply-chain-security/` `../pentest-tools/`
 
-## 路由上下文
+## Routing Context
 
-**上游**: MASTER R23  
-**下游**: 拿到节点 shell → `attack-chain` / `windows-ad`；镜像漏洞 → supply-chain  
-**MUST NOT**: 未授权扫公有云其他租户
+**Upstream**: MASTER R23  
+**Downstream**: obtain a node shell → `attack-chain` / `windows-ad`; image vulnerabilities → supply-chain  
+**MUST NOT**: scan other tenants of a public cloud without authorization
 
-## 任务完成自检
+## Task Completion Self-Check
 
-- [ ] 是否限定在授权账号/cluster？
-- [ ] 发现是否含复现与影响？
-- [ ] 是否避免破坏性操作？
-- [ ] 报告 / journal？
+- [ ] Did you stay within the authorized account/cluster?
+- [ ] Do the findings include reproduction and impact?
+- [ ] Did you avoid destructive operations?
+- [ ] Report / journal?
 
 ## Limitations
 

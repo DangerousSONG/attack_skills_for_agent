@@ -1,86 +1,87 @@
 ---
 name: php-codeigniter-audit
-description: CodeIgniter 框架特效安全审计工具。针对 CodeIgniter 的 CSRF、XSS 输出过滤、数据库查询构造、路由与验证器配置、会话 Cookie 安全等机制进行白盒静态审计，并映射到通用漏洞类型体系（CSRF/AUTH/XSS/SQL/CFG/SESS 等）。
+description: "CodeIgniter framework-specific security audit tool. Performs white-box static analysis of CodeIgniter's CSRF, XSS output filtering, database query construction, router and validator configuration, session cookie security, and other mechanisms, and maps the results to the generic vulnerability type taxonomy (CSRF/AUTH/XSS/SQL/CFG/SESS, etc.)."
+zh-signals: "CodeIgniter 框架白盒安全审计。信号:CodeIgniter,白盒审计,CSRF,XSS,SQL注入,会话安全"
+when-to-use: "Use when auditing a CodeIgniter project's framework configuration for CSRF, XSS output filtering, SQL construction, router and validator, and session cookie issues."
 ---
 
-# PHP CodeIgniter 框架安全审计（php-codeigniter-audit）
+# PHP CodeIgniter Framework Security Audit (php-codeigniter-audit)
 
-分析 CodeIgniter 项目的框架机制与配置踩坑，重点覆盖：
-- CSRF 保护是否启用与 token 名称/校验逻辑是否正确
-- 输出过滤与 XSS 防护（CI 自带过滤器是否被禁用或错误使用）
-- 数据库查询构造：是否存在用户输入拼接到 `$this->db->query` 或原生 SQL
-- 表单验证器是否被覆盖或绕过
-- 会话 Cookie flags 安全性（CI 会话设置）
+Analyze the framework mechanisms and configuration pitfalls of CodeIgniter projects, focusing on:
+- Whether CSRF protection is enabled and whether the token name/validation logic is correct
+- Output filtering and XSS protection (whether CI's built-in filters are disabled or misused)
+- Database query construction: whether user input is concatenated into `$this->db->query` or raw SQL
+- Whether form validators are overridden or bypassed
+- Session cookie flag security (CI session settings)
 
-## 输入
-用户提供：
-- `source_path`：CodeIgniter 项目根目录
-可选：
-- `output_path`：输出目录路径（默认 `{source_path}_audit`）
+## Input
+Provided by the user:
+- `source_path`: CodeIgniter project root directory
+Optional:
+- `output_path`: output directory path (default `{source_path}_audit`)
 
-## 输出目录
-输出到：
+## Output Directory
+Output to:
 ```
 {output_path}/framework_audit/
   codeigniter_{timestamp}.md
 ```
 
-## 框架识别（必做）
-必须给出识别证据（不允许空口断言）：
-- 典型目录：`application/`、`system/`
-- 配置文件：`application/config/config.php` 或会话/安全配置文件
-- 版本线索：`composer.json` 或 `system/core/` 结构
+## Framework Identification (Required)
+Must present identification evidence (no unsupported assertions):
+- Typical directories: `application/`, `system/`
+- Configuration files: `application/config/config.php` or session/security configuration files
+- Version clues: `composer.json` or the `system/core/` structure
 
-## 风险类型映射（必做）
-每条发现都必须写明：
-- 通用类型码：`CSRF` / `XSS` / `SQL` / `AUTH` / `CFG` / `SESS` / `LOGIC` 等
-- 映射原因
+## Risk Type Mapping (Required)
+Every finding must state:
+- Generic type code: `CSRF` / `XSS` / `SQL` / `AUTH` / `CFG` / `SESS` / `LOGIC` etc.
+- The reason for the mapping
 
-## 必审清单（必做：逐项检查并输出结果）
+## Mandatory Audit Checklist (Required: check each item and output the result)
 
-### 1) CSRF 保护（CSRF）
-必须定位并输出：
-- CSRF 是否启用（CI 3：`config.php` 的 csrf 配置，CI 4：Security 类配置）
-- token 名称、校验入口与跳过规则（是否某些控制器/方法未启用校验）
+### 1) CSRF Protection (CSRF)
+Must locate and output:
+- Whether CSRF is enabled (CI 3: csrf settings in `config.php`; CI 4: Security class configuration)
+- Token name, validation entry point, and skip rules (whether some controllers/methods do not enable validation)
 
-判定规则：
-- 存在状态变更路由但未启用 CSRF，则输出 CSRF 风险
+Decision rules:
+- If a state-changing route exists without CSRF enabled, output a CSRF risk
 
-### 2) XSS 输出防护（XSS/CFG）
-必须定位并输出：
-- CI 的 XSS 过滤器是否启用（如 `global_xss_filtering`、`Security::xss_clean` 等）
-- 视图层是否对用户输入做了正确 `html_escape` 或等价转义
+### 2) XSS Output Protection (XSS/CFG)
+Must locate and output:
+- Whether CI's XSS filters are enabled (such as `global_xss_filtering`, `Security::xss_clean`)
+- Whether the view layer applies proper `html_escape` or equivalent escaping to user input
 
-判定规则：
-- 如果禁用过滤或未转义输出，且用户输入能进入视图输出，则输出 XSS
+Decision rules:
+- If filtering is disabled or output is unescaped and user input can reach the view output, output an XSS risk
 
-### 3) 数据库查询拼接（SQL）
-必须定位并输出：
-- 原生查询：`$this->db->query($sql)` 或 `->query($userInput)` 的拼接证据
-- 正确路径：Query Builder 与绑定参数使用
+### 3) Database Query Concatenation (SQL)
+Must locate and output:
+- Raw queries: concatenation evidence in `$this->db->query($sql)` or `->query($userInput)`
+- The correct path: Query Builder with bound parameters
 
-判定规则：
-- 若存在用户输入进入 SQL 字符串拼接，输出 SQL 风险
+Decision rules:
+- If user input enters an SQL string concatenation, output an SQL risk
 
-### 4) 会话与 Cookie（SESS/CFG）
-必须定位并输出：
-- cookie flags：HttpOnly/Secure/SameSite（如在项目中配置）
-- session 配置：会话超时、固定防护（如存在）
+### 4) Session and Cookie (SESS/CFG)
+Must locate and output:
+- Cookie flags: HttpOnly/Secure/SameSite (as configured in the project)
+- Session configuration: session timeout, fixation protection (if present)
 
-### 5) 鉴权与访问控制（AUTH）
-必须定位并输出：
-- 控制器中访问保护模式：自定义 `auth` helper、基类 controller 的校验、过滤器
-- 路由层过滤器或中间件（CI 4 filters）
+### 5) Authentication and Access Control (AUTH)
+Must locate and output:
+- Access protection patterns in controllers: custom `auth` helper, base controller checks, filters
+- Router-level filters or middleware (CI 4 filters)
 
-判定规则：
-- 若敏感控制器或方法缺少统一鉴权，输出 AUTH 风险
+Decision rules:
+- If sensitive controllers or methods lack unified authentication, output an AUTH risk
 
-## 可观测 PoC（必做：框架特效可观测验证框架）
-至少给出以下两类其一并写清观察点：
-- CSRF：缺失 CSRF token 调用状态变更路由，观察是否成功与副作用
-- SQL：使用注入 payload 调用疑似拼接 SQL 路径，观察返回差异或错误回显
+## Observable PoC (Required: framework-specific observable verification harness)
+Provide at least one of the following two categories and clearly state the observation point:
+- CSRF: call a state-changing route without a CSRF token, and observe whether it succeeds and its side effects
+- SQL: call a suspected SQL concatenation path with an injection payload, and observe the response difference or error output
 
-## 输出完整性检查（强制）
-- [ ] 输出包含：CSRF/XSS/SQL/Session/Auth 的检查结果
-- [ ] 每条风险都有：映射类型码 + 位置证据 + 可观测验证框架 + 修复建议
-
+## Output Completeness Check (Mandatory)
+- [ ] Output includes: CSRF/XSS/SQL/Session/Auth check results
+- [ ] Every risk has: a mapped type code + location evidence + an observable verification harness + a remediation recommendation

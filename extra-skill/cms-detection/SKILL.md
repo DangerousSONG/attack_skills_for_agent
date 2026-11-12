@@ -1,6 +1,10 @@
 ---
 name: cms-detection
 description: Identify CMS, frameworks, and server technology stacks on live hosts.
+zh-signals: "识别存活主机上的 CMS、Web 框架与服务器技术栈，指导后续针对性测试。信号:cms识别,指纹识别,wordpress,drupal,技术栈,recon"
+when-to-use: >-
+  Use when you have a list of live hosts and need to identify their CMS, framework, server
+  software, or technology stack before choosing attack tests.
 version: 1.1.0
 revision_date: 2026-07-25
 license: MIT

@@ -1,88 +1,92 @@
 ---
 name: mcp-security
 description: |
-  MCP (Model Context Protocol) 协议安全测试方法论。当目标环境使用 MCP Server 集成外部工具、
-  需要评估 MCP 工具描述安全性、或测试 Agent 通过 MCP 调用工具时的安全边界时触发。
-  覆盖: 工具描述投毒、地毯式骗局(动态篡改)、指令覆盖(Shadow Tool)、隐藏指令(ANSI/Unicode)、
-  跨 Server 攻击、Token 窃取、Schema 操纵、上下文溢出。
+  MCP (Model Context Protocol) protocol security testing methodology. Triggered when the target environment integrates MCP servers to expose external tools,
+  when you need to evaluate the security of MCP tool descriptions, or when testing the security boundaries of an agent calling tools over MCP.
+  Covers: tool description poisoning, rug pull (dynamic tampering), instruction override (shadow tool), hidden instructions (ANSI/Unicode),
+  cross-server attacks, token theft, schema manipulation, context overflow.
+zh-signals: "MCP 协议安全测试方法论，覆盖工具描述投毒、指令覆盖与隐藏指令注入。信号:mcp安全,工具投毒,指令覆盖,shadow tool,隐藏指令"
+when-to-use: >-
+  Use when a target environment integrates MCP servers, when evaluating MCP tool
+  description security, or when testing agent tool-call security boundaries.
 metadata:
-  tags: mcp, model context protocol, tool poisoning, mcp server, mcp tool, agent tool, 工具投毒, 指令覆盖, shadow tool, rug pull, 隐藏指令, ansi escape, zero-width, unicode steganography, mcp security, tool description injection
+  tags: mcp, model context protocol, tool poisoning, mcp server, mcp tool, agent tool, tool poisoning, instruction override, shadow tool, rug pull, hidden instructions, ansi escape, zero-width, unicode steganography, mcp security, tool description injection
   category: ai-security
 ---
 
-# MCP 协议安全测试方法论
+# MCP Protocol Security Testing Methodology
 
-## 概述
+## Overview
 
-MCP (Model Context Protocol) 为 LLM 提供标准化的工具调用接口，但其信任模型存在根本缺陷：模型必须解析工具的完整描述（description）来决定如何调用，而这些描述由 MCP Server 控制。攻击者可通过恶意 Server 在描述中注入指令，劫持模型行为——这比传统 Prompt 注入更隐蔽，因为用户通常不会审查工具描述的原始内容。
+MCP (Model Context Protocol) provides a standardized tool invocation interface for LLMs, but its trust model has a fundamental flaw: the model must parse the full description of a tool to decide how to call it, and those descriptions are controlled by the MCP server. An attacker can inject instructions into the description via a malicious server and hijack model behavior — this is stealthier than traditional prompt injection because users typically do not review the raw content of tool descriptions.
 
-## 深入参考
+## Further Reading
 
-- 各 Phase 详细 Payload 与攻击场景 → [references/mcp-attack-payloads.md](references/mcp-attack-payloads.md)
+- Detailed payloads and attack scenarios for each Phase → [references/mcp-attack-payloads.md](references/mcp-attack-payloads.md)
 
 ---
 
-## 攻击面分类
+## Attack Surface Classification
 
-| 攻击类型 | 核心机制 | 危害等级 | GAARM 编号 |
+| Attack Type | Core Mechanism | Severity | GAARM ID |
 |----------|----------|----------|------------|
-| 工具描述投毒 | description 中嵌入恶意指令 | Critical | GAARM.0046 |
-| 地毯式骗局 | 授权后动态篡改 description | Critical | GAARM.0046.001 |
-| 指令覆盖 (Shadow Tool) | 恶意 Server 劫持可信工具行为 | Critical | GAARM.0046.002 |
-| 隐藏指令注入 | ANSI 转义码/零宽 Unicode 隐写 | High | GAARM.0046.003 |
+| Tool description poisoning | Malicious instructions embedded in the description | Critical | GAARM.0046 |
+| Rug pull | Dynamic tampering of the description after authorization | Critical | GAARM.0046.001 |
+| Instruction override (Shadow Tool) | A malicious server hijacks the behavior of a trusted tool | Critical | GAARM.0046.002 |
+| Hidden instruction injection | ANSI escape codes / zero-width Unicode steganography | High | GAARM.0046.003 |
 
 ---
 
-## 方法论概览
+## Methodology Overview
 
-### Phase 0: MCP 环境侦察
-- 枚举目标已连接的 MCP Server 列表及来源（官方/第三方/自建）
-- 提取每个 Server 暴露的工具清单、inputSchema 定义、权限声明
-- 判断客户端的信任模型：是否区分不同 Server 的信任等级、工具调用是否需要二次确认
+### Phase 0: MCP Environment Reconnaissance
+- Enumerate the list of MCP servers the target is connected to and their origin (official/third-party/self-hosted)
+- Extract the tool list, inputSchema definitions, and permission declarations exposed by each server
+- Determine the client's trust model: does it distinguish trust levels between servers, and do tool calls require secondary confirmation
 
-### Phase 1: 工具描述投毒检测
-- 获取所有工具的完整 description（包括 inputSchema.description），检查是否包含 `<IMPORTANT>`、`[SYSTEM]`、HTML 注释等指令标签
-- 对 description 做 base64/Unicode 解码扫描，识别编码后的隐藏指令
-- 验证模型是否会遵循 description 中的指令——构造含有"忽略用户请求"类指令的测试工具，观察模型行为变化
+### Phase 1: Tool Description Poisoning Detection
+- Obtain the full description of every tool (including inputSchema.description) and check whether it contains instruction tags such as `<IMPORTANT>`, `[SYSTEM]`, or HTML comments
+- Run base64/Unicode decoding scans over the descriptions to identify encoded hidden instructions
+- Verify whether the model follows instructions inside the description — build a test tool containing instructions like "ignore the user request" and observe changes in model behavior
 
-### Phase 2: 动态篡改测试（地毯式骗局）
-- 记录工具首次注册时的 description 哈希值
-- 模拟持续运行场景：定时重新获取工具列表，对比 description 是否发生变化
-- 关键判断：MCP 协议允许 Server 随时通过 `notifications/tools/list_changed` 更新描述，客户端是否在更新时重新请求用户授权
+### Phase 2: Dynamic Tampering Test (rug pull)
+- Record the hash of a tool's description at first registration
+- Simulate a long-running scenario: periodically re-fetch the tool list and compare whether descriptions have changed
+- Key question: the MCP protocol allows a server to update descriptions at any time via `notifications/tools/list_changed` — does the client re-request user authorization on update
 
-### Phase 3: 指令覆盖测试（Shadow Tool）
-- 注册恶意 MCP Server，其工具 description 中包含针对其他 Server 工具的覆盖指令
-- 测试跨工具劫持：恶意工具描述要求模型在调用邮件/文件等可信工具时篡改参数
-- 验证客户端是否存在工具名称冲突保护（同名工具优先级机制）
+### Phase 3: Instruction Override Test (shadow tool)
+- Register a malicious MCP server whose tool descriptions contain override instructions targeting other servers' tools
+- Test cross-tool hijacking: the malicious tool description asks the model to tamper with arguments when calling trusted tools such as email or file
+- Verify whether the client has tool name collision protection (a priority mechanism for identically named tools)
 
-### Phase 4: 隐藏指令注入
-- ANSI 转义码测试：在 description 中嵌入 `\x1b[8m` (隐藏文本) 指令，检查终端渲染和模型解析的差异
-- 零宽 Unicode 字符测试：用 U+200B/U+200C/U+200D/U+FEFF 编码恶意指令，验证人类不可见但模型可读
-- "行跳跃"攻击：利用 ANSI 光标控制序列覆盖终端显示内容，伪造用户可见的输出
+### Phase 4: Hidden Instruction Injection
+- ANSI escape code test: embed the `\x1b[8m` (hidden text) instruction in the description and check the difference between terminal rendering and model parsing
+- Zero-width Unicode character test: encode malicious instructions with U+200B/U+200C/U+200D/U+FEFF, verifying they are invisible to humans but readable by the model
+- "Line jump" attack: use ANSI cursor control sequences to overwrite the terminal display and forge user-visible output
 
-### Phase 5: 跨 Server 攻击与 Token 窃取
-- 测试恶意 Server 能否通过工具描述指令获取其他 Server 的 OAuth Token 或 API Key
-- 验证 Token 隔离机制：一个 Server 的凭据是否对其他 Server 可见
-- Server 伪装检测：恶意 Server 是否能声称自己是可信 Server 的"更新版本"
+### Phase 5: Cross-Server Attacks and Token Theft
+- Test whether a malicious server can obtain another server's OAuth token or API key through tool description instructions
+- Verify the token isolation mechanism: are one server's credentials visible to other servers
+- Server impersonation detection: can a malicious server claim to be an "updated version" of a trusted server
 
 ---
 
-## 实战检测清单
+## Practical Detection Checklist
 
 ```
-1. [ ] 目标环境连接了哪些 MCP Server？是否包含第三方/未审计 Server？
-2. [ ] 工具 description 原始内容是否包含可疑指令标签或编码内容？
-3. [ ] 工具描述是否会在授权后发生动态变化？客户端是否重新确认？
-4. [ ] 是否存在跨 Server 的工具名称冲突或描述覆盖？
-5. [ ] description 中是否嵌入 ANSI 转义码或零宽 Unicode 字符？
-6. [ ] 各 Server 的 Token/凭据是否实现了隔离？
-7. [ ] 客户端是否对 inputSchema 做严格校验，还是透传给模型？
-8. [ ] 工具调用结果是否经过消毒后再返回模型上下文？
+1. [ ] Which MCP servers is the target environment connected to? Does it include third-party/unaudited servers?
+2. [ ] Does the raw tool description contain suspicious instruction tags or encoded content?
+3. [ ] Do tool descriptions change dynamically after authorization? Does the client reconfirm?
+4. [ ] Do cross-server tool name collisions or description overrides exist?
+5. [ ] Are ANSI escape codes or zero-width Unicode characters embedded in descriptions?
+6. [ ] Are tokens/credentials isolated per server?
+7. [ ] Does the client strictly validate inputSchema, or does it pass it through to the model?
+8. [ ] Are tool call results sanitized before being returned to the model context?
 ```
 
 ---
 
-## 参考资源
+## Reference Resources
 
 - [Invariant Labs — MCP Security Notification: Tool Poisoning Attacks](https://invariantlabs.ai/blog/mcp-security-notification-tool-poisoning-attacks)
 - [OWASP — Model Context Protocol Security](https://genai.owasp.org/)

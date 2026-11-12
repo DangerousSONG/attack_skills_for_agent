@@ -1,6 +1,9 @@
 ---
 name: aws-penetration-testing
 description: "Provide comprehensive techniques for penetration testing AWS cloud environments. Covers IAM enumeration, privilege escalation, SSRF to metadata endpoint, S3 bucket exploitation, Lambda code extraction, and persistence techniques for red team operations."
+zh-signals: "测试 AWS 云环境的渗透技术，覆盖 IAM 枚举、提权、元数据 SSRF 与 S3 利用。信号:AWS渗透,IAM枚举,权限提升,SSRF元数据,S3桶。"
+when-to-use: >-
+  Use when conducting an authorized penetration test of an AWS environment, including IAM enumeration, privilege escalation, metadata SSRF, S3 bucket exploitation, or Lambda code extraction.
 risk: offensive
 source: community
 author: zebbern

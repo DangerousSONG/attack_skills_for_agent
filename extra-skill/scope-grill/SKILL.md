@@ -1,6 +1,8 @@
 ---
 name: scope-grill
 description: Interviews the user about a pentest or audit engagement before any testing begins, capturing target, scope, rules of engagement, auth, and deliverables into a structured brief. Trigger when the user says "start a pentest", "begin an engagement", or "test this target", describes a target without mentioning scope/authorization/deliverables, or wants to structure an engagement before diving in.
+zh-signals: "在测试开始前通过访谈确认目标、范围、授权与交付物的接洽简报。信号:范围确认,授权,约定规则,交付物,渗透测试,简报"
+when-to-use: "Use before any penetration test or audit begins when target, scope, authorization, or deliverables still need to be clarified."
 license: MIT
 metadata:
   version: "1.0.0"

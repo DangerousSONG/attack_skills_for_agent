@@ -2,38 +2,42 @@
 name: waymore-archive-urls
 description: "waymore: Historical URL full harvesting. Signals: asset mapping, subdomains, URL only, upper limit."
 zh-signals: "waymore: 历史 URL 全量收割。信号:资产测绘,子域名,仅 URL,上限。"
+when-to-use: >-
+  Use when harvesting historical URLs of a target domain from Wayback Machine,
+  Common Crawl and AlienVault OTX for asset discovery. The consolidated URL
+  list feeds downstream parameter fuzzing or content discovery.
 ---
 
 # waymore
 
-- 攻击大类:C01 资产测绘与指纹识别
-- 上游仓库:https://github.com/xnl-h4ck3r/waymore
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C01 Asset Mapping and Fingerprinting
+- Upstream Repository: https://github.com/xnl-h4ck3r/waymore
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install waymore
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `waymore -i t.com` | Wayback+CC+OTX URL 收割 |
-| `-i t.com -mode U` | 仅 URL |
-| `-i t.com -oU out.txt` | 输出 |
-| `-n 50000` | 上限 |
+| `waymore -i t.com` | Wayback+CC+OTX URL harvesting |
+| `-i t.com -mode U` | URLs only |
+| `-i t.com -oU out.txt` | Output |
+| `-n 50000` | Upper limit |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 历史 URL 全量收割
+### Full historical URL harvesting
 
 ```bash
 waymore -i corp.com -oU urls.txt
-# 比 waybackurls 更全(含 CC/OTX),喂 dalfox
+# More complete than waybackurls (includes CC/OTX), feeds dalfox
 ```
 
-## 注意事项
+## Notes
 
-xnl-h4ck3r 出品,Wayback/Common Crawl/AlienVault 三源 URL 提取,适合大规模资产。
+By xnl-h4ck3r, extracts URLs from three sources (Wayback/Common Crawl/AlienVault), well suited to large-scale asset discovery.

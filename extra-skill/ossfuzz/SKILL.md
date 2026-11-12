@@ -2,6 +2,11 @@
 name: ossfuzz
 type: technique
 description: "Enrolls a project in OSS-Fuzz, Google's free continuous fuzzing service for open source, and drives it locally. Covers project.yaml, Dockerfile and build.sh setup, the helper scripts, reproducing OSS-Fuzz crash reports, and the acceptance criteria. Use when setting up continuous fuzzing for an open-source project, reproducing an OSS-Fuzz bug report, or testing an OSS-Fuzz build before submitting it."
+zh-signals: "将开源项目接入 OSS-Fuzz 并在本地运行，覆盖 project.yaml、Dockerfile、build.sh、崩溃复现与验收标准。信号:OSS-Fuzz,持续模糊测试,project.yaml,崩溃复现,开源项目"
+when-to-use: >-
+  Use when setting up continuous fuzzing for an open-source project,
+  reproducing an OSS-Fuzz crash report, or testing an OSS-Fuzz build before
+  submission.
 ---
 
 # OSS-Fuzz

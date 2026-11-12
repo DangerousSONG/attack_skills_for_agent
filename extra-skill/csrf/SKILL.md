@@ -2,6 +2,9 @@
 name: csrf
 description: >
   Cross-Site Request Forgery (CSRF) tricks authenticated users into submitting forged requests to a target application by exploiting browser automatic cookie attachment. Detect via missing or predictable CSRF tokens in state-changing requests (POST/PUT/DELETE), absent `SameSite` cookie attributes, and JSON endpoints accepting `text/plain` Content-Type. Test using HTML auto-submitting forms, XHR requests, and CORS-enabled fetch. Tools: Burp Suite (Generate CSRF PoC), OWASP ZAP.
+zh-signals: "检测与利用跨站请求伪造漏洞，覆盖令牌校验缺失、SameSite 与 JSON 端点绕过。信号:CSRF,跨站请求伪造,CSRF令牌,SameSite,请求伪造。"
+when-to-use: >-
+  Use when state-changing requests lack or fail to validate anti-CSRF tokens, cookies lack SameSite protection, or JSON endpoints accept text/plain, and you need to build and verify a CSRF proof of concept.
 license: MIT
 compatibility: Designed for Claude Code. Requires Burp Suite or OWASP ZAP, HTML PoC hosting.
 metadata:

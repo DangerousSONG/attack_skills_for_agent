@@ -2,37 +2,41 @@
 name: aclpwn-acl-abuse
 description: "aclpwn: automates ACL abuse. Signals: ad attack, domain pentest, ACL privilege escalation path"
 zh-signals: "aclpwn: ACL 滥用自动化。信号:ad攻击,域渗透,ACL 提权路径。"
+when-to-use: >-
+  Use during Active Directory privilege escalation when you have valid
+  credentials or BloodHound data and want to compute and execute ACL abuse paths
+  to a target principal.
 ---
 
 # aclpwn
 
-- 攻击大类:C30 AD域渗透与域控攻击
-- 上游仓库:https://github.com/fox-it/aclpwn.py
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C30 AD Domain Penetration and Domain Controller Attacks
+- Upstream Repository: https://github.com/fox-it/aclpwn.py
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 pip install aclpwn
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `aclpwn -f svc -t 'domain admins' -d corp.local` | ACL 提权路径 |
-| `-f user -t target -cp` | BloodHound 数据 |
-| `-d domain -u u -p p` | 凭据 |
+| `aclpwn -f svc -t 'domain admins' -d corp.local` | ACL privilege escalation path |
+| `-f user -t target -cp` | BloodHound data |
+| `-d domain -u u -p p` | Credentials |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### ACL 滥用自动化
+### Automated ACL abuse
 
 ```bash
 aclpwn -f lowpriv -t 'domain admins' -d corp.local -du dc01
-# GenericAll/WriteDacl 自动提权
+# GenericAll/WriteDacl automatic privilege escalation
 ```
 
-## 注意事项
+## Notes
 
-fox-it 出品,ACL 攻击路径自动化。
+By fox-it; automates ACL attack paths.

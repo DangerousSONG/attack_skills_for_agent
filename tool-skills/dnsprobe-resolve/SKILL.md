@@ -2,38 +2,39 @@
 name: dnsprobe-resolve
 description: "dnsprobe: bulk subdomain resolution. Signals: subdomain, domain enumeration, dnsprobe, record types."
 zh-signals: "dnsprobe: 子域批量解析。信号:子域名,域名枚举,dnsprobe`,记录类型。"
+when-to-use: "Use when you have a list of candidate subdomains and need to resolve them in bulk, keeping only live domains; supports selecting record types and output files."
 ---
 
 # dnsprobe
 
-- 攻击大类:C02 域名与DNS侦察
-- 上游仓库:https://github.com/projectdiscovery/dnsprobe
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C02 Domain and DNS Reconnaissance
+- Upstream Repository: https://github.com/projectdiscovery/dnsprobe
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 go install github.com/projectdiscovery/dnsprobe@latest
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `cat subs.txt | dnsprobe` | 批量 DNS 解析 |
-| `-r A,AAAA,CNAME` | 记录类型 |
-| `-o out.txt` | 输出 |
-| `-t 5` | 超时 |
+| `cat subs.txt | dnsprobe` | Bulk DNS resolution |
+| `-r A,AAAA,CNAME` | Record types |
+| `-o out.txt` | Output |
+| `-t 5` | Timeout |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 子域批量解析
+### Bulk subdomain resolution
 
 ```bash
 cat subs.txt | dnsprobe -r A -o resolved.txt
-# 只留活域名
+# Keeps only live domains
 ```
 
-## 注意事项
+## Notes
 
-ProjectDiscovery 出品,批量 DNS 解析(httpx 的前身组件)。
+From ProjectDiscovery; bulk DNS resolution (the predecessor component of httpx).

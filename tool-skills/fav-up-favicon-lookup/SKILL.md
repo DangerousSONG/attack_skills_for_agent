@@ -2,38 +2,41 @@
 name: fav-up-favicon-lookup
 description: "Fav-up: real IP reverse lookup using favicon hashes. Signals: network topology, internet mapping, batch favicon."
 zh-signals: "Fav-up: 真实 IP 反查(favicon 哈希)。信号:网络拓扑,互联网测绘,批量 favicon。"
+when-to-use: >-
+  Use when locating the real origin IP behind a WAF or CDN by matching favicon
+  hashes against Shodan and Censys.
 ---
 
 # Fav-up
 
-- 攻击大类:C04 网络拓扑与互联网测绘
-- 上游仓库:https://github.com/pielco11/fav-up
-- 上游 License:MIT(本 SKILL.md 以 Apache-2.0 二次开源,上游版权归原项目所有)
+- Attack Category: C04 Network Topology and Internet Mapping
+- Upstream Repository: https://github.com/pielco11/fav-up
+- Upstream License: MIT (this SKILL.md is re-released under Apache-2.0; upstream copyright belongs to the original project)
 
-## 安装
+## Installation
 
 ```bash
 git clone https://github.com/pielco11/fav-up && cd fav-up && pip install -r requirements.txt
 ```
 
-## 参数速查
+## Parameter Quick Reference
 
-| 参数 / 命令 | 说明 |
+| Parameter / Command | Description |
 | --- | --- |
-| `python3 favUp.py -fw favicon.ico` | favicon 反查 IP |
-| `-sc` | 同时查 Shodan/Censys |
-| `-w targets.txt` | 批量 favicon |
-| `-o out.txt` | 输出 |
+| `python3 favUp.py -fw favicon.ico` | Reverse lookup IP from favicon |
+| `-sc` | Query Shodan/Censys at the same time |
+| `-w targets.txt` | Batch favicons |
+| `-o out.txt` | Output |
 
-## 攻击场景 Playbook
+## Attack Scenario Playbook
 
-### 真实 IP 反查(favicon 哈希)
+### Real IP reverse lookup (favicon hash)
 
 ```bash
 curl -s https://target.com/favicon.ico -o fav.ico
-python3 favUp.py -fw fav.ico -sc  # hash 匹配 Shodan 上的同图标资产 → 源站 IP
+python3 favUp.py -fw fav.ico -sc  # Match the hash against assets with the same icon on Shodan → origin IP
 ```
 
-## 注意事项
+## Notes
 
-WAF/CDN 后源站定位三板斧之一(favicon 哈希/DNS 记录/证书透明度);配合 cloudmare 类工具验证。
+One of the three classic techniques for locating the origin server behind a WAF/CDN (favicon hash / DNS records / certificate transparency); verify it with tools such as cloudmare.
