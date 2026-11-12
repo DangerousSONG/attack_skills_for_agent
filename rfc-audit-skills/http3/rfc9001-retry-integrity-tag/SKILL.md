@@ -1,58 +1,59 @@
 ---
 name: rfc9001-retry-integrity-tag
-description: 审计 QUIC 实现对 Retry 包完整性与令牌生命周期的处理是否按 RFC 9000 §8.1.4/§17.2.5 与 RFC 9001 §5.8——完整性标签未验证、令牌可重放、多 Retry 循环未防护即握手前无认证攻击面（盲区条款；warpsock 补齐 §17.2.5.1/§17.2.5.2 loop guards 实证）
+description: Audit whether QUIC implementations handle Retry-packet integrity and token lifecycle per RFC 9000 §8.1.4/§17.2.5 and RFC 9001 §5.8 — unverified integrity tag, replayable tokens, unguarded multi-Retry loops (pre-authentication attack surface; blind-spot clause; warpsock added §17.2.5.1/§17.2.5.2 loop guards as evidence)
+zh-signals: 审计 QUIC 实现对 Retry 包完整性与令牌生命周期的处理是否按 RFC 9000 §8.1.4/§17.2.5 与 RFC 9001 §5.8——完整性标签未验证、令牌可重放、多 Retry 循环未防护即握手前无认证攻击面（盲区条款；warpsock 补齐 §17.2.5.1/§17.2.5.2 loop guards 实证）
 rfc: RFC 9000 §8.1.4（令牌完整性）/ §17.2.5（Retry 包）/ RFC 9001 §5.8（Retry Integrity Tag）
 license: Apache-2.0
 ---
 
-# RFC 9001 §5.8 Retry 完整性与令牌生命周期审计
+# RFC 9001 §5.8 Retry Integrity & Token Lifecycle Audit
 
-## 1. 约束条款（原文出处）
+## 1. Normative Clauses (Original Sources)
 
-RFC 9001 §5.8：Retry 包携带 128 位完整性标签，用**公开固定的** AES-128-GCM 密钥与 nonce 计算（v1 常量公开、v2 常量 RFC 9369 §3.3.3 另行规定）——客户端在接受 Retry 前**必须**验证该标签（标签不提供服务器身份认证，仅防篡改/防伪造）。
+RFC 9001 §5.8: a Retry packet carries a 128-bit integrity tag computed with a **publicly fixed** AES-128-GCM key and nonce (v1 constants are public; v2 constants are specified separately in RFC 9369 §3.3.3) — the client **must** verify this tag before accepting a Retry (the tag provides no server authentication, only tamper/forgery protection).
 
-RFC 9000 §8.1.4（原文要点）：
-> 地址验证令牌 MUST 难以猜测、MUST 有完整性保护防客户端伪造；Retry 令牌 SHOULD 短期有效且只能立即回显；**servers MUST ensure that replay of tokens is prevented or limited**。
-> 若服务端收到含无效 Retry 令牌的 Initial，SHOULD 立即以 INVALID_TOKEN 关闭连接。
+RFC 9000 §8.1.4 (original text, key points):
+> Address-validation tokens MUST be hard to guess and MUST have integrity protection against client forgery; Retry tokens SHOULD be short-lived and usable only for immediate echo; **servers MUST ensure that replay of tokens is prevented or limited**.
+> If a server receives an Initial containing an invalid Retry token, it SHOULD immediately close the connection with INVALID_TOKEN.
 
-RFC 9000 §17.2.5：客户端**不得**对同一连接尝试接受多个 Retry（攻击者可用无限 Retry 做放大/延迟）；客户端在已收到服务端 Initial 后到达的 Retry 必须丢弃。
+RFC 9000 §17.2.5: a client MUST NOT accept more than one Retry for the same connection attempt (an attacker can use unlimited Retries for amplification/delay); a Retry arriving after the client has received the server's Initial MUST be discarded.
 
-核心模式一句话：**Retry 是把"证明你收到了我的挑战"变成一条无状态可验令牌的设计——但完整性标签密钥是公开的、令牌是客户端可回放的，所有安全重量压在"验证标签 + 限次 + 限时"三个开关上，少一个开关就是一条握手前 DoS 暗道。**
+Core pattern in one sentence: **Retry turns "prove you received my challenge" into a stateless, verifiable token — but the integrity-tag key is public and the token is client-replayable, so all security weight rests on three switches: verify tag, limit count, limit lifetime. Miss one switch and you have a pre-handshake DoS backdoor.**
 
-## 2. 违规判定条件
+## 2. Violation Criteria
 
-| 编号 | 探测 | 判定 |
+| ID | Probe | Verdict |
 |---|---|---|
-| RT-1 | 篡改 Retry 包的 DCID/令牌后重算任意 16 字节尾巴（或翻转标签任意位）发送给客户端 | 客户端接受 Retry → 未验证完整性标签 → 违规 |
-| RT-2 | 对同一连接尝试连续注入两个 Retry（第二次携带第一个的令牌） | 客户端接受第二个 / 进入循环 → 违反 §17.2.5 单 Retry 约束 |
-| RT-3 | 在客户端已收到服务端 Initial/Handshake 后注入延迟 Retry | 客户端接受 → 违反迟达丢弃约束 |
-| RT-4 | 同一令牌跨连接重放（用 A 连接获得的令牌发起 B 连接）并观察服务端 | 接受且跳过地址验证 → 违反 MUST 防重放；配合源地址伪造即成放大器 |
-| RT-5 | 构造过期/地址不符的令牌回显（如能注入令牌内容观测其结构） | 接受 → 令牌未绑定源地址/时间戳 |
+| RT-1 | Tamper with the Retry packet's DCID/token, append any recomputed 16-byte tail (or flip any tag bit), and send it to the client | Client accepts the Retry → integrity tag not verified → violation |
+| RT-2 | Attempt to inject two Retries in a row for the same connection (the second carrying the first's token) | Client accepts the second / enters a loop → violates the §17.2.5 single-Retry constraint |
+| RT-3 | Inject a delayed Retry after the client has received the server's Initial/Handshake | Client accepts → violates the late-arrival discard constraint |
+| RT-4 | Replay the same token across connections (token obtained in connection A used to open connection B) and observe the server | Accepted, skipping address validation → violates the MUST anti-replay; combined with source-address spoofing it becomes an amplifier |
+| RT-5 | Echo an expired/address-mismatched token (if token contents can be injected and observed) | Accepted → token not bound to source address/timestamp |
 
-判定方法：aioquic 作为恶意客户端/中间人注入 Retry；令牌重放需同 IP 双连接测试；时序控制用原始 UDP 注入。
+Method: aioquic acting as a malicious client/MITM injecting Retries; token replay needs dual connections from the same IP; timing control via raw UDP injection.
 
-## 3. 攻击面猜想
+## 3. Attack-Surface Hypotheses
 
-- **握手前放大/延迟 DoS**：RT-2/RT-3 ——无限 Retry 循环迫使客户端反复重算 Initial 密钥（每次 Retry 换 DCID 需重新派生），CPU 放大
-- **地址验证旁路 → 反射放大**：RT-4 ——令牌重放 + 源地址伪造让服务端把未验证地址当已验证，解除 3 倍反放大限制
-- **降级配合**：伪造 Retry 与版本协商/迁移交互，可作为 QUIC-LEAK 类握手前内存消耗的触发器
+- **Pre-handshake amplification/delay DoS**: RT-2/RT-3 — unlimited Retry loops force the client to repeatedly recompute Initial keys (each Retry changes DCID, requiring re-derivation), CPU amplification
+- **Address-validation bypass → reflection amplification**: RT-4 — token replay + source-address spoofing makes the server treat an unvalidated address as validated, lifting the 3× anti-amplification limit
+- **Downgrade chaining**: forged Retries interacting with version negotiation/migration can serve as a trigger for QUIC-LEAK-class pre-handshake memory consumption
 
-## 4. 关联历史 CVE / 实证
+## 4. Related Historical CVEs / Evidence
 
-| 证据 | 实现 | 根因 |
+| Evidence | Implementation | Root cause |
 |---|---|---|
-| warpsock changelog 修复记录 | warpsock | 显式补齐 "RFC 9000 §17.2.5.1/§17.2.5.2 loop guards（one accepted Retry per attempt, late Retry discard once an Initial or Handshake is opened）" 并配专属回归测试——说明多 Retry 与迟达 Retry 是真实实现 pitfall |
-| CVE-2025-54939（旁证路径） | lsquic | 握手前路径（Initial/Retry 处理）无认证且历史上内存管理出错——本 Skill RT-1~RT-5 全部落在该路径 |
-| 暂无 Retry 独立 CVE | — | RFC 9001 §5.8 标签密钥公开是设计使然（只防篡改不防伪造），实现普遍验标签但限次/限时/防重放三开关覆盖参差——盲区条款 |
+| warpsock changelog fix record | warpsock | Explicitly added "RFC 9000 §17.2.5.1/§17.2.5.2 loop guards (one accepted Retry per attempt, late Retry discard once an Initial or Handshake is opened)" with dedicated regression tests — showing multi-Retry and late-Retry are real implementation pitfalls |
+| CVE-2025-54939 (corroborating path) | lsquic | The pre-handshake path (Initial/Retry handling) is unauthenticated and historically error-prone in memory management — RT-1~RT-5 of this Skill all land on that path |
+| No standalone CVE for Retry yet | — | The public tag key in RFC 9001 §5.8 is by design (tamper protection only, no forgery protection); implementations generally verify the tag but coverage of the count/lifetime/anti-replay switches varies — blind-spot clause |
 
-## 5. 差分验证方法
+## 5. Differential Verification
 
-对照组：quic-go ≥ 0.60、msquic、warpsock（含 loop guards 的版本）。
-对比字段：RT-1 标签验证、RT-2 单 Retry 强制、RT-3 迟达丢弃、RT-4 跨连接重放拒绝。
-误报排除：实现选择"不接受任何 Retry"（disable_retry）属合规；只标记"验标签但无限次""接受迟达""重放被接受"。
+Control group: quic-go ≥ 0.60, msquic, warpsock (version with loop guards).
+Comparison fields: RT-1 tag verification, RT-2 single-Retry enforcement, RT-3 late-arrival discard, RT-4 cross-connection replay rejection.
+False-positive exclusion: an implementation choosing "accept no Retry at all" (disable_retry) is compliant; flag only "verifies tag but unlimited count", "accepts late Retry", "replay accepted".
 
-## 6. 对接的攻击 Skill
+## 6. Downstream Attack Skills
 
-- 技能层（怎么打）：`fuzzowski-network-fuzz`（Retry/Initial 交互序列 fuzz）、`slowhttptest-dos`（握手前资源消耗节奏）
-- 工具层（用什么打）：aioquic（Retry 注入）、原始 UDP 时序脚本
-- 命中后动作：RT-4 成立 → 评估反射放大比（跳过地址验证后的发送上限）；RT-2 成立 → 量化单连接 CPU 放大系数
+- Skill layer (how to attack): `fuzzowski-network-fuzz` (Retry/Initial interaction-sequence fuzz), `slowhttptest-dos` (pre-handshake resource-consumption cadence)
+- Tool layer (with what): aioquic (Retry injection), raw UDP timing scripts
+- Post-hit actions: if RT-4 holds → assess the reflection amplification ratio (send ceiling after address-validation bypass); if RT-2 holds → quantify the per-connection CPU amplification factor

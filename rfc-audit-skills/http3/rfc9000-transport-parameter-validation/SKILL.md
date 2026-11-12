@@ -1,56 +1,57 @@
 ---
 name: rfc9000-transport-parameter-validation
-description: 审计 QUIC 实现对传输参数完整性与一致性校验是否按 RFC 9000 §18.2/§7.3——CID 相关参数缺失/错配、服务端专用参数被客户端携带、非法值未拒绝即握手前无认证攻击面与中间人注入 CID 面（盲区条款；CVE-2025-54939 lsquic QUIC-LEAK 同路径实证）
+description: Audit whether QUIC implementations validate transport-parameter integrity and consistency per RFC 9000 §18.2/§7.3 — missing/mismatched CID-related parameters, client carrying server-only parameters, illegal values not rejected (pre-authentication attack surface and MITM CID-injection surface; blind-spot clause; CVE-2025-54939 lsquic QUIC-LEAK evidences the same path)
+zh-signals: 审计 QUIC 实现对传输参数完整性与一致性校验是否按 RFC 9000 §18.2/§7.3——CID 相关参数缺失/错配、服务端专用参数被客户端携带、非法值未拒绝即握手前无认证攻击面与中间人注入 CID 面（盲区条款；CVE-2025-54939 lsquic QUIC-LEAK 同路径实证）
 rfc: RFC 9000 §18.2（Transport Parameter 定义）/ §7.3（使用 CID 参数的验证义务）
 license: Apache-2.0
 ---
 
-# RFC 9000 §18.2 传输参数校验完备性审计
+# RFC 9000 §18.2 Transport-Parameter Validation Completeness Audit
 
-## 1. 约束条款（原文出处）
+## 1. Normative Clauses (Original Sources)
 
-RFC 9000 §7.3/§18.2（原文要点）：
+RFC 9000 §7.3/§18.2 (original text, key points):
 > An endpoint MUST treat the absence of the initial_source_connection_id transport parameter from either endpoint or the absence of the original_destination_connection_id transport parameter from the server as a connection error of type TRANSPORT_PARAMETER_ERROR.
 > An endpoint MUST treat the following as a connection error of type TRANSPORT_PARAMETER_ERROR or PROTOCOL_VIOLATION: absence of the retry_source_connection_id transport parameter from the server after receiving a Retry packet; presence of the retry_source_connection_id transport parameter when no Retry packet was received; or a mismatch between values received from a peer in these transport parameters and the value sent in the corresponding Destination or Source Connection ID fields of Initial packets.
 > A client MUST NOT include any server-only transport parameter: original_destination_connection_id, preferred_address, retry_source_connection_id, or stateless_reset_token. A server MUST treat receipt of any of these transport parameters as a connection error of type TRANSPORT_PARAMETER_ERROR.
 > A server that chooses a zero-length connection ID MUST NOT provide a preferred address. Similarly, a server MUST NOT include a zero-length connection ID in this transport parameter. A client MUST treat a violation of these requirements as a connection error of type TRANSPORT_PARAMETER_ERROR.
-> max_udp_payload_size 值低于 1200 为无效。
+> A max_udp_payload_size value below 1200 is invalid.
 
-核心模式一句话：**CID 相关传输参数是把"线路上看到的 CID"与"握手协商出的 CID"绑定的唯一锚——锚缺失或错配意味着握手期间的 Initial 可被注入替换，整个连接的身份从握手第一包起就可能是攻击者选定的。**
+Core pattern in one sentence: **CID-related transport parameters are the only anchor binding "the CID seen on the wire" to "the CID negotiated in the handshake" — a missing or mismatched anchor means the Initial during the handshake can be injected and replaced; the connection's identity may be attacker-chosen from the very first handshake packet.**
 
-## 2. 违规判定条件
+## 2. Violation Criteria
 
-| 编号 | 探测 | 判定 |
+| ID | Probe | Verdict |
 |---|---|---|
-| TP-1 | 删除 initial_source_connection_id（或服务端删除 original_destination_connection_id）后完成握手 | 未以 TRANSPORT_PARAMETER_ERROR 终止 → 违规 |
-| TP-2 | 无 Retry 路径下携带 retry_source_connection_id / 有 Retry 路径下缺失该参数 / 参数值与 Retry 包 SCID 不符 | 未终止 → 违规 |
-| TP-3 | 客户端 Initial 携带服务端专用参数（original_destination_connection_id / preferred_address / retry_source_connection_id / stateless_reset_token 任一） | 服务端未终止 → 违规 |
-| TP-4 | 构造传输参数值与线路 Initial 包 CID 字段不一致（改写 DCID 重放） | 未检测 → 中间人可注入自选 CID 成立 |
-| TP-5 | 发送 max_udp_payload_size < 1200 / preferred_address 含零长 CID / 零长 CID 服务端带 preferred_address | 未按 TRANSPORT_PARAMETER_ERROR 终止 → 违规 |
+| TP-1 | Remove initial_source_connection_id (or, on the server side, original_destination_connection_id) and complete the handshake | Not terminated with TRANSPORT_PARAMETER_ERROR → violation |
+| TP-2 | Carry retry_source_connection_id without a Retry / omit it after a Retry / make its value mismatch the Retry packet SCID | Not terminated → violation |
+| TP-3 | Client Initial carries any server-only parameter (original_destination_connection_id / preferred_address / retry_source_connection_id / stateless_reset_token) | Server does not terminate → violation |
+| TP-4 | Craft transport-parameter values inconsistent with the CID fields of the on-wire Initial packets (rewrite DCID and replay) | Not detected → MITM CID injection confirmed |
+| TP-5 | Send max_udp_payload_size < 1200 / preferred_address containing a zero-length CID / zero-length-CID server carrying preferred_address | Not terminated with TRANSPORT_PARAMETER_ERROR → violation |
 
-判定方法：aioquic 逐参数篡改（传输参数位于加密扩展，需自写 TLS 层或借助支持扩展的栈）；quic-go 调试日志观测校验路径。
+Method: per-parameter tampering with aioquic (transport parameters live in encrypted extensions; requires a custom TLS layer or a stack supporting extension injection); observe the validation path via quic-go debug logs.
 
-## 3. 攻击面猜想
+## 3. Attack-Surface Hypotheses
 
-- **CID 注入（中间人）**：TP-4 ——握手期注入带攻击者选定 CID 的 Initial，若校验缺失则连接身份被劫持，后续路由/无状态重置令牌全部错位
-- **无认证握手前崩溃**：传输参数解析处于握手前路径，畸形参数是 LSQUIC QUIC-LEAK（CVE-2025-54939）同类"smuggled 包触发内存分配"的入口
-- **preferred_address 零长 CID**：可导致迁移路径上的连接 ID 状态机进入未定义分支
+- **CID injection (MITM)**: TP-4 — inject an Initial with an attacker-chosen CID during the handshake; if validation is missing, connection identity is hijacked and subsequent routing/stateless-reset tokens are all displaced
+- **Pre-authentication handshake crash**: transport-parameter parsing sits on the pre-authentication path; malformed parameters are the entry point of the same "smuggled packet triggers memory allocation" class as LSQUIC QUIC-LEAK (CVE-2025-54939)
+- **preferred_address with zero-length CID**: can drive the connection-ID state machine on migration paths into an undefined branch
 
-## 4. 关联历史 CVE / 实证
+## 4. Related Historical CVEs / Evidence
 
-| CVE / 证据 | 实现 | 根因 |
+| CVE / Evidence | Implementation | Root cause |
 |---|---|---|
-| **CVE-2025-54939**（QUIC-LEAK，HIGH） | lsquic | 握手前路径对畸形/超限包分配内存未释放——传输参数解析与 Initial 处理同属无认证握手前路径，本 Skill TP-1~TP-5 是该路径的参数级系统展开 |
-| 暂无参数校验独立 CVE | — | §18.2 校验分散在 §7.3/§18.2 多段，实现常只校验"能解析"不校验"值一致"——盲区条款 |
+| **CVE-2025-54939** (QUIC-LEAK, HIGH) | lsquic | Memory allocated on the pre-authentication path for malformed/oversized packets never freed — transport-parameter parsing and Initial handling share this unauthenticated pre-handshake path; TP-1~TP-5 of this Skill are the parameter-level systematic expansion of that path |
+| No standalone CVE for parameter validation yet | — | §18.2 validation is scattered across §7.3/§18.2 in multiple paragraphs; implementations often validate only "parses" but not "values are consistent" — blind-spot clause |
 
-## 5. 差分验证方法
+## 5. Differential Verification
 
-对照组：quic-go ≥ 0.60、msquic、ngtcp2。
-对比字段：TP-1~TP-5 各自的错误码与终止行为；重点对照"解析成功但值校验"是否独立存在。
-误报排除：实现选择"忽略未知参数"（合规，RFC 允许）与"拒绝非法值"（必须）需区分；只标记 MUST 级校验缺失。
+Control group: quic-go ≥ 0.60, msquic, ngtcp2.
+Comparison fields: error codes and termination behavior for TP-1~TP-5 individually; focus on whether "parse succeeded but value validation" exists as an independent check.
+False-positive exclusion: distinguish "ignore unknown parameters" (compliant; RFC allows) from "reject illegal values" (mandatory); flag only missing MUST-level validation.
 
-## 6. 对接的攻击 Skill
+## 6. Downstream Attack Skills
 
-- 技能层（怎么打）：`fuzzowski-network-fuzz`（传输参数字节 fuzz）、`tlsfuzzer-fuzz`（TLS 层扩展参数变异）
-- 工具层（用什么打）：aioquic（自定义传输参数）、自写 TLS ClientHello 变异脚本
-- 命中后动作：TP-4 成立 → 验证 CID 注入对路由层/重置令牌的影响链；TP-1~TP-3 → 按握手前路径崩溃面做 fuzz 扩展
+- Skill layer (how to attack): `fuzzowski-network-fuzz` (transport-parameter byte fuzz), `tlsfuzzer-fuzz` (TLS-layer extension parameter mutation)
+- Tool layer (with what): aioquic (custom transport parameters), hand-written TLS ClientHello mutation scripts
+- Post-hit actions: if TP-4 holds → verify the impact chain of CID injection on routing layer / reset tokens; for TP-1~TP-3 → extend fuzzing against the pre-handshake crash surface
