@@ -1,0 +1,85 @@
+---
+name: attack-skill-router
+description: "The routing layer of the offensive skill library. When a task involves any stage of penetration testing (reconnaissance/exploitation/privilege escalation/lateral movement/persistence, etc.), load this skill first and use the 'service/technology/CVE -> recommended skill' table to pick 3-5 primary skills, then load them in a targeted way; do not blindly grep and read all of the 1000+ SKILL.md files."
+zh-signals: "攻击侧 Skill 库的路由层，按服务、技术或 CVE 匹配攻击大类并选定 primary skill。信号:技能路由,攻击技能库,渗透测试,skill选型"
+when-to-use: At the start of any penetration testing task; come back here to switch routing when the already-loaded skills are not enough to solve the current obstacle.
+---
+
+# Attack Skill Router · Offensive Skill Routing Layer (v2.0)
+
+## Purpose
+
+This library contains 996 skills (50 offensive categories). Searching the whole library directly makes the Agent face an excessive number of homogeneous options (measured: the deserialization topic once loaded 3 overlapping skills at once).
+**This routing layer compresses "choose N out of 996" into "choose 1 category out of 50 -> choose 1-3 out of the 3-5 primaries per category".**
+
+## Usage Flow (Must Follow This Order)
+
+1. **Locate the category**: use the "Routing Table" below to hit one row by service type / vulnerability class / technology keyword / CVE;
+2. **Choose the primaries**: among the 3-5 slugs in that row, pick the 1-3 most relevant by when-to-use and load them with the Skill tool;
+3. **Expand only if needed**: for categories marked [secondary subcategory -> ref] (those have many skills), open the `reference.md` in the same directory and choose by sub-tag; otherwise use `grep -ril <keyword> /opt/attack-skill-library` to expand in a targeted way;
+4. **Report**: list the slugs actually loaded at the end of the final report (consistent with the evaluation workflow).
+
+## Selection Rules
+
+- **Methodology before tools**: choose the methodology skill first (it teaches you the exploit chain); tool-specific skills (the manual for a single tool) are added only when the methodology lacks concrete commands;
+- **Load only one skill per topic**: the routing table is already deduplicated per topic (see the accompanying MERGES.md, where human adjudication resolved 13 merges / 7 non-merges); if grep still matches several similar slugs, choose the one whose frontmatter when-to-use best matches the current service/version;
+- **Version-sensitive tasks** (Java deserialization gadgets, kernel exploits, etc.): the methodology skill can only give you the approach, gadget adaptation is exploit engineering — build it yourself following the skill guidance plus the target version, do not keep retrying old gadgets from the library.
+
+## Routing Table (50 categories · 5 primaries per category · one row per category)
+
+- **C01 Asset Mapping and Fingerprinting** (62) [secondary subcategory -> ref] Triggers: asset mapping / fingerprinting ; recon, osint, performing -> `performing-timeline-reconstruction-with-plaso`, `collecting-open-source-intelligence`, `performing-asset-criticality-scoring-for-vulns`, `alterx-dsl-subdomains`, `amass-attack-surface`
+- **C02 Domain and DNS Reconnaissance** (19) Triggers: domain / DNS reconnaissance ; dns, subdomain, performing -> `performing-dns-enumeration-and-zone-transfer`, `performing-subdomain-enumeration-with-subfinder`, `cors-cross-origin-misconfiguration`, `aiodnsbrute-dns`, `altdns-permutation` ; 14 more, expand with grep
+- **C03 Email and Personnel OSINT** (27) Triggers: email / personnel OSINT ; osint, username, email -> `profiling-threat-actor-groups`, `bridgekeeper-username-mangle`, `cr3dov3r-leak-lookup` ; 24 more, expand with grep
+- **C04 Network Topology and Internet Mapping** (10) Triggers: network topology / internet mapping ; shodan, network, performing -> `performing-ip-reputation-analysis-with-shodan`, `exploiting-bgp-hijacking-vulnerabilities`, `ctf-osint`, `asnmap-network-recon`, `fav-up-favicon-lookup` ; 5 more, expand with grep
+- **C05 External Attack Surface and Cloud Asset Exposure** (31) Triggers: external attack surface / cloud asset exposure ; exposure, offensive, cloud -> `enumerating-cloud-with-cloudfox`, `conducting-external-reconnaissance-with-osint`, `exploiting-excessive-data-exposure-in-api`, `apkleaks-endpoint-scan`, `gh-dork-github` ; 26 more, expand with grep
+- **C06 Vulnerability Intelligence and Vulnerability Databases** (14) Triggers: vulnerability intelligence / vulnerability database ; cve, exploiting, log4j -> `exploiting-nopac-cve-2021-42278-42287`, `exploiting-zerologon-vulnerability-cve-2020-1472`, `race-condition`, `exploitdb-search`, `getsploit-exploit-search` ; 9 more, expand with grep
+- **C07 Payload Development and Weaponization** (24) Triggers: payload development / weaponization ; shellcode, payload, evasion -> `conducting-spearphishing-simulation-campaign`, `reverse-shell-techniques`, `csv-formula-injection`, `chankro-php-binary`, `gadgettojscript-deser` ; 19 more, expand with grep
+- **C08 Phishing and Social Engineering** (25) Triggers: phishing / social engineering ; phishing, performing, social -> `performing-red-team-phishing-with-gophish`, `attacking-oauth-with-device-code-phishing`, `conducting-social-engineering-pretext-call`, `bad-pdf-phish`, `credsniper-phish` ; 20 more, expand with grep
+- **C09 Web Application Vulnerability Exploitation** (171) [secondary subcategory -> ref] Triggers: web application vulnerability exploitation ; offensive, performing, exploiting -> `performing-web-cache-poisoning-attack`, `exploiting-template-injection-vulnerabilities`, `testing-for-xml-injection-vulnerabilities`, `bbqsql-blind-sqlmap`, `java-deserialization-gadget-selector`
+- **C10 API and Business Logic Attacks** (54) [secondary subcategory -> ref] Triggers: API / business logic attacks ; api, jwt, performing -> `exploiting-idor-vulnerabilities`, `testing-api-security-with-owasp-top-10`, `performing-graphql-security-assessment`, `astra-api-scan`, `cariddi-crawler-secrets`
+- **C11 Edge Devices and VPN Attacks** (4) Triggers: edge devices / VPN attacks ; scada, attacker, cameradar -> `offensive-anti-forensics`, `scada-attacker`, `cameradar-rtsp`, `sigploit-telecom` ; 0 more, expand with grep
+- **C12 Supply Chain and CI/CD Attacks** (16) Triggers: supply chain / CI/CD attacks ; cicd, offensive, dependency -> `testing-prompt-injection-in-rag-pipelines`, `implementing-fuzz-testing-in-cicd-with-aflplusplus`, `performing-sca-dependency-scanning-with-snyk`, `dvcs-ripper-vcs`, `git-dumper-repo` ; 11 more, expand with grep
+- **C13 Remote Command Execution and WebShells** (8) Triggers: remote command execution / WebShell ; shell, manager, shellme -> `htshells-htaccess`, `novahot-web-shell` ; 6 more, expand with grep
+- **C14 Cloud and Container Execution** (3) Triggers: cloud / container execution ; container, escape, deepce -> `botb-container-attack`, `deepce-container-escape` ; 1 more, expand with grep
+- **C15 Persistence and Backdoor Installation** (13) Triggers: persistence / backdoor installation ; persistence, shell, performing -> `performing-malware-persistence-investigation`, `operating-sliver-c2`, `conducting-domain-persistence-with-dcsync`, `dbd-dns-tunnel-shell`, `gcat-gmail-c2` ; 8 more, expand with grep
+- **C16 Linux Local Privilege Escalation** (8) Triggers: Linux local privilege escalation ; privesc, linux, escape -> `sandbox-escape-techniques`, `linux-privilege-escalation`, `privesc-advisor`, `linenum-privesc-scan`, `suid3num-privesc` ; 3 more, expand with grep
+- **C17 Windows Local Privilege Escalation** (11) Triggers: Windows local privilege escalation ; windows, privesc, lateral -> `defi-attack-patterns`, `windows-privilege-escalation`, `offensive-k8s-attacks`, `beroot-privesc-check`, `powershdll-nopowershell` ; 6 more, expand with grep
+- **C18 Cloud and Container Privilege Escalation** (14) Triggers: cloud / container privilege escalation ; performing, kubernetes, privilege -> `auditing-kubernetes-rbac-privilege-escalation`, `performing-kubernetes-penetration-testing`, `performing-agentless-vulnerability-scanning`, `cloudlist-multi-cloud`, `microburst-azure` ; 9 more, expand with grep
+- **C19 EDR and AV Evasion** (4) Triggers: EDR / AV evasion ; evasion, operating, havoc -> `operating-havoc-c2`, `offensive-edr-evasion`, `evasion-specialist` ; 1 more, expand with grep
+- **C20 Anti-Forensics and Trace Cleanup** (4) Triggers: anti-forensics / trace cleanup ; anti, forensic, mat -> `mat-metadata-clean`, `moonwalk-anti-forensic` ; 2 more, expand with grep
+- **C21 Traffic Obfuscation and Encrypted Tunnels** (1) Triggers: traffic obfuscation / encrypted tunnel ; offensive, data, exfiltration -> `offensive-data-exfiltration` ; 0 more, expand with grep
+- **C22 Process Injection and In-Memory Execution** (19) Triggers: process injection / in-memory execution ; injection, header, llm -> `red-teaming-llms-with-garak`, `testing-for-email-header-injection`, `testing-for-host-header-injection`, `amber-reflective-packer` ; 15 more, expand with grep
+- **C23 Fileless and LOLBin Abuse** (2) Triggers: fileless / LOLBin abuse ; lolbas, living, off -> `lolbas-living-off-land`, `m3-gen-msbuild` ; 0 more, expand with grep
+- **C24 Memory Dumping and LSASS Theft** (5) Triggers: memory dump / LSASS theft ; credentials, conducting, pass -> `conducting-pass-the-ticket-attack`, `active-directory-acl-abuse`, `mimikatz-credentials`, `mimipenguin-linux` ; 1 more, expand with grep
+- **C25 Hashes and Password Cracking** (34) Triggers: hash / password cracking ; wordlist, hash, brute -> `performing-hash-cracking-with-hashcat`, `performing-gcp-penetration-testing-with-gcpbucketbrute`, `authbypass-authentication-flaws`, `bkcrack-zip-plaintext`, `john-hash-crack` ; 29 more, expand with grep
+- **C26 Kerberos and Ticket Attacks** (8) Triggers: Kerberos / ticket attacks ; kerberos, kerberoasting, extracting -> `extracting-credentials-from-memory-dump`, `exploiting-kerberoasting-with-impacket`, `performing-kerberoasting-attack`, `kekeo-kerberos`, `krbrelayx-kerberos-relay` ; 3 more, expand with grep
+- **C27 Local Credential and Browser Theft** (4) Triggers: local credentials / browser theft ; credential, access, extracting -> `extracting-browser-history-artifacts`, `performing-credential-access-with-lazagne`, `abusing-dpapi-for-credential-access` ; 1 more, expand with grep
+- **C28 Brute Force and Password Spraying** (15) Triggers: brute force / password spraying ; spray, brute, o365 -> `barq-azure-ad`, `hydra-service-brute` ; 13 more, expand with grep
+- **C29 Internal Network Discovery and Enumeration** (17) Triggers: internal network discovery / enumeration ; ldap, smb, enum -> `ad-ldap-enum-ldap`, `adidnsdump-ldap-enum` ; 15 more, expand with grep
+- **C30 AD Domain Penetration and Domain Controller Attacks** (50) [secondary subcategory -> ref] Triggers: AD domain penetration / domain controller attacks ; active, directory, exploiting -> `moving-laterally-with-netexec`, `exploiting-constrained-delegation-abuse`, `relaying-ntlm-for-adcs-esc8`, `aclpwn-acl-abuse`, `activedirectoryenum-ad`
+- **C31 Lateral Movement via Remote Services** (13) Triggers: lateral movement via remote services ; lateral, movement, performing -> `performing-lateral-movement-with-wmiexec`, `performing-lateral-movement-detection`, `exploiting-ms17-010-eternalblue-vulnerability`, `barmie-rmi-attack`, `impacket-protocol-exec` ; 8 more, expand with grep
+- **C32 Tunneling and Internal Network Pivoting** (12) Triggers: tunnel / internal network pivoting ; pivot, tunnel, trevorproxy -> `stack-overflow-and-rop`, `tunneling-and-pivoting`, `frp-tunnel`, `chisel-tunnel` ; 8 more, expand with grep
+- **C33 Data Collection and Staging** (4) Triggers: data collection / staging ; acquiring, disk, image -> `acquiring-disk-image-with-dd-and-dcfldd`, `paramspider-param-harvest`, `tlsx-tls-enum` ; 1 more, expand with grep
+- **C34 Screen and Input Capture** (3) Triggers: screen / input capture ; witnessme, web, shot -> `offensive-keylogger-arch`, `scrying-multi-screenshot`, `witnessme-web-shot` ; 0 more, expand with grep
+- **C35 C2 Frameworks and Remote Control** (21) Triggers: C2 framework / remote control ; performing, infrastructure, red -> `performing-red-team-with-covenant`, `performing-privilege-escalation-on-linux`, `performing-automated-malware-analysis-with-cape`, `adaptix-c2-framework`, `emp3r0r-c2` ; 16 more, expand with grep
+- **C36 Covert Callbacks and Communication Channels** (3) Triggers: covert callback / communication channel ; icmpsh, reverse, websockify -> `icmpsh-reverse`, `interactsh-oob` ; 1 more, expand with grep
+- **C37 Data Exfiltration** (2) Triggers: data exfiltration ; data, exfiltrator, dnsteal -> `data-exfiltrator`, `dnsteal-dns-exfil` ; 0 more, expand with grep
+- **C38 Steganography and Hidden Channels** (4) Triggers: steganography / hidden channel ; stego, zsteg, png -> `cloakify-exfil`, `openstego-general-stego` ; 2 more, expand with grep
+- **C39 Data Destruction and Wiping** (3) Triggers: data destruction / wiping ; performing, binary, exploitation -> `performing-binary-exploitation-analysis`, `exploit-development`, `slowhttptest-dos` ; 0 more, expand with grep
+- **C40 Sniffing and Man-in-the-Middle Attacks** (36) Triggers: sniffing / man-in-the-middle attack ; mitm, performing, network -> `performing-arp-spoofing-attack-simulation`, `performing-network-packet-capture-analysis`, `performing-network-traffic-analysis-with-zeek`, `above-protocol-anomaly`, `arpspoof-smikims` ; 31 more, expand with grep
+- **C41 Web Vulnerability Scanning and Validation** (21) Triggers: web vulnerability scanning / validation ; performing, web, dir -> `performing-container-security-scanning-with-trivy`, `performing-ssl-tls-security-assessment`, `nuclei-template-scan`, `gobuster-dir-dns`, `ffuf-web-fuzz` ; 16 more, expand with grep
+- **C42 Network Scanning and Enumeration** (40) Triggers: network scanning / enumeration ; scan, network, sip -> `scanning-network-with-nmap-advanced`, `building-vulnerability-scanning-workflow`, `offensive-bug-identification`, `angry-ip-scan`, `apachetomcatscanner-tomcat` ; 35 more, expand with grep
+- **C43 Mobile Attacks** (21) Triggers: mobile attacks ; android, mobile, app -> `conducting-mobile-app-penetration-test`, `performing-dynamic-analysis-of-android-app`, `performing-android-app-static-analysis-with-mobsf`, `appmon-ios-android`, `bagbak-ios-decrypt` ; 16 more, expand with grep
+- **C44 AI and Large Language Model Security** (12) Triggers: AI / large language model security ; threat, llm, attacks -> `assessing-vector-and-embedding-weaknesses`, `testing-for-system-prompt-leakage`, `performing-threat-modeling-with-owasp-threat-dragon`, `hexstrike-ai`, `pentestagent-crewai` ; 7 more, expand with grep
+- **C45 Malicious Software Development and AV Evasion** (9) Triggers: malicious software development / AV evasion ; macro, dkmc, gen -> `avet-av-evasion`, `bluffy-hollow` ; 7 more, expand with grep
+- **C46 Binary Vulnerability Exploitation and Pwn** (46) [secondary subcategory -> ref] Triggers: binary vulnerability exploitation / Pwn ; offensive, exploitation, penetration -> `performing-external-network-penetration-test`, `exploiting-smb-vulnerabilities-with-metasploit`, `exploiting-vulnerabilities-with-metasploit-framework`, `angrop-rop-gen`, `armscgen-shellcode`
+- **C47 Reverse Engineering** (4) Triggers: reverse engineering ; sickle, shellcode, exe2hexbat -> `open-redirect`, `exe2hexbat-payload-transfer`, `petools-pe-analysis` ; 1 more, expand with grep
+- **C48 Blockchain and Web3 Security** (5) Triggers: blockchain / Web3 security ; security, slither, solidity -> `smart-contract-security`, `solana-security`, `web3-security-tooling`, `slither-solidity-audit` ; 1 more, expand with grep
+- **C49 Cryptographic Attacks** (22) Triggers: cryptographic attacks ; crypto, rsa, tls -> `lattice-crypto-attacks`, `symmetric-cipher-attacks`, `rsa-attack-techniques`, `a2sv-ssl-vuln`, `cero-tls-cert` ; 17 more, expand with grep
+- **C50 Red Team Methodology and Automation** (38) Triggers: red team methodology / automation ; team, offensive, engagement -> `conducting-full-scope-red-team-engagement`, `designing-adversary-engagement-with-mitre-engage`, `performing-purple-team-atomic-testing`, `cloudfail-cloud-origin`, `engagement-discipline` ; 33 more, expand with grep
+
+## Appendix
+
+- Total primaries: 197 (996 on disk, secondary subcategories are in reference.md, the rest are grepped on demand and never loaded proactively)
+- Maintenance: after adding/removing a skill, re-run `python attack-skill-router/gen_router.py` (scans the repository + INDEX.md directly, no CSV needed); ranking within a category follows "methodology repository priority + tool name order", and the FORCE_PRIMARY list lives in the script
+- Accompanying files: reference.md (the expansion layer generated by this script), MERGES.md (adjudication records for merging overlapping groups, with 13 merges / 7 non-merges already adjudicated by hand, not generated by this script)
