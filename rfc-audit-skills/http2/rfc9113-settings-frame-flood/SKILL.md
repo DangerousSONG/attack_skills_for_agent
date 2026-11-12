@@ -1,54 +1,55 @@
 ---
 name: rfc9113-settings-frame-flood
-description: 审计 HTTP/2 实现 SETTINGS 帧处理是否有界——超大条目数 SETTINGS 帧反复发送即 CPU 耗尽（CVE-2020-11080 nghttp2 <1.41.0：14400 字节 2400 条目反复发送打满 CPU，波及 Node.js/Oracle MySQL 等全生态）；RFC 仅要求长度 6 的倍数校验与按序处理，条目数上限属实现义务（盲区条款）
+description: Audit whether HTTP/2 implementations bound SETTINGS-frame processing — repeatedly sending SETTINGS frames with an excessive entry count exhausts CPU (CVE-2020-11080 nghttp2 <1.41.0: a 14,400-byte frame with 2,400 entries repeated saturates the CPU, impacting the entire ecosystem including Node.js/Oracle MySQL); the RFC only requires the length-multiple-of-6 check and in-order processing — an entry-count cap is the implementation's obligation (blind-spot clause)
+zh-signals: 审计 HTTP/2 实现 SETTINGS 帧处理是否有界——超大条目数 SETTINGS 帧反复发送即 CPU 耗尽（CVE-2020-11080 nghttp2 <1.41.0：14400 字节 2400 条目反复发送打满 CPU，波及 Node.js/Oracle MySQL 等全生态）；RFC 仅要求长度 6 的倍数校验与按序处理，条目数上限属实现义务（盲区条款）
 rfc: RFC 9113 §6.5（SETTINGS 帧）/ §6.5.1 / RFC 7540 §6.5.2（设置项语义）
 license: Apache-2.0
 ---
 
-# RFC 9113 §6.5 SETTINGS 帧资源消耗审计
+# RFC 9113 §6.5 SETTINGS-Frame Resource-Consumption Audit
 
-## 1. 约束条款（原文出处）
+## 1. Normative Clauses (Original Sources)
 
-RFC 9113 §6.5（要点）：
-> SETTINGS 帧长度**必须是 6 的倍数**，否则按连接错误（FRAME_SIZE_ERROR）处理；
-> SETTINGS 中的值 MUST 按出现顺序处理；
-> SETTINGS 影响连接状态，不得依赖流控。
+RFC 9113 §6.5 (key points):
+> A SETTINGS-frame length **must be a multiple of 6**, otherwise treat as a connection error (FRAME_SIZE_ERROR);
+> Values in a SETTINGS frame MUST be processed in the order they appear;
+> SETTINGS affect connection state and do not rely on flow control.
 
-核心模式一句话：**SETTINGS 是连接级控制帧，不走流控、不需 ACK 即生效——RFC 给了格式约束却没给条目数上限，这条留白就是 CVE-2020-11080 的房间。审计的对象不是"违反 RFC 哪条 MUST"，而是"RFC 留白处你有没有自己立墙"。**
+Core pattern in one sentence: **SETTINGS is a connection-level control frame — it bypasses flow control and takes effect without ACK — the RFC gives format constraints but no entry-count cap, and that blank space is exactly CVE-2020-11080's room. The audit target is not "which RFC MUST is violated" but "did you build your own wall where the RFC left it blank."**
 
-## 2. 违规判定条件
+## 2. Violation Criteria
 
-| 编号 | 探测 | 判定 |
+| ID | Probe | Criterion |
 |---|---|---|
-| SF-1 | 发送 14,400 字节 SETTINGS 帧（2,400 条目，合法长度 6 倍数），循环反复 | CPU 占用随发送速率线性爬升且无熔断 → CVE-2020-11080 同款 |
-| SF-2 | SETTINGS 帧长度非 6 倍数 | 未按 FRAME_SIZE_ERROR 断开 → §6.5 格式校验缺失 |
-| SF-3 | 高频发送 SETTINGS（每包一帧，值随机变化） | 服务端逐帧全量应用且无频率/数量上限 → 无界处理面 |
-| SF-4 | SETTINGS 中含未知标识符 | 未忽略（报错断开） → §6.5.2 容忍义务缺失（兼容性断点） |
-| SF-5 | SETTINGS 帧出现在流 0 以外的流 | 未按连接错误处理 → 流定向校验缺失 |
+| SF-1 | Send a 14,400-byte SETTINGS frame (2,400 entries, legal multiple-of-6 length) in a loop | CPU climbs linearly with send rate and no circuit breaker → same class as CVE-2020-11080 |
+| SF-2 | SETTINGS frame length not a multiple of 6 | Not disconnected with FRAME_SIZE_ERROR → §6.5 format validation missing |
+| SF-3 | High-frequency SETTINGS (one frame per packet, values randomly changing) | Server applies each frame in full with no rate/count cap → unbounded processing surface |
+| SF-4 | SETTINGS containing unknown identifiers | Not ignored (error/disconnect) → §6.5.2 tolerance obligation missing (compatibility breakpoint) |
+| SF-5 | SETTINGS frame on a stream other than stream 0 | Not handled as a connection error → stream-orientation validation missing |
 
-判定方法：h2 客户端循环发送；观测目标 CPU/事件循环延迟；对照组为无攻击基线吞吐。
+Method: h2 client sending in a loop; observe target CPU/event-loop latency; control group is the no-attack baseline throughput.
 
-## 3. 攻击面猜想
+## 3. Attack-Surface Hypotheses
 
-- **CPU 耗尽 DoS**：SF-1/SF-3 ——低带宽打满事件循环；Node.js 生态因内嵌 nghttp2 全量波及
-- **连接状态搅动**：SF-3 ——每帧 SETTINGS 变更连接参数（如窗口大小），触发下游全部流的重算
-- **兼容性指纹/断点**：SF-4 ——对未知标识报错暴露栈版本并阻断未来扩展
+- **CPU-exhaustion DoS**: SF-1/SF-3 — low bandwidth saturates the event loop; the Node.js ecosystem fully impacted via its embedded nghttp2
+- **Connection-state churn**: SF-3 — every SETTINGS frame changes connection parameters (e.g., window size), triggering recomputation across all downstream streams
+- **Compatibility fingerprint/breakpoint**: SF-4 — erroring on unknown identifiers exposes the stack version and blocks future extensions
 
-## 4. 关联历史 CVE
+## 4. Related Historical CVEs
 
-| CVE | 实现 | 根因 |
+| CVE | Implementation | Root Cause |
 |---|---|---|
-| **CVE-2020-11080** | nghttp2 <1.41.0（CVSS 7.5，CWE-400） | 14,400 字节（2,400 条目）SETTINGS 帧反复发送 → CPU 100%；无条目数上限。波及 Node.js、Oracle MySQL、GraalVM 等全生态下游 |
-| 盲区声明 | 同族待发现 | RFC 未规定条目上限，各实现自定上限值不一——本 Skill 标记为**高复发盲区**：审计任何新 H2 栈时必查 |
+| **CVE-2020-11080** | nghttp2 <1.41.0 (CVSS 7.5, CWE-400) | A 14,400-byte (2,400-entry) SETTINGS frame sent repeatedly → 100% CPU; no entry-count cap. Impacts the entire downstream ecosystem: Node.js, Oracle MySQL, GraalVM, etc. |
+| Blind-spot declaration | Same family, TBD | The RFC does not specify an entry cap, and implementations set wildly different caps — this skill is flagged as a **high-recurrence blind spot**: must-check when auditing any new H2 stack |
 
-## 5. 差分验证方法
+## 5. Differential Verification
 
-对照组：nghttp2 ≥1.41.0（修复版含条目处理上限）。
-对比字段：SF-1 CPU 曲线、SF-3 帧频率熔断阈值、SF-2/4/5 错误码正确性。
-误报排除：服务端对 SETTINGS 应用后回 ACK 属正常行为，判定只看"处理成本是否有界"；实现声明"条目上限"但上限过高（如 2^30）仍标违规。
+Control group: nghttp2 ≥1.41.0 (patched version includes entry-processing caps).
+Comparison fields: SF-1 CPU curve, SF-3 frame-rate circuit-breaker threshold, SF-2/4/5 error-code correctness.
+False-positive exclusion: a server ACKing after applying SETTINGS is normal behavior — judgment only considers "is the processing cost bounded"; an implementation declaring an "entry cap" that is absurdly high (e.g., 2^30) is still marked as a violation.
 
-## 6. 对接的攻击 Skill
+## 6. Downstream Attack Skills
 
-- 技能层（怎么打）：`slowhttptest-dos`（低频 SETTINGS 流模式）、`fuzzowski-network-fuzz`（SETTINGS 变体 fuzz）
-- 工具层（用什么打）：Python h2（帧级 SETTINGS 构造）、CPU 采样脚本
-- 命中后动作：SF-1 确认 → 测量单连接 CPU 放大系数 → 评估 Node.js 类内嵌栈的下游波及清单
+- Skill layer (how to attack): `slowhttptest-dos` (low-rate SETTINGS stream mode), `fuzzowski-network-fuzz` (SETTINGS-variant fuzzing)
+- Tool layer (what to attack with): Python h2 (frame-level SETTINGS construction), CPU sampling scripts
+- Post-hit actions: SF-1 confirmed → measure single-connection CPU amplification factor → assess the downstream impact list of embedded stacks like Node.js
