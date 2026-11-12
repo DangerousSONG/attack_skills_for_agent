@@ -1,57 +1,58 @@
 ---
 name: rfc7541-hpack-decompression-accounting
-description: 审计 HPACK 解码侧的资源记账模型——动态表 4KiB 上限管不住解码过程中的逐条目物化分配，索引引用放大（1 字节引用 → 全量头副本）与逐条目簿记开销叠加即成 HTTP/2 Bomb（CVE-2026-49975 Apache httpd / CVE-2026-47774 Envoy，nginx/IIS/Pingora 全栈，单连接 20 秒 32GB）；经典 HPACK Bomb 谱系 CVE-2016-6581（python-hpack）/CVE-2016-1544（nghttpd）/CVE-2025-53020（Apache 4000x）/CVE-2026-10725（Perl Protocol::HTTP2 头列表上限通告不执行）；RFC 7541 §7.3 被实证为规范缺陷——解码后大小与头字段数是两个独立上限，实现缺一不可
+description: Audit the resource-accounting model on the HPACK decode side — the 4KiB dynamic-table cap does not cover per-entry materialization during decoding; index-reference amplification (1-byte reference → full header copy) combined with per-entry bookkeeping overhead becomes an HTTP/2 Bomb (CVE-2026-49975 Apache httpd / CVE-2026-47774 Envoy, full stack nginx/IIS/Pingora, 32GB in 20 seconds per connection); classic HPACK Bomb lineage CVE-2016-6581 (python-hpack) / CVE-2016-1544 (nghttpd) / CVE-2025-53020 (Apache ~4000x) / CVE-2026-10725 (Perl Protocol::HTTP2 advertises header-list limit but never enforces it); RFC 7541 §7.3 empirically proven to be a specification defect — decompressed size and header-field count are two independent limits, and an implementation needs both
+zh-signals: 审计 HPACK 解码侧的资源记账模型——动态表 4KiB 上限管不住解码过程中的逐条目物化分配，索引引用放大（1 字节引用 → 全量头副本）与逐条目簿记开销叠加即成 HTTP/2 Bomb（CVE-2026-49975 Apache httpd / CVE-2026-47774 Envoy，nginx/IIS/Pingora 全栈，单连接 20 秒 32GB）；经典 HPACK Bomb 谱系 CVE-2016-6581（python-hpack）/CVE-2016-1544（nghttpd）/CVE-2025-53020（Apache 4000x）/CVE-2026-10725（Perl Protocol::HTTP2 头列表上限通告不执行）；RFC 7541 §7.3 被实证为规范缺陷——解码后大小与头字段数是两个独立上限，实现缺一不可
 rfc: RFC 7541 §7.3（内存消耗，已实证缺陷条款）/ §4.1（条目尺寸记账）+ RFC 9113 §6.5.2（SETTINGS_MAX_HEADER_LIST_SIZE）
 license: Apache-2.0
 ---
 
-# RFC 7541 §7.3 / RFC 9113 §6.5.2 HPACK 解码资源记账审计
+# RFC 7541 §7.3 / RFC 9113 §6.5.2 HPACK Decode Resource-Accounting Audit
 
-## 1. 约束条款（原文出处）
+## 1. Normative Clauses (Original Sources)
 
-RFC 9113 §6.5.2（要点）：
-> 端点通告 `SETTINGS_MAX_HEADER_LIST_SIZE` 后，**收到超出该限制的头列表必须视为流错误/连接错误**。
+RFC 9113 §6.5.2 (key points):
+> After advertising `SETTINGS_MAX_HEADER_LIST_SIZE`, an endpoint **MUST treat a received header list that exceeds the advertised limit as a stream error or connection error**.
 
-RFC 7541 §7.3（要点，已被实证为缺陷）：
-> 攻击者可使端点耗尽内存。HPACK 通过 SETTINGS_HEADER_TABLE_SIZE 限制动态表内存……（仅此一句，认为问题已解决）。
+RFC 7541 §7.3 (key points, empirically proven defective):
+> An attacker can cause an endpoint to exhaust memory. HPACK limits dynamic-table memory via SETTINGS_HEADER_TABLE_SIZE… (this one sentence, assuming the problem is solved).
 
-核心模式一句话：**§7.3 用"压缩比"框定了内存风险，但 2026 年 HTTP/2 Bomb 证明这个模型是错的——单条几乎为空的头（解压缩尺寸极小、解压根不触发限制）也能让服务端为每个条目付簿记开销（池块、结构体、零终止拷贝），放大系数 68:1（IIS）到 5700:1（Envoy）。五个独立实现团队读了同一段规范犯了同一个错，说明审计点不在"有没有上限"，而在"上限管的是哪一层内存"。解码后总尺寸和头字段个数是两个独立上限，缺一即洞。**
+Core pattern in one sentence: **§7.3 frames memory risk in terms of "compression ratio", but the 2026 HTTP/2 Bomb proved this model wrong — a single nearly-empty header (tiny decompressed size, decompression never triggers any limit) can still make the server pay per-entry bookkeeping overhead (pool blocks, structs, NUL-terminated copies) for every entry, with amplification factors from 68:1 (IIS) to 5700:1 (Envoy). Five independent implementation teams read the same spec paragraph and made the same mistake, so the audit point is not "is there a limit" but "which layer of memory does the limit govern." Decompressed total size and header-field count are two independent limits; missing either one is a hole.**
 
-## 2. 违规判定条件
+## 2. Violation Criteria
 
-| 编号 | 探测 | 判定 |
+| ID | Probe | Criterion |
 |---|---|---|
-| HA-1 | 单头块内数千个"索引引用同一条大 cookie 条目"（1 字节/引用） | 服务端逐引用物化全量副本且头列表总量上限未拦截 → HTTP/2 Bomb 第 1 阶段成立 |
-| HA-2 | 单头块内塞入数千个独立小头字段（总量低于解码尺寸上限） | 字段数无上限 → 簿记放大绕过尺寸上限（Calif 变体核心） |
-| HA-3 | 头列表超过 SETTINGS_MAX_HEADER_LIST_SIZE 通告值 | 未按流错误拒绝 → §6.5.2 通告-执行不一致（CVE-2026-10725 同款：通告 65536 但解码器从不查） |
-| HA-4 | Huffman 编码的极小线上负载展开为大字符串（压缩比 >100:1） | 展开后无字符串级上限 → 与 `rfc7541-hpack-decode-limit` 互补的字段级维度 |
-| HA-5 | HA-1/HA-2 与流控持有（INITIAL_WINDOW_SIZE=0）组合 | 缓冲不可回收 → 全链成立，对照 CVE-2026-49975 复现表 |
+| HA-1 | Thousands of "index references to the same large cookie entry" (1 byte per reference) within a single header block | Server materializes a full copy per reference and the header-list total limit does not stop it → HTTP/2 Bomb phase 1 holds |
+| HA-2 | Thousands of independent small header fields in a single header block (total below the decompressed-size limit) | No field-count limit → bookkeeping amplification bypasses the size limit (the Calif variant core) |
+| HA-3 | Header list exceeds the advertised SETTINGS_MAX_HEADER_LIST_SIZE | Not rejected as a stream error → §6.5.2 advertise/enforce inconsistency (same class as CVE-2026-10725: advertises 65536 but the decoder never checks) |
+| HA-4 | Huffman-encoded tiny on-wire payload expands into a large string (compression ratio >100:1) | No string-level limit after expansion → the field-level dimension complementary to `rfc7541-hpack-decode-limit` |
+| HA-5 | HA-1/HA-2 combined with flow-control holds (INITIAL_WINDOW_SIZE=0) | Buffer cannot be released → full chain holds; compare against the CVE-2026-49975 reproduction table |
 
-判定方法：python-hpack 手工构造头块；观测每请求服务端内存增量；分别测"尺寸上限"与"字段数上限"两个维度。
+Method: hand-craft header blocks with python-hpack; observe per-request server memory increments; test the "size limit" and "field-count limit" dimensions separately.
 
-## 3. 攻击面猜想
+## 3. Attack-Surface Hypotheses
 
-- **内存耗尽 DoS**：HA-1/HA-2/HA-5 ——五大实现 2026-06 同步中招的当前最高危 H2 攻击类
-- **通告-执行分歧指纹**：HA-3 ——SETTINGS 宣称的值与实际执行不一致暴露栈与版本
-- **字段数走私**：HA-2 ——WAF/网关按字节数限额时，海量小头字段可绕过审计规则
+- **Memory-exhaustion DoS**: HA-1/HA-2/HA-5 — the currently highest-risk H2 attack class, hitting five major implementations simultaneously in 2026-06
+- **Advertise/enforce divergence fingerprint**: HA-3 — a SETTINGS-advertised value that is not actually enforced exposes the stack and version
+- **Field-count smuggling**: HA-2 — when a WAF/gateway quotas by byte count, massive numbers of small header fields can bypass audit rules
 
-## 4. 关联历史 CVE
+## 4. Related Historical CVEs
 
-| CVE | 实现 | 根因 |
+| CVE | Implementation | Root Cause |
 |---|---|---|
-| **CVE-2026-49975 / CVE-2026-47774** | Apache httpd（mod_http2 <2.0.41）/ Envoy / nginx（1.29.8 max_headers 修复）/ IIS / Cloudflare Pingora（RHSB-2026-007，2026-06-02 Calif 披露，OpenAI Codex 辅助发现） | 逐条目簿记开销不在动态表预算内 + 零窗口持有钉住内存；放大 68:1–5700:1；约 88 万公网站点暴露 |
-| **CVE-2026-10725** | Perl Protocol::HTTP2 <1.13 | 入向 HPACK 无头列表上限：SETTINGS 通告 MAX_HEADER_LIST_SIZE 默认 65536 但解码路径从不查询；CONTINUATION 缓冲无界累加 |
-| **CVE-2025-53020** | Apache httpd（Gal Bar Nahum，~4000x 放大） | HTTP/2 Bomb 前奏：压缩头展开与驻留的放大实现 |
-| **CVE-2016-6581 / CVE-2016-1544** | python-hpack <2.3.0 / nghttpd、nghttp、libnghttp2_asio | 经典 HPACK Bomb：动态表塞满大条目后数千次引用，16KB 线上 → 64MB 解码；nghttp2 库本身不受影响的边界案例（应用层义务） |
+| **CVE-2026-49975 / CVE-2026-47774** | Apache httpd (mod_http2 <2.0.41) / Envoy / nginx (1.29.8 max_headers fix) / IIS / Cloudflare Pingora (RHSB-2026-007, disclosed 2026-06-02 by Calif, discovered with OpenAI Codex assistance) | Per-entry bookkeeping overhead not covered by the dynamic-table budget + zero-window holds pinning memory; amplification 68:1–5700:1; ~880K public websites exposed |
+| **CVE-2026-10725** | Perl Protocol::HTTP2 <1.13 | Inbound HPACK has no header-list limit: SETTINGS advertises MAX_HEADER_LIST_SIZE default 65536 but the decode path never consults it; CONTINUATION buffering accumulates without bound |
+| **CVE-2025-53020** | Apache httpd (Gal Bar Nahum, ~4000x amplification) | Prelude to the HTTP/2 Bomb: amplification via compressed-header expansion and residency |
+| **CVE-2016-6581 / CVE-2016-1544** | python-hpack <2.3.0 / nghttpd, nghttp, libnghttp2_asio | Classic HPACK Bomb: fill the dynamic table with large entries then reference them thousands of times, 16KB on the wire → 64MB decoded; boundary case where the nghttp2 library itself is unaffected (application-layer obligation) |
 
-## 5. 差分验证方法
+## 5. Differential Verification
 
-对照组：nginx ≥1.29.8（max_headers 字段数上限）与 mod_http2 ≥2.0.41（修复版）作为双上限标杆。
-对比字段：HA-1 单引用物化成本、HA-2 字段数上限值、HA-3 通告-执行一致性、HA-5 与流控持有的组合放大系数。
-误报排除：实现字段数上限极高（如 2^20）但仍存在 → 判定违规（拒绝服务下限过低才算数）；实现按解码后尺寸限额且字段数受尺寸间接约束（大字段挤占）→ 对 HA-1 判定通过但对 HA-2 仍须实测。
+Control group: nginx ≥1.29.8 (max_headers field-count limit) and mod_http2 ≥2.0.41 (patched) as the dual-limit benchmark.
+Comparison fields: HA-1 per-reference materialization cost, HA-2 field-count limit value, HA-3 advertise/enforce consistency, HA-5 combined amplification factor with flow-control holds.
+False-positive exclusion: an implementation with an extremely high field-count limit (e.g., 2^20) still counts as a violation (a DoS floor set too low is what matters); an implementation limiting by decompressed size with field count indirectly constrained by size (large fields squeeze the count) → passes HA-1 but HA-2 still requires empirical testing.
 
-## 6. 对接的攻击 Skill
+## 6. Downstream Attack Skills
 
-- 技能层（怎么打）：`fuzzowski-network-fuzz`（HPACK 头块变异）、`dharma-grammar-fuzz`（条目数/引用模式组合生成）
-- 工具层（用什么打）：python-hpack 手工编码、CVE-2026-49975 公开复现工程（razureink/cve-2026-49975-http2bomb_reproduction）做对照基线
-- 命中后动作：HA-2 确认 → 测"字段数 × 条目大小"放大矩阵 → 对照五大实现修复表定级 → 与 `rfc9113-flow-control-window-stall` 组合测全链
+- Skill layer (how to attack): `fuzzowski-network-fuzz` (HPACK header-block mutation), `dharma-grammar-fuzz` (entry-count / reference-pattern combination generation)
+- Tool layer (what to attack with): python-hpack hand-encoding, the public CVE-2026-49975 reproduction project (razureink/cve-2026-49975-http2bomb_reproduction) as the control baseline
+- Post-hit actions: HA-2 confirmed → test the "field count × entry size" amplification matrix → rate against the five-implementation fix table → combine with `rfc9113-flow-control-window-stall` for the full chain

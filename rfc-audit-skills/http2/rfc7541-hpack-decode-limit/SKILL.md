@@ -1,56 +1,57 @@
 ---
 name: rfc7541-hpack-decode-limit
-description: 审计 HPACK 解码器整数/字符串表示是否有界——超长整数编码、超长字符串字面量必须按解码错误处理，否则单头块即可撑爆内存或绕过长度限制（CVE-2026-59248 cowlib HPACK/QPACK 整数解码内存耗尽 DoS；Jetty OSTIF 审计 TOB:JETTY-1 HpackDecoder 整数溢出超 maxHeaderSize；h2o issue #3602 接受超长 varint 而 nghttp2/ls-hpack 拒绝，属可绕过长限制的合规分歧点）；RFC 7541 §5.1/§5.2/§7.4 明确"实现必须自设上限"（盲区条款）
+description: Audit whether the HPACK decoder bounds integer/string representations — overlong integer encodings and oversized string literals must be treated as decoding errors, otherwise a single header block can exhaust memory or bypass length limits (CVE-2026-59248 cowlib HPACK/QPACK integer-decoder memory-exhaustion DoS; Jetty OSTIF audit TOB:JETTY-1 HpackDecoder integer overflow past maxHeaderSize; h2o issue #3602 accepts overlong varint while nghttp2/ls-hpack reject it — a compliance divergence that bypasses length limits); RFC 7541 §5.1/§5.2/§7.4 explicitly place the burden of limits on the implementation (blind-spot clause)
+zh-signals: 审计 HPACK 解码器整数/字符串表示是否有界——超长整数编码、超长字符串字面量必须按解码错误处理，否则单头块即可撑爆内存或绕过长度限制（CVE-2026-59248 cowlib HPACK/QPACK 整数解码内存耗尽 DoS；Jetty OSTIF 审计 TOB:JETTY-1 HpackDecoder 整数溢出超 maxHeaderSize；h2o issue #3602 接受超长 varint 而 nghttp2/ls-hpack 拒绝，属可绕过长限制的合规分歧点）；RFC 7541 §5.1/§5.2/§7.4 明确"实现必须自设上限"（盲区条款）
 rfc: RFC 7541 §5.1（整数表示）/ §5.2（字符串字面量）/ §7.4（实现上限义务）
 license: Apache-2.0
 ---
 
-# RFC 7541 §5.1/§5.2 HPACK 解码有界性审计
+# RFC 7541 §5.1/§5.2 HPACK Decode-Boundedness Audit
 
-## 1. 约束条款（原文出处）
+## 1. Normative Clauses (Original Sources)
 
-RFC 7541 §5.1（要点）：
-> 整数表示允许无限大的值；编码器可以发送大量零值字节浪费带宽并可用于整数溢出。**值或编码长度超过实现上限的整数编码必须按解码错误处理**。
+RFC 7541 §5.1 (key points):
+> Integer representations allow arbitrarily large values; an encoder can send long runs of zero-value bytes to waste bandwidth and to enable integer overflow. **Integer encodings whose value or encoding length exceeds the implementation's limit MUST be treated as a decoding error.**
 
-RFC 7541 §7.4（要点）：
-> 实现必须为接受的**整数值、整数编码长度、字符串字面量长度**分别设置上限。
+RFC 7541 §7.4 (key points):
+> Implementations MUST set limits on the **integer values, integer encoding lengths, and string literal lengths** they accept.
 
-核心模式一句话：**HPACK 整数是可变长 varint（7 位/组，理论上无上限），字符串长度字段同样无上限——RFC 把上限完全下放给实现，这就是解码器内存放大器。审计对象不是"违反哪条 MUST"，而是"三个上限（值/编码长/字符串长）你立了没有、立在哪、能不能被超长编码绕过"。**
+Core pattern in one sentence: **HPACK integers are variable-length varints (7 bits per group, theoretically unbounded), and string length fields are likewise unbounded — the RFC delegates all limits entirely to the implementation. That makes the decoder a memory amplifier. The audit target is not "which MUST is violated" but "have you set the three limits (value / encoding length / string length), where, and can an overlong encoding bypass them."**
 
-## 2. 违规判定条件
+## 2. Violation Criteria
 
-| 编号 | 探测 | 判定 |
+| ID | Probe | Criterion |
 |---|---|---|
-| HD-1 | 发送编码长度 11+ 字节（前缀值故意低填充）的 HPACK 整数（如 :path 索引字段） | 未按解码错误处理（接受或静默截断）→ §5.1 上限义务缺失，超长编码可绕过外层头部长度限制 |
-| HD-2 | 发送声明长度 16MB+ 的字符串字面量（name 或 value） | 未按流错误/解码错误拒绝，或先全量分配再校验 → 内存放大（线上 4 字节长度字段 → 线下 16MB 分配） |
-| HD-3 | 整数解码累加发生溢出（构造前缀 + 连续 0xFF 字节使累加器回绕） | 溢出后小值放行或进入负长度路径 → Jetty TOB:JETTY-1 同款 |
-| HD-4 | 同一头块内嵌套超长编码 + 合法字段交替 | 逐字段处理无总量记账 → 单头块绕过单字段上限（需头块级累积上限） |
-| HD-5 | 发送超长编码后接合法请求 | 连接未被关闭或后续解码状态未重置 → 错误恢复路径缺陷 |
+| HD-1 | Send an HPACK integer (e.g., an indexed `:path` field) with an encoding length of 11+ bytes (prefix value deliberately low-padded) | Not treated as a decoding error (accepted or silently truncated) → §5.1 limit obligation missing; overlong encoding can bypass the outer header-length limit |
+| HD-2 | Send a string literal (name or value) with a declared length of 16MB+ | Not rejected as a stream/decoding error, or fully allocated before validation → memory amplification (4-byte length field on the wire drives a 16MB allocation off it) |
+| HD-3 | Integer-decoding accumulator overflows (craft prefix + consecutive 0xFF bytes to wrap the accumulator) | Small value passes after overflow, or enters a negative-length path → same class as Jetty TOB:JETTY-1 |
+| HD-4 | Alternate overlong encodings with legitimate fields within a single header block | Per-field processing with no aggregate accounting → a single header block bypasses per-field limits (a header-block-level cumulative limit is required) |
+| HD-5 | Send a legitimate request after an overlong encoding | Connection not closed, or decoder state not reset → error-recovery path defect |
 
-判定方法：Python h2/hpack 库手工构造 HPACK 字节流（绕开高层 API 的长度检查）；观测服务端内存分配峰值与连接存活状态。
+Method: hand-craft HPACK byte streams with the Python h2/hpack library (bypassing the high-level API's length checks); observe server memory allocation peaks and connection survival.
 
-## 3. 攻击面猜想
+## 3. Attack-Surface Hypotheses
 
-- **内存耗尽 DoS**：HD-2 ——低带宽（长度字段几字节）触发大分配；cowlib 实证为 QPACK/HPACK 共用解码路径
-- **长度限制绕过**：HD-1 ——超长 varint 编码小值绕过基于"编码长度"的简易 WAF/网关头限长，配合下游按解码值处理形成走私分歧
-- **整数溢出 → 越界读写**：HD-3 ——累加器溢出可导致负长度 memcpy（TOB:JETTY-1 定性 Medium/DoS，堆溢出可升级）
+- **Memory-exhaustion DoS**: HD-2 — low bandwidth (a few bytes of length field) triggers a large allocation; the cowlib finding shows the HPACK/QPACK decode paths are shared
+- **Length-limit bypass**: HD-1 — an overlong varint encoding a small value bypasses naive WAF/gateway length caps based on encoded length, and the decoded value processed downstream creates a smuggling divergence
+- **Integer overflow → out-of-bounds read/write**: HD-3 — accumulator overflow can lead to negative-length memcpy (TOB:JETTY-1 rated Medium/DoS; heap overflow can escalate)
 
-## 4. 关联历史 CVE
+## 4. Related Historical CVEs
 
-| CVE / 审计发现 | 实现 | 根因 |
+| CVE / Audit Finding | Implementation | Root Cause |
 |---|---|---|
-| **CVE-2026-59248** | cowlib（Erlang，Cowboy 服务端） | HPACK/QPACK 整数解码器无内存上限 → 解码内存耗尽 DoS；已有可复现 Docker lab + exploit client |
-| **TOB:JETTY-1**（Trail of Bits OSTIF Jetty 审计 2023） | Eclipse Jetty HpackDecoder | 整数溢出风险可使解码越过 maxHeaderSize 限制（Medium，修复后复核） |
-| h2o/h2o#3602（2026-06 实证） | h2o | HPACK 解码器接受超长（overlong）整数编码；nghttp2 与 ls-hpack 拒绝 → 实现间合规分歧，可绕过长限制/混淆头内容 |
+| **CVE-2026-59248** | cowlib (Erlang, Cowboy server) | HPACK/QPACK integer decoder has no memory bound → decoding memory-exhaustion DoS; reproducible Docker lab + exploit client available |
+| **TOB:JETTY-1** (Trail of Bits OSTIF Jetty audit 2023) | Eclipse Jetty HpackDecoder | Integer-overflow risk lets decoding exceed the maxHeaderSize limit (Medium, fixed and re-verified) |
+| h2o/h2o#3602 (2026-06 empirical) | h2o | HPACK decoder accepts overlong integer encodings while nghttp2 and ls-hpack reject them → inter-implementation compliance divergence; can bypass length limits / confuse header content |
 
-## 5. 差分验证方法
+## 5. Differential Verification
 
-对照组：nghttp2 ≥1.44（对超长整数编码直接拒绝）；h2o 修复版。
-对比字段：HD-1 是否拒绝及拒绝码（COMPRESSION_ERROR）、HD-2 分配前校验 vs 分配后校验、HD-3 溢出处理、HD-5 连接处置。
-误报排除：实现接受超长编码但设有头块级总字节上限且先校验后分配 → 判定通过（上限位置不同但等效）。
+Control group: nghttp2 ≥1.44 (rejects overlong integer encodings outright); patched h2o.
+Comparison fields: whether HD-1 is rejected and with which error code (COMPRESSION_ERROR); HD-2 allocate-before-check vs check-before-allocate; HD-3 overflow handling; HD-5 connection disposition.
+False-positive exclusion: an implementation that accepts overlong encodings but enforces a header-block-level total-byte limit checked before allocation → passes (limit placed differently but equivalent).
 
-## 6. 对接的攻击 Skill
+## 6. Downstream Attack Skills
 
-- 技能层（怎么打）：`fuzzowski-network-fuzz`（HPACK 字节变异）、`dharma-grammar-fuzz`（整数/字符串长度字段组合生成）
-- 工具层（用什么打）：python-hpack 手工编码字节流、内存采样脚本（tracemalloc / jmap）
-- 命中后动作：HD-2 确认 → 测单连接内存放大系数与 OOM 时间 → 评估共享网关（cowlib/Cowboy 系）下游波及面
+- Skill layer (how to attack): `fuzzowski-network-fuzz` (HPACK byte mutation), `dharma-grammar-fuzz` (combinations of integer/string length fields)
+- Tool layer (what to attack with): python-hpack hand-encoded byte streams, memory sampling scripts (tracemalloc / jmap)
+- Post-hit actions: HD-2 confirmed → measure per-connection memory amplification factor and time-to-OOM → assess blast radius on shared gateways (cowlib/Cowboy family)

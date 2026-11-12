@@ -1,57 +1,58 @@
 ---
 name: rfc7541-hpack-index-address-space
-description: 审计 HPACK 索引地址空间（静态表 61 项 + 动态表）的边界与生命周期一致性——索引越界读直接远程崩溃（CVE-2018-14645 HAProxy <1.8.14 hpack_valid_idx() 越界读 DoS，CWE-125，RHSA-2018:2882）；SETTINGS_HEADER_TABLE_SIZE=0 通告生效前编码器有权使用 4096 默认表，解码器提前拒绝即互操作炸弹（Zephyr #124221 2026-11 实证：Chrome/Firefox 首屏突发全挂）；动态表驱逐后的索引引用必须判解码错误（RFC 7541 §4.3/§2.3.3）；RFC 7541 §2.3.3 的地址空间语义 + §4.2/§6.3 的容量协商时序是判定锚点
+description: Audit HPACK index address-space (static table 61 entries + dynamic table) boundary and lifecycle consistency — out-of-bounds index reads crash remotely (CVE-2018-14645 HAProxy <1.8.14 hpack_valid_idx() OOB-read DoS, CWE-125, RHSA-2018:2882); before a SETTINGS_HEADER_TABLE_SIZE=0 advertisement takes effect the encoder is entitled to use the 4096-default table, and a decoder that rejects early becomes an interoperability bomb (Zephyr #124221, 2026-11 empirical — Chrome/Firefox first-screen bursts all fail); index references to evicted entries must be decoding errors (RFC 7541 §4.3/§2.3.3); RFC 7541 §2.3.3 address-space semantics + §4.2/§6.3 capacity-negotiation timing are the audit anchors
+zh-signals: 审计 HPACK 索引地址空间（静态表 61 项 + 动态表）的边界与生命周期一致性——索引越界读直接远程崩溃（CVE-2018-14645 HAProxy <1.8.14 hpack_valid_idx() 越界读 DoS，CWE-125，RHSA-2018:2882）；SETTINGS_HEADER_TABLE_SIZE=0 通告生效前编码器有权使用 4096 默认表，解码器提前拒绝即互操作炸弹（Zephyr #124221 2026-11 实证：Chrome/Firefox 首屏突发全挂）；动态表驱逐后的索引引用必须判解码错误（RFC 7541 §4.3/§2.3.3）；RFC 7541 §2.3.3 的地址空间语义 + §4.2/§6.3 的容量协商时序是判定锚点
 rfc: RFC 7541 §2.3.3（索引地址空间）/ §4.2（最大表尺寸）/ §4.3（驱逐）/ §6.3（尺寸更新时序）
 license: Apache-2.0
 ---
 
-# RFC 7541 §2.3.3 索引地址空间边界审计
+# RFC 7541 §2.3.3 Index Address-Space Boundary Audit
 
-## 1. 约束条款（原文出处）
+## 1. Normative Clauses (Original Sources)
 
-RFC 7541 §2.3.3（要点）：
-> 索引地址空间 = 静态表（61 项）+ 动态表（当前条目）；**严格大于两者之和的索引必须按解码错误处理**。
+RFC 7541 §2.3.3 (key points):
+> Index address space = static table (61 entries) + dynamic table (current entries); **an index strictly greater than their sum must be treated as a decoding error**.
 
-RFC 7541 §4.2 + §6.3（要点）：
-> 编码器在收到对端的 SETTINGS 并确认前，有权假设动态表尺寸为协议默认值 4096；表尺寸变更时按新尺寸驱逐，引用已被驱逐的索引是解码错误。
+RFC 7541 §4.2 + §6.3 (key points):
+> Before receiving and acknowledging the peer's SETTINGS, the encoder may assume the dynamic-table size is the protocol default of 4096; when the table size changes, eviction follows the new size, and referencing an evicted index is a decoding error.
 
-核心模式一句话：**索引是 HPACK 里唯一的"指针"——指针越界在 C 实现里就是越界读崩溃（HAProxy 实证），而"什么时候允许用什么索引"是个时序问题：服务端刚说"我表尺寸为 0"，在途的、按 4096 默认表编码的请求完全合法，解码器这时候拒收就是把自己和全浏览器互操作搞死（Zephyr 实证）。审计对象是索引校验的两个维度：边界（越界必须判错不崩溃）与时序（默认表窗口期内的索引必须可解析）。**
+Core pattern in one sentence: **the index is HPACK's only "pointer" — an out-of-bounds pointer in a C implementation is a direct OOB-read crash (HAProxy empirical), and "which indices are allowed when" is a timing problem: right after the server says "my table size is 0", in-flight requests encoded against the 4096 default table are perfectly legal, and a decoder that rejects them at this moment kills its own interoperability with every browser (Zephyr empirical). The audit target has two dimensions: boundary (out-of-bounds must error, not crash) and timing (indices within the default-table window must parse).**
 
-## 2. 违规判定条件
+## 2. Violation Criteria
 
-| 编号 | 探测 | 判定 |
+| ID | Probe | Criterion |
 |---|---|---|
-| IA-1 | 发送索引 = 61 + 动态表当前条目数 + N（N=1/8/1024）的索引表示 | 崩溃/越界读 → CVE-2018-14645 同款；未判解码错误 → 边界校验缺失 |
-| IA-2 | SETTINGS_HEADER_TABLE_SIZE=0 通告后、对端 ACK 前的窗口期内，发引用 4096 默认表条目的索引（≥62） | 解码器拒绝（但按规范此刻必须可解析）→ 互操作炸弹（Zephyr #124221 模式） |
-| IA-3 | 动态表尺寸更新导致驱逐后，立即引用被驱逐的旧索引 | 未判解码错误（COMPRESSION_ERROR）→ §4.3 驱逐一致性缺失 |
-| IA-4 | 静态表边界索引（61/62）在动态表为空/非空两种状态下交叉引用 | 静态/动态拼接边界错一 → 地址空间拼接实现缺陷 |
-| IA-5 | 头块中间插动态表尺寸更新（非头块开头） | 未按解码错误处理 → §6.3 尺寸更新位置约束缺失（与 `rfc7541-hpack-table-capacity` 互补的编码位置维度） |
-| IA-6 | 索引 0 的索引表示（0x80，非法） | 未判解码错误 → 最低边界校验缺失 |
+| IA-1 | Send an indexed representation with index = 61 + current dynamic-table entry count + N (N=1/8/1024) | Crash / OOB read → same class as CVE-2018-14645; not treated as a decoding error → boundary check missing |
+| IA-2 | Within the window after advertising SETTINGS_HEADER_TABLE_SIZE=0 but before the peer's ACK, send indices (≥62) referencing 4096-default-table entries | Decoder rejects (when the spec requires them to parse at this moment) → interoperability bomb (Zephyr #124221 pattern) |
+| IA-3 | After a dynamic-table size update causes eviction, immediately reference the evicted old index | Not treated as a decoding error (COMPRESSION_ERROR) → §4.3 eviction consistency missing |
+| IA-4 | Cross-reference boundary indices of the static table (61/62) with the dynamic table empty vs non-empty | An off-by-one in the static/dynamic concatenation → address-space concatenation implementation defect |
+| IA-5 | Insert a dynamic-table size update mid-header-block (not at the block start) | Not treated as a decoding error → §6.3 size-update position constraint missing (the encoding-position dimension complementary to `rfc7541-hpack-table-capacity`) |
+| IA-6 | An indexed representation with index 0 (0x80, illegal) | Not treated as a decoding error → lowest boundary check missing |
 
-判定方法：python-hpack 手工编码索引表示 + SETTINGS 时序脚本（通告 0 后未 ACK 即发索引 ≥62）；观测崩溃/错误码/互操作行为。
+Method: hand-encode indexed representations with python-hpack + SETTINGS timing script (advertise 0, then send index ≥62 before ACK); observe crash / error codes / interoperability behavior.
 
-## 3. 攻击面猜想
+## 3. Attack-Surface Hypotheses
 
-- **远程崩溃 DoS**：IA-1 ——越界读/写在嵌入式代理（C 实现 HPACK）上是直接崩溃面
-- **互操作炸弹**：IA-2 ——不是打服务端，是让服务端打自己：所有浏览器首屏突发被拒，DoS 效果等价且"合规"
-- **压缩状态分歧**：IA-3 ——驱逐后索引引用被接受 → 双端表状态分叉 → 后续头块解码错乱（信息完整性风险，可向走私演进）
+- **Remote-crash DoS**: IA-1 — OOB read/write is a direct crash surface on embedded proxies (C-implemented HPACK)
+- **Interoperability bomb**: IA-2 — not attacking the server but making the server attack itself: all browser first-screen bursts rejected, DoS-equivalent effect while being "compliant"
+- **Compression-state divergence**: IA-3 — accepting index references after eviction → the two ends' table states fork → subsequent header blocks decode into garbage (information-integrity risk, can evolve into smuggling)
 
-## 4. 关联历史 CVE
+## 4. Related Historical CVEs
 
-| CVE / 实证 | 实现 | 根因 |
+| CVE / Empirical Finding | Implementation | Root Cause |
 |---|---|---|
-| **CVE-2018-14645** | HAProxy <1.8.14 | HPACK 解码器 `hpack_valid_idx()` 越界读（CWE-125）→ 远程崩溃 DoS；CVSS 7.5；RHSA-2018:2882 修复 |
-| **Zephyr #124221**（2026-11 实证） | Zephyr RTOS HTTP/2 服务器 | 解码器无动态表，通告 TABLE_SIZE=0 但 ACK 窗口期内拒绝索引 ≥62 的合法引用 → Chrome/Firefox 首屏突发全挂；RFC 7541 §4.2/§6.3 的"默认 4096 窗口"义务被忽略（互操作层而非安全层，但审计必查） |
-| 盲区声明 | 同族待发现 | 索引边界与 SETTINGS 时序是两个独立维度；IOT/边缘栈（Zephyr 类）动态表支持常不完整，属**新兴栈高复发区** |
+| **CVE-2018-14645** | HAProxy <1.8.14 | HPACK decoder `hpack_valid_idx()` out-of-bounds read (CWE-125) → remote-crash DoS; CVSS 7.5; fixed in RHSA-2018:2882 |
+| **Zephyr #124221** (2026-11 empirical) | Zephyr RTOS HTTP/2 server | Decoder has no dynamic table; advertises TABLE_SIZE=0 but rejects legal index ≥62 references within the ACK window → Chrome/Firefox first-screen bursts all fail; the RFC 7541 §4.2/§6.3 "default-4096 window" obligation ignored (interoperability layer rather than security layer, but must be audited) |
+| Blind-spot declaration | Same family, TBD | Index boundary and SETTINGS timing are two independent dimensions; IoT/edge stacks (Zephyr class) often have incomplete dynamic-table support — a **high-recurrence zone on emerging stacks** |
 
-## 5. 差分验证方法
+## 5. Differential Verification
 
-对照组：nghttp2（索引越界严格判 COMPRESSION_ERROR；默认窗口期行为合规）；修复版 HAProxy ≥1.8.14。
-对比字段：IA-1 处置（错误码 vs 崩溃）、IA-2 窗口期行为、IA-3 驱逐后引用处置。
-误报排除：实现无动态表但窗口期内维护临时解析表（Zephyr 修复建议方案）→ 判定通过；越界索引判错但错误码非 COMPRESSION_ERROR → 记兼容性瑕疵不记安全违规。
+Control group: nghttp2 (strict COMPRESSION_ERROR on out-of-bounds indices; compliant default-window behavior); patched HAProxy ≥1.8.14.
+Comparison fields: IA-1 disposition (error code vs crash), IA-2 window behavior, IA-3 post-eviction reference disposition.
+False-positive exclusion: an implementation without a dynamic table that maintains a temporary parse table during the window (the Zephyr fix proposal) → passes; an out-of-bounds index errors but with a code other than COMPRESSION_ERROR → record as a compatibility blemish, not a security violation.
 
-## 6. 对接的攻击 Skill
+## 6. Downstream Attack Skills
 
-- 技能层（怎么打）：`fuzzowski-network-fuzz`（索引字段边界变异）、`dharma-grammar-fuzz`（SETTINGS 时序 × 索引组合生成）
-- 工具层（用什么打）：python-hpack 手工索引编码、SETTINGS/ACK 时序控制脚本
-- 命中后动作：IA-1 确认 → 归档最小崩溃索引值 → 评估同族嵌入式栈波及；IA-2 确认 → 输出"合规请求被拒"互操作证据链（该发现走互操作缺陷通道，不计安全分）
+- Skill layer (how to attack): `fuzzowski-network-fuzz` (index-field boundary mutation), `dharma-grammar-fuzz` (SETTINGS timing × index combination generation)
+- Tool layer (what to attack with): python-hpack hand index encoding, SETTINGS/ACK timing control scripts
+- Post-hit actions: IA-1 confirmed → archive the minimal crashing index value → assess spread across the same embedded-stack family; IA-2 confirmed → produce a "legal request rejected" interoperability evidence chain (this finding goes through the interoperability-defect channel, not scored as security)
