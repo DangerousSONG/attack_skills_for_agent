@@ -4,6 +4,10 @@
 > 逐条明细（名称/来源/License/简介/链接）见 [INDEX.md](INDEX.md)。维护流程（新增/修改 skill 的三步级联 + 门禁）见 [CONTRIBUTING](CONTRIBUTING.md)。
 > ⚠️ 仅限授权安全测试使用（authorized security testing only）。
 
+## 项目简介
+
+本仓库是一套面向渗透测试 Agent 的**攻击侧 Skill 能力库**：把散落在各处的渗透知识整理成 Agent 能直接执行的 SKILL.md（frontmatter 检索信号 + 方法论 + 命令速查 + 攻击场景 Playbook）。**skill 从哪来**——10 个上游开源仓库（Anthropic-Cybersecurity-Skills / hack-skills / Claude-Red-pentest-set 等，共 435 个）按统一口径收录，加上 561 个「一个真实工具一个 playbook」的工具改写自研，合计 996 个，License 全部可二创（Apache-2.0 / MIT / CC BY 4.0）。**怎么分类**——按攻击大类分 50 类（C01–C50，ATT&CK 骨架，如 C09 Web 漏洞利用、C30 AD 域渗透），仓库目录按来源组织，路由表按任务场景映射到具体 skill slug。**怎么用**——`scripts/deploy.py` 一键「两层部署」：3 个注册 skill 常驻 Agent 索引（<2K tokens/step），993 个文件库 skill 经路由表命中后由 Agent Read 按需加载，避免全量注册导致的上下文爆炸；检索质量用 107 条中文渗透任务查询的 Recall@5/@20 持续量化（当前 82.2% / 100.0%）。三套检索方案（static 路由表 / funnel 三层漏斗 / rag 语义检索）在 main 分支由 `scripts/route.py` 统一入口按参数调度，底层 skill 底座完全一致。
+
 ## 核心价值
 
 - **两层部署，根治 token 爆炸**：996 个 skill 全量注册时每个 step 携带约 20K tokens 索引，实测 prompt cache 命中率 84.9% → 14.8%，成本放大 3.9 倍。改为「3 注册 + 993 文件库」后常驻索引 <2K tokens/step（详见下文部署模型）。
