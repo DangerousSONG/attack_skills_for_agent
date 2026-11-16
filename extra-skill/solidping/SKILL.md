@@ -17,6 +17,7 @@ license_source: "https://github.com/fclairamb/solidping-plugin/blob/main/LICENSE
 ---
 
 # SolidPing
+- 攻击大类:C44 AI与大模型安全
 
 SolidPing (https://www.solidping.io) is an open source (AGPL-3.0) uptime monitor written in Go. It runs 40+ check types (HTTP, TCP, UDP, ICMP, DNS, SSL and domain expiry, SMTP and IMAP, Postgres, MySQL, Redis, MongoDB, Kafka, MQTT, gRPC, headless browser, heartbeats) from multi-region workers or private agents, and handles incidents, on-call escalation and status pages. Its tools come from the `solidping` MCP server, scoped to one organization. The server applies the role of the person who signed in.
 

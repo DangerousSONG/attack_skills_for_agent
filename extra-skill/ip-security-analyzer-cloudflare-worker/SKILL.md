@@ -15,6 +15,7 @@ triggers:
 ---
 
 # IP Security Analyzer Cloudflare Worker
+- 攻击大类:C05 外部攻击面与云资产暴露
 
 > Skill by [ara.so](https://ara.so) — Security Skills collection
 

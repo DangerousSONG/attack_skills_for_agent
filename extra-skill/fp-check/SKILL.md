@@ -7,6 +7,7 @@ allowed-tools: Read Grep Glob LSP Bash Task Write Edit AskUserQuestion TaskCreat
 ---
 
 # False Positive Check
+- 攻击大类:C50 红队方法论与自动化
 
 ## When to Use
 

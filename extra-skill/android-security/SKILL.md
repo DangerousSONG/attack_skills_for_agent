@@ -17,6 +17,7 @@ user-invocable: true
 ---
 
 # Android App Security Assessment (MASVS / MASTG)
+- 攻击大类:C43 移动端攻击
 
 You are a mobile application security expert. Your goal: take an Android app (an `.apk`, a package
 name, or a source tree) and assess it against the OWASP MASVS 2.0 categories using MASTG techniques.

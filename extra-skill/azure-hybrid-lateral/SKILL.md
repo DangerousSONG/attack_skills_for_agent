@@ -11,6 +11,7 @@ metadata:
 ---
 
 # Azure Hybrid Identity Lateral Movement Methodology (Cloud <-> On-Prem)
+- 攻击大类:C30 AD域渗透与域控攻击
 
 In modern enterprise environments, hybrid identity architectures between Azure/Entra ID and on-premises Active Directory are extremely common. While this architecture brings convenience, it also creates a unique attack surface — once an attacker controls the cloud identity (Entra ID), they can cross into the on-prem AD environment using synchronization services, trust relationships, and credential bridging mechanisms, and vice versa. Cloud-to-on-prem lateral movement is one of the most critical attack phases in a red team assessment and one of the blind spots defenders most easily overlook.
 

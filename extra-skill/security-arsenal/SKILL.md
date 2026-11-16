@@ -32,6 +32,7 @@ sources: community, public_research
 > Without that confirmation, remain read-only and provide defensive guidance only. Prefer a sandbox, disposable VM, or controlled lab.
 
 # SECURITY ARSENAL
+- 攻击大类:C07 载荷开发与武器化
 
 Payloads, bypass tables, wordlists, and submission rules.
 

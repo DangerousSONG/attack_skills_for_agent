@@ -212,6 +212,7 @@ Needs zero network egress. Local DTD paths differ per distro (yelp/docbookx is c
 ### Content-Type Swap (JSON to XML)
 ```bash
 # Original JSON request
+- 攻击大类:C09 Web应用漏洞利用
 curl -X POST https://target.com/api/endpoint \
   -H "Content-Type: application/json" \
   -d '{"user":"test"}'

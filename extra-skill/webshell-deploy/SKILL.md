@@ -9,6 +9,7 @@ metadata:
 ---
 
 # Webshell Deployment and Exploitation Methodology
+- 攻击大类:C09 Web应用漏洞利用
 
 
 Follow this methodology when exploitation requires uploading or writing a webshell to the target.

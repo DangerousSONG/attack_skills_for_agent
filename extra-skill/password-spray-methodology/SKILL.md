@@ -11,6 +11,7 @@ tags: [password, spray, methodology, redteam]
 ---
 
 # Password Spray Methodology
+- 攻击大类:C09 Web应用漏洞利用
 
 Password spraying is the highest-ROI credential attack: one (or few) passwords tried against many users. It's quiet, avoids lockouts, and succeeds where traditional brute force fails. This skill consolidates every spray vector, enumeration technique, pattern, and protocol across the entire skill catalog.
 

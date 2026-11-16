@@ -20,6 +20,7 @@ related_skills:
 ---
 
 # CMS Detection
+- 攻击大类:C09 Web应用漏洞利用
 
 Identify the content management system, web framework, server software, and technology stack of every live host. Know which stack you're attacking before you attack it — a WordPress site needs different tests than a Laravel API or a Spring Boot microservice. Multi-CMS detection covers WordPress, Drupal, Joomla, Magento, Shopify, Wix, Squarespace, Laravel, Django, Express, Spring Boot, and more.
 

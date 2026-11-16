@@ -11,6 +11,7 @@ tags: [triage, validation, redteam]
 ---
 
 # TRIAGE & VALIDATION
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 One wrong answer = STOP **this finding**. Kill **the finding**. Move on **to the next test class**.
 

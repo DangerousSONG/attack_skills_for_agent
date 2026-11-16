@@ -13,6 +13,7 @@ license: MIT
 ---
 
 # SAST Lite
+- 攻击大类:C09 Web应用漏洞利用
 
 An AST-based static analyzer for Python. Instead of fragile regex matching, it
 parses each file into an abstract syntax tree and inspects how dangerous APIs

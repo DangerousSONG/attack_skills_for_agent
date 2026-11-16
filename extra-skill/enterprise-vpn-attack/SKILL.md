@@ -35,6 +35,7 @@ DO NOT use for:
 ```bash
 curl --max-time 30 --connect-timeout 10 -skI 'https://target/+CSCOE+/logon.html' | head -10
 # Look for: Set-Cookie: webvpn=; X-Frame-Options: SAMEORIGIN; CSP: ... block-all-mixed-content
+- 攻击大类:C43 移动端攻击
 # Login page contains: "AnyConnect", "CSCOE", "logon.html"
 ```
 ASA version: not banner-disclosed in modern builds; need to derive from JS file paths or test specific paths.

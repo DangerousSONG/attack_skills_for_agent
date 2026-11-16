@@ -11,6 +11,7 @@ metadata:
 ---
 
 # Terraform State File and IaC Attack Methodology
+- 攻击大类:C12 供应链与CI/CD攻击
 
 Terraform stores the attributes of all managed resources (including passwords, keys, tokens) in plaintext in the state file. The state file is the core of Terraform attacks — obtaining the state is equivalent to obtaining a credential snapshot of the entire infrastructure. Moreover, Terraform's declarative nature means "code is infrastructure" — modifying `.tf` files or module references is enough to gain code execution during the plan/apply phase.
 

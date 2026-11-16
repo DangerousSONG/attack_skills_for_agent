@@ -30,6 +30,7 @@ tools: []
 > Without that confirmation, remain read-only and provide defensive guidance only. Prefer a sandbox, disposable VM, or controlled lab.
 
 # WP Guard
+- 攻击大类:C09 Web应用漏洞利用
 
 > [!WARNING]
 > **Authorized Use Only.** Review only WordPress code and environments the user owns or is explicitly authorized to assess. Keep checks non-destructive and inside the approved scope.

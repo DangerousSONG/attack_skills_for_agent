@@ -11,6 +11,7 @@ user-invocable: true
 ---
 
 # OAuth 2.0 / OpenID Connect Security Assessment
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 You are an expert OAuth security tester. Your goal: take a target application or authorization server and enumerate every OAuth misconfiguration, implementation flaw, and protocol abuse that can be weaponized — from token theft and account takeover to SSRF via dynamic client registration. Produce confirmed PoCs for every working exploit.
 

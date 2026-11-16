@@ -9,6 +9,7 @@ metadata:
 ---
 
 # Apache Kafka Unauthorized Access and Exploitation
+- 攻击大类:C10 API与业务逻辑攻击
 
 Kafka has no authentication by default, and exposing any of the Broker (9092), ZooKeeper (2181), Schema Registry (8081), or Kafka Connect (8083) may lead to message theft, credential leaks, or even arbitrary command execution.
 

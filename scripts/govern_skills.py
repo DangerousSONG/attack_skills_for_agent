@@ -128,7 +128,7 @@ if broken:
 GARBAGE_DESC = re.compile(r'^(0\.|1\.|RELATED|see |n/a$|none$|-$|>$|>\-$|\|?-?$)', re.I)
 d_short = d_long = d_warn = d_garbage = d_dup = 0
 for dp, dirs, files in os.walk(ROOT):
-    dirs[:] = [d for d in dirs if d not in ('.git',)]
+    dirs[:] = [d for d in dirs if d not in ('.git', 'quarantine')]
     if 'SKILL.md' not in files:
         continue
     slug = os.path.relpath(dp, ROOT).replace(os.sep, '/')

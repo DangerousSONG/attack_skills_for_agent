@@ -10,6 +10,7 @@ metadata:
 ---
 
 # Sandbox Escape and Anti-Analysis Techniques
+- 攻击大类:C45 恶意软件开发与免杀
 
 > **Positioning**: designing the anti-sandbox layer that runs before a red team payload is delivered. This is not "analyzing sandbox escapes" but "implementing sandbox escapes".
 

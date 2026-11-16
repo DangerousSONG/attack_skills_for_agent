@@ -9,6 +9,7 @@ metadata:
 ---
 
 # JavaScript API Endpoint Extraction Methodology
+- 攻击大类:C10 API与业务逻辑攻击
 
 In a separate front-end/back-end architecture, the JS bundle is the **largest source of information** about API endpoints — 10 times more efficient than directory scanning.
 

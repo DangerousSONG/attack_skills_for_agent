@@ -10,6 +10,7 @@ metadata:
 ---
 
 # Software Supply Chain Attack Methodology
+- 攻击大类:C09 Web应用漏洞利用
 
 > **Core idea**: don't attack the target itself, attack the upstream dependencies/build pipeline it trusts
 

@@ -7,6 +7,7 @@ allowed-tools: Bash, Read, Write, Grep, Glob, WebSearch
 ---
 
 # Cloud Audit — Cloud Infrastructure Security Review
+- 攻击大类:C05 外部攻击面与云资产暴露
 
 Audit cloud infrastructure configurations for misconfigurations, excessive permissions, public exposure, and compliance gaps. Covers AWS, GCP, and Azure.
 

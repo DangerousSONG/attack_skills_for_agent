@@ -11,6 +11,7 @@ metadata:
 ---
 
 # fingerprintx Service Fingerprinting Methodology
+- 攻击大类:C42 网络扫描与枚举
 
 fingerprintx is a service fingerprinting tool by Praetorian. Core strengths: **51 protocols** + **fast and accurate** + **JSON metadata output**.
 

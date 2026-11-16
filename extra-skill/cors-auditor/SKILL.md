@@ -13,6 +13,7 @@ license: MIT
 ---
 
 # CORS Misconfiguration Auditor
+- 攻击大类:C09 Web应用漏洞利用
 
 Inspects CORS response headers and reports exploitable misconfigurations with
 fixes. The analysis core is pure and offline-testable; live probing uses only

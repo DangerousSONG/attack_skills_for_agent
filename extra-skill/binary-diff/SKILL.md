@@ -10,6 +10,7 @@ when-to-use: "Use when you have symbols or reverse-engineering results from an o
 ---
 
 # Cross-Version Symbol Migration (Binary Diff)
+- 攻击大类:C43 移动端攻击
 
 ## ACTION REQUIRED (execute immediately after reading)
 

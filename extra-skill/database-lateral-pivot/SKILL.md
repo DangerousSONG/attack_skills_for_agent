@@ -11,6 +11,7 @@ metadata:
 ---
 
 # Database Lateral Movement Methodology
+- 攻击大类:C31 远程服务横向移动
 
 Databases are natural pivots inside an internal network — they usually have looser network access policies than application servers (they need to connect to multiple services), and PostgreSQL's dblink, MSSQL's Linked Server, and MySQL's FEDERATED engine all provide native cross-host query capability. When application-layer network segmentation is strict, lateral movement through the database is often the only path.
 

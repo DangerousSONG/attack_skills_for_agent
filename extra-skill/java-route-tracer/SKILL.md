@@ -7,6 +7,7 @@ when-to-use: >-
 ---
 
 # Java Route Tracer - Route Call-Chain Tracing
+- 攻击大类:C09 Web应用漏洞利用
 
 Given a user-specified route, trace the complete call chain from the entry point to the final usage point and output layer-by-layer call information. **Applicable to parameter flow tracing across multiple vulnerability types.**
 

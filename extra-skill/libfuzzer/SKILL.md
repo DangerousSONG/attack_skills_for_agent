@@ -7,6 +7,7 @@ when-to-use: "Use when writing or debugging an LLVMFuzzerTestOneInput harness, s
 ---
 
 # libFuzzer
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 libFuzzer is an in-process, coverage-guided fuzzer that is part of the LLVM project. It's the recommended starting point for fuzzing C/C++ projects due to its simplicity and integration with the LLVM toolchain. While libFuzzer has been in maintenance-only mode since late 2022, it is easier to install and use than its alternatives, has wide support, and will be maintained for the foreseeable future.
 

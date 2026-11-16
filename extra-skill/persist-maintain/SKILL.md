@@ -12,6 +12,7 @@ metadata:
 ---
 
 # Privilege Persistence Methodology
+- 攻击大类:C09 Web应用漏洞利用
 
 Persistence core: establish an access channel that **does not depend on the original vulnerability**.
 

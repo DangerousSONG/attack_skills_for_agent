@@ -7,6 +7,7 @@ when-to-use: "Use when testing whether a running cryptographic implementation is
 ---
 
 # Constant-Time Testing
+- 攻击大类:C49 密码学攻击
 
 Timing attacks exploit variations in execution time to extract secret information from cryptographic implementations. Unlike cryptanalysis that targets theoretical weaknesses, timing attacks leverage implementation flaws - and they can affect any cryptographic code.
 

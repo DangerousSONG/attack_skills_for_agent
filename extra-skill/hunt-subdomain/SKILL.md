@@ -132,6 +132,7 @@ Subdomain takeover is high-value because it allows an attacker to serve content 
 **Bulk CNAME extraction and NXDOMAIN detection:**
 ```bash
 # Extract CNAMEs and check if target resolves
+- 攻击大类:C42 网络扫描与枚举
 while read sub; do
   cname=$(dig +short CNAME "$sub" | head -1)
   if [ -n "$cname" ]; then

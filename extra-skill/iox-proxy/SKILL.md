@@ -11,6 +11,7 @@ metadata:
 ---
 
 # iox Port Forwarding and Internal Network Pivoting
+- 攻击大类:C31 远程服务横向移动
 
 iox is a lightweight port forwarding/proxy tool — a single binary with zero dependencies, supporting forward/reverse proxy and SOCKS5. During internal penetration testing it is used to build traffic tunnels that let the attacker machine reach services on the target's internal network.
 

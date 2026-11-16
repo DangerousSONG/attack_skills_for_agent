@@ -8,6 +8,7 @@ when-to-use: >-
 ---
 
 # PHP Deserialization Audit (php-deser-audit)
+- 攻击大类:C09 Web应用漏洞利用
 
 Analyze PHP project source code to identify user-controlled data reaching `unserialize()` or an equivalent deserialization sink, then combine it with the magic methods of the involved classes (`__wakeup/__destruct/__call/__toString/{value}`) to determine whether an object injection exploit chain exists.
 

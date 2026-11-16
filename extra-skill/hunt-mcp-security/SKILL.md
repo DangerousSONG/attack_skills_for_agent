@@ -17,6 +17,7 @@ related_skills:
 ---
 
 # MCP Security Hunting
+- 攻击大类:C44 AI与大模型安全
 
 Hunt vulnerabilities in Model Context Protocol (MCP) implementations — the standard protocol that lets AI applications connect to external tools (databases, APIs, files, web services). MCP introduces a unique attack surface where AI agents become the attack vector and tool responses become the delivery mechanism. Tools exposed without access control, unsanitized input handling, and over-trusted tool outputs enable privilege escalation, data exfiltration, and system compromise through the AI itself.
 

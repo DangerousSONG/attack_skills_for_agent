@@ -9,6 +9,7 @@ metadata:
 ---
 
 # Service Mesh Attack Methodology (Istio/Linkerd/Envoy)
+- 攻击大类:C09 Web应用漏洞利用
 
 A Service Mesh pushes network communication logic down into sidecar proxies (Envoy/Linkerd-proxy) and centrally manages traffic routing, mTLS, and access policy through the control plane (Istiod/Linkerd Control Plane). From the attacker's perspective: the control plane is the "brain" of the whole mesh, and obtaining control plane configuration means mastering the topology of every microservice; the sidecar Admin interface listens on localhost by default and is reachable from inside the pod; CRDs such as VirtualService/DestinationRule control where traffic flows, so anyone with RBAC permissions can hijack or tamper with routing.
 

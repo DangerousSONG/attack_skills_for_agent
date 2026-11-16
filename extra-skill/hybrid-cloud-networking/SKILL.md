@@ -20,6 +20,7 @@ These paths remain unavailable in this catalog copy:
 Do not invoke a step that requires one of these files. Obtain the original material and review its dependencies, license, and effects before use. Independent inline steps and the bundled helpers can proceed within the user’s authorized scope.
 
 # Hybrid Cloud Networking
+- 攻击大类:C05 外部攻击面与云资产暴露
 
 Configure secure, high-performance connectivity between on-premises and cloud environments using VPN, Direct Connect, and ExpressRoute.
 

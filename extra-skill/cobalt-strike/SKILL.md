@@ -9,6 +9,7 @@ metadata:
 ---
 
 # Cobalt Strike Operational Methodology
+- 攻击大类:C35 C2框架与远控
 
 Cobalt Strike (CS) is a commercial red team C2 framework that uses a C/S architecture to support collaborative penetration testing. Core advantages: **team collaboration** (multiple clients / multiple TeamServers) + **stealthy Beacon communications** (HTTP/HTTPS/DNS/SMB) + **a complete post-exploitation chain** (privilege escalation → credentials → lateral movement → persistence) + **Aggressor script extensibility**.
 

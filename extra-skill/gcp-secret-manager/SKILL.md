@@ -22,6 +22,7 @@ metadata:
 ---
 
 # GCP Secret Manager
+- 攻击大类:C05 外部攻击面与云资产暴露
 
 Store and manage secrets securely in Google Cloud Platform.
 

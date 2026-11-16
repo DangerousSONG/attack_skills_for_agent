@@ -12,6 +12,7 @@ metadata:
 ---
 
 # Target Panorama Profiling Methodology
+- 攻击大类:C03 邮箱与人员OSINT
 
 This skill complements `recon-full` (active scanning): recon-full handles "discovery", target-profiling handles "analysis and organization". If reconnaissance has not been done yet, run recon-full first.
 

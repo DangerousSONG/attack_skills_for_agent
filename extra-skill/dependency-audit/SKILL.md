@@ -7,6 +7,7 @@ allowed-tools: Bash, Read, Write, Grep, Glob, WebSearch
 ---
 
 # Dependency Audit — Framework, Package, and Toolchain Security
+- 攻击大类:C12 供应链与CI/CD攻击
 
 Audit project dependencies, frameworks, language runtimes, and dev tools for known vulnerabilities (CVEs), security anti-patterns, and supply chain risks.
 

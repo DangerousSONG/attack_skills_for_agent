@@ -9,6 +9,7 @@ metadata:
 ---
 
 # Impacket Windows Protocol Toolkit
+- 攻击大类:C31 远程服务横向移动
 
 Impacket implements the Windows network protocol stack in pure Python, allowing you to operate against Windows targets directly from Linux—without installing anything on the target.
 

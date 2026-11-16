@@ -12,6 +12,7 @@ license: MIT
 ---
 
 # JWT Inspector
+- 攻击大类:C09 Web应用漏洞利用
 
 Decode and audit JSON Web Tokens with **no third-party dependencies**. It
 splits the token, decodes header + payload, evaluates them against a set of

@@ -12,6 +12,7 @@ metadata:
 ---
 
 # Authentication & Authorization Implementation Patterns
+- 攻击大类:C13 远程命令执行与WebShell
 
 Build secure, scalable authentication and authorization systems using industry-standard patterns and modern best practices.
 

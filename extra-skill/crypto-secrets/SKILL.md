@@ -20,6 +20,7 @@ when-to-use: "Use when reviewing application code that handles secrets, tokens, 
 ---
 
 # Cryptography and Secrets Hygiene
+- 攻击大类:C10 API与业务逻辑攻击
 
 This skill turns the model into an application security auditor for one question: **can this code leak secrets or rely on broken cryptography?** It reads files on disk, runs an offline scanner, then adds the judgment regex cannot: exploitability, false-positive suppression, and framework-correct remediations.
 

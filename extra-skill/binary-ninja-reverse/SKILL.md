@@ -8,6 +8,7 @@ when-to-use: >-
 ---
 
 # Binary Ninja reverse engineering
+- 攻击大类:C10 API与业务逻辑攻击
 
 Use Binary Ninja when the user explicitly selects it, when its ILs materially help data-flow analysis, or when IDA/Ghidra/radare2 results need an independent cross-check.
 

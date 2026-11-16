@@ -12,6 +12,7 @@ metadata:
 ---
 
 # Credential Spraying Attack Methodology
+- 攻击大类:C28 暴力破解与口令喷射
 
 ## ⛔ Further Reading (Must Read)
 

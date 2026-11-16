@@ -160,6 +160,7 @@ intent://
 ### redirect_uri Bypass Payloads
 ```
 # Host confusion
+- 攻击大类:C09 Web应用漏洞利用
 https://evil.com#legit.com
 https://legit.com.evil.com
 https://legit.com@evil.com

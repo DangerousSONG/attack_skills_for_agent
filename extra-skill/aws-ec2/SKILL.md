@@ -22,6 +22,7 @@ metadata:
 ---
 
 # AWS EC2
+- 攻击大类:C05 外部攻击面与云资产暴露
 
 Deploy and manage Amazon EC2 compute instances for production, staging, and development workloads.
 

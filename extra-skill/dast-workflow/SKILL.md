@@ -9,6 +9,7 @@ when-to-use: >-
 ---
 
 # DAST Workflow
+- 攻击大类:C10 API与业务逻辑攻击
 
 ## When to use
 

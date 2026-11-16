@@ -6,6 +6,7 @@ when-to-use: "Use when performing white-box PHP source audit and you need to ide
 ---
 
 # PHP Expression Injection (Non-Template) Audit (php-expr-audit)
+- 攻击大类:C09 Web应用漏洞利用
 
 Analyze PHP project source code to identify "expression evaluation/compilation" entry points: user-controllable expression strings passed into an expression engine (or PHP language-level code execution functions), thereby altering conditional logic, routing decisions, permission expressions, or executing sensitive semantics (Expression Injection / code injection class).
 

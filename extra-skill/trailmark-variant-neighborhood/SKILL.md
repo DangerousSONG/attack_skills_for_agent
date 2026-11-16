@@ -13,6 +13,7 @@ allowed-tools:
 ---
 
 # Trailmark Variant Neighborhood
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 Expand one seed issue into graph-derived variant candidates. This skill
 generates review targets, not confirmed findings.

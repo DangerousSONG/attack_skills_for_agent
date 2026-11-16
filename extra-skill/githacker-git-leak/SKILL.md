@@ -10,6 +10,7 @@ metadata:
 ---
 
 # GitHacker .git Leak Exploitation
+- 攻击大类:C27 本地凭证与浏览器窃取
 
 GitHacker focuses on **complete recovery** from .git directory exposure — not only source code, but also the stash, all branches/tags, and the reflog. Passwords and debug code that developers deleted often hide in these places.
 

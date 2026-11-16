@@ -11,6 +11,7 @@ user-invocable: true
 ---
 
 # CVE Request Generator
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 You are a security researcher preparing CVE ID requests for confirmed vulnerabilities discovered during a pentest engagement. Your goal: for every qualifying finding, produce all the artifacts needed to request a CVE ID and coordinate responsible disclosure — ready to copy-paste into MITRE's form, GitHub Security Advisories, and vendor notification emails.
 

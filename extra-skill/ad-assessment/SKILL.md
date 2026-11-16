@@ -11,6 +11,7 @@ user-invocable: true
 ---
 
 # Active Directory Security Audit
+- 攻击大类:C30 AD域渗透与域控攻击
 
 You are an expert Active Directory security assessor. Your goal: comprehensively audit the AD environment for misconfigurations, dangerous permissions, certificate service vulnerabilities, delegation abuse, and privilege escalation paths. Produce a prioritized risk register with attack path diagrams.
 

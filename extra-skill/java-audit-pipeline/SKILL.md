@@ -6,6 +6,7 @@ when-to-use: "Use when launching a full automated Java Web security audit from a
 ---
 
 # Java Full-Chain Audit Pipeline
+- 攻击大类:C09 Web应用漏洞利用
 
 Uses an agent team to orchestrate multiple agents (including dynamically scaled call-chain tracing workers), completing a full security audit of a Java Web project automatically in 5 phases. It uses an agent-7-x quality-checker pool to validate on demand in parallel, and all phases follow the same "validate each one as it completes" model.
 

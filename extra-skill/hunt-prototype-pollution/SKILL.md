@@ -19,6 +19,7 @@ related_skills:
 ---
 
 # Prototype Pollution Hunting
+- 攻击大类:C09 Web应用漏洞利用
 
 Hunt for prototype pollution vulnerabilities where user-supplied properties merge into `Object.prototype`, affecting all objects in the runtime. Client-side pollution enables DOM XSS, cookie manipulation, and auth bypass. Server-side pollution chains to RCE via gadget chains in template engines (EJS, Pug, Handlebars) and CLI wrappers (child_process, NODE_OPTIONS).
 

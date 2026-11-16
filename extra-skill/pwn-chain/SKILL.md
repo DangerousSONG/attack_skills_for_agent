@@ -153,6 +153,7 @@ For the full template see `references/kernel-pwn.md`.
 
 ```bash
 # One-shot check + install of the core tools
+- 攻击大类:C46 二进制漏洞利用与Pwn
 for t in pwntools ropgadget ropper; do
   pip show $t >/dev/null 2>&1 || pip install $t
 done

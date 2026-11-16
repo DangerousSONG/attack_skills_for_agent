@@ -13,6 +13,7 @@ metadata:
 ---
 
 # Web/AI Cross-Domain Attack Chain Methodology
+- 攻击大类:C09 Web应用漏洞利用
 
 ## Overview
 

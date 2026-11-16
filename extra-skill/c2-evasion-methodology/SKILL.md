@@ -10,6 +10,7 @@ metadata:
 ---
 
 # C2 Framework AV Evasion Methodology
+- 攻击大类:C35 C2框架与远控
 
 ## Further Reading
 

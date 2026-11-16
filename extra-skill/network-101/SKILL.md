@@ -25,6 +25,7 @@ date_added: "2026-02-27"
 > Without that confirmation, remain read-only and provide defensive guidance only. Prefer a sandbox, disposable VM, or controlled lab.
 
 # Network 101
+- 攻击大类:C42 网络扫描与枚举
 
 ## Purpose
 

@@ -9,6 +9,7 @@ metadata:
 ---
 
 # Python Web Debug Mode Exploitation
+- 攻击大类:C09 Web应用漏洞利用
 
 Debug mode in Python web frameworks is one of the most dangerous misconfigurations left by developers — the Werkzeug debugger provides a direct interactive Python shell (RCE), Django's DEBUG=True leaks the full configuration and source paths, and FastAPI's /docs exposes every API endpoint.
 

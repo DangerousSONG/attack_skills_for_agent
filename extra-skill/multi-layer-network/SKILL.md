@@ -11,6 +11,7 @@ metadata:
 ---
 
 # Multi-Layer Network Penetration Methodology
+- 攻击大类:C31 远程服务横向移动
 
 ## ⛔ Further Reading (Must Read)
 

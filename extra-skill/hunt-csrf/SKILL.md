@@ -111,6 +111,7 @@ CSRF becomes high-value when it touches **state-changing actions with account-le
 ### Response Header Signals
 ```
 # Missing or weak SameSite cookie attributes
+- 攻击大类:C09 Web应用漏洞利用
 Set-Cookie: session=abc123; HttpOnly        # no SameSite = vulnerable
 Set-Cookie: session=abc123; SameSite=None   # explicitly allows cross-site
 

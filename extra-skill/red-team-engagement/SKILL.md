@@ -10,6 +10,7 @@ allowed-tools: Read, Write, Bash, Grep, Glob, WebSearch
 ---
 
 # Red Team Engagement — Authorized Adversary Emulation
+- 攻击大类:C09 Web应用漏洞利用
 
 This skill is for **planning and executing an authorized red-team engagement against systems and an organization that has explicitly contracted for it**. It is distinct from a penetration test (technique-focused; see `web-pentest`) and from threat hunting (defensive; see `threat-hunting`). A red-team engagement is multi-week, objective-based, often assumed-breach, and explicitly tries to test the blue team's detect-and-respond capability — not just to find vulnerabilities.
 

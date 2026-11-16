@@ -17,6 +17,7 @@ related_skills:
 ---
 
 # Docker Privilege Escalation Skill
+- 攻击大类:C14 云与容器执行
 
 Docker container escape and privilege escalation — Docker socket abuse, volume mount host takeover, docker group root-equivalence, and prior-privilege-escalation detection. Docker group membership = instant root on the host via 5 distinct techniques. Confirmed on fitness-chain (Docker containers extracted, 12 image layers, privileged mode) and gov-finance-portal (Dockerfile + docker-compose.prod.yml exposed in GitLab).
 

@@ -120,6 +120,7 @@ upstream response body is returned to you.** These are different findings:
 
 ```bash
 # one request settles it: fetch something with a known, recognisable body
+- 攻击大类:C09 Web应用漏洞利用
 -d '{"url":"https://example.com/"}'
 # {"statusCode":200,"data":"<!doctype html>...<title>Example Domain</title>..."}
 #                          ^ body returned = full-read, not blind

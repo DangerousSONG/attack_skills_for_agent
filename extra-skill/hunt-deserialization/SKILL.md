@@ -11,6 +11,7 @@ tags: [deserialization, hunt, redteam]
 ---
 
 # HUNT-DESERIALIZATION — Insecure Deserialization
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 ## Crown Jewel Targets
 

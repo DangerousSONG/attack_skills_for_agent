@@ -6,6 +6,7 @@ when-to-use: "Use for security questions, focused reviews, or vulnerability rese
 ---
 
 # Security Audit
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 Find vulnerabilities that violate a real trust boundary, then give owners the source evidence, safe reproduction, priority, and smallest effective fix. This is a defensive, source-first workflow. A candidate without a concrete affected principal, resource, or security outcome is not a confirmed finding.
 

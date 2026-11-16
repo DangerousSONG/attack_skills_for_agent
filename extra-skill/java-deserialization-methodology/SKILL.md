@@ -11,6 +11,7 @@ metadata:
 ---
 
 # Java Deserialization Vulnerability Methodology
+- 攻击大类:C09 Web应用漏洞利用
 
 Java deserialization is one of the most dangerous vulnerability classes in the Java ecosystem — once successful it usually leads straight to RCE.
 

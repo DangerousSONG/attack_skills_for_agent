@@ -11,6 +11,7 @@ metadata:
 ---
 
 # ksubdomain Stateless Subdomain Brute-Forcing Methodology
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 ksubdomain is a stateless subdomain brute-forcing tool. Core strengths: **extreme speed** (raw-socket packet sending, 10x faster than dnsx) + **dual validation/enumeration modes** + **bandwidth control**. Requires root privileges.
 

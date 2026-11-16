@@ -15,6 +15,7 @@ triggers:
 ---
 
 # Foundry Security Spec
+- 攻击大类:C48 区块链与Web3安全
 
 > Skill by [ara.so](https://ara.so) — Security Skills collection.
 

@@ -15,6 +15,7 @@ metadata:
 ---
 
 # Business Logic Flaws
+- 攻击大类:C09 Web应用漏洞利用
 
 ## What Is Broken and Why
 Business logic flaws occur when an application's security controls are implemented only on the client side, or when developers assume users will always follow the intended workflow. Unlike injection attacks, these vulnerabilities use the application's own features correctly from a technical standpoint but in unintended sequences or with unexpected values. They are particularly dangerous because automated scanners rarely detect them — they require understanding the application's intended purpose. Common manifestations include price/quantity manipulation, workflow step bypass, coupon reuse, race conditions in financial operations, and privilege escalation via hidden or predictable parameters.

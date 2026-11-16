@@ -15,6 +15,7 @@ source_repo: Ranjeet2063/agentic-awesome-skills
 ---
 
 # Soroban Contract Security Audit
+- 攻击大类:C48 区块链与Web3安全
 
 **What it is:** Tracks formal security audit findings, authorization invariants, and WASM storage footprint compliance for Soroban Rust smart contracts on Stellar.
 

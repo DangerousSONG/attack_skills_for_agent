@@ -34,6 +34,7 @@ DO NOT use for:
 ### Play Store developer-page scrape
 ```bash
 # Find developer page from the target's brand name
+- 攻击大类:C10 API与业务逻辑攻击
 curl --max-time 30 --connect-timeout 10 -sk -A "Mozilla/5.0" "https://play.google.com/store/apps/developer?id=<Brand+Name>" -o /tmp/dev.html
 
 # Extract package IDs

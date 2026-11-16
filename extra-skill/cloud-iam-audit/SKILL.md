@@ -9,6 +9,7 @@ metadata:
 ---
 
 # Cloud IAM Permission Audit and Privilege Escalation Methodology
+- 攻击大类:C27 本地凭证与浏览器窃取
 
 IAM/CAM permissions are the attack surface — an over-permissive policy is more dangerous than an RCE vulnerability.
 

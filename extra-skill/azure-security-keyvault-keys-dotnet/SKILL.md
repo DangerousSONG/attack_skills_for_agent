@@ -9,6 +9,7 @@ date_added: '2026-02-27'
 ---
 
 # Azure.Security.KeyVault.Keys (.NET)
+- 攻击大类:C05 外部攻击面与云资产暴露
 
 Client library for managing cryptographic keys in Azure Key Vault and Managed HSM.
 

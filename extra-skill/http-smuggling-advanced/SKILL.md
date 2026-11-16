@@ -12,6 +12,7 @@ metadata:
 ---
 
 # Advanced HTTP Request Smuggling Exploitation
+- 攻击大类:C09 Web应用漏洞利用
 
 > **Prerequisite**: This skill focuses on **chained exploitation after the smuggling vulnerability is confirmed**
 

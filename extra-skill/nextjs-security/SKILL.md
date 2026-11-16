@@ -6,6 +6,7 @@ when-to-use: "Use when reviewing a Next.js application, middleware, Server Actio
 ---
 
 # Next.js Security
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 ## When to use
 

@@ -8,6 +8,7 @@ when-to-use: >-
 ---
 
 # PHP Session and Cookie Security Audit (php-session-cookie-audit)
+- 攻击大类:C09 Web应用漏洞利用
 
 Analyze the security settings and implementation logic of authentication sessions in PHP project source code, focusing on detecting:
 - session fixation
