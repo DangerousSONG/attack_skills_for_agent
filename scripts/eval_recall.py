@@ -124,6 +124,8 @@ QUERIES = [
 
 def load_skills(from_git=False):
     docs = {}
+    # 底座切换: SKILL_EXCLUDE_DIRS=extra-skill 即回退原996底座(隔离前后口径一致生效)
+    env_excl = {s.strip() for s in os.environ.get('SKILL_EXCLUDE_DIRS', '').split(',') if s.strip()}
     # BEFORE 只有 tool-skills 组被改过, 该组一次性从 git archive 解包, 其余直接读工作区
     tmp = None
     if from_git:
@@ -133,7 +135,7 @@ def load_skills(from_git=False):
             subprocess.check_call('git archive HEAD | tar -x -C scripts/_before_tmp', cwd=ROOT, shell=True,
                                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     for dp, dirs, files in os.walk(ROOT):
-        dirs[:] = [d for d in dirs if d not in ('.git', '_before_tmp', 'quarantine')]
+        dirs[:] = [d for d in dirs if d not in ('.git', '_before_tmp', 'quarantine') and d not in env_excl]
         if 'SKILL.md' not in files:
             continue
         slug = os.path.relpath(dp, ROOT).replace(os.sep, '/')

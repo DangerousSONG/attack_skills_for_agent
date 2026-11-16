@@ -93,7 +93,11 @@ def main():
     ap.add_argument('--backend', required=True, choices=BACKENDS,
                     help='路由方案: static=静态表 / funnel=三层漏斗 / rag=语义检索')
     ap.add_argument('--top', type=int, default=5, help='static/funnel: 返回条数 (默认 5)')
+    ap.add_argument('--exclude-dirs', default='',
+                    help='逗号分隔的顶层目录不进底座, 如 "extra-skill" 即回退原996底座(默认全量1569; static后端不受影响)')
     a, passthrough = ap.parse_known_args()
+    if a.exclude_dirs:
+        os.environ['SKILL_EXCLUDE_DIRS'] = a.exclude_dirs
 
     if a.backend == 'static':
         out = route_static(a.query, top=a.top)

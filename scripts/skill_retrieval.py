@@ -24,10 +24,12 @@ REGISTERED = {'attack-skill-router', 'engagement-discipline', 'java-deserializat
 
 def load_corpus():
     """{slug: (name, description, zh_signals)}，与 eval_recall.load_skills 同口径(排除注册层与 scripts)
-    第三元素为中文检索信号词(zh-signals 字段, 与英文 description 分离存储, 仅检索用不进展示)"""
+    第三元素为中文检索信号词(zh-signals 字段, 与英文 description 分离存储, 仅检索用不进展示)
+    环境变量 SKILL_EXCLUDE_DIRS(逗号分隔顶层目录)可切换底座, 如 extra-skill=回退原996底座"""
+    env_excl = {s.strip() for s in os.environ.get('SKILL_EXCLUDE_DIRS', '').split(',') if s.strip()}
     docs = {}
     for dp, dirs, files in os.walk(ROOT):
-        dirs[:] = [d for d in dirs if d not in ('.git', '_before_tmp', 'quarantine')]
+        dirs[:] = [d for d in dirs if d not in ('.git', '_before_tmp', 'quarantine') and d not in env_excl]
         if 'SKILL.md' not in files:
             continue
         slug = os.path.relpath(dp, ROOT).replace(os.sep, '/').split('/')[-1]

@@ -54,6 +54,7 @@
 
 ```bash
 python scripts/deploy.py [--dry-run] [--clean] [--skills-dir 注册层目录] [--library-dir 文件库目录]
+python scripts/deploy.py --exclude-dirs extra-skill   # 回退原 996 底座(对照实验用; 默认全量 1569)
 ```
 
 - 默认注册层 `/root/.claude/skills/`、文件库 `/opt/attack-skill-library/`（环境变量 `SKILL_LIBRARY` 可覆盖）

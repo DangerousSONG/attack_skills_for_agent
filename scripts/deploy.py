@@ -20,14 +20,15 @@ ROOT_FILES = [('INDEX.md', 'INDEX.md'), ('attack-skill-router/MERGES.md', 'MERGE
 # 路由工具: 随库部署到 _router/, 镜像烘焙时已 build 好索引则一并带上
 ROUTER_FILES = ['skill_route.py', 'skill_retrieval.py', 'build_entity_registry.py', 'entity_registry.json']
 
-def find_skills(base):
-    """返回 {slug: abs_dir}，校验重名"""
+def find_skills(base, exclude=()):
+    """返回 {slug: abs_dir}，校验重名；exclude=要跳过的顶层目录名(如 extra-skill 回退996底座)"""
     out, dup = {}, []
     for dp, dirs, files in os.walk(base):
+        dirs[:] = [d for d in dirs if d not in exclude]
         if 'SKILL.md' not in files:
             continue
         rel = os.path.relpath(dp, base)
-        if rel.startswith('.git') or rel.split(os.sep)[0] == 'quarantine' or 'quarantine' in rel.split(os.sep):
+        if rel.startswith('.git') or 'quarantine' in rel.split(os.sep):
             continue
         slug = os.path.basename(dp)
         if slug in out:
@@ -46,9 +47,14 @@ def main():
     ap.add_argument('--library-dir', default='/opt/attack-skill-library', help='文件库目标目录')
     ap.add_argument('--dry-run', action='store_true', help='只打印计划')
     ap.add_argument('--clean', action='store_true', help='部署前清空目标目录(危险,仅限重建)')
+    ap.add_argument('--exclude-dirs', default='',
+                    help='逗号分隔的顶层目录不进文件库, 如 "extra-skill" 即回退原996底座(默认全量1569)')
     a = ap.parse_args()
 
-    skills, dup = find_skills(ROOT)
+    exclude = {s.strip() for s in a.exclude_dirs.split(',') if s.strip()}
+    skills, dup = find_skills(ROOT, exclude)
+    if exclude:
+        print('排除目录:', sorted(exclude))
     if dup:
         print('!! slug 重名, 拒绝部署:', dup); sys.exit(1)
     for r in REGISTERED:
