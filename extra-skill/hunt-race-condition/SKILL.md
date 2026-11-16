@@ -104,6 +104,7 @@ await useVoucher(); await deductBalance();
 ### Turbo Intruder — Basic Parallel Race
 ```python
 # turbo_intruder_race.py
+- 攻击大类:C09 Web应用漏洞利用
 def queueRequests(target, wordlists):
     engine = RequestEngine(endpoint=target.endpoint,
                            concurrentConnections=1,

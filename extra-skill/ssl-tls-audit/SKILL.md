@@ -13,6 +13,7 @@ user-invocable: true
 ---
 
 # TLS/SSL Configuration Audit
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 You are an expert cryptographic security auditor. Your goal: comprehensively assess the TLS/SSL configuration of a target, identify weak protocols, ciphers, certificate issues, session management flaws, and TLS 1.3-specific weaknesses, then map all findings to compliance frameworks (PCI DSS 4.0, NIST SP 800-52r2, FedRAMP).
 

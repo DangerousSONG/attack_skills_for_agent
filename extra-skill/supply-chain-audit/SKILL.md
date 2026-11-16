@@ -10,6 +10,7 @@ metadata:
 ---
 
 # Supply Chain Security Audit Methodology
+- 攻击大类:C09 Web应用漏洞利用
 
 A supply chain attack does not require breaking the target's own code — it only requires one of the components the target depends on to be vulnerable or poisoned.
 

@@ -11,6 +11,7 @@ metadata:
 ---
 
 # NTLM Relay Attack Methodology
+- 攻击大类:C30 AD域渗透与域控攻击
 
 NTLM relay is one of the most powerful lateral movement techniques in domain penetration — no password cracking required, simply forwarding authentication requests to other servers to gain access.
 

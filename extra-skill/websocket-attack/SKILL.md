@@ -11,6 +11,7 @@ metadata:
 ---
 
 # WebSocket Security Testing Methodology
+- 攻击大类:C09 Web应用漏洞利用
 
 
 WebSocket provides full-duplex communication, but its security mechanisms are often overlooked — there is no automatic same-origin policy protection, and no standard practice for CSRF tokens.

@@ -9,6 +9,7 @@ when-to-use: >-
 ---
 
 # AFL++
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 AFL++ is a fork of the original AFL fuzzer that offers better fuzzing performance and more advanced features while maintaining stability. A major benefit over libFuzzer is that AFL++ has stable support for running fuzzing campaigns on multiple cores, making it ideal for large-scale fuzzing efforts.
 

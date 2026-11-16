@@ -16,6 +16,7 @@ metadata:
 ---
 
 # Reflected Cross-Site Scripting (XSS)
+- 攻击大类:C09 Web应用漏洞利用
 
 ## What Is Broken and Why
 Reflected XSS occurs when an application takes user-supplied data (URL parameters, form fields, HTTP headers) and includes it in the HTTP response without proper output encoding. The browser interprets the injected content as executable script, running in the context of the vulnerable origin. Because the payload travels in the request, the attacker must socially-engineer the victim into clicking a crafted link. The root cause is missing context-aware output encoding.

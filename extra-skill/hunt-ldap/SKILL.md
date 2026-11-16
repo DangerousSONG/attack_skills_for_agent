@@ -13,6 +13,7 @@ tags: [ldap, hunt, redteam]
 ---
 
 # HUNT-LDAP — LDAP Injection & XPath Injection
+- 攻击大类:C30 AD域渗透与域控攻击
 
 > Grounding note: LDAP injection is rarely disclosed with verbatim payloads on
 > public platforms (most live on internal-pentest reports). This skill is

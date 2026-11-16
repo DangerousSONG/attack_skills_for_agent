@@ -6,6 +6,7 @@ when-to-use: "Use for authorized assessment of federated identity systems involv
 ---
 
 # Identity Federation (SAML / OIDC / OAuth)
+- 攻击大类:C30 AD域渗透与域控攻击
 
 ## ACTION REQUIRED (execute immediately after reading)
 

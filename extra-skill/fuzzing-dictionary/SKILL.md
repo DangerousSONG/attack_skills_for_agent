@@ -7,6 +7,7 @@ when-to-use: "Use when fuzzing a parser, protocol, or file format, when coverage
 ---
 
 # Fuzzing Dictionary
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 A fuzzing dictionary provides domain-specific tokens to guide the fuzzer toward interesting inputs. Instead of purely random mutations, the fuzzer incorporates known keywords, magic numbers, protocol commands, and format-specific strings that are more likely to reach deeper code paths in parsers, protocol handlers, and file format processors.
 

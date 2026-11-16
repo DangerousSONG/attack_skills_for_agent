@@ -10,6 +10,7 @@ metadata:
 ---
 
 # Kerberoasting & AS-REP Roasting
+- 攻击大类:C30 AD域渗透与域控攻击
 
 > **Core Value**: Obtain high-privilege service account passwords with any domain user privilege → reach domain admin level without privilege escalation
 

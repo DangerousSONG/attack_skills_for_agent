@@ -12,6 +12,7 @@ source: community
 date_added: '2026-02-27'
 ---
 # SAST Security Plugin
+- 攻击大类:C42 网络扫描与枚举
 
 Static Application Security Testing (SAST) for comprehensive code vulnerability detection across multiple languages, frameworks, and security patterns.
 

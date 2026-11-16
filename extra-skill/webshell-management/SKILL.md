@@ -9,6 +9,7 @@ metadata:
 ---
 
 # CLI Operations After Webshell Deployment
+- 攻击大类:C15 持久化与后门植入
 
 > **Prerequisites**: The webshell has been deployed to the target. This skill focuses on CLI interaction and management operations after deployment.
 

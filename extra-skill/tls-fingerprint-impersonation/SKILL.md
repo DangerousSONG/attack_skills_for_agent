@@ -19,6 +19,7 @@ related_skills:
 ---
 
 # TLS Fingerprint Impersonation
+- 攻击大类:C42 网络扫描与枚举
 
 Spoof TLS ClientHello parameters — cipher suites, key exchange groups, signature algorithms, and extension order — to match real browsers at the JA3/JA4 fingerprint level. Uses patched rustls to rebuild the TLS layer with browser-identical configurations. Bypasses TLS fingerprinting detection (Cloudflare, Akamai, F5) that flags non-browser TLS stacks. Supports 20 browser profiles including Chrome 100-142, Firefox 128-144, Safari iOS 18, and OkHttp 3-5 (Android).
 

@@ -9,6 +9,7 @@ metadata:
 ---
 
 # Advanced Kerberos Attacks
+- 攻击大类:C30 AD域渗透与域控攻击
 
 ## Trigger Conditions
 

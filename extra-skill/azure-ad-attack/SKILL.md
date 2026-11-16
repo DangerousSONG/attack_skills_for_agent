@@ -12,6 +12,7 @@ metadata:
 ---
 
 # Azure AD / Entra ID Attack Methodology
+- 攻击大类:C30 AD域渗透与域控攻击
 
 > **Positioning**: From the attacker's perspective, exploit Azure AD trust relationships, token mechanics, and configuration flaws to achieve lateral movement and privilege escalation
 

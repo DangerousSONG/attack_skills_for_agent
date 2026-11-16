@@ -7,6 +7,7 @@ allowed-tools: Read, Grep, Glob, Bash, Write
 ---
 
 # API Audit — REST / GraphQL / RPC Security Review
+- 攻击大类:C09 Web应用漏洞利用
 
 Perform a systematic security audit of API endpoints against the OWASP API Security Top 10 (2023). Distinct from `owasp-audit` — that's category-driven over a whole codebase, this is surface-driven over the API contract.
 

@@ -20,6 +20,7 @@ metadata:
 ---
 
 # Azure SQL
+- 攻击大类:C48 区块链与Web3安全
 
 Deploy and manage Azure SQL Database, Elastic Pools, and Cosmos DB. Covers server provisioning, firewall rules, geo-replication, backup strategies, performance tuning, security hardening, and Terraform configurations.
 

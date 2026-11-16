@@ -19,6 +19,7 @@ related_skills:
 ---
 
 # Zimbra Attack Skill
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 Zimbra Collaboration Suite attack surface — SOAP API user enumeration without authentication, version fingerprinting, UploadServlet path traversal (CVE-2022-37042), `/service/proxy` internal SSRF, and Admin console access. Confirmed on IGN Argentina (Zimbra 8.8.11, admin user confirmed, UploadServlet active), gov-finance-portal (Zimbra webmail, SOAP auth functional), and ITERJ (Zimbra webmail active).
 

@@ -20,6 +20,7 @@ outputs: [c2_infrastructure, opsec_report, exfil_channel]
 ---
 
 # Advanced Red Team Operations
+- 攻击大类:C35 C2框架与远控
 
 ## When to Activate
 

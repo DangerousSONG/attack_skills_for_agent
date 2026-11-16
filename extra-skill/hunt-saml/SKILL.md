@@ -16,6 +16,7 @@ tags: [saml, hunt, redteam, sso]
 ### Attack Surface
 ```bash
 # Find SAML endpoints
+- 攻击大类:C30 AD域渗透与域控攻击
 cat recon/$TARGET/urls.txt | grep -iE "saml|sso|login.*redirect|oauth|idp|sp"
 # Key endpoints: /saml/acs (assertion consumer service), /sso/saml, /auth/saml/callback
 ```

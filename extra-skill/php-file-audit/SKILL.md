@@ -13,6 +13,7 @@ metadata:
 ---
 
 # PHP File Operation Vulnerability Source Code Audit
+- 攻击大类:C09 Web应用漏洞利用
 This skill focuses on the source code level: determining whether a "file operation vulnerability actually holds". Its core is verifying path controllability, content controllability, and execution reachability. Runtime exploitation techniques such as crafting upload bypass payloads or LFI log poisoning belong to the corresponding black-box exploit skills.
 
 ## Further Reading

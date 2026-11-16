@@ -6,6 +6,7 @@ when-to-use: "Use when performing a white-box security audit of a PHP codebase f
 ---
 
 # PHP Command Injection Audit (php-cmd-audit)
+- 攻击大类:C09 Web应用漏洞利用
 
 Analyze PHP project source code, identify code related to system command execution, and trace user input to command construction points to verify whether a command injection risk exists.
 

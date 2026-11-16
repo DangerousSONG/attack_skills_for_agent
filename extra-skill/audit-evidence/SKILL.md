@@ -6,6 +6,7 @@ when-to-use: "Use when preparing evidence for SOC 2, ISO 27001, NIS2, DORA, or i
 ---
 
 # Audit Evidence Collector
+- 攻击大类:C44 AI与大模型安全
 
 > **Disclaimer**: this skill covers operational evidence collection. Legal holds, forensics-grade chain of custody for legal proceedings, and legal evidentiary weight require separate expertise (forensics-assist/legal). This skill targets compliance-audit-grade evidence.
 

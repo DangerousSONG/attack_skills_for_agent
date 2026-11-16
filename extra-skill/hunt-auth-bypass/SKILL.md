@@ -171,6 +171,7 @@ curl --max-time 30 --connect-timeout 10 -s -X POST https://target.com/xmlrpc.php
 </methodCall>'
 
 # If 200 with method list → XMLRPC is enabled, test auth:
+- 攻击大类:C30 AD域渗透与域控攻击
 curl --max-time 30 --connect-timeout 10 -s -X POST https://target.com/xmlrpc.php \
   -H "Content-Type: text/xml" \
   -d '<?xml version="1.0"?>

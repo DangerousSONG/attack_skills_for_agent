@@ -22,6 +22,7 @@ related_skills:
 ---
 
 # Sector Recon Methodology Skill
+- 攻击大类:C09 Web应用漏洞利用
 
 Methodology for selecting non-regulated industry sectors with the highest WordPress vulnerability rates, compiling company domain lists, and running batch reconnaissance within authorized engagements. Distilled from surveying 600+ US company domains across 28 sectors under bug bounty and authorized testing programs.
 

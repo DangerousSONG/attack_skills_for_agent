@@ -13,6 +13,7 @@ tags: [evidence, hygiene, reporting, redteam]
 ---
 
 # EVIDENCE HYGIENE — PoC Capture & Redaction Discipline
+- 攻击大类:C50 红队方法论与自动化
 
 > Use this skill BEFORE capturing any screenshot, exporting any HAR, or attaching any evidence to a bug-bounty submission. It catches the most common evidence-hygiene mistakes that cause cookies to leak, PII to be shared without consent, or screenshots to be unsuitable for triage.
 

@@ -6,6 +6,7 @@ when-to-use: "Use when you need curated exploitation payloads for authorized ant
 ---
 
 # SecLists Payloads (Curated)
+- 攻击大类:C19 EDR与AV规避
 
 ## Description
 

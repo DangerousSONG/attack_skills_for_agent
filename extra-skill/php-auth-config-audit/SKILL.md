@@ -16,6 +16,7 @@ metadata:
 ---
 
 # PHP Authentication, Configuration, and Logic Flaw Source Code Audit
+- 攻击大类:C09 Web应用漏洞利用
 This skill focuses on authentication, authorization, configuration, cryptographic, and business logic defects at the source code level. Runtime exploitation (such as JWT forgery or race condition scripts) belongs to the corresponding black-box exploit skill.
 
 ## Further Reading

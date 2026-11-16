@@ -8,6 +8,7 @@ when-to-use: >-
 ---
 
 # Hacker
+- 攻击大类:C50 红队方法论与自动化
 
 Hacker is an **instruction-only offensive engagement framework** for Cursor. It mimics the useful structure of `offensive-claude` - presets, Kill Chain phases, role handoffs, quality gates, and report artifacts - while keeping this repo's authorization-first safety model.
 

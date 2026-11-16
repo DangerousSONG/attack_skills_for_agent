@@ -12,6 +12,7 @@ metadata:
 ---
 
 # Vulnerability Diagnose
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 A suspected vulnerability is not a finding. Before writing anything, build a deterministic reproduction case. If you cannot reproduce it reliably, you cannot report it.
 

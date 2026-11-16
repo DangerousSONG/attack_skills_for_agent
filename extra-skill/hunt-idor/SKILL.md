@@ -137,6 +137,7 @@ state.currentUser.organizationId
 **Basic IDOR test with curl (swap cookie/token):**
 ```bash
 # Get User A's resource ID while authenticated as A
+- 攻击大类:C09 Web应用漏洞利用
 curl --max-time 30 --connect-timeout 10 -s -H "Cookie: session=USER_A_SESSION" \
   https://target.com/api/v1/invoices/12345
 

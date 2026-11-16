@@ -12,6 +12,7 @@ date_added: 2026-02-27
 ---
 
 # Firebase
+- 攻击大类:C10 API与业务逻辑攻击
 
 Firebase gives you a complete backend in minutes - auth, database, storage,
 functions, hosting. But the ease of setup hides real complexity. Security rules

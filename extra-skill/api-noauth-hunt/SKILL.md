@@ -20,6 +20,7 @@ related_skills:
 ---
 
 # API No-Authentication Validation
+- 攻击大类:C10 API与业务逻辑攻击
 
 Identify API operations that may be reachable without the authentication or
 authorization required by their data and business function. Discovery is

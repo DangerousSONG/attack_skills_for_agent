@@ -20,6 +20,7 @@ metadata:
 ---
 
 # AWS VPC
+- 攻击大类:C05 外部攻击面与云资产暴露
 
 Design and manage Virtual Private Cloud networking for production AWS environments with proper subnet isolation, routing, and security.
 

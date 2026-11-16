@@ -9,6 +9,7 @@ metadata:
 ---
 
 # spray Directory Brute Forcing Methodology
+- 攻击大类:C28 暴力破解与口令喷射
 
 spray is a high-performance directory brute forcing tool by chainreactors, whose core advantages are: **smart filtering** (automatically identifies invalid responses) + **extreme performance** (far beyond ffuf in multi-target scenarios) + **fingerprinting** (integrated gogo/fingerprinthub/wappalyzer fingerprint databases).
 

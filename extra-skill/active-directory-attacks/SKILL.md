@@ -28,6 +28,7 @@ date_added: "2026-02-27"
 <!-- security-allowlist: credential-extraction, kerberos-attacks -->
 
 # Active Directory Attacks
+- 攻击大类:C30 AD域渗透与域控攻击
 
 ## Purpose
 

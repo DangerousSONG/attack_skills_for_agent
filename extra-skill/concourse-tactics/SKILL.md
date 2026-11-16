@@ -9,6 +9,7 @@ metadata:
 ---
 
 # Concourse CI Penetration Testing and Exploitation Methodology
+- 攻击大类:C10 API与业务逻辑攻击
 
 Concourse CI is a container-centric CI/CD system — every Task runs in an isolated container, pipeline configuration is stored as code, and all credentials are injected through the Credential Manager. Once Fly CLI credentials or an API token are obtained, attackers can steal all Secrets stored in pipeline variables, tamper with jobs to inject malicious tasks, extract Git/S3/Docker Registry credentials from resource configurations, hijack build logs and artifacts, and achieve container escape through the Garden container interface on worker nodes.
 

@@ -10,6 +10,7 @@ user-invocable: true
 ---
 
 # CVE Vulnerability Analysis Workflow
+- 攻击大类:C06 漏洞情报与漏洞库
 
 ## Purpose
 

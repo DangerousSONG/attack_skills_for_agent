@@ -16,6 +16,7 @@ metadata:
 ---
 
 # DOM-Based Cross-Site Scripting (XSS)
+- 攻击大类:C09 Web应用漏洞利用
 
 ## What Is Broken and Why
 DOM XSS arises when client-side JavaScript takes data from a controllable source (URL fragment, query string, referrer, postMessage, cookie) and writes it to a dangerous sink that interprets HTML or executes code, all without the data ever being sent to or processed by the server. This means server-side output encoding does not prevent it, and proxy-based scanners may miss it entirely. The root cause is JavaScript treating user-controlled DOM properties as trusted content.

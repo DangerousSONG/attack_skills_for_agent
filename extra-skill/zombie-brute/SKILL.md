@@ -11,6 +11,7 @@ metadata:
 ---
 
 # zombie Multi-Protocol Brute Force
+- 攻击大类:C28 暴力破解与口令喷射
 
 zombie focuses on the **efficiency and coverage of brute force** — supporting 20+ protocols, building in smart dictionary generation, and supporting a credential spraying mode (one password against all users, avoiding lockouts).
 

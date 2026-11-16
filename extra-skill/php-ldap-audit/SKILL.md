@@ -9,6 +9,7 @@ when-to-use: >-
 ---
 
 # PHP LDAP Injection Audit (php-ldap-audit)
+- 攻击大类:C09 Web应用漏洞利用
 
 Analyze PHP project source code, identify LDAP query related code (filter/DN construction), and detect LDAP injection risks: an attacker can change LDAP query semantics by controlling filter or DN fragments, leading to unauthorized queries, data disclosure, or authentication bypass.
 

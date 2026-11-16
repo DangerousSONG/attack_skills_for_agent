@@ -6,6 +6,7 @@ when-to-use: "Use when reviewing PHP source code where user input reaches MongoD
 ---
 
 # PHP NoSQL Injection Audit (php-nosql-audit)
+- 攻击大类:C09 Web应用漏洞利用
 
 Analyze PHP project source code to identify how user input enters NoSQL query conditions, and detect operator injection leading to authentication bypass / data exposure.
 

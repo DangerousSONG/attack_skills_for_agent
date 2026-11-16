@@ -11,6 +11,7 @@ metadata:
 ---
 
 # Droid Recon — Android APK Static Analysis
+- 攻击大类:C09 Web应用漏洞利用
 
 A structured static analysis methodology for Android APK files using Linux command-line tools. No emulator, no device, no dynamic instrumentation required — pure static.
 

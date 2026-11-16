@@ -9,6 +9,7 @@ metadata:
 ---
 
 # Cloud Metadata Exploitation Methodology
+- 攻击大类:C09 Web应用漏洞利用
 
 IMDS is the bridge from SSRF/RCE to the cloud control plane—a single HTTP request yields IAM/CAM temporary credentials.
 

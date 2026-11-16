@@ -9,6 +9,7 @@ metadata:
 ---
 
 # PostgreSQL Penetration Testing and Exploitation
+- 攻击大类:C31 远程服务横向移动
 
 PostgreSQL listens on port 5432 by default. Its powerful SQL engine, rich set of system functions, and extension mechanism mean that once connection access is obtained, everything from file read/write to operating system command execution takes only a few SQL statements.
 

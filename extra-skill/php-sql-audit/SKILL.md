@@ -6,6 +6,7 @@ when-to-use: "Use when auditing PHP application source code for SQL injection, t
 ---
 
 # PHP SQL Injection Audit (php-sql-audit)
+- 攻击大类:C09 Web应用漏洞利用
 
 Analyze PHP project source code, identify SQL execution code (PDO/mysqli/ORM), trace user input to SQL construction points, verify whether SQL injection exists, and output a complete vulnerability report.
 

@@ -9,6 +9,7 @@ date_added: "2026-02-27"
 ---
 
 # Laravel Security Audit
+- 攻击大类:C09 Web应用漏洞利用
 
 ## Skill Metadata
 

@@ -6,6 +6,7 @@ when-to-use: "Use when adding or upgrading a dependency, reviewing a PR that cha
 ---
 
 # Supply-Chain Security Scanner
+- 攻击大类:C12 供应链与CI/CD攻击
 
 This skill turns the model into a dependency reviewer. Read the manifests, lockfiles, install scripts, and the dependency diff; walk the detection passes; report each supply-chain risk with a severity and a concrete fix. No tools to install, no package to run, no registry to phone — the analysis is the model reading what's on disk and in the diff.
 

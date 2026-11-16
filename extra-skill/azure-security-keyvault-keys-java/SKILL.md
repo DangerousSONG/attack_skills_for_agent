@@ -10,6 +10,7 @@ date_added: "2026-02-27"
 ---
 
 # Azure Key Vault Keys (Java)
+- 攻击大类:C05 外部攻击面与云资产暴露
 
 Manage cryptographic keys and perform cryptographic operations in Azure Key Vault and Managed HSM.
 

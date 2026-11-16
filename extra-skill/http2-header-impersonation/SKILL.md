@@ -17,6 +17,7 @@ related_skills:
 ---
 
 # HTTP/2 Header Impersonation
+- 攻击大类:C09 Web应用漏洞利用
 
 Spoof HTTP/2 SETTINGS frames, pseudo-header ordering, and browser-specific HTTP headers to match real browsers at the protocol level. Targets the detection gap between TLS fingerprinting (ClientHello) and JavaScript fingerprinting — the HTTP/2 connection setup and header structure that anti-bot systems analyze. Matches Chrome, Firefox, Safari iOS, and OkHttp (Android) profiles with exact window sizes, header list limits, and header ordering.
 

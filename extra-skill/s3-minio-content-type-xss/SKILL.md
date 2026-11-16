@@ -18,6 +18,7 @@ related_skills:
 ---
 
 # S3/MinIO Content-Type Override to Stored XSS
+- 攻击大类:C09 Web应用漏洞利用
 
 Exploit public cloud storage buckets (S3, MinIO, and compatible) by overriding the `Content-Type` response header via query parameters. When a target serves user-uploaded files from its own origin (e.g., `cdn.target.com` or `target.com/uploads/`), a successful override turns a stored HTML/JS payload into same-origin stored XSS — bypassing every upload-time validation the application performed.
 

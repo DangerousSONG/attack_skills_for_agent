@@ -19,6 +19,7 @@ date_added: "2026-02-27"
 > Without that confirmation, remain read-only and provide defensive guidance only. Prefer a sandbox, disposable VM, or controlled lab.
 
 # File Path Traversal Testing
+- 攻击大类:C09 Web应用漏洞利用
 
 ## Purpose
 

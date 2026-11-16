@@ -11,6 +11,7 @@ tags: [cloud, misconfiguration, hunt, redteam]
 ---
 
 # HUNT-CLOUD-MISCONFIG — Cloud / Infrastructure Misconfigurations
+- 攻击大类:C05 外部攻击面与云资产暴露
 
 ## Crown Jewel Targets
 

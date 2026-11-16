@@ -17,6 +17,7 @@ related_skills:
 ---
 
 # GitHub Secret Hunting
+- 攻击大类:C10 API与业务逻辑攻击
 
 Scan public GitHub repositories for leaked API keys, tokens, passwords, and internal infrastructure details. Developers accidentally push secrets constantly — this skill uses targeted dorking, automated scanning tools, and real-time monitoring to find credentials before the developer notices and revokes them.
 

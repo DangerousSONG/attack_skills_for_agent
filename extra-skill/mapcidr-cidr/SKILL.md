@@ -10,6 +10,7 @@ metadata:
 ---
 
 # mapcidr CIDR Range Processing Methodology
+- 攻击大类:C42 网络扫描与枚举
 
 mapcidr is a CIDR processing tool from ProjectDiscovery. Core advantages: **expansion / aggregation / slicing / shuffling** + **dual-stack IPv4/IPv6** + **pipeline friendly**.
 

@@ -13,6 +13,7 @@ license: MIT
 ---
 
 # Dockerfile Security Scan
+- 攻击大类:C14 云与容器执行
 
 Parses a Dockerfile and flags common security and supply-chain problems, each
 with a concrete fix. Pure text analysis — no Docker daemon, no network, stdlib

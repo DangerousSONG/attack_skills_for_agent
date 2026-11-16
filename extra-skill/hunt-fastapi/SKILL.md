@@ -20,6 +20,7 @@ related_skills:
 ---
 
 # FastAPI Security Hunting
+- 攻击大类:C09 Web应用漏洞利用
 
 Hunt FastAPI-specific vulnerabilities in dependency injection authorization gaps, Pydantic model coercion and extra field exploitation, OpenAPI schema mining for hidden endpoints, and ASGI middleware bypasses. FastAPI's design — dependency injection for auth, Pydantic for validation, OpenAPI auto-generation — creates unique attack surface distinct from Flask or Django.
 

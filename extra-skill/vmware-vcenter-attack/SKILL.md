@@ -35,6 +35,7 @@ Do NOT use for:
 TARGET="vcenter.target.com"
 
 # Build info endpoint (often public; revealing exact patch level)
+- 攻击大类:C46 二进制漏洞利用与Pwn
 curl --max-time 30 --connect-timeout 10 -sk "https://$TARGET/sdk/vimServiceVersions.xml"
 
 # UI build (visible in page source)

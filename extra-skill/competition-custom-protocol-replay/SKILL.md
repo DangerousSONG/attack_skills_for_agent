@@ -8,6 +8,7 @@ when-to-use: >-
 ---
 
 # Competition Custom Protocol Replay
+- 攻击大类:C42 网络扫描与枚举
 
 Use this skill only as a downstream specialization after `$ctf-sandbox-orchestrator` is already active and has established sandbox assumptions, node ownership, and evidence priorities. If that has not happened yet, return to `$ctf-sandbox-orchestrator` first.
 

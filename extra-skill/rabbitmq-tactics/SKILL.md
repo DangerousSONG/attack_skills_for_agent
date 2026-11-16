@@ -12,6 +12,7 @@ metadata:
 ---
 
 # RabbitMQ Unauthorized Access and Exploitation
+- 攻击大类:C10 API与业务逻辑攻击
 
 RabbitMQ enables the Management Plugin by default and ships with guest/guest credentials (localhost only), but many instances set `loopback_users = none`, which makes the guest account remotely accessible — going from message theft to Erlang Cookie RCE takes only a few steps.
 

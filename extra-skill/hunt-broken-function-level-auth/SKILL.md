@@ -17,6 +17,7 @@ related_skills:
 ---
 
 # Broken Function Level Authorization
+- 攻击大类:C09 Web应用漏洞利用
 
 Hunt for endpoints where authorization is enforced at the controller/middleware level but bypassed through HTTP verb drift, legacy routes, shadow endpoints, or transport protocol inconsistencies. Unlike IDOR (object-level), this targets ACTION-level authorization — can a user invoke admin functions despite lacking the admin role.
 

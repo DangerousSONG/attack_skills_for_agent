@@ -15,6 +15,7 @@ metadata:
 ---
 
 # Java Front-End Security Vulnerability Source Code Audit
+- 攻击大类:C09 Web应用漏洞利用
 This skill focuses on the source code level: determining whether a "front-end security vulnerability actually holds". Its core is verifying whether filtering and escaping are sufficient as user input flows into the HTTP response (HTML/header/cookie/redirect). Runtime exploitation techniques such as crafting payloads or bypassing WAFs belong to the corresponding black-box exploit skills.
 
 ## Further Reading

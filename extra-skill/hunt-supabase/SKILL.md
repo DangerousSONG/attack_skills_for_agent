@@ -13,6 +13,7 @@ tags: [supabase, hunt, redteam]
 ---
 
 # HUNT-SUPABASE — Supabase Exploitation
+- 攻击大类:C10 API与业务逻辑攻击
 
 ## Crown Jewel Targets
 

@@ -17,6 +17,7 @@ related_skills:
 ---
 
 # Origin IP Discovery
+- 攻击大类:C02 域名与DNS侦察
 
 Discover the real server IP behind CDN/WAF protections (Cloudflare, Akamai, Fastly). When the origin IP is found, the raw server is exposed without firewall rules, rate limiting, or application-layer filtering. Techniques include favicon hash fingerprinting across Shodan, historical DNS records from passive sources, SSL certificate SAN field matching, and Google Analytics ID cross-referencing.
 

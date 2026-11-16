@@ -11,6 +11,7 @@ when-to-use: "Use when analyzing any binary file (PE/ELF/APK/DLL/SO/firmware) wi
 ---
 
 # IDA Pro Reverse Engineering Skill
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 ## ACTION REQUIRED (execute immediately after reading)
 

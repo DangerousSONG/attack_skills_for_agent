@@ -7,6 +7,7 @@ when-to-use: "Use when analyzing binaries (PE/ELF/Mach-O/DEX/WASM) with the rada
 ---
 
 # radare2
+- 攻击大类:C47 逆向工程
 
 A binary analysis skill for the `radare2` CLI. The focus is completing reconnaissance, analysis, locating, exporting and light modification directly from the command line, without relying on a GUI.
 

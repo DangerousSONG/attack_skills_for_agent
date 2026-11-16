@@ -34,6 +34,7 @@ metadata:
 > Without that confirmation, remain read-only and provide defensive guidance only. Prefer a sandbox, disposable VM, or controlled lab.
 
 # DAST Scanning
+- 攻击大类:C42 网络扫描与枚举
 
 Test running applications for security vulnerabilities through dynamic analysis.
 

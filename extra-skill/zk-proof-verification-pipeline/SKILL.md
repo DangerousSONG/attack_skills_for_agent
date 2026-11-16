@@ -15,6 +15,7 @@ source_repo: Ranjeet2063/agentic-awesome-skills
 ---
 
 # Zero-Knowledge Proof Verification Pipeline
+- 攻击大类:C12 供应链与CI/CD攻击
 
 **What it is:** Registers zero-knowledge SNARK proof verification keys, circuit complexity constraints, and nullifier tracking to prevent double-spending in privacy systems.
 

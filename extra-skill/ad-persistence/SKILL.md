@@ -11,6 +11,7 @@ metadata:
 ---
 
 # AD Persistence Methodology
+- 攻击大类:C30 AD域渗透与域控攻击
 
 Core objective after obtaining high privileges: establish persistent access so you can still return to the target environment after a reboot or password change.
 

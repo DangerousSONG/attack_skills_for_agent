@@ -13,6 +13,7 @@ tags: [lfi, hunt, redteam]
 ---
 
 # HUNT-LFI — Local / Remote File Inclusion & Path Traversal
+- 攻击大类:C09 Web应用漏洞利用
 
 ## Crown Jewel Targets
 

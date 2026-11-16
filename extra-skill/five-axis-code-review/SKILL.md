@@ -17,6 +17,7 @@ license_source: https://github.com/alapha888/agent-skills-en/blob/main/LICENSE
 ---
 
 # Code Review Checklist
+- 攻击大类:C44 AI与大模型安全
 
 One review answers a single question: "Will this code become someone else's problem within three months?" Walk the five axes in order; each axis gets pass / fail / N-A, and every failure must come with a concrete fix.
 

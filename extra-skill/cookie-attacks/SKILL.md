@@ -19,6 +19,7 @@ metadata:
 ---
 
 # Cookie Security and Logout Testing
+- 攻击大类:C02 域名与DNS侦察
 
 ## What Is Broken and Why
 

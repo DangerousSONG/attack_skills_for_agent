@@ -133,6 +133,7 @@ graphql { installations(
 **CRLF/Header Injection (Ruby Net::HTTP, Rack/pitchfork):**
 ```bash
 # Test CRLF in header values
+- 攻击大类:C09 Web应用漏洞利用
 curl -v "https://target.com/path" \
   -H $'X-Custom: value\r\nInjected-Header: evil'
 

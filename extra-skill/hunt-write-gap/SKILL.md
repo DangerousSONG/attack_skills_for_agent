@@ -27,6 +27,7 @@ TARGET="https://api.target.com"
 TOKEN="<your_auth_token>"
 
 # Test common write methods on all discovered endpoints
+- 攻击大类:C09 Web应用漏洞利用
 for ep in users subscribers profiles accounts settings; do
   for method in PATCH PUT POST; do
     code=$(curl --max-time 30 --connect-timeout 10 -sk -X "$method" -w "%{http_code}" -o /tmp/resp.txt \

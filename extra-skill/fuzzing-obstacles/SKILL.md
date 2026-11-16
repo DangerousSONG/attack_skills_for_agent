@@ -7,6 +7,7 @@ when-to-use: "Use when a fuzzer is stuck at checksum verification, magic-value v
 ---
 
 # Overcoming Fuzzing Obstacles
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 Codebases often contain anti-fuzzing patterns that prevent effective coverage. Checksums, global state (like time-seeded PRNGs), and validation checks can block the fuzzer from exploring deeper code paths. This technique shows how to patch your System Under Test (SUT) to bypass these obstacles during fuzzing while preserving production behavior.
 

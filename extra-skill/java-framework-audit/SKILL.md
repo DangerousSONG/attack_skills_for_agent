@@ -15,6 +15,7 @@ metadata:
 ---
 
 # Java Framework-Specific Vulnerability Source Code Audit
+- 攻击大类:C09 Web应用漏洞利用
 Framework vulnerabilities fall into two categories: **flaws in the framework itself** (known CVEs, fixed by upgrading) and **framework misuse** (configuration/coding flaws caused by developers misunderstanding the framework's security mechanisms). The core question this skill addresses is: how does the code of the audited project trigger these known framework vulnerability patterns.
 
 ## Further Reading

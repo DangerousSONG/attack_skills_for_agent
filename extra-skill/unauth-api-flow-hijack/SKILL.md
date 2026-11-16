@@ -19,6 +19,7 @@ related_skills:
 ---
 
 # Unauthenticated API Flow Hijack
+- 攻击大类:C09 Web应用漏洞利用
 
 Exploit API endpoints that implement a full business workflow (interview, application, checkout, onboarding) without requiring authentication at any step. Unlike simple data exposure, these flows allow an attacker to participate in — and manipulate — the application's core business logic: submitting forms, uploading files, completing transactions, and exporting data. The entire state machine is accessible without credentials.
 

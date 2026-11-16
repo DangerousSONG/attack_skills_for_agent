@@ -9,6 +9,7 @@ when-to-use: >-
 ---
 
 # PHP Arbitrary File Read Audit (php-file-read-audit)
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 Analyze PHP project source code and identify file read and include execution risks: path traversal leading to arbitrary file read, and inclusion of arbitrary files (include/require) leading to information disclosure or code execution (when the included content is executable, or affected by stream wrappers).
 

@@ -6,6 +6,7 @@ when-to-use: "Use when auditing a Yii or Yii2 codebase for access control, CSRF,
 ---
 
 # PHP Yii (Yii2) Framework Security Audit (php-yii-audit)
+- 攻击大类:C09 Web应用漏洞利用
 
 Analyze the framework mechanisms and configuration pitfalls of Yii2 projects, focusing on:
 - Access control: `AccessControl` filter, `roles` rules, use of matchCallback

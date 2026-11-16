@@ -33,6 +33,7 @@ DO NOT use for:
 ### Direct guesses
 ```bash
 # Tenant subdomains often match the brand
+- 攻击大类:C30 AD域渗透与域控攻击
 # Replace these with your target's actual tenant slug candidates:
 for tenant in target-brand target-brand-ltd target-sister-brand target-brand-short target-other-variant; do
   for region in okta okta-emea oktapreview; do
