@@ -1,7 +1,7 @@
 ---
 name: seatbelt-host-survey
 description: "Seatbelt: Enumerates Windows privilege escalation surface. Signals: Windows privilege escalation, UAC bypass, full host reconnaissance, by group, system groups."
-zh-signals: "Seatbelt: Windows 提权面系统枚举。信号:windows提权,uac绕过,全量主机侦察,按组,系统组。"
+zh-signals: "Seatbelt: Windows 提权面系统枚举。信号:windows提权,uac绕过,全量主机侦察,按组,系统组,安全基线,基线核查。"
 when-to-use: >-
   Use after gaining a foothold on Windows when you need a comprehensive host
   survey to identify privilege escalation paths such as unquoted service paths,
