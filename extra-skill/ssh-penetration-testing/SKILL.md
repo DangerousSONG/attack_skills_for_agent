@@ -18,6 +18,7 @@ date_added: "2026-02-27"
 > Show the exact command(s), explain their expected effect, and wait for explicit confirmation in the current conversation.
 > Without that confirmation, remain read-only and provide defensive guidance only. Prefer a sandbox, disposable VM, or controlled lab.
 # SSH Penetration Testing
+- 攻击大类:C27 本地凭证与浏览器窃取
 
 ## Purpose
 

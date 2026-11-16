@@ -52,6 +52,7 @@ Do NOT use for:
 
 ```bash
 # AWS access key patterns
+- 攻击大类:C05 外部攻击面与云资产暴露
 AKIA[0-9A-Z]{16}                # IAM user access key (long-term)
 ASIA[0-9A-Z]{16}                # STS temporary credential
 AGPA[0-9A-Z]{16}                # IAM group

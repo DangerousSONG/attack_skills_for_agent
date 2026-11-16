@@ -10,6 +10,7 @@ when-to-use: >-
 ---
 
 # OSS-Fuzz
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 [OSS-Fuzz](https://google.github.io/oss-fuzz/) is an open-source project developed by Google that provides free distributed infrastructure for continuous fuzz testing. It streamlines the fuzzing process and facilitates simpler modifications. While only select projects are accepted into OSS-Fuzz, the project's core is open-source, allowing anyone to host their own instance for private projects.
 

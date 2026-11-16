@@ -18,6 +18,7 @@ related_skills:
 ---
 
 # Hardcoded Credential Hunt
+- 攻击大类:C10 API与业务逻辑攻击
 
 Detect credentials baked into client-side code or HTML responses. Targets include master passwords in form `value` attributes, secret keys in inline scripts, API tokens in configuration endpoints, and plaintext credentials leaked through debug error pages. This class of vulnerability bypasses authentication entirely — no brute force required.
 

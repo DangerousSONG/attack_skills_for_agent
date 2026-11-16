@@ -9,6 +9,7 @@ when-to-use: >-
 ---
 
 # Infrastructure-as-Code Security Scanner
+- 攻击大类:C05 外部攻击面与云资产暴露
 
 This skill turns the model into a cloud security auditor. Read the IaC, find the dangerous misconfigurations, and report each one with a severity and a concrete fix. The analysis runs entirely against files on disk — no live cloud, no credentials, no `apply`.
 

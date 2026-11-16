@@ -20,6 +20,7 @@ related_skills:
 ---
 
 # Exchange/OWA Attack Skill
+- 攻击大类:C30 AD域渗透与域控攻击
 
 Exchange Outlook Web Access reconnaissance covering endpoint mapping, NTLM
 Type-2 metadata, authentication controls, and version evidence. Password or

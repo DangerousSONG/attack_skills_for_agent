@@ -14,6 +14,7 @@ license: "MIT"
 license_source: "https://github.com/zhaoxuya520/reverse-skill/blob/main/LICENSE"
 ---
 # 🔄 DSL Custom VM Reverse Engineering (DSL VM Reverse Engineering)
+- 攻击大类:C47 逆向工程
 ## When to Use
 
 - A protected web asset runs a custom bytecode VM (risk-control/captcha engines).

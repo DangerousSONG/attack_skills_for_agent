@@ -15,6 +15,7 @@ triggers:
 ---
 
 # IaC Security Scanner Skills
+- 攻击大类:C02 域名与DNS侦察
 
 > Skill by [ara.so](https://ara.so) — Security Skills collection.
 

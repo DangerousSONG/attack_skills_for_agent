@@ -17,6 +17,7 @@ related_skills:
 ---
 
 # GitLab Public Recon Skill
+- 攻击大类:C42 网络扫描与枚举
 
 Enumerate publicly accessible GitLab repositories to extract source code, credentials, internal IPs, CI/CD tokens, deployment configurations, and environment files. GitLab instances with registration enabled or public visibility expose the entire development infrastructure. Confirmed on gov-finance-portal (3 public repos, 461K CPFs, internal IP 10.11.82.75, CI/CD tokens), dev-agency (GitLab with SSL private keys), and fitness-chain (Firebase SA keys in repos).
 

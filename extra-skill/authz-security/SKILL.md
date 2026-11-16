@@ -9,6 +9,7 @@ when-to-use: >-
 ---
 
 # Authorization Security Scanner
+- 攻击大类:C09 Web应用漏洞利用
 
 This skill turns the model into an authorization reviewer. Read the routes, controllers, resolvers, and data models; walk the detection passes; report each missing access-control check with a severity and a concrete, framework-correct fix. No tools to install, no app to run, no credentials — the analysis is the model reading the code.
 

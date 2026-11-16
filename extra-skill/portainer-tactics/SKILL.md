@@ -14,6 +14,7 @@ metadata:
 ---
 
 # Portainer Exploitation Skill
+- 攻击大类:C09 Web应用漏洞利用
 
 - **Product**: Portainer (Docker/Kubernetes container management platform)
 - **Default ports**: 9000 (HTTP), 9443 (HTTPS) | **Identification**: `/api/status` returns JSON | **FOFA**: `app="Portainer"`

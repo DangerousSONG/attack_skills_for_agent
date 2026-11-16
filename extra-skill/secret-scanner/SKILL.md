@@ -13,6 +13,7 @@ license: MIT
 ---
 
 # Secret Scanner
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 A dependency-free engine that finds committed credentials by combining
 **high-signal vendor regex rules** (AWS, GitHub, GCP, Stripe, OpenAI,

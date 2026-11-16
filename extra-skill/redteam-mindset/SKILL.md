@@ -436,6 +436,7 @@ This skill is the operational discipline; those are the techniques.
 
 ```bash
 # Read-only first step; confirm scope before anything active.
+- 攻击大类:C50 红队方法论与自动化
 cat scope.txt  # target list from the authorized engagement brief
 ```
 

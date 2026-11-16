@@ -10,6 +10,7 @@ metadata:
 ---
 
 # C2 Beacon Configuration Extraction and Analysis
+- 攻击大类:C35 C2框架与远控
 
 > **Red-team value**: understand what configuration a beacon leaks → customize the Malleable Profile → strengthen C2 OPSEC
 

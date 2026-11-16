@@ -6,6 +6,7 @@ when-to-use: "Use when auditing a Laravel codebase for framework-specific securi
 ---
 
 # PHP Laravel Framework Security Audit (php-laravel-audit)
+- 攻击大类:C09 Web应用漏洞利用
 
 Analyze the "framework-specific security mechanisms" and "common pitfall patterns" in Laravel project source code, focusing on:
 - Authentication and route protection (middleware/auth/Policies/Gates)

@@ -17,6 +17,7 @@ metadata:
 ---
 
 # OS Command Injection
+- 攻击大类:C09 Web应用漏洞利用
 
 ## What Is Broken and Why
 Command injection occurs when an application passes user-supplied data to a system shell without sanitization, effectively letting the attacker append their own commands. Applications that invoke OS utilities (ping, nslookup, file conversion tools, archive utilities) by constructing shell strings are particularly susceptible. The vulnerability grants attacker-level access equivalent to the web server process user, enabling file read/write, network pivoting, and privilege escalation.

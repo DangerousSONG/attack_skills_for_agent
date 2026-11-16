@@ -12,6 +12,7 @@ date_added: "2026-09-04"
 Supporting files are included at skill-relative paths. See [UPSTREAM-NOTICE.md](UPSTREAM-NOTICE.md) for their pinned sources, licenses, hashes, and import changes.
 
 # Constant-Time Analysis
+- 攻击大类:C49 密码学攻击
 
 Analyze cryptographic code to detect operations that leak secret data through execution timing variations.
 

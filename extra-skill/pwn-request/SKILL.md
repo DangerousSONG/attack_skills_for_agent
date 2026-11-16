@@ -20,6 +20,7 @@ metadata:
 ---
 
 # Pwn Request
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 ## What Is Broken and Why
 

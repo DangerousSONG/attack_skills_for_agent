@@ -23,6 +23,7 @@ metadata:
 ---
 
 # SSL/TLS Management
+- 攻击大类:C02 域名与DNS侦察
 
 Manage certificates and secure communications across web servers, Kubernetes clusters, and internal services.
 

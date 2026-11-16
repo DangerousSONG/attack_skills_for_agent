@@ -9,6 +9,7 @@ metadata:
 ---
 
 # SQL Server Penetration Testing and Exploitation
+- 攻击大类:C31 远程服务横向移动
 
 SQL Server listens on port 1433 by default, and a weak SA password is the most common entry point. Once sysadmin rights are obtained, xp_cmdshell allows direct operating system command execution; even when xp_cmdshell is disabled, multiple RCE paths remain available such as sp_OACreate, CLR Assembly, and SQL Agent Jobs. The Linked Server mechanism is an important pivot for lateral movement inside the internal network.
 

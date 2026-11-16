@@ -11,6 +11,7 @@ metadata:
 ---
 
 # Redis Unauthorized Access and Exploitation
+- 攻击大类:C10 API与业务逻辑攻击
 
 Redis has no authentication by default and listens on 0.0.0.0 — once exposed to the network the attack surface is huge, since going from data theft to RCE takes only a few commands.
 

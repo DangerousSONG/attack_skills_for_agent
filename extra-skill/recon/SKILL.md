@@ -7,6 +7,7 @@ allowed-tools: Bash, Read, Write, WebSearch, WebFetch
 ---
 
 # Recon — Penetration Testing Reconnaissance
+- 攻击大类:C42 网络扫描与枚举
 
 Perform structured reconnaissance against an authorized target, organizing findings into an actionable attack surface map.
 

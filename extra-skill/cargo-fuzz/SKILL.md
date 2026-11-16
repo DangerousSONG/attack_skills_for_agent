@@ -8,6 +8,7 @@ when-to-use: >-
 ---
 
 # cargo-fuzz
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 cargo-fuzz is the de facto choice for fuzzing Rust projects when using Cargo. It uses libFuzzer as the backend and provides a convenient Cargo subcommand that automatically enables relevant compilation flags for your Rust project, including support for sanitizers like AddressSanitizer.
 

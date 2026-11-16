@@ -18,6 +18,7 @@ Supporting files are included at skill-relative paths. See [UPSTREAM-NOTICE.md](
 The integration fixture in `assets/conftest_template.py` connects to the configured Cosmos endpoint; `cleanup_test_docs` deletes records explicitly added to its tracking list. Use only an isolated disposable test container with test-only records, never production data. Copying the template does not connect to Cosmos.
 
 # Cosmos DB Service Implementation
+- 攻击大类:C48 区块链与Web3安全
 
 Build production-grade Azure Cosmos DB NoSQL services following clean code, security best practices, and TDD principles.
 

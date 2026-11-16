@@ -63,6 +63,7 @@ report_count: 18
 ---
 
 # HUNT-SESSION — Session Management
+- 攻击大类:C09 Web应用漏洞利用
 
 ## Crown Jewel Targets
 

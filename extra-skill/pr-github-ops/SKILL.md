@@ -9,6 +9,7 @@ when-to-use: >-
 ---
 
 # PR GitHub operations
+- 攻击大类:C44 AI与大模型安全
 
 Superagent PR scans run in a sandbox with an authenticated `gh` CLI. You own GitHub side effects after handoff: inline finding comments, managed labels, and check-run completion.
 

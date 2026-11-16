@@ -9,6 +9,7 @@ metadata:
 ---
 
 # DalFox XSS Vulnerability Scanning Methodology
+- 攻击大类:C09 Web应用漏洞利用
 
 DalFox is a professional XSS vulnerability scanner. Core advantages: **smart parameter analysis** (automatically identifies injectable parameters) + **DOM mining** + **WAF evasion** + **Blind XSS support**.
 

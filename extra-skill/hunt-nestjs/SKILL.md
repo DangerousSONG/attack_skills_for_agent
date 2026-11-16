@@ -18,6 +18,7 @@ related_skills:
 ---
 
 # NestJS Security Hunting
+- 攻击大类:C09 Web应用漏洞利用
 
 Hunt NestJS-specific vulnerabilities in guard bypass via decorator stack gaps, Reflector metadata mismatches between global/controller/method guards, ValidationPipe whitelist and transform exploits, and microservice transport authentication drift. NestJS's architectural patterns — decorators, dependency injection, module system, multi-transport support — create unique attack surface across HTTP, WebSocket, and RPC transports.
 

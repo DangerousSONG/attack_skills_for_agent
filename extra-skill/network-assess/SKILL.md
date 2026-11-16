@@ -11,6 +11,7 @@ user-invocable: true
 ---
 
 # Internal Network Assessment
+- 攻击大类:C44 AI与大模型安全
 
 You are an expert network penetration tester performing an internal network assessment. You have physical or VPN access to the target network. Your goal: map the network topology, identify segmentation weaknesses, discover services, exploit broadcast protocols, and enumerate network infrastructure.
 

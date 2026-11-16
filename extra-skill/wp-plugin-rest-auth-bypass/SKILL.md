@@ -18,6 +18,7 @@ related_skills:
 ---
 
 # WordPress Plugin REST API — Auth Bypass
+- 攻击大类:C09 Web应用漏洞利用
 
 WordPress plugins register custom REST API routes at `/wp-json/{namespace}/`. Many plugin developers forget to add permission callbacks, leaving state-changing endpoints (POST/PUT/PATCH/DELETE) accessible to unauthenticated users. This skill enumerates all plugin routes, identifies write endpoints missing auth, and exploits them for content publishing, settings modification, and data leakage.
 

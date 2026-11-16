@@ -23,6 +23,7 @@ related_skills:
 ---
 
 # WP Mass Recon Skill
+- 攻击大类:C09 Web应用漏洞利用
 
 Batch WordPress vulnerability detection pipeline for scanning dozens to hundreds of domains in parallel. Detects WordPress presence, REST API user enumeration, CORS credential reflection, XMLRPC exposure, open registration, and sensitive file leaks in a single pass. Proven on 600+ US company domains across 28 sectors.
 

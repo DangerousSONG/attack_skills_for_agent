@@ -7,6 +7,7 @@ when-to-use: >-
 ---
 
 # SecLists Passwords (Curated)
+- 攻击大类:C50 红队方法论与自动化
 
 ## Description
 

@@ -9,6 +9,7 @@ metadata:
 ---
 
 # Elasticsearch Unauthorized Access and Exploitation
+- 攻击大类:C10 API与业务逻辑攻击
 
 Elasticsearch listens on port 9200 by default with no authentication, and when exposed to the network it faces a large amount of sensitive data leakage and potential RCE risk.
 

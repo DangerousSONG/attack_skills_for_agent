@@ -10,6 +10,7 @@ allowed-tools: Bash, Read, Write, Grep, Glob, WebSearch
 ---
 
 # Container Audit — Docker & Kubernetes Security Review
+- 攻击大类:C14 云与容器执行
 
 Audit container images, Dockerfiles, Helm charts, Kustomize overlays, and Kubernetes manifests for misconfiguration, excessive privilege, exposed secrets, and runtime security gaps. Distinct from `cloud-audit` (cloud-provider IAM and managed services) and `dependency-audit` (package CVEs in the application). This skill is the container/orchestration layer between them.
 

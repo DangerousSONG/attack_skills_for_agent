@@ -17,6 +17,7 @@ related_skills:
 ---
 
 # Firebase & Supabase Attack Skill
+- 攻击大类:C10 API与业务逻辑攻击
 
 Exploit misconfigured Firebase (Firestore, Storage, Auth) and Supabase (REST API, Storage, Auth) backends. These BaaS platforms are the #1 source of massive data breaches in modern web apps when Row Level Security (RLS) is missing and API keys leak in JavaScript bundles. Confirmed on delivery-platform (204K WhatsApp conversations, 173K phone numbers), visa-processing-platform (64K users, 46K reports), fitness-chain (39K users, 5 Firebase projects, 21 credentials), dental-booking (9 clinics, 1,749 leads).
 

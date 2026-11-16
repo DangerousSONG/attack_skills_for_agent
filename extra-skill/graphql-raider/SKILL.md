@@ -14,6 +14,7 @@ metadata:
 ---
 
 # GraphQL Raider
+- 攻击大类:C09 Web应用漏洞利用
 
 GraphQL replaces REST with a single flexible endpoint where clients define exactly what they want. That power collapses the usual defense lines: one endpoint holds every operation, the schema is self-documenting, and query structure is client-controlled — making it a uniquely attack-rich surface.
 

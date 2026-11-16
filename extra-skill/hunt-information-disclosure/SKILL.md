@@ -20,6 +20,7 @@ related_skills:
 ---
 
 # Information Disclosure Hunting
+- 攻击大类:C49 密码学攻击
 
 Hunt for information exposure through stack traces, debug endpoints, versioned path discovery, source maps, and differential oracles. Each disclosure amplifies other vulnerabilities — a version number enables CVE targeting, a server path enables LFI, a schema leak enables auth bypass, and an error message reveals internal infrastructure.
 

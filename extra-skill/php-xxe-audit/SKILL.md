@@ -6,6 +6,7 @@ when-to-use: "Use when reviewing PHP source code for XML parsing points that may
 ---
 
 # PHP XXE Audit (php-xxe-audit)
+- 攻击大类:C09 Web应用漏洞利用
 
 Analyze PHP project source code to identify XXE (XML External Entity) risks: when an XML parsing point allows external entities/DOCTYPE, the XML input is controllable, and an echo-back or OOB channel exists, it may lead to file read / SSRF / DoS.
 

@@ -12,6 +12,7 @@ metadata:
 ---
 
 # Mythic C2 Operational Methodology
+- 攻击大类:C35 C2框架与远控
 
 Mythic is a modular C2 framework whose core consists of the Mythic server, Agents, and C2 Profiles. When using it, first determine the target platform and communication path, then install the matching Agent/Profile; do not install a pile of components first and choose at the last minute.
 

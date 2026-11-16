@@ -21,6 +21,7 @@ related_skills:
 ---
 
 # Stealth Browser Launch
+- 攻击大类:C42 网络扫描与枚举
 
 Launch a patched Chromium binary with C++ source-level fingerprint modifications that bypass anti-bot detection. The binary spoofs canvas, WebGL, audio, GPU, screen, WebRTC, network timing, and automation signals at the binary level — not via JavaScript injection or config patches that break with Chrome updates. Passes Cloudflare Turnstile, reCAPTCHA v3 (0.9 score), FingerprintJS, BrowserScan, and 30+ detection sites.
 

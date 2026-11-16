@@ -13,6 +13,7 @@ metadata:
 ---
 
 # Java Injection Vulnerability Source Code Audit
+- 攻击大类:C09 Web应用漏洞利用
 This skill focuses on determining at the source level whether "the injection holds", with the core task being verifying whether filtering along the Source→Sink path is sufficient. Crafting payloads, bypassing WAFs, and other runtime exploitation techniques belong to the corresponding black-box exploit skill.
 
 ## Further Reading

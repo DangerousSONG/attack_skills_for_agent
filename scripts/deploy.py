@@ -27,7 +27,7 @@ def find_skills(base):
         if 'SKILL.md' not in files:
             continue
         rel = os.path.relpath(dp, base)
-        if rel.startswith('.git'):
+        if rel.startswith('.git') or rel.split(os.sep)[0] == 'quarantine' or 'quarantine' in rel.split(os.sep):
             continue
         slug = os.path.basename(dp)
         if slug in out:

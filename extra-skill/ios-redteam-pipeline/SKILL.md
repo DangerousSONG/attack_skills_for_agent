@@ -51,6 +51,7 @@ DO NOT use for:
 
 ```bash
 # App Store search API (no auth, no scraping needed)
+- 攻击大类:C43 移动端攻击
 curl -s "https://itunes.apple.com/search?term=<brand>&country=us&entity=software&limit=50" | python3 -m json.tool
 
 # Pull the full metadata for a known bundle ID (once you have one)

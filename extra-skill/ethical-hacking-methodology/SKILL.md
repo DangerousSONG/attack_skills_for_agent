@@ -26,6 +26,7 @@ date_added: "2026-02-27"
 > AUTHORIZED USE ONLY: Use this skill only for authorized penetration testing engagements, defensive validation, or controlled educational environments.
 
 # Ethical Hacking Methodology
+- 攻击大类:C09 Web应用漏洞利用
 
 ## Purpose
 

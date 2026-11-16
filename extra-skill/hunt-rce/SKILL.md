@@ -151,6 +151,7 @@ window.location = userControlled  // URL scheme bypass → JS execution
 ### Template Injection Probes
 ```
 # Generic polyglot — works across Jinja2, Twig, Freemarker, Pebble, Velocity
+- 攻击大类:C13 远程命令执行与WebShell
 {{7*7}}${7*7}#{7*7}<%= 7*7 %>*{7*7}
 {{'7'*7}}
 {{config}}

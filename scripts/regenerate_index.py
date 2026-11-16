@@ -57,7 +57,7 @@ old_total = sum(len(s['entries']) for s in sections.values())
 # ---- 2. 遍历仓库现状 ----
 repo = {}   # slug -> (relpath, desc, cat)
 for dp, dirs, files in os.walk(ROOT):
-    dirs[:] = [d for d in dirs if d not in ('.git', '_before_tmp')]
+    dirs[:] = [d for d in dirs if d not in ('.git', '_before_tmp', 'quarantine')]
     if 'SKILL.md' not in files:
         continue
     rel = os.path.relpath(dp, ROOT).replace(os.sep, '/')
@@ -102,8 +102,12 @@ for slug, (rel, desc, cat) in sorted(repo.items()):
         url = 'https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/tool-skills/{0}/SKILL.md'.format(slug)
         label = '工具改写({0})'.format(upstream)
         lic = 'Apache-2.0 (上游 {0})'.format(upl)
+    elif rel.startswith('extra-skill/'):
+        url = 'https://github.com/DangerousSONG/attack_skills_for_agent/blob/main/extra-skill/{0}/SKILL.md'.format(slug)
+        label = '外部收录(extra-skill)'
+        lic = '见各 SKILL.md 文件头'
     else:
-        print('  [跳过] 非 tool-skills 新条目, 请手工补 URL 规则:', slug, rel)
+        print('  [跳过] 非 tool-skills/extra-skill 新条目, 请手工补 URL 规则:', slug, rel)
         continue
     sections[cat]['entries'].append([slug, url, label, lic, trunc(desc)])
     known.add(slug)
@@ -114,7 +118,7 @@ total = sum(len(s['entries']) for s in sections.values())
 lines = []
 lines.append('# 攻击侧 Skills 完整清单（{0} 个 · v2.0）'.format(total))
 lines.append('')
-lines.append('> 现成 435（10 个开源仓库精选）+ 工具改写 561（含 2 个原创专项）。按 50 个攻击大类分组。')
+lines.append('> 现成 435（10 个开源仓库精选）+ 工具改写 561（含 2 个原创专项）+ 外部收录 573（extra-skill 经筛选/分类/去重）。按 50 个攻击大类分组。')
 lines.append('')
 lines.append('| 分类 | 数量 |')
 lines.append('| --- | --- |')

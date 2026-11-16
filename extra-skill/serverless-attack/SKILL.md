@@ -9,6 +9,7 @@ metadata:
 ---
 
 # Serverless/Cloud Function Attack Methodology
+- 攻击大类:C10 API与业务逻辑攻击
 
 Serverless functions run in ephemeral containers, so traditional persistence and lateral movement approaches do not apply. The attack focus is: event injection (input tampering), credential extraction (environment variables/temporary tokens), and code injection (modifying the function code).
 

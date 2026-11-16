@@ -15,6 +15,7 @@ triggers:
 ---
 
 # wxmini-security-audit
+- 攻击大类:C50 红队方法论与自动化
 
 > Skill by [ara.so](https://ara.so) — Security Skills collection.
 

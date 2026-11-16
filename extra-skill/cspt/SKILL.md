@@ -19,6 +19,7 @@ metadata:
 ---
 
 # Client-Side Path Traversal (CSPT)
+- 攻击大类:C09 Web应用漏洞利用
 
 ## What Is Broken and Why
 

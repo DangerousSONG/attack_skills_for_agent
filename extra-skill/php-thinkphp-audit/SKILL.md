@@ -8,6 +8,7 @@ when-to-use: >-
 ---
 
 # PHP ThinkPHP Framework Security Audit (php-thinkphp-audit)
+- 攻击大类:C09 Web应用漏洞利用
 
 Analyze the "framework-specific security mechanisms" and typical pitfall patterns in ThinkPHP project source code, focusing on:
 - Authentication and access control (auth module, controller/middleware gates)

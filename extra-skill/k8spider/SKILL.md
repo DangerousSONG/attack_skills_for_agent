@@ -11,6 +11,7 @@ metadata:
 ---
 
 # K8Spider — Kubernetes DNS Service Discovery
+- 攻击大类:C42 网络扫描与枚举
 
 k8spider is a DNS-based K8s service discovery tool — **it only needs access to the cluster DNS to enumerate all Services with low privileges**. No API Server token, no special permissions, pure DNS queries.
 

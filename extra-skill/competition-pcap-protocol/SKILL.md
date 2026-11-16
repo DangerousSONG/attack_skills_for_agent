@@ -6,6 +6,7 @@ when-to-use: "Use only after ctf-sandbox-orchestrator is active, when a CTF chal
 ---
 
 # Competition PCAP Protocol
+- 攻击大类:C35 C2框架与远控
 
 Use this skill only as a downstream specialization after `$ctf-sandbox-orchestrator` is already active and has established sandbox assumptions, node ownership, and evidence priorities. If that has not happened yet, return to `$ctf-sandbox-orchestrator` first.
 

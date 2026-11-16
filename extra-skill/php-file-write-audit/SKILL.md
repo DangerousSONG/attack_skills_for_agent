@@ -8,6 +8,7 @@ when-to-use: >-
 ---
 
 # PHP Arbitrary File Write Audit (php-file-write-audit)
+- 攻击大类:C09 Web应用漏洞利用
 
 Analyze the implementation logic that "writes data to files on disk" in PHP project source code, focusing on:
 

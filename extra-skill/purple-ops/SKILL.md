@@ -6,6 +6,7 @@ when-to-use: "Use when planning a structured purple-team cycle to validate detec
 ---
 
 # Purple Team Ops
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 > **Bridge skill**: this is a both-blue-and-pentest category. The actual work is collaboration — red simulates a TTP, blue tries to detect it, both learn at the same time. No surprise engagements ("see if we catch them without warning"); that is red team. Purple is planned, measured, and aimed at gap closure.
 

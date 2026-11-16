@@ -6,6 +6,7 @@ when-to-use: "Use when detecting API keys in code or logs, validating credit car
 ---
 
 # SecLists Pattern-Matching
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 ## Description
 

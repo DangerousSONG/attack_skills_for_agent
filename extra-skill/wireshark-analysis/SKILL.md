@@ -12,6 +12,7 @@ date_added: "2026-02-27"
 ---
 
 # Wireshark Network Traffic Analysis
+- 攻击大类:C41 Web漏洞扫描与验证
 
 ## Detailed Guide
 

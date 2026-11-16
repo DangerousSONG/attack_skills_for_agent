@@ -9,6 +9,7 @@ metadata:
 ---
 
 # ADCS Certificate Attack Methodology
+- 攻击大类:C30 AD域渗透与域控攻击
 
 ADCS is the PKI infrastructure of Active Directory. Misconfigured certificate templates can let low-privileged users obtain Domain Admin rights directly — currently the most underrated yet most powerful attack surface in domain penetration.
 

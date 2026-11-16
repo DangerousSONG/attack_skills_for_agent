@@ -9,6 +9,7 @@ date_added: "2026-06-19"
 ---
 
 # Bugs Are Annoying
+- 攻击大类:C05 外部攻击面与云资产暴露
 
 An adversarial QA pass for any codebase, in any language. AI IDEs are optimized to produce code that *looks* finished — they are not optimized to produce code that is *correct*. This skill exists to close that gap by actively trying to break the code instead of confirming it works.
 

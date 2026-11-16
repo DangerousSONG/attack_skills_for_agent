@@ -133,7 +133,7 @@ def load_skills(from_git=False):
             subprocess.check_call('git archive HEAD | tar -x -C scripts/_before_tmp', cwd=ROOT, shell=True,
                                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     for dp, dirs, files in os.walk(ROOT):
-        dirs[:] = [d for d in dirs if d not in ('.git', '_before_tmp')]
+        dirs[:] = [d for d in dirs if d not in ('.git', '_before_tmp', 'quarantine')]
         if 'SKILL.md' not in files:
             continue
         slug = os.path.relpath(dp, ROOT).replace(os.sep, '/')

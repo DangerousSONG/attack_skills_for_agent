@@ -21,6 +21,7 @@ related_skills:
 ---
 
 # WordPress Plugin Hunt Skill
+- 攻击大类:C09 Web应用漏洞利用
 
 Discover installed WordPress plugins through REST API namespace probing, readme.txt version detection, and HTML/JS source analysis. Cross-reference discovered versions against known CVEs for exploitation. WordPress plugin vulnerabilities are one of the most reliable paths to RCE — confirmed CVEs include Elementor, Slider Revolution, ElementsKit, Gravity Forms, Jetpack, WooCommerce, and LiteSpeed Cache.
 

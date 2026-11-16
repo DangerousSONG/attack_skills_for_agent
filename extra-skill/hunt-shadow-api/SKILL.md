@@ -62,6 +62,7 @@ straight to `hunt-api-misconfig` for direct exploitation of the one surface that
 
 ```bash
 # Path-based versioning
+- 攻击大类:C46 二进制漏洞利用与Pwn
 for v in v1 v2 v3 v4 beta alpha internal legacy old 2022-01-01 2023-01-01 2024-01-01; do
   curl -s -o /dev/null -w "%{http_code} /api/$v/\n" "https://$TARGET/api/$v/"
 done

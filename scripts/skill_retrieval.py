@@ -27,7 +27,7 @@ def load_corpus():
     第三元素为中文检索信号词(zh-signals 字段, 与英文 description 分离存储, 仅检索用不进展示)"""
     docs = {}
     for dp, dirs, files in os.walk(ROOT):
-        dirs[:] = [d for d in dirs if d not in ('.git', '_before_tmp')]
+        dirs[:] = [d for d in dirs if d not in ('.git', '_before_tmp', 'quarantine')]
         if 'SKILL.md' not in files:
             continue
         slug = os.path.relpath(dp, ROOT).replace(os.sep, '/').split('/')[-1]

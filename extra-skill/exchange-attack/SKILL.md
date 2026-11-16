@@ -9,6 +9,7 @@ metadata:
 ---
 
 # Exchange Mail Server Attack Methodology
+- 攻击大类:C30 AD域渗透与域控攻击
 
 Exchange holds an extremely privileged position in a domain environment — it typically has Domain Admin-level privileges, stores all company mail, and keeps the full staff address book. Compromising Exchange is almost equivalent to owning the entire domain.
 

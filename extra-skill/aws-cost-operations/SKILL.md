@@ -15,6 +15,7 @@ license_source: https://github.com/zxkane/aws-skills/blob/main/LICENSE
 ---
 
 # AWS Cost & Operations
+- 攻击大类:C05 外部攻击面与云资产暴露
 
 This skill provides comprehensive guidance for AWS cost optimization, monitoring, observability, and operational excellence with integrated MCP servers.
 

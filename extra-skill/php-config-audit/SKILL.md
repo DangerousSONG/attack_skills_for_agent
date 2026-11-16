@@ -8,6 +8,7 @@ when-to-use: >-
 ---
 
 # PHP Configuration Security Audit (php-config-audit)
+- 攻击大类:C09 Web应用漏洞利用
 
 Analyze PHP project configuration and runtime settings to detect security-relevant configuration flaws:
 - Overly permissive CORS (allowing all origins, improper credentials combination)

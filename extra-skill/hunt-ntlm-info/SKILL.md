@@ -112,6 +112,7 @@ WWW-Authenticate: Negotiate, NTLM
 **Generic NTLM Type-1 anonymous probe (curl + raw socket fallback):**
 ```bash
 # Most one-shot curl runs DON'T return Type-2 because the connection closes.
+- 攻击大类:C30 AD域渗透与域控攻击
 # Use this as a quick probe to confirm NTLM is offered:
 curl --max-time 30 --connect-timeout 10 -sk -I -H "Authorization: NTLM TlRMTVNTUAABAAAAB4IIogAAAAAAAAAAAAAAAAAAAAAGAbEdAAAADw==" \
   "https://target.example/_api/web/CurrentUser" 2>&1 | grep -i "WWW-Authenticate"

@@ -18,6 +18,7 @@ when-to-use: >-
 5. `ACT`: enter the first step of the "Workflow" and execute it; do not stop in a confirmation state
 
 # APK Reverse Engineering CLI Working Standard
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 ## Scope of Applicability
 

@@ -14,6 +14,7 @@ metadata:
 → Read [references/network-attacks.md](references/network-attacks.md)
 
 # Network Reconnaissance Inside a Kubernetes Cluster
+- 攻击大类:C42 网络扫描与枚举
 
 The first step of lateral movement in a K8s cluster is figuring out what other services are running. Because K8s uses DNS for service discovery and every Service and Pod has a predictable DNS name, the whole cluster can be enumerated systematically through DNS reverse lookups.
 

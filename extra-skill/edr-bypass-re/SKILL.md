@@ -90,6 +90,7 @@ Key insights:
 
 ```powershell
 # List common EDR / AV drivers
+- 攻击大类:C45 恶意软件开发与免杀
 Get-Service | Where-Object {$_.Name -match 'CSAgent|SentinelAgent|elasticendpoint|esets|ekrn|MsMpEng|wdsvc|cyserver|sysmon|aswbidsagent'}
 
 # List loaded minifilters

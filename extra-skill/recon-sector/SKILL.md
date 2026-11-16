@@ -23,6 +23,7 @@ related_skills:
 ---
 
 # RECON-SECTOR — Parameterized Sector Reconnaissance
+- 攻击大类:C42 网络扫描与枚举
 
 Unified sector-specific reconnaissance. Takes a sector name (e.g., `plumbing`, `dentists`, `hvac`), loads sector-specific platform and path data from `references/sectors.yaml`, and runs the standard recon probe suite: WordPress detection, CORS credential reflection, XMLRPC exposure, debug log mining, source leak checks, and directory listing detection.
 

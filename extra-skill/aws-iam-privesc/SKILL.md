@@ -9,6 +9,7 @@ metadata:
 ---
 
 # AWS IAM Privilege Escalation Methodology
+- 攻击大类:C09 Web应用漏洞利用
 
 Privilege escalation in AWS environments is one of the most critical attack phases. Unlike traditional operating system privilege escalation, the core of AWS privilege escalation lies in abusing combinations of IAM permissions — an apparently harmless `iam:PassRole` permission, combined with permission to create compute services, lets an attacker obtain the full permissions of an arbitrary role. AWS has hundreds of permissions, and many permission combinations can form escalation chains.
 

@@ -7,6 +7,7 @@ allowed-tools: Read Write Grep Glob Bash
 ---
 
 # Differential Security Review
+- 攻击大类:C44 AI与大模型安全
 
 Security-focused code review for PRs, commits, and diffs.
 

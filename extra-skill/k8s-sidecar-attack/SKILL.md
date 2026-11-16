@@ -11,6 +11,7 @@ metadata:
 ---
 
 # Kubernetes Sidecar Traffic Hijacking
+- 攻击大类:C14 云与容器执行
 
 All containers within the same pod share a network namespace — this is a K8s design decision and a blessing for attackers. Traffic sent by a sidecar container (such as Istio Envoy) can be captured directly with tcpdump by any container in the same pod, because they share the same network interface.
 

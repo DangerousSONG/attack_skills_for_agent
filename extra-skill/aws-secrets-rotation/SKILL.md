@@ -11,6 +11,7 @@ date_added: "2026-02-27"
 ---
 
 # AWS Secrets Rotation
+- 攻击大类:C10 API与业务逻辑攻击
 
 Automate rotation of secrets, credentials, and API keys using AWS Secrets Manager and Lambda.
 

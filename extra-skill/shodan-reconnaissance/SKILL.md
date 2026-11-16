@@ -24,6 +24,7 @@ date_added: "2026-02-27"
 > Without that confirmation, remain read-only and provide defensive guidance only. Prefer a sandbox, disposable VM, or controlled lab.
 
 # Shodan Reconnaissance and Pentesting
+- 攻击大类:C44 AI与大模型安全
 
 ## Detailed Guide
 

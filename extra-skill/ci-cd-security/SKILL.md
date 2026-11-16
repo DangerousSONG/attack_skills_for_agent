@@ -6,6 +6,7 @@ when-to-use: "Use when the user shares a GitHub Actions workflow or asks for a C
 ---
 
 # CI/CD Security Scanner
+- 攻击大类:C12 供应链与CI/CD攻击
 
 This skill turns the model into a workflow-YAML scanner. Read the file, walk the detection rules, report findings with severity and a concrete rewrite. No tools to install, no commands to run — the analysis is the model reading the YAML.
 

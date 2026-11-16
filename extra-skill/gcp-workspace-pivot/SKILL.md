@@ -9,6 +9,7 @@ metadata:
 ---
 
 # GCP to Google Workspace Pivot Methodology
+- 攻击大类:C09 Web应用漏洞利用
 
 GCP and Google Workspace belong to the same Google Cloud ecosystem, and the two are deeply bound through IAM and OAuth. Once an attacker holds GCP Service Account or Project access, if the target organization also uses Google Workspace (formerly G Suite), they may pivot from cloud infrastructure into the enterprise productivity suite — gaining direct access to company-wide mail, files, calendars, contacts, and even the admin console.
 

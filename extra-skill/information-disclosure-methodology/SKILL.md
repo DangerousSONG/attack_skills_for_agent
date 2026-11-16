@@ -9,6 +9,7 @@ metadata:
 ---
 
 # Information Disclosure Methodology
+- 攻击大类:C09 Web应用漏洞利用
 
 ## ⛔ Further Reading (Must Read)
 

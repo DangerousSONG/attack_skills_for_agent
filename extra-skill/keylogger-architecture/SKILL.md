@@ -17,6 +17,7 @@ outputs: [keylogger_binary, captured_input]
 ---
 
 # Keylogger Architecture
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 ## When to Activate
 

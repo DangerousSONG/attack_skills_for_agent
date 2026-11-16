@@ -17,6 +17,7 @@ metadata:
 ---
 
 # Java Serialization-Class Vulnerability Source Code Audit
+- 攻击大类:C09 Web应用漏洞利用
 This skill focuses on source-level judgement of "whether deserialization/XXE/SSTI holds". The core work is: white-box confirmation of deserialization entry points, tracing data sources, assessing the gadget chains available in the classpath, verifying the secure configuration of XML parsers, and checking the rendering context of template engines. Runtime black-box techniques such as crafting exploit payloads and sending remote exploit chains fall within the scope of the corresponding exploit skill.
 
 ## Further Reading

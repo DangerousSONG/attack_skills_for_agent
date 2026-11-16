@@ -9,6 +9,7 @@ metadata:
 ---
 
 # 401/403 Bypass Methodology
+- 攻击大类:C09 Web应用漏洞利用
 
 Core idea: the reverse proxy / WAF checks one path format, but the backend performs a different path normalization.
 

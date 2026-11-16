@@ -13,6 +13,7 @@ tags: [recon, sector, expansion, redteam]
 ---
 
 # RECON-SECTOR-EXPANSION — Batch Discovery Across Untapped Sectors
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 ## When to Use
 

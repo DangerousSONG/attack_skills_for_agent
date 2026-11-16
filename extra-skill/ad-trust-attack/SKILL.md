@@ -10,6 +10,7 @@ metadata:
 ---
 
 # Domain Trust Relationship Attacks
+- 攻击大类:C30 AD域渗透与域控攻击
 
 Enumerate and exploit Active Directory trust relationships to achieve lateral movement and privilege escalation across domains and forests.
 

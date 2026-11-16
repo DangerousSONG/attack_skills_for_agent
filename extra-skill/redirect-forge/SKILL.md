@@ -11,6 +11,7 @@ metadata:
 ---
 
 # Redirect Forge — Open Redirect
+- 攻击大类:C09 Web应用漏洞利用
 
 Open redirect occurs when an application redirects a user to a URL that is partially or fully controlled by attacker input, without proper validation. On its own it enables phishing. Chained with OAuth, SSRF, or CSP it becomes Critical.
 

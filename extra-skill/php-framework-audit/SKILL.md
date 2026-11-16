@@ -14,6 +14,7 @@ metadata:
 ---
 
 # PHP Framework-Specific Security Audit
+- 攻击大类:C09 Web应用漏洞利用
 ## Framework Identification Decision Table
 
 | Identification Feature | Framework | Deep Reference |

@@ -46,6 +46,7 @@ Anti-pattern: treating reproduction failure as evidence the original signal was 
 
 ```python
 # Capture pre-test fingerprint of the target
+- 攻击大类:C09 Web应用漏洞利用
 fingerprint = {
     "ts_pre": time.time(),
     "ip_seen": "<operator-src-ip>",

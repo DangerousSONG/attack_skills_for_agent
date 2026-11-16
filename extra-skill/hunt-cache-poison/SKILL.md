@@ -156,6 +156,7 @@ X-HTTP-Method-Override
 **Confirm caching behavior:**
 ```bash
 # Send twice, compare Age header
+- 攻击大类:C09 Web应用漏洞利用
 curl -s -I "https://target.com/page" | grep -i "age\|x-cache\|cf-cache"
 curl -s -I "https://target.com/page" | grep -i "age\|x-cache\|cf-cache"
 ```
