@@ -9,6 +9,7 @@ metadata:
 ---
 
 # gau URL History Collection Methodology
+- 攻击大类:C10 API与业务逻辑攻击
 
 gau (getallurls) collects known URLs from historical data sources. Core advantages: **aggregation of four data sources** (Wayback/CommonCrawl/OTX/URLScan) + **fully passive** + **pipeline friendly**.
 

@@ -6,6 +6,7 @@ when-to-use: "Use when auditing PHP source code for cross-site scripting, tracin
 ---
 
 # PHP XSS Audit (php-xss-audit)
+- 攻击大类:C09 Web应用漏洞利用
 
 Analyze PHP project source code and identify cross-site scripting (XSS): user input reaching an output context without correct escaping/encoding, or a framework with auto-escaping disabled that leads to expression execution/HTML injection.
 

@@ -10,6 +10,7 @@ date_added: "2026-02-27"
 ---
 
 # WordPress Plugin Development Workflow
+- 攻击大类:C09 Web应用漏洞利用
 
 ## Detailed Guide
 

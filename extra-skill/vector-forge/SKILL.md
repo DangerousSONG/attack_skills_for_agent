@@ -9,6 +9,7 @@ when-to-use: >-
 ---
 
 # Vector Forge
+- 攻击大类:C44 AI与大模型安全
 
 Uses mutation testing to systematically identify gaps in test vector
 coverage, then generates new test vectors that close those gaps.

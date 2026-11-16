@@ -9,6 +9,7 @@ when-to-use: >-
 ---
 
 # Wycheproof
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 Wycheproof is an extensive collection of test vectors designed to verify the correctness of cryptographic implementations and test against known attacks. Originally developed by Google, it is now a community-managed project where contributors can add test vectors for specific cryptographic constructions.
 

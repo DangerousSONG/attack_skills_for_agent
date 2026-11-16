@@ -31,6 +31,7 @@ tools: []
 > Without that confirmation, remain read-only and provide defensive guidance only. Prefer a sandbox, disposable VM, or controlled lab.
 
 # Security Audit
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 > [!WARNING]
 > **Authorized Use Only.** Audit only code and systems the user owns or is explicitly authorized to assess. Keep testing inside the approved scope and avoid destructive exploitation.

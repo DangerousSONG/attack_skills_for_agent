@@ -14,6 +14,7 @@ tags: [tls, network, hunt, redteam]
 ---
 
 # HUNT-TLS-NETWORK — TLS/SSL & DNS Security
+- 攻击大类:C02 域名与DNS侦察
 
 ## Reality Check (Read First)
 

@@ -15,6 +15,7 @@ metadata:
 ---
 
 # ArgoCD Exploitation Skill
+- 攻击大类:C09 Web应用漏洞利用
 
 - **Product**: Argo CD (declarative GitOps continuous delivery tool for Kubernetes)
 - **Default ports**: 80/443 (Web UI), 8080 (Server), 6379 (Redis)

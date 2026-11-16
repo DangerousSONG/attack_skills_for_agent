@@ -11,6 +11,7 @@ metadata:
 ---
 
 # Web Cache Poisoning & HTTP Request Smuggling
+- 攻击大类:C09 Web应用漏洞利用
 
 Two related but distinct advanced web attack techniques, both of which exploit parsing differences in multi-tier web architectures.
 

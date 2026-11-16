@@ -20,6 +20,7 @@ metadata:
 ---
 
 # Self-Hosted Runner Poisoning
+- 攻击大类:C12 供应链与CI/CD攻击
 
 ## What Is Broken and Why
 

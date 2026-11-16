@@ -6,6 +6,7 @@ when-to-use: "Use when internal AD is in scope and you hold a domain foothold, o
 ---
 
 # AD Attack Paths
+- 攻击大类:C30 AD域渗透与域控攻击
 
 > **RoE-only and lab discipline**: AD attacks usually touch the highest-privilege layer of an organization. Version-specific ticket-extraction recipes, vendor-tool output, and ready-to-run DCSync commands for production are not in this skill; they belong in a closed engagement workspace. The skill contains class names, BloodHound edge types, ATT&CK T-IDs, and defensive counterparts. Lab work happens in a separate AD test domain.
 

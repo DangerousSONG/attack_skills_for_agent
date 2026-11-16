@@ -15,6 +15,7 @@ metadata:
 ---
 
 # PHP Source Code Audit for Serialization and Template Vulnerabilities
+- 攻击大类:C09 Web应用漏洞利用
 This skill focuses on the source code level to determine whether "deserialization/XXE/SSTI actually hold", focusing on validating data controllability and secure configuration along the Source→Sink path. Runtime techniques such as payload construction and chain exploitation belong to the corresponding black-box exploit skills.
 
 ## Further Reading

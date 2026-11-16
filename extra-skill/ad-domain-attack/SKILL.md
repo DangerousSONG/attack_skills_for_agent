@@ -10,6 +10,7 @@ metadata:
 ---
 
 # AD Domain Attack Methodology
+- 攻击大类:C30 AD域渗透与域控攻击
 
 Owning the domain controller = controlling the entire network.
 

@@ -20,6 +20,7 @@ related_skills:
 ---
 
 # CORS Credential WordPress Skill
+- 攻击大类:C09 Web应用漏洞利用
 
 Detect, confirm, and exploit CORS credential reflection on WordPress REST API endpoints. CORS misconfiguration is one of the most common critical findings in US SMB WordPress sites (~7-8% of all WP targets), enabling cross-origin data exfiltration with victim cookies. Documents 8 CORS variants and full browser PoC construction.
 

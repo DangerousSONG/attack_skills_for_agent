@@ -9,6 +9,7 @@ metadata:
 ---
 
 # BloodHound.py AD Information Gathering Methodology
+- 攻击大类:C30 AD域渗透与域控攻击
 
 BloodHound.py is the Python collector for BloodHound. Core advantages: **no execution on the target** (collects remotely over LDAP/DNS) + **broad coverage** (users/groups/computers/sessions/ACLs/trust relationships) + **JSON output** (import into the BloodHound GUI to analyze attack paths).
 

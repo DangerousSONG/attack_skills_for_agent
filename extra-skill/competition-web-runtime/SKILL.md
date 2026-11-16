@@ -7,6 +7,7 @@ when-to-use: >-
 ---
 
 # Competition Web Runtime
+- 攻击大类:C10 API与业务逻辑攻击
 
 Use this skill only as a downstream specialization after `$ctf-sandbox-orchestrator` is already active and has established sandbox assumptions, node ownership, and evidence priorities. If that has not happened yet, return to `$ctf-sandbox-orchestrator` first.
 

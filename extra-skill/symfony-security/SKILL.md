@@ -6,6 +6,7 @@ when-to-use: "Use when reviewing a Symfony or PHP-based application's security c
 ---
 
 # Symfony Security
+- 攻击大类:C09 Web应用漏洞利用
 
 ## When to use
 

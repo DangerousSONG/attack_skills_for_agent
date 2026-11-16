@@ -9,6 +9,7 @@ metadata:
 ---
 
 # LDAP Injection Methodology
+- 攻击大类:C09 Web应用漏洞利用
 
 LDAP (Lightweight Directory Access Protocol) is widely used for enterprise user authentication and directory lookups. When an application concatenates user input directly into an LDAP search filter, an attacker can modify the query logic to bypass authentication or extract directory data.
 

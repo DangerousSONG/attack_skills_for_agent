@@ -24,6 +24,7 @@ metadata:
 
 
 # Mobile Device Management (MDM) for Startups & Small Teams
+- 攻击大类:C43 移动端攻击
 
 A practical guide to enrolling, securing, and managing company devices across
 macOS, Windows, iOS, and Android — from zero-touch onboarding to remote wipe.

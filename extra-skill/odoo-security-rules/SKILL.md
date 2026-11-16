@@ -9,6 +9,7 @@ date_added: "2026-09-04"
 ---
 
 # Odoo Security Rules
+- 攻击大类:C09 Web应用漏洞利用
 
 ## Overview
 

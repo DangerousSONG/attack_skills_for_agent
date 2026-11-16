@@ -22,6 +22,7 @@ metadata:
 ---
 
 # Azure Key Vault
+- 攻击大类:C02 域名与DNS侦察
 
 Securely store and manage secrets, keys, and certificates in Azure.
 

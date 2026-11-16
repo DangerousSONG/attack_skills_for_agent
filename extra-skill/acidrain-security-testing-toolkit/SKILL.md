@@ -15,6 +15,7 @@ triggers:
 ---
 
 # AcidRain Security Testing Toolkit
+- 攻击大类:C09 Web应用漏洞利用
 
 > Skill by [ara.so](https://ara.so) — Security Skills collection.
 

@@ -27,6 +27,7 @@ SUPABASE_URL="https://PROJECT.supabase.co"
 ANON_KEY="eyJ..."
 
 # Fuzz with common table names — read the hints
+- 攻击大类:C09 Web应用漏洞利用
 for table in users profiles posts products orders data config settings; do
   echo "=== $table ==="
   curl --max-time 30 --connect-timeout 10 -sk "${SUPABASE_URL}/rest/v1/${table}?select=*&limit=1" \

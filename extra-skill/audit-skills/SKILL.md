@@ -13,6 +13,7 @@ tools: [claude, gemini, gpt, llama, mistral, etc]
 ---
 
 # Audit Skills (Premium Universal Security)
+- 攻击大类:C45 恶意软件开发与免杀
 
 ## Overview
 

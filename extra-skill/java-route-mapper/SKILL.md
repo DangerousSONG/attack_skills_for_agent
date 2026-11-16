@@ -6,6 +6,7 @@ when-to-use: "Use when you need to extract every HTTP route and parameter from J
 ---
 
 # Java Source Route & Parameter Mapper
+- 攻击大类:C09 Web应用漏洞利用
 
 **Extract** all HTTP routes and request parameter structures from Java Web project source code and generate Burp Suite Repeater request templates. **Does not perform security vulnerability assessment, code quality analysis, or any output beyond the scope of route extraction.**
 

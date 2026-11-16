@@ -17,6 +17,7 @@ triggers:
 ---
 
 # Symfony Security Auditor Skill
+- 攻击大类:C44 AI与大模型安全
 
 > Skill by [ara.so](https://ara.so) — Security Skills collection.
 

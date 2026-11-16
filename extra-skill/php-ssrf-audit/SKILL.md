@@ -6,6 +6,7 @@ when-to-use: "Use when auditing PHP source code for server-side request forgery,
 ---
 
 # PHP SSRF Audit (php-ssrf-audit)
+- 攻击大类:C09 Web应用漏洞利用
 
 Analyze PHP project source code to identify SSRF risks: user-controllable URL/host/path reaching network request or file-read functions without protocol allowlists, DNS/IP internal-network rejection, port restrictions, or similar controls.
 

@@ -17,6 +17,7 @@ triggers:
 ---
 
 # VulnHunter Security Scanner
+- 攻击大类:C42 网络扫描与枚举
 
 > Skill by [ara.so](https://ara.so) — Security Skills collection.
 

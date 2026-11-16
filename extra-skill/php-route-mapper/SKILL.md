@@ -8,6 +8,7 @@ when-to-use: >-
 ---
 
 # PHP Source Code Route & Param Mapper
+- 攻击大类:C09 Web应用漏洞利用
 
 Analyze PHP web project source code, extract **complete** HTTP route entries and request parameter structures, generate request templates usable for security testing (Burp/Repeater style), and save them automatically as Markdown.
 

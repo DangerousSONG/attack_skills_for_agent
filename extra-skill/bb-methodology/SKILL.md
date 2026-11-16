@@ -11,6 +11,7 @@ tags: [bug-bounty, methodology, recon, redteam]
 ---
 
 # Bug Bounty Methodology: Workflow + Mindset
+- 攻击大类:C09 Web应用漏洞利用
 
 Master orchestrator for hunting sessions. Combines the 5-phase non-linear workflow with the critical thinking framework that separates top 1% hunters from the rest.
 

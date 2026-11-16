@@ -9,6 +9,7 @@ metadata:
 ---
 
 # Web Cryptography Attack Methodology
+- 攻击大类:C49 密码学攻击
 
 Cryptographic attacks against web applications do not need to break the algorithm itself — they exploit **implementation flaws**: leaked error messages, predictable randomness, and improper use of encryption modes.
 

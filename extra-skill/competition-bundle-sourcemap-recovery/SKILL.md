@@ -8,6 +8,7 @@ when-to-use: >-
 ---
 
 # Competition Bundle Sourcemap Recovery
+- 攻击大类:C45 恶意软件开发与免杀
 
 Use this skill only as a downstream specialization after `$ctf-sandbox-orchestrator` is already active and has established sandbox assumptions, node ownership, and evidence priorities. If that has not happened yet, return to `$ctf-sandbox-orchestrator` first.
 

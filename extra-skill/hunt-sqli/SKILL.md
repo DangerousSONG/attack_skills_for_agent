@@ -228,6 +228,7 @@ username[$regex]=.*&password[$regex]=.*
 **PHP Hash/Array Injection:**
 ```
 # Replace scalar with array
+- 攻击大类:C09 Web应用漏洞利用
 param[key]=value
 param[$gt]=0
 param[$ne]=null

@@ -6,6 +6,7 @@ when-to-use: "Use when investigating identity-log anomalies or compromised accou
 ---
 
 # Log Triage
+- 攻击大类:C30 AD域渗透与域控攻击
 
 > **Identity-first context**: the bulk of modern incidents starts or escalates via identity providers. Logs are the truth source — UIs are stale snapshots. This skill covers audit/identity logs from the major IdPs; network logs and endpoint EDR touch on this but live in other skills.
 

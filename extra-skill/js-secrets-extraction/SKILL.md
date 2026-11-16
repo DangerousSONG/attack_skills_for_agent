@@ -11,6 +11,7 @@ tags: [js, secrets, API-key, jwt, source-map, recon]
 ---
 
 # JS Bundle & Source Map Analysis -- Secret Extraction
+- 攻击大类:C10 API与业务逻辑攻击
 
 ## When to Use
 

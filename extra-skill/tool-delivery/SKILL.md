@@ -10,6 +10,7 @@ metadata:
 ---
 
 # Tool Delivery Methodology
+- 攻击大类:C09 Web应用漏洞利用
 
 After gaining access to a target, the next step is usually to deliver tools (fscan, frp, chisel, linpeas, winPEAS, mimikatz, etc.) to the target and execute them there. This step may look simple, but the method chosen directly affects the success rate and stealth.
 

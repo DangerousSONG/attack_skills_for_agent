@@ -13,6 +13,7 @@ metadata:
 ---
 
 # PHP Frontend Interaction Vulnerability Source Code Audit
+- 攻击大类:C09 Web应用漏洞利用
 This skill focuses on source-level judgement of "whether the frontend security vulnerability holds", the core being to verify whether user-controllable data output in HTTP responses is safe. Payload crafting, WAF bypass, and other runtime exploitation techniques fall within the corresponding black-box exploit skill scope.
 
 ## Further Reading

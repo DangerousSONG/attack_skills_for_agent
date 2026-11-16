@@ -8,6 +8,7 @@ when-to-use: >-
 ---
 
 # Java SQL Injection Audit Tool
+- 攻击大类:C09 Web应用漏洞利用
 
 Scans Java Web project source code, locates all SQL execution entry points, and detects SQL injection vulnerabilities.
 

@@ -7,6 +7,7 @@ when-to-use: >-
 ---
 
 # Java Authentication Mechanism Audit Tool
+- 攻击大类:C09 Web应用漏洞利用
 
 Scan Java Web project source code, identify authentication mechanism implementations, and detect authentication bypass vulnerabilities and broken access control flaws.
 

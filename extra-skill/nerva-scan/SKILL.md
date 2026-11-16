@@ -9,6 +9,7 @@ metadata:
 ---
 
 # nerva High-Performance Service Fingerprinting Methodology
+- 攻击大类:C42 网络扫描与枚举
 
 nerva is a service fingerprinting tool by Praetorian (an upgraded version of fingerprintx). Core strengths: **120+ protocols** + **TCP/UDP/SCTP multi-transport** + **rich metadata extraction**.
 

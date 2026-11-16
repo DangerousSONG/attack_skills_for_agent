@@ -6,6 +6,7 @@ when-to-use: "Use only after ctf-sandbox-orchestrator is active, when a CTF chal
 ---
 
 # Competition Stego Media
+- 攻击大类:C05 外部攻击面与云资产暴露
 
 Use this skill only as a downstream specialization after `$ctf-sandbox-orchestrator` is already active and has established sandbox assumptions, node ownership, and evidence priorities. If that has not happened yet, return to `$ctf-sandbox-orchestrator` first.
 

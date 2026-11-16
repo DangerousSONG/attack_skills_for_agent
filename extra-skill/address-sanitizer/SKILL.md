@@ -7,6 +7,7 @@ when-to-use: "Use when fuzzing C/C++ or Rust with unsafe blocks or FFI, debuggin
 ---
 
 # AddressSanitizer (ASan)
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 AddressSanitizer (ASan) is a widely adopted memory error detection tool used extensively during software testing, particularly fuzzing. It helps detect memory corruption bugs that might otherwise go unnoticed, such as buffer overflows, use-after-free errors, and other memory safety violations.
 

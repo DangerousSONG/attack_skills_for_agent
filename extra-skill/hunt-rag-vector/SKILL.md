@@ -100,6 +100,7 @@ manipulate — isolation may not hold at the layer that actually matters.
 
 ```bash
 # Direct, unauthenticated vector-DB probing
+- 攻击大类:C44 AI与大模型安全
 curl -s http://$TARGET:8000/api/v1/heartbeat                     # Chroma — confirms reachability
 curl -s http://$TARGET:6333/collections                           # Qdrant — lists all collections, no auth check
 curl -s -X POST http://$TARGET:8080/v1/graphql \

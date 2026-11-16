@@ -11,6 +11,7 @@ when-to-use: >-
 ---
 
 # Property-Based Testing
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 An example test asserts one point. A property asserts a rule over the whole input
 domain and lets the generator hunt for the counterexample. That trade is worth making

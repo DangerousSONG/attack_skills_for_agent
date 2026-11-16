@@ -12,6 +12,7 @@ metadata:
 ---
 
 # AD ACL Abuse Methodology
+- 攻击大类:C30 AD域渗透与域控攻击
 
 > **Core Value**: Achieve privilege escalation through misconfigured permissions on AD objects, with no exploit required
 

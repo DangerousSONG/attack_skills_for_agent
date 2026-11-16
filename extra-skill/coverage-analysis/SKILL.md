@@ -10,6 +10,7 @@ when-to-use: >-
 ---
 
 # Coverage Analysis
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 Coverage analysis is essential for understanding which parts of your code are exercised during fuzzing. It helps identify fuzzing blockers like magic value checks and tracks the effectiveness of harness improvements over time.
 

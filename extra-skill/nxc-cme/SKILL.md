@@ -12,6 +12,7 @@ metadata:
 ---
 
 # NetExec (nxc) / CrackMapExec (cme)
+- 攻击大类:C30 AD域渗透与域控攻击
 
 nxc (NetExec) is the successor to CrackMapExec — the command syntax is almost identical, but nxc is more actively maintained. If only cme is available on the target machine, usage is the same; just replace `nxc` with `cme`.
 

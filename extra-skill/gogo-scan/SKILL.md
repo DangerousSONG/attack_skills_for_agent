@@ -11,6 +11,7 @@ metadata:
 ---
 
 # gogo High-Speed Port Scanning and Fingerprinting
+- 攻击大类:C42 网络扫描与枚举
 
 The core advantage of gogo is **fingerprint precision** - it ships with 2000+ fingerprint rules that accurately identify web frameworks, middleware versions and CMS types, and outputs structured JSON for downstream processing.
 

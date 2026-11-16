@@ -6,6 +6,7 @@ when-to-use: "Use when performing white-box static security audit of an authoriz
 ---
 
 # PHP WordPress Framework Security Audit (php-wordpress-audit)
+- 攻击大类:C09 Web应用漏洞利用
 
 Analyze the framework-specific security mechanisms in a WordPress project, focusing on:
 - nonce validation and capability permission checks (preventing CSRF and broken access control)

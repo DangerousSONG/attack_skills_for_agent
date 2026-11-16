@@ -15,6 +15,7 @@ https://cheatsheetseries.owasp.org/
 -->
 
 # Django Access Control & IDOR Review
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 Find access control vulnerabilities by investigating how the codebase answers one question:
 

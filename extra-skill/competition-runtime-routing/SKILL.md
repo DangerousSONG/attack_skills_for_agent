@@ -7,6 +7,7 @@ when-to-use: >-
 ---
 
 # Competition Runtime Routing
+- 攻击大类:C09 Web应用漏洞利用
 
 Use this skill only as a downstream specialization after `$ctf-sandbox-orchestrator` is already active and has established sandbox assumptions, node ownership, and evidence priorities. If that has not happened yet, return to `$ctf-sandbox-orchestrator` first.
 

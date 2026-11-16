@@ -9,6 +9,7 @@ metadata:
 ---
 
 # Metasploit Framework Invocation Methodology
+- 攻击大类:C09 Web应用漏洞利用
 
 MSF has two invocation styles, suited to different scenarios:
 

@@ -10,6 +10,7 @@ allowed-tools: Read, Grep, Glob, Bash, WebSearch
 ---
 
 # Crypto Audit — Cryptography Implementation Review
+- 攻击大类:C09 Web应用漏洞利用
 
 Audit how cryptography is implemented in an application — algorithm choices, parameters, modes, and the implementation patterns that turn good primitives into broken systems. Deeper than `owasp-audit` A02 (which catches the obvious "MD5 password" and "VERIFY_NONE" cases). This skill is for the subtler implementation review.
 

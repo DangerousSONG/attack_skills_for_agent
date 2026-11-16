@@ -193,6 +193,7 @@ A single GraphQL request aliases the same mutation with different OTP codes. Com
 **RC desync test pattern (pseudo-sequence):**
 ```bash
 # Step 1: Grant access via REST
+- 攻击大类:C09 Web应用漏洞利用
 curl -X PUT https://api.target.com/repos/ORG/REPO/teams/TEAM \
   -H "Authorization: token ADMIN_TOKEN" \
   -d '{"permission":"admin"}'

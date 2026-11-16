@@ -11,6 +11,7 @@ tags: [cors, automation, chain, redteam]
 ---
 
 # Multi-Endpoint CORS Triage
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 ## When to Use
 

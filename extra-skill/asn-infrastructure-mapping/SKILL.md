@@ -18,6 +18,7 @@ related_skills:
 ---
 
 # ASN Infrastructure Mapping
+- 攻击大类:C42 网络扫描与枚举
 
 Map an organization's entire IP infrastructure by pivoting from domain to ASN (Autonomous System Number), extracting CIDR ranges, and discovering every hostname and service across all owned IP blocks. Includes TLD expansion to find sibling domains on different top-level domains with separate infrastructure.
 

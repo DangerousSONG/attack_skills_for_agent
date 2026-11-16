@@ -6,6 +6,7 @@ when-to-use: "Use when auditing PHP application source code for business logic f
 ---
 
 # PHP Business Logic Vulnerability Audit (php-logic-audit)
+- 攻击大类:C09 Web应用漏洞利用
 
 Analyze defects related to "business process correctness" in PHP projects. Focus coverage:
 - Mass Assignment (bulk assignment writes fields that should be privileged)

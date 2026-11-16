@@ -17,6 +17,7 @@ tools: [claude, codex, cursor, gemini]
 ---
 
 # Logic Lens
+- 攻击大类:C50 红队方法论与自动化
 
 ## Overview
 

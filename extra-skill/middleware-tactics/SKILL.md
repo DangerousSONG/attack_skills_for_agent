@@ -10,6 +10,7 @@ metadata:
 ---
 
 # Middleware Vulnerability Exploitation Methodology
+- 攻击大类:C09 Web应用漏洞利用
 
 Middleware is the runtime environment of web applications — taking over the middleware equals executing code directly on the server.
 

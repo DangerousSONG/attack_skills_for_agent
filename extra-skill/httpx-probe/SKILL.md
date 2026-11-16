@@ -9,6 +9,7 @@ metadata:
 ---
 
 # httpx HTTP Liveness Detection and Fingerprinting Methodology
+- 攻击大类:C42 网络扫描与枚举
 
 httpx is a multi-purpose HTTP probe tool by ProjectDiscovery. Its core strengths: **high-speed concurrency** (50 threads by default) + **rich probes** (status code/title/tech stack/CDN/screenshot, etc.) + **pipeline core** (the bridge between port scanning and vulnerability scanning).
 

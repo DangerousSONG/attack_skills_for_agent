@@ -12,6 +12,7 @@ metadata:
 ---
 
 # APT Emulation and Intelligence-Driven Red Teaming
+- 攻击大类:C09 Web应用漏洞利用
 
 > **Goal**: not random attacks, but the complete attack chain of a real threat actor, used to test the organization's defensive capability
 

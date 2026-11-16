@@ -11,6 +11,7 @@ tags: [flask, werkzeug, debugger, SECRET, recon, python]
 ---
 
 # Flask/Werkzeug Debugger Exploitation
+- 攻击大类:C09 Web应用漏洞利用
 
 Flask applications with `debug=True` enable the Werkzeug debugger, which exposes stack traces and (optionally) an interactive Python console. The debugger runs at the same port as the Flask app and activates on any unhandled exception (HTTP 500).
 

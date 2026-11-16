@@ -32,6 +32,7 @@ report_count: 14
 > Without that confirmation, remain read-only and provide defensive guidance only. Prefer a sandbox, disposable VM, or controlled lab.
 
 # HUNT-DOM — DOM Clobbering / PostMessage / Service Worker / CSS Exfil
+- 攻击大类:C09 Web应用漏洞利用
 
 ## Crown Jewel Targets
 

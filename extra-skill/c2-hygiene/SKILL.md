@@ -6,6 +6,7 @@ when-to-use: "Use when designing, reviewing, or assessing C2 infrastructure for 
 ---
 
 # C2 Hygiene
+- 攻击大类:C35 C2框架与远控
 
 > **Sandbox/lab-only and RoE-strict**: this skill describes architecture and hygiene discipline for C2 infrastructure in red-team engagement context. Specific beacon configurations, malleable-profile strings for named C2 frameworks, or EDR-bypass recipes do not live here — those belong in a closed engagement vault. The skill provides architectural patterns, OPSEC checklists, and a detection perspective, all verifiable in a lab.
 

@@ -19,6 +19,7 @@ related_skills:
 ---
 
 # Mass Assignment Hunting
+- 攻击大类:C09 Web应用漏洞利用
 
 Hunt for mass assignment vulnerabilities where API endpoints blindly bind user-supplied fields to internal objects without allowlisting. Sensitive fields like `isAdmin`, `role`, `ownerId`, `plan`, `tier`, `balance`, and `verified` can be injected to escalate privileges, bypass payments, or assume ownership of resources.
 

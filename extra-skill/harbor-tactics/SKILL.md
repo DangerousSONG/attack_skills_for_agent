@@ -9,6 +9,7 @@ metadata:
 ---
 
 # Harbor Container Image Registry Penetration Testing and Exploitation Methodology
+- 攻击大类:C10 API与业务逻辑攻击
 
 Harbor is an enterprise-grade private container image registry offering image hosting, vulnerability scanning, signature verification, replication policies, Robot Accounts, and more. The default administrator account `admin/Harbor12345` remains unchanged in a large number of deployments. Once administrator access is obtained, an attacker can enumerate and pull images from all projects, extract hardcoded credentials from image layers (environment variables/config files/private keys), inject backdoored images to conduct supply chain attacks, create webhooks for event monitoring and data exfiltration, abuse replication policies to steal images to an attacker-controlled registry, and create Robot Accounts for persistent access.
 

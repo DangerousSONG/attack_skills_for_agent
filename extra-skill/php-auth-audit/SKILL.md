@@ -6,6 +6,7 @@ when-to-use: "Use when auditing PHP web application source code for authenticati
 ---
 
 # PHP Authentication and Authorization Mechanism Audit (Auth Audit)
+- 攻击大类:C09 Web应用漏洞利用
 
 Analyze PHP web project source code, identify the authentication and authorization chains, determine the auth status of every route, and detect auth bypass / privilege bypass / IDOR risks.
 

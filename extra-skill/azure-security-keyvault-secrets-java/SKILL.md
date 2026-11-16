@@ -11,6 +11,7 @@ date_added: "2026-02-27"
 ---
 
 # Azure Key Vault Secrets (Java)
+- 攻击大类:C10 API与业务逻辑攻击
 
 Securely store and manage secrets like passwords, API keys, and connection strings.
 

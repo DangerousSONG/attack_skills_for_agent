@@ -8,6 +8,7 @@ when-to-use: >-
 ---
 
 # Java File Read Vulnerability Audit Tool
+- 攻击大类:C09 Web应用漏洞利用
 
 Inspect Java web project source code, identify file read implementations, and detect arbitrary file read and path traversal vulnerabilities.
 

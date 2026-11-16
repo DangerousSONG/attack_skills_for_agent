@@ -15,6 +15,7 @@ triggers:
 ---
 
 # Web Security Scanner Pro Skill
+- 攻击大类:C06 漏洞情报与漏洞库
 
 > Skill by [ara.so](https://ara.so) — Security Skills collection.
 

@@ -19,6 +19,7 @@ related_skills:
 ---
 
 # WordPress Compromise Path Analysis
+- 攻击大类:C09 Web应用漏洞利用
 
 Use this skill to determine whether verified WordPress primitives actually
 compose into administrative control or benign code-execution proof. It is a

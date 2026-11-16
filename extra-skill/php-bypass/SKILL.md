@@ -9,6 +9,7 @@ metadata:
 ---
 
 # PHP Security Restriction Bypass Methodology
+- 攻击大类:C09 Web应用漏洞利用
 
 
 When you already have a webshell (one that can execute PHP code) but cannot execute system commands, this skill guides you through breaking the `disable_functions` and `open_basedir` restrictions.

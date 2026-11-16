@@ -9,6 +9,7 @@ metadata:
 ---
 
 # MongoDB Unauthorized Access and NoSQL Injection Exploitation
+- 攻击大类:C09 Web应用漏洞利用
 
 MongoDB listens on port 27017 by default and early versions require no authentication, so a network-exposed instance risks full data leakage. At the same time, web applications using MongoDB are widely affected by NoSQL injection vulnerabilities.
 

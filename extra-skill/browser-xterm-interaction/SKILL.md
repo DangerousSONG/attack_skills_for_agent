@@ -9,6 +9,7 @@ metadata:
 ---
 
 # Playwright Browser MCP × Web Terminal Interaction
+- 攻击大类:C09 Web应用漏洞利用
 
 Web terminals (xterm.js, hterm, etc.) render the terminal interface in the browser, but their output is usually rendered with canvas or custom DOM, so the standard `browser_snapshot()` can only see the last prompt line in the accessibility tree. This is the biggest pain point when interacting with web terminals — you need specific JavaScript methods to read the terminal output reliably.
 

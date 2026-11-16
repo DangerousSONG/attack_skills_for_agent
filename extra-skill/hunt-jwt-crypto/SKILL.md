@@ -32,6 +32,7 @@ sources: hackerone_public
 > Without that confirmation, remain read-only and provide defensive guidance only. Prefer a sandbox, disposable VM, or controlled lab.
 
 # HUNT-JWT-CRYPTO — Forgeable JSON Web Tokens (A04 Cryptographic Failures)
+- 攻击大类:C49 密码学攻击
 
 ## What actually pays
 

@@ -8,6 +8,7 @@ when-to-use: >-
 ---
 
 # Spring Boot Security
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 ## When to use
 

@@ -11,6 +11,7 @@ metadata:
 ---
 
 # Deep Subdomain Mining Methodology
+- 攻击大类:C44 AI与大模型安全
 
 > **⛔ In-depth reference**: the full parameters of subfinder/ksubdomain/amass, wildcard filtering scripts, and the multi-tool combined workflow are in `references/enumeration-tools.md`
 

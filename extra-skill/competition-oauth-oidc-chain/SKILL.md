@@ -8,6 +8,7 @@ when-to-use: >-
 ---
 
 # Competition OAuth OIDC Chain
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 Use this skill only as a downstream specialization after `$ctf-sandbox-orchestrator` is already active and has established sandbox assumptions, node ownership, and evidence priorities. If that has not happened yet, return to `$ctf-sandbox-orchestrator` first.
 

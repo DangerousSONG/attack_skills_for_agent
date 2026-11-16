@@ -7,6 +7,7 @@ when-to-use: "Use when fuzzing a Ruby library or gem, testing a Ruby C extension
 ---
 
 # Ruzzy
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 Ruzzy is a coverage-guided fuzzer for Ruby built on libFuzzer. It enables fuzzing both pure Ruby code and Ruby C extensions with sanitizer support for detecting memory corruption and undefined behavior.
 

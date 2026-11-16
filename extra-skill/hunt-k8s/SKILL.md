@@ -13,6 +13,7 @@ tags: [kubernetes, k8s, hunt, redteam]
 ---
 
 # HUNT-K8S — Kubernetes & Docker Security
+- 攻击大类:C09 Web应用漏洞利用
 
 ## Crown Jewel Targets
 

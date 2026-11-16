@@ -6,6 +6,7 @@ when-to-use: "Use when auditing PHP filesystem operations such as mkdir, chmod, 
 ---
 
 # PHP Filesystem Operation Audit (php-filesystem-audit)
+- 攻击大类:C09 Web应用漏洞利用
 
 Analyze critical filesystem operations in PHP projects, paying particular attention to how these operations interact with:
 

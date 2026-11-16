@@ -7,6 +7,7 @@ allowed-tools: Bash Read
 ---
 
 # Burp Project Parser
+- 攻击大类:C32 隧道与内网穿透
 
 Search and extract data from Burp Suite project files using the burpsuite-project-file-parser extension.
 

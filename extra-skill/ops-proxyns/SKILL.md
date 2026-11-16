@@ -11,6 +11,7 @@ tags: [ops, proxyns, redteam, infrastructure]
 ---
 
 # OPS-PROXYNS — Kernel-Level Proxy / OPSEC Protection
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 ## Why proxy-ns Over proxychains
 

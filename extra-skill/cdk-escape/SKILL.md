@@ -12,6 +12,7 @@ metadata:
 ---
 
 # CDK Container Penetration and Escape
+- 攻击大类:C14 云与容器执行
 
 CDK is the Swiss army knife of container penetration — **a single binary covering in-container information gathering, vulnerability detection, and escape exploitation**. After getting a container shell, run the CDK assessment first, then pick an escape path.
 

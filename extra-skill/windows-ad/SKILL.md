@@ -6,6 +6,7 @@ when-to-use: "Use for authorized AD and Windows identity attack testing — Kerb
 ---
 
 # Windows / Active Directory Security
+- 攻击大类:C30 AD域渗透与域控攻击
 
 ## ACTION REQUIRED (execute immediately after reading)
 

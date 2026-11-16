@@ -16,6 +16,7 @@ metadata:
 ---
 
 # Java Authentication and Configuration Security Source Code Audit
+- 攻击大类:C09 Web应用漏洞利用
 
 Authentication, authorization, and security configuration are the highest-yield vulnerability surfaces in Java backend projects. This skill provides complete detection approaches for 6 major categories of white-box audit, applicable to Spring Boot/Spring Security, Apache Shiro, and custom frameworks.
 

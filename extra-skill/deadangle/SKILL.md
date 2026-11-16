@@ -11,6 +11,7 @@ metadata:
 ---
 
 # Dead Angle — Check Conclusions Before You Deliver Them
+- 攻击大类:C50 红队方法论与自动化
 
 ## What This Skill Is
 

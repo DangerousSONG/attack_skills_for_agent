@@ -22,6 +22,7 @@ related_skills:
 ---
 
 # Port & Service Discovery Skill
+- 攻击大类:C10 API与业务逻辑攻击
 
 Use scoped Nmap discovery to identify services adjacent to web applications,
 including databases, remote administration, mail, caches, and non-standard API

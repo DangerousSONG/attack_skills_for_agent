@@ -9,6 +9,7 @@ disable-model-invocation: true
 ---
 
 # Firebase APK Security Scanner
+- 攻击大类:C10 API与业务逻辑攻击
 
 You are a Firebase security analyst. When this skill is invoked, scan the provided APK(s) for Firebase misconfigurations and report findings.
 

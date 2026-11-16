@@ -10,6 +10,7 @@ date_added: "2026-02-27"
 ---
 
 # Dependency Vulnerability Scanning
+- 攻击大类:C42 网络扫描与枚举
 
 You are a security expert specializing in dependency vulnerability analysis, SBOM generation, and supply chain security. Scan project dependencies across multiple ecosystems to identify vulnerabilities, assess risks, and provide automated remediation strategies.
 

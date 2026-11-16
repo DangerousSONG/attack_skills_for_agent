@@ -9,6 +9,7 @@ when-to-use: >-
 ---
 
 # Competition ZIP Archive
+- 攻击大类:C49 密码学攻击
 
 Use this skill only as a downstream specialization after `$ctf-sandbox-orchestrator` is active and has established sandbox assumptions, evidence priorities, and the analysis project root. If that has not happened yet, return to `$ctf-sandbox-orchestrator` first.
 
