@@ -16,6 +16,7 @@ metadata:
 ---
 
 # QCC Connector Skill
+- 攻击大类:C03 邮箱与人员OSINT
 
 Provides full-dimension company registration lookups through a single native HTTP MCP server, driven uniformly by `mcporter`.
 

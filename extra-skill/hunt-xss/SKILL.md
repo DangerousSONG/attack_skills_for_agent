@@ -266,6 +266,7 @@ location.href = 'https://target.com/page#<script>alert(1)</script>'
 **Grep patterns for source review:**
 ```bash
 # Find dangerous sinks in JS
+- 攻击大类:C09 Web应用漏洞利用
 grep -rn "innerHTML\|document\.write\|eval(\|setTimeout(\|location\.hash\|location\.search" --include="*.js" <!-- security-allowlist: documented payload technique reference, do not execute outside authorized scope -->
 
 # Find unsafe Rails helpers

@@ -17,6 +17,7 @@ triggers:
 ---
 
 # microsoft-security-skills-plugin
+- 攻击大类:C30 AD域渗透与域控攻击
 
 > Skill by [ara.so](https://ara.so) — Security Skills collection.
 

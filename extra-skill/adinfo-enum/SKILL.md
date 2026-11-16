@@ -10,6 +10,7 @@ metadata:
 ---
 
 # Adinfo Fast AD Information Gathering
+- 攻击大类:C30 AD域渗透与域控攻击
 
 The value of Adinfo lies in **collecting a full picture of the domain environment with one command** — domain controllers, domain admins, trusts, SPNs, delegation, GPOs, and other key information all get printed, saving you the trouble of writing LDAP queries by hand.
 

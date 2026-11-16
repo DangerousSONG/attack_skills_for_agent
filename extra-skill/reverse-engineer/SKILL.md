@@ -23,6 +23,7 @@ date_added: '2026-02-27'
 > Without that confirmation, remain read-only and provide defensive guidance only. Prefer a sandbox, disposable VM, or controlled lab.
 
 # Common RE scripting environments
+- 攻击大类:C46 二进制漏洞利用与Pwn
 - IDAPython (IDA Pro scripting)
 - Ghidra scripting (Java/Python via Jython)
 - r2pipe (radare2 Python API)

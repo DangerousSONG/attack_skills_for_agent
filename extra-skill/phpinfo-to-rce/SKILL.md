@@ -19,6 +19,7 @@ related_skills:
 ---
 
 # PHPInfo → RCE Chain Skill
+- 攻击大类:C09 Web应用漏洞利用
 
 Evaluate exposed `phpinfo()` pages for configuration disclosure and the
 prerequisites of a separate execution path. Enabled process functions do not

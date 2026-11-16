@@ -6,6 +6,7 @@ when-to-use: "Use when auditing Java Web source (Servlet/Commons FileUpload or S
 ---
 
 # Java File Upload Vulnerability Auditing Tool
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 Inspect Java Web project source code, identify file upload implementations, and detect upload-related vulnerabilities (arbitrary file upload, path traversal, file overwrite, web-root executability, etc.).
 

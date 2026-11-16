@@ -15,6 +15,7 @@ metadata:
 ---
 
 # Stored Cross-Site Scripting (XSS)
+- 攻击大类:C09 Web应用漏洞利用
 
 ## What Is Broken and Why
 Stored XSS persists because user-supplied content is saved to a database or file system and later retrieved and rendered without output encoding. Unlike reflected XSS, no social engineering link is needed — every user who views the affected page triggers the payload. High-privilege pages (admin panels, audit logs, user management) that display stored user input are particularly dangerous as they can lead to full application compromise.

@@ -10,6 +10,7 @@ metadata:
 ---
 
 # dnsx Bulk DNS Resolution Methodology
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 dnsx is a high-speed DNS tool from ProjectDiscovery. Core advantages: **multiple record types** + **automatic wildcard filtering** + **pipeline friendly**.
 

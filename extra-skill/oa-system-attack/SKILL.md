@@ -9,6 +9,7 @@ metadata:
 ---
 
 # Exploitation of Domestic OA/Intranet Systems
+- 攻击大类:C09 Web应用漏洞利用
 
 Chinese CTF intranet environments almost always contain OA systems—they have many historical vulnerabilities, a low patch rate, and typically high privileges.
 

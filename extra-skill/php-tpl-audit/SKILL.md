@@ -6,6 +6,7 @@ when-to-use: "Use when auditing PHP projects for SSTI where user input controls 
 ---
 
 # PHP Template Injection / SSTI Audit (php-tpl-audit)
+- 攻击大类:C09 Web应用漏洞利用
 
 Analyze PHP project source code to identify template injection (SSTI) and dangerous expression execution risks: user-controllable content influencing template selection, rendered expression parsing, or conversion into executable code.
 

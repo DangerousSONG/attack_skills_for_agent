@@ -21,6 +21,7 @@ metadata:
 ---
 
 # LLM Application Security
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 Harden chatbots, RAG pipelines, and AI features embedded in SaaS products against prompt injection, data leakage, abuse, and compliance violations.
 

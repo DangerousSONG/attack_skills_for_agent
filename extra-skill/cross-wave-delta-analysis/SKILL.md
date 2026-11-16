@@ -21,6 +21,7 @@ related_skills:
 ---
 
 # Cross-Wave Delta Analysis Skill
+- 攻击大类:C42 网络扫描与枚举
 
 Methodology for comparing findings across multiple recon waves on the same target set. Detects NEW findings, REGRESSIONS (previously open now blocked), PERSISTENT vulnerabilities, and CHANGES over time. Distilled from 9 waves across 7 deep targets that revealed missed CORS findings, new port exposures, and infrastructure drift.
 

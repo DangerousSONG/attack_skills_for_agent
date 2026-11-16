@@ -13,6 +13,7 @@ when-to-use: "Use when comparing code between commits or tags and needing to det
 ---
 
 # Graph Evolution
+- 攻击大类:C13 远程命令执行与WebShell
 
 Builds Trailmark code graphs at two source snapshots and computes a
 structural diff. Surfaces security-relevant changes that text-level

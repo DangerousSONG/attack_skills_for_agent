@@ -10,6 +10,7 @@ date_added: '2026-02-27'
 ---
 
 # Azure Key Vault Keys SDK for Rust
+- 攻击大类:C05 外部攻击面与云资产暴露
 
 Client library for Azure Key Vault Keys — secure storage and management of cryptographic keys.
 

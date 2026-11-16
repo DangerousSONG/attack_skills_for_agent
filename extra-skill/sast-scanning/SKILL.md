@@ -23,6 +23,7 @@ metadata:
 ---
 
 # SAST Scanning
+- 攻击大类:C42 网络扫描与枚举
 
 Identify security vulnerabilities in source code through static analysis.
 

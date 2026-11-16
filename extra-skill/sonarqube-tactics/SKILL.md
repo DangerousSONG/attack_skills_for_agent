@@ -9,6 +9,7 @@ metadata:
 ---
 
 # SonarQube Code Audit Platform Attacks
+- 攻击大类:C27 本地凭证与浏览器窃取
 
 SonarQube is the core code quality platform in a DevSecOps stack, listens on port 9000 by default, and the factory credentials admin/admin are frequently overlooked. Once compromised, an attacker can directly obtain all project source code, the list of known vulnerabilities, and internal credentials — effectively the security blueprint of the entire R&D organization.
 

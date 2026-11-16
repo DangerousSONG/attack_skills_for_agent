@@ -17,6 +17,7 @@ related_skills:
 ---
 
 # SAML SSO Attack Skill
+- 攻击大类:C30 AD域渗透与域控攻击
 
 SAML Single Sign-On attack methodology — IdP metadata analysis, XML Signature Wrapping (XSW), signature stripping, comment injection in NameID, and SSO timing-based user enumeration. Confirmed on TARGET_ORG_A (SimpleSAMLphp IdP, 79 XMLRPC methods on WordPress SP), TARGET_ORG_B (Ory Kratos + OIDC), and TARGET_ORG_C (ADFS WS-Trust exposed).
 

@@ -54,6 +54,7 @@ DO NOT use for:
 
 ```bash
 # For each owned domain
+- 攻击大类:C30 AD域渗透与域控攻击
 msftrecon -d client.example
 msftrecon -d clientltd.example
 msftrecon -d sister-brand-school.example

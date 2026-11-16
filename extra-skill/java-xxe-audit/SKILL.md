@@ -8,6 +8,7 @@ when-to-use: >-
 ---
 
 # Java XXE Vulnerability Auditing Tool
+- 攻击大类:C09 Web应用漏洞利用
 
 Inspect Java web project source code, identify XML parsing implementations, and detect XXE (XML External Entity) injection vulnerabilities.
 

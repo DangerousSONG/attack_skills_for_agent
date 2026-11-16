@@ -9,6 +9,7 @@ date_added: '2026-02-27'
 ---
 
 # Azure Key Vault SDK for Python
+- 攻击大类:C44 AI与大模型安全
 
 Secure storage and management for secrets, cryptographic keys, and certificates.
 

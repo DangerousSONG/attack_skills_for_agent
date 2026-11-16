@@ -1,7 +1,7 @@
 ---
 name: masscan-internet
 description: "masscan: Network-wide fast mapping and banner-level service identification. Signals: port scanning, nmap, full subnet full port high-speed scan, banner fingerprinting."
-zh-signals: "masscan: 网段级快速测绘、Banner 级服务识别。信号:端口扫描,nmap,全网段全端口高速扫,带 banner 抓指纹。"
+zh-signals: "masscan: 网段级快速测绘、Banner 级服务识别。信号:端口扫描,nmap,全网段全端口高速扫,带 banner 抓指纹,大规模,全网。"
 when-to-use: "Use when you need internet-scale or full-subnet high-speed port scanning with banner grabbing for service identification. Requires root privileges, target ranges, and rate and interface settings to avoid flooding."
 ---
 

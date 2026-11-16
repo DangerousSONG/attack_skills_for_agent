@@ -19,6 +19,7 @@ related_skills:
 ---
 
 # Virtual Host Enumeration
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 Discover hidden virtual hosts on IP addresses by fuzzing the `Host` header. Many servers only respond to specific domain names and remain invisible to standard subdomain enumeration. VHOST fuzzing exposes internal services, development environments, and admin panels that share the same IP but answer to different hostnames.
 

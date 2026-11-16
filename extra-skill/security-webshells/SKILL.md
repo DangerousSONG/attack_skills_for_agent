@@ -6,6 +6,7 @@ when-to-use: "Use when testing web shell detection rules, validating IDS or IPS 
 ---
 
 # SecLists Web-Shells
+- 攻击大类:C13 远程命令执行与WebShell
 
 ## Description
 

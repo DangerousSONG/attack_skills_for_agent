@@ -9,6 +9,7 @@ metadata:
 ---
 
 # OAuth/SSO Attack Methodology
+- 攻击大类:C30 AD域渗透与域控攻击
 
 OAuth 2.0 is the most common third-party authentication protocol in modern web applications. The attack surface concentrates on each redirect step of the authentication flow — redirect_uri validation, the state parameter, and token delivery.
 

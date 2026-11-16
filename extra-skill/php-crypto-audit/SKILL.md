@@ -7,6 +7,7 @@ when-to-use: >-
 ---
 
 # PHP Cryptography and Key Security Audit (php-crypto-audit)
+- 攻击大类:C09 Web应用漏洞利用
 
 Analyze the cryptographic and hashing implementations for passwords / tokens / sensitive data in PHP project source code, and detect:
 - Weak hashing (MD5/SHA1/no salt)

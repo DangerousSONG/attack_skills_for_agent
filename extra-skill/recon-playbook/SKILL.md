@@ -22,6 +22,7 @@ related_skills:
 ---
 
 # External Web Recon Playbook
+- 攻击大类:C10 API与业务逻辑攻击
 
 Use this playbook to turn an authorized root domain or asset list into a
 prioritized map of web applications, APIs, authentication boundaries, and

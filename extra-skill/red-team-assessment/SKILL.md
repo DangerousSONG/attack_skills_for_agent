@@ -9,6 +9,7 @@ metadata:
 ---
 
 # Red Team Assessment End-to-End Methodology
+- 攻击大类:C09 Web应用漏洞利用
 
 This skill is the **overall process orchestration** for a penetration test — it does not contain specific exploitation techniques (those live in the specialized skills under exploit/), but it guides you to advance the entire assessment in the right order and with the right strategy.
 

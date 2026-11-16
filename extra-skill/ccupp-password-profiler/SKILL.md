@@ -9,6 +9,7 @@ metadata:
 ---
 
 # ccupp Social Engineering Password Wordlist Generation
+- 攻击大类:C43 移动端攻击
 
 ccupp (Chinese Common User Passwords Profiler) intelligently generates password wordlists from the target's personal information — more accurate than generic wordlists, because most people's passwords contain their own name, birthday, phone number, and similar data.
 

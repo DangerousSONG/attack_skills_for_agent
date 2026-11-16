@@ -9,6 +9,7 @@ metadata:
 ---
 
 # katana Web Crawler Methodology
+- 攻击大类:C10 API与业务逻辑攻击
 
 katana is the next-generation web crawler framework from ProjectDiscovery. Core advantages: **JavaScript parsing** (discovers dynamic endpoints) + **Headless mode** (renders SPAs) + **pipeline friendly** + **automatic form filling**.
 

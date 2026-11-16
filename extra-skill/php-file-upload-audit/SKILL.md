@@ -25,6 +25,7 @@ when-to-use: "Use when auditing PHP source code for file upload entry points, fi
 
 
 # PHP File Upload Audit (php-file-upload-audit)
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 
 

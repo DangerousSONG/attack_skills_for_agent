@@ -24,6 +24,7 @@ The target uses modern observability tooling (Go, .NET, Java, Node.js). These fr
 TARGET="https://target.com"
 
 # Common observability paths
+- 攻击大类:C10 API与业务逻辑攻击
 for ep in metrics health status ready live readyz healthz \
   actuator/health actuator/metrics actuator/prometheus \
   Telescope telescope horizon debug; do

@@ -288,6 +288,7 @@ Response codes:
 **ToolShell precondition reproduction:**
 ```bash
 # Step 1: anon GET ToolPane.aspx
+- 攻击大类:C10 API与业务逻辑攻击
 TP=$(curl --max-time 30 --connect-timeout 10 -sk "https://target.example/_layouts/15/ToolPane.aspx?DisplayMode=Edit")
 echo "$TP" | grep -oE '__VIEWSTATEENCRYPTED" id="__VIEWSTATEENCRYPTED" value="[^"]*"'
 # If value="" → precondition

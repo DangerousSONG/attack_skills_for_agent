@@ -11,6 +11,7 @@ tags: [wordpress, plugin, automation, redteam]
 ---
 
 # WP-PLUGIN-AUTOMATION — Batch WordPress Plugin CVE Testing
+- 攻击大类:C09 Web应用漏洞利用
 
 ## When to Use
 

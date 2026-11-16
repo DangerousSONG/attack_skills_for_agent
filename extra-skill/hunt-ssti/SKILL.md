@@ -21,6 +21,7 @@ Use when the target has any endpoint that renders user-controlled input through 
 
 ```bash
 # Detection polyglot — try this in EVERY user-controlled field
+- 攻击大类:C09 Web应用漏洞利用
 {{7*7}}${7*7}#{7*7}<%= 7*7 %>*{7*7}
 # Expectation: 49 appears in the response (or 7777777 for Jinja2 string repetition)
 

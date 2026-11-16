@@ -24,6 +24,7 @@ related_skills:
 ---
 
 # Staging & Subdomain Hunt Skill
+- 攻击大类:C42 网络扫描与枚举
 
 Discover staging, development, and internal subdomains through certificate transparency (crt.sh), DNS brute force, and web probing. Exploit the staging security gap — staging environments consistently have weaker security than production (no WAF, debug enabled, install pages accessible). Proven on 7 US targets where staging subdomains exposed phpinfo, WordPress install pages, and internal APIs not visible on production.
 

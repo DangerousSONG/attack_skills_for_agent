@@ -6,6 +6,7 @@ when-to-use: "Use when auditing a CodeIgniter project's framework configuration 
 ---
 
 # PHP CodeIgniter Framework Security Audit (php-codeigniter-audit)
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 Analyze the framework mechanisms and configuration pitfalls of CodeIgniter projects, focusing on:
 - Whether CSRF protection is enabled and whether the token name/validation logic is correct

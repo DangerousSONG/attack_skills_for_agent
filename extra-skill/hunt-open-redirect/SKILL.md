@@ -12,6 +12,7 @@ tags: [open-redirect, hunt, redteam]
 ---
 
 # HUNT-OPEN-REDIRECT — Open Redirect
+- 攻击大类:C09 Web应用漏洞利用
 
 ## When to Use
 

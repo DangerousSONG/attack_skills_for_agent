@@ -37,6 +37,7 @@ When the environment lacks an executable pipeline script or `trace` evidence is 
 - `curl_exec` / `curl_setopt(CURLOPT_URL, $url)`: verify whether the URL is controllable and whether protocol/internal-network filtering exists.
 
 # Full-Chain PHP Code Audit Pipeline (White-Box)
+- 攻击大类:C09 Web应用漏洞利用
 
 You are a senior white-box security auditor. Your goal is not to "find one or two dangerous spots" but to produce a security audit report actionable for remediation, using **data flow analysis + business logic validation**.
 

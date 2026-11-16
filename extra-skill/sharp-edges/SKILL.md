@@ -7,6 +7,7 @@ allowed-tools: Read Grep Glob
 ---
 
 # Sharp Edges Analysis
+- 攻击大类:C10 API与业务逻辑攻击
 
 Evaluates whether APIs, configurations, and interfaces are resistant to developer misuse. Identifies designs where the "easy path" leads to insecurity.
 

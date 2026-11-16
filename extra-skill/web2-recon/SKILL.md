@@ -11,6 +11,7 @@ tags: [web2, recon, redteam]
 ---
 
 # WEB2 RECON PIPELINE
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 Full asset discovery from nothing to a prioritized URL list ready for hunting.
 

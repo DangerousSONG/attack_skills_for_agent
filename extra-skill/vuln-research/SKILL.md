@@ -10,6 +10,7 @@ allowed-tools: Read, Grep, Glob, Bash, WebSearch, WebFetch
 ---
 
 # Vuln Research — CVE Deep-Dive and Applicability Assessment
+- 攻击大类:C06 漏洞情报与漏洞库
 
 When a CVE drops, the question isn't "do we have this package?" — `dependency-audit` answers that. The questions are:
 

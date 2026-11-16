@@ -7,6 +7,7 @@ allowed-tools: Bash, Read, Write, Grep, Glob, WebSearch
 ---
 
 # IAM Audit — Identity & Access Management Review and Design
+- 攻击大类:C30 AD域渗透与域控攻击
 
 Cover the identity and access layer end-to-end: audit existing setup, design from scratch, plan migrations, and codify the patterns most teams get wrong. This is the consultant-style skill — not just "what's misconfigured" but "what should this look like."
 

@@ -32,6 +32,7 @@ report_count: 18
 > Without that confirmation, remain read-only and provide defensive guidance only. Prefer a sandbox, disposable VM, or controlled lab.
 
 # HUNT-CICD — CI/CD Pipeline Security
+- 攻击大类:C12 供应链与CI/CD攻击
 
 ## Crown Jewel Targets
 

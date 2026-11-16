@@ -25,6 +25,7 @@ date_added: "2026-02-27"
 > AUTHORIZED USE ONLY: Use this skill only for authorized security assessments, defensive validation, or controlled educational environments.
 
 # Red Team Tactics
+- 攻击大类:C50 红队方法论与自动化
 
 > Adversary simulation principles based on MITRE ATT&CK framework.
 

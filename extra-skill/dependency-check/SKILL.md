@@ -13,6 +13,7 @@ license: MIT
 ---
 
 # Dependency Check
+- 攻击大类:C12 供应链与CI/CD攻击
 
 Scans Python (`requirements.txt`) and npm (`package.json`) manifests for
 known-vulnerable versions and supply-chain risks. **Offline by default** — it

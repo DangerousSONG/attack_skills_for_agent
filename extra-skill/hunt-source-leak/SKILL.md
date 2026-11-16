@@ -11,6 +11,7 @@ tags: [source, leak, hunt, redteam]
 ---
 
 # HUNT-SOURCE-LEAK — Source Code & Build Artifact Leakage
+- 攻击大类:C10 API与业务逻辑攻击
 
 ## Crown Jewel Targets
 

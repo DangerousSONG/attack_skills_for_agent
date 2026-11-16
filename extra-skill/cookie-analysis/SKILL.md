@@ -12,6 +12,7 @@ metadata:
 ---
 
 # Cookie Analysis & Forgery Methodology
+- 攻击大类:C09 Web应用漏洞利用
 
 ## When to Use
 - You found a session cookie and want to forge it

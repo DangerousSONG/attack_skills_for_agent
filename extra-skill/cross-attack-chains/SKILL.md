@@ -18,6 +18,7 @@ related_skills:
 ---
 
 # Cross-Attack Chains
+- 攻击大类:C50 红队方法论与自动化
 
 An attack chain is a sequence of verified security behaviors in which each step
 provides a prerequisite for the next. Several findings on the same target do

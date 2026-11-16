@@ -7,6 +7,7 @@ when-to-use: >-
 ---
 
 # PHP Symfony Framework Security Audit (php-symfony-audit)
+- 攻击大类:C09 Web应用漏洞利用
 
 Analyze the "framework-specific security mechanisms" and "configuration/usage pitfalls" in Symfony project source code, focusing on:
 - Correctness of access_control and firewalls configuration in `config/packages/security*.yaml`

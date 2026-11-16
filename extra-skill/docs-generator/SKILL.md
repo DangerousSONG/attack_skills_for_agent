@@ -16,6 +16,7 @@ license_source: "https://github.com/zhaoxuya520/reverse-skill/blob/main/LICENSE"
 Supporting files are included at skill-relative paths. See [UPSTREAM-NOTICE.md](UPSTREAM-NOTICE.md) for their pinned sources, licenses, hashes, and import changes.
 
 # Technical Documentation
+- 攻击大类:C47 逆向工程
 ## When to Use
 
 - A finished analysis needs a structured, shareable report.

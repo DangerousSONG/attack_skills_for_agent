@@ -13,6 +13,7 @@ metadata:
 ---
 
 # PHP Injection Vulnerability Source Code Audit
+- 攻击大类:C09 Web应用漏洞利用
 This skill focuses on the source code level: determining whether "injection actually holds". Its core is verifying whether filtering along the Source→Sink path is sufficient. Runtime exploitation techniques such as crafting payloads or bypassing WAFs belong to the corresponding black-box exploit skills.
 
 ## Further Reading

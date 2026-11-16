@@ -14,6 +14,7 @@ allowed-tools:
 ---
 
 # Trailmark Review Gate
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 Apply deterministic security gate rules to Trailmark structural diff evidence.
 This skill does not replace line-level review. It produces a compact structural

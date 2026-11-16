@@ -6,6 +6,7 @@ when-to-use: "Use when auditing PHP source code for missing CSRF protection on s
 ---
 
 # PHP CSRF Audit (php-csrf-audit)
+- 攻击大类:C09 Web应用漏洞利用
 
 Analyze PHP project source code to determine whether every endpoint that may cause state changes (POST/PUT/PATCH/DELETE, or side-effecting GET) implements CSRF protection (token verification, SameSite/CORS coordination, double-submit cookie, etc.).
 

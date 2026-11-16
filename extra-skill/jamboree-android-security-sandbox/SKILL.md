@@ -15,6 +15,7 @@ triggers:
 ---
 
 # JAMBOREE Android Security Sandbox Skill
+- 攻击大类:C43 移动端攻击
 
 > Skill by [ara.so](https://ara.so) — Security Skills collection
 

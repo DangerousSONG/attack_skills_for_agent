@@ -20,6 +20,7 @@ related_skills:
 ---
 
 # WordPress Security Assessment
+- 攻击大类:C09 Web应用漏洞利用
 
 Map WordPress core, REST, XML-RPC, plugins, themes, authentication boundaries,
 and adjacent installations before selecting a vulnerability-specific test.

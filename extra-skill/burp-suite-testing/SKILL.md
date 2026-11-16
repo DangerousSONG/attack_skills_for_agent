@@ -28,6 +28,7 @@ date_added: "2026-02-27"
 > AUTHORIZED USE ONLY: Use this skill only for authorized security assessments, defensive validation, or controlled educational environments.
 
 # Burp Suite Web Application Testing
+- 攻击大类:C13 远程命令执行与WebShell
 
 ## Purpose
 

@@ -6,6 +6,7 @@ when-to-use: "Use when analyzing call paths, mapping attack surface, tracing tai
 ---
 
 # Trailmark
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 Parses source code into a directed graph of functions, classes, calls, and
 semantic metadata for security analysis.

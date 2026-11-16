@@ -285,6 +285,7 @@ someone else's balance" is real impact; "I sent a malformed amount and got a 400
 
 ```bash
 # Read-only first step; confirm scope before anything active.
+- 攻击大类:C09 Web应用漏洞利用
 cat scope.txt  # target list from the authorized engagement brief
 ```
 

@@ -9,6 +9,7 @@ metadata:
 ---
 
 # CI/CD Pipeline and Supply Chain Attack Methodology
+- 攻击大类:C09 Web应用漏洞利用
 
 CI/CD systems are core infrastructure for modern software engineering — they hold read/write access to code repositories, carry cloud platform deployment credentials, and can modify production environments directly. Once a pipeline is compromised, the attacker gains code control, Secrets access, and cloud environment penetration at the same time, and the blast radius far exceeds the compromise of a single server.
 

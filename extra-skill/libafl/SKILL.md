@@ -9,6 +9,7 @@ when-to-use: >-
 ---
 
 # LibAFL
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 LibAFL is a modular fuzzing library that implements features from AFL-based fuzzers like AFL++. Unlike traditional fuzzers, LibAFL provides all functionality in a modular and customizable way as a Rust library. It can be used as a drop-in replacement for libFuzzer or as a library to build custom fuzzers from scratch.
 

@@ -12,6 +12,7 @@ license: "MIT"
 license_source: "https://github.com/zhaoxuya520/reverse-skill/blob/main/LICENSE"
 ---
 # Ghidra Reverse Engineering
+- 攻击大类:C46 二进制漏洞利用与Pwn
 ## When to Use
 
 - Static analysis of binaries without an IDA license.

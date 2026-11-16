@@ -12,6 +12,7 @@ tags: [bug-bounty, toolkit, local, recon, redteam]
 ---
 
 # Bug Bounty Master Workflow
+- 攻击大类:C42 网络扫描与枚举
 
 Full pipeline: Recon -> Learn -> Hunt -> Validate -> Report. One skill for everything.
 

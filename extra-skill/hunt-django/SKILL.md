@@ -18,6 +18,7 @@ related_skills:
 ---
 
 # Django Security Hunting
+- 攻击大类:C09 Web应用漏洞利用
 
 Hunt Django-specific vulnerabilities focusing on Django REST Framework (DRF) permission class gaps, ORM raw query injection, template injection via `|safe` and `mark_safe`, and Django admin panel exploitation. Django's batteries-included approach creates unique attack surface: admin interface, ORM query building, DRF serializers, Channels WebSockets, and Celery task queues.
 

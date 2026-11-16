@@ -8,6 +8,7 @@ when-to-use: >-
 ---
 
 # Competition Browser Persistence
+- 攻击大类:C44 AI与大模型安全
 
 Use this skill only as a downstream specialization after `$ctf-sandbox-orchestrator` is already active and has established sandbox assumptions, node ownership, and evidence priorities. If that has not happened yet, return to `$ctf-sandbox-orchestrator` first.
 

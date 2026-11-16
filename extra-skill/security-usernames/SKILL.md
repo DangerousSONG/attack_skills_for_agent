@@ -8,6 +8,7 @@ when-to-use: >-
 ---
 
 # SecLists Usernames (Curated)
+- 攻击大类:C27 本地凭证与浏览器窃取
 
 ## Description
 

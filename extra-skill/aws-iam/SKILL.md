@@ -20,6 +20,7 @@ metadata:
 ---
 
 # AWS IAM
+- 攻击大类:C05 外部攻击面与云资产暴露
 
 Manage identity and access in AWS with least-privilege policies, roles, federation, and permission boundaries.
 

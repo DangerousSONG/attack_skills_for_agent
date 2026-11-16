@@ -19,6 +19,7 @@ related_skills:
 ---
 
 # Source Leak Hunt Skill
+- 攻击大类:C27 本地凭证与浏览器窃取
 
 Mass scanning for exposed sensitive files (`.env`, `.git/config`, `wp-config.php.bak`, `debug.log`, `backup.sql`, `phpinfo.php`, `Dockerfile`, etc.) with content-based false positive filtering. Source leaks are the second most common finding (~7% of targets) after WordPress user enumeration.
 

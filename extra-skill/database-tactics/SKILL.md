@@ -9,6 +9,7 @@ metadata:
 ---
 
 # Database Service Attack Methodology
+- 攻击大类:C09 Web应用漏洞利用
 
 Databases are the core pivot of internal network penetration — almost every application has a database backend, and databases usually have operating-system-level capabilities.
 

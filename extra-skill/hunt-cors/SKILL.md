@@ -11,6 +11,7 @@ tags: [cors, hunt, redteam]
 ---
 
 # HUNT-CORS — Cross-Origin Resource Sharing Misconfiguration
+- 攻击大类:C09 Web应用漏洞利用
 
 ## What actually pays (and what does not)
 

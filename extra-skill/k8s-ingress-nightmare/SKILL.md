@@ -12,6 +12,7 @@ metadata:
 ---
 
 # IngressNightmare — CVE-2025-1974
+- 攻击大类:C46 二进制漏洞利用与Pwn
 
 Ingress-NGINX Admission Controller unauthenticated RCE exploit chain (CVSSv3 9.8), allowing remote code execution from the pod network without any K8s credentials.
 

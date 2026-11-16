@@ -11,6 +11,7 @@ tags: [firebase, hunt, redteam]
 ---
 
 # HUNT-FIREBASE — Firebase / Firestore / GCP Exploitation
+- 攻击大类:C10 API与业务逻辑攻击
 
 ## Crown Jewel Targets
 

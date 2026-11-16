@@ -14,6 +14,7 @@ metadata:
 ---
 
 # Economist Attack — Offensive Strategy Mindset
+- 攻击大类:C09 Web应用漏洞利用
 
 ## The Economic Lens
 

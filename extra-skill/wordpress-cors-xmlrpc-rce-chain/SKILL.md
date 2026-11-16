@@ -18,6 +18,7 @@ related_skills:
 ---
 
 # WordPress CORS, XML-RPC, and Upload Chain
+- 攻击大类:C09 Web应用漏洞利用
 
 This skill evaluates whether independently verified WordPress behaviors can
 form a path to unauthorized file execution. It does not assume that CORS,

@@ -7,6 +7,7 @@ when-to-use: >-
 ---
 
 # PHP Route Tracer (data flow tracing, no vulnerability conclusions)
+- 攻击大类:C09 Web应用漏洞利用
 
 Based on the routes from `php-route-mapper` (or the synthetic entry points provided by `php-audit-pipeline`), trace from the **handler / CLI entry / specified symbol** to the final Sink (SQL/command/file/SSRF/XSS/template rendering/deserialization, etc.), and output the complete data flow chain, parameter variable name changes, and controllability analysis.
 

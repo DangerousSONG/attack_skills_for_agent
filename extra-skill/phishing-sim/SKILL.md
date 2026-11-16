@@ -9,6 +9,7 @@ when-to-use: >-
 ---
 
 # Phishing Simulation
+- 攻击大类:C02 域名与DNS侦察
 
 > **Awareness goal + ethical template**: phishing sims aim to improve organizational awareness, not to ridicule individuals. No ad-hoc spear phishing against specific people without written sign-off from management AND HR. No pretexts that fundamentally sow mistrust (family emergencies, illness of a colleague, fabricated HR disciplinary actions). NL/EU context: employee monitoring falls under the AVG (GDPR) plus labor law; consultation with the works council and/or employee representation is usually required before campaigns. This skill structures; legal review belongs with legal/HR/DPO.
 

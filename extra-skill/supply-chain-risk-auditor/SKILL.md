@@ -15,6 +15,7 @@ date_added: "2026-09-04"
 ---
 
 # Supply Chain Risk Auditor
+- 攻击大类:C12 供应链与CI/CD攻击
 
 Activates when the user says "audit this project's dependencies".
 

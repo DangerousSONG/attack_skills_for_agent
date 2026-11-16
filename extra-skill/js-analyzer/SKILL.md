@@ -11,6 +11,7 @@ metadata:
 ---
 
 # JS Analyzer — JavaScript Security Analysis
+- 攻击大类:C09 Web应用漏洞利用
 
 JS files are often the most information-rich attack surface in a web application. A thorough JS review routinely yields: hidden API endpoints, hardcoded secrets, client-side authorization logic to bypass, insecure postMessage handlers, and vulnerable third-party libraries.
 

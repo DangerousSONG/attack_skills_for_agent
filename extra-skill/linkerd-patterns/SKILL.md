@@ -9,6 +9,7 @@ date_added: "2026-02-27"
 ---
 
 # Linkerd Patterns
+- 攻击大类:C14 云与容器执行
 
 Production patterns for Linkerd service mesh - the lightweight, security-first service mesh for Kubernetes.
 

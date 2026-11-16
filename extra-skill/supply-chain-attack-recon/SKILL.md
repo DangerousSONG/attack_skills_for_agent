@@ -49,6 +49,7 @@ Target Org
 TARGET="<brand>"  # set to target brand name
 
 # Direct guesses
+- 攻击大类:C46 二进制漏洞利用与Pwn
 for guess in $TARGET "${TARGET}-tech" "${TARGET}corp" "${TARGET}-io" "${TARGET}-eng"; do
   curl --max-time 30 --connect-timeout 10 -sI "https://github.com/$guess" | grep -E "HTTP|status" | head -1
 done

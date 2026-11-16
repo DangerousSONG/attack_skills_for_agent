@@ -9,6 +9,7 @@ metadata:
 ---
 
 # Business Logic Flaw Methodology
+- 攻击大类:C09 Web应用漏洞利用
 
 The essence of a business logic flaw: the application fails to validate business rules server-side, letting an attacker violate the intended business flow by modifying request parameters. WAFs and automated scanners can barely detect these — every request still looks like a "normal" HTTP request.
 

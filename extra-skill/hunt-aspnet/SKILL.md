@@ -132,6 +132,7 @@ Set-Cookie: ASP.NET_SessionId=...; SameSite=None  (suggests cross-origin embeddi
 curl --max-time 30 --connect-timeout 10 -sk -X POST "https://target.example/page.aspx" \
   --data "__VIEWSTATE=AAAA&__VIEWSTATEGENERATOR=AAAA"
 # Inspect body for:
+- 攻击大类:C46 二进制漏洞利用与Pwn
 #  - "Validation of viewstate MAC failed" → confirms signed ViewState
 #  - "The state information is invalid for this page" → confirms ALTERNATE parser path
 #  - "Version Information: Microsoft .NET Framework Version:X.X.XXXXX" → exact patch level

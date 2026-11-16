@@ -11,6 +11,7 @@ metadata:
 ---
 
 # XXE Phantom — XML External Entity Injection
+- 攻击大类:C30 AD域渗透与域控攻击
 
 XXE occurs when an XML parser evaluates external entity declarations (`<!ENTITY xxe SYSTEM "...">`) supplied by the attacker. Impact ranges from local file disclosure to full SSRF and, in some stacks, Remote Code Execution.
 

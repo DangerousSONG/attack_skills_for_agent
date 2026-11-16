@@ -22,6 +22,7 @@ metadata:
 ---
 
 # GCP Cloud SQL
+- 攻击大类:C05 外部攻击面与云资产暴露
 
 Deploy and manage fully managed relational databases (PostgreSQL, MySQL, SQL Server) on Google Cloud.
 
