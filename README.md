@@ -66,7 +66,11 @@ python scripts/deploy.py --exclude-dirs extra-skill   # 回退原 996 底座(对
 
 - 评测集：107 条中文渗透任务查询，每条人工标注金标 slug（如「SQL 注入验证并拖库」→ `exploiting-sql-injection-with-sqlmap` 等 3 个标准答案），50 个攻击大类全覆盖
 - 方法：TF-IDF（词 1-2 gram + 字 3-5 gram）对 `name×3 + description + zh-signals` 排序；Recall@N = 金标至少 1 个进前 N 的查询占比
-- 当前：**Recall@5 82.2% / Recall@20 100.0%**（v2.2 英文化后口径）；边界：只测"找不找得到"，不测"用得好不好"
+- 当前（2026-11-16 双底座口径，金标已补 extra-skill 适配项）：
+  - 原 996 底座（`SKILL_EXCLUDE_DIRS=extra-skill`）：**Recall@5 84.1% / Recall@20 100.0%**
+  - 全量 1569 底座（默认）：**Recall@5 77.6% / Recall@20 97.2%**
+  - 历史 v2.2 口径（纯 996 + 旧金标）：82.2% / 100.0%；R@20 未达 100 的 3 条（API 限流绕过/安卓静态分析/慢速 DoS）为库内容真实缺口
+- 边界：只测"找不找得到"，不测"用得好不好"
 
 ```bash
 python scripts/eval_recall.py   # 约 1-2 分钟，输出 BEFORE(HEAD) vs AFTER(工作区)
