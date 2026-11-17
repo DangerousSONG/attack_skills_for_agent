@@ -35,8 +35,9 @@ def _static_rows():
     """解析 attack-skill-router/SKILL.md 的 50 类主表为结构化行。"""
     path = os.path.join(ROOT, 'attack-skill-router', 'SKILL.md')
     rows = []
+    # 主表行格式(gen_router v2.x): - **C30 AD域渗透与域控攻击**（50）〔flags〕 触发:xxx / yyy ; a, b → `slug`, ...
     line_re = re.compile(
-        r'^- \*\*(C\d+ [^*]+)\*\*\s*\((\d+)\)(.*?)\s+Triggers:\s*(.*?)\s*->\s*(.+?)\s*$')
+        r'^- \*\*(C\d+ [^*]+)\*\*\s*（(\d+)）(.*?)触发[:：]\s*(.*?)\s*→\s*(.+?)\s*$')
     slug_re = re.compile(r'`([^`]+)`')
     with io.open(path, encoding='utf-8') as f:
         for line in f:
@@ -47,7 +48,7 @@ def _static_rows():
             rows.append({
                 'category': name.strip(),
                 'count': int(count),
-                'triggers': [t.strip() for t in re.split(r'[;/]', triggers) if t.strip()],
+                'triggers': [t.strip() for t in re.split(r'[;/、，,]', triggers) if t.strip()],
                 'slugs': slug_re.findall(slug_part),
             })
     return rows
