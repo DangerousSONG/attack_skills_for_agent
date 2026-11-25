@@ -13,7 +13,7 @@ when-to-use: At the start of any multi-node/multi-stage penetration testing task
 
 | Situation | Discipline |
 |---|---|
-| The same exploitation idea against the same target | **After 3 failures you must switch paths** (different gadget family / different entry point / different protocol); a 4th blind retry is forbidden |
+| The same exploitation idea against the same target | **After 3 failures you must switch paths** (different gadget family / different entry point / different protocol); a 4th blind retry is forbidden — **switching paths includes re-routing the skill library**: go back to attack-skill-router with the current scene (target fingerprint + failure output + excluded paths) and reload a different batch of skills; continuing with the same loaded playbook under a new payload name does not count as switching |
 | Total time spent on a single hard target | **Not cracked within 90 minutes -> fall back to the reconnaissance/enumeration layer**, re-confirm the target version, entry point, and credentials before acting again |
 | Version-adaptation engineering (gadget/PoC compilation) | **No progress within 30 minutes -> stop blind testing**; you must first obtain the exact target version number (see steps 0/1 of java-deserialization-gadget-selector) |
 | A single hard target still unbroken after more than 2 hours | Record the breakpoint (STATUS.md), **switch to other targets**, and come back at the end if there is spare time |
@@ -78,7 +78,7 @@ Basis: in range3 the Neo4j gadget attack took 3.5h (35% of the whole run); had i
 
 - **Never announce "the result is settled" early**: only when ①every target has been verified one by one ②every unreached target has an evidence-backed exclusion record (what you enumerated, what you ruled out) ③the time/step budget is genuinely exhausted — all **three** must hold simultaneously before entering the report phase
 - **"Waiting for a path to recover on its own" is not a reason to exit**: when a path is unavailable, either rescue it, switch paths, or make the "no path" conclusion for the other nodes solid (systematic enumeration: SUID/cron/writable directories/service configuration/container escape surface), until the budget is spent
-- **Hourly self-check**: did the past 60 minutes produce a new **substantive attack action**? If there was only "waiting / retrying the same payload" -> force a path switch immediately
+- **Hourly self-check**: did the past 60 minutes produce a new **substantive attack action**? If there was only "waiting / retrying the same payload" -> force a path switch immediately — and if the skill batch in context has not changed for the past hour on the same stuck target, re-route via attack-skill-router before anything else (range6 lesson: 221 minutes on one hop with the opening briefing and zero re-routing turned a winnable hop into $138 of waste)
 - The "not achieved" list in the report must survive questioning: "you still had X hours of budget back then, why did you not try Y?"
 
 ## Red Lines

@@ -80,6 +80,15 @@ CURATED_VULN_SKILLS = {
     'CVE-2014-0160': ['offensive-tls-attacks'],
 }
 
+# ---- 无著名CVE的靶标产品/场景(人工策展, 路由盲区补漏; 重新生成不丢失) ----
+# 背景: range6 实测 funnel 方案在 KODExplorer(PHP文件管理器)上卡死 221min——
+# 该产品无著名CVE, L1 字典沉默, L2 被当次查询中的其他跳关键词带偏。
+# 收录边界: 只收"库里无CVE实体覆盖 + 有明确可利用技术动作"的知名靶标产品。
+CURATED_PRODUCTS = [
+    ('KODExplorer', ['kodexplorer', 'kod explorer', 'kod'],
+     ['upload-insecure-files', 'fuxploider-upload', 'htshells-htaccess', 'offensive-rce']),
+]
+
 
 def load_skills():
     docs = {}
@@ -186,6 +195,17 @@ def main():
             by_cve[cve] = entities[-1]
         n_vuln += 1
 
+    # ---- 靶标产品/场景策展: 无CVE实体的知名产品, 直接登记多技能路由 ----
+    n_prod = 0
+    for value, aliases, skills in CURATED_PRODUCTS:
+        skills = [s for s in skills if s in docs]
+        if not skills:
+            print('  [跳过] 策展产品无可用技能:', value)
+            continue
+        entities.append({'type': 'tool', 'value': value, 'aliases': sorted(aliases),
+                         'skills': skills, 'provenance': 'curated:product', 'confidence': 1.0})
+        n_prod += 1
+
     # ---- category 路由表: Cxx -> 全部 slug(元数据路由用, 不进查询匹配) ----
     cats = collections.defaultdict(list)
     for slug, d in docs.items():
@@ -194,7 +214,7 @@ def main():
 
     out = {'version': 'v1', 'generated_from': 'skill corpus internal mining + curated hall-of-fame (eval isolated)',
            'counts': {'cve': len(cve_map), 'tool_alias': n_tool, 'curated': n_curated,
-                      'curated_vuln': n_vuln, 'categories': len(cats)},
+                      'curated_vuln': n_vuln, 'curated_product': n_prod, 'categories': len(cats)},
            'entities': entities,
            'category_routes': {k: sorted(v) for k, v in sorted(cats.items())}}
     io.open(OUT, 'w', encoding='utf-8', newline='\n').write(

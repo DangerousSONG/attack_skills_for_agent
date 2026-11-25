@@ -22,6 +22,12 @@ Agent 用法(注册层 attack-skill-router 已改为调本工具, 不再人肉�
 可弃权: L3 开启时无强相关候选 -> abstain=true, Agent 应裸跑(永不差于基线)。
   llm: Top-N 无 >=4 分; local: 最高分 < 0 (bge-reranker logit 口径)。
 
+输出字段(除 skills/source 外):
+  hit_layer     l1 | l2 —— 命中层, Agent 可据此判断"实体精确命中"还是"关键词召回"
+  l2_top_sim    L2 top1 TF-IDF 余弦(0-1), L2 相关性标尺
+  low_confidence true 时: L1 未命中且 L2 top1 < LOW_SIM_TAU —— 返回候选自动扩到 10 个,
+                并附 advisory 换词重路由/重排/grep 三选一, 防止"返回 3-5 个就是对的 3-5 个"
+
 依赖: scikit-learn, scipy, rank_bm25; --coarse/--rerank local 需 fastembed(懒加载, 默认路径不触发);
       --rerank llm 时需网关 key; 索引先 build。
 """
@@ -42,6 +48,10 @@ CVE_RE = re.compile(r'CVE-\d{4}-\d{4,7}', re.I)
 # ---- L0c 粗筛(可选, 懒加载) ----
 COARSE_MODEL = os.environ.get('SKILL_COARSE_MODEL', 'Qwen/Qwen3-Embedding-0.6B-Q')
 COARSE_TAU = 0.40                      # exp_l1_sweep 标定: 100% recall 下最大剔除率对应阈值
+LOW_SIM_TAU = 0.30                     # L1未命中且L2 top1 TF-IDF余弦<此值 -> low_confidence(启发式信号, 非弃权)。
+                                       # 标定(v0.1 采样): 噪声0.215/弱办公0.257 < 0.30 < 真实弱相关0.38+;
+                                       # 注意共享词(tls/cron类)可冲到0.5+, 本信号只兜明显噪声, 不追求精确分类;
+                                       # range6实测: 长查询带偏L2时该值明显走低, 用于触发"扩候选+提示重路由"。
 Q_PREFIX = {
     'Qwen/Qwen3-Embedding-0.6B-Q': 'Instruct: Given a web search query, retrieve relevant passages that answer the query\nQuery: ',
     'BAAI/bge-small-zh-v1.5': '为这个句子生成表示以用于检索相关文章：',
@@ -236,6 +246,12 @@ def main():
         cands.insert(0, s)
     cands = cands[:max(a.cand, a.top)]
 
+    # L2 置信度信号: L1 未命中时 top1 TF-IDF 余弦作为相关性标尺(与 l2_recall 同款变换, 独立复算一次)
+    from scipy.sparse import hstack as _hstack
+    _q = _hstack([vec_w.transform([a.text]), vec_c.transform([a.text])])
+    top_sim = float((_q @ X.T).toarray()[0].max())
+    low_conf = (not l1_hits) and (top_sim < LOW_SIM_TAU)
+
     source = 'l1' if l1_hits else 'l2'
     if a.coarse:
         source = 'l0c({0}/{1})+'.format(kept, len(slugs)) + source
@@ -253,8 +269,16 @@ def main():
     else:
         source += '(no-rerank)'
 
-    out = {'query': a.text, 'skills': cands[:a.top], 'source': source,
-           'l1_entities': l1_ents, 'abstain': abstain}
+    n_out = a.top if not low_conf else max(a.top, 10)   # 低置信自动扩候选, 防"返回5个就是对的5个"
+    out = {'query': a.text, 'skills': cands[:n_out], 'source': source,
+           'l1_entities': l1_ents, 'abstain': abstain,
+           'hit_layer': 'l1' if l1_hits else 'l2',
+           'l2_top_sim': round(top_sim, 4),
+           'low_confidence': low_conf}
+    if low_conf:
+        out['advisory'] = ('L1未命中且L2相关性弱(top1<{0}): 上列仅为候选非定论。建议三选一: '
+                           '①换查询词重路由(只写当前目标+已观察技术栈, 不带其他跳关键词); '
+                           '②--rerank llm 重排; ③grep /opt/attack-skill-library 定向扩。').format(LOW_SIM_TAU)
     if a.docs:
         out['descriptions'] = {s: docs[s][1] for s in out['skills']}
     if scores:
