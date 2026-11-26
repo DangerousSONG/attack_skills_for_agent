@@ -4,18 +4,30 @@ description: 攻击侧 Skill 库的路由层。当任务涉及渗透测试任一
 when-to-use: 任何渗透任务开题时；已加载 skill 不足以解决当前障碍时回来换路由；同一目标连续失败换路时；切换到新服务/新子网/新技术栈时。
 ---
 
-# Attack Skill Router · 攻击 Skill 路由层（v2.5）
+# Attack Skill Router · 攻击 Skill 路由层（v2.6）
 
 ## 用途
 
 本库共 996 个攻击 skill（C01–C50）+ 40 个协议审计 skill（C51，见 `rfc-audit-skills/`）。直接全库搜索会让 Agent 面对过量同质选项（实测：反序列化主题曾一次装入 3 个重叠 skill）。
 **本路由层把「996 选 N」压缩为「51 类选 1 类 → 每类 3-5 个 primary 选 1-3 个」**。
 
+## 挂载感知（v2.6 硬规则 · range6 v16 复盘补丁）
+
+> 教训：range6 v16 funnel 复跑，agent 在 KOD 跳搜完 `/root/.claude/skills` 后报告 "no additional skills existed on disk to load"，全程靠自建 CVE 研究硬打——996 全库其实挂在 `/opt/attack-skill-library`，库里的 webshell/upload 技能一个没读到。根因：Skill 工具只能看到 `/root/.claude/skills` 下**真正挂载**的注册层 skill，看不到 `/opt` 的库。**挂载方案决定了"加载"一词的含义。**
+
+**开局先探测挂载形态，再决定加载方式（必须按序）**：
+
+1. **先探库**：`ls /opt/attack-skill-library`（一次即可）。存在 → 全库在该路径；不存在 → 技能已全部平铺在 `/root/.claude/skills`；
+2. **库在 /opt 时**，本路由层选出的每个 skill 必须**实际读入**：`cat /opt/attack-skill-library/<slug>/SKILL.md`，按其方法论执行；Skill 工具只用于 `/root/.claude/skills` 下挂载的注册层 skill（本 router、engagement-discipline 等）；
+3. **库平铺时**，按常规用 Skill 工具加载；
+4. **禁止以"Skill 工具列表里没有"为由判定库中无技能**——判空之前必须先 `ls` / `grep -ril <关键词>` 过 `/opt/attack-skill-library`；
+5. **重路由的验收标准是"读到方法"**：每次重路由（下节 4 触发器）的产出必须是实际从库读入的 1-3 个 skill 方法段，禁止把重路由当仪式、读完照旧凭自身知识硬打。
+
 ## 使用流程（必须按序）
 
 1. **定位大类**：用下方「路由表」按 服务类型 / 漏洞类别 / 技术关键词 / CVE 命中一行；
-2. **选 primary**：在该行的 3-5 个 slug 中，按 when-to-use 选 1-3 个最贴切的，用 Skill 工具加载；
-3. **不够再扩**：大类标了〔二级子类→ref〕的（本类 skill 多），展开同目录 `reference.md` 按子标签细选；其余用 `grep -ril <关键词> /opt/attack-skill-library` 定向补；
+2. **选 primary**：在该行的 3-5 个 slug 中，按 when-to-use 选 1-3 个最贴切的，**按上节「挂载感知」规则加载**（库在 /opt 则 `cat` 其 SKILL.md 读入，平铺则 Skill 工具加载）；
+3. **不够再扩**：大类标了〔二级子类→ref〕的（本类 skill 多），展开同目录 `reference.md` 按子标签细选；其余用 `grep -ril <关键词> /opt/attack-skill-library`（平铺方案则 grep `/root/.claude/skills`）定向补；
 4. **报告**：最终报告末尾列出实际加载的 slug（与评测工作流一致）。
 
 ## 重路由硬规则（v2.5 新增 · range6 复盘补丁）
@@ -30,6 +42,8 @@ when-to-use: 任何渗透任务开题时；已加载 skill 不足以解决当前
 4. **skill_route 返回 `low_confidence: true`** —— 按返回的 advisory 三选一执行（换词重路由 / `--rerank llm` / grep 定向扩），不得把低置信候选当定论。
 
 **多跳任务查询纪律**：查询只写当前一跳的「服务名 + 已观察技术栈」，**禁止把整条链的 CVE/服务关键词堆进一次查询**——长查询会绑架 L2 召回，把当前跳真正需要的技能挤出候选（range6 实测：混合查询使 KOD 跳的召回被 Java 词汇带偏）。
+
+**每跳必查库**：多跳任务每进入新一跳，除重路由外还必须从库实际读入该跳的 1-N 个 skill 方法段（`cat /opt/attack-skill-library/<slug>/SKILL.md`），读入记录写入该跳工作笔记；某一跳结束时若一次都未读库，视为该跳流程违规（range6 v16 实测：KOD 跳 0 次读库，agent 不知道库挂在 /opt，自建 CVE 研究烧完预算）。
 
 ## 选用规则
 
