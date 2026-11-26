@@ -4,31 +4,35 @@ description: 攻击侧 Skill 库的路由层。当任务涉及渗透测试任一
 when-to-use: 任何渗透任务开题时；已加载 skill 不足以解决当前障碍时回来换路由；同一目标连续失败换路时；切换到新服务/新子网/新技术栈时。
 ---
 
-# Attack Skill Router · 攻击 Skill 路由层（v2.6）
+# Attack Skill Router · 攻击 Skill 路由层（v2.7）
 
 ## 用途
 
 本库共 996 个攻击 skill（C01–C50）+ 40 个协议审计 skill（C51，见 `rfc-audit-skills/`）。直接全库搜索会让 Agent 面对过量同质选项（实测：反序列化主题曾一次装入 3 个重叠 skill）。
-**本路由层把「996 选 N」压缩为「51 类选 1 类 → 每类 3-5 个 primary 选 1-3 个」**。
+**本路由层把「996 选 N」压缩为「脚本检索 top-k → 读入 1-3 个方法段」**。
 
-## 挂载感知（v2.6 硬规则 · range6 v16 复盘补丁）
+## GLOBAL RULE — 库技能怎么加载（适用于本路由层所有路径与兜底）
 
-> 教训：range6 v16 funnel 复跑，agent 在 KOD 跳搜完 `/root/.claude/skills` 后报告 "no additional skills existed on disk to load"，全程靠自建 CVE 研究硬打——996 全库其实挂在 `/opt/attack-skill-library`，库里的 webshell/upload 技能一个没读到。根因：Skill 工具只能看到 `/root/.claude/skills` 下**真正挂载**的注册层 skill，看不到 `/opt` 的库。**挂载方案决定了"加载"一词的含义。**
+**Skill 工具只认 3 个注册 skill**：`attack-skill-router`、`engagement-discipline`、`java-deserialization-gadget-selector`。其余 993 个库技能是**纯 markdown 文件**（漏斗挂载方案下库在 `/opt/attack-skill-library`；平铺方案下在 `/root/.claude/skills`）。`Skill(<slug>)` 一律返回 Unknown skill——浪费一个回合并静默中断路由链，**永远不要把 slug 当 skill 名调 Skill 工具**。库技能唯一正确的加载方式：本路由层检索 → Read/cat 打开返回的 SKILL.md 绝对路径并遵循其方法论。
 
-**开局先探测挂载形态，再决定加载方式（必须按序）**：
+> 教训（range6 v16/v17 双复盘）：agent 搜完 `/root/.claude/skills` 后报告 "no additional skills existed on disk to load"，全程靠自建 CVE 研究硬打，库里现成的 webshell/upload 技能一个没读到——因为它把"读库"当成了可跳过的阅读动作。v2.7 起"获取技能"必须是**一条命令**：脚本跑下去，知识以命令输出的形式进上下文，没有"要不要读"的决策点。
 
-1. **先探库**：`ls /opt/attack-skill-library`（一次即可）。存在 → 全库在该路径；不存在 → 技能已全部平铺在 `/root/.claude/skills`；
-2. **库在 /opt 时**，本路由层选出的每个 skill 必须**实际读入**：`cat /opt/attack-skill-library/<slug>/SKILL.md`，按其方法论执行；Skill 工具只用于 `/root/.claude/skills` 下挂载的注册层 skill（本 router、engagement-discipline 等）；
-3. **库平铺时**，按常规用 Skill 工具加载；
-4. **禁止以"Skill 工具列表里没有"为由判定库中无技能**——判空之前必须先 `ls` / `grep -ril <关键词>` 过 `/opt/attack-skill-library`；
-5. **重路由的验收标准是"读到方法"**：每次重路由（下节 4 触发器）的产出必须是实际从库读入的 1-3 个 skill 方法段，禁止把重路由当仪式、读完照旧凭自身知识硬打。
+## 使用流程（必须按序 · v2.7 脚本优先）
 
-## 使用流程（必须按序）
+1. **必跑检索（每次开题/换跳必跑，禁止跳步）**：
 
-1. **定位大类**：用下方「路由表」按 服务类型 / 漏洞类别 / 技术关键词 / CVE 命中一行；
-2. **选 primary**：在该行的 3-5 个 slug 中，按 when-to-use 选 1-3 个最贴切的，**按上节「挂载感知」规则加载**（库在 /opt 则 `cat` 其 SKILL.md 读入，平铺则 Skill 工具加载）；
-3. **不够再扩**：大类标了〔二级子类→ref〕的（本类 skill 多），展开同目录 `reference.md` 按子标签细选；其余用 `grep -ril <关键词> /opt/attack-skill-library`（平铺方案则 grep `/root/.claude/skills`）定向补；
-4. **报告**：最终报告末尾列出实际加载的 slug（与评测工作流一致）。
+   ```bash
+   python3 /opt/attack-skill-library/_router/skill_route.py "<一句话任务描述：当前目标服务 + 已观察技术栈 + 要解决的问题>"
+   ```
+
+   - 原样复制执行，不要改写脚本路径；查询只写**当前一跳**的信息（纪律见下节），禁止堆整条链的 CVE/服务关键词；
+   - 输出 JSON 直接给出 top 候选 slug、`hit_layer`、`low_confidence`（KODExplorer 类已知产品名命中 L1 实体层，策展映射保证 webshell/upload 正确候选在列）；
+   - 取 top 1-3 候选进入第 2 步；
+   - 脚本不可用（报错/平铺方案无 `_router`）→ 退回「下方路由表查行 + `grep -ril <关键词> <库根目录>`」，但必须在报告注明走了兜底；
+   - `low_confidence: true` → 按下节触发器 4 的三选一执行，不得把候选当定论。
+2. **读入方法**：用 Read 打开 `/opt/attack-skill-library/<slug>/SKILL.md`（平铺方案则为 `/root/.claude/skills/<slug>/SKILL.md`），按其方法论逐步执行——不是扫一眼标题就算加载；
+3. **交叉验证（可选）**：下方「路由表」51 类用于快速核对候选合理性，不替代第 1 步检索；
+4. **报告**：最终报告末尾列出实际加载的 slug 及来源（检索/查表/grep 兜底）。
 
 ## 重路由硬规则（v2.5 新增 · range6 复盘补丁）
 
@@ -43,7 +47,7 @@ when-to-use: 任何渗透任务开题时；已加载 skill 不足以解决当前
 
 **多跳任务查询纪律**：查询只写当前一跳的「服务名 + 已观察技术栈」，**禁止把整条链的 CVE/服务关键词堆进一次查询**——长查询会绑架 L2 召回，把当前跳真正需要的技能挤出候选（range6 实测：混合查询使 KOD 跳的召回被 Java 词汇带偏）。
 
-**每跳必查库**：多跳任务每进入新一跳，除重路由外还必须从库实际读入该跳的 1-N 个 skill 方法段（`cat /opt/attack-skill-library/<slug>/SKILL.md`），读入记录写入该跳工作笔记；某一跳结束时若一次都未读库，视为该跳流程违规（range6 v16 实测：KOD 跳 0 次读库，agent 不知道库挂在 /opt，自建 CVE 研究烧完预算）。
+**每跳必查库**：多跳任务每进入新一跳，除重路由外还必须执行一次第 1 步检索脚本并实际读入该跳的 1-N 个 skill 方法段，读入记录写入该跳工作笔记；某一跳结束时若一次都未读库，视为该跳流程违规（range6 v16/v17 双实测：KOD 跳 0 次读库，agent 把 SKILL 规则当背景板，自建 CVE 研究烧完预算）。
 
 ## 选用规则
 
